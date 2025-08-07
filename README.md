@@ -1,454 +1,61 @@
-# Multi-Sensor Recording System for Contactless GSR Prediction Research
+# Vale: Your style, our editor [![Build status](https://ci.appveyor.com/api/projects/status/snk0oo6ih1nwuf6r?svg=true)](https://ci.appveyor.com/project/jdkato/vale) [![Go Report Card](https://img.shields.io/badge/%F0%9F%93%9D%20%20go%20report-A%2B-75C46B?color=00ACD7)](https://goreportcard.com/report/github.com/errata-ai/vale) [![GitHub All Releases](https://img.shields.io/github/downloads/errata-ai/vale/total?logo=GitHub&color=ff69b4)](https://github.com/errata-ai/vale/releases) [![Docker Pulls](https://img.shields.io/docker/pulls/jdkato/vale?color=orange&logo=docker&logoColor=white)](https://hub.docker.com/r/jdkato/vale) [![Chocolatey](https://img.shields.io/chocolatey/dt/vale?color=white&label=chocolatey&logo=chocolatey)](https://community.chocolatey.org/packages/vale) [![Homebrew](https://img.shields.io/homebrew/installs/dy/vale?color=yellow&label=homebrew&logo=homebrew)](https://formulae.brew.sh/formula/vale)
 
-[![Build Status](https://github.com/buccancs/bucika_gsr/workflows/CI/badge.svg)](https://github.com/buccancs/bucika_gsr/actions)
-[![Test Coverage](https://img.shields.io/badge/test%20coverage-%3E95%25-brightgreen)](./evaluation_suite/)
-[![Research Ready](https://img.shields.io/badge/research%20ready-yes-success)](./docs/test_execution_guide.md)
+> Enjoying Vale? Please consider writing a user [testimonial][5].
 
-A complete multi-sensor recording system designed for contactless GSR (Galvanic Skin Response) prediction research. This system integrates multiple data streams including thermal imaging, traditional cameras, and Shimmer GSR sensors to create synchronised multi-modal datasets for advanced physiological research.
+<p align="center">
+  <b>Vale</b> is a command-line tool that brings code-like linting to prose. It's <b><a href="#mag-at-a-glance-vale-vs-">fast</a></b>, <b>cross-platform</b> (Windows, macOS, and Linux), and <b>highly customizable</b>.
+</p>
 
-## 🏗️ System Architecture
+<div align="center">
+<table>
+<thead>
+<tr>
+<th><a href="https://vale.sh/docs/vale-cli/installation/">Docs</a></th>
+<th><a href="https://studio.vale.sh/">Vale Studio</a></th>
+<th><a href="https://vale.sh/hub/">Package Hub</a></th>
+<th><a href="https://vale.sh/explorer/">Rule Explorer</a></th>
+<th><a href="https://vale.sh/generator/">Config Generator</a></th>
+</tr>
+</thead>
+</table>
+</div>
 
-The system implements a **distributed star-mesh topology** with PC master-controller coordination:
+## :heart: Sponsors
 
-- **PC Master Controller**: Python desktop application managing session coordination, device synchronisation, and data aggregation
-- **Android Recording Devices**: Mobile applications handling multi-sensor data collection (camera, thermal, Shimmer GSR)
-- **JSON Protocol Communication**: WebSocket-based real-time communication between PC and Android devices
-- **Offline-First Recording**: Local data storage with synchronised timestamps for reliable data collection
+> Hi there! I'm [@jdkato](https://github.com/jdkato), the sole developer of Vale. If you'd like to help me dedicate more time to _developing_, _documenting_, and _supporting_ Vale, feel free to donate through [GitHub Sponsors](https://github.com/sponsors/jdkato) or [Open Collective](https://opencollective.com/vale). Any donation&mdash;big, small, one-time, or recurring&mdash;is greatly appreciated!
 
-## 🔬 Research Applications
+### Organizations
 
-### Target Use Cases
-- **Contactless GSR Prediction**: Development of computer vision models for stress detection
-- **Multi-Modal Physiological Research**: Synchronised collection of thermal, visual, and traditional GSR data
-- **Human-Computer Interaction Studies**: Real-time physiological monitoring during interactive sessions
-- **Stress Response Analysis**: Longitudinal studies of physiological responses to stimuli
+<a href="https://opencollective.com/vale/organization/0/website"><img src="https://opencollective.com/vale/organization/0/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/1/website"><img src="https://opencollective.com/vale/organization/1/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/2/website"><img src="https://opencollective.com/vale/organization/2/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/3/website"><img src="https://opencollective.com/vale/organization/3/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/4/website"><img src="https://opencollective.com/vale/organization/4/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/5/website"><img src="https://opencollective.com/vale/organization/5/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/6/website"><img src="https://opencollective.com/vale/organization/6/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/7/website"><img src="https://opencollective.com/vale/organization/7/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/8/website"><img src="https://opencollective.com/vale/organization/8/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organization/9/website"><img src="https://opencollective.com/vale/organization/9/avatar.svg?avatarHeight=100"></a>
 
-### Data Collection Capabilities
-- **High-Resolution Thermal Imaging**: Contactless skin temperature monitoring
-- **Synchronised Video Recording**: Visual context for physiological responses  
-- **Shimmer GSR Sensors**: Gold-standard physiological measurements
-- **Precision Timestamps**: <1ms synchronisation accuracy across all data streams
+### Other
 
-## 🚀 Quick Start
+> Thanks to [Appwrite][4] for supporting Vale through their [Open Source Sponsorship program][3].
 
-### Prerequisites
-- **PC Controller**: Python 3.8+, OpenCV, PyQt5, sufficient RAM (4GB+ recommended)
-- **Android Devices**: Android 8.0+, Camera2 API support, Bluetooth capabilities
-- **Network**: Stable WiFi network for device communication
+<p>
+  <a href="https://appwrite.io/">
+    <img src="https://github.com/errata-ai/vale/assets/8785025/95d4b2f8-a94b-4512-8197-7e80973655cc" width="201px">
+  </a>
+</p>
 
-### Installation
+### Individuals
 
-#### Basic Installation
+<a href="https://opencollective.com/vale"><img src="https://opencollective.com/vale/individuals.svg?width=890"></a>
 
-1. **Clone Repository**
-   ```bash
-   git clone https://github.com/buccancs/bucika_gsr.git
-   cd bucika_gsr
-   ```
+## :boom: Key Features
 
-2. **Setup PC Controller**
-   ```bash
-   # Basic installation with core dependencies
-   pip install -e .
-   
-   # Or install with all optional dependencies
-   pip install -e ".[dev,shimmer,calibration,android]"
-   ```
+- [x] **Support for markup**: Vale has a rich understanding of many [markup formats](https://docs.errata.ai/vale/scoping#formats), allowing it to avoid syntax-related false positives and intelligently exclude code snippets from prose-related rules.
 
-#### Optional Dependencies
-
-The system includes several optional dependency groups for specific functionality:
-
-##### 🔧 Development Tools (`dev`)
-```bash
-pip install -e ".[dev]"
-```
-**Includes**: pytest, coverage tools, linters (black, isort, mypy), security scanners (bandit)
-**Use when**: Contributing to development, running tests, code quality checks
-
-##### 📟 Shimmer GSR Sensors (`shimmer`) 
-```bash
-pip install -e ".[shimmer]"
-```
-**Includes**: pyshimmer, pybluez, bleak (Bluetooth communication)
-**Use when**: Working with Shimmer GSR sensors, Bluetooth device integration
-
-##### 📷 Advanced Calibration (`calibration`)
-```bash
-pip install -e ".[calibration]"
-```
-**Includes**: opencv-contrib-python (extended OpenCV features)
-**Use when**: Using advanced computer vision features, specialised calibration algorithms
-
-##### 📱 Android Integration (`android`)
-```bash
-pip install -e ".[android]"
-```
-**Includes**: adb-shell, pure-python-adb (Android Debug Bridge communication)
-**Use when**: Direct Android device communication, debugging, automated testing
-
-##### 🎯 Common Combinations
-```bash
-# Research setup with all sensors
-pip install -e ".[shimmer,calibration]"
-
-# Full development environment  
-pip install -e ".[dev,shimmer,calibration,android]"
-
-# Production deployment (minimal)
-pip install -e .
-```
-
-3. **Setup Android Application**
-   ```bash
-   cd AndroidApp
-   ./gradlew assembleDebug
-   # Install APK on Android devices
-   ```
-
-### Basic Usage
-
-1. **Start PC Controller**
-   ```bash
-   cd PythonApp
-   python main.py
-   ```
-
-2. **Connect Android Devices**
-   - Launch Android app on recording devices
-   - Devices auto-discover PC controller on network
-   - Verify connection status in PC interface
-
-3. **Start Recording Session**
-   - Configure session parameters (duration, recording modes)
-   - Initiate synchronised recording across all devices
-   - Monitor real-time status and data quality
-
-## 🔧 Build Status & Recent Improvements
-
-### Compilation Status: ✅ RESOLVED
-All critical compilation errors have been successfully resolved (commit 3ee81f2):
-
-- **Android Build**: All missing imports added (`CancellationException`, `IOException`)
-- **Files Fixed**: 8 core components (RecordingController, CommandProcessor, CameraRecorder, etc.)
-- **Build System**: Gradle builds complete successfully for all variants
-- **Dependencies**: Hilt injection conflicts resolved, AndroidManifest conflicts resolved
-
-### Testing Infrastructure: ✅ OPERATIONAL
-- Build system fully operational
-- Test framework configured and functional
-- All components compile without errors
-- Ready for thorough testing and research deployment
-
-## 📊 complete Testing & Validation
-
-### Unified Test Framework
-
-The system includes a **research-grade evaluation suite** with complete real component testing (zero mocking). All test documentation, results, and execution guidance has been consolidated into a single complete resource.
-
-**📋 [UNIFIED TEST DOCUMENTATION](./UNIFIED_TEST_DOCUMENTATION.md)** - Complete test framework documentation
-
-#### Quick Testing Commands
-
-```bash
-# Run complete evaluation suite
-python run_evaluation_suite.py
-
-# Quick validation during development
-python run_evaluation_suite.py --quick --verbose
-
-# Test specific categories
-python run_evaluation_suite.py --category android_foundation
-python run_evaluation_suite.py --category pc_foundation
-python run_evaluation_suite.py --category integration_tests
-```
-
-#### Latest Test Results
-
-**✅ 100% Success Rate** across all 17 tests (Latest execution: a196ef57)
-- **Android Foundation**: 5/5 tests passed (100.0%) ✅
-- **PC Foundation**: 6/6 tests passed (100.0%) ✅  
-- **Integration Tests**: 6/6 tests passed (100.0%) ✅
-- **Total Duration**: 1.6 seconds (complete mode)
-- **Build Status**: All compilation errors resolved ✅
-- **Research Deployment**: Ready ✅
-
-📊 **[View Latest Results](./evaluation_results/latest_execution.json)** | 📝 **[Execution Logs](./evaluation_results/execution_logs.md)**
-
-### Test Coverage
-
-#### Foundation Tests (Real Component Validation)
-- **Android Components** (5 complete tests):
-  - Camera recording validation with real MainActivity.kt testing
-  - Shimmer GSR sensor integration with Bluetooth permissions validation
-  - Network communication with WebSocket implementation testing
-  - Thermal camera integration with dependency validation
-  - Session management with recording coordination testing
-
-- **PC Components** (6 complete tests):
-  - Calibration system with real CalibrationManager validation
-  - Network server with PCServer implementation testing
-  - Shimmer manager with device communication validation
-  - Session coordination with multi-device management testing
-  - Synchronisation engine with precision timing validation
-
-#### Integration Tests (Cross-Component)
-- **Multi-Device Coordination**: Device discovery, session management, scalability (up to 8 devices)
-- **Network Performance**: WebSocket protocols, resilience testing, bandwidth optimisation
-- **Synchronisation Precision**: <1ms temporal accuracy, cross-platform timing validation
-- **End-to-End Workflows**: Complete recording lifecycle validation
-- **Error Handling & Recovery**: Connection failures, device errors, network interruptions
-- **Performance Under Stress**: High device counts, data rates, extended sessions
-
-### Quality Standards
-- **Success Rate**: 100% for foundation tests, 100% for integration tests (after compilation fixes)
-- **Build Status**: All compilation errors resolved, all imports satisfied
-- **Synchronisation**: <1ms temporal accuracy, <0.5ms RMS deviation
-- **Real Implementation Testing**: 100% tests validate actual source code
-- **Research Readiness**: Fully validated and deployment-ready
-
-## 📁 Project Structure
-
-```
-bucika_gsr/
-├── AndroidApp/                 # Android recording application
-│   ├── src/main/java/com/multisensor/recording/
-│   │   ├── controllers/        # Specialised business logic controllers
-│   │   ├── managers/           # Device and system managers
-│   │   ├── recording/          # Core recording components
-│   │   ├── calibration/        # Camera calibration
-│   │   ├── network/            # Communication protocols
-│   │   ├── service/            # Background services
-│   │   └── ui/                 # Clean MVVM UI layer
-│   └── build.gradle.kts        # Android build configuration
-├── PythonApp/                 # PC master controller
-│   ├── calibration/           # Camera calibration system
-│   ├── network/               # Device communication
-│   ├── session/               # Session management
-│   ├── gui/                   # User interface
-│   └── main.py               # Application entry point
-├── evaluation_suite/          # complete testing framework
-│   ├── foundation/           # Unit tests for components
-│   ├── integration/          # Cross-component tests
-│   └── framework/            # Test execution framework
-├── docs/                     # Documentation
-│   ├── test_execution_guide.md
-│   ├── test_troubleshooting.md
-│   └── architecture.md
-└── protocol/                 # Communication protocols
-```
-
-## 🔧 System Components
-
-### PC Master Controller (Python)
-- **Calibration Manager**: OpenCV-based camera calibration for precise measurements
-- **Session Coordinator**: Multi-device session management and synchronisation
-- **Network Server**: WebSocket-based device communication and control
-- **Data Aggregator**: Synchronised data collection and storage
-- **Real-time Monitor**: Live status monitoring and quality assessment
-
-### Android Recording Application (Kotlin)
-- **Camera Recording**: High-resolution video capture with Camera2 API
-- **Thermal Integration**: Thermal camera data collection and processing
-- **Shimmer Manager**: Bluetooth GSR sensor communication and data streaming
-- **Network Client**: Real-time communication with PC controller
-- **Session Management**: Local recording coordination and synchronisation
-
-#### Clean MVVM Architecture
-
-**Refactored Architecture Achievement:**
-The Android application underwent complete architectural refactoring to implement clean MVVM patterns following single responsibility principle. The original monolithic MainViewModel (2035 lines) was refactored into specialised controllers, achieving a **78% size reduction** (2035 → 451 lines) while dramatically improving maintainability and testability.
-
-**Specialised Controllers:**
-- **RecordingSessionController** (218 lines): Pure recording operation management with reactive StateFlow patterns
-- **DeviceConnectionManager** (389 lines): Device connectivity orchestration and initialisation procedures  
-- **FileTransferManager** (448 lines): Data transfer operations and session management
-- **CalibrationManager** (441 lines): Calibration process coordination for all device types
-- **MainViewModelRefactored** (451 lines): Pure UI state coordination through reactive composition
-
-**Architecture Benefits:**
-- **Improved Maintainability**: Each component has single, well-defined responsibility
-- **Enhanced Testability**: Controllers can be unit tested independently with clear dependencies
-- **Reactive Architecture**: StateFlow-based state management ensures UI consistency
-- **Production-Ready Code**: Complete comment removal with self-documenting architecture
-- **Scalability**: New features can be added to specific controllers without affecting others
-
-### Communication Protocol
-- **JSON-based Messaging**: Structured communication between PC and Android
-- **WebSocket Transport**: Real-time bidirectional communication
-- **Synchronisation Protocol**: Precision timestamp coordination
-- **Error Recovery**: Automatic reconnection and data integrity validation
-- **🔒 TLS Encryption**: Secure data transmission with certificate validation
-- **🔐 Authentication**: Token-based authentication with cryptographic validation
-
-### 🔒 Security and Privacy Features
-
-#### End-to-End Security
-- **TLS/SSL Encryption**: All data transmission secured with TLS encryption
-- **AES-GCM Data Encryption**: Local data storage encrypted using hardware-backed Android Keystore
-- **Certificate Pinning**: Production-ready certificate validation and pinning
-- **Secure Authentication**: Cryptographically secure token-based authentication
-
-#### Privacy Compliance
-- **GDPR Compliance**: Full compliance with EU privacy regulations including consent management
-- **Data Anonymization**: Automatic PII removal and participant ID anonymization
-- **Secure Logging**: PII-aware log sanitisation with sensitive data pattern recognition
-- **Data Retention**: Configurable retention policies with automatic deletion recommendations
-
-#### Security Implementation
-```kotlin
-// Hardware-backed encryption
-class SecurityUtils(context: Context, logger: Logger) {
-    fun encryptData(data: ByteArray): EncryptedData?
-    fun generateAuthToken(): String
-    fun createSecureSSLContext(): SSLContext?
-}
-
-// GDPR-compliant privacy management
-class PrivacyManager(context: Context, logger: Logger) {
-    fun recordConsent(participantId: String?, studyId: String?)
-    fun anonymizeMetadata(metadata: Map<String, Any>): Map<String, Any>
-    fun generatePrivacyReport(): PrivacyReport
-}
-```
-
-## 🔬 Research Features
-
-### Multi-Modal Data Collection
-- **Synchronised Timestamps**: <1ms accuracy across all data streams
-- **Flexible Session Configuration**: Customizable recording parameters
-- **Real-time Quality Monitoring**: Live assessment of data quality
-- **Automated Calibration**: Camera calibration with validation
-
-### Data Quality Assurance
-- **complete Validation**: Multi-layer testing ensures research-grade quality
-- **Statistical Analysis**: Quality metrics with confidence intervals
-- **Reproducibility Testing**: Consistent performance across sessions
-- **Error Detection**: Automated identification of data quality issues
-
-### Research Workflow Integration
-- **Session Templates**: Predefined configurations for common research scenarios
-- **Data Export**: Structured data formats for analysis pipeline integration
-- **Metadata Management**: Complete session documentation and traceability
-- **Analysis Integration**: Compatible with common research analysis tools
-
-## 📈 Performance Characteristics
-
-### System Scalability
-- **Device Support**: Up to 8 concurrent Android recording devices
-- **Data Throughput**: >10 MB/s per device, 100+ MB/s aggregate
-- **Session Duration**: Extended recording sessions (hours to days)
-- **Memory Efficiency**: <1GB typical usage, adaptive scaling
-
-### Reliability Features
-- **Error Recovery**: >80% automatic recovery from connection failures
-- **Data Integrity**: complete validation and corruption detection
-- **Graceful Degradation**: Continued operation despite individual device failures
-- **Resource Management**: Adaptive resource allocation based on available hardware
-
-## 📚 Documentation
-
-### Quick References
-- **[Test Execution Guide](./docs/test_execution_guide.md)**: complete testing procedures
-- **[Troubleshooting Guide](./docs/test_troubleshooting.md)**: Solutions for common issues
-- **[API Documentation](./docs/api/)**: Detailed API reference
-- **[Architecture Overview](./docs/architecture.md)**: System design and layer separation
-- **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Infrastructure utilities and patterns
-- **[Scaling Architecture](./docs/SCALING_ARCHITECTURE.md)**: Scaling beyond 8 devices
-
-### Research Documentation
-- **[Calibration Procedures](./docs/calibration_system_readme.md)**: Camera calibration methodology
-- **[Synchronisation Analysis](./docs/multi_device_synchronization_readme.md)**: Timing precision validation
-- **[Data Quality Assessment](./evaluation_suite/README.md)**: Quality metrics and validation
-
-### Architecture & Design
-- **[Architecture Diagrams](./docs/ARCHITECTURE_DIAGRAMS.md)**: Visual system overview
-- **[Layer Architecture](./docs/diagrams/14_layer_architecture.png)**: 6-layer system architecture
-- **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Logging, synchronisation, error handling
-- **[Scaling Considerations](./docs/SCALING_ARCHITECTURE.md)**: Multi-controller and distributed architectures
-- **[Architecture Maintenance](./docs/ARCHITECTURE_MAINTENANCE.md)**: Guidelines for maintaining architectural integrity
-
-## 🤝 Contributing
-
-### Development Workflow
-1. **Foundation Testing**: Run unit tests before committing changes
-   ```bash
-   python run_evaluation_suite.py --category foundation --quick
-   ```
-
-2. **Integration Validation**: Test cross-component functionality
-   ```bash
-   python run_evaluation_suite.py --category integration
-   ```
-
-3. **Complete Evaluation**: Full system validation before releases
-   ```bash
-   python run_evaluation_suite.py --parallel
-   ```
-
-### Code Quality Standards
-
-The Multi-Sensor Recording System maintains exceptional code quality through systematic improvements across all components:
-
-#### Exception Handling Excellence
-- **590+ Android exception handlers** systematically enhanced with specific exception types
-- **7 Python exception handlers** replaced with targeted error handling  
-- **CancellationException preservation** maintaining proper coroutine semantics
-- **91% improvement** in error handling specificity across all platforms
-
-#### Reliability Metrics
-- **98.4% system reliability** under diverse failure conditions
-- **80% reduction in debugging time** through structured logging implementation
-- **99.3% error recovery success rate** for handled exception conditions
-- **97.8% data integrity preservation** during failure scenarios
-
-#### Professional Standards
-- **Research-grade reliability** suitable for scientific instrumentation
-- **Industry-standard exception handling** practices implemented throughout
-- **complete observability** through structured logging framework
-- **Enhanced maintainability** with specific error context preservation
-
-#### Validation Results
-- **Test Coverage**: >95% for critical components, 99.5% overall success rate
-- **Documentation**: complete documentation with academic rigor
-- **Performance**: Research-grade timing precision (<1ms synchronisation)
-- **Quality Assurance**: Multi-dimensional reliability assessment at 97% confidence
-
-## 📄 Licence
-
-This project is licenced under the MIT Licence - see the [LICENCE](LICENCE) file for details.
-
-## 🔬 Research Citation
-
-If you use this system in your research, please cite:
-
-```bibtex
-@mastersthesis{bucika2024multisensor,
-  title={Multi-Sensor Recording System for Contactless GSR Prediction Research},
-  author={Bucika, [Author Name]},
-  year={2024},
-  school={[University Name]},
-  type={Master's Thesis}
-}
-```
-
-## 🆘 Support
-
-### Getting Help
-- **Documentation**: Check complete guides in `docs/` directory
-- **Testing Issues**: Review [troubleshooting guide](./docs/test_troubleshooting.md)
-- **Research Questions**: Consult research documentation and methodology guides
-- **Technical Support**: Open an issue with detailed error logs and system information
-
-### Community
-- **Research Applications**: Share your research use cases and findings
-- **Feature Requests**: Propose enhancements for research applications
-- **Bug Reports**: Report issues with detailed reproduction steps
-- **Contributions**: Submit improvements following the development workflow
-
----
-
-**Multi-Sensor Recording System** - Enabling advanced physiological research through synchronised multi-modal data collection.
+- [x] A **highly customizable** [extension system](https://vale.sh/docs/topics/styles/): Vale is capable of enforcing _your style_&mdash;be it a standard [editorial style guide](https://github.com/errata-ai/styles#available-styles) or a custom in-house set of rules (such as those created by [GitLab](https://docs.gitlab.com/ee/development/documentation/testing.html#vale), [Homebrew](https://github.com/Homebrew/brew/tree/master/docs/vale-styles/Homebrew), [Linode](https://www.linode.com/blog/linode/docs-as-code-at-linode/), [CockroachDB](https://github.com/cockroachdb/docs/tree/master/vale), and [Spotify](https://github.com/spotify/backstage)).
 
 - [x] **Easy-to-install**, stand-alone binaries: Unlike other tools, Vale doesn't require you to install and configure a particular programming language and its related tooling (such as Python/pip or Node.js/npm).
 
@@ -460,8 +67,8 @@ See the [documentation](https://vale.sh) for more information.
 
 ### Functionality
 
-| Tool       | Extensible           | Checks          | Supports Markup                                                         | Built With | Licence      |
-|------------|----------------------|-----------------|-------------------------------------------------------------------------|------------|--------------|
+| Tool       | Extensible           | Checks          | Supports Markup                                                         | Built With | License      |
+| ---------- | -------------------- | --------------- | ----------------------------------------------------------------------- | ---------- | ------------ |
 | Vale       | Yes (via YAML)       | spelling, style | Yes (Markdown, AsciiDoc, reStructuredText, HTML, XML, Org)              | Go         | MIT          |
 | textlint   | Yes (via JavaScript) | spelling, style | Yes (Markdown, AsciiDoc, reStructuredText, HTML, Re:VIEW)               | JavaScript | MIT          |
 | RedPen     | Yes (via Java)       | spelling, style | Yes (Markdown, AsciiDoc, reStructuredText, Textile, Re:VIEW, and LaTeX) | Java       | Apache-2.0   |
@@ -525,8 +132,14 @@ The corpus IDs in the above plots&mdash;`gitlab` and `ydkjs`&mdash;correspond to
 
 - A [snapshot](https://gitlab.com/gitlab-org/gitlab/-/tree/7d6a4025a0346f1f50d2825c85742e5a27b39a8b/doc) of GitLab's open-source documentation (1,500 Markdown files).
 
-- A [chapter](https://raw.githubusercontent.com/getify/You-Dont-Know-JS/1st-ed/es6%20%26%20beyond/ch2.md) from the open-source book *You Don't Know JS*.
+- A [chapter](https://raw.githubusercontent.com/getify/You-Dont-Know-JS/1st-ed/es6%20%26%20beyond/ch2.md) from the open-source book _You Don't Know JS_.
 
-## :page_facing_up: Licence
+## :page_facing_up: License
 
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B21090%2Fgithub.com%2Ferrata-ai%2Fvale.svg?type=large)](https://app.fossa.com/projects/custom%2B21090%2Fgithub.com%2Ferrata-ai%2Fvale?ref=badge_large)
+
+[1]: https://www.digitalocean.com/open-source/credits-for-projects
+[2]: https://studio.vale.sh/
+[3]: https://appwrite.io/oss-fund
+[4]: https://appwrite.io/
+[5]: https://page.famewall.io/vale
