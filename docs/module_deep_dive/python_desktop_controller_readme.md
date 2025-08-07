@@ -23,16 +23,16 @@ The controller implementation addresses fundamental challenges in distributed ph
 
 ### System Role and Responsibilities
 
-The Python Desktop Controller encompasses complete orchestration capabilities designed for complex multi-modal research environments. Operating as the master coordinator in the established distributed star-mesh topology, it provides centralised control while maintaining the system's offline-first recording capability.
+The Python Desktop Controller encompasses complete orchestration capabilities designed for complex multi-modal research environments. Operating as the master coordinator in the established distributed star-mesh topology, it provides centralized control while maintaining the system's offline-first recording capability.
 
 **Primary Functions:**
 
-- **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal sensors, and physiological monitoring equipment through standardised protocols
+- **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal sensors, and physiological monitoring equipment through standardized protocols
 - **Real-Time System Monitoring**: Advanced monitoring capabilities providing continuous assessment of device status, data quality, synchronisation precision, and system performance metrics
 - **Experimental Protocol Management**: Sophisticated session management enabling complex experimental protocols with automated device configuration and temporal coordination
-- **Data Integration and analysis**: complete data collection coordination with post-session analysis capabilities supporting research workflows
+- **Data Integration and Analysis**: complete data collection coordination with post-session analysis capabilities supporting research workflows
 
-**Architectural Decision Rationale**: The centralised control approach balances the need for coordinated multi-device operation with distributed resilience, following established patterns in scientific computing systems [Hey2009].
+**Architectural Decision Rationale**: The centralized control approach balances the need for coordinated multi-device operation with distributed resilience, following established patterns in scientific computing systems [Hey2009].
 
 ### Technology Stack
 
@@ -49,12 +49,12 @@ The Python Desktop Controller encompasses complete orchestration capabilities de
 
 - **Multi-Device Coordination**: Simultaneous control of multiple Android smartphones and USB webcams
 - **Real-time Monitoring**: Live status monitoring with device health indicators and preview streaming
-- **Recording Session Management**: Centralised start/stop control with automatic session metadata generation
+- **Recording Session Management**: Centralized start/stop control with automatic session metadata generation
 - **USB Webcam Integration**: DirectShow/V4L2 camera capture for stationary high-quality video recording
 - **Camera Calibration System**: OpenCV-based intrinsic and extrinsic camera parameter estimation
 - **Stimulus Presentation**: Integrated experimental stimulus controller for research applications
 - **Data Synchronisation**: Temporal alignment of multi-modal data streams with microsecond precision
-- **Export and analysis Tools**: Automated data processing and export for analysis workflows
+- **Export and Analysis Tools**: Automated data processing and export for analysis workflows
 
 ## Architecture
 
@@ -170,17 +170,17 @@ phases:
 
 #### Tabbed Interface Structure
 
-- **Recording Tab**: Centralised recording controls with real-time preview and session management
+- **Recording Tab**: Centralized recording controls with real-time preview and session management
 - **Devices Tab**: complete device connection management with individual and global coordination
 - **Calibration Tab**: Streamlined calibration workflows with progress tracking and quality assessment
 - **Files Tab**: Data management functions, export capabilities, and integrated system logging
 
 #### Component-Based Architecture
 
-- **ModernButton**: Standardised button styling with hover effects and semantic colour coding
+- **ModernButton**: Standardized button styling with hover effects and semantic colour coding
 - **StatusIndicator**: Consistent status communication across device types and operational states
 - **ProgressIndicator**: Unified progress visualisation for operations and procedures
-- **ConnectionManager**: Device connections with standardised controls and status reporting
+- **ConnectionManager**: Device connections with standardized controls and status reporting
 
 ## Protocol Specification
 
@@ -198,13 +198,13 @@ sockets.
 | Port | 9000 | Default server port (configurable) |
 | Message Format | JSON | Human-readable structured data |
 | Encoding | UTF-8 | Unicode text encoding |
-| Max Message Sise | 10MB | Maximum single message sise |
+| Max Message Size | 10MB | Maximum single message size |
 | Connection Timeout | 30 seconds | Initial connection timeout |
 | Keep-Alive | 60 seconds | Heartbeat interval |
 
 #### Message Structure
 
-All communication messages follow a standardised JSON format:
+All communication messages follow a standardized JSON format:
 
 ```json
 {
@@ -477,7 +477,7 @@ class WebcamManager:
     def detect_cameras(self) -> List[CameraInfo]:
         """Detect available USB cameras"""
         cameras = []
-        for index in range(10):  # check first 10 camera indices
+        for index in range(10):  # Check first 10 camera indices
             cap = cv2.VideoCapture(index)
             if cap.isOpened():
                 cameras.append(CameraInfo(index, cap))
@@ -671,7 +671,7 @@ The application provides a tabbed interface with four main sections:
 - **Session Browser**: Navigate recorded sessions
 - **Data Export**: Export tools for various formats
 - **Logging Viewer**: System logs and diagnostics
-- **Storage Management**: Disk space and file organisation
+- **Storage Management**: Disk space and file organization
 
 ### Recording Session Workflow
 
@@ -707,7 +707,7 @@ The application provides a tabbed interface with four main sections:
 **During Recording:**
 
 - Monitor device status indicators
-- check storage space and battery levels
+- Check storage space and battery levels
 - Observe synchronisation quality metrics
 - Use emergency stop if necessary
 
@@ -725,7 +725,7 @@ The application provides a tabbed interface with four main sections:
 1. Navigate to Files tab
 2. Select completed session from browser
 3. Review session metadata and file inventory
-4. check data integrity and completeness
+4. Check data integrity and completeness
 
 **Data Export:**
 
@@ -761,7 +761,7 @@ The application provides a tabbed interface with four main sections:
 
 1. Select "Stereo Calibration" mode
 2. Configure both RGB and thermal cameras
-3. Capture synchronised calibration images
+3. Capture synchronized calibration images
 4. Process stereo calibration parameters
 5. Validate alignment accuracy
 6. Save stereo parameters for session use
@@ -1089,7 +1089,7 @@ class SessionTest:
 **Solutions**:
 
 1. Verify Python environment activation: `conda activate thermal-env`
-2. check dependency installation: `conda list`
+2. Check dependency installation: `conda list`
 3. Validate PyQt5 installation: `python -c "import PyQt5; print('PyQt5 available')"`
 4. Run with debug mode: `python application.py --debug`
 
@@ -1097,7 +1097,7 @@ class SessionTest:
 **Solutions**:
 
 1. Update PyQt5 to latest version: `conda update pyqt5`
-2. check display scaling settings
+2. Check display scaling settings
 3. Verify graphics drivers are up to date
 4. Try alternative display backend: `export QT_QPA_PLATFORM=xcb`
 
@@ -1107,7 +1107,7 @@ class SessionTest:
 **Solutions**:
 
 1. Verify camera connections and power
-2. check USB port functionality with other devices
+2. Check USB port functionality with other devices
 3. Restart application with administrator privileges
 4. Update camera drivers
 5. Test with camera diagnostic tool: `python -c "import cv2; print(cv2.getBuildInformation())"`
@@ -1116,7 +1116,7 @@ class SessionTest:
 **Solutions**:
 
 1. Verify network connectivity (same WiFi network)
-2. check Android app is running and network configured
+2. Check Android app is running and network configured
 3. Test network connectivity: `ping [android_device_ip]`
 4. Verify firewall settings allow communication on configured port
 5. Restart network stack on both devices
@@ -1128,9 +1128,9 @@ class SessionTest:
 
 1. Ensure calibration board is clearly visible and well-lit
 2. Capture images from diverse angles and distances
-3. Use appropriate calibration board sise (recommend 9x6 chessboard)
+3. Use appropriate calibration board size (recommend 9x6 chessboard)
 4. Avoid motion blur during capture
-5. check camera focus and stability
+5. Check camera focus and stability
 
 **Problem**: Stereo calibration alignment poor
 **Solutions**:
@@ -1139,7 +1139,7 @@ class SessionTest:
 2. Verify temporal synchronisation between cameras
 3. Use larger calibration board for better feature detection
 4. Increase number of calibration image pairs
-5. check relative camera positioning and overlap
+5. Check relative camera positioning and overlap
 
 #### Performance Issues
 
@@ -1157,7 +1157,7 @@ class SessionTest:
 
 1. Use wired network connection if possible
 2. Reduce network traffic from other applications
-3. check WiFi signal strength and interference
+3. Check WiFi signal strength and interference
 4. Configure Quality of Service (QoS) settings
 5. Use dedicated network for research equipment
 
@@ -1167,7 +1167,7 @@ class SessionTest:
 **Solutions**:
 
 1. Verify sufficient storage space on all devices
-2. check file system integrity
+2. Check file system integrity
 3. Use data validation tools: `python tools/validate_data_schemas.py --session [session_id]`
 4. Review session logs for error messages
 5. Implement automatic backup procedures
@@ -1176,7 +1176,7 @@ class SessionTest:
 **Solutions**:
 
 1. Verify system clock synchronisation
-2. check network stability during recording
+2. Check network stability during recording
 3. Review synchronisation quality metrics
 4. Use higher precision synchronisation settings
 5. Post-process temporal alignment if necessary

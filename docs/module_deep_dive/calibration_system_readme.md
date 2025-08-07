@@ -137,7 +137,7 @@ graph TB
 #### Pattern-Based Calibration Pipeline
 
 1. **Pattern Presentation**: Automated or manual calibration pattern display
-2. **Image Acquisition**: Synchronised image capture across multiple cameras
+2. **Image Acquisition**: Synchronized image capture across multiple cameras
 3. **Feature Detection**: Robust corner or circle detection with quality filtering
 4. **Parameter Estimation**: Non-linear optimisation using detected features
 5. **Quality Assessment**: complete validation and coverage analysis
@@ -167,8 +167,8 @@ graph TB
     "device_ids",
     "start_time",
     "pattern_type",
-    "pattern_sise",
-    "square_sise",
+    "pattern_size",
+    "square_size",
     "status"
   ],
   "properties": {
@@ -197,7 +197,7 @@ graph TB
       "enum": ["chessboard", "circles", "asymmetric_circles"],
       "description": "Type of calibration pattern used"
     },
-    "pattern_sise": {
+    "pattern_size": {
       "type": "object",
       "properties": {
         "width": {"type": "integer", "minimum": 3},
@@ -205,10 +205,10 @@ graph TB
       },
       "required": ["width", "height"]
     },
-    "square_sise": {
+    "square_size": {
       "type": "number",
       "minimum": 0.001,
-      "description": "Physical sise of pattern squares in meters"
+      "description": "Physical size of pattern squares in meters"
     },
     "status": {
       "type": "string",
@@ -234,7 +234,7 @@ graph TB
         [0.0, 0.0, 1.0]
       ],
       "distortion_coefficients": [0.1, -0.2, 0.001, -0.002, 0.1],
-      "image_sise": [640, 480],
+      "image_size": [640, 480],
       "calibration_flags": 0
     },
     "quality_metrics": {
@@ -308,8 +308,8 @@ graph TB
     "camera_id": "camera_01",
     "calibration_config": {
       "pattern_type": "chessboard",
-      "pattern_sise": {"width": 9, "height": 6},
-      "square_sise": 0.025,
+      "pattern_size": {"width": 9, "height": 6},
+      "square_size": 0.025,
       "image_count": 20,
       "quality_threshold": 0.8,
       "auto_capture": true,
@@ -332,8 +332,8 @@ graph TB
     "camera_pair": ["rgb_camera", "thermal_camera"],
     "calibration_config": {
       "pattern_type": "chessboard",
-      "pattern_sise": {"width": 9, "height": 6},
-      "square_sise": 0.025,
+      "pattern_size": {"width": 9, "height": 6},
+      "square_size": 0.025,
       "image_count": 15,
       "synchronized_capture": true,
       "quality_threshold": 0.85
@@ -380,7 +380,7 @@ class CalibrationManager:
         
         # Process calibration using OpenCV
         calibration_data = self.calibration_processor.process_intrinsic_calibration(
-            images, config.pattern_type, config.pattern_sise, config.square_sise
+            images, config.pattern_type, config.pattern_size, config.square_size
         )
         
         # Assess calibration quality
@@ -407,12 +407,12 @@ class CalibrationManager:
         """Perform stereo calibration between two cameras"""
         session = self.create_calibration_session(config)
         
-        # Capture synchronised calibration images
+        # Capture synchronized calibration images
         image_pairs = self._capture_stereo_calibration_images(camera_pair, config)
         
         # Process stereo calibration
         stereo_data = self.calibration_processor.process_stereo_calibration(
-            image_pairs, config.pattern_type, config.pattern_sise, config.square_sise
+            image_pairs, config.pattern_type, config.pattern_size, config.square_size
         )
         
         # Assess stereo calibration quality
@@ -447,7 +447,7 @@ class CalibrationProcessor:
         self.optimization_processor = OptimizationProcessor()
     
     def process_intrinsic_calibration(self, images: List[np.ndarray], pattern_type: str, 
-                                    pattern_sise: Tuple[int, int], square_sise: float) -> CalibrationData:
+                                    pattern_size: Tuple[int, int], square_size: float) -> CalibrationData:
         """Process intrinsic camera calibration using detected patterns"""
         
         # Detect calibration patterns in images
@@ -455,12 +455,12 @@ class CalibrationProcessor:
         image_points = []
         
         # Generate object points for calibration pattern
-        objp = self._generate_object_points(pattern_sise, square_sise)
+        objp = self._generate_object_points(pattern_size, square_size)
         
         for image in images:
             # Detect pattern corners/circles
             detected_points = self.pattern_detector.detect_pattern(
-                image, pattern_type, pattern_sise
+                image, pattern_type, pattern_size
             )
             
             if detected_points is not None:
@@ -471,10 +471,10 @@ class CalibrationProcessor:
             raise CalibrationError("Insufficient valid calibration images")
         
         # Perform camera calibration
-        image_sise = images[0].shape[:2][::-1]  # (width, height)
+        image_size = images[0].shape[:2][::-1]  # (width, height)
         
         ret, camera_matrix, dist_coeffs, rvecs, tvecs = cv2.calibrateCamera(
-            object_points, image_points, image_sise, None, None,
+            object_points, image_points, image_size, None, None,
             flags=cv2.CALIB_FIX_ASPECT_RATIO
         )
         
@@ -499,7 +499,7 @@ class CalibrationProcessor:
             parameters=IntrinsicParameters(
                 camera_matrix=camera_matrix,
                 distortion_coefficients=dist_coeffs,
-                image_sise=image_sise
+                image_size=image_size
             ),
             rms_error=rms_error,
             rotation_vectors=rvecs,
@@ -509,8 +509,8 @@ class CalibrationProcessor:
         )
     
     def process_stereo_calibration(self, image_pairs: List[Tuple[np.ndarray, np.ndarray]], 
-                                 pattern_type: str, pattern_sise: Tuple[int, int], 
-                                 square_sise: float) -> StereoCalibrationData:
+                                 pattern_type: str, pattern_size: Tuple[int, int], 
+                                 square_size: float) -> StereoCalibrationData:
         """Process stereo calibration between two cameras"""
         
         # Detect patterns in both cameras simultaneously
@@ -518,15 +518,15 @@ class CalibrationProcessor:
         image_points_left = []
         image_points_right = []
         
-        objp = self._generate_object_points(pattern_sise, square_sise)
+        objp = self._generate_object_points(pattern_size, square_size)
         
         for left_image, right_image in image_pairs:
             # Detect patterns in both images
             left_points = self.pattern_detector.detect_pattern(
-                left_image, pattern_type, pattern_sise
+                left_image, pattern_type, pattern_size
             )
             right_points = self.pattern_detector.detect_pattern(
-                right_image, pattern_type, pattern_sise
+                right_image, pattern_type, pattern_size
             )
             
             if left_points is not None and right_points is not None:
@@ -538,14 +538,14 @@ class CalibrationProcessor:
             raise CalibrationError("Insufficient valid stereo calibration image pairs")
         
         # Perform stereo calibration
-        image_sise = image_pairs[0][0].shape[:2][::-1]
+        image_size = image_pairs[0][0].shape[:2][::-1]
         
         # First calibrate individual cameras
         ret1, camera_matrix1, dist_coeffs1, _, _ = cv2.calibrateCamera(
-            object_points, image_points_left, image_sise, None, None
+            object_points, image_points_left, image_size, None, None
         )
         ret2, camera_matrix2, dist_coeffs2, _, _ = cv2.calibrateCamera(
-            object_points, image_points_right, image_sise, None, None
+            object_points, image_points_right, image_size, None, None
         )
         
         if not (ret1 and ret2):
@@ -555,7 +555,7 @@ class CalibrationProcessor:
         ret, _, _, _, _, R, T, E, F = cv2.stereoCalibrate(
             object_points, image_points_left, image_points_right,
             camera_matrix1, dist_coeffs1, camera_matrix2, dist_coeffs2,
-            image_sise, flags=cv2.CALIB_FIX_INTRINSIC
+            image_size, flags=cv2.CALIB_FIX_INTRINSIC
         )
         
         if not ret:
@@ -701,7 +701,7 @@ bucika_gsr/calibration/
     - Print high-quality calibration patterns (recommended: 9x6 chessboard)
     - Mount pattern on rigid, flat surface
     - Ensure good lighting conditions
-    - Verify pattern dimensions and square sise accuracy
+    - Verify pattern dimensions and square size accuracy
 
 2. **Environment Setup**:
     - Stable camera mounting
@@ -728,8 +728,8 @@ bucika_gsr/calibration/
     - Choose target camera (USB webcam or Android device)
     - Configure pattern parameters:
         - Pattern type: Chessboard (recommended)
-        - Pattern sise: 9x6 corners
-        - Square sise: 25mm (measure accurately)
+        - Pattern size: 9x6 corners
+        - Square size: 25mm (measure accurately)
 
 2. **Image Capture Process**:
     - Position calibration pattern in camera view
@@ -743,7 +743,7 @@ bucika_gsr/calibration/
 3. **Quality Assessment**:
     - Monitor real-time detection feedback
     - Verify pattern detection accuracy
-    - check coverage map for complete sampling
+    - Check coverage map for complete sampling
     - Review detection success rate (target: >80%)
 
 4. **Calibration Processing**:
@@ -781,14 +781,14 @@ bucika_gsr/calibration/
 
 1. **Setup Requirements**:
     - Both cameras must see calibration pattern simultaneously
-    - Synchronised image capture capability
+    - Synchronized image capture capability
     - Overlap region of at least 60% between camera views
     - Consistent lighting for both visible and thermal imaging
 
 2. **Calibration Procedure**:
     - Configure stereo calibration mode
     - Verify temporal synchronisation between cameras
-    - Capture synchronised image pairs (15-20 pairs recommended)
+    - Capture synchronized image pairs (15-20 pairs recommended)
     - Process stereo calibration parameters
     - Validate epipolar geometry
 
@@ -813,7 +813,7 @@ bucika_gsr/calibration/
 
 ### Calibration Data Management
 
-#### Session Organisation
+#### Session Organization
 
 ```
 calibration_data/
@@ -879,12 +879,12 @@ class CalibrationProcessor:
     """OpenCV-based calibration algorithm implementation"""
     
     def process_intrinsic_calibration(self, images: List[np.ndarray], pattern_type: str, 
-                                    pattern_sise: Tuple[int, int], square_sise: float) -> CalibrationData:
+                                    pattern_size: Tuple[int, int], square_size: float) -> CalibrationData:
         """Process intrinsic calibration using detected patterns"""
     
     def process_stereo_calibration(self, image_pairs: List[Tuple[np.ndarray, np.ndarray]], 
-                                 pattern_type: str, pattern_sise: Tuple[int, int], 
-                                 square_sise: float) -> StereoCalibrationData:
+                                 pattern_type: str, pattern_size: Tuple[int, int], 
+                                 square_size: float) -> StereoCalibrationData:
         """Process stereo calibration between camera pairs"""
     
     def apply_calibration_correction(self, image: np.ndarray, calibration: CalibrationResult) -> np.ndarray:
@@ -941,7 +941,7 @@ class IntrinsicParameters:
     """Intrinsic camera calibration parameters"""
     camera_matrix: np.ndarray
     distortion_coefficients: np.ndarray
-    image_sise: Tuple[int, int]
+    image_size: Tuple[int, int]
     calibration_flags: int
     confidence_intervals: Optional[Dict[str, Tuple[float, float]]] = None
 ```
@@ -1031,7 +1031,7 @@ class CalibrationQualityTest:
             )
             results.append(result)
         
-        # check parameter consistency
+        # Check parameter consistency
         focal_lengths = [r.parameters.camera_matrix[0, 0] for r in results]
         focal_length_std = np.std(focal_lengths)
         
@@ -1049,8 +1049,8 @@ class CalibrationIntegrationTest:
         # Create calibration session
         config = CalibrationConfig(
             pattern_type="chessboard",
-            pattern_sise=(9, 6),
-            square_sise=0.025,
+            pattern_size=(9, 6),
+            square_size=0.025,
             quality_threshold=0.8
         )
         
@@ -1071,8 +1071,8 @@ class CalibrationIntegrationTest:
         
         config = CalibrationConfig(
             pattern_type="chessboard",
-            pattern_sise=(9, 6),
-            square_sise=0.025,
+            pattern_size=(9, 6),
+            square_size=0.025,
             synchronized_capture=True
         )
         
@@ -1094,7 +1094,7 @@ class CalibrationIntegrationTest:
 **Symptoms**: Low detection success rate, inconsistent corner detection
 **Diagnosis**:
 
-1. check image quality and focus
+1. Check image quality and focus
 2. Verify lighting conditions
 3. Validate pattern print quality and dimensions
 4. Review pattern positioning and visibility
@@ -1103,7 +1103,7 @@ class CalibrationIntegrationTest:
 
 1. **Image Quality Improvement**:
    ```python
-   # check image sharpness
+   # Check image sharpness
    laplacian_variance = cv2.Laplacian(image, cv2.CV_64F).var()
    if laplacian_variance < 100:
        print("Image may be blurry - check camera focus")
@@ -1120,7 +1120,7 @@ class CalibrationIntegrationTest:
 **Diagnosis**:
 
 1. Analyse error distribution across images
-2. check calibration pattern quality
+2. Check calibration pattern quality
 3. Review image capture diversity
 4. Validate camera stability during capture
 
@@ -1146,7 +1146,7 @@ class CalibrationIntegrationTest:
 **Diagnosis**:
 
 1. Verify temporal synchronisation between cameras
-2. check camera overlap and baseline geometry
+2. Check camera overlap and baseline geometry
 3. Validate individual camera calibrations
 4. Review pattern visibility in both cameras
 
@@ -1157,18 +1157,18 @@ class CalibrationIntegrationTest:
    # Test temporal alignment
    sync_quality = test_camera_synchronisation(camera1, camera2)
    if sync_quality.offset > 1.0:  # 1ms threshold
-       print("Cameras may not be properly synchronised")
+       print("Cameras may not be properly synchronized")
    ```
 
 2. **Baseline Optimisation**:
     - Verify adequate baseline distance (>5% of working distance)
     - Ensure sufficient camera overlap (>60%)
-    - check for parallel optical axes
+    - Check for parallel optical axes
     - Validate camera mounting stability
 
 ### Advanced Diagnostics
 
-#### Calibration Quality analysis
+#### Calibration Quality Analysis
 
 ```python
 def diagnose_calibration_quality(calibration_result: CalibrationResult):
@@ -1183,7 +1183,7 @@ def diagnose_calibration_quality(calibration_result: CalibrationResult):
     if quality.coverage_score < 0.6:
         print("WARNING: Poor coverage - capture more images from diverse positions")
     
-    # check parameter confidence
+    # Check parameter confidence
     focal_confidence = quality.confidence_intervals.get("focal_length_x", (0, 0))
     if (focal_confidence[1] - focal_confidence[0]) > 10.0:
         print("WARNING: High parameter uncertainty - increase image count")
@@ -1243,4 +1243,4 @@ python calibration_benchmark.py --iterations 100 --cross-validation
 
 [Triggs2000] Triggs, B., McLauchlan, P. F., Hartley, R. I., & Fitzgibbon, A. W. (2000). Bundle adjustment—a modern synthesis. In *International Workshop on Vision Algorithms* (pp. 298-372). Springer.
 
-[Zhang2000] Zhang, Z. (2000). A flexible new technique for camera calibration. *IEEE Transactions on Pattern analysis and Machine Intelligence*, 22(11), 1330-1334.
+[Zhang2000] Zhang, Z. (2000). A flexible new technique for camera calibration. *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 22(11), 1330-1334.

@@ -180,7 +180,7 @@ Create a configuration file to customis\1 quality thresholds and test parameters
   - WebSocket communication protocol validation with 98%+ connection success
   - Network resilience under adverse conditions (high latency, packet loss)
   - Bandwidth utilisation efficiency testing (<85% utilisation)
-  - Message serialisation/deserialisation accuracy (>98% success)
+  - Message serialisation/deserialization accuracy (>98% success)
 - **Synchronisation Precision**:
   - Temporal accuracy validation (<1ms precision, <0.5ms RMS)
   - Cross-platform timing synchronisation (PC-Android <50ms max offset)
@@ -209,7 +209,7 @@ Create a configuration file to customis\1 quality thresholds and test parameters
 *Implementation expanded with new complete tests*
 - **Complete Research Workflow Validation**: Full session lifecycle from device discovery to data export
 - **Data Integrity Across Multi-Modal Collection**: Cross-sensor data correlation and validation
-- **Export and analysis Pipeline Testing**: Data processing and analysis workflow validation
+- **Export and Analysis Pipeline Testing**: Data processing and analysis workflow validation
 
 ### Performance Tests (Non-Functional)
 *Planned for future implementation*
@@ -242,7 +242,7 @@ The evaluation suite enforces research-grade quality standards:
 - **Temporal Stability**: <1ms/hour drift over extended operation, automatic compensation
 - **Cross-Platform Consistency**: <50ms synchronisation variance between PC and Android
 - **Real Implementation Testing**: 100% tests validate actual source code and functionality
-- **Multi-Modal Coordination**: <50ms jitter for synchronised multi-sensor recording start/stop
+- **Multi-Modal Coordination**: <50ms jitter for synchronized multi-sensor recording start/stop
 
 ## Output and Reporting
 
@@ -270,7 +270,7 @@ Each execution provides:
 - **Overall Quality Score** (0.0-1.0) based on weighted criteria
 - **Research Readiness Assessment** (Ready/Needs Improvement)
 - **Specific Recommendations** for addressing identified issues
-- **Trend analysis** across multiple executions
+- **Trend Analysis** across multiple executions
 
 ## Integration with Development Workflow
 
@@ -327,7 +327,7 @@ The evaluation suite implements rigorous scientific validation principles:
 
 ### Statistical Validation
 - **Confidence Intervals**: 95% confidence intervals for all timing measurements
-- **Sample Sise analysis**: Adequate sample sizes for statistical power
+- **Sample Size Analysis**: Adequate sample sizes for statistical power
 - **Outlier Detection**: Automated identification and handling of anomalous results
 
 ### Reproducibility Testing
@@ -353,7 +353,7 @@ The evaluation suite implements rigorous scientific validation principles:
 - **Multi-Study Validation**: Cross-study consistency verification
 - **Long-Term Reliability**: Extended operational validation (weeks/months)
 - **Real-World Deployment**: Field testing in actual research environments
-- **Comparative analysis**: Benchmarking against alternative solutions
+- **Comparative Analysis**: Benchmarking against alternative solutions
 
 ## Conclusion
 

@@ -7,17 +7,17 @@ This chapter provides a detailed evaluation of the Multi-Sensor Recording System
 ![Figure 6.1: Achievement Visualisation Dashboard](../diagrams/figure_6_1_achievement_visualization_dashboard.png)
 *Figure 6.1: complete dashboard showing the achievement status of primary and secondary research objectives with quantitative performance metrics and validation results.*
 
-The assessment methodology employs both quantitative performance metrics and qualitative evaluation criteria to provide a balanced evaluation of research contributions. Technical performance is validated against established benchmarks in contactless physiological measurement, while broader contributions to research methodology and software engineering are identified and analysed.
+The assessment methodology employs both quantitative performance metrics and qualitative evaluation criteria to provide a balanced evaluation of research contributions. Technical performance is validated against established benchmarks in contactless physiological measurement, while broader contributions to research methodology and software engineering are identified and analyzed.
 
 The chapter additionally examines limitations and constraints that emerged during development and validation phases, ensuring transparent disclosure of system capabilities and boundaries. This analysis establishes a foundation for future research directions and practical deployment considerations.
 
 ### Key Deliverables and Research Outcomes
 
-The research project successfully delivered a validated multi-sensor platform for contactless GSR measurement that integrates thermal imaging technology with traditional electrodermal sensors within a synchronised distributed system architecture. The platform demonstrates practical feasibility of contactless GSR estimation while maintaining measurement accuracy comparable to established electrode-based reference methods.
+The research project successfully delivered a validated multi-sensor platform for contactless GSR measurement that integrates thermal imaging technology with traditional electrodermal sensors within a synchronized distributed system architecture. The platform demonstrates practical feasibility of contactless GSR estimation while maintaining measurement accuracy comparable to established electrode-based reference methods.
 
 **Primary Technical Deliverables:**
 
-- Functional multi-device Android-PC platform with synchronised data acquisition capabilities
+- Functional multi-device Android-PC platform with synchronized data acquisition capabilities
 - Thermal imaging integration for contactless GSR estimation implemented in `PythonApp/src/webcam/webcam_capture.py`
 - Distributed sensor fusion algorithms with millisecond-precision timing coordination
 - complete validation framework demonstrating correlation coefficients exceeding 0.8 with reference GSR measurements
@@ -39,7 +39,7 @@ The research achieved several significant technical innovations that advance the
 
 The distributed system architecture successfully addresses temporal synchronisation challenges inherent in multi-device physiological measurement, achieving synchronisation precision suitable for research applications through implementation of custom protocols defined in `protocol/communication_protocol.json`. The modular software architecture enables flexible sensor integration while maintaining research-grade data integrity and measurement precision.
 
-The experimental validation methodology established quantitative benchmarks for contactless GSR measurement accuracy, providing the research community with standardised evaluation criteria for future contactless physiological measurement system development.
+The experimental validation methodology established quantitative benchmarks for contactless GSR measurement accuracy, providing the research community with standardized evaluation criteria for future contactless physiological measurement system development.
 outlines potential future work and extensions that logically stem from
 the findings and limitations, positioning the project within a wider
 research context and proposing directions for continued innovation.
@@ -53,7 +53,7 @@ The Multi-Sensor Recording System project represents a significant
 achievement in the development of an advanced research instrument for
 contactless physiological monitoring. It successfully bridges the gap
 between the theoretical goals of non-intrusive stress measurement and
-the practical challenges of implementing a reliable, synchronised
+the practical challenges of implementing a reliable, synchronized
 multi-sensor platform. All major objectives set out at the beginning of
 the project have been met, and in several cases the outcomes exceed the
 initial expectations. The final system provides a sophisticated platform
@@ -61,7 +61,7 @@ that not only meets its ambitious original requirements but also
 establishes new benchmarks in areas such as data synchronisation
 precision, system scalability, and software quality. This section
 summarizes the project's deliverables and outcomes, and highlights the
-key technical innovations realised.
+key technical innovations realized.
 
 ### Key Deliverables and Outcomes
 
@@ -72,7 +72,7 @@ The following key outcomes have been achieved by the end of the project:
 - **Integrated Multi-Sensor Recording Platform:** A complete system was
   delivered, consisting of an **Android mobile application** and a
   **Python-based desktop controller**. Together, these components allow
-  synchronised recording of high-resolution RGB video, thermal imagery,
+  synchronized recording of high-resolution RGB video, thermal imagery,
   and galvanic skin response (GSR) signals. The system can coordinate
   multiple devices and sensors in real time, enabling complete data
   acquisition for stress and emotion research. All core functional
@@ -131,7 +131,7 @@ The following key outcomes have been achieved by the end of the project:
   requirements phase was satisfied under the tested conditions, giving
   confidence in the system's correctness and robustness.
 
-Taken together, these deliverables indicate that the project realised a
+Taken together, these deliverables indicate that the project realized a
 **fully operational research system**. The outcomes include not only the
 working software and hardware integration, but also the qualitative
 aspects such as reliability and usability, which were explicitly planned
@@ -152,7 +152,7 @@ cutting-edge research requirements with practical engineering
 constraints:
 
 - **Distributed Multi-Device Architecture:** The system's architecture
-  is an innovative hybrid of centralised and distributed design. It
+  is an innovative hybrid of centralized and distributed design. It
   combines a central coordinating desktop application with multiple
   autonomous mobile sensing units. This **hybrid star--mesh topology**
   provides the simplicity of a central control (for session management
@@ -160,7 +160,7 @@ constraints:
   of each mobile device (for local data capture and preliminary
   processing). This architecture is novel in the context of
   physiological monitoring systems, which traditionally rely on either a
-  single dedicated device or purely centralised data loggers. The
+  single dedicated device or purely centralized data loggers. The
   project demonstrated that such a distributed approach can maintain
   strict temporal coordination and reliability. This innovation enables
   new experimental setups -- for instance, multiple participants or
@@ -237,7 +237,7 @@ constraints:
 
 In summary, the technical innovations arising from this project set it
 apart from simply being an implementation of known techniques. The
-development of a **synchronised, scalable, and quality-aware
+development of a **synchronized, scalable, and quality-aware
 multi-sensor system** demonstrates original problem-solving and
 contributes new approaches to the field of research-oriented software
 and system design. These achievements not only solved the immediate
@@ -278,7 +278,7 @@ extent to which each was achieved:
   project not only delivered reliable multi-device sync but demonstrated
   a higher precision and scalability than initially required.
 
-- **Goal 2: Real-Time Multi-Modal Data Processing and analysis** --
+- **Goal 2: Real-Time Multi-Modal Data Processing and Analysis** --
   *Status:* **Achieved (Exceeded expectations).** The project aimed to
   process and analyse data from multiple modalities in real time, which
   included handling high-resolution video and sensor streams
@@ -302,8 +302,8 @@ extent to which each was achieved:
   is reliable enough for research use (minimal data loss, proper
   documentation, etc.). This goal was achieved to an exemplary degree.
   All data recorded by the system is time-stamped, free of significant
-  gaps, and stored in standardised formats suitable for analysis (e.g.
-  synchronised CSV or HDF5 files for sensor data with corresponding
+  gaps, and stored in standardized formats suitable for analysis (e.g.
+  synchronized CSV or HDF5 files for sensor data with corresponding
   video timestamp logs). The system's reliability was evidenced by
   long-duration test runs (Section 5.6.1) where it maintained operation
   without crashes or data corruption; specifically, the system achieved
@@ -431,7 +431,7 @@ objectives did require careful time management and prioritisation, as
 discussed in Chapter 4 (some planned extensions, such as exploring
 complex machine learning algorithms for GSR prediction, were deferred in
 favour of solidifying the working system -- see Future Work).
-Nonetheless, the fact that multiple stretch goals were realised speaks
+Nonetheless, the fact that multiple stretch goals were realized speaks
 to the effectiveness of the project's iterative and agile approach. It
 also means the final deliverable is a well-rounded platform, equipped
 with advanced features that will serve the research community better and
@@ -444,7 +444,7 @@ critically evaluate the results and the process by which they were
 achieved. This section discusses the strengths and weaknesses of the
 system design, reflects on key design choices and their consequences,
 and compares the final solution to other approaches in order to
-contextualise its value. By examining what worked well and what
+contextualize its value. By examining what worked well and what
 challenges were encountered (and how they were addressed), we derive
 lessons that are relevant for both this project's legacy and similar
 future endeavors. This reflective analysis highlights not only the
@@ -530,7 +530,7 @@ focusing on software modules while waiting for hardware issues to
 resolve). In retrospect, the project management could have included more
 **risk mitigation** for hardware and integration aspects (as was
 partially identified in the risk analysis in Chapter 3). Nonetheless,
-the team adapted by parallelising development streams and making use of
+the team adapted by parallelizing development streams and making use of
 simulated data to test software while hardware was unavailable. This
 flexibility in the process was important in ultimately delivering
 everything on time.
@@ -550,7 +550,7 @@ simple predictive drift correction and periodic re-synchronisation,
 rather than a more complex adaptive filtering approach. This was decided
 after experimenting with alternatives and finding that a simpler
 approach was easier to verify and less prone to edge-case failures. The
-result was a slightly less optimised sync routine, but one that is
+result was a slightly less optimized sync routine, but one that is
 transparent and reliable, aligning with the project's goals.
 
 In summary, the system design process involved continuously balancing
@@ -592,7 +592,7 @@ thermal camera, and a widely available GSR sensor) rather than
 proprietary equipment. An approximate cost analysis suggests that our
 entire multi-device setup costs a fraction of what high-end laboratory
 systems would -- roughly on the order of 70% cheaper than an equivalent
-set of devices from a specialised vendor. This drastic cost reduction
+set of devices from a specialized vendor. This drastic cost reduction
 can democratis\1 advanced physiological monitoring, making it feasible
 for smaller labs or field studies with limited budgets. Another point of
 comparison is **flexibility**: commercial systems often come as closed
@@ -626,7 +626,7 @@ oftentimes individual components are tested in isolation. Second,
 **reliability and rigor**: academic prototypes might not undergo the
 same level of rigorous testing and quality assurance, since they are
 often built for a one-off study or publication. In contrast, this
-project emphasised software engineering best practices (version control,
+project emphasized software engineering best practices (version control,
 testing, documentation) and achieved a level of reliability more akin to
 industrial software than a quick prototype. This means that our system
 is better poised for repeated use in diverse studies and for long-term
@@ -650,7 +650,7 @@ integration of **contactless measurement with traditional sensing**.
 Many open-source efforts target a single sensor type or a single device
 (e.g., a phone app that measures heart rate using the camera). Our
 project by design handles large volumes of data from multiple
-synchronised sources (video frames plus sensor streams), which required
+synchronized sources (video frames plus sensor streams), which required
 solving challenges in data management and sync that simpler tools don't
 encounter. Additionally, the combination of **thermal imaging** with
 visible video and physiological signals in one open platform is, to the
@@ -666,7 +666,7 @@ open-source projects' success also depends on ease of use and
 maintenance; our system, while powerful, does have more moving parts
 than a single-purpose tool, so ensuring it is picked up by others will
 require continued effort in simplifying deployment (see Future Work for
-plans such as containerisation to ease setup). However, in terms of
+plans such as containerization to ease setup). However, in terms of
 capability and design quality, this project's output arguably goes
 beyond any existing open-source solution for multimodal stress
 measurement. It fills a gap by providing researchers a ready-made
@@ -679,7 +679,7 @@ research alternatives. Its key advantages lie in innovation (offering
 something new in combining modalities and tech), cost and openness
 (making advanced methods accessible), and thoroughness (engineered and
 validated to a high standard). No solution is without competition or
-trade-offs: commercial systems may still outperform in specialised
+trade-offs: commercial systems may still outperform in specialized
 use-cases or offer professional support, and simpler academic tools
 might be easier to deploy for very specific tasks. Nonetheless, this
 project's system strikes a compelling balance, delivering a unique and
@@ -690,7 +690,7 @@ laboratory-grade results -- an outcome that both validates the project's
 premise and contributes a valuable piece of infrastructure to the
 community.
 
-## System Performance analysis
+## System Performance Analysis
 
 A crucial aspect of evaluating the project is analysing how the system
 performed relative to its design specifications and how those
@@ -748,7 +748,7 @@ high-resolution timers. The outcome is that researchers can trust the
 data alignment from our system for any experiment where events need to
 be correlated with only millisecond-level uncertainty (such as aligning
 physiological responses with stimuli timings). This level of performance
-is typically only seen in specialised lab equipment, thus the system's
+is typically only seen in specialized lab equipment, thus the system's
 sync accuracy is a standout metric.
 
 **Resource Utilisation and Efficiency:** The system's performance also
@@ -807,7 +807,7 @@ and maintain stable operation over long durations. These metrics are a
 testament to the soundness of the system's design and the effectiveness
 of optimizations carried out during development. By achieving such
 performance on commodity hardware, the project demonstrates the
-viability of using non-specialised equipment for advanced research
+viability of using non-specialized equipment for advanced research
 applications, which is a significant validation of the initial project
 vision.
 
@@ -815,7 +815,7 @@ vision.
 
 To ensure that the performance claims above are credible and
 scientifically valid, the project employed a thorough approach to
-performance testing and validation. This involved using both specialised
+performance testing and validation. This involved using both specialized
 testing scripts and real-world trial runs, as well as statistical
 analysis to interpret the results. Here we outline how the key
 performance results were validated:
@@ -857,15 +857,15 @@ qualitative confirmation that the system's performance holds up under
 realistic conditions and that its fault tolerance mechanisms work in
 practice.
 
-**Statistical analysis of Timing Data:** For the crucial aspect of
+**Statistical Analysis of Timing Data:** For the crucial aspect of
 synchronisation and timing, the validation was done with rigorous
 statistical techniques. Time stamp logs from devices were collected and
 compared using cross-correlation analysis to assess alignment. We also
-utilised an external high-precision time source (an atomic clock
-synchronised timestamping on each device via an NTP server) as a
-baseline to verify our internal sync. The results were analysed to
+utilized an external high-precision time source (an atomic clock
+synchronized timestamping on each device via an NTP server) as a
+baseline to verify our internal sync. The results were analyzed to
 compute confidence intervals for the synchronisation error. For example,
-with a sample sise of 10,000 timestamp comparisons, we found the mean
+with a sample size of 10,000 timestamp comparisons, we found the mean
 offset \~0 ms with standard deviation \~3 ms; a 95% confidence interval
 for the mean offset included zero and was within ±0.1 ms, indicating no
 systematic bias, and for the distribution of offsets, 99% of errors were
@@ -900,7 +900,7 @@ overlook a flaw in measuring performance.
 Through this multifaceted validation approach, we can state with
 assurance that the system's performance has been rigorously verified.
 Each key result is supported by data from well-designed tests, and those
-tests themselves were scrutinised for correctness. This level of
+tests themselves were scrutinized for correctness. This level of
 validation is in line with the project's emphasis on scientific rigor:
 just as one would validate experimental data before drawing conclusions,
 we validated system performance before claiming success on technical
@@ -942,7 +942,7 @@ broadens the scope of experimental design. The project essentially
 demonstrates a template for **multi-person, multi-modal experiments**:
 researchers can coordinate several sensors and cameras to capture
 synchronous data from multiple subjects, thus investigating
-interpersonal physiological correlations or synchronised responses to
+interpersonal physiological correlations or synchronized responses to
 stimuli. This is a contribution to research methodology in fields like
 psychology and human factors, showing a path to more ecologically valid
 experiments through technology.
@@ -993,7 +993,7 @@ tool development.
 an important aspect of research methodology today involves ethics and
 data governance. The project took care to include features that
 facilitate compliance with data privacy norms (like secure data storage,
-optional anonymisation of video by blurring faces if needed, etc.). By
+optional anonymization of video by blurring faces if needed, etc.). By
 addressing these in the design, we contribute a reference for how future
 contactless monitoring systems can be built ethically from the ground
 up. We discuss in the documentation the considerations such as informed
@@ -1042,7 +1042,7 @@ design as a starting template rather than starting from scratch.
 **Testing and Quality Assurance Best Practices:** Another significant
 software engineering contribution of this project is the complete
 approach to testing and quality assurance in a domain where this is not
-always prioritised. We employed unit testing on both the Android side
+always prioritized. We employed unit testing on both the Android side
 (using AndroidJUnit and Espresso for UI tests) and the Python side (with
 PyTest), achieving high code coverage. We also integrated continuous
 integration (CI) tools to run tests on each commit. While these
@@ -1053,7 +1053,7 @@ repository includes all test code), we provide a concrete example that
 **high-quality code and research prototypes are not mutually
 exclusive**. This could encourage better practices in the community --
 showing that investing in tests pays off by catching issues early and
-ensuring reliability. Additionally, we created specialised testing tools
+ensuring reliability. Additionally, we created specialized testing tools
 (like simulators for sensor data) that can be adapted for other
 projects. For instance, our network simulation tests (which introduced
 artificial latency or packet loss to test robustness) are generic enough
@@ -1082,7 +1082,7 @@ open-source software engineering, and by achieving it here, we add to
 the community's examples of well-documented research tools.
 
 **Open-Source Release and Community Impact:** By releasing the entire
-codebase under an open-source licence (e.g., MIT licence), the project
+codebase under an open-source license (e.g., MIT License), the project
 contributes directly to the pool of tools available to the community. In
 terms of software engineering impact, this means the code can be
 examined, reused, and improved by anyone. Already, there has been
@@ -1192,7 +1192,7 @@ ideal targets or where trade-offs were made:
   systems.
 
 - **Computational Load and Power Constraints:** Although the system was
-  optimised for performance, it does push the limits of the hardware,
+  optimized for performance, it does push the limits of the hardware,
   especially on the mobile devices. Recording 4K video and processing it
   continuously is intensive; during testing, devices got noticeably warm
   and battery life was drained quickly (a phone could only record for a
@@ -1307,7 +1307,7 @@ deploying and using this system in real research or applied contexts:
   to ensure compliance, and some may be hesitant to use a tool that
   records video, given the sensitive nature of biometric data. These are
   not faults of the system per se, but external constraints that
-  influence how and where the system can be utilised. Essentially, **the
+  influence how and where the system can be utilized. Essentially, **the
   system lives at an intersection of technology and human subject
   research regulations**, and navigating that requires careful
   protocols.
@@ -1353,7 +1353,7 @@ robustness:
   contactless GSR estimation. In the short term, this means integrating
   machine learning models into the processing pipeline. A next step
   could be to apply a convolutional neural network (CNN) or a
-  transformer-based model that takes the synchronised RGB and thermal
+  transformer-based model that takes the synchronized RGB and thermal
   footage as input and outputs a continuous prediction of GSR. Data for
   training such a model could be collected using the system itself
   (since it can record ground truth GSR alongside video). As a first
@@ -1451,9 +1451,9 @@ research questions that this project could evolve into, building on the
 foundation laid:
 
 - **Next-Generation Contactless Monitoring Platform:** In the long term,
-  one could transform this system into a more generalised platform for
+  one could transform this system into a more generalized platform for
   contactless physiological and behavioral monitoring. This might
-  involve miniaturising and custom-building hardware -- for example,
+  involve miniaturizing and custom-building hardware -- for example,
   developing a dedicated device or sensor hub that includes a thermal
   camera, RGB camera, and required processing, all in a single unit.
   Paired with wearable reference sensors, it could become a portable
@@ -1466,8 +1466,8 @@ foundation laid:
   interdisciplinary work, possibly collaboration with hardware engineers
   and incorporating new sensors (like depth cameras for 3D imaging, or
   improved thermal sensors). It moves the project from a
-  proof-of-concept using off-the-shelf parts to a specialised instrument
-  that could perhaps be commercialised or widely distributed. This is an
+  proof-of-concept using off-the-shelf parts to a specialized instrument
+  that could perhaps be commercialized or widely distributed. This is an
   ambitious direction that builds directly on the success of the current
   system and the clearly demonstrated demand for such multi-modal data.
 
@@ -1505,7 +1505,7 @@ foundation laid:
   coordination algorithms and perhaps cloud support (to aggregate data
   centrally if experiments are geographically distributed). A
   cloud-connected version of the system could allow researchers in
-  different locations to run synchronised studies -- for instance, two
+  different locations to run synchronized studies -- for instance, two
   labs in different cities could collect data under similar protocols
   and then combine the data in real time for comparison. This moves into
   the realm of **Internet of Things (IoT) for research**, where each

@@ -7,7 +7,7 @@ The validation methodology for the Multi-Sensor Recording System employs a syste
 ![Figure 5.1: Multi-Layered Testing Architecture](../diagrams/figure_5_1_multi_layered_testing_architecture.png)
 *Figure 5.1: complete testing framework showing the hierarchical validation approach from unit testing through system integration to experimental validation.*
 
-The testing philosophy integrates established software engineering practices with specialised validation methods for scientific instrumentation, balancing full coverage with practical implementation constraints while prioritising critical system components and behaviours that directly impact research outcomes.
+The testing philosophy integrates established software engineering practices with specialized validation methods for scientific instrumentation, balancing full coverage with practical implementation constraints while prioritising critical system components and behaviours that directly impact research outcomes.
 
 ### Multi-Level Testing Hierarchy
 
@@ -26,7 +26,7 @@ Standard software testing methodologies require augmentation to address research
 
 **Temporal Synchronisation Validation:** Custom validation procedures assess timestamp alignment accuracy across distributed sensor nodes, with target specifications requiring synchronisation precision within 5 milliseconds. Testing protocols verify synchronisation maintenance under various network conditions and device configurations.
 
-**Sensor Data Quality Assessment:** Specialised validation metrics evaluate GSR signal fidelity, thermal imaging quality, and camera data integrity. Quality assessment includes signal-to-noise ratio analysis, correlation validation with reference sensors, and statistical validation of measurement precision.
+**Sensor Data Quality Assessment:** Specialized validation metrics evaluate GSR signal fidelity, thermal imaging quality, and camera data integrity. Quality assessment includes signal-to-noise ratio analysis, correlation validation with reference sensors, and statistical validation of measurement precision.
 
 **Long-term Reliability Characterisation:** Extended testing protocols assess system performance during prolonged operation, including evaluation of synchronisation drift, data loss rates, and hardware stability under continuous operation conditions.
 example, one key metric is **synchronisation precision** between devices
@@ -60,7 +60,7 @@ Overall, the strategy was driven by the project's requirements (from
 Chapter 3): every functional requirement and non-functional requirement
 was mapped to one or more tests to confirm it is satisfied. In summary,
 the testing approach was **holistic** -- covering unit, integration,
-system, and user aspects -- and **metric-driven**, emphasising
+system, and user aspects -- and **metric-driven**, emphasizing
 quantitative evidence (timings, counts, percentages) to demonstrate that
 the system meets its design goals.
 
@@ -90,10 +90,10 @@ testing engine** (using Pytest for the Python controller), and an
 Coordinator can trigger tests on the Android device (or emulator) and
 the desktop application in tandem, and it ensures that any coordinated
 tests (like starting a session from the PC and verifying the Android
-response) happen in a synchronised fashion. Test results from all
+response) happen in a synchronized fashion. Test results from all
 components are sent to a central **Metrics Collector**, which aggregates
 logs and quantitative measurements (such as timing data or pass/fail
-counts). Finally, an **analysis & Reporting** module processes these
+counts). Finally, an **Analysis & Reporting** module processes these
 results to produce summary reports, logs, and alerts. This architecture
 proved vital in managing the complexity of multi-device testing,
 allowing us to run a full test suite (unit + integration + system tests)
@@ -103,7 +103,7 @@ with one command and gather all results in one place.
 
 Coordinating tests across PC and Android required some special
 infrastructure. On the Android side, we used **AndroidJUnitRunner** for
-unit tests and small integration tests on the device. We also utilised
+unit tests and small integration tests on the device. We also utilized
 **Espresso** for UI tests to simulate user interactions in the Android
 app's
 interface[\[5\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,double%20creation%20and%20behaviour%20verification).
@@ -167,7 +167,7 @@ data characteristics (including some noise and variability) so that the
 tests remain
 realistic[\[8\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=system%20addresses%20the%20unique%20challenges,characteristics%20of%20human%20physiological%20responses)[\[9\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=Synthetic%20data%20generation%20includes%20temporal,environmental%20conditions%2C%20and%20experimental%20scenarios).
 In cases where real data was needed (e.g., to verify that a recorded
-video and GSR signal can be synchronised post-hoc), we used **anonymised
+video and GSR signal can be synchronized post-hoc), we used **anonymized
 sample data** collected during early trial runs, with all personal
 identifiers removed. This allowed testing of data export and analysis
 functions on real-world-like data without violating privacy.
@@ -191,7 +191,7 @@ in isolation, on both the Android application side and the desktop
 controller side. In total, we wrote dozens of unit test cases, aiming
 for broad coverage of the codebase's core logic. The unit tests were run
 frequently during development (with each code commit) to catch
-regressions early. We utilised mocking frameworks to simulate
+regressions early. We utilized mocking frameworks to simulate
 interactions with hardware or external dependencies, so that unit tests
 could run in a fast, deterministic manner.
 
@@ -347,12 +347,12 @@ for an incomplete
 one[\[28\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_main.py#L155-L164)[\[29\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_main.py#L165-L173).
 Another test generates a sample NumPy array of sensor readings and runs
 it through a processing pipeline (e.g., filtering out noise or
-normalising values) to ensure the transformations behave as expected
+normalizing values) to ensure the transformations behave as expected
 (values are in the expected range, length of data is correct,
 etc.)[\[30\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_main.py#L176-L184)[\[31\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_main.py#L180-L188).
 We also verify basic image processing capabilities using OpenCV -- for
 example, create a dummy image in memory and apply a grayscale conversion
-and resising, then assert that the dimensions and pixel values match
+and resizing, then assert that the dimensions and pixel values match
 expected
 results[\[32\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_main.py#L119-L128)[\[33\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_main.py#L129-L135).
 This gives confidence that the OpenCV integration is working (important
@@ -441,7 +441,7 @@ all sides. Our automated test simulation verified the message sequence
 (PC sends "stop", devices acknowledge and finalise data, PC gathers
 final status). In a manual test, we physically observed that stopping a
 session through the desktop GUI caused the phone to stop recording
-within about a second and that all data was indeed finalised (video file
+within about a second and that all data was indeed finalized (video file
 closed, no corruption, sensor log saved). The system also produced a
 combined session log on the PC, listing all files and any issues; in our
 test, it showed all devices finished successfully. This confirms the
@@ -470,7 +470,7 @@ Overall, the multi-device integration tests demonstrated that the
 correctly** under normal conditions and degrades gracefully under
 abnormal conditions. The successful synchronisation of start/stop
 commands and data timestamps confirms that the core promise of the
-system -- synchronised multi-modal data capture -- is fulfilled by the
+system -- synchronized multi-modal data capture -- is fulfilled by the
 integration of its parts.
 
 ### 5.4.2 Network Communication Testing
@@ -494,7 +494,7 @@ passed[\[34\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8eff
 The high-latency scenario was more interesting -- here the start command
 from PC took about half a second to reach the phone and similarly for
 stop, etc. The system still worked (the devices all connected and
-synchronised), just that actions took longer to reflect. The test logged
+synchronized), just that actions took longer to reflect. The test logged
 \~500 ms average latency (matching what we injected) and still 0% packet
 loss[\[36\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_05_test_network_resilience_output.txt#L51-L59)[\[37\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_05_test_network_resilience_output.txt#L72-L80).
 All assertions passed in this scenario, showing that the system can
@@ -551,7 +551,7 @@ induced a drop after everything was recording, causing the PC to lose
 contact with the Android for a short period. The Android, however, keeps
 recording locally even if connection is lost. When the connection was
 restored (we simulated a 5-second outage), the PC and Android
-re-synchronised -- the PC noted a gap in heartbeats and then received a
+re-synchronized -- the PC noted a gap in heartbeats and then received a
 fresh status update once the link was back. The session continued and
 eventually was stopped successfully. This test was considered passed
 (with some warnings in the logs). It validates NFR-010 (system
@@ -611,7 +611,7 @@ in Chapter 4), confirming that data was flowing.
 
 After 5 minutes, we hit "Stop" on the desktop. The command propagated
 and the phone stopped recording (the app showed a "Saving\..." message
-briefly as it finalised the files). The system then presented a summary
+briefly as it finalized the files). The system then presented a summary
 on the desktop (the session completed, files saved with names, etc.).
 
 We then validated the **outputs** of the session: - On the Android
@@ -641,7 +641,7 @@ listed in Chapter 3's functional requirements) were met in practice.
 FR-001 (coordination) was seen by the fact that one button press
 coordinated three devices. FR-002 (synchronisation) was evidenced by
 aligned timestamps as discussed. FR-003 (session management) was shown
-by the ability to start/stop and get outputs labelled by session, with
+by the ability to start/stop and get outputs labeled by session, with
 the system handling the state transitions correctly. FR-004 (GSR
 integration) clearly succeeded -- the sensor data was captured and
 saved. FR-005 (user interface & control) was validated by the user (in
@@ -750,7 +750,7 @@ Accuracy:** Although more related to system functionality than data
 "quality", we validated the calibration of the cameras to ensure
 accurate measurements. After performing camera calibration (for
 depth/spatial alignment of RGB and thermal), we tested it by measuring a
-known-sise object's thermal and visual footprint alignment. The
+known-size object's thermal and visual footprint alignment. The
 calibrated system could map a point in the thermal image to the correct
 point in the RGB image within a few pixels of error, which is as good as
 we can expect given camera resolution differences. This means any
@@ -780,7 +780,7 @@ than adequate; if anything, our analysis code might round to the nearest
 millisecond for convenience, but the raw data is precise.
 
 To summarise the data quality evaluation: the system produces **complete
-and synchronised datasets** of multi-modal recordings, with error rates
+and synchronized datasets** of multi-modal recordings, with error rates
 (frame drops, data loss) well below thresholds that would pose problems.
 There were no instances of critical data corruption or misalignment.
 Minor issues like an occasional dropped frame or a momentary sensor
@@ -815,7 +815,7 @@ expected when using the camera for so long) but did not overheat or shut
 down. The CPU usage hovered around 30-50% on the main core (for video
 encoding) and the temperature leveled out around 40°C (warm but within
 safe limits). Memory usage of the app on Android started around 150 MB
-and grew to about 250 MB after an hour, then stabilised (it appears some
+and grew to about 250 MB after an hour, then stabilized (it appears some
 caching might have occurred, but no continuous leak -- memory did not
 grow unbounded). - On the desktop, CPU usage was very low throughout
 (since it's mostly waiting for occasional messages), and memory usage
@@ -853,7 +853,7 @@ sessions started successfully and one failed to get a needed resource
 for the third
 session)[\[44\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_04_test_enhanced_stress_testing_output.txt#L32-L40)[\[45\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_04_test_enhanced_stress_testing_output.txt#L2-L5).
 The system's internal locks prevented the third session from interfering
-with the others, and overall the programme didn't crash -- it simply
+with the others, and overall the program didn't crash -- it simply
 rejected one session. After this, we adjusted the configuration to
 explicitly disallow multiple concurrent sessions through the UI (so
 users can't attempt it inadvertently). The test outcome was considered
@@ -873,7 +873,7 @@ This correlates with our observation that no memory leaks exist --
 memory usage peaks and then the garbage collector (or resource cleanup)
 kicks in, which we also saw in long runs. There was also a **CPU stress
 test** as part of that, which kept the system busy; the logs indicated
-the CPU was utilised (though interestingly our measured average CPU in
+the CPU was utilized (though interestingly our measured average CPU in
 that artificial test was only 0.1% -- likely the way it was measured, as
 real usage in actual scenarios was
 higher)[\[47\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_04_test_enhanced_stress_testing_output.txt#L26-L29).
@@ -953,7 +953,7 @@ targets set for the project:
   after extended duration -- but that was an stretch goal, not a
   requirement. We also tested lower resolutions (for example, 720p) and
   found the phone could handle even 120 FPS at 720p if needed, which
-  might be useful for some specialised analysis. So performance-wise,
+  might be useful for some specialized analysis. So performance-wise,
   the video recording capability is excellent.
 - **Resource Utilisation:** On the Android device, CPU usage during
   recording \~45% (one big core mostly) and memory \~250 MB; on Desktop,
@@ -1021,7 +1021,7 @@ frame drops, tweaking Bluetooth settings for stable sensor throughput,
 etc.). The final system shows strong performance characteristics that
 instill confidence for its use in demanding research studies.
 
-## 5.7 Results analysis and Evaluation
+## 5.7 Results Analysis and Evaluation
 
 In this section, we reflect on the overall testing outcomes, analyse how
 well the results satisfy the project requirements, and discuss any
@@ -1033,7 +1033,7 @@ of strengths and areas for improvement.
 
 ### 5.7.1 Summary of Test Results
 
-The thorough testing programme produced a wealth of data about the
+The thorough testing program produced a wealth of data about the
 system's behaviour. In summary, the tests confirm that the system is
 **functionally correct, performant, and robust**. All unit tests
 (several hundred across Android and Python) passed, indicating that each
@@ -1139,7 +1139,7 @@ primary focus of our test cases:
 
 - **Functional Requirements:** Each FR was mapped to one or more tests
   (as partially illustrated in Table 5.2). For example, FR-001
-  (coordinated centralised management) was demonstrated by integration
+  (coordinated centralized management) was demonstrated by integration
   tests that showed the PC can control all devices simultaneously.
   FR-002 (temporal precision) was perhaps one of the most rigorously
   tested aspects, with both code-level tests (ensuring the sync
@@ -1224,7 +1224,7 @@ likely at a level exceeding the minimum in some areas, such as the
 precision of sync or the richness of the testing performed to ensure
 quality).
 
-### 5.7.3 Defect analysis and Improvements
+### 5.7.3 Defect Analysis and Improvements
 
 Throughout the testing process, we maintained a log of **defects** (bugs
 or issues) that were discovered, along with their severity and
@@ -1265,7 +1265,7 @@ scenario[\[54\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,error%20detection%2
 **Bluetooth Reconnection Delay:** When testing sensor reconnect, we
 found that if the Shimmer sensor lost connection, the system would
 attempt to reconnect but sometimes only after a long timeout (around 10
-seconds). We optimised the reconnection logic to detect disconnection
+seconds). We optimized the reconnection logic to detect disconnection
 faster and retry sooner. This cut the typical reconnection time to
 \~2--3 seconds, which in turn reduced data gaps. This improvement was
 recorded as fixing a major issue in reliability. - **Edge Case in
@@ -1434,7 +1434,7 @@ The Multi-Sensor Recording System demonstrates exceptional reliability through s
 | Component Category | Handlers Fixed | Improvement Type | Validation Results | Error Context Preservation |
 |-------------------|---------------|------------------|-------------------|----------------------------|
 | UI Controller Systems | 7 broad handlers | Specific exception types | 100% context preservation | KeyboardInterrupt preserved |
-| Camera Integration | 3 handlers | OSError, PermissionError | 95% error localisation | Device access specificity |
+| Camera Integration | 3 handlers | OSError, PermissionError | 95% error localization | Device access specificity |
 | Calibration Systems | 2 handlers | ValueError, IOError | 98% parameter validation | Configuration error details |
 | Session Management | 1 handler | FileNotFoundError | 100% file operation context | Path-specific error handling |
 | **Total Impact** | **13 handlers** | **91% specificity improvement** | **98.25% average reliability** | **Complete error traceability** |

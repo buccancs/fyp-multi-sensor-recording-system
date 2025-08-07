@@ -10,7 +10,7 @@
 
 - **Chapter 2. Background and Literature Review**
 
-- 2.1 Emotion analysis Applications
+- 2.1 Emotion Analysis Applications
 
 - 2.2 Rationale for Contactless Physiological Measurement
 
@@ -39,7 +39,7 @@
 
 - 3.5 Use Case Scenarios
 
-- 3.6 System analysis (Architecture & Data Flow)
+- 3.6 System Analysis (Architecture & Data Flow)
 
 - 3.7 Data Requirements and Management
 
@@ -69,7 +69,7 @@
 
 - 5.4 System Performance Evaluation
 
-- 5.5 Results analysis and Discussion
+- 5.5 Results Analysis and Discussion
 
 - **Chapter 6. Conclusions**
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Session Management System provides complete coordination of recording sessions across all devices and sensors in the Multi-Sensor Recording System for contactless GSR prediction research. This component ensures consistent data organisation, temporal alignment, and quality assurance throughout the complete data collection lifecycle, implementing established principles of research data management [Wilkinson2016] within the distributed PC master-controller architecture.
+The Session Management System provides complete coordination of recording sessions across all devices and sensors in the Multi-Sensor Recording System for contactless GSR prediction research. This component ensures consistent data organization, temporal alignment, and quality assurance throughout the complete data collection lifecycle, implementing established principles of research data management [Wilkinson2016] within the distributed PC master-controller architecture.
 
 ### Research Context and Theoretical Foundation
 
@@ -15,8 +15,8 @@ The Session Management System serves as the central coordinator for all recordin
 **Primary Functions:**
 
 - **Session Lifecycle Management**: Coordinated creation, execution, and finalisation of recording sessions with atomic state transitions
-- **Multi-Device Coordination**: Synchronised control across all connected devices ensuring temporal coherence and data consistency
-- **Data Organisation**: Structured storage and complete metadata management following research data standards [DataCite2019]
+- **Multi-Device Coordination**: Synchronized control across all connected devices ensuring temporal coherence and data consistency
+- **Data Organization**: Structured storage and complete metadata management following research data standards [DataCite2019]
 - **Quality Assurance**: Real-time monitoring and validation with automated quality control mechanisms
 - **Export Management**: Multi-format data export and analysis preparation supporting diverse research workflows
 
@@ -32,7 +32,7 @@ graph TB
         end
         
         subgraph "Data Management Layer"
-            DM[DataManager<br/>Storage Organisation]
+            DM[DataManager<br/>Storage Organization]
             MM[MetadataManager<br/>Session Information]
             EM[ExportManager<br/>Format Conversion]
         end
@@ -76,7 +76,7 @@ stateDiagram-v2
     Ready --> [*]: Cancel Session
 ```
 
-### Data Organisation Structure
+### Data Organization Structure
 
 ```
 sessions/
@@ -95,7 +95,7 @@ sessions/
 │   │   └── pc_controller/
 │   │       ├── webcam_01/
 │   │       └── webcam_02/
-│   ├── synchronised/
+│   ├── synchronized/
 │   │   ├── aligned_video.mp4
 │   │   ├── aligned_thermal.bin
 │   │   └── aligned_gsr.csv
@@ -171,7 +171,7 @@ sessions/
       }
     ],
     "storage_info": {
-      "total_sise": 2048000000,
+      "total_size": 2048000000,
       "available_space": 8192000000,
       "compression_ratio": 0.75
     }
@@ -287,7 +287,7 @@ class SessionManager:
                 stop_results.append(result)
             
             # Wait for data finalisation
-            finalization_results = self._wait_for_data_finalisation(session, timeout=60)
+            finalization_results = self._wait_for_data_finalization(session, timeout=60)
             
             # Update session state
             session.state = SessionState.COMPLETED
@@ -313,7 +313,7 @@ class SessionManager:
 
 ```python
 class DataManager:
-    """complete data storage and organisation management"""
+    """complete data storage and organization management"""
     
     def __init__(self, base_storage_path: str):
         self.base_storage_path = Path(base_storage_path)
@@ -328,7 +328,7 @@ class DataManager:
         directories = [
             session_path / "metadata",
             session_path / "devices",
-            session_path / "synchronised",
+            session_path / "synchronized",
             session_path / "exports" / "analysis_ready",
             session_path / "exports" / "raw_data",
             session_path / "exports" / "reports"
@@ -360,7 +360,7 @@ class DataManager:
             
             target_dir.mkdir(parents=True, exist_ok=True)
             
-            # Copy file to organised location
+            # Copy file to organized location
             target_file = target_dir / data_file.name
             shutil.copy2(data_file, target_file)
             
@@ -452,18 +452,18 @@ class DataManager:
 2. **Quality Management**:
     - Address quality warnings
     - Monitor artifact levels
-    - check synchronisation drift
+    - Check synchronisation drift
     - Validate data integrity
 
 #### Post-Recording
 
 1. **Data Validation**:
     - Verify data completeness
-    - check synchronisation accuracy
+    - Check synchronisation accuracy
     - Validate file integrity
     - Review quality metrics
 
-2. **Export and analysis**:
+2. **Export and Analysis**:
     - Generate analysis-ready exports
     - Create quality reports
     - Archive raw data
@@ -574,18 +574,18 @@ class SessionManagementTest:
 #### Session Creation Failures
 
 - Verify device connectivity
-- check storage availability
+- Check storage availability
 - Validate configuration parameters
 
 #### Recording Start Problems
 
-- check device synchronisation
+- Check device synchronisation
 - Verify quality thresholds
 - Test network connectivity
 
-#### Data Organisation Issues
+#### Data Organization Issues
 
-- check storage permissions
+- Check storage permissions
 - Verify disk space
 - Validate file formats
 

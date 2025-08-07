@@ -12,7 +12,7 @@
     - 1.5. [A.4 System Performance Specifications](#a4-system-performance-specifications)
     - 1.6. [A.5 Technology Stack Justification Matrix](#a5-technology-stack-justification-matrix)
 1. [Appendix B: Testing and Evaluation Results](#appendix-b-testing-and-evaluation-results)
-    - 2.1. [B.1 Multi-Level Testing Coverage analysis](#b1-multi-level-testing-coverage-analysis)
+    - 2.1. [B.1 Multi-Level Testing Coverage Analysis](#b1-multi-level-testing-coverage-analysis)
     - 2.2. [B.2 Algorithm Validation Results](#b2-algorithm-validation-results)
     - 2.3. [B.3 Multi-Device Coordination Test Results](#b3-multi-device-coordination-test-results)
     - 2.4. [B.4 Network Performance Test Results](#b4-network-performance-test-results)
@@ -27,7 +27,7 @@
     - 3.1. [complete User Guide for Research Operations](#complete-user-guide-for-research-operations)
     - 3.2. [C.1 Getting Started - First-Time Setup](#c1-getting-started---first-time-setup)
     - 3.3. [C.2 Recording Session Management](#c2-recording-session-management)
-    - 3.4. [C.3 Data Export and analysis](#c3-data-export-and-analysis)
+    - 3.4. [C.3 Data Export and Analysis](#c3-data-export-and-analysis)
 3. [Appendix D: Supporting Documentation and Data](#appendix-d-supporting-documentation-and-data)
     - 4.1. [D.1 Technical Specifications and Calibration Data](#d1-technical-specifications-and-calibration-data)
     - 4.2. [D.2 Network Protocol Specifications](#d2-network-protocol-specifications)
@@ -53,7 +53,7 @@ technical specifications available in the docs/ directory.
 
 ### A.1 Component Documentation Reference
 
-The Multi-Sensor Recording System is organised into self-contained components, each with complete documentation:
+The Multi-Sensor Recording System is organized into self-contained components, each with complete documentation:
 
 **Core System Components:**
 
@@ -140,13 +140,13 @@ The Multi-Sensor Recording System is organised into self-contained components, e
 | **Kotlin + Camera2**   | Java + CameraX, Flutter | Native performance, modern async support     | Maximum performance           | Medium complexity      |
 | **WebSocket Protocol** | HTTP REST, gRPC         | Real-time bidirectional communication        | Low latency communication     | Low complexity         |
 | **SQLite + JSON**      | PostgreSQL, MongoDB     | Local storage simplicity                     | Fast local queries            | Low complexity         |
-| **OpenCV Integration** | Custom image processing | Mature computer vision library               | Optimised algorithms          | Medium complexity      |
-| **Bluetooth LE**       | WiFi Direct, USB        | Low power, standardised protocol             | Power efficient               | Medium complexity      |
+| **OpenCV Integration** | Custom image processing | Mature computer vision library               | Optimized algorithms          | Medium complexity      |
+| **Bluetooth LE**       | WiFi Direct, USB        | Low power, standardized protocol             | Power efficient               | Medium complexity      |
 
 ---
 ## Appendix B: Testing and Evaluation Results
 
-### B.1 Multi-Level Testing Coverage analysis
+### B.1 Multi-Level Testing Coverage Analysis
 
 **Table B.1.1: Multi-Level Testing Coverage Summary**
 
@@ -197,7 +197,7 @@ The Multi-Sensor Recording System is organised into self-contained components, e
 
 **Table B.5.1: Synchronisation Precision Results**
 
-| Synchronisation Metric | Target Precision | Measured Precision   | Sample Sise  | Statistical analysis           |
+| Synchronisation Metric | Target Precision | Measured Precision   | Sample Size  | Statistical Analysis           |
 |------------------------|------------------|----------------------|--------------|--------------------------------|
 | **Initial Sync**       | ≤50ms            | 23.7ms ± 8.2ms       | n=500        | Mean ± SD, normal distribution |
 | **Sustained Sync**     | ≤25ms            | 18.4ms ± 6.1ms       | n=10,000     | 95.7% within tolerance         |
@@ -233,7 +233,7 @@ The Multi-Sensor Recording System is organised into self-contained components, e
 
 **Table B.8.1: User Experience and Usability Results**
 
-| Usability Metric         | Target Value | Measured Value    | Sample Sise    | User Satisfaction |
+| Usability Metric         | Target Value | Measured Value    | Sample Size    | User Satisfaction |
 |--------------------------|--------------|-------------------|----------------|-------------------|
 | **Setup Time**           | <10 minutes  | 6.2 ± 1.1 minutes | n=50 users     | 92% satisfied     |
 | **Learning Curve**       | <2 hours     | 1.4 ± 0.3 hours   | n=25 new users | 88% satisfied     |
@@ -269,7 +269,7 @@ The Multi-Sensor Recording System is organised into self-contained components, e
 
 **Table B.11.1: Usability and Effectiveness Summary**
 
-| Usability Aspect      | Target   | Achieved        | Sample Sise | Success Rate |
+| Usability Aspect      | Target   | Achieved        | Sample Size | Success Rate |
 |-----------------------|----------|-----------------|-------------|--------------|
 | **Setup Efficiency**  | <10 min  | 6.2 ± 1.1 min   | n=50        | 96%          |
 | **Learning Curve**    | <2 hours | 1.4 ± 0.3 hours | n=25        | 88%          |
@@ -285,7 +285,7 @@ into the thesis framework.
 
 **Multi-Device Synchronisation System Technical Specifications:**
 
-The synchronisation system implements sophisticated Network Time Protocol (NTP) algorithms optimised for local network
+The synchronisation system implements sophisticated Network Time Protocol (NTP) algorithms optimized for local network
 precision and mobile device coordination. The system achieves sub-millisecond temporal alignment across diverse sensor
 modalities through advanced clock drift compensation and network-resilient communication protocols.
 
@@ -293,7 +293,7 @@ modalities through advanced clock drift compensation and network-resilient commu
 
 - **MasterClockSynchronizer**: Central time authority with precision drift compensation
 - **SessionSynchronizer**: Coordinated session management with automatic recovery mechanisms
-- **NTPTimeServer**: Custom NTP implementation optimised for local network operation
+- **NTPTimeServer**: Custom NTP implementation optimized for local network operation
 - **Clock Drift Compensation**: Advanced algorithms maintaining accuracy over extended sessions
 
 *Performance Specifications:*
@@ -356,7 +356,7 @@ synchronisation.
 - **Multi-Stream Configuration**: Independent video and RAW capture with quality optimisation
 - **Samsung S21/S22 Optimisation**: LEVEL_3 hardware capability utilisation with automatic detection
 - **RAW Processing Pipeline**: DNG file generation with complete metadata embedding
-- **Synchronised Capture**: Microsecond-level synchronisation across multiple camera devices
+- **Synchronized Capture**: Microsecond-level synchronisation across multiple camera devices
 - **Quality Validation**: complete error management and recovery with visual confirmation
 
 *Performance Specifications:*
@@ -389,7 +389,7 @@ complementary physiological signals.
 
 **TopDon Thermal Camera Integration Technical Specifications:**
 
-The thermal camera integration provides sophisticated temperature measurement capabilities optimised for physiological
+The thermal camera integration provides sophisticated temperature measurement capabilities optimized for physiological
 research applications. The system features uncooled microbolometer technology with research-grade accuracy.
 
 *Hardware Specifications:*
@@ -397,13 +397,13 @@ research applications. The system features uncooled microbolometer technology wi
 - **Resolution**: 256×192 pixel thermal sensor with high-precision measurement
 - **Temperature Range**: -20°C to +650°C (TC001 Plus) with ±1.5°C accuracy
 - **Frame Rate**: Up to 25 Hz with real-time thermal data processing
-- **Spectral Range**: 8-14 μm LWIR optimised for human physiological monitoring
+- **Spectral Range**: 8-14 μm LWIR optimized for human physiological monitoring
 - **Connectivity**: USB-C OTG with Android device integration and automatic detection
 
 *Processing Capabilities:*
 
 - **Real-Time Calibration**: Manufacturer-validated coefficients with environmental compensation
-- **Temperature ROI analysis**: Multi-point measurement with region-specific analysis
+- **Temperature ROI Analysis**: Multi-point measurement with region-specific analysis
 - **Thermal Data Export**: Raw thermal data access with processed temperature matrices
 - **Quality Assessment**: Automated emissivity correction and atmospheric compensation
 
@@ -529,17 +529,17 @@ graph TB
 
 **Table A.2: Software Environment Specifications**
 
-| Software Component      | Version                  | licence Type   | Installation Source            | Configuration Notes                            |
+| Software Component      | Version                  | License Type   | Installation Source            | Configuration Notes                            |
 |-------------------------|--------------------------|----------------|--------------------------------|------------------------------------------------|
-| **Operating System**    | Windows 10/11 Pro        | Commercial     | Microsoft Store/Volume licence | Enable Developer Mode for Android debugging    |
+| **Operating System**    | Windows 10/11 Pro        | Commercial     | Microsoft Store/Volume License | Enable Developer Mode for Android debugging    |
 | **Python Runtime**      | Python 3.9+ with conda   | Open Source    | Anaconda Distribution          | Use conda environment for dependency isolation |
 | **Android Studio**      | 2022.3.1+ (Electric Eel) | Open Source    | Google Developer Tools         | Include Android SDK and ADB tools              |
-| **OpenCV**              | 4.8.0+                   | BSD licence    | pip/conda install              | Computer vision and image processing           |
-| **FastAPI**             | 0.104.0+                 | MIT licence    | pip install                    | Web API framework for device communication     |
-| **SQLAlchemy**          | 2.0+                     | MIT licence    | pip install                    | Database ORM for session management            |
-| **WebSocket Libraries** | websockets 11.0+         | BSD licence    | pip install                    | Real-time bidirectional communication          |
+| **OpenCV**              | 4.8.0+                   | BSD License    | pip/conda install              | Computer vision and image processing           |
+| **FastAPI**             | 0.104.0+                 | MIT License    | pip install                    | Web API framework for device communication     |
+| **SQLAlchemy**          | 2.0+                     | MIT License    | pip install                    | Database ORM for session management            |
+| **WebSocket Libraries** | websockets 11.0+         | BSD License    | pip install                    | Real-time bidirectional communication          |
 | **PyQt5**               | 5.15.0+                  | GPL/Commercial | pip install                    | GUI framework for desktop controller           |
-| **psutil**              | 5.8.0+                   | BSD licence    | pip install                    | System monitoring and resource tracking        |
+| **psutil**              | 5.8.0+                   | BSD License    | pip install                    | System monitoring and resource tracking        |
 
 **Figure A.2: Physical Laboratory Setup Configuration**
 
@@ -550,7 +550,7 @@ graph TB
 
 Top Panel: Overview of complete laboratory setup with 360-degree view
 - Central controller workstation with dual 27" monitors displaying system dashboard
-- Organised cable management with colour-coded cables for different systems
+- Organized cable management with colour-coded cables for different systems
 - Professional lighting setup with adjustable colour temperature
 
 Middle Panel: Participant interaction area
@@ -574,10 +574,10 @@ Bottom Panel: Technical infrastructure detail
 | **IP Address Range**         | 192.168.100.0/24                           | Isolated subnet for research equipment | VLAN isolation from institutional network       |
 | **DHCP Lease Time**          | 24 hours                                   | Stable addressing for long sessions    | Static reservations for critical devices        |
 | **Quality of Service (QoS)** | Video: High, Data: Medium, Management: Low | Prioritise real-time data streams      | Bandwidth allocation per device type            |
-| **Firewall Rules**           | Block external internet, allow internal    | Research data protection               | Prevent unauthorised data exfiltration          |
-| **Network Time Protocol**    | Internal NTP server at 192.168.100.1       | Precise time synchronisation           | GPS-synchronised reference clock                |
+| **Firewall Rules**           | Block external internet, allow internal    | Research data protection               | Prevent unauthorized data exfiltration          |
+| **Network Time Protocol**    | Internal NTP server at 192.168.100.1       | Precise time synchronisation           | GPS-synchronized reference clock                |
 | **VPN Access**               | IPSec tunnel for remote administration     | Secure remote system access            | Multi-factor authentication required            |
-| **Monitoring and Logging**   | SNMP monitoring with syslog aggregation    | Network performance tracking           | Centralised log analysis and alerting           |
+| **Monitoring and Logging**   | SNMP monitoring with syslog aggregation    | Network performance tracking           | Centralized log analysis and alerting           |
 
 **Table A.2: Network Configuration Requirements**
 
@@ -691,7 +691,7 @@ graph TB
     subgraph "Service Layer"
         COORD[Device Coordinator<br/>Connection Management]
         SYNC[Synchronisation Service<br/>Temporal Alignment]
-        PROC[Processing Service<br/>Data analysis Pipeline]
+        PROC[Processing Service<br/>Data Analysis Pipeline]
         QUAL[Quality Service<br/>Assessment and Monitoring]
     end
 ---
@@ -775,7 +775,7 @@ references: `docs/diagrams/04_pc_app_architecture.png`, `docs/diagrams/16_softwa
 [PLACEHOLDER: Desktop application screenshot collage showing:
 
 Main Dashboard Panel (1920x1080 resolution):
-- Top menu bar with File, Edit, Session, Devices, analysis, Help menus
+- Top menu bar with File, Edit, Session, Devices, Analysis, Help menus
 - Left sidebar showing connected device list with status indicators (green=connected, yellow=warning, red=error)
 - Central monitoring area with real-time data streams from all devices
 - Right panel showing session configuration and timing controls
@@ -801,13 +801,13 @@ Session Control Panel:
 
 | Interface Element            | Function                             | User Action                       | Expected Result                            | Troubleshooting                              |
 |------------------------------|--------------------------------------|-----------------------------------|--------------------------------------------|----------------------------------------------|
-| **Device Discovery Button**  | Scan for available Android devices   | Click "Discover Devices"          | Devices appear in sidebar list             | check Wi-Fi connectivity if no devices found |
-| **Session Start Control**    | Begin synchronised recording         | Click "Start Session" after setup | All devices begin recording simultaneously | Verify all devices show green status         |
+| **Device Discovery Button**  | Scan for available Android devices   | Click "Discover Devices"          | Devices appear in sidebar list             | Check Wi-Fi connectivity if no devices found |
+| **Session Start Control**    | Begin synchronized recording         | Click "Start Session" after setup | All devices begin recording simultaneously | Verify all devices show green status         |
 | **Quality Monitor Panel**    | Real-time assessment of data quality | Monitor automatically updates     | Colour indicators show quality status       | Red indicators require attention             |
 | **Emergency Stop Button**    | Immediately halt all recording       | Click red "STOP" button           | All devices stop, data saved automatically | Use only in emergency situations             |
-| **Export Data Wizard**       | Convert and export research data     | Click "Export Session Data"       | Step-by-step data conversion process       | check storage space before export            |
+| **Export Data Wizard**       | Convert and export research data     | Click "Export Session Data"       | Step-by-step data conversion process       | Check storage space before export            |
 | **Device Configuration**     | Adjust individual device settings    | Right-click device in sidebar     | Context menu with device options           | Changes apply immediately to device          |
-| **Network Status Indicator** | Show connection health               | Automatic real-time updates       | Green=good, Yellow=warning, Red=error      | check network infrastructure if red          |
+| **Network Status Indicator** | Show connection health               | Automatic real-time updates       | Green=good, Yellow=warning, Red=error      | Check network infrastructure if red          |
 | **Synchronisation Display**  | Show timing accuracy across devices  | Automatic real-time monitoring    | ±ms deviation from reference time          | Recalibrate if deviation exceeds ±50ms       |
 
 **Figure B.2: Android Mobile Application Interface Screenshots**
@@ -833,14 +833,14 @@ Device Setup Screen:
 - Storage location selection and available space indicator
 
 Recording Status Screen:
-- Real-time recording statistics (duration, file sise, quality)
+- Real-time recording statistics (duration, file size, quality)
 - Network connection strength and data transfer rate
 - Battery level with estimated remaining recording time
 - Temperature monitoring for device health
 - GSR sensor data stream visualisation
 
 Settings and Configuration Screen:
-- User profile selection for personalised settings
+- User profile selection for personalized settings
 - Recording quality presets (High, Medium, Battery Saver)
 - Network and connectivity preferences
 - Data storage and privacy settings
@@ -852,14 +852,14 @@ Settings and Configuration Screen:
 
 | Procedure Phase             | Duration      | Required Actions                                                                                                                                  | Quality Checkpoints                       | Success Criteria                           |
 |-----------------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------|--------------------------------------------|
-| **Pre-Session Setup**       | 10-15 minutes | 1. Power on all equipment<br/>2. Verify network connectivity<br/>3. check device battery levels<br/>4. Load participant configuration             | All devices connected and green status    | 100% device connectivity, >4 hours battery |
+| **Pre-Session Setup**       | 10-15 minutes | 1. Power on all equipment<br/>2. Verify network connectivity<br/>3. Check device battery levels<br/>4. Load participant configuration             | All devices connected and green status    | 100% device connectivity, >4 hours battery |
 | **Participant Preparation** | 5-8 minutes   | 1. Position participant comfortably<br/>2. Attach GSR sensors (if using reference)<br/>3. Adjust camera angles<br/>4. Confirm participant consent | Optimal sensor placement and comfort      | Clear video framing, sensor signal quality |
 | **System Calibration**      | 3-5 minutes   | 1. Run thermal calibration sequence<br/>2. Synchronise all device clocks<br/>3. Test recording start/stop<br/>4. Verify data quality indicators   | Calibration within tolerance, sync <±25ms | All quality indicators green               |
 | **Recording Session**       | Variable      | 1. Monitor real-time quality indicators<br/>2. Maintain visual supervision<br/>3. Note any anomalies or events<br/>4. Ensure continuous recording | Quality maintained throughout session     | <1% frame drops, continuous data streams   |
 | **Session Completion**      | 5-10 minutes  | 1. Stop all recordings safely<br/>2. Verify data integrity<br/>3. Export/backup session data<br/>4. Document session notes                        | Complete data capture verified            | 100% data integrity, successful backup     |
 | **Post-Session Cleanup**    | 10-15 minutes | 1. Sanitise GSR sensors and equipment<br/>2. Charge device batteries<br/>3. Update session database<br/>4. Archive raw data files                 | Equipment ready for next session          | Clean equipment, charged batteries         |
 
-**Figure B.3: Data Export and analysis Workflow**
+**Figure B.3: Data Export and Analysis Workflow**
 
 *Available diagram reference: `docs/diagrams/13_data_export_workflow.png`*
 
@@ -873,17 +873,17 @@ flowchart TD
     F --> G[Partial Data Recovery]
     G --> E
 ---
-    E --> H[CSV Export for Statistical analysis]
+    E --> H[CSV Export for Statistical Analysis]
     E --> I[JSON Export for Custom Processing]
     E --> J[MATLAB Format for Signal Processing]
     E --> K[Video Files for Manual Review]
 ---
     H --> L[Statistical Software Import]
-    I --> M[Custom analysis Pipeline]
+    I --> M[Custom Analysis Pipeline]
     J --> N[MATLAB/Octave Processing]
     K --> O[Video Annotation Tools]
 ---
-    L --> P[Research analysis]
+    L --> P[Research Analysis]
     M --> P
     N --> P
     O --> P
@@ -899,18 +899,18 @@ flowchart TD
 
 | Scenario                      | Symptoms                                  | Probable Cause                            | Resolution Steps                                                                                                | Prevention                                           |
 |-------------------------------|-------------------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| **Device Connection Lost**    | Device shows red status, stops responding | Network interruption, device sleep        | 1. check Wi-Fi signal strength<br/>2. Restart device networking<br/>3. Re-pair device if necessary              | Use dedicated research network, disable device sleep |
-| **Poor Video Quality**        | Blurry images, low frame rate             | Insufficient lighting, network congestion | 1. Improve lighting conditions<br/>2. check network bandwidth usage<br/>3. Adjust video quality settings        | Optimise lighting setup, monitor network load        |
-| **Synchronisation Drift**     | Timing deviation >±50ms                   | Clock drift, network latency              | 1. Recalibrate time synchronisation<br/>2. check network latency<br/>3. Restart synchronisation service         | Regular calibration schedule, stable network         |
+| **Device Connection Lost**    | Device shows red status, stops responding | Network interruption, device sleep        | 1. Check Wi-Fi signal strength<br/>2. Restart device networking<br/>3. Re-pair device if necessary              | Use dedicated research network, disable device sleep |
+| **Poor Video Quality**        | Blurry images, low frame rate             | Insufficient lighting, network congestion | 1. Improve lighting conditions<br/>2. Check network bandwidth usage<br/>3. Adjust video quality settings        | Optimise lighting setup, monitor network load        |
+| **Synchronisation Drift**     | Timing deviation >±50ms                   | Clock drift, network latency              | 1. Recalibrate time synchronisation<br/>2. Check network latency<br/>3. Restart synchronisation service         | Regular calibration schedule, stable network         |
 | **Storage Full**              | Recording stops unexpectedly              | Insufficient storage space                | 1. Clear old session data<br/>2. Add additional storage<br/>3. Enable automatic cleanup                         | Monitor storage usage, automated archival            |
-| **GSR Sensor Issues**         | No signal or erratic readings             | Poor electrode contact, battery low       | 1. check electrode placement<br/>2. Replace sensor battery<br/>3. Clean electrode surfaces                      | Regular sensor maintenance, spare batteries          |
-| **Thermal Calibration Error** | Inaccurate temperature readings           | Environmental factors, sensor drift       | 1. Allow thermal equilibration time<br/>2. Use reference target for calibration<br/>3. check ambient conditions | Controlled environment, regular calibration          |
+| **GSR Sensor Issues**         | No signal or erratic readings             | Poor electrode contact, battery low       | 1. Check electrode placement<br/>2. Replace sensor battery<br/>3. Clean electrode surfaces                      | Regular sensor maintenance, spare batteries          |
+| **Thermal Calibration Error** | Inaccurate temperature readings           | Environmental factors, sensor drift       | 1. Allow thermal equilibration time<br/>2. Use reference target for calibration<br/>3. Check ambient conditions | Controlled environment, regular calibration          |
 
 ```
 [PLACEHOLDER: Screenshot collection showing:
 1. Main dashboard with device status indicators
 2. Session configuration interface with participant setup
-3. Real-time monitoring view with synchronised data streams
+3. Real-time monitoring view with synchronized data streams
 4. Quality assessment panel with statistical metrics
 5. Data export interface with format selection options]
 ```
@@ -988,7 +988,7 @@ python -m pytest PythonApp/
 flowchart LR
     subgraph "Device Preparation"
         POWER[Power On Devices<br/>⚡ Android devices<br/>⚡ Thermal cameras<br/>⚡ GSR sensors]
-        check[Status check<br/>📱 Battery levels<br/>📶 Network connectivity<br/>💾 Storage capacity]
+        CHECK[Status Check<br/>📱 Battery levels<br/>📶 Network connectivity<br/>💾 Storage capacity]
     end
 ---
     subgraph "System Initialisation"
@@ -998,11 +998,11 @@ flowchart LR
 ---
     subgraph "Session Configuration"
         CONFIG[Configure Session<br/>👤 Participant details<br/>📋 Protocol selection<br/>⚙️ Quality settings]
-        VALIDATE[Validation check<br/>✅ Device readiness<br/>✅ Quality metrics<br/>✅ Storage space]
+        VALIDATE[Validation Check<br/>✅ Device readiness<br/>✅ Quality metrics<br/>✅ Storage space]
     end
 ---
-    POWER --> check
-    check --> LAUNCH
+    POWER --> CHECK
+    CHECK --> LAUNCH
     LAUNCH --> CONNECT
     CONNECT --> CONFIG
     CONFIG --> VALIDATE
@@ -1021,7 +1021,7 @@ flowchart LR
 ```
 [PLACEHOLDER: Detailed screenshots showing:
 1. Session start interface with countdown timer
-2. Live data monitoring with synchronised timestamps
+2. Live data monitoring with synchronized timestamps
 3. Quality indicators with real-time alerts
 4. Manual annotation interface for researchers
 5. Session completion summary with data statistics]
@@ -1095,7 +1095,7 @@ specifications:
     "port": 9000,
     "protocol": "TCP",
     "timeout_seconds": 30,
-    "buffer_sise": 8192,
+    "buffer_size": 8192,
     "max_connections": 10,
     "heartbeat_interval": 5,
     "reconnect_attempts": 3,
@@ -1106,7 +1106,7 @@ specifications:
 
 **Table D.2: Communication Protocol Message Format Specification**
 
-| Message Type             | JSON Structure                                                                     | Sise (bytes) | Frequency        | Error Handling                 |
+| Message Type             | JSON Structure                                                                     | Size (bytes) | Frequency        | Error Handling                 |
 |--------------------------|------------------------------------------------------------------------------------|--------------|------------------|--------------------------------|
 | **Device Registration**  | `{"type":"register","device_id":"string","capabilities":[]}`                       | 128-512      | Once per session | Retry with exponential backoff |
 | **Time Synchronisation** | `{"type":"sync","timestamp":"ISO8601","ntp_offset":"float"}`                       | 256          | Every 30 seconds | NTP fallback protocol          |
@@ -1143,9 +1143,9 @@ specifications:
   
   "performance": {
     "max_memory_usage_mb": 2048,
-    "thread_pool_sise": 4,
+    "thread_pool_size": 4,
     "async_processing": true,
-    "cache_sise": 100
+    "cache_size": 100
   }
 }
 ```
@@ -1231,7 +1231,7 @@ graph TB
 
 **Table D.3: Statistical Significance Testing**
 
-| Hypothesis Test                  | Sample Sise | Test Statistic | p-value | Confidence Interval  | Conclusion                       |
+| Hypothesis Test                  | Sample Size | Test Statistic | p-value | Confidence Interval  | Conclusion                       |
 |----------------------------------|-------------|----------------|---------|----------------------|----------------------------------|
 | **Temporal Accuracy vs. Target** | n=10,000    | t=23.7         | p<0.001 | [17.2ms, 20.1ms]     | Significantly better than target |
 | **GSR Correlation Validation**   | n=2,500     | r=0.892        | p<0.001 | [0.869, 0.915]       | Strong significant correlation   |
@@ -1282,7 +1282,7 @@ graph TB
 | **Undergraduate Volunteer** | Novice           | 11.2                 | 3.8                      | 78%                  | 22%        |
 | **Average All Users**       | Mixed            | 7.3                  | 4.4                      | 91.6%                | 8.4%       |
 
-**Figure E.1: User Satisfaction analysis**
+**Figure E.1: User Satisfaction Analysis**
 
 *Missing diagram - user satisfaction analysis results not available as image file*
 
@@ -1311,10 +1311,10 @@ xychart-beta
 **[PLACEHOLDER: User Feedback Forms]**
 
 - Location: `docs/evaluation/user_feedback_forms.pdf`
-- Content: Standardised feedback forms used for user experience evaluation
+- Content: Standardized feedback forms used for user experience evaluation
 - Expected sections: System usability scale, custom research workflow questionnaires, technical difficulty assessments
 
-**[PLACEHOLDER: Statistical analysis Reports]**
+**[PLACEHOLDER: Statistical Analysis Reports]**
 
 - Location: `analysis/statistical_reports/`
 - Content: Detailed statistical analysis reports using R/SPSS for evaluation data
@@ -1341,7 +1341,7 @@ This appendix provides detailed code snippets for all files referenced in the th
 corresponds to specific file references mentioned in Chapters 1-6, demonstrating the technical implementation of
 concepts discussed in the academic content.
 
-*Note: Code snippets are organised by reference numbers (F.1-F.177) corresponding to file mentions in the chapter
+*Note: Code snippets are organized by reference numbers (F.1-F.177) corresponding to file mentions in the chapter
 sections. Complete source code is available in the project repository.*
 ---
 ## Chapter 1 References
@@ -1370,7 +1370,7 @@ class Application(QObject):
         self.json_server = None
         self.webcam_capture = None
         self._create_services()
-        self.logger.info("application initialised")
+        self.logger.info("application initialized")
 ---
     def _create_services(self):
         """Create backend services with dependency injection"""
@@ -1484,7 +1484,7 @@ class MultiSensorApplication : Application() {
 ---
     private fun initializeSystemMonitoring() {
         // Setup crash reporting and performance monitoring
-        logger.logD(TAG, "System monitoring initialised")
+        logger.logD(TAG, "System monitoring initialized")
     }
 ---
     companion object {
@@ -1515,7 +1515,7 @@ class SessionManager:
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
 ---
     def create_session(self, session_name: Optional[str] = None) -> Dict:
-        """Create a new recording session with standardised structure"""
+        """Create a new recording session with standardized structure"""
         timestamp = datetime.now()
 ---
         if session_name is None:
@@ -1854,11 +1854,11 @@ class QualityAssessmentEngine {
     }
 ---
     private fun assessSharpness(frame: Mat): Double {
-        val grey = Mat()
-        Imgproc.cvtColor(frame, grey, Imgproc.COLOR_BGR2GRAY)
+        val gray = Mat()
+        Imgproc.cvtColor(frame, gray, Imgproc.COLOR_BGR2GRAY)
 ---
         val laplacian = Mat()
-        Imgproc.Laplacian(grey, laplacian, CvType.CV_64F)
+        Imgproc.Laplacian(gray, laplacian, CvType.CV_64F)
 ---
         val mu = MatOfDouble()
         val sigma = MatOfDouble()
@@ -1932,15 +1932,15 @@ Python and Kotlin implementations. The full codebase is available in the project
 documentation, unit tests, and deployment scripts. The selected listings above demonstrate key architectural patterns
 and technical innovations that address the unique challenges of research-grade distributed sensor coordination.
 |---|---|---|---|
-| **Start Recording** | Green "Start" button | Ctrl+R | Synchronised recording begins across all devices |
+| **Start Recording** | Green "Start" button | Ctrl+R | Synchronized recording begins across all devices |
 | **Pause Recording** | Yellow "Pause" button | Ctrl+P | All devices pause simultaneously, resume capability
 maintained |
 | **Stop Recording** | Red "Stop" button | Ctrl+S | Complete session termination, data finalisation initiated |
 | **Add Marker** | "Marker" button | Ctrl+M | Timestamp marker added to all data streams |
-| **Quality check** | "Quality" button | Ctrl+Q | Real-time quality assessment displayed |
+| **Quality Check** | "Quality" button | Ctrl+Q | Real-time quality assessment displayed |
 | **Emergency Stop** | Emergency button | Ctrl+E | Immediate termination with data preservation |
 
-#### B.3 Data analysis and Export
+#### B.3 Data Analysis and Export
 
 **Figure B.4: Data Export Workflow Interface**
 
@@ -1957,13 +1957,13 @@ maintained |
 
 **Table B.3: Supported Export Formats**
 
-| Format              | Use Case                              | File Sise  | Compatibility        | Processing Time |
+| Format              | Use Case                              | File Size  | Compatibility        | Processing Time |
 |---------------------|---------------------------------------|------------|----------------------|-----------------|
 | **CSV**             | Statistical analysis (SPSS, R, Excel) | Large      | Universal            | Fast            |
 | **JSON**            | Web applications, Python analysis     | Medium     | High                 | Fast            |
 | **MATLAB .mat**     | MATLAB/Octave analysis                | Medium     | MATLAB ecosystem     | Medium          |
 | **HDF5**            | Large dataset analysis (Python, R)    | Compressed | Scientific computing | Slow            |
-| **Custom Research** | Specialised analysis pipelines        | Variable   | Project-specific     | Variable        |
+| **Custom Research** | Specialized analysis pipelines        | Variable   | Project-specific     | Variable        |
 
 ---
 ## Appendix C: Supporting Documentation and Data
@@ -2001,7 +2001,7 @@ xychart-beta
 | Protocol Name                      | Duration                    | Participants      | Data Streams           | Research Application       |
 |------------------------------------|-----------------------------|-------------------|------------------------|----------------------------|
 | **Stress Response Measurement**    | 20 minutes                  | 1-4 participants  | RGB + Thermal + GSR    | Psychophysiology studies   |
-| **Social Interaction analysis**    | 45 minutes                  | 2-8 participants  | Multi-angle RGB + GSR  | Social psychology research |
+| **Social Interaction Analysis**    | 45 minutes                  | 2-8 participants  | Multi-angle RGB + GSR  | Social psychology research |
 | **Emotion Recognition Validation** | 15 minutes                  | 1 participant     | High-res RGB + Thermal | Computer vision research   |
 | **Group Dynamics Study**           | 60 minutes                  | 4-12 participants | Distributed sensing    | Organizational research    |
 | **Longitudinal Monitoring**        | Multiple sessions           | 1-2 participants  | All modalities         | Clinical research          |
@@ -2218,7 +2218,7 @@ research teams. The procedures balance experimental rigor with practical usabili
 1. **Session Completion** (3 minutes)
     - Stop recording on all devices simultaneously
     - Verify data integrity and completeness
-    - Export data in standardised formats
+    - Export data in standardized formats
     - Generate session summary report
 
 **Quality Assurance During Recording:**
@@ -2235,11 +2235,11 @@ Quality Indicators:
 ✓ Data transmission: >99% packet success
 ```
 
-#### B.3 Data Export and analysis
+#### B.3 Data Export and Analysis
 
 **Data Export Procedures:**
 
-The export system provides multiple format options optimised for different analysis workflows commonly used in
+The export system provides multiple format options optimized for different analysis workflows commonly used in
 psychophysiological research. Format selection should align with subsequent analysis requirements and computational
 resources.
 
@@ -2260,7 +2260,7 @@ export_data(
     include_raw_video=False
 )
 
-# MATLAB format for specialised toolboxes
+# MATLAB format for specialized toolboxes
 export_data(
     format='mat',
     matlab_version='v7.3',
@@ -2289,7 +2289,7 @@ python -m analysis.validate_session --session-id [SESSION_ID]
 ### Technical Specifications and Reference Materials
 
 This appendix provides complete technical documentation, reference data, and supporting materials that supplement
-the main thesis content. The materials are organised to support both immediate research applications and future system
+the main thesis content. The materials are organized to support both immediate research applications and future system
 development efforts.
 
 #### C.1 Hardware Specifications
@@ -2312,13 +2312,13 @@ Topdon TC001 Thermal Camera Specifications:
 ```
 
 The selection rationale for this specific thermal camera model reflects extensive evaluation of available research-grade
-thermal imaging solutions. The decision prioritised measurement accuracy, integration compatibility, and
+thermal imaging solutions. The decision prioritized measurement accuracy, integration compatibility, and
 cost-effectiveness for research laboratory
 adoption [CITE - Thermal camera evaluation criteria for physiological research].
 
 **Android Device Requirements:**
 
-Device selection criteria emphasise consistency across research installations while accommodating varying institutional
+Device selection criteria emphasize consistency across research installations while accommodating varying institutional
 procurement constraints and budget limitations.
 
 ```
@@ -2496,7 +2496,7 @@ Data Integrity Test Results:
 
 #### E.5 Areas Identified for Improvement
 
-**Failed Test analysis:**
+**Failed Test Analysis:**
 
 1. **Enhanced Stress Testing**: Failed with exit code 1 after 76.73 seconds
     - Issue: Resource monitoring and concurrent session handling under extreme load
@@ -2600,7 +2600,7 @@ GSR Measurement Correlation:
 
 Statistical Validation Results:
 
-- Sample sise: n = 1,247 measurement sessions
+- Sample size: n = 1,247 measurement sessions
 - Measurement correlation: r = 0.95 (95% CI: 0.94-0.96)
 - Systematic bias: 0.03μS ± 0.12μS (not significant)
 - Random error: σ = 0.18μS
@@ -2614,13 +2614,13 @@ suitable for psychophysiological research applications.
 ---
 ## Appendix F: Evaluation Data and Results
 
-### complete System Evaluation and Validation analysis
+### complete System Evaluation and Validation Analysis
 
 This appendix presents detailed evaluation data, statistical analysis results, and performance validation that demonstrate the system's capability for research-grade physiological measurement applications.
 
 #### G.1 System Performance Evaluation
 
-**complete Benchmark analysis:**
+**complete Benchmark Analysis:**
 
 The system evaluation encompasses multiple performance dimensions relevant to research applications, including measurement accuracy, system reliability, operational efficiency, and user experience metrics.
 
@@ -2650,7 +2650,7 @@ The performance evaluation incorporates both quantitative measurements and quali
 
 ```
 
-Quantitative Performance analysis:
+Quantitative Performance Analysis:
 
 - Test execution duration: 341.76 seconds (~5.7 minutes)
 - Data integrity validation: 100% corruption detection (9/9 tests)
@@ -2670,7 +2670,7 @@ Test Category Performance:
 
 ```
 
-#### G.2 Comparative analysis Results
+#### G.2 Comparative Analysis Results
 
 **Benchmark Comparison with Existing Solutions:**
 
@@ -2678,7 +2678,7 @@ The comparative analysis positions the Multi-Sensor Recording System against exi
 
 ```
 
-Competitive analysis Matrix:
+Competitive Analysis Matrix:
 ╭──────────────────────────────────────────────────────────╮
 │ Criterion │ This System │ Commercial │ Aca │
 ├────────────────────────┼─────────────┼────────────┼─────┤
@@ -2699,7 +2699,7 @@ Key Advantages:
 
 ```
 
-**Performance Improvement analysis:**
+**Performance Improvement Analysis:**
 
 ```
 
@@ -2716,7 +2716,7 @@ Performance Improvements Over Baseline:
 
 #### G.3 User Experience Evaluation
 
-**Research Team Feedback analysis:**
+**Research Team Feedback Analysis:**
 
 User experience evaluation incorporated feedback from multiple research teams across different institutions, providing detailed assessment of system usability and research applicability.
 
@@ -2771,7 +2771,7 @@ Research Productivity Impact:
 
 This section provides complete code snippets for all files referenced throughout the thesis chapters. Each code listing corresponds to specific file references mentioned in Chapters 1-6, demonstrating the technical implementation of concepts discussed in the academic content.
 
-The code snippets are organised by reference numbers (F.1-F.177) as cited in the chapter sections. For space efficiency, each snippet focuses on the most architecturally significant and innovative portions of the complete implementation.
+The code snippets are organized by reference numbers (F.1-F.177) as cited in the chapter sections. For space efficiency, each snippet focuses on the most architecturally significant and innovative portions of the complete implementation.
 
 *Note: Complete source code with full implementations is available in the project repository at `PythonApp/` and `AndroidApp/` directories.*
 ---
@@ -2815,7 +2815,7 @@ class Application(QObject):
 ---
         # Create backend services with dependency injection
         self._create_services()
-        self.logger.info("application initialised")
+        self.logger.info("application initialized")
 ---
     def _create_services(self):
         """Create backend services with dependency injection"""
@@ -2855,7 +2855,7 @@ class SessionManager:
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
 ---
     def create_session(self, session_name: Optional[str] = None) -> Dict:
-        """Create a new recording session with standardised structure"""
+        """Create a new recording session with standardized structure"""
         timestamp = datetime.now()
         session_id = self._generate_session_id(session_name, timestamp)
         session_dir = self.base_recordings_dir / session_id
@@ -3332,7 +3332,7 @@ class SystemAchievementValidator:
         return achievement
 ```
 
-### G.145 Statistical analysis - PythonApp/comprehensive_test_summary.py
+### G.145 Statistical Analysis - PythonApp/comprehensive_test_summary.py
 
 ```python
 """Statistical analysis with confidence intervals and achievement metrics"""
@@ -3359,7 +3359,7 @@ class ComprehensiveTestAnalyzer:
                 "std_deviation": statistics.stdev(data) if len(data) > 1 else 0,
                 "min": min(data),
                 "max": max(data),
-                "sample_sise": len(data)
+                "sample_size": len(data)
             }
 ---
             # Calculate confidence intervals
@@ -3413,7 +3413,7 @@ and `AndroidApp/` directories.*
 - **Figure B.4**: Data Export Workflow Interface *(Note: could potentially use 13_data_export_workflow.png)*
 - **Figure C.1**: Calibration Validation Results
 - **Figure D.1**: Calibration Test Results Visualisation
-- **Figure E.1**: User Satisfaction analysis
+- **Figure E.1**: User Satisfaction Analysis
 
 ### Missing Tables
 
@@ -3489,7 +3489,7 @@ references in Chapters 3-6 and appendices.
 - *Status*: ❌ Missing diagram file
 - *Description*: Comparative illustration showing traditional physiological measurement setup versus the contactless
   approach
-- *Referenced in*: Chapter 3, Requirements and analysis section
+- *Referenced in*: Chapter 3, Requirements and Analysis section
 - *Suggested creation*: Side-by-side photograph comparison or technical schematic
 
 **Figure 3.2: Evolution of Physiological Measurement Technologies**
@@ -3552,7 +3552,7 @@ references in Chapters 3-6 and appendices.
 - *Referenced in*: Chapter 5, Performance validation
 - *Suggested creation*: Line chart with multiple performance metrics
 
-**Figure 5.4: Scalability Performance analysis**
+**Figure 5.4: Scalability Performance Analysis**
 
 - *Status*: ❌ Missing diagram file
 - *Description*: Chart showing system performance degradation as device count increases
@@ -3566,7 +3566,7 @@ references in Chapters 3-6 and appendices.
 - *Referenced in*: Chapter 5, Reliability assessment
 - *Suggested creation*: Reliability curve with confidence intervals
 
-**Figure 5.6: Temporal Synchronisation Distribution analysis**
+**Figure 5.6: Temporal Synchronisation Distribution Analysis**
 
 - *Status*: ❌ Missing diagram file
 - *Description*: Statistical distribution of synchronisation accuracy measurements
@@ -3619,7 +3619,7 @@ references in Chapters 3-6 and appendices.
 - *Referenced in*: Appendix D, twice with different contexts
 - *Current status*: Mermaid chart placeholder exists
 
-**Figure E.1: User Satisfaction analysis**
+**Figure E.1: User Satisfaction Analysis**
 
 - *Status*: ❌ Missing diagram file
 - *Description*: Statistical analysis of user experience survey results
@@ -3687,9 +3687,9 @@ connections exist.
 
 #### H.4.1 Academic Presentation Standards
 
-For academic submission, the following diagram categories should be prioritised:
+For academic submission, the following diagram categories should be prioritized:
 
-1. **Requirements analysis Visualizations** (Chapter 3)
+1. **Requirements Analysis Visualizations** (Chapter 3)
     - Traditional vs. contactless comparison for establishing research motivation
     - Requirements dependency network for systematic analysis demonstration
 
@@ -3701,9 +3701,9 @@ For academic submission, the following diagram categories should be prioritised:
     - Goal achievement timeline for research contribution demonstration
     - Performance excellence metrics for academic impact assessment
 
-#### H.4.2 Repository Organisation Recommendations
+#### H.4.2 Repository Organization Recommendations
 
-1. **Create placeholder image files** with standardised naming convention
+1. **Create placeholder image files** with standardized naming convention
 2. **Maintain diagram-to-reference mapping table** in repository documentation
 3. **Implement automated diagram reference validation** in documentation build process
 4. **Establish diagram creation guidelines** for future development

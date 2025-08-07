@@ -160,14 +160,14 @@ New contributors should review key ADRs to understand architectural decisions:
 - [ ] **Clear Context**: Problem and constraints are well-defined
 - [ ] **complete Alternatives**: Multiple options evaluated
 - [ ] **Evidence-Based**: Decisions supported by research or testing
-- [ ] **Consequence analysis**: Both positive and negative impacts identified
+- [ ] **Consequence Analysis**: Both positive and negative impacts identified
 - [ ] **Implementation Guidance**: Clear direction for developers
 - [ ] **Proper References**: Links to standards, papers, and related decisions
 
 ### Templates and Tools
 
 - **Template**: Use `ADR-TEMPLATE.md` for new decisions
-- **Validation**: check ADRs during code review process
+- **Validation**: Check ADRs during code review process
 - **Tracking**: Maintain ADR index with status and cross-references
 - **Integration**: Link ADRs with implementation code
 
@@ -203,7 +203,7 @@ ADRs in this project follow academic research standards:
 
 ### For Contributors
 
-- **Reference Existing**: check relevant ADRs before proposing changes
+- **Reference Existing**: Check relevant ADRs before proposing changes
 - **Propose New**: Suggest ADRs for significant architectural decisions
 - **Question Decisions**: Ask about rationale using ADR framework
 - **Implementation Consistency**: Follow established patterns documented in ADRs

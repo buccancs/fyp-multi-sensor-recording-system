@@ -3,9 +3,9 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue)](https://www.python.org/)
 [![PyQt5](https://img.shields.io/badge/PyQt5-5.15.7-green)](https://www.riverbankcomputing.com/software/pyqt/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.8.0-red)](https://opencv.org/)
-[![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](../licence)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
 
-A complete Python desktop application that serves as the central orchestrator for the Multi-Sensor Recording System. This controller coordinates multiple Android devices, USB cameras, and Bluetooth sensors to achieve research-grade synchronised data collection across heterogeneous sensor modalities.
+A complete Python desktop application that serves as the central orchestrator for the Multi-Sensor Recording System. This controller coordinates multiple Android devices, USB cameras, and Bluetooth sensors to achieve research-grade synchronized data collection across heterogeneous sensor modalities.
 
 ## 🔧 System Status: ✅ FULLY OPERATIONAL
 
@@ -40,25 +40,25 @@ A complete Python desktop application that serves as the central orchestrator fo
 
 ## Overview
 
-The Multi-Sensor Desktop Controller implements a distributed coordination system that orchestrates synchronised data collection from multiple sensor nodes. The application follows distributed systems principles [Lamport1978, Cristian1989] to achieve microsecond-precision temporal synchronisation across all connected sensors while providing an intuitive interface for research applications.
+The Multi-Sensor Desktop Controller implements a distributed coordination system that orchestrates synchronized data collection from multiple sensor nodes. The application follows distributed systems principles [Lamport1978, Cristian1989] to achieve microsecond-precision temporal synchronisation across all connected sensors while providing an intuitive interface for research applications.
 
 ### Key Capabilities
 
 - **Multi-Device Coordination**: Simultaneous control of multiple Android smartphones and USB webcams
 - **Real-time Monitoring**: Live status monitoring with device health indicators and preview streaming
-- **Recording Session Management**: Centralised start/stop control with automatic session metadata generation
+- **Recording Session Management**: Centralized start/stop control with automatic session metadata generation
 - **USB Webcam Integration**: DirectShow/V4L2 camera capture for stationary high-quality video recording
 - **Camera Calibration System**: OpenCV-based intrinsic and extrinsic camera parameter estimation
 - **Shimmer3 Integration**: Direct Bluetooth connectivity with physiological sensors
 - **Stimulus Presentation**: Integrated experimental stimulus controller for research applications
 - **Data Synchronisation**: Temporal alignment of multi-modal data streams with microsecond precision
-- **Export and analysis Tools**: Automated data processing and export for analysis workflows
+- **Export and Analysis Tools**: Automated data processing and export for analysis workflows
 
 ### Research Applications
 
 The desktop controller is designed for advanced research scenarios requiring precise multi-modal data coordination:
 
-- **Physiological Computing**: Synchronised physiological and behavioural data collection [Picard1997]
+- **Physiological Computing**: Synchronized physiological and behavioural data collection [Picard1997]
 - **Human-Computer Interaction**: Multi-perspective analysis with temporal precision [Shneiderman2016]
 - **Computer Vision Research**: RGB-thermal-depth data fusion for algorithm development
 - **Clinical Research**: Non-invasive monitoring with research-grade accuracy [Wilhelm2010]
@@ -212,7 +212,7 @@ The desktop controller manages multiple heterogeneous sensor devices simultaneou
 
 ```python
 class DeviceCoordinator:
-    """Coordinates multiple sensor devices for synchronised recording."""
+    """Coordinates multiple sensor devices for synchronized recording."""
     
     def __init__(self):
         self.android_devices = {}
@@ -295,7 +295,7 @@ class CalibrationManager:
         
         # Perform calibration
         ret, camera_matrix, dist_coeffs, rvecs, tvecs = cv2.calibrateCamera(
-            object_points, image_points, image_sise, None, None
+            object_points, image_points, image_size, None, None
         )
         
         # Assess calibration quality
@@ -369,7 +369,7 @@ class ShimmerManager:
 - **Multi-Library Support**: Fallback support for pyshimmer, bluetooth, and pybluez
 - **Device Discovery**: Bluetooth scanning with automatic device detection
 - **Real-time Streaming**: Continuous GSR data with configurable sampling rates
-- **Session Management**: Session-based data organisation with CSV export
+- **Session Management**: Session-based data organization with CSV export
 - **Error Recovery**: Graceful handling of connection failures and library issues
 
 ### Advanced Features
@@ -753,7 +753,7 @@ python PythonApp/application.py --log-level DEBUG
 
 #### GUI Interface Overview
 
-The desktop controller features a tabbed interface organised by workflow:
+The desktop controller features a tabbed interface organized by workflow:
 
 ```mermaid
 graph TB
@@ -783,7 +783,7 @@ graph TB
         subgraph "Files Tab"
             FILE_BROWSE[File Browser<br/>Session Management]
             FILE_EXPORT[Export Tools<br/>Format/Destination]
-            FILE_ANALYSIS[Quick analysis<br/>Validation/Preview]
+            FILE_ANALYSIS[Quick Analysis<br/>Validation/Preview]
         end
         
         MENU --> TABS
@@ -826,7 +826,7 @@ graph TB
 
 3. **Recording Execution**:
    ```python
-   # Start synchronised recording across all devices
+   # Start synchronized recording across all devices
    session_config = SessionConfig(
        session_name="experiment_001",
        duration=300,  # 5 minutes
@@ -845,7 +845,7 @@ graph LR
         SETUP[Setup Phase<br/>📋 Configuration]
         CAPTURE[Capture Phase<br/>📸 Pattern Images]
         PROCESS[Processing Phase<br/>⚙️ Computation]
-        VALIDATE[Validation Phase<br/>✅ Quality check]
+        VALIDATE[Validation Phase<br/>✅ Quality Check]
         SAVE[Save Phase<br/>💾 Results Storage]
         
         SETUP --> CAPTURE
@@ -895,7 +895,7 @@ class ExperimentController:
         self._export_results(protocol.export_config)
 ```
 
-#### Data Export and analysis
+#### Data Export and Analysis
 
 ```python
 class DataExporter:
@@ -915,7 +915,7 @@ class DataExporter:
             raise ValueError(f"Unsupported export format: {format}")
     
     def _export_research_format(self, session: SessionInfo):
-        """Export in standardised research format with metadata."""
+        """Export in standardized research format with metadata."""
         export_package = {
             'metadata': session.metadata,
             'video_files': session.video_files,
@@ -1037,7 +1037,7 @@ class CalibrationAPI:
         
         Args:
             config: Calibration configuration including pattern type,
-                   sise, and quality thresholds
+                   size, and quality thresholds
                    
         Returns:
             CalibrationSession: Session object for calibration workflow
@@ -1292,10 +1292,10 @@ graph TB
     subgraph "Data Management Architecture"
         INGEST[Data Ingestion<br/>Multi-source Collection]
         VALIDATE[Validation<br/>Integrity Checking]
-        ORGANIS\1[Organisation<br/>Session Structure]
+        ORGANIS\1[Organization<br/>Session Structure]
         COMPRESS[Compression<br/>Storage Optimisation]
         INDEX[Indexing<br/>Metadata Database]
-        EXPORT[Export<br/>analysis Formats]
+        EXPORT[Export<br/>Analysis Formats]
         
         INGEST --> VALIDATE
         VALIDATE --> ORGANIS\1
@@ -1336,9 +1336,9 @@ class MemoryManager:
         self.cache_manager = CacheManager()
         self.gc_scheduler = GarbageCollectionScheduler()
         
-    def allocate_buffer(self, sise: int) -> MemoryBuffer:
+    def allocate_buffer(self, size: int) -> MemoryBuffer:
         """Allocate memory buffer with pooling."""
-        return self.memory_pool.acquire(sise)
+        return self.memory_pool.acquire(size)
     
     def monitor_memory_usage(self):
         """Continuous memory monitoring with automatic cleanup."""
@@ -1362,7 +1362,7 @@ class PerformanceOptimizer:
         self.gpu_available = self._check_gpu_availability()
         
     async def process_video_frame(self, frame: np.ndarray) -> ProcessedFrame:
-        """Optimised video frame processing."""
+        """Optimized video frame processing."""
         if self.gpu_available:
             return await self._process_frame_gpu(frame)
         else:
@@ -1546,7 +1546,7 @@ class AutomatedTestRunner:
 Error: Connection refused to 192.168.1.100:8080
 Solutions:
 1. Verify firewall settings allow incoming connections
-2. check that desktop controller is listening on correct port
+2. Check that desktop controller is listening on correct port
 3. Ensure all devices are on same network segment
 4. Validate IP address configuration
 5. Test with telnet or netcat for basic connectivity
@@ -1556,7 +1556,7 @@ Solutions:
 ```
 Error: Socket connection reset by peer
 Solutions:
-1. check network stability and interference
+1. Check network stability and interference
 2. Increase connection timeout values
 3. Enable automatic reconnection
 4. Monitor network quality metrics
@@ -1570,10 +1570,10 @@ Solutions:
 Error: No USB video devices found
 Solutions:
 1. Verify USB cable connections
-2. check USB port power delivery
+2. Check USB port power delivery
 3. Install camera drivers if required
 4. Test camera with other applications
-5. check device manager for hardware conflicts
+5. Check device manager for hardware conflicts
 ```
 
 **Issue**: Poor video quality or frame drops
@@ -1582,7 +1582,7 @@ Error: Frame rate below target, quality degraded
 Solutions:
 1. Reduce recording resolution or frame rate
 2. Close unnecessary applications
-3. check available USB bandwidth
+3. Check available USB bandwidth
 4. Monitor CPU and memory usage
 5. Use higher quality USB cables
 ```
@@ -1594,10 +1594,10 @@ Solutions:
 Error: No Shimmer devices found during Bluetooth scan
 Solutions:
 1. Verify Shimmer device is powered and charged
-2. check Bluetooth adapter functionality
+2. Check Bluetooth adapter functionality
 3. Clear Bluetooth device cache
 4. Ensure pyshimmer library is installed
-5. check sensor battery level
+5. Check sensor battery level
 ```
 
 #### Performance Issues
@@ -1874,9 +1874,9 @@ class RobustErrorHandling:
 
 ---
 
-## licence
+## License
 
-This project is licensed under the MIT licence - see the [licence](../licence) file for details.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
 
 ## Acknowledgments
 

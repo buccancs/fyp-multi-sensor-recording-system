@@ -40,14 +40,14 @@ from typing import Any, Dict, List, Optional, Tuple
 **Problem**: Android devices not detected
 **Solution**:
 1. Ensure all devices on same WiFi network
-2. check firewall settings allow local network communication
+2. Check firewall settings allow local network communication
 3. Verify Android app has network permissions
 
 #### WebSocket Connection Timeouts
 **Problem**: Connection timeouts during testing
 **Solution**:
 1. Increase timeout values in test configuration
-2. check network stability and bandwidth
+2. Check network stability and bandwidth
 3. Reduce concurrent device connections for testing
 
 ### Android-Specific Issues
@@ -57,14 +57,14 @@ from typing import Any, Dict, List, Optional, Tuple
 **Solution**:
 1. Grant all requested permissions in Android app
 2. Enable developer options on Android devices
-3. check USB debugging is enabled
+3. Check USB debugging is enabled
 
 #### Bluetooth Connection Issues
 **Problem**: Shimmer sensor connection failures
 **Solution**:
 1. Verify Bluetooth is enabled on Android devices
 2. Pair Shimmer devices before testing
-3. check device compatibility with Shimmer sensors
+3. Check device compatibility with Shimmer sensors
 
 ### Performance Issues
 
@@ -95,14 +95,14 @@ python run_evaluation_suite.py --category android_foundation
 **Problem**: Timing precision below requirements
 **Solution**:
 1. Ensure NTP synchronisation is working
-2. check system clock accuracy
+2. Check system clock accuracy
 3. Reduce network latency between devices
 
 #### Data Quality Issues
 **Problem**: Invalid or corrupted test data
 **Solution**:
 1. Verify device calibration
-2. check sensor connection quality
+2. Check sensor connection quality
 3. Validate data format compliance
 
 ## Debug Mode and Logging
@@ -116,7 +116,7 @@ python run_evaluation_suite.py --verbose --debug
 python run_evaluation_suite.py --log-level DEBUG
 ```
 
-### Log analysis
+### Log Analysis
 Common log patterns to look for:
 - Connection establishment messages
 - Error patterns and stack traces
@@ -135,13 +135,13 @@ python run_evaluation_suite.py --test shimmer_integration_test
 
 ### Environment Validation
 ```bash
-# check system requirements
+# Check system requirements
 python -c "import PyQt5, cv2, numpy; print('Core dependencies OK')"
 
 # Verify network configuration
 python -c "import socket; print(f'Local IP: {socket.gethostbyname(socket.gethostname())}')"
 
-# check available devices
+# Check available devices
 python run_evaluation_suite.py --list-devices
 ```
 
@@ -153,7 +153,7 @@ python run_evaluation_suite.py --list-devices
 - **[Architecture Documentation](./architecture.md)**: System design and components
 
 ### Support Channels
-1. check existing issues in project repository
+1. Check existing issues in project repository
 2. Review test execution logs for specific error patterns
 3. Consult community documentation and forums
 4. Contact development team with detailed error information

@@ -24,7 +24,7 @@
 
 1.3. [Thesis Outline](#13-thesis-outline)
 
-- complete Thesis Organisation
+- complete Thesis Organization
 - Research Scope and Boundaries
 - Academic Contributions and Innovation Framework
 - Methodology and Validation Approach
@@ -45,7 +45,7 @@ in realistic environments [McDuff2016; Poh2010], as implemented through the coor
 
 The historical progression of physiological measurement technologies reveals a consistent trajectory toward less
 invasive, more accurate, and increasingly accessible measurement approaches [Boucsein2012; Fowles1981]. Early research
-in galvanic skin response (GSR) and stress measurement required specialised laboratory equipment [Biopac2018], trained
+in galvanic skin response (GSR) and stress measurement required specialized laboratory equipment [Biopac2018], trained
 technicians, and controlled environments that severely limited the ecological validity of research
 findings [Brewer2000; Campbell1957]. Participants were typically constrained to stationary positions with multiple
 electrodes attached to their skin, creating an artificial research environment that could itself influence the
@@ -72,7 +72,7 @@ addressed in this system through the contactless integration approach implemente
   limit ecological validity
 - **Participant Discomfort and Behavioral Artifacts**: Physical sensors create awareness of monitoring that can alter
   the phenomena being studied
-- **Technical Expertise Requirements**: Traditional systems require specialised training for operation and maintenance
+- **Technical Expertise Requirements**: Traditional systems require specialized training for operation and maintenance
 - **Single-Participant Focus**: Most traditional systems are designed for individual measurement, limiting group
   dynamics research
 - **High Equipment Costs**: Commercial research-grade systems often cost tens of thousands of dollars, limiting
@@ -159,18 +159,18 @@ The system implements several sophisticated components working in concert:
   device coordination protocols
 - **SessionSynchronizer**: Sophisticated session management system that coordinates recording initialisation and
   termination across all devices with microsecond precision
-- **NTPTimeServer**: Custom Network Time Protocol implementation optimised for local network precision and mobile device
+- **NTPTimeServer**: Custom Network Time Protocol implementation optimized for local network precision and mobile device
   coordination
 - **Clock Drift Compensation**: Advanced algorithms that monitor and compensate for device-specific timing variations
   during extended recording sessions
 
 **Network Communication Protocol:**
 
-The synchronisation framework employs a sophisticated JSON-based communication protocol optimised for scientific
+The synchronisation framework employs a sophisticated JSON-based communication protocol optimized for scientific
 applications:
 
 - **StartRecordCommand**: Precisely coordinated recording initiation with timestamp validation
-- **StopRecordCommand**: Synchronised recording termination with data integrity verification
+- **StopRecordCommand**: Synchronized recording termination with data integrity verification
 - **SyncTimeCommand**: Continuous time synchronisation with latency compensation
 - **HelloMessage**: Device discovery and capability negotiation
 - **StatusMessage**: Real-time operational status and quality monitoring
@@ -193,7 +193,7 @@ several persistent challenges that existing commercial and research solutions fa
 beyond the reach of many research groups, particularly those in developing countries or smaller institutions. This cost
 barrier significantly limits the democratisation of advanced physiological measurement research.
 
-**Technical Complexity and Training Requirements**: Existing systems often require specialised technical expertise for
+**Technical Complexity and Training Requirements**: Existing systems often require specialized technical expertise for
 operation, maintenance, and data analysis, creating barriers for research groups without dedicated technical support
 staff.
 
@@ -227,7 +227,7 @@ distributed system coordination, real-time data processing, and cross-platform a
 immediate practical benefits for research applications.
 
 **Hybrid Coordination Architecture**: The system implements a novel hybrid star-mesh topology that combines the
-operational simplicity of centralised coordination with the resilience and scalability benefits of distributed
+operational simplicity of centralized coordination with the resilience and scalability benefits of distributed
 processing. This architectural innovation addresses the fundamental challenge of coordinating consumer-grade devices for
 scientific applications while maintaining the precision required for research use.
 
@@ -259,7 +259,7 @@ scientific validity and research quality standards.
 
 #### Current Limitations in Physiological Measurement Systems
 
-The contemporary landscape of physiological measurement research is characterised by persistent methodological
+The contemporary landscape of physiological measurement research is characterized by persistent methodological
 limitations that constrain research design, compromise data quality, and limit the ecological validity of research
 findings. These limitations have remained largely unaddressed despite decades of technological advancement in related
 fields, creating a significant opportunity for innovation that can fundamentally improve research capabilities across
@@ -283,7 +283,7 @@ can significantly alter the phenomena under investigation [Healey2005].
 **Scalability and Multi-Participant Limitations**: Traditional physiological measurement systems are designed primarily
 for single-participant applications, creating significant constraints for research into group dynamics, social
 physiological responses, and large-scale behavioral studies [Picard1997]. Coordinating multiple traditional GSR systems
-requires complex technical setup, extensive calibration procedures, and specialised technical expertise that makes
+requires complex technical setup, extensive calibration procedures, and specialized technical expertise that makes
 multi-participant research impractical for many research groups [ShimmerUseCase2018].
 
 The cost structure of traditional systems compounds scalability limitations, with each additional participant requiring
@@ -306,7 +306,7 @@ contactless measurement capabilities implemented in
 `AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt`.
 
 **Technical Complexity and Accessibility Barriers**: Traditional research-grade physiological measurement systems
-require specialised technical expertise for operation, calibration, and maintenance that places them beyond the
+require specialized technical expertise for operation, calibration, and maintenance that places them beyond the
 practical reach of many research groups [DataTranslation2018, MCC2019]. This technical complexity creates barriers to
 entry that limit the democratisation of physiological measurement research and concentrate advanced capabilities within
 well-funded institutions with dedicated technical support staff.
@@ -384,7 +384,7 @@ other phenomena where the artificial laboratory environment may fundamentally al
 Developing contactless measurement capabilities that enable natural behaviour investigation could revolutionise
 understanding of human physiological responses and their practical applications.
 
-**Longitudinal Studies and Pattern analysis**: Traditional measurement approaches make longitudinal physiological
+**Longitudinal Studies and Pattern Analysis**: Traditional measurement approaches make longitudinal physiological
 studies impractical due to participant burden, cost considerations, and technical complexity. However, longitudinal
 analysis is essential for understanding how physiological responses change over time, how individuals adapt to
 stressors, and how interventions affect long-term physiological patterns.
@@ -402,7 +402,7 @@ Developing cost-effective, scalable measurement systems could enable population-
 informs evidence-based policy and intervention development while advancing scientific understanding of human
 physiological diversity.
 
-**Multi-Modal analysis and Sensor Fusion**: Traditional single-sensor approaches to physiological measurement may miss
+**Multi-Modal Analysis and Sensor Fusion**: Traditional single-sensor approaches to physiological measurement may miss
 important aspects of physiological responses that could be captured through multi-modal analysis combining visual,
 thermal, and physiological data. However, the technical complexity of coordinating multiple sensor modalities has
 prevented widespread adoption of multi-modal approaches.
@@ -437,7 +437,7 @@ system that:
 
 **Objective 1: Advanced Distributed System Architecture Development**
 
-Develop and validate a hybrid coordination architecture that combines centralised control simplicity with distributed
+Develop and validate a hybrid coordination architecture that combines centralized control simplicity with distributed
 processing resilience, enabling reliable coordination of heterogeneous consumer-grade devices for scientific
 applications. This architecture must achieve:
 
@@ -486,7 +486,7 @@ framework must achieve:
 Develop and demonstrate systematic requirements engineering methodology specifically adapted for research software
 applications where traditional commercial requirements approaches may be insufficient. This methodology must address:
 
-- **Stakeholder analysis for Research Applications**: Establish systematic approaches to stakeholder identification and
+- **Stakeholder Analysis for Research Applications**: Establish systematic approaches to stakeholder identification and
   requirement elicitation that account for the unique characteristics of research environments
 - **Scientific Methodology Integration**: Ensure requirements engineering process integrates scientific methodology
   considerations with technical implementation requirements
@@ -541,7 +541,7 @@ by measurement methodology limitations. This enablement must support:
 ---
 ## 1.3 Thesis Outline
 
-### complete Thesis Organisation
+### complete Thesis Organization
 
 This Master's thesis presents a systematic academic treatment of the Multi-Sensor Recording System project through six
 complete chapters that provide complete coverage of all aspects from initial requirements analysis through final
@@ -565,7 +565,7 @@ that enable system implementation. This technical foundation enables readers to 
 architectural choices and implementation approaches while providing context for evaluating the innovation and
 contributions presented in subsequent chapters.
 
-**Chapter 3: Requirements and analysis** presents the systematic requirements engineering process that established the
+**Chapter 3: Requirements and Analysis** presents the systematic requirements engineering process that established the
 foundation for system design and implementation. This chapter demonstrates rigorous academic methodology for
 requirements analysis specifically adapted for research software development, where traditional commercial requirements
 approaches may be insufficient for addressing the unique challenges of scientific instrumentation.
@@ -594,7 +594,7 @@ evidence of system capability and reliability.
 The evaluation framework includes multi-layered testing strategy, performance benchmarking, reliability assessment, and
 statistical validation that provides objective assessment of system achievement while identifying limitations and
 opportunities for improvement. The chapter demonstrates that rigorous software engineering practices can be successfully
-applied to research software development while accounting for the specialised requirements of scientific applications.
+applied to research software development while accounting for the specialized requirements of scientific applications.
 
 **Chapter 6: Conclusions and Evaluation** provides critical evaluation of project achievements, systematic assessment of
 technical contributions, and detailed analysis of system limitations while outlining future development directions
@@ -672,7 +672,7 @@ theoretical understanding while providing immediate practical benefits for the r
 
 **1. Distributed Systems Architecture Innovation**
 
-- Novel hybrid star-mesh topology that combines centralised coordination simplicity with distributed processing
+- Novel hybrid star-mesh topology that combines centralized coordination simplicity with distributed processing
   resilience
 - Advanced synchronisation algorithms achieving microsecond precision across heterogeneous wireless devices
 - Fault tolerance mechanisms specifically designed for research applications where data loss is unacceptable
@@ -720,7 +720,7 @@ theoretical understanding while providing immediate practical benefits for the r
 
 The thesis employs systematic research methodology that demonstrates rigorous approaches to research software
 development while contributing new knowledge to both computer science and research methodology domains. The methodology
-combines established software engineering practices with specialised approaches developed specifically for scientific
+combines established software engineering practices with specialized approaches developed specifically for scientific
 instrumentation requirements.
 
 **Requirements Engineering Methodology:**
@@ -735,12 +735,12 @@ feasibility.
 
 The development methodology demonstrates systematic approaches to iterative development that maintain scientific rigor
 while accommodating the flexibility needed for research applications. The approach combines agile development practices
-with specialised validation techniques that ensure scientific measurement quality throughout the development lifecycle.
+with specialized validation techniques that ensure scientific measurement quality throughout the development lifecycle.
 
 **complete Testing and Validation Framework:**
 
 The validation approach includes multi-layered testing strategy covering unit testing (targeting 95% coverage),
-integration testing (100% interface coverage), system testing (all use cases), and specialised testing for performance,
+integration testing (100% interface coverage), system testing (all use cases), and specialized testing for performance,
 reliability, security, and usability. The framework includes research-specific validation methodologies ensuring
 measurement accuracy, temporal precision, and data integrity meet scientific standards.
 
@@ -769,11 +769,11 @@ flexibility.
 **Title**: Chapter 1: Introduction - Multi-Sensor Recording System Thesis  
 **Author**: Computer Science Master's Student  
 **Date**: 2024  
-**Institution**: University Research programme  
+**Institution**: University Research Program  
 **Chapter**: 1 of 7  
 **Research Area**: Multi-Sensor Recording System for Contactless GSR Prediction
 
-**Chapter Focus**: Introduction, background, motivation, research objectives, and thesis organisation  
+**Chapter Focus**: Introduction, background, motivation, research objectives, and thesis organization  
 **Length**: Approximately 25 pages  
 **Format**: Markdown with integrated technical analysis
 
@@ -789,7 +789,7 @@ chapter establishes:
 
 - Clear motivation for the research based on identified limitations in current approaches
 - Specific technical and research objectives with measurable outcomes
-- Systematic thesis organisation enabling effective academic evaluation
+- Systematic thesis organization enabling effective academic evaluation
 - Research scope and boundaries appropriate for Master's thesis level research
 
 ### For Technical Implementation
@@ -806,7 +806,7 @@ made throughout the project. Key technical context includes:
 
 The introduction establishes the research context and community needs that the project addresses. This includes:
 
-- analysis of current research methodology limitations and innovation opportunities
+- Analysis of current research methodology limitations and innovation opportunities
 - Identification of cost and accessibility barriers that the project aims to address
 - Framework for community adoption and collaborative development
 - Educational value and technology transfer potential for research methodology training
@@ -822,7 +822,7 @@ information is available in the complete thesis structure:
 **Core Thesis Chapters:**
 
 - Chapter 2: Background and Literature Review (`Chapter_2_Context_and_Literature_Review.md`)
-- Chapter 3: Requirements and analysis (`Chapter_3_Requirements_and_Analysis.md`)
+- Chapter 3: Requirements and Analysis (`Chapter_3_Requirements_and_Analysis.md`)
 - Chapter 4: Design and Implementation (`Chapter_4_Design_and_Implementation.md`)
 - Chapter 5: Evaluation and Testing (`Chapter_5_Testing_and_Results_Evaluation.md`)
 - Chapter 6: Conclusions and Evaluation (`Chapter_6_Conclusions_and_Evaluation.md`)
@@ -942,7 +942,7 @@ Engineering, 3(4), 250-251, 2019.
 
 [Goodfellow2016] Goodfellow, I., Bengio, Y., & Courville, A. "Deep Learning." MIT Press, 2016.
 
-[Hawthorne1939] Roethlisberger, F. J., & Dickson, W. J. "Management and the Worker: An Account of a Research programme
+[Hawthorne1939] Roethlisberger, F. J., & Dickson, W. J. "Management and the Worker: An Account of a Research Program
 Conducted by the Western Electric Company, Hawthorne Works, Chicago." Harvard University Press, 1939.
 
 [Healey2005] Healey, J. A., & Picard, R. W. "Detecting stress during real-world driving tasks using physiological
@@ -966,8 +966,8 @@ Requirements and Pricing, 2019.
 
 [Picard1997] Picard, R. W. "Affective Computing." MIT Press, 1997.
 
-[Picard2001] Picard, R. W., Vyzas, E., & Healey, J. "Toward machine emotional intelligence: analysis of affective
-physiological state." IEEE Transactions on Pattern analysis and Machine Intelligence, 23(10), 1175-1191, 2001.
+[Picard2001] Picard, R. W., Vyzas, E., & Healey, J. "Toward machine emotional intelligence: Analysis of affective
+physiological state." IEEE Transactions on Pattern Analysis and Machine Intelligence, 23(10), 1175-1191, 2001.
 
 [Poh2010] Poh, M. Z., McDuff, D. J., & Picard, R. W. "Non-contact, automated cardiac pulse measurements using video
 imaging and blind source separation." Optics Express, 18(10), 10762-10774, 2010.

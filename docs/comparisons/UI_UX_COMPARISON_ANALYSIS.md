@@ -10,27 +10,27 @@ This document provides a focused analysis of user interface design and user expe
 
 #### 1. Beautiful User Interface Design
 - **Visual Excellence**: Professional, polished interface with consistent design language
-- **Intuitive Layout**: Well-organised interface elements with logical visual hierarchy
+- **Intuitive Layout**: Well-organized interface elements with logical visual hierarchy
 - **Modern Design**: Contemporary UI patterns following Android design guidelines
 - **Visual Feedback**: Clear user feedback with appropriate animations and transitions
 
 #### 2. High-Quality Thermal Preview
-- **Smooth Performance**: Responsive, real-time thermal visualisation without lag
-- **Excellent Rendering**: High-quality thermal image display with clear colour mapping
-- **User Controls**: Intuitive preview controls for zoom, colour adjustment, and display options
-- **Visual Clarity**: Excellent thermal data presentation with clear temperature visualisation
+- **Smooth Performance**: Responsive, real-time thermal visualization without lag
+- **Excellent Rendering**: High-quality thermal image display with clear color mapping
+- **User Controls**: Intuitive preview controls for zoom, color adjustment, and display options
+- **Visual Clarity**: Excellent thermal data presentation with clear temperature visualization
 
 #### 3. Elegant File Browser
 - **Beautiful Navigation**: Intuitive file system navigation with clear directory structure
-- **File Management**: Easy file selection, organisation, and management capabilities
+- **File Management**: Easy file selection, organization, and management capabilities
 - **Preview Integration**: Quick preview capabilities for thermal recordings
 - **User-Friendly Operations**: Simple file operations with clear user feedback
 
 #### 4. Comprehensive Settings Page
-- **Complete Configuration**: Full range of settings for thermal camera customisation
-- **User-Friendly Interface**: Clear, organised settings with helpful descriptions
+- **Complete Configuration**: Full range of settings for thermal camera customization
+- **User-Friendly Interface**: Clear, organized settings with helpful descriptions
 - **Immediate Feedback**: Real-time validation and configuration feedback
-- **Intuitive Organisation**: Logical grouping of settings with easy navigation
+- **Intuitive Organization**: Logical grouping of settings with easy navigation
 
 #### 5. Overall Functional Excellence
 - **Reliable Operation**: Stable, working implementation with consistent performance
@@ -52,9 +52,9 @@ This document provides a focused analysis of user interface design and user expe
 - **Minimal Standalone UI**: Limited standalone interface (designed for system integration)
 - **Technical Configuration**: Advanced settings for research-grade data collection
 - **Embedded Preview**: Basic thermal preview within multi-sensor interface
-- **Session Management**: File organisation based on research session structure
+- **Session Management**: File organization based on research session structure
 
-## UI/UX Comparison analysis
+## UI/UX Comparison Analysis
 
 ### Interface Design Quality
 
@@ -62,8 +62,8 @@ This document provides a focused analysis of user interface design and user expe
 |--------|--------------|---------------------------|
 | **Visual Design** | ⭐⭐⭐⭐⭐ Beautiful, polished interface | ⭐⭐⭐ Functional, technical focus |
 | **User Experience** | ⭐⭐⭐⭐⭐ Intuitive, smooth interactions | ⭐⭐⭐ System integration focused |
-| **Preview Quality** | ⭐⭐⭐⭐⭐ Excellent thermal visualisation | ⭐⭐⭐ Basic preview functionality |
-| **File Management** | ⭐⭐⭐⭐⭐ Elegant file browser | ⭐⭐⭐ Session-based organisation |
+| **Preview Quality** | ⭐⭐⭐⭐⭐ Excellent thermal visualization | ⭐⭐⭐ Basic preview functionality |
+| **File Management** | ⭐⭐⭐⭐⭐ Elegant file browser | ⭐⭐⭐ Session-based organization |
 | **Settings Interface** | ⭐⭐⭐⭐⭐ Comprehensive, user-friendly | ⭐⭐⭐ Technical configuration |
 | **Overall Polish** | ⭐⭐⭐⭐⭐ Professional app experience | ⭐⭐⭐ Research tool interface |
 
@@ -74,7 +74,7 @@ This document provides a focused analysis of user interface design and user expe
 2. **Beautiful Visual Design**: Professional interface comparable to commercial apps
 3. **Smooth User Interactions**: Responsive, intuitive user experience throughout
 4. **Comprehensive Feature Access**: Easy access to all thermal camera features
-5. **User-Centric Design**: Interface optimised for thermal camera usage patterns
+5. **User-Centric Design**: Interface optimized for thermal camera usage patterns
 
 #### bucika_gsr Implementation Advantages  
 1. **Multi-Sensor Integration**: Seamless coordination with comprehensive sensor suite
@@ -92,7 +92,7 @@ This document provides a focused analysis of user interface design and user expe
 // Potential UI improvements inspired by IRCamera app
 - Adopt beautiful visual design language and consistent styling
 - Implement smooth animations and transitions
-- Enhance colour schemes and visual hierarchy
+- Enhance color schemes and visual hierarchy
 - Improve icon design and visual feedback systems
 ```
 
@@ -101,7 +101,7 @@ This document provides a focused analysis of user interface design and user expe
 // Enhanced thermal preview based on IRCamera quality
 - Implement smooth, high-quality thermal rendering
 - Add intuitive preview controls and user interactions
-- Enhance colour palette options and display modes
+- Enhance color palette options and display modes
 - Improve real-time performance and responsiveness
 ```
 
@@ -111,13 +111,13 @@ This document provides a focused analysis of user interface design and user expe
 - Create beautiful file navigation interface
 - Add preview thumbnails and quick access features
 - Implement intuitive file operations and management
-- Enhance file organisation and discovery features
+- Enhance file organization and discovery features
 ```
 
 #### 4. Settings Interface Enhancement
 ```kotlin
 // Settings page improvements based on IRCamera design
-- Organise settings with clear, user-friendly interface
+- Organize settings with clear, user-friendly interface
 - Add helpful descriptions and validation feedback
 - Implement intuitive configuration workflows
 - Enhance user guidance and help systems
@@ -130,7 +130,7 @@ This document provides a focused analysis of user interface design and user expe
 #### 1. Adopt IRCamera UI Excellence
 - **Beautiful Interface Design**: Implement IRCamera's visual design patterns
 - **User Experience Quality**: Adopt smooth, intuitive interaction patterns
-- **Preview Excellence**: Integrate high-quality thermal visualisation approaches
+- **Preview Excellence**: Integrate high-quality thermal visualization approaches
 - **File Management**: Implement elegant file browser and management features
 
 #### 2. Maintain Technical Robustness
@@ -159,25 +159,25 @@ class EnhancedThermalInterface @Inject constructor(
 - Study IRCamera's visual design language and interaction patterns
 - Implement beautiful, polished interface elements throughout the application
 - Add smooth animations and transitions for better user experience
-- Enhance colour schemes and visual feedback systems
+- Enhance color schemes and visual feedback systems
 
 #### 2. Preview System Enhancement
 - Upgrade thermal preview to match IRCamera's smooth, high-quality rendering
 - Add intuitive preview controls and user interaction features
-- Implement better colour palette options and display modes
+- Implement better color palette options and display modes
 - Improve real-time performance and visual responsiveness
 
 #### 3. File Management Redesign
 - Create elegant file browser inspired by IRCamera's beautiful navigation
 - Add preview thumbnails and quick access features for thermal recordings
 - Implement intuitive file operations with clear user feedback
-- Enhance file organisation and discovery capabilities
+- Enhance file organization and discovery capabilities
 
 #### 4. Settings Interface Overhaul
 - Redesign settings page with IRCamera's user-friendly approach
 - Add comprehensive configuration options with clear descriptions
 - Implement real-time validation and helpful user guidance
-- Organise settings logically with intuitive navigation
+- Organize settings logically with intuitive navigation
 
 ### For Long-term Integration
 

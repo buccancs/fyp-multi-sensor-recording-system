@@ -1,4 +1,4 @@
-# Chapter 3: Requirements and System analysis
+# Chapter 3: Requirements and System Analysis
 
 ## 3.1 Problem Statement and Research Context
 
@@ -13,7 +13,7 @@ sacrificing accuracy. In the current state of physiological measurement,
 cameras and thermal sensors have advanced to capture subtle
 physiological cues (e.g. facial temperature changes or perspiration)
 that could correlate with stress. However, **no integrated system
-existed** to simultaneously collect *synchronised* thermal, visual, and
+existed** to simultaneously collect *synchronized* thermal, visual, and
 reference GSR data required to develop and validate contactless GSR
 prediction models. This thesis operates in the context of **affective
 computing and human-computer interaction research**, where unobtrusive
@@ -26,7 +26,7 @@ ground-truth physiological data.
 
 To bridge this gap, the project developed a **Multi-Sensor Recording
 System for Contactless GSR Prediction**. The system is designed to
-collect **synchronised multi-modal data streams** -- specifically
+collect **synchronized multi-modal data streams** -- specifically
 high-resolution visual video, thermal infrared imagery, and **GSR
 readings from a Shimmer sensor** -- in real time. By aligning these data
 streams with sub-millisecond precision, the system creates rich datasets
@@ -36,7 +36,7 @@ context demands a solution that is *both* scientifically rigorous
 (accurate timing, reliable signals) and practical for field use (mobile
 devices, untethered subjects). In summary, the problem statement centres
 on building a **distributed data acquisition system** that can capture
-synchronised physiological and imaging data to enable **contactless GSR
+synchronized physiological and imaging data to enable **contactless GSR
 measurement** research. The remainder of this chapter details the
 requirements derived from this problem and the system analysis that
 shaped the solution.
@@ -54,7 +54,7 @@ maintainers/developers** of the system who need the software to be
 maintainable, extensible, and testable; and (4) **Institutional review
 boards / ethics committees**, concerned with data security and
 participant safety. Each stakeholder group introduced distinct
-requirements. For example, researchers emphasised data synchronisation
+requirements. For example, researchers emphasized data synchronisation
 accuracy and multi-modal integration, participants motivated
 requirements for comfort and privacy, and developers focused on modular
 architecture and high code quality standards to ensure reliability.
@@ -63,7 +63,7 @@ Given the experimental nature of the project, the **requirements
 engineering approach was iterative and incremental**. The team followed
 an agile-like process: initial core requirements were established from
 the research objectives (e.g. *"record thermal and video data
-synchronised with GSR"*), and a **prototype system** was quickly built
+synchronized with GSR"*), and a **prototype system** was quickly built
 to validate feasibility. As the prototype was tested with actual
 sensors, new requirements and refinements were discovered (for instance,
 the need for automated device re-connection on failure, or a method to
@@ -91,7 +91,7 @@ and implementation.
 ## 3.3 Functional Requirements Overview
 
 Table 3.1 lists the **Functional Requirements (FR)** identified for the
-multi-sensor recording system. Each requirement is labelled with a unique
+multi-sensor recording system. Each requirement is labeled with a unique
 ID and a priority (H = High, M = Medium) indicating its importance.
 These functional requirements capture the intended capabilities and
 behaviours of the system. They were derived to ensure the system meets
@@ -103,7 +103,7 @@ research workflow.
 ---
   ID                      Functional Requirement Description                                                                                                                                                                                                                                                                                                                                                 Priority
 ---
-  FR-01                   **Centralised Multi-Device Coordination:** The system shall provide a PC-based master controller application that can connect to and manage multiple remote recording devices (Android smartphones). This enables one operator to initiate and control recording sessions across all devices from a single interface.                                                              H
+  FR-01                   **Centralized Multi-Device Coordination:** The system shall provide a PC-based master controller application that can connect to and manage multiple remote recording devices (Android smartphones). This enables one operator to initiate and control recording sessions across all devices from a single interface.                                                              H
 
   FR-02                   **User Interface for Session Control:** The PC master controller shall offer an intuitive graphical user interface (GUI) for configuring sessions, displaying device status, and controlling recordings (start/stop). The GUI should show connected device indicators and allow the user to easily monitor the recording process in real time.                                     H
 
@@ -113,14 +113,14 @@ research workflow.
   FR-04                   **Visual Video Capture:** Each Android recording device shall capture high-resolution **RGB video** of the participant during the session. The system should support at least 30 frames per second at HD (720p) resolution or higher (up to the device's capabilities, e.g. 1080p or 4K) for detailed visual data. The video recording is to be continuous for the session         H
                           duration, saved in a standard format (e.g. MP4).
 
-  FR-05                   **Thermal Imaging Capture:** If a recording device is equipped with a thermal camera, the system shall capture **thermal infrared video** in parallel with the RGB video. Thermal frames must be recorded at the highest available resolution and frame rate (device-dependent) and time-synchronised with other streams. This provides contactless skin temperature data          H
+  FR-05                   **Thermal Imaging Capture:** If a recording device is equipped with a thermal camera, the system shall capture **thermal infrared video** in parallel with the RGB video. Thermal frames must be recorded at the highest available resolution and frame rate (device-dependent) and time-synchronized with other streams. This provides contactless skin temperature data          H
                           corresponding to the participant's physiological state.
 
   FR-06                   **GSR Sensor Integration:** The system shall integrate **Shimmer GSR sensor** devices to collect ground-truth physiological signals (electrodermal activity and related sensors). The PC controller must handle Shimmer data either via direct Bluetooth connection or via an Android device acting as a relay (proxy) for the                                                     H
-                          sensor[\[2\]](PythonApp/shimmer_manager.py#L138-L145). All connected GSR sensors should be managed concurrently, and their data samples (GSR conductivity, plus other channels like PPG or accelerometer) timestamped and synchronised with the session timeline.
+                          sensor[\[2\]](PythonApp/shimmer_manager.py#L138-L145). All connected GSR sensors should be managed concurrently, and their data samples (GSR conductivity, plus other channels like PPG or accelerometer) timestamped and synchronized with the session timeline.
 
   FR-07                   **Session Management and Metadata:** The system shall allow the user to create a new *recording session* and automatically assign it a unique Session ID. During a session, the controller will maintain metadata including session start time, configured duration (if applicable), and the list of active devices/sensors. Upon session start, each device and sensor is         H
-                          registered in the session metadata, and upon stop, the session is finalised with end time and duration
+                          registered in the session metadata, and upon stop, the session is finalized with end time and duration
                           recorded[\[3\]](PythonApp/session/session_manager.py#L74-L81)[\[4\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L334-L342). A session metadata file (e.g. JSON or
                           text) shall be saved, summarising the session details for future reference.
 
@@ -128,7 +128,7 @@ research workflow.
                           timestamped or contains timestamps internally. This *offline-first* design ensures no data loss in case of network disruption and maximizes reliability of recording.
 
   FR-09                   **Data Aggregation and Transfer:** After a recording session is stopped, the system shall support automatic aggregation of the distributed data. The PC controller will instruct each Android device to **transfer the recorded files** (video and any other data) to the PC over the network. The files are transmitted in chunks with verification -- the PC confirms the file   M
-                          sizes and integrity on receipt[\[5\]](PythonApp/network/device_server.py#L355-L364). All files from the session are collected into the PC's session folder for centralised storage. (In the event automatic transfer fails or is unavailable, the system permits manual retrieval as a
+                          sizes and integrity on receipt[\[5\]](PythonApp/network/device_server.py#L355-L364). All files from the session are collected into the PC's session folder for centralized storage. (In the event automatic transfer fails or is unavailable, the system permits manual retrieval as a
                           fallback.)
 
   FR-10                   **Real-Time Status Monitoring:** The PC interface shall display real-time status updates from each connected device, including indicators such as recording state (recording/idle), battery level, storage space, and connectivity health[\[6\]](PythonApp/network/device_server.py#L26-L34). M
@@ -149,7 +149,7 @@ FR-13                   **Post-Session Data Processing:** The system shall suppo
 ---
 **Discussion:** The above functional requirements cover the core
 capabilities of the system. Together, they ensure that the
-**multi-sensor recording system can capture synchronised data from
+**multi-sensor recording system can capture synchronized data from
 multiple devices and sensors** and manage that data effectively for
 research use. The design addresses multi-device coordination (FR-01,
 FR-02) and tight time synchronisation (FR-03) as top priorities, since
@@ -158,7 +158,7 @@ FR-04 through FR-06 enumerate the data acquisition needs for each sensor
 modality -- visual video, thermal imaging, and GSR -- reflecting the
 system's multi-modal nature. Session handling and data management
 (FR-07, FR-08, FR-09) form the backbone that guarantees recordings are
-organised and preserved reliably (e.g., creating session metadata and
+organized and preserved reliably (e.g., creating session metadata and
 using offline local storage to avoid data loss). Real-time feedback and
 control (FR-10 and FR-11) improve the usability of the system during
 experiments, allowing the operator to monitor progress and mark
@@ -206,7 +206,7 @@ mobile or field environments, with human participants involved).
 
   NFR-04                  **Data Integrity and Accuracy:** The system shall ensure the integrity and accuracy of recorded data. All data files (videos, sensor CSV) are verified for correctness after recording -- for example, the file transfer process includes confirming file sizes and sending                           High
                           acknowledgments[\[5\]](PythonApp/network/device_server.py#L355-L364). Time stamps must be consistent and accurate (no clock drift over typical session durations). The GSR sensor data should be sampled with
-                          stable timing and recorded with the correct units (e.g., microSiemens for conductance) without clipping or quantisation errors. This requirement is crucial for the scientific validity of the collected dataset.
+                          stable timing and recorded with the correct units (e.g., microSiemens for conductance) without clipping or quantization errors. This requirement is crucial for the scientific validity of the collected dataset.
 
   NFR-05                  **Scalability (Multi-Device Support):** The architecture should scale to **multiple recording devices** operating concurrently. Adding more Android devices (or additional Shimmer sensors) to a session should have a linear or manageable impact on performance. The network and PC controller must Medium
                           handle the bandwidth of multiple video streams and sensor feeds. At minimum, the system is expected to support a scenario of *at least two Android devices* plus one or two Shimmer sensors recording together. The design (threaded server, asynchronous I/O, etc.) allows scaling up the number of  
@@ -223,14 +223,14 @@ mobile or field environments, with human participants involved).
                           testable[\[16\]](changelog.md#L34-L41)[\[17\]](changelog.md#L60-L64). Additionally, a high level of automated test coverage
                           was achieved, so developers can confidently refactor the system and add features while catching regressions early. This requirement ensures the longevity of the system as a research platform.
 
-  NFR-08                  **Portability:** The system should be portable and not dependent on specialised or expensive hardware beyond the sensors themselves. The PC controller is a cross-platform Python application that can run on standard laptops or desktops (the only requirement being moderate processing power, \~4 Medium
+  NFR-08                  **Portability:** The system should be portable and not dependent on specialized or expensive hardware beyond the sensors themselves. The PC controller is a cross-platform Python application that can run on standard laptops or desktops (the only requirement being moderate processing power, \~4 Medium
                           GB RAM, and Python 3.8+ environment). The Android app runs on common Android devices (Android 8.0 or above) and supports a range of phone models, provided they have the needed sensors (camera, etc.) and Bluetooth for Shimmer. This allows the system to be deployed in different laboratories or  
                           even off-site (using a router or local hotspot for networking). Portability also implies that the system's components (PC and mobile) communicate over standard interfaces (TCP/IP network, JSON messages) without requiring wired connections, increasing the flexibility of where and how it can be
                           used.
 
-NFR-09                  **Security and Data Privacy:** While the system is typically used in controlled research settings, basic security measures are required. The network communication (JSON command channel and file transfers) should occur only over a secure local network. Only authorised devices (which send a     Medium
-                          correct handshake/hello message with expected format) are allowed to connect to the PC controller, reducing the risk of unauthorised interception. Additionally, participant data (video and physiological signals) are sensitive, so the system should provide options to encrypt stored data or
-                          otherwise protect data at rest, according to institutional data handling guidelines. (For example, the recorded files can be stored on encrypted drives or be anonymised by not embedding personal identifiers.) Although full encryption of live streams is not implemented in the current version,  
+NFR-09                  **Security and Data Privacy:** While the system is typically used in controlled research settings, basic security measures are required. The network communication (JSON command channel and file transfers) should occur only over a secure local network. Only authorized devices (which send a     Medium
+                          correct handshake/hello message with expected format) are allowed to connect to the PC controller, reducing the risk of unauthorized interception. Additionally, participant data (video and physiological signals) are sensitive, so the system should provide options to encrypt stored data or
+                          otherwise protect data at rest, according to institutional data handling guidelines. (For example, the recorded files can be stored on encrypted drives or be anonymized by not embedding personal identifiers.) Although full encryption of live streams is not implemented in the current version,  
                           this requirement is noted for completeness to ensure ethical research data management.
 ---
 **Discussion:** These non-functional requirements underline the system's
@@ -286,7 +286,7 @@ performing system calibration, and real-time monitoring with event
 annotation (Placeholder).***
 
 **Use Case 1: Multi-Participant Recording Session** -- *"Conduct a
-synchronised multi-sensor recording for one or more participants."* In
+synchronized multi-sensor recording for one or more participants."* In
 this primary use case, a researcher records an experimental session
 involving physiological monitoring. The steps are as follows:
 
@@ -314,7 +314,7 @@ involving physiological monitoring. The steps are as follows:
     local MP4 files, and if a device has a paired Shimmer, it starts
     streaming GSR data to a local file. The PC concurrently might start
     its own recording (e.g., if a webcam on the PC is used as another
-    video source). All these actions are synchronised -- devices either
+    video source). All these actions are synchronized -- devices either
     start immediately upon command or according to a coordinated start
     timestamp so that their internal clocks align (the system accounts
     for network latency by using very short command messages and
@@ -326,14 +326,14 @@ involving physiological monitoring. The steps are as follows:
     minutes, 30 minutes, or longer), the system continuously collects
     data. Each smartphone writes video frames to its storage and
     periodically sends status updates to the PC (battery level, elapsed
-    recording time, file sise, etc. as per FR-10). The Shimmer sensors
+    recording time, file size, etc. as per FR-10). The Shimmer sensors
     stream GSR (and possibly additional signals like PPG, accelerometer)
     -- if a Shimmer is connected directly to the PC, the PC logs that
     data in real time; if connected via a phone, the phone relays the
     sensor data packets to the PC over the network or stores them to
     include in its file. The system ensures that all data streams are
     timestamped consistently (each device uses a monotonic clock or
-    synchronised timestamp). If any device encounters an error (for
+    synchronized timestamp). If any device encounters an error (for
     example, a camera error or a Bluetooth disconnection), it
     automatically tries to resolve it (restart the camera, reconnect the
     sensor) without user intervention, as long as the session is active.
@@ -350,7 +350,7 @@ involving physiological monitoring. The steps are as follows:
     system's scalability, it handles two sets of data as easily as one.
     The PC's session metadata will log both devices under the same
     Session ID, and all data will share the timeline. The researcher can
-    thus capture social or group scenarios with synchronised
+    thus capture social or group scenarios with synchronized
     physiological measurements for each person.
 
 1. **Stop Session:** Once the desired recording duration or
@@ -359,7 +359,7 @@ involving physiological monitoring. The steps are as follows:
     Each Android device stops recording: it finalizes the video file
     (closing the file safely) and similarly finalizes any sensor data
     file. The devices then each report back a final status (e.g., "Saved
-    300s of video, file sise 500 MB"). At this point, the PC invokes the
+    300s of video, file size 500 MB"). At this point, the PC invokes the
     data aggregation process (FR-09): it requests each device to
     transmit its files. One by one, the phones send their recorded files
     to the PC: for example, Device A sends
@@ -378,11 +378,11 @@ involving physiological monitoring. The steps are as follows:
     researcher can then proceed to analyse the data offline.
 
 1. **Post-conditions:** The outcome of this use case is that **all
-    relevant multi-modal data has been recorded and centralised**. The
+    relevant multi-modal data has been recorded and centralized**. The
     session folder on the PC now contains subfolders or files for each
     device: e.g., video files from each camera, thermal data, GSR CSV,
     plus a session log and metadata. The researcher has a complete,
-    time-synchronised dataset from the multi-participant session, which
+    time-synchronized dataset from the multi-participant session, which
     can be used for model training or other analysis.
 
 **Use Case 2: System Calibration and Configuration** -- *"Calibrate
@@ -532,7 +532,7 @@ These use case scenarios demonstrate the end-to-end flow of how the
 system is used in practice. In a typical experiment day, the researcher
 would first calibrate and configure the system (Use Case 2), then run
 one or multiple recording sessions (Use Case 1) while monitoring and
-annotating (Use Case 3), and finally end up with well-organised data
+annotating (Use Case 3), and finally end up with well-organized data
 ready for analysis. The scenarios involve multiple system components
 interacting seamlessly: for example, the **network communication** plays
 a crucial role in all cases (device discovery, start/stop commands, live
@@ -542,7 +542,7 @@ flow, explaining how these use cases are supported by the design of the
 software and the distribution of responsibilities between the PC
 controller and the Android devices.
 
-## 3.6 System analysis (Architecture & Data Flow)
+## 3.6 System Analysis (Architecture & Data Flow)
 
 This section analyzes the overall architecture of the multi-sensor
 recording system and describes the flow of data through the system's
@@ -553,8 +553,8 @@ handle the various concerns: user interface, device communication,
 sensor data handling, and data storage. The analysis here shows how the
 chosen architecture meets the requirements (both functional and
 non-functional) and how data moves from capture to storage in a
-synchronised way. Key architectural elements and their interactions are
-summarised in *Figure 3.2* and the data flow is illustrated in *Figure
+synchronized way. Key architectural elements and their interactions are
+summarized in *Figure 3.2* and the data flow is illustrated in *Figure
 3.3*.
 
 ***Figure 3.2: High-level system architecture, showing the PC Master
@@ -605,8 +605,8 @@ Recording Controller uses Android's Camera2 API for video and the
 Shimmer SDK for sensor data if a Shimmer is connected to the phone.
 Crucially, the Android app does not make autonomous decisions -- it acts
 on commands from the PC or on a local user action (which is rare in this
-use case). This separation ensures that **control logic is centralised**
-on the PC, fulfilling the requirement of FR-01 (centralised multi-device
+use case). This separation ensures that **control logic is centralized**
+on the PC, fulfilling the requirement of FR-01 (centralized multi-device
 coordination).
 
 The **Shimmer GSR Sensors** integration is architected flexibly. The
@@ -651,10 +651,10 @@ thread (so that heavy file transfers don't freeze the GUI), and the
 Android uses background threads or coroutines for camera and file
 operations (preventing UI jank on the phone). Overall, the chosen
 architecture ensures that the system can reliably coordinate multiple
-devices and handle data streams, while also being organised for future
+devices and handle data streams, while also being organized for future
 modifications.
 
-**Data Flow analysis:** The flow of data through the system can be
+**Data Flow Analysis:** The flow of data through the system can be
 described step-by-step for a typical session, highlighting how
 information moves and transforms from capture to storage. *Figure 3.3
 depicts this flow, from the moment the user initiates a session to the
@@ -751,8 +751,8 @@ final data aggregation \[Placeholder\].* Here is the sequence:
 
 1. Device sends a `file_info` message indicating it is about to send a
     file, including file name and
-    sise[\[48\]](PythonApp/network/device_server.py#L284-L293)[\[49\]](PythonApp/network/device_server.py#L298-L306).
-    For example, `"name": "rgb_video.mp4", "sise": 50012345`.
+    size[\[48\]](PythonApp/network/device_server.py#L284-L293)[\[49\]](PythonApp/network/device_server.py#L298-L306).
+    For example, `"name": "rgb_video.mp4", "size": 50012345`.
 
 1. PC prepares to receive by creating a new file in the session folder
     (`DeviceID_rgb_video.mp4`) and responds (implicitly via ack or
@@ -773,7 +773,7 @@ final data aggregation \[Placeholder\].* Here is the sequence:
     name[\[53\]](PythonApp/network/device_server.py#L347-L355).
     PC then closes the file and compares the received byte count to the
     expected
-    sise[\[54\]](PythonApp/network/device_server.py#L356-L364).
+    size[\[54\]](PythonApp/network/device_server.py#L356-L364).
     If they match, PC logs success and sends back a confirmation
     (`file_received` message with status
     ok)[\[55\]](PythonApp/network/device_server.py#L364-L372).
@@ -792,7 +792,7 @@ final data aggregation \[Placeholder\].* Here is the sequence:
 
 1. Throughout this, the Session Manager on PC is aware of incoming
     files and uses
-    `add_file_to_session(device_id, file_type, path, sise)` to update
+    `add_file_to_session(device_id, file_type, path, size)` to update
     the session
     metadata[\[58\]](PythonApp/session/session_manager.py#L120-L129)[\[59\]](PythonApp/session/session_manager.py#L130-L139).
     This means the session's JSON metadata will list, for each device,
@@ -812,7 +812,7 @@ final data aggregation \[Placeholder\].* Here is the sequence:
     timestamp[\[60\]](PythonApp/session/session_manager.py#L218-L226)[\[61\]](PythonApp/session/session_manager.py#L232-L240)).
 
 1. **Data Storage and Access:** At the end of the data flow, all data
-    resides in an organised manner on the PC. The **session folder**
+    resides in an organized manner on the PC. The **session folder**
     (typically under a `recordings/` directory) contains the following:
     video files (named by device and type), sensor data CSV, events log,
     session metadata JSON, and any calibration or processed data
@@ -887,7 +887,7 @@ and accessibility for analysis.
 are: - **Video data:** This includes regular RGB video and thermal
 video. The video is encoded in a standard compressed format
 (MPEG-4/H.264 in an MP4 container) on the recording devices to manage
-file sise. Each video file is accompanied by an internal timestamp track
+file size. Each video file is accompanied by an internal timestamp track
 (every video frame has a timestamp in the file), and frame rate
 information is stored. Thermal video, if captured, is also stored as an
 MP4 (if using a sensor that outputs a stream) or potentially as a
@@ -976,7 +976,7 @@ checksums or at least byte counts are
 compared[\[54\]](PythonApp/network/device_server.py#L356-L364).
 After a session, the Session Manager on PC logs a **session summary**
 that includes whether each expected file is present and its
-sise[\[71\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L410-L418).
+size[\[71\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L410-L418).
 For example, the PC log might say "RGB Video: ✓ (50012345 bytes),
 Thermal Video: ✓ (12345678 bytes), Shimmer Data: ✓ (N bytes)" confirming
 successful captures. In case a file is missing or incomplete, that is
@@ -1010,7 +1010,7 @@ the PC can reside on an encrypted drive. Personal identifiers are
 generally not embedded in file names (device IDs are generic like
 "phone1" or a device serial, and session IDs are timestamps or
 user-defined codes, not participant names). This is a conscious decision
-to keep the data pseudonymised at the file system level. The mapping
+to keep the data pseudonymized at the file system level. The mapping
 from session ID to a specific participant or experiment trial would be
 maintained separately by the researcher (not in the recorded data
 itself), to protect participant identity if files are shared with others

@@ -14,7 +14,7 @@ Version B: Full Structure
 
 - **Chapter 2. Background and Literature Review**
 
-- 2.1 Emotion analysis Applications
+- 2.1 Emotion Analysis Applications
 
 - 2.2 Contactless Physiological Measurement: Rationale and Approaches
 
@@ -30,7 +30,7 @@ Version B: Full Structure
 
   - 2.4.2 Galvanic Skin Response (Electrodermal Activity)
 
-  - 2.4.3 Comparative analysis of Cortisol and GSR
+  - 2.4.3 Comparative Analysis of Cortisol and GSR
 
 - 2.5 GSR Physiology and Limitations
 
@@ -59,9 +59,9 @@ Version B: Full Structure
   - 2.8.2 Topdon Thermal Camera (Specifications and Selection
     Justification)
 
-- **Chapter 3. Requirements and analysis**
+- **Chapter 3. Requirements and Analysis**
 
-- 3.1 Problem Context and Opportunity analysis
+- 3.1 Problem Context and Opportunity Analysis
 
   - 3.1.1 Current Physiological Measurement Landscape
 
@@ -73,9 +73,9 @@ Version B: Full Structure
 
 - 3.2 Requirements Engineering Methodology
 
-  - 3.2.1 Stakeholder analysis and Requirements Elicitation
+  - 3.2.1 Stakeholder Analysis and Requirements Elicitation
 
-  - 3.2.2 System Requirements analysis Framework
+  - 3.2.2 System Requirements Analysis Framework
 
 - 3.3 Functional Requirements
 
@@ -83,7 +83,7 @@ Version B: Full Structure
 
   - 3.3.2 Sensor Integration and Data Acquisition Requirements
 
-  - 3.3.3 Real-Time Data Processing and analysis Requirements
+  - 3.3.3 Real-Time Data Processing and Analysis Requirements
 
   - 3.3.4 Session Management and User Interface Requirements
 
@@ -101,11 +101,11 @@ Version B: Full Structure
 
   - 3.5.2 Secondary Use Cases (Maintenance and Extensions)
 
-- 3.6 System analysis
+- 3.6 System Analysis
 
-  - 3.6.1 Data Flow analysis
+  - 3.6.1 Data Flow Analysis
 
-  - 3.6.2 Component Interaction analysis
+  - 3.6.2 Component Interaction Analysis
 
   - 3.6.3 Scalability Considerations
 
@@ -257,13 +257,13 @@ Version B: Full Structure
 
   - 5.6.2 System Performance Benchmarking
 
-- 5.7 Results analysis and Evaluation
+- 5.7 Results Analysis and Evaluation
 
   - 5.7.1 Summary of Test Results
 
   - 5.7.2 Requirements Validation (Functional & Non-Functional)
 
-  - 5.7.3 Defect analysis and Improvements
+  - 5.7.3 Defect Analysis and Improvements
 
 - **Chapter 6. Conclusions**
 
@@ -285,7 +285,7 @@ Version B: Full Structure
 
   - 6.3.2 Comparison with Existing Solutions
 
-- 6.4 System Performance analysis
+- 6.4 System Performance Analysis
 
   - 6.4.1 Performance Characteristics and Metrics
 
@@ -329,7 +329,7 @@ Version B: Full Structure
 
   - B.2 Recording Session Management
 
-  - B.3 Data Export and analysis Procedures
+  - B.3 Data Export and Analysis Procedures
 
 - **Appendix C: Supporting Documentation and Data**
 
@@ -347,7 +347,7 @@ Version B: Full Structure
 
   - D.3 Reliability and Stress Test Reports
 
-- **Appendix E: Evaluation Data and analysis**
+- **Appendix E: Evaluation Data and Analysis**
 
   - E.1 User Experience Evaluation Data
 

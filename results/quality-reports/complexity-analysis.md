@@ -1,10 +1,10 @@
-# Code Complexity and Documentation analysis
+# Code Complexity and Documentation Analysis
 
 **Generated:** 2025-08-06T06:55:47.275674
 
 ## Summary
 
-- **Total Functions analysed:** 1499
+- **Total Functions Analyzed:** 1499
 - **Need Documentation:** 493
 - **High Complexity (>15):** 67
 - **Medium Complexity (10-15):** 39

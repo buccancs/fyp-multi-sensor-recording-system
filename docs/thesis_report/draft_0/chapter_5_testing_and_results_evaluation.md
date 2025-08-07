@@ -35,15 +35,15 @@
 6. [Reliability and Stress Testing](#reliability-and-stress-testing)
     - 7.1. [Stress Testing Implementation](#stress-testing-implementation)
     - 7.2. [Error Recovery Testing](#error-recovery-testing)
-7. [Results analysis and Evaluation](#results-analysis-and-evaluation)
+7. [Results Analysis and Evaluation](#results-analysis-and-evaluation)
     - 8.1. [Test Results Summary](#test-results-summary)
         - 8.1.1. [Coverage Metrics](#coverage-metrics)
         - 8.1.2. [Performance Benchmarks](#performance-benchmarks)
     - 8.2. [Quality Assessment Results](#quality-assessment-results)
         - 8.2.1. [Functional Requirements Validation](#functional-requirements-validation)
         - 8.2.2. [Non-Functional Requirements Assessment](#non-functional-requirements-assessment)
-    - 8.3. [Test Coverage analysis](#test-coverage-analysis)
-    - 8.4. [Defect analysis](#defect-analysis)
+    - 8.3. [Test Coverage Analysis](#test-coverage-analysis)
+    - 8.4. [Defect Analysis](#defect-analysis)
         - 8.4.1. [Critical Defects (0 remaining)](#critical-defects-0-remaining)
         - 8.4.2. [Major Defects (2 resolved)](#major-defects-2-resolved)
         - 8.4.3. [Minor Defects (5 resolved, 2 tracked)](#minor-defects-5-resolved-2-tracked)
@@ -107,7 +107,7 @@ systematic validation of research-specific quality attributes including measurem
 integrity, long-term reliability, and scientific reproducibility that often have quantitative requirements significantly
 exceeding typical software quality
 standards [CITE - Basili, V.R., & Weiss, D.M. (1984). A methodology for collecting valid software engineering data. IEEE Transactions on Software Engineering, 10(6), 728-738].
-These stringent attributes necessitate specialised testing methodologies, sophisticated measurement techniques, and
+These stringent attributes necessitate specialized testing methodologies, sophisticated measurement techniques, and
 statistical validation approaches that provide confidence intervals, uncertainty estimates, and statistical significance
 assessments for critical performance metrics that directly impact research validity.
 
@@ -156,7 +156,7 @@ ongoing research applications.
 **complete Real-World Validation Emphasis with Ecological Validity**: The testing strategy systematically
 prioritizes validation under realistic conditions that accurately replicate the challenges, constraints, and operational
 complexities encountered in actual research environments across diverse scientific disciplines and experimental
-contexts [CITE - Shadish, W.R., Cook, T.D., & Campbell, D.T. (2002). Experimental and quasi-experimental designs for generalised causal inference. Houghton Mifflin].
+contexts [CITE - Shadish, W.R., Cook, T.D., & Campbell, D.T. (2002). Experimental and quasi-experimental designs for generalized causal inference. Houghton Mifflin].
 This systematic emphasis on real-world validation includes thorough testing with diverse participant populations
 spanning different demographic characteristics, varying environmental conditions including lighting variations and
 acoustic interference, different hardware configurations reflecting the heterogeneous nature of research laboratories,
@@ -168,7 +168,7 @@ reflect the operational conditions where the system will be
 deployed [CITE - Campbell, D.T., & Stanley, J.C. (1963). Experimental and quasi-experimental designs for research. Houghton Mifflin].
 This complete approach ensures that the system performs reliably under the complex, dynamic, and often
 unpredictable conditions encountered in real research applications where environmental factors, participant behaviour,
-and equipment performance may vary significantly from idealised testing conditions.
+and equipment performance may vary significantly from idealized testing conditions.
 
 ### Sophisticated Multi-Layered Testing Hierarchy with complete Coverage
 
@@ -205,11 +205,11 @@ The Python testing infrastructure leverages pytest with sophisticated extensions
 enabling thorough validation of multi-device coordination, temporal synchronisation, and cross-platform
 integration. The framework includes:
 
-- **Pytest Framework (7.4.0)**: Core testing engine with advanced fixture management, parametrised testing, and
+- **Pytest Framework (7.4.0)**: Core testing engine with advanced fixture management, parametrized testing, and
   complete reporting capabilities
-- **Pytest-asyncio Integration**: Specialised testing for asynchronous operations including network communication and
+- **Pytest-asyncio Integration**: Specialized testing for asynchronous operations including network communication and
   sensor coordination
-- **Pytest-cov Coverage analysis**: complete code coverage analysis with branch coverage and integration testing
+- **Pytest-cov Coverage Analysis**: complete code coverage analysis with branch coverage and integration testing
   metrics
 - **Mock and Fixture Management**: Sophisticated test doubles for hardware dependencies and network simulation
 
@@ -217,7 +217,7 @@ integration. The framework includes:
 The Android testing infrastructure employs modern Android testing approaches with complete UI testing,
 instrumentation testing, and integration validation:
 
-- **JUnit 5 Testing Framework**: Advanced unit testing with complete assertion libraries and parametrised test
+- **JUnit 5 Testing Framework**: Advanced unit testing with complete assertion libraries and parametrized test
   support
 - **Espresso UI Testing**: Automated user interface testing with complete interaction simulation and validation
 - **MockK Framework**: Kotlin-native mocking framework for sophisticated test double creation and behaviour verification
@@ -240,7 +240,7 @@ synchronisation, and complete system coordination:
 The scientific validation framework implements sophisticated statistical analysis with confidence interval estimation,
 comparative analysis against established benchmarks, and complete measurement precision assessment:
 
-- **Temporal Precision analysis**: Microsecond-level timing validation with cross-correlation analysis and drift
+- **Temporal Precision Analysis**: Microsecond-level timing validation with cross-correlation analysis and drift
   compensation testing
 - **Measurement Accuracy Assessment**: Statistical comparison with reference physiological sensors using Pearson
   correlation analysis
@@ -256,7 +256,7 @@ scenarios:
 - **Stress Testing**: Resource exhaustion testing with memory pressure, storage limitations, and thermal stress
   conditions
 - **Endurance Testing**: Extended operation validation with 168-hour continuous operation scenarios
-- **Scalability analysis**: Systematic performance analysis across device count scaling and network complexity
+- **Scalability Analysis**: Systematic performance analysis across device count scaling and network complexity
   variations
 
 **Quality Assurance Process Integration:**
@@ -270,11 +270,11 @@ continuous integration validation:
 - **Black Code Formatting (23.3.0)**: Automated code formatting ensuring consistent style across the Python codebase
 - **Flake8 Linting (6.0.0)**: complete static analysis with complexity metrics and style violation detection
 - **mypy Type Checking (1.3.0)**: Advanced static type analysis with complete type annotation validation
-- **Bandit Security analysis (1.7.5)**: Automated security vulnerability detection with complete security scanning
+- **Bandit Security Analysis (1.7.5)**: Automated security vulnerability detection with complete security scanning
 
 **Android Code Quality Standards:**
 
-- **Detekt Static analysis (1.23.0)**: Kotlin-specific static analysis with code complexity metrics and style validation
+- **Detekt Static Analysis (1.23.0)**: Kotlin-specific static analysis with code complexity metrics and style validation
 - **KtLint Formatting (0.50.0)**: Automated Kotlin code formatting ensuring consistent style across Android codebase
 - **Android Lint Integration**: complete Android-specific analysis with resource optimisation and performance
   validation
@@ -303,7 +303,7 @@ test categories:
   style ACCURACY fill:#e1f5fe
   style SCIENTIFIC fill:#f3e5f5
 
-**Table 5.2: Test Coverage analysis by Component**
+**Table 5.2: Test Coverage Analysis by Component**
 
 | System Component             | Line Coverage | Branch Coverage | Function Coverage | Integration Coverage | Critical Paths Tested |
 |------------------------------|---------------|-----------------|-------------------|----------------------|-----------------------|
@@ -322,7 +322,7 @@ test categories:
 
 ```mermaid
 graph LR
-    subgraph "Coverage analysis Dashboard"
+    subgraph "Coverage Analysis Dashboard"
         A[Android Camera<br/>94.7% coverage<br/>High confidence]
         B[Thermal Integration<br/>91.8% coverage<br/>Good confidence]
         C[GSR Interface<br/>96.4% coverage<br/>High confidence]
@@ -379,12 +379,12 @@ controlled variations that test system adaptability and robustness. The testing 
 studies, extended duration sessions, varying environmental conditions, and different hardware configurations to ensure
 complete operational validation.
 
-**Specialised Testing Layer Excellence**: The specialised testing layer addresses non-functional requirements and
+**Specialized Testing Layer Excellence**: The specialized testing layer addresses non-functional requirements and
 quality attributes that are critical for research applications but may not be adequately covered by functional testing
 alone. This layer includes performance testing under realistic load conditions, stress testing that validates system
 behaviour at operational limits, and reliability testing that demonstrates stable operation over extended periods.
 
-Specialised testing incorporates domain-specific validation approaches including measurement accuracy testing that
+Specialized testing incorporates domain-specific validation approaches including measurement accuracy testing that
 compares system outputs against reference standards, temporal precision testing that validates synchronisation accuracy
 under various network conditions, and data integrity testing that ensures complete preservation of research data
 throughout all system operations.
@@ -398,7 +398,7 @@ research software must satisfy both technical quality requirements and scientifi
 **Statistical Validation Framework**: The testing methodology implements complete statistical validation approaches
 that provide quantitative confidence measures for critical system performance
 characteristics [CITE - Statistical validation methods for research software]. The framework employs appropriate
-statistical tests for different types of measurements while accounting for factors such as sample sise requirements,
+statistical tests for different types of measurements while accounting for factors such as sample size requirements,
 statistical power, and confidence interval calculations.
 
 Statistical validation includes measurement uncertainty analysis that quantifies and reports the precision and accuracy
@@ -436,7 +436,7 @@ addresses the unique challenges of coordinating Android applications with Python
 reliable communication with diverse hardware sensors.
 
 Integration testing encompasses communication protocol validation, data format compatibility verification, and error
-handling validation across component boundaries. The framework includes specialised testing tools for simulating network
+handling validation across component boundaries. The framework includes specialized testing tools for simulating network
 conditions, hardware failures, and timing variations that enable thorough validation of integration robustness.
 
 **System Testing Layer Completeness**: The system testing layer provides end-to-end validation of complete research
@@ -448,12 +448,12 @@ System testing includes complete scenario-based testing that replicates actual r
 designs. The framework provides tools for generating realistic test data and simulating participant behaviour that enable
 validation of system performance under conditions that closely match real research applications.
 
-**Specialised Testing Layer Requirements**: The specialised testing layer addresses specific quality attributes that are
+**Specialized Testing Layer Requirements**: The specialized testing layer addresses specific quality attributes that are
 critical for research applications but may not be adequately covered by traditional testing approaches. This layer
 includes performance testing, reliability validation, security verification, and usability assessment tailored to
 research software requirements.
 
-Specialised testing implements sophisticated measurement and analysis techniques that provide quantitative validation of
+Specialized testing implements sophisticated measurement and analysis techniques that provide quantitative validation of
 quality attributes with statistical confidence intervals. The framework includes tools for long-duration testing, stress
 testing under extreme conditions, and security assessment using research-specific threat models.
 
@@ -462,7 +462,7 @@ testing under extreme conditions, and security assessment using research-specifi
 The testing framework establishes quantitative metrics and acceptance criteria that provide objective assessment of
 system quality while enabling comparison with established benchmarks and research software standards. The metrics
 framework recognizes that research applications require different quality standards than commercial software, often
-emphasising reliability and accuracy over features such as user interface sophistication or performance optimisation.
+emphasizing reliability and accuracy over features such as user interface sophistication or performance optimisation.
 
 | Testing Category        | Coverage Target            | Quality Metric            | Acceptance Criteria                           | Validation Method                               |
 |-------------------------|----------------------------|---------------------------|-----------------------------------------------|-------------------------------------------------|
@@ -478,7 +478,7 @@ while acknowledging practical constraints in achieving perfect coverage across a
 prioritise critical components and safety-critical functionality while allowing flexibility for components with lower
 risk profiles.
 
-**Quality Metric Selection**: The quality metrics emphasise characteristics that directly impact research validity and
+**Quality Metric Selection**: The quality metrics emphasize characteristics that directly impact research validity and
 reproducibility, including measurement accuracy, temporal precision, and data integrity. The metrics framework provides
 both instantaneous quality assessment and trend analysis that enables proactive quality management throughout system
 operation.
@@ -497,14 +497,14 @@ sophisticated coordination mechanisms that can validate both individual platform
 integration while providing complete result aggregation and analysis capabilities.
 
 The framework architecture emerged from analysis of existing testing approaches for distributed systems, combined with
-specialised requirements for physiological measurement validation and research software quality assurance. The design
+specialized requirements for physiological measurement validation and research software quality assurance. The design
 prioritizes reproducibility, scalability, and automation while providing the flexibility needed to accommodate diverse
 research applications and evolving system requirements.
 
 ### complete Multi-Platform Testing Architecture
 
 The multi-platform testing architecture addresses the fundamental challenge of coordinating test execution across
-Android mobile devices, Python desktop applications, and embedded sensor hardware while maintaining synchronised timing
+Android mobile devices, Python desktop applications, and embedded sensor hardware while maintaining synchronized timing
 and complete result collection. The architecture implements a sophisticated orchestration system that manages test
 execution, data collection, and result analysis across the complete system topology.
 
@@ -531,17 +531,17 @@ graph TB
         NETWORK_SIM[Network Simulator<br/>Controlled Networking Conditions]
     end
 ---
-    subgraph "Data Collection and analysis"
+    subgraph "Data Collection and Analysis"
         METRICS_COLLECTOR[Metrics Collection Service<br/>Performance and Quality Data]
         LOG_AGGREGATOR[Log Aggregation System<br/>Multi-Platform Log Collection]
-        ANALYSIS_ENGINE[analysis Engine<br/>Statistical and Trend analysis]
+        ANALYSIS_ENGINE[Analysis Engine<br/>Statistical and Trend Analysis]
         VALIDATION_FRAMEWORK[Validation Framework<br/>Requirement Compliance Checking]
     end
 ---
     subgraph "Reporting and Documentation"
         DASHBOARD[Real-Time Dashboard<br/>Test Progress Visualisation]
         REPORTS[Automated Report Generation<br/>complete Test Documentation]
-        TRENDS[Trend analysis<br/>Quality Trend Tracking]
+        TRENDS[Trend Analysis<br/>Quality Trend Tracking]
         ALERTS[Alert System<br/>Failure Notification]
     end
 ---
@@ -574,7 +574,7 @@ graph TB
     VALIDATION_FRAMEWORK --> ALERTS
 ```
 
-**Centralised Test Orchestration System**: The test orchestration layer provides centralised management of complex
+**Centralized Test Orchestration System**: The test orchestration layer provides centralized management of complex
 multi-platform test scenarios while maintaining fine-grained control over individual test execution phases. The
 orchestration system implements sophisticated scheduling algorithms that optimise test execution order based on resource
 availability, dependency relationships, and parallel execution opportunities.
@@ -584,9 +584,9 @@ continuation of test suites despite individual test case failures. The system pr
 resource utilisation monitoring that enables optimisation of test execution efficiency while ensuring full
 coverage of all validation requirements.
 
-**Platform-Specific Testing Engine Integration**: Each platform-specific testing engine provides specialised validation
+**Platform-Specific Testing Engine Integration**: Each platform-specific testing engine provides specialized validation
 capabilities tailored to the unique characteristics and constraints of different system components. The engines
-implement standardised interfaces that enable unified control and result collection while preserving the specialised
+implement standardized interfaces that enable unified control and result collection while preserving the specialized
 functionality needed for effective platform-specific testing.
 
 The Android testing engine integrates with the Android instrumentation framework and provides thorough testing of
@@ -621,12 +621,12 @@ testing of analysis algorithms. The generation system includes models of physiol
 characteristics, and environmental variation that provide thorough test coverage without requiring human subjects.
 
 Synthetic data generation includes temporal correlation modelling that ensures generated data maintains the complex
-temporal relationships characteristic of physiological signals. The system provides parameterised generation that
+temporal relationships characteristic of physiological signals. The system provides parameterized generation that
 enables testing across diverse participant characteristics, environmental conditions, and experimental scenarios.
 
-**Real Data Integration and Privacy Protection**: The framework provides capabilities for integrating anonymised real
+**Real Data Integration and Privacy Protection**: The framework provides capabilities for integrating anonymized real
 physiological data into testing workflows while maintaining strict privacy protection and ethical compliance. The
-integration system implements complete anonymisation techniques that remove identifying information while
+integration system implements complete anonymization techniques that remove identifying information while
 preserving the physiological characteristics needed for effective testing.
 
 Real data integration includes statistical validation techniques that ensure test data maintains representative
@@ -696,7 +696,7 @@ graph TB
         PSYSTEM[System Tests<br/>End-to-End Validation]
     end
 ---
-    subgraph "Specialised Testing Tools"
+    subgraph "Specialized Testing Tools"
         NETWORK[Network Simulation<br/>Latency & Packet Loss]
         LOAD[Load Testing<br/>Device Scaling]
         MONITOR[Resource Monitoring<br/>Performance Metrics]
@@ -890,7 +890,7 @@ class ShimmerRecorderTest {
 ---
         // Assert
         assertTrue(result.isSuccess)
-        assertEquals(2, result.getOrNull()?.sise)
+        assertEquals(2, result.getOrNull()?.size)
         verify(bluetoothAdapter).startDiscovery()
     }
 ---
@@ -953,8 +953,8 @@ class TestCalibrationManager:
         # Arrange
         pattern_config = PatternConfig(
             pattern_type=PatternType.CHESSBOARD,
-            pattern_sise=(9, 6),
-            square_sise=25.0
+            pattern_size=(9, 6),
+            square_size=25.0
         )
 ---
         # Act
@@ -976,8 +976,8 @@ class TestCalibrationManager:
         insufficient_images = [np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8) for _ in range(3)]
         pattern_config = PatternConfig(
             pattern_type=PatternType.CHESSBOARD,
-            pattern_sise=(9, 6),
-            square_sise=25.0
+            pattern_size=(9, 6),
+            square_size=25.0
         )
 ---
         # Act
@@ -997,8 +997,8 @@ class TestCalibrationManager:
         mock_find_corners.return_value = (False, None)  # Simulate detection failure
         pattern_config = PatternConfig(
             pattern_type=PatternType.CHESSBOARD,
-            pattern_sise=(9, 6),
-            square_sise=25.0
+            pattern_size=(9, 6),
+            square_size=25.0
         )
 ---
         # Act
@@ -1528,11 +1528,11 @@ xychart-beta
 | **4 Devices**     | 46-198ms avg    | 0-6.7%       | 100%               | Good         | 100%         | Tested configuration |
 | **Higher counts** | Not tested      | N/A          | N/A                | N/A          | N/A          | Future work needed   |
 
-**Figure 5.4: Scalability Performance analysis**
+**Figure 5.4: Scalability Performance Analysis**
 
 ```mermaid
 xychart-beta
-    title "System Scalability analysis"
+    title "System Scalability Analysis"
     x-axis "Number of Connected Devices" [1, 2, 4, 6, 8, 10, 12]
     y-axis "Response Time (seconds)" 0 --> 10
     line "Average Response Time" [1.2, 1.4, 2.1, 2.9, 3.7, 5.2, 7.8]
@@ -1578,7 +1578,7 @@ xychart-beta
 
 **Table 5.7: Temporal Synchronisation Accuracy Results**
 
-| Synchronisation Test            | Target Precision | Measured Precision   | Sample Sise      | Statistical analysis           |
+| Synchronisation Test            | Target Precision | Measured Precision   | Sample Size      | Statistical Analysis           |
 |---------------------------------|------------------|----------------------|------------------|--------------------------------|
 | **Initial Sync Establishment**  | ≤50ms            | 23.7ms ± 8.2ms       | n=500            | Mean ± SD, normal distribution |
 | **Sustained Sync Accuracy**     | ≤25ms            | 18.4ms ± 6.1ms       | n=10,000         | 95.7% within tolerance         |
@@ -1586,7 +1586,7 @@ xychart-beta
 | **Multi-Device Coordination**   | ≤25ms            | 21.8ms ± 7.9ms       | n=2,000          | Cross-device variance analysis |
 | **Extended Session Drift**      | <1ms/hour        | 0.34ms/hour ± 0.12ms | 24-hour sessions | Linear regression analysis     |
 
-**Figure 5.6: Temporal Synchronisation Distribution analysis**
+**Figure 5.6: Temporal Synchronisation Distribution Analysis**
 
 ```mermaid
 xychart-beta
@@ -1624,7 +1624,7 @@ class TestSystemPerformance:
 ---
             performance_results.append({
                 'scenario': scenario,
-                'cpu_utilisation': result.cpu_stats,
+                'cpu_utilization': result.cpu_stats,
                 'memory_usage': result.memory_stats,
                 'network_throughput': result.network_stats,
                 'storage_io': result.storage_stats,
@@ -1633,7 +1633,7 @@ class TestSystemPerformance:
 ---
         # Validate performance requirements
         for result in performance_results:
-            assert result['cpu_utilisation'].average < 0.8
+            assert result['cpu_utilization'].average < 0.8
             assert result['memory_usage'].peak < 4_000_000_000  # 4GB
             assert result['response_times'].session_start < 2.0  # 2 seconds
             assert result['response_times'].session_stop < 5.0  # 5 seconds
@@ -1711,7 +1711,7 @@ class TestNetworkPerformance:
                 performance = await session.measure_performance()
 ---
                 # Validate adaptive behaviour
-                assert performance.network_utilisation < 0.8 * scenario['bandwidth']
+                assert performance.network_utilization < 0.8 * scenario['bandwidth']
                 assert performance.quality_mode == scenario['expected_quality']
 ---
                 await session.stop()
@@ -1776,7 +1776,7 @@ class TestSystemStressLimits:
             health_report = await stress_test.generate_health_report()
             health_reports.append(health_report)
 ---
-            # check for critical failures
+            # Check for critical failures
             if health_report.critical_failures:
                 pytest.fail(f"Critical failure detected: {health_report.critical_failures}")
 ---
@@ -1925,11 +1925,11 @@ class TestErrorRecoveryMechanisms:
                 assert recovery_result.affected_timespan_isolated
 ```
 ---
-## Results analysis and Evaluation
+## Results Analysis and Evaluation
 
 ### Test Results Summary
 
-The thorough testing programme produced extensive validation data across all system components and integration
+The thorough testing program produced extensive validation data across all system components and integration
 scenarios:
 
 #### Coverage Metrics
@@ -1956,7 +1956,7 @@ class TestResultsAnalysis:
                 'device_sync': {'avg': 0.34, 'max': 0.67, 'target': 1.0},
                 'calibration': {'avg': 12.4, 'max': 18.7, 'target': 30.0}
             },
-            'resource_utilisation': {
+            'resource_utilization': {
                 'cpu_usage': {'avg': 67.3, 'peak': 78.9, 'limit': 80.0},
                 'memory_usage': {'avg': 2.1, 'peak': 3.4, 'limit': 4.0},  # GB
                 'network_throughput': {'avg': 45.2, 'peak': 78.3, 'limit': 100.0},  # Mbps
@@ -1985,7 +1985,7 @@ class TestResultsAnalysis:
                 report.add_concern(f"{operation} response time exceeds target")
 ---
         # Resource utilisation analysis
-        resources = results['resource_utilisation']
+        resources = results['resource_utilization']
         for resource, metrics in resources.items():
             utilization_ratio = metrics['peak'] / metrics['limit']
             if utilization_ratio <= 0.8:
@@ -2013,7 +2013,7 @@ class TestResultsAnalysis:
 
 #### Functional Requirements Validation
 
-All 12 critical functional requirements were successfully validated through the testing programme:
+All 12 critical functional requirements were successfully validated through the testing program:
 
 - **FR-001 Multi-Device Coordination**: ✅ Validated with up to 8 simultaneous devices
 - **FR-002 Video Data Acquisition**: ✅ Achieved 4K@60fps with 99.7% frame capture rate
@@ -2032,7 +2032,7 @@ All 12 critical functional requirements were successfully validated through the 
 | **Data Integrity**    | 100%       | 99.98%    | ✅ Nearly Perfect |
 | **Sync Precision**    | ±5ms       | ±3.2ms    | ✅ Exceeded       |
 
-### Test Coverage analysis
+### Test Coverage Analysis
 
 ```python
 def analyze_test_coverage():
@@ -2066,7 +2066,7 @@ def analyze_test_coverage():
     return coverage_analysis
 ```
 
-### Defect analysis
+### Defect Analysis
 
 During the testing process, several categories of defects were identified and resolved:
 
@@ -2084,7 +2084,7 @@ During the testing process, several categories of defects were identified and re
 
 - **UI responsiveness under high load**: Improved through background processing optimisation
 - **Calibration edge case handling**: Enhanced error detection and user guidance
-- **Network reconnection delay**: Optimised reconnection algorithms
+- **Network reconnection delay**: Optimized reconnection algorithms
 - **Export format compatibility**: Expanded format support and validation
 
 #### Tracked Issues (Non-critical)
@@ -2108,18 +2108,18 @@ development velocity:
 
 **Areas for Improvement:**
 
-- Automated test execution could be further optimised
+- Automated test execution could be further optimized
 - Cross-platform testing could benefit from additional device variations
 - Long-term reliability testing duration could be extended
 
-**Testing ROI analysis:**
+**Testing ROI Analysis:**
 
 - Testing effort represented approximately 35% of total development effort
 - Defect detection efficiency: 89% of defects found before system testing
 - Post-deployment defect rate: <0.1% of test-detected defects
 - User acceptance rate: 94% in pilot testing programs
 
-The thorough testing programme successfully validated that the Multi-Sensor Recording System meets all specified
+The thorough testing program successfully validated that the Multi-Sensor Recording System meets all specified
 requirements while providing a robust foundation for research applications.
 
 ## Code Implementation References
@@ -2227,9 +2227,9 @@ and scientific validity.
 - **Figure 5.1**: Multi-Layered Testing Architecture
 - **Figure 5.2**: Test Coverage Heatmap
 - **Figure 5.3**: Performance Benchmark Results Over Time
-- **Figure 5.4**: Scalability Performance analysis
+- **Figure 5.4**: Scalability Performance Analysis
 - **Figure 5.5**: System Reliability Over Extended Operation
-- **Figure 5.6**: Temporal Synchronisation Distribution analysis
+- **Figure 5.6**: Temporal Synchronisation Distribution Analysis
 
 ### Missing Tables
 
@@ -2355,7 +2355,7 @@ Media, 2001.
 
 ### Table 5.4: Scientific Validation and Accuracy Assessment
 
-| Measurement Type          | Reference Standard     | Achieved Accuracy      | Statistical Significance   | Validation Method          | Sample Sise         |
+| Measurement Type          | Reference Standard     | Achieved Accuracy      | Statistical Significance   | Validation Method          | Sample Size         |
 |---------------------------|------------------------|------------------------|----------------------------|----------------------------|---------------------|
 | **Temporal Precision**    | Atomic clock reference | ±18.7ms (σ=3.2ms)      | p<0.001, r=0.987           | Cross-correlation analysis | n=10,000 events     |
 | **GSR Correlation**       | Laboratory-grade GSR   | r=0.892 ± 0.023        | p<0.001, CI=[0.869, 0.915] | Pearson correlation        | n=2,500 samples     |
@@ -2385,7 +2385,7 @@ graph TD
         ACCEPTANCE[Acceptance Tests<br/>Stakeholder Requirement Validation<br/>8 test cases<br/>100% pass rate]
     end
 ---
-    subgraph "Specialised Testing Layer"
+    subgraph "Specialized Testing Layer"
         PERFORMANCE[Performance Tests<br/>Load and Scalability Validation<br/>4 device coordination]
         STRESS[Stress Tests<br/>Resource Limit Testing<br/>71.4% success rate]
         RELIABILITY[Reliability Tests<br/>Network Resilience Testing<br/>1ms-500ms latency tolerance]

@@ -1,4 +1,4 @@
-# Chapter 3: Requirements and analysis
+# Chapter 3: Requirements and Analysis
 
 ## Table of Contents
 
@@ -10,14 +10,14 @@
 
 3.2. [Requirements Engineering Approach](#32-requirements-engineering-approach)
 
-- 3.2.1. [Stakeholder analysis and Requirements Elicitation](#321-stakeholder-analysis-and-requirements-elicitation)
-- 3.2.2. [System Requirements analysis Framework](#322-system-requirements-analysis-framework)
+- 3.2.1. [Stakeholder Analysis and Requirements Elicitation](#321-stakeholder-analysis-and-requirements-elicitation)
+- 3.2.2. [System Requirements Analysis Framework](#322-system-requirements-analysis-framework)
 
 3.3. [Functional Requirements Overview](#33-functional-requirements-overview)
 
 - 3.3.1. [Multi-Device Coordination and Synchronisation Requirements](#331-multi-device-coordination-and-synchronisation-requirements)
 - 3.3.2. [Sensor Integration and Data Acquisition Requirements](#332-sensor-integration-and-data-acquisition-requirements)
-- 3.3.3. [Real-Time Data Processing and analysis Requirements](#333-real-time-data-processing-and-analysis-requirements)
+- 3.3.3. [Real-Time Data Processing and Analysis Requirements](#333-real-time-data-processing-and-analysis-requirements)
 - 3.3.4. [User Interface and Session Management Requirements](#334-user-interface-and-session-management-requirements)
 
 3.4. [Non-Functional Requirements](#34-non-functional-requirements)
@@ -32,17 +32,17 @@
 ## 3.5.2. [Secondary Use Case: System Calibration and Configuration](#352-secondary-use-case-system-calibration-and-configuration)
 3.5.3. [Secondary Use Case: Real-Time Monitoring and Annotation](#353-secondary-use-case-real-time-monitoring-and-annotation)
 
-3.6. [System analysis (Architecture & Data Flow)](#36-system-analysis-architecture--data-flow)
+3.6. [System Analysis (Architecture & Data Flow)](#36-system-analysis-architecture--data-flow)
 
-- 3.6.1. [Data Flow analysis](#361-data-flow-analysis)
-- 3.6.2. [Component Interaction analysis](#362-component-interaction-analysis)
+- 3.6.1. [Data Flow Analysis](#361-data-flow-analysis)
+- 3.6.2. [Component Interaction Analysis](#362-component-interaction-analysis)
 - 3.6.3. [Scalability Considerations](#363-scalability-considerations)
 
 3.7. [Data Requirements and Management](#37-data-requirements-and-management)
 
 - 3.7.1. [Data Types and Volume Specifications](#371-data-types-and-volume-specifications)
 - 3.7.2. [Data Quality and Integrity Requirements](#372-data-quality-and-integrity-requirements)
-- 3.7.3. [Data Management and analysis Preparation](#373-data-management-and-analysis-preparation)
+- 3.7.3. [Data Management and Analysis Preparation](#373-data-management-and-analysis-preparation)
 ---
 This complete chapter establishes the systematic foundation for the Multi-Sensor Recording System through rigorous
 requirements engineering methodology and detailed analytical assessment. The requirements analysis follows established
@@ -64,20 +64,20 @@ and operational foundation that guides all subsequent design and implementation 
 - 3.3. [Hardware Integration Requirements](#hardware-integration-requirements)
 - 3.4. [Detailed Functional Requirements Specifications](#detailed-functional-requirements-specifications)
 - 3.5. [Core System Coordination Requirements](#core-system-coordination-requirements)
-  - 3.5.1. [FR-001: Multi-Device Coordination and Centralised Management](#fr-001-multi-device-coordination-and-centralised-management)
+  - 3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
   - 3.5.2. [FR-002: Advanced Temporal Synchronisation and Precision Management](#fr-002-advanced-temporal-synchronisation-and-precision-management)
   - 3.5.3. [FR-003: complete Session Management and Lifecycle Control](#fr-003-complete-session-management-and-lifecycle-control)
 - 3.6. [Data Acquisition and Processing Requirements](#data-acquisition-and-processing-requirements)
   - 3.6.1. [FR-010: Advanced Video Data Capture and Real-Time Processing](#fr-010-advanced-video-data-capture-and-real-time-processing)
-  - 3.6.2. [FR-011: complete Thermal Imaging Integration and Physiological analysis](#fr-011-complete-thermal-imaging-integration-and-physiological-analysis)
+  - 3.6.2. [FR-011: complete Thermal Imaging Integration and Physiological Analysis](#fr-011-complete-thermal-imaging-integration-and-physiological-analysis)
   - 3.6.3. [FR-012: Physiological Sensor Integration and Validation](#fr-012-physiological-sensor-integration-and-validation)
-- 3.7. [Advanced Processing and analysis Requirements](#advanced-processing-and-analysis-requirements)
+- 3.7. [Advanced Processing and Analysis Requirements](#advanced-processing-and-analysis-requirements)
   - 3.7.1. [FR-020: Real-Time Signal Processing and Feature Extraction](#fr-020-real-time-signal-processing-and-feature-extraction)
   - 3.7.2. [FR-021: Machine Learning Inference and Prediction](#fr-021-machine-learning-inference-and-prediction)
 - 3.8. [Core System Functions](#core-system-functions)
   - 3.8.1. [FR-030: Multi-Device Coordination and Synchronisation](#fr-030-multi-device-coordination-and-synchronisation)
   - 3.8.2. [FR-031: High-Quality RGB Video Data Acquisition](#fr-031-high-quality-rgb-video-data-acquisition)
-  - 3.8.3. [FR-032: Thermal Imaging Integration and analysis](#fr-032-thermal-imaging-integration-and-analysis)
+  - 3.8.3. [FR-032: Thermal Imaging Integration and Analysis](#fr-032-thermal-imaging-integration-and-analysis)
   - 3.8.4. [FR-033: Reference GSR Measurement Integration](#fr-033-reference-gsr-measurement-integration)
   - 3.8.5. [FR-005: complete Session Management](#fr-005-complete-session-management)
 - 3.9. [Advanced Data Processing Requirements](#advanced-data-processing-requirements)
@@ -104,12 +104,12 @@ and operational foundation that guides all subsequent design and implementation 
         - 5.1.2. [UC-002: System Calibration and Configuration](#uc-002-system-calibration-and-configuration)
         - 5.1.3. [UC-003: Real-Time Data Monitoring](#uc-003-real-time-data-monitoring)
     - 5.2. [Secondary Use Cases](#secondary-use-cases)
-        - 5.2.1. [UC-010: Data Export and analysis](#uc-010-data-export-and-analysis)
+        - 5.2.1. [UC-010: Data Export and Analysis](#uc-010-data-export-and-analysis)
         - 5.2.2. [UC-011: System Maintenance and Diagnostics](#uc-011-system-maintenance-and-diagnostics)
-3. [System analysis](#system-analysis)
-    - 6.1. [Data Flow analysis](#data-flow-analysis)
-    - 6.2. [Component Interaction analysis](#component-interaction-analysis)
-    - 6.3. [Scalability analysis](#scalability-analysis)
+3. [System Analysis](#system-analysis)
+    - 6.1. [Data Flow Analysis](#data-flow-analysis)
+    - 6.2. [Component Interaction Analysis](#component-interaction-analysis)
+    - 6.3. [Scalability Analysis](#scalability-analysis)
 4. [Data Requirements](#data-requirements)
     - 7.1. [Data Types and Volumes](#data-types-and-volumes)
     - 7.2. [Data Quality Requirements](#data-quality-requirements)
@@ -117,7 +117,7 @@ and operational foundation that guides all subsequent design and implementation 
 5. [Requirements Validation](#requirements-validation)
     - 8.1. [Validation Methods](#validation-methods)
     - 8.2. [Requirements Traceability](#requirements-traceability)
-    - 8.3. [Critical Requirements analysis](#critical-requirements-analysis)
+    - 8.3. [Critical Requirements Analysis](#critical-requirements-analysis)
     - 8.4. [Requirements Changes and Evolution](#requirements-changes-and-evolution)
 ---
 This complete chapter establishes the systematic foundation for the Multi-Sensor Recording System through rigorous
@@ -140,7 +140,7 @@ opportunities across multiple research disciplines.
 The following comparative analysis illustrates the fundamental limitations of traditional GSR measurement approaches
 compared to the proposed contactless system architecture:
 
-**Comparative analysis of Physiological Measurement Approaches** (see Table 3.1 below)
+**Comparative Analysis of Physiological Measurement Approaches** (see Table 3.1 below)
 
 **Traditional vs. Contactless Measurement Setup Comparison** (see Figure 3.1 below)
 
@@ -164,7 +164,7 @@ timeline
             : Digital Signal Processing
             : Research Applications
     1995-2010: Wearable Technology
-            : Miniaturisation
+            : Miniaturization
             : Wireless Sensors
             : Ambulatory Monitoring
     2015-2020: Consumer Integration
@@ -179,7 +179,7 @@ timeline
 
 ### 3.1.3 Identified Research Gap and Opportunity
 
-**Research Gap analysis Matrix** (see Table 3.2 below)
+**Research Gap Analysis Matrix** (see Table 3.2 below)
 
 **Research Impact Potential vs. Technical Complexity Matrix** (see Figure 3.3 below)
 
@@ -191,7 +191,7 @@ diverse stakeholder groups while ensuring technical feasibility, scientific vali
 success within realistic project
 constraints [CITE - Nuseibeh, B., & Easterbrook, S. (2000). Requirements engineering: a roadmap. Proceedings of the Conference on the Future of Software Engineering, 35-46].
 The sophisticated methodology recognizes that research software projects present unique and often unprecedented
-challenges compared to traditional commercial software development paradigms, requiring specialised approaches that
+challenges compared to traditional commercial software development paradigms, requiring specialized approaches that
 carefully balance scientific rigor with practical implementation considerations, stakeholder satisfaction, and long-term
 system
 maintainability [CITE - Segal, J., & Morris, C. (2008). Developing scientific software. IEEE Software, 25(4), 18-20].
@@ -206,10 +206,10 @@ needs of the research team and the broader scientific requirements of the intern
 reproducible, high-quality physiological measurement tools that can advance scientific understanding across multiple
 disciplines [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007). Software development environments for scientific and engineering software: A series of case studies. Proceedings of the 29th International Conference on Software Engineering, 550-559].
 
-### 3.2.1 Stakeholder analysis and Requirements Elicitation
+### 3.2.1 Stakeholder Analysis and Requirements Elicitation
 
 The foundational framework of the requirements engineering process rested on complete stakeholder analysis that
-systematically identified and characterised all parties with significant vested interests in the system's successful
+systematically identified and characterized all parties with significant vested interests in the system's successful
 development, deployment, and long-term
 operation [CITE - Freeman, R.E., Harrison, J.S., Wicks, A.C., Parmar, B.L., & De Colle, S. (2010). Stakeholder theory: The state of the art. Cambridge University Press].
 This extensive analysis extended far beyond simple user identification to examine the complex interdependent
@@ -226,7 +226,7 @@ feedback mechanisms that systematically captured both explicit requirements and 
 through traditional requirements elicitation approaches.
 
 The complete stakeholder analysis systematically identified five primary stakeholder groups, each bringing distinct
-perspectives, specialised requirements, and specific success criteria that would influence system design decisions and
+perspectives, specialized requirements, and specific success criteria that would influence system design decisions and
 operational procedures. Understanding these diverse perspectives and their complex interactions was absolutely crucial
 for developing balanced requirements that could satisfy competing needs while maintaining overall system coherence,
 technical feasibility, and scientific
@@ -242,7 +242,7 @@ in novel experimental contexts that had never before been possible with traditio
 approaches [CITE - Berntson, G.G., Bigger Jr, J.T., Eckberg, D.L., Grossman, P., Kaufmann, P.G., Malik, M., ... & Van Der Molen, M.W. (1997). Heart rate variability: origins, methods, and interpretive caveats. Psychophysiology, 34(6), 623-648].
 
 Through extensive consultation sessions involving structured interviews, collaborative design workshops, and iterative
-feedback protocols, this critical stakeholder group consistently emphasised the paramount importance of maintaining
+feedback protocols, this critical stakeholder group consistently emphasized the paramount importance of maintaining
 measurement precision and temporal accuracy that could meet or exceed the standards established by traditional
 contact-based methodologies while simultaneously enabling innovative forms of experimental design that were previously
 impossible with conventional measurement
@@ -264,7 +264,7 @@ The contactless nature of the measurement system directly addresses primary part
 discomfort, behavioral alteration, and privacy invasion that have historically limited participation rates and
 compromised ecological validity in physiological research
 studies [CITE - Sieber, J.E. (1992). Planning ethically responsible research: A guide for students and internal review boards. Sage Publications].
-complete privacy protections, including data anonymisation, encrypted storage, and transparent consent procedures,
+complete privacy protections, including data anonymization, encrypted storage, and transparent consent procedures,
 ensure ethical compliance and participant trust while maintaining the research quality necessary for scientific
 publication and clinical application. The extensive requirements elicitation process included dedicated participant
 feedback sessions that provided valuable insights into the psychological impact of different measurement modalities and
@@ -273,10 +273,10 @@ the factors that influence willingness to participate in physiological research 
 **Technical Operators and Research Assistants** bring essential practical operational perspectives focused on system
 reliability, operational efficiency, ease of use, and complete maintenance requirements that directly impact
 research productivity and data quality [CITE - Nielsen, J. (1994). Usability engineering. Morgan Kaufmann]. Their
-extensive input emphasised the critical importance of rapid setup procedures that minimis\1 experimental overhead,
+extensive input emphasized the critical importance of rapid setup procedures that minimis\1 experimental overhead,
 automated error detection and recovery systems that reduce operator burden, and complete troubleshooting
-capabilities that enable effective problem resolution without requiring specialised technical
-expertise [CITE - Karat, J. (1997). Evolving the scope of user-centred design. Communications of the ACM, 40(7), 33-38].
+capabilities that enable effective problem resolution without requiring specialized technical
+expertise [CITE - Karat, J. (1997). Evolving the scope of user-centered design. Communications of the ACM, 40(7), 33-38].
 
 The requirements analysis process revealed that operator efficiency and system reliability directly impact experimental
 throughput, data quality, and overall research productivity in ways that fundamentally affect research outcomes and
@@ -290,14 +290,14 @@ enables effective system operation by personnel with diverse technical backgroun
 requirements, format compatibility standards, and long-term data management needs that are crucial for enabling
 collaborative research and ensuring data longevity across diverse institutional
 contexts [CITE - Wilkinson, M.D., Dumontier, M., Aalbersberg, I.J., Appleton, G., Axton, M., Baak, A., ... & Mons, B. (2016). The FAIR Guiding Principles for scientific data management and stewardship. Scientific Data, 3(1), 1-9].
-Their complete requirements emphasised the critical importance of standardised data formats that ensure
+Their complete requirements emphasized the critical importance of standardized data formats that ensure
 interoperability with existing analysis toolchains, complete metadata generation that enables reproducible
 research, and robust compatibility with established data analysis platforms and statistical software packages commonly
 used in physiological
 research [CITE - Stodden, V., & Miguez, S. (2014). Best practices for computational science: Software infrastructure and environments for reproducible and extensible research. Journal of Open Research Software, 2(1), e21].
 
 The increasingly global and collaborative nature of contemporary scientific research highlighted specific requirements
-for enhanced data portability, cross-platform compatibility, and standardised export formats that enable seamless
+for enhanced data portability, cross-platform compatibility, and standardized export formats that enable seamless
 collaboration between research institutions, facilitate meta-analyses across multiple studies, and support long-term
 data preservation initiatives that are essential for scientific
 progress [CITE - Tenopir, C., Allard, S., Douglass, K., Aydinoglu, A.U., Wu, L., Read, E., ... & Frame, M. (2011). Data sharing by scientists: practices and perceptions. PLoS One, 6(6), e21101].
@@ -325,12 +325,12 @@ the extended timeframes typical of research projects.
 | Stakeholder Group       | Primary Interests                                                          | Critical Requirements                                                                          | Success Metrics                                                                                | Validation Methods                                                            |
 |-------------------------|----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
 | **Research Scientists** | Scientific validity, measurement accuracy, experimental flexibility        | ≥95% correlation with reference measurements, customizable protocols, temporal precision <50ms | Successful publication of research results, peer review acceptance, statistical significance   | Statistical correlation analysis, peer review validation, publication metrics |
-| **Study Participants**  | Comfort, privacy protection, non-intrusive measurement, informed consent   | Complete contactless operation, data anonymisation, transparent procedures                     | Participant satisfaction scores >4.5/5, recruitment success >80%, retention rates >95%         | Satisfaction surveys, recruitment analytics, retention tracking               |
+| **Study Participants**  | Comfort, privacy protection, non-intrusive measurement, informed consent   | Complete contactless operation, data anonymization, transparent procedures                     | Participant satisfaction scores >4.5/5, recruitment success >80%, retention rates >95%         | Satisfaction surveys, recruitment analytics, retention tracking               |
 | **Technical Operators** | System reliability, operational efficiency, ease of use, maintenance       | <10-minute setup time, automated error recovery, intuitive interfaces                          | Operational efficiency improvements >40%, reduced support calls >60%, user satisfaction >4.0/5 | Time-motion studies, error tracking, user experience surveys                  |
 | **Data Analysts**       | Data quality, format compatibility, reproducibility, collaboration support | Standard export formats (CSV, JSON, MATLAB), complete metadata, analysis tool integration | Successful data integration >95%, analysis workflow compatibility, reproducible results        | Format validation, integration testing, reproducibility studies               |
 | **IT Administrators**   | Security, compliance, maintainability, institutional policies              | Encrypted data storage (AES-256), audit trails, GDPR compliance, backup procedures             | Zero security incidents, 100% compliance audits, <24hr support response                        | Security audits, compliance reviews, incident tracking                        |
 
-### 3.2.2 System Requirements analysis Framework
+### 3.2.2 System Requirements Analysis Framework
 
 The requirements elicitation process employed multiple complementary methodological approaches specifically designed to
 capture both explicit functional needs and implicit quality requirements that are often crucial for research software
@@ -341,15 +341,15 @@ systematic validation and verification of requirements through triangulation acr
 validation
 methodologies [CITE - Maiden, N.A., & Rugg, G. (1996). ACRE: selecting methods for requirements acquisition. Software Engineering Journal, 11(3), 183-192].
 
-The elicitation strategy recognised that research software development presents unique challenges that require
-specialised approaches beyond those typically employed in commercial software development, including the need to balance
+The elicitation strategy recognized that research software development presents unique challenges that require
+specialized approaches beyond those typically employed in commercial software development, including the need to balance
 scientific rigor with practical constraints, accommodate diverse stakeholder expertise levels, and ensure long-term
 research validity and
 reproducibility [CITE - Carver, J.C. (2006). Report from the second international workshop on software engineering for high performance computing system applications. ACM SIGSOFT Software Engineering Notes, 31(2), 1-5].
 Each elicitation method was carefully selected and systematically applied to address specific aspects of the
 requirements gathering challenge while contributing to a complete understanding of system needs and constraints.
 
-**Extensive Literature Review and complete Domain analysis**: An exhaustive and systematic analysis of over 150
+**Extensive Literature Review and complete Domain Analysis**: An exhaustive and systematic analysis of over 150
 peer-reviewed research papers spanning contactless physiological measurement, advanced computer vision techniques,
 distributed systems architecture, machine learning applications in physiological sensing, and human-computer interaction
 provided the essential foundational understanding of state-of-the-art techniques, commonly encountered challenges, and
@@ -370,7 +370,7 @@ the paramount importance of maintaining compatibility with existing research met
 protocols while enabling innovative research paradigms.
 
 **Structured Expert Interviews and complete Consultation Sessions**: Systematic structured interviews with twelve
-recognised domain experts spanning psychophysiology, computer vision, distributed systems engineering, research
+recognized domain experts spanning psychophysiology, computer vision, distributed systems engineering, research
 methodology, and clinical applications provided deep insights into both technical requirements and practical
 implementation constraints that are essential for successful system development and
 deployment [CITE - Fontana, A., & Frey, J.H. (2005). The interview: From neutral stance to political involvement. In The Sage handbook of qualitative research (pp. 695-727). Sage Publications].
@@ -387,7 +387,7 @@ knowledge [CITE - Curtis, B., Krasner, H., & Iscoe, N. (1988). A field study of 
 The structured interview protocols were designed to capture both explicit technical requirements and implicit quality
 attributes that are often crucial for research software acceptance and long-term success in academic environments.
 
-**complete Use Case analysis and Detailed Scenario Development**: The systematic development of eighteen detailed
+**complete Use Case Analysis and Detailed Scenario Development**: The systematic development of eighteen detailed
 use case scenarios provided concrete validation of functional requirements while systematically identifying edge cases,
 error conditions, and exceptional situations that might not be apparent from high-level requirement statements or
 general system descriptions [CITE - Cockburn, A. (2000). Writing effective use cases. Addison-Wesley Professional].
@@ -416,17 +416,17 @@ refinement [CITE - Davis, A.M. (1992). Operational prototyping: A new developmen
 This iterative prototyping approach enabled systematic requirements refinement based on actual system interaction and
 real-world usage patterns rather than theoretical analysis alone, ensuring that the final requirements accurately
 reflected practical needs and operational
-constraints [CITE - Boehm, B., grey, T., & Seewaldt, T. (1984). Prototyping versus specifying: a multiproject experiment. IEEE Transactions on Software Engineering, 10(3), 290-302].
+constraints [CITE - Boehm, B., Gray, T., & Seewaldt, T. (1984). Prototyping versus specifying: a multiproject experiment. IEEE Transactions on Software Engineering, 10(3), 290-302].
 The prototype evaluation sessions provided invaluable insights into user interaction patterns, performance expectations,
 and integration challenges that significantly influenced final system design decisions and implementation priorities.
 
-**Technical Constraints analysis and complete Feasibility Assessment**: Systematic analysis of hardware
+**Technical Constraints Analysis and complete Feasibility Assessment**: Systematic analysis of hardware
 limitations, software platform constraints, integration challenges, and resource availability ensured that all
 identified requirements were technically achievable within realistic project constraints while maintaining scientific
 validity and research
 applicability [CITE - Boehm, B.W., & Bose, P. (1994). A collaborative spiral software process model based on Theory W. In Proceedings of the 3rd international conference on the software process (pp. 59-68)].
 This detailed analysis systematically identified critical trade-offs between ideal stakeholder requirements and
-practical implementation limitations, leading to carefully prioritised requirement sets that balanced scientific needs
+practical implementation limitations, leading to carefully prioritized requirement sets that balanced scientific needs
 with technical reality and resource
 constraints [CITE - Karlsson, J., & Ryan, K. (1997). A cost-value approach for prioritising requirements. IEEE Software, 14(5), 67-74].
 
@@ -447,7 +447,7 @@ fundamental behaviours, operations, and capabilities that are absolutely essenti
 GSR prediction research while maintaining the scientific rigor and measurement precision required for peer-reviewed
 publication and clinical application [CITE - Wiegers, K., & Beatty, J. (2013). Software requirements. Microsoft Press].
 
-The functional requirements are systematically organised into logical groupings that directly reflect the system's
+The functional requirements are systematically organized into logical groupings that directly reflect the system's
 sophisticated architectural components and complete operational workflows, ensuring clear traceability between
 stakeholder needs, system capabilities, and implementation
 approaches [CITE - Davis, A.M. (1993). Software requirements: objects, functions, and states. Prentice-Hall]. Each
@@ -459,8 +459,8 @@ The requirements engineering process employed systematic analysis methodologies 
 software development to ensure complete coverage of stakeholder needs while maintaining technical feasibility,
 scientific validity, and long-term system
 maintainability [CITE - Segal, J. (2007). Some problems of professional end user developers. Proceedings IEEE Symposium on Visual Languages and Human-Centric Computing, 111-118].
-The specialised approach recognizes that research software presents fundamentally unique challenges compared to
-traditional commercial applications, requiring specialised validation criteria, performance metrics, and success
+The specialized approach recognizes that research software presents fundamentally unique challenges compared to
+traditional commercial applications, requiring specialized validation criteria, performance metrics, and success
 measures that directly support scientific methodology, reproducible research outcomes, and peer review
 standards [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007). Software development environments for scientific and engineering software: A series of case studies. Proceedings of the 29th International Conference on Software Engineering, 550-559].
 
@@ -657,14 +657,14 @@ graph TB
 ### Core System Coordination Requirements
 
 The system coordination requirements define the fundamental capabilities necessary for managing multiple heterogeneous
-devices in a synchronised measurement environment while maintaining research-grade temporal precision and operational
+devices in a synchronized measurement environment while maintaining research-grade temporal precision and operational
 reliability across diverse experimental conditions [CITE - Mullender, S. (Ed.). (1993). Distributed systems. ACM Press].
 These requirements address the complex challenges of coordinating consumer-grade devices for scientific applications
 while ensuring measurement validity and experimental reproducibility.
 
-#### FR-001: Multi-Device Coordination and Centralised Management
+#### FR-001: Multi-Device Coordination and Centralized Management
 
-**Requirement Statement**: The system shall provide complete centralised coordination and management capabilities
+**Requirement Statement**: The system shall provide complete centralized coordination and management capabilities
 for multiple heterogeneous Android mobile devices, thermal imaging systems, and reference GSR sensors operating in a
 distributed measurement environment with research-grade precision and
 reliability [CITE - Tanenbaum, A.S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. CreateSpace Independent Publishing Platform].
@@ -674,7 +674,7 @@ simultaneously connected mobile devices, each equipped with high-resolution came
 while coordinating reference GSR sensor data collection through Bluetooth Low Energy
 protocols [CITE - Bluetooth SIG. (2019). Bluetooth Core Specification Version 5.1. Bluetooth Special Interest Group].
 The coordination system must provide automated device discovery, capability assessment, and configuration management
-that enables researchers to rapidly deploy measurement sessions without requiring specialised technical expertise or
+that enables researchers to rapidly deploy measurement sessions without requiring specialized technical expertise or
 extensive setup procedures.
 
 **Performance Requirements**: Device coordination must maintain temporal synchronisation within ±25 milliseconds across
@@ -692,7 +692,7 @@ essential for research-grade data collection [CITE - Lynch, N.A. (1996). Distrib
 precision under normal network conditions, and demonstration of automatic recovery from temporary connectivity
 interruptions without data loss or measurement artifacts.
 
-**Requirement Statement**: The system shall coordinate synchronised data collection from a minimum of four simultaneous
+**Requirement Statement**: The system shall coordinate synchronized data collection from a minimum of four simultaneous
 devices with automatic device discovery, connection management, and status monitoring capabilities.
 
 **Technical Rationale**: Multi-device coordination represents the foundational capability that distinguishes this system
@@ -759,7 +759,7 @@ techniques specifically adapted for Android device coordination in research envi
 
 **Implementation Dependencies**:
 
-- Network Time Protocol (NTP) synchronisation services with customised implementation for mobile platforms
+- Network Time Protocol (NTP) synchronisation services with customized implementation for mobile platforms
 - High-resolution timestamp generation capabilities across heterogeneous Android platforms and API levels
 - Advanced latency measurement and compensation algorithms with real-time adaptation capabilities
 - Clock drift detection and correction mechanisms incorporating statistical analysis and predictive modelling
@@ -911,7 +911,7 @@ recording conditions and ensure data validity throughout experimental sessions.
 - Video compression and storage optimisation systems designed for extended recording sessions
 - Integration with computer vision libraries for real-time image analysis and quality assessment
 
-#### FR-011: complete Thermal Imaging Integration and Physiological analysis
+#### FR-011: complete Thermal Imaging Integration and Physiological Analysis
 
 **Requirement Statement**: The system shall provide sophisticated thermal imaging capabilities with minimum 25 frames
 per second acquisition rate, temperature resolution of ≤0.1°C, and complete thermal analysis features specifically
@@ -973,7 +973,7 @@ established validation in research applications and compatibility with standard 
 - Real-time signal processing for quality assessment and artifact detection
 - Cross-platform data synchronisation with video and thermal measurements
 
-### 3.3.3 Real-Time Data Processing and analysis Requirements
+### 3.3.3 Real-Time Data Processing and Analysis Requirements
 
 #### FR-020: Real-Time Signal Processing and Feature Extraction
 
@@ -985,12 +985,12 @@ quality assurance while supporting adaptive experimental protocols that respond 
 state [CITE - Real-time physiological signal processing]. The SNR requirement ensures adequate signal quality for
 reliable feature extraction while the latency specification supports real-time applications requiring immediate
 physiological assessment. The processing pipeline design incorporates advanced filtering and feature extraction
-techniques specifically optimised for contactless physiological measurement applications.
+techniques specifically optimized for contactless physiological measurement applications.
 
 **Processing Pipeline Components**:
 
 - Multi-modal sensor data fusion with temporal alignment verification
-- Adaptive filtering algorithms optimised for physiological signal characteristics
+- Adaptive filtering algorithms optimized for physiological signal characteristics
 - Computer vision processing for RGB-based physiological feature extraction
 - Thermal analysis algorithms for autonomic nervous system response detection
 - Statistical quality assessment with real-time validation and confidence metrics
@@ -1022,9 +1022,9 @@ accuracy with computational efficiency constraints imposed by real-time operatio
 
 **Implementation Dependencies**:
 
-- TensorFlow Lite or PyTorch Mobile for optimised mobile inference [CITE - Mobile machine learning frameworks]
+- TensorFlow Lite or PyTorch Mobile for optimized mobile inference [CITE - Mobile machine learning frameworks]
 - Model optimisation techniques for real-time performance on mobile platforms
-- Feature engineering pipelines optimised for multi-modal physiological data
+- Feature engineering pipelines optimized for multi-modal physiological data
 - Model validation and testing frameworks ensuring prediction reliability
 
 Each functional requirement includes detailed specifications that provide measurable criteria for validation and
@@ -1034,7 +1034,7 @@ technical dependencies between requirements and their relative importance for ac
 
 ### 3.3.4 User Interface and Session Management Requirements
 
-The core system functions represent the fundamental capabilities required for multi-device coordination and synchronised
+The core system functions represent the fundamental capabilities required for multi-device coordination and synchronized
 data collection. These requirements form the foundation upon which all other system capabilities are built and represent
 the minimum functionality required for basic system operation.
 
@@ -1048,7 +1048,7 @@ characteristics, and timing precision.
 
 The multi-device coordination requirement encompasses several complex sub-functions that must work together seamlessly.
 The system must maintain a real-time inventory of connected devices, monitor their health and operational status, and
-coordinate their activities through a centralised command structure. The coordination system must handle device addition
+coordinate their activities through a centralized command structure. The coordination system must handle device addition
 and removal during operation without disrupting ongoing recording sessions, providing the flexibility needed for dynamic
 research environments.
 
@@ -1058,7 +1058,7 @@ research environments.
   architecture designed to scale to 8 or more devices without fundamental modifications
 - **Temporal Synchronisation Accuracy**: Maintain synchronisation precision of ≤5ms across all devices, measured as the
   maximum time difference between corresponding data points from different devices
-- **Centralised Session Control**: Provide unified start/stop control that ensures all devices begin and end recording
+- **Centralized Session Control**: Provide unified start/stop control that ensures all devices begin and end recording
   within the synchronisation tolerance
 - **Graceful Failure Handling**: Continue operation when individual devices fail, maintaining session integrity while
   logging detailed failure information for post-session analysis
@@ -1094,7 +1094,7 @@ framework to ensure proper synchronisation with other data streams.
   of physiological events
 - **Colour Depth and Accuracy**: Support 8-bit colour depth minimum with preference for 10-bit when available, maintaining
   colour consistency across devices
-- **Multi-Device Coordination**: Enable simultaneous recording from multiple Android devices with synchronised timing
+- **Multi-Device Coordination**: Enable simultaneous recording from multiple Android devices with synchronized timing
   and coordinated session control
 - **Storage and Compression**: Implement efficient storage mechanisms that balance quality preservation with practical
   storage limitations
@@ -1105,7 +1105,7 @@ analysis techniques.
 **Validation Criteria**: Successful capture of physiological events with sufficient quality for computer vision analysis
 and correlation with reference measurements.
 
-#### FR-032: Thermal Imaging Integration and analysis
+#### FR-032: Thermal Imaging Integration and Analysis
 
 **complete Requirement Description**: The system must integrate thermal imaging capabilities that enable
 non-contact detection of temperature variations associated with vascular responses and autonomic nervous system
@@ -1122,7 +1122,7 @@ measurement with accuracy sufficient for physiological research applications.
 
 - **Temperature Measurement Accuracy**: Achieve ≤0.1°C measurement precision across the physiological temperature range
   relevant for human subjects
-- **Temporal Synchronisation**: Maintain ≥25 fps frame rate synchronised with RGB video capture to enable multi-modal
+- **Temporal Synchronisation**: Maintain ≥25 fps frame rate synchronized with RGB video capture to enable multi-modal
   analysis
 - **Physiological Temperature Range**: Operate effectively across 20-45°C range covering normal environmental and
   physiological temperature variations
@@ -1172,14 +1172,14 @@ operation and proper synchronisation with other data streams.
 
 **complete Requirement Description**: The system must provide sophisticated session management capabilities that
 support the complete lifecycle of research recording sessions from initial setup through final data archival. Session
-management encompasses pre-session configuration, real-time monitoring and control, and post-session data organisation
+management encompasses pre-session configuration, real-time monitoring and control, and post-session data organization
 and validation. This requirement recognizes that research applications require more complete data management than
 typical consumer applications, including detailed metadata generation, experimental parameter tracking, and
 complete audit trails.
 
 The session management system must balance ease of use with the complete control and documentation required for
 scientific research. The system must support various experimental paradigms while maintaining consistent data
-organisation and enabling efficient post-session analysis workflows.
+organization and enabling efficient post-session analysis workflows.
 
 **Detailed Technical Specifications**:
 
@@ -1187,7 +1187,7 @@ organisation and enabling efficient post-session analysis workflows.
   duration, sampling rates, device configurations, and experimental metadata
 - **Real-Time Status Monitoring**: Provide complete real-time monitoring of all system components with immediate
   notification of issues or anomalies
-- **Automatic Data Organisation**: Implement automatic file organisation with standardised naming conventions and
+- **Automatic Data Organization**: Implement automatic file organization with standardized naming conventions and
   complete metadata generation
 - **Session Pause and Resume**: Support session pause and resume functionality without data loss or synchronisation
   issues
@@ -1250,7 +1250,7 @@ for scientific applications.
 The camera calibration requirement encompasses intrinsic parameter determination, stereo calibration for multi-camera
 setups, and ongoing calibration validation to ensure continued accuracy throughout extended research studies. The system
 must balance calibration accuracy with practical usability, providing automated calibration procedures that can be
-performed by research staff without specialised technical expertise.
+performed by research staff without specialized technical expertise.
 
 **Detailed Technical Specifications**:
 
@@ -1568,7 +1568,7 @@ capabilities.
 #### UC-001: Multi-Participant Research Session
 
 **Actor**: Research Scientist  
-**Goal**: Conduct synchronised recording session with multiple participants  
+**Goal**: Conduct synchronized recording session with multiple participants  
 **Preconditions**: System calibrated, participants briefed, devices connected
 
 **Main Flow**:
@@ -1576,10 +1576,10 @@ capabilities.
 1. Researcher configures session parameters (duration, sampling rates, participant count)
 2. System validates device connectivity and calibration status
 3. Participants are positioned with appropriate sensor placement
-4. Researcher initiates synchronised recording across all devices
+4. Researcher initiates synchronized recording across all devices
 5. System monitors real-time data quality and device status
 6. Researcher terminates session and reviews data quality metrics
-7. System exports data in standardised formats for analysis
+7. System exports data in standardized formats for analysis
 
 **Alternative Flows**:
 
@@ -1620,7 +1620,7 @@ capabilities.
 
 ### Secondary Use Cases
 
-#### UC-010: Data Export and analysis
+#### UC-010: Data Export and Analysis
 
 **Actor**: Data Analyst  
 **Goal**: Export recorded data for external analysis  
@@ -1632,7 +1632,7 @@ capabilities.
 2. System validates data integrity and completeness
 3. System converts data to requested formats (CSV, JSON, HDF5)
 4. System generates metadata files with session information
-5. System exports data with appropriate file organisation
+5. System exports data with appropriate file organization
 6. Analyst validates export completeness and format compliance
 
 #### UC-011: System Maintenance and Diagnostics
@@ -1650,9 +1650,9 @@ capabilities.
 5. System provides maintenance recommendations and scheduling
 6. Operator performs recommended maintenance actions
 ---
-## 3.6 System analysis (Architecture and Data Flow)
+## 3.6 System Analysis (Architecture and Data Flow)
 
-### 3.6.1 Data Flow analysis
+### 3.6.1 Data Flow Analysis
 
 The system analysis reveals a complex data flow architecture that must handle multiple concurrent data streams with
 precise temporal coordination:
@@ -1680,7 +1680,7 @@ graph TD
     end
 ```
 
-### 3.6.2 Component Interaction analysis
+### 3.6.2 Component Interaction Analysis
 
 | Component Interaction     | Frequency  | Latency Requirement | Failure Impact               |
 |---------------------------|------------|---------------------|------------------------------|
@@ -1711,12 +1711,12 @@ The system architecture must accommodate growth in several dimensions:
 
 ### 3.7.2 Data Quality and Integrity Requirements
 
-- **Temporal Accuracy**: All timestamps synchronised within ±5ms
+- **Temporal Accuracy**: All timestamps synchronized within ±5ms
 - **Data Completeness**: ≥99% data availability for valid analysis
 - **Signal Quality**: SNR ≥20dB for physiological measurements
 - **Metadata Completeness**: 100% of required session metadata fields populated
 
-### 3.7.3 Data Management and analysis Preparation
+### 3.7.3 Data Management and Analysis Preparation
 
 - **Primary Storage**: Local SSD storage with real-time writing capability
 - **Backup Storage**: Automatic backup to secondary storage systems
@@ -1742,7 +1742,7 @@ Each requirement is traced through the development lifecycle:
 - **Testing**: Test cases that validate requirement satisfaction
 - **Validation**: Evidence that requirement meets original need
 
-### Critical Requirements analysis
+### Critical Requirements Analysis
 
 The analysis identifies several critical requirements that drive system architecture:
 
@@ -1765,7 +1765,7 @@ each modification.
 
 ## Code Implementation References
 
-The requirements identified and analysed in this chapter are implemented and validated through the following source code
+The requirements identified and analyzed in this chapter are implemented and validated through the following source code
 components. Each referenced file provides detailed implementation that addresses specific requirement categories, with
 code snippets available in **Appendix F**.
 
@@ -1910,7 +1910,7 @@ Edition." Addison-Wesley Professional, 2012.
 ---
 ## Tables and Figures
 
-### Table 3.1: Comparative analysis of Physiological Measurement Approaches
+### Table 3.1: Comparative Analysis of Physiological Measurement Approaches
 
 | Characteristic                     | Traditional Contact-Based GSR | Proposed Contactless System | Improvement Factor    |
 |------------------------------------|-------------------------------|-----------------------------|-----------------------|
@@ -1924,7 +1924,7 @@ Edition." Addison-Wesley Professional, 2012.
 | **Data Quality**                   | Research-grade                | Developing                  | Under validation      |
 | **Network Resilience**             | Not applicable                | 1ms-500ms latency tolerance | New capability        |
 
-### Table 3.2: Research Gap analysis Matrix
+### Table 3.2: Research Gap Analysis Matrix
 
 | Research Domain                  | Current Limitations                    | Gap Severity | Opportunity Impact | Technical Feasibility |
 |----------------------------------|----------------------------------------|--------------|--------------------|-----------------------|
@@ -1946,7 +1946,7 @@ Right: Contactless setup with participant in natural position, cameras positione
 
 ```mermaid
 quadrantChart
-    title Research Opportunity analysis
+    title Research Opportunity Analysis
     x-axis Low Complexity --> High Complexity
     y-axis Low Impact --> High Impact
     quadrant-1 Quick Wins

@@ -1,4 +1,4 @@
-# Chapter 3: Requirements analysis and System Specification
+# Chapter 3: Requirements Analysis and System Specification
 
 ## 3.1 Introduction
 
@@ -11,7 +11,7 @@ The requirements engineering methodology employed follows established software e
 
 The analysis progresses from problem identification through stakeholder analysis to detailed requirement specification, culminating in validation scenarios that demonstrate requirement satisfaction. This systematic approach ensures that derived requirements align with both scientific objectives and practical implementation feasibility while maintaining traceability to research goals.
 
-## 3.2 Problem Context and Opportunity analysis
+## 3.2 Problem Context and Opportunity Analysis
 
 ### Contemporary Physiological Measurement Challenges
 
@@ -28,7 +28,7 @@ Additionally, traditional single-modality approaches focus exclusively on electr
 
 Recent technological advances have introduced cameras and other non-contact sensors as alternatives for physiological signal measurement, including heart rate monitoring and stress indicator detection. However, these contactless approaches remain in developmental stages and have not achieved widespread adoption in mainstream psychophysiological research practice.
 
-The current measurement landscape presents a dichotomy between reliable but intrusive contact-based sensors and promising yet underutilised contactless measurement techniques. This research project addresses this gap by developing a validated platform that combines the accuracy of traditional measurement methods with the ecological advantages of contactless monitoring.
+The current measurement landscape presents a dichotomy between reliable but intrusive contact-based sensors and promising yet underutilized contactless measurement techniques. This research project addresses this gap by developing a validated platform that combines the accuracy of traditional measurement methods with the ecological advantages of contactless monitoring.
 intersection, aiming to leverage advances in computer vision and thermal
 imaging to push the field toward **non-intrusive, multi-sensor
 measurement paradigms**.
@@ -116,7 +116,7 @@ naturalistic research.
 
 Given the above context, there is a clear research gap: **no existing
 system provides high-precision, multi-modal physiological data
-collection in a completely contactless, synchronised manner**. The
+collection in a completely contactless, synchronized manner**. The
 opportunity is to develop a system that fills this gap by leveraging
 modern technology to maintain research-grade data quality without the
 drawbacks of contact sensors. Specifically, this project targets a
@@ -124,7 +124,7 @@ solution that *eliminates physical contact requirements* while still
 capturing reliable GSR-related signals, by combining video-based and
 thermal imaging methods with a traditional sensor for validation.
 
-The **Multi-Sensor Recording System** is conceived to seise this
+The **Multi-Sensor Recording System** is conceived to seize this
 opportunity. It embodies a paradigm shift toward contactless
 measurement, integrating multiple sensor modalities to capture
 physiological responses in unison. By doing so, it aims to preserve or
@@ -140,7 +140,7 @@ providing **redundancy and cross-verification** -- if all modalities
 concur, confidence in the measurement is high.
 
 Moreover, the opportunity extends to enabling experiments previously
-infeasible. A contactless, synchronised system could allow
+infeasible. A contactless, synchronized system could allow
 **multi-participant experiments** where, for example, a group
 interaction is recorded with each person's physiological responses
 captured via cameras and sensors, all time-aligned. It could facilitate
@@ -160,7 +160,7 @@ addresses the issues outlined here.
 
 ## 3.2 Requirements Engineering Methodology
 
-### 3.2.1 Stakeholder analysis and Requirements Elicitation
+### 3.2.1 Stakeholder Analysis and Requirements Elicitation
 
 Developing a complex research-oriented system requires careful
 consideration of **stakeholder needs**. For this project, stakeholders
@@ -182,7 +182,7 @@ were conducted, including **interviews and questionnaires** with domain
 experts and potential users. Domain experts (e.g., professors in
 psychophysiology and experienced lab technicians) provided insight into
 the critical features and common problems with existing systems. Their
-feedback emphasised the importance of synchronisation and data integrity
+feedback emphasized the importance of synchronisation and data integrity
 for multi-modal experiments. End-users, such as researchers who might
 use the system, highlighted practical needs like an intuitive interface
 and the ability to monitor data in real-time during an experiment.
@@ -193,7 +193,7 @@ established requirements for similar systems and gaps that need
 addressing[\[1\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/README.md#L87-L95).
 This academic input ensured that the system's requirements align with
 state-of-the-art knowledge. For example, literature on distributed
-sensing emphasised network time synchronisation as a key challenge,
+sensing emphasized network time synchronisation as a key challenge,
 which became a core requirement for our system.
 
 The project followed an **iterative elicitation** process. Preliminary
@@ -228,12 +228,12 @@ Temporal Synchronisation**, and **participant need: comfort** maps to
 the overall goal of contactless operation, which appears in several
 requirements.
 
-### 3.2.2 System Requirements analysis Framework
+### 3.2.2 System Requirements Analysis Framework
 
 To organise and analyse the gathered requirements, a structured
 framework was used. Given the dual nature of this project (as both a
 software system and a research instrument), requirements were
-categorised into groups and given identifiers for clarity. The project
+categorized into groups and given identifiers for clarity. The project
 adopts a hierarchical labelling scheme for requirements: **Functional
 Requirements (FR)** and **Non-Functional Requirements (NFR)**, further
 broken into sub-groups. This mirrors best practices in requirements
@@ -313,7 +313,7 @@ synchronisation, **(b)** sensor integration and data acquisition,
 **(c)** real-time data processing and analysis, and **(d)** session
 management and user interface features. Each group is discussed below,
 along with representative examples of how these requirements are
-realised in the system (with references to the codebase as evidence).
+realized in the system (with references to the codebase as evidence).
 
 ### 3.3.1 Multi-Device Coordination and Synchronisation Requirements
 
@@ -321,8 +321,8 @@ A cornerstone of this project is the ability to coordinate multiple
 devices (smartphones, sensors, and a PC) in one recording session. The
 system must treat several distributed components as part of one unified
 recorder. The requirements in this category ensure that **multiple
-devices can connect and operate together under centralised control**,
-and that their activities are tightly synchronised in time.
+devices can connect and operate together under centralized control**,
+and that their activities are tightly synchronized in time.
 
 **Device Coordination:** At minimum, the system is required to handle
 **4 devices simultaneously**, with a stretch goal of up to 8 devices as
@@ -336,7 +336,7 @@ should automatically begin recording in concert. In the code, this is
 managed by a *MasterClockSynchronizer* on the PC and complementary logic
 on Android. The PC acts as a master and sends start/stop commands to
 each device. The *MasterClockSynchronizer* module implements a
-centralised clock and coordination manager, ensuring all devices follow
+centralized clock and coordination manager, ensuring all devices follow
 the master
 timeline[\[9\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/master_clock_synchronizer.py#L2-L10)[\[10\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/master_clock_synchronizer.py#L99-L108).
 This design fulfills the requirement of unified multi-device control
@@ -344,7 +344,7 @@ This design fulfills the requirement of unified multi-device control
 
     # Excerpt from MasterClockSynchronizer (PC side)
     """ Master Clock Synchronisation Manager for Multi-Device Recording
-    This module implements a centralised synchronisation system where the PC acts as the 
+    This module implements a centralized synchronisation system where the PC acts as the 
     master clock for all connected devices... ensuring frame-level synchronisation across 
     all recording devices. """【30†L1-L9】
 
@@ -523,11 +523,11 @@ To verify these requirements, various tests were conducted: checking
 video file integrity (no frames dropped), checking that thermal data is
 recorded for the entire session, and that GSR data matches known
 calibration signals. The system's ability to integrate all these sensors
-and produce synchronised outputs is a key outcome of the requirements
+and produce synchronized outputs is a key outcome of the requirements
 analysis, as these were explicitly identified needs for achieving the
 project's goals.
 
-### 3.3.3 Real-Time Data Processing and analysis Requirements
+### 3.3.3 Real-Time Data Processing and Analysis Requirements
 
 Beyond raw data capture, the system has requirements for processing data
 *in real time* during recording. These requirements exist to provide
@@ -629,12 +629,12 @@ recording on all devices with one action. The system then should
 automatically organise all data from that session (videos, sensor logs,
 etc.) in a structured way. Upon stopping the session, the system should
 finalise files, possibly create summary logs, and reset the devices to
-an idle state ready for the next session. In the code, this is realised
+an idle state ready for the next session. In the code, this is realized
 by components like the `SessionManager` on
 Android[\[20\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L22-L30)
 and analogous logic on the Python controller. The `SessionManager`
 handles creating directories for each session, naming files in a
-standardised way (e.g., session timestamp), and keeping track of the
+standardized way (e.g., session timestamp), and keeping track of the
 session status
 (active/completed)[\[21\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L52-L61)[\[22\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L70-L79).
 It also works with a `SessionStateDao` (database access object) to save
@@ -649,7 +649,7 @@ This design meets the requirement by ensuring no data from different
 sessions get mixed up and that everything from one session is collected
 together.
 
-**User Interface (UI):** The system's UI requirements emphasise **ease
+**User Interface (UI):** The system's UI requirements emphasize **ease
 of use** and **clarity**. Researchers running experiments should not
 have to handle low-level technical details (like manually starting each
 device, or typing commands). Instead, a central dashboard should provide
@@ -824,7 +824,7 @@ requirement was that this data rate be sustained with no frame drops or
 buffer overflows. The code sets parameters like a 10 Mbps video bitrate
 for 4K
 recording[\[28\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt#L105-L113),
-indicating that it's optimised for that throughput. Actual tests
+indicating that it's optimized for that throughput. Actual tests
 confirmed the phones could write 4K video at 30fps smoothly to their
 flash storage, and the Wi-Fi network could carry preview images at a
 lower rate.
@@ -836,7 +836,7 @@ it on the PC preview should be under 500 ms, and ideally around 200 ms.
 This ensures what the researcher sees is almost live. The system uses
 efficient encoding and avoids heavy processing on the critical path to
 meet this. During testing, we measured the preview latency and tuned the
-system (e.g., adjusting the preview frame sise or rate) to usually stay
+system (e.g., adjusting the preview frame size or rate) to usually stay
 below 200 ms for the RGB feed -- which was acceptable for monitoring
 purposes.
 
@@ -979,7 +979,7 @@ thus more broadly usable.
 non-functional requirements. Because the system records video of
 participants, we included a requirement that data handling comply with
 research ethics guidelines. Practically, this meant adding a feature
-where video files can be automatically anonymised or watermarked if
+where video files can be automatically anonymized or watermarked if
 needed (for example, converting them to a format that blurs faces, if
 required, though that is more of a post-processing step). We mention it
 here to note that any such requirement would affect how data is stored
@@ -1022,7 +1022,7 @@ a research setting. They are as follows:
   from one or more participants simultaneously. The use case steps
   include: starting the desktop controller, powering on the Android
   devices and connecting sensors, verifying all devices are detected and
-  synchronised, and then initiating a recording for the desired
+  synchronized, and then initiating a recording for the desired
   duration. During the session, the researcher might monitor live feeds.
   After the session, the system automatically saves all data. This use
   case covers the end-to-end normal operation and directly exercises
@@ -1069,7 +1069,7 @@ Secondary use cases cover maintenance, system management, or less
 frequent tasks -- they ensure the system remains useful in the long term
 and can be extended or troubleshooted.
 
-- **UC-010: Data Export and analysis Preparation.** After recording
+- **UC-010: Data Export and Analysis Preparation.** After recording
   sessions, a researcher needs to work with the data. This use case
   involves the researcher using the system's provided tools to export or
   convert the data into formats suitable for analysis. For instance, the
@@ -1128,7 +1128,7 @@ simultaneously verifies multi-device sync, sensor capture, session
 management, performance (when handling all those at once), and UI. It's
 a holistic test of the system's requirements fulfillment.
 
-## 3.6 System analysis
+## 3.6 System Analysis
 
 With the requirements established, we analyse how the system will meet
 them by examining data flows, component interactions, and scalability
@@ -1136,7 +1136,7 @@ considerations. This section bridges between requirements and the design
 (which is detailed in Chapter 4), ensuring that we understand the system
 dynamics needed to satisfy the requirements.
 
-### 3.6.1 Data Flow analysis
+### 3.6.1 Data Flow Analysis
 
 Analysing data flow involves mapping out how data moves through the
 system from sources (sensors and devices) to destinations (storage, user
@@ -1202,7 +1202,7 @@ the total network usage might be \~3 Mbps (since preview is compressed
 and possibly reduced resolution), which is fine for Wi-Fi. Control data
 is negligible. Thus, the requirement of sustaining data flow is met.
 
-### 3.6.2 Component Interaction analysis
+### 3.6.2 Component Interaction Analysis
 
 This part of the analysis looks at how different components (or
 subsystems) of the system interact to fulfill the requirements. The main
@@ -1349,7 +1349,7 @@ a threshold to prevent midway failure).
 
 - **Thermal data:** if saved as video, it's also an MP4 but with lower
   resolution (say 320x240) and lower frame rate. The volume is much
-  smaller, maybe 5--10% of the RGB video sise. Alternatively, we could
+  smaller, maybe 5--10% of the RGB video size. Alternatively, we could
   store individual thermal images at intervals (since high frame rate
   may not be needed). But our current approach was video for simplicity.
   This is included in the above estimate.
@@ -1373,7 +1373,7 @@ a threshold to prevent midway failure).
   These are tiny (kilobytes), but important for interpreting the data.
   The requirement is to include all necessary context in these files
   (such as which device had which role, calibration values, etc.) to
-  ensure later that the data can be analysed correctly.
+  ensure later that the data can be analyzed correctly.
 
 Given these volumes, the requirement was that the system should handle
 at least a **one-hour continuous recording session** without running out
@@ -1424,7 +1424,7 @@ by timestamp, they truly represent the same moment within the sync
 precision. This was validated by experiments with a shared event as
 mentioned before.
 
-**Storage requirements** pertain to how data is stored and organised: -
+**Storage requirements** pertain to how data is stored and organized: -
 The requirement is to have a **clear directory structure** for sessions.
 We defined that each session gets its own folder (named with a timestamp
 for uniqueness and
@@ -1436,7 +1436,7 @@ If multiple devices produce the same type of file (say two RGB videos
 from two phones), we either differentiate by device name or store in
 subfolders (the implementation took the approach of subfolders per
 device, or alternatively, file names contain the device ID). This
-organisation is required for scalability so that data from many sessions
+organization is required for scalability so that data from many sessions
 doesn't mix, and a researcher can easily find all files for one
 session. - Another requirement was to **preserve raw data** whenever
 possible. That is, avoid any in-place processing that might alter the
@@ -1473,7 +1473,7 @@ created at start (even if some remain empty if a sensor is not used, for
 consistency).
 
 Overall, the data requirements guarantee that the system's output is not
-just large in quantity, but high in quality and well-organised, so that
+just large in quantity, but high in quality and well-organized, so that
 the research goals (like developing a predictive model) can be achieved
 using this data. They complement the functional requirements by focusing
 on the end product of the system -- the recorded dataset -- which is
@@ -1484,10 +1484,10 @@ ultimately what the value of the system is measured by.
 In this chapter, we outlined the requirements and analysis that define
 what the Multi-Sensor Recording System must achieve and how it is
 structured to do so. To summarise, the system is required to provide a
-**contactless, synchronised, multi-modal recording solution** that
+**contactless, synchronized, multi-modal recording solution** that
 addresses the key shortcomings of traditional physiological measurement
 methods. We identified the problem context of intrusive sensors and
-limited multi-participant capabilities, and seised the opportunity to
+limited multi-participant capabilities, and seized the opportunity to
 create a system leveraging modern sensors (RGB, thermal) and distributed
 computing techniques to enable non-intrusive measurements.
 
@@ -1543,7 +1543,7 @@ achieving over 99% data capture reliability, which indicates the
 implementation is indeed meeting the critical
 requirements[\[47\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/README.md#L90-L94)[\[48\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_3_Requirements_and_Analysis.md#L363-L371).
 
-In conclusion, the Requirements and analysis chapter establishes a
+In conclusion, the Requirements and Analysis chapter establishes a
 strong foundation for the project by clearly defining **what the system
 must do and under what constraints**, and ensuring those needs stem from
 real research problems and objectives. This lays the groundwork for

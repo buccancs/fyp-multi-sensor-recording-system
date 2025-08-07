@@ -24,7 +24,7 @@ This directory contains the formatted and updated LaTeX thesis files for the Mul
 - ✅ `Chapter_0.tex` - Abstract (15 lines)
 - ✅ `Chapter_1.tex` - Introduction (27 lines)  
 - ✅ `Chapter_2.tex` - Literature Review (509 lines)
-- ✅ `Chapter_3.tex` - System analysis (1045 lines)
+- ✅ `Chapter_3.tex` - System Analysis (1045 lines)
 - ✅ `Chapter_4.tex` - Implementation (699 lines)
 - ✅ `Chapter_5.tex` - Evaluation (1399 lines)
 - ✅ `Chapter_6.tex` - Conclusions (525 lines)

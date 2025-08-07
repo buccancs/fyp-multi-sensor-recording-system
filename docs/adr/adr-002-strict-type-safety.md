@@ -230,7 +230,7 @@ def calibrate_device(device_id: str) -> Result[CalibrationData, CalibrationError
 - [MyPy Documentation](https://mypy.readthedocs.io/) - Official documentation
 - [PEP 484 - Type Hints](https://www.python.org/dev/peps/pep-0484/) - Python Enhancement Proposal
 - [Effective Python Type Checking](https://realpython.com/python-type-checking/) - Best practices guide
-- Wilson, P. et al. (2023). "Static Type analysis in Scientific Python Applications." *Journal of Computational Science*, 45, 123-135.
+- Wilson, P. et al. (2023). "Static Type Analysis in Scientific Python Applications." *Journal of Computational Science*, 45, 123-135.
 - [ADR-004: Distributed Device Synchronisation](./ADR-004-distributed-synchronisation.md) - Related type-safe coordination architecture
 
 ## Revision History

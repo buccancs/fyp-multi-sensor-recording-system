@@ -160,7 +160,7 @@ graph TB
 
 - **Tonic/Phasic Decomposition**: Separation of baseline and response components
 - **Event Detection**: Automated identification of physiological responses
-- **Statistical analysis**: Real-time descriptive statistics and trend analysis
+- **Statistical Analysis**: Real-time descriptive statistics and trend analysis
 - **Quality Scoring**: complete signal quality assessment and reporting
 
 ## Protocol Specification
@@ -174,7 +174,7 @@ graph TB
 |-----------|-------|-------------|
 | Protocol | Bluetooth SPP | Serial Port Profile |
 | Baud Rate | 115200 | Data transmission rate |
-| Data Bits | 8 | Data frame sise |
+| Data Bits | 8 | Data frame size |
 | Stop Bits | 1 | Frame termination |
 | Parity | None | Error checking |
 | Flow Control | RTS/CTS | Hardware flow control |
@@ -276,7 +276,7 @@ class ShimmerCommand:
     "quality_monitoring": true,
     "data_streaming": {
       "mode": "continuous",
-      "buffer_sise": 1024,
+      "buffer_size": 1024,
       "transmission_interval": 100
     }
   }
@@ -385,7 +385,7 @@ class ShimmerManager:
             # Configure streaming parameters
             streaming_config = StreamingConfig(
                 sampling_rate=session_config.sampling_rate,
-                buffer_sise=session_config.buffer_sise,
+                buffer_size=session_config.buffer_size,
                 quality_threshold=session_config.quality_threshold
             )
 
@@ -730,11 +730,11 @@ bucika_gsr/
 
 #### Pre-Recording Preparation
 
-1. **Signal Quality check**:
+1. **Signal Quality Check**:
     - Connect all Shimmer devices
     - Monitor real-time signal display
     - Verify electrode contact quality
-    - check for artifact presence
+    - Check for artifact presence
 
 2. **Baseline Recording**:
     - Record 2-3 minutes of baseline activity
@@ -744,7 +744,7 @@ bucika_gsr/
 
 3. **Synchronisation Validation**:
     - Verify temporal alignment with other sensors
-    - check master clock synchronisation
+    - Check master clock synchronisation
     - Test coordinated recording start/stop
     - Validate data timestamp consistency
 
@@ -761,7 +761,7 @@ bucika_gsr/
 2. **Data Monitoring**:
     - Monitor real-time GSR signal display
     - Watch quality indicators and artifact detection
-    - check electrode contact status
+    - Check electrode contact status
     - Observe signal-to-noise ratio metrics
 
 3. **Quality Management**:
@@ -774,7 +774,7 @@ bucika_gsr/
 
 1. **Data Validation**:
     - Review session quality report
-    - check for data gaps or corruption
+    - Check for data gaps or corruption
     - Validate temporal synchronisation
     - Verify data export completeness
 
@@ -784,9 +784,9 @@ bucika_gsr/
     - Assess electrode contact stability
     - Generate quality assurance report
 
-### Signal analysis and Interpretation
+### Signal Analysis and Interpretation
 
-#### Real-Time analysis Features
+#### Real-Time Analysis Features
 
 1. **Live Signal Display**:
     - Real-time GSR conductance visualisation
@@ -800,7 +800,7 @@ bucika_gsr/
     - Arousal level estimation
     - Stress indicator assessment
 
-#### Post-Session analysis
+#### Post-Session Analysis
 
 1. **Signal Decomposition**:
     - Separate tonic and phasic components
@@ -1035,9 +1035,9 @@ class QualityAssessmentTest:
 **Symptoms**: Cannot discover or connect to Shimmer devices
 **Diagnosis**:
 
-1. check Bluetooth adapter functionality
+1. Check Bluetooth adapter functionality
 2. Verify device pairing status
-3. check COM port assignment (Windows)
+3. Check COM port assignment (Windows)
 4. Test with official Shimmer software
 
 **Solutions**:
@@ -1064,7 +1064,7 @@ class QualityAssessmentTest:
 **Diagnosis**:
 
 1. Monitor Bluetooth signal strength
-2. check for interference sources
+2. Check for interference sources
 3. Verify power levels on Shimmer devices
 4. Test connection stability over time
 
@@ -1087,10 +1087,10 @@ class QualityAssessmentTest:
 **Symptoms**: High resistance values, unstable signal, poor quality scores
 **Diagnosis**:
 
-1. check electrode attachment and contact pressure
+1. Check electrode attachment and contact pressure
 2. Verify skin preparation (cleaning, dryness)
 3. Monitor contact resistance values
-4. check for electrode degradation
+4. Check for electrode degradation
 
 **Solutions**:
 
@@ -1112,7 +1112,7 @@ class QualityAssessmentTest:
 **Diagnosis**:
 
 1. Identify artifact types (motion, electrical, electrode)
-2. check environmental conditions
+2. Check environmental conditions
 3. Monitor participant movement
 4. Review electrode stability
 
@@ -1127,12 +1127,12 @@ class QualityAssessmentTest:
 2. **Electrical Interference Mitigation**:
     - Turn off nearby electronic devices
     - Use battery power when possible
-    - check for ground loops
+    - Check for ground loops
     - Consider shielded cables
 
 ### Advanced Diagnostics
 
-#### Signal analysis Diagnostics
+#### Signal Analysis Diagnostics
 
 ```python
 def diagnose_signal_quality(session_data: List[ProcessedGSRSample]):
@@ -1158,7 +1158,7 @@ def diagnose_signal_quality(session_data: List[ProcessedGSRSample]):
         "recommendations": []
     }
     
-    # check for common issues
+    # Check for common issues
     if signal_mean < 2.0:
         diagnostics["quality_issues"].append("Low conductance - check electrode contact")
         diagnostics["recommendations"].append("Improve electrode contact or use conductive gel")
