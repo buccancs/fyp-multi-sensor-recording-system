@@ -3,67 +3,69 @@
  \section{Overview}
 
 The \textbf{Shimmer3 GSR+}
-is a wearable wireless sensor used for real-time physiological signal acquisition, particularly \textbf{galvanic skin response (GSR)}
+ is a wearable wireless sensor used for real-time physiological signal acquisition,
+ particularly \textbf{galvanic skin response (GSR)}
  (also known as electrodermal activity, EDA).
 
-It monitors the electrical conductance of the skin via two electrodes attached
-to the fingers; changes in skin moisture (e.g. due to sweat gland activity from
-stress or arousal) alter this conductance, allowing measurement of emotional
-arousal and sympathetic nervous system activity.
+It monitors the electrical conductance of the skin via two electrodes attached to the
+fingers; changes in skin moisture (e.g.  due to sweat gland activity from stress or
+arousal) alter this conductance, allowing measurement of emotional arousal and
+sympathetic nervous system activity.
 
-The Shimmer3 GSR+ unit also supports an optical pulse sensor (PPG) via a 3.5mm
-jack, which can be used (with an ear-clip or finger probe) to capture
-photoplethysmogram signals for heart rate estimation.
+The Shimmer3 GSR+ unit also supports an optical pulse sensor (PPG) via a 3.5mm jack,
+which can be used (with an ear-clip or finger probe) to capture photoplethysmogram
+signals for heart rate estimation.
 
-In addition, the Shimmer3 platform includes an on-board inertial measurement
-unit (IMU), enabling up to 10 degrees-of-freedom motion data if needed.
+In addition, the Shimmer3 platform includes an on-board inertial measurement unit
+(IMU), enabling up to 10 degrees-of-freedom motion data if needed.
 
-All signals can be streamed wirelessly in real time to a host device (or logged
-to an SD card on the Shimmer) for analysis.
+All signals can be streamed wirelessly in real time to a host device (or logged to an
+SD card on the Shimmer) for analysis.
 
 In summary, the Shimmer3 GSR+ is a compact, battery-powered sensor that provides
-high-quality GSR data (skin conductance or resistance) along with optional PPG
-and motion signals, making it suitable for mobile psychophysiological research
-and biometric data collection.
+high-quality GSR data (skin conductance or resistance) along with optional PPG and
+motion signals, making it suitable for mobile psychophysiological research and
+biometric data collection.
 
 \section{Project Scope}
 
 The \textbf{Shimmer3 GSR+ Android SDK/API}
-is a software toolkit that enables Android applications to communicate with
-Shimmer3 devices and capture their sensor data in real time.
+ is a software toolkit that enables Android applications to communicate with Shimmer3
+ devices and capture their sensor data in real time.
 
-The SDK abstracts the low-level Bluetooth communication and sensor packet parsing, providing developers with high-level interfaces to \textbf{connect to Shimmer3 GSR+ sensors, configure their settings, and stream GSR data live}
+The SDK abstracts the low-level Bluetooth communication and sensor packet parsing,
+providing developers with high-level interfaces to \textbf{connect to Shimmer3 GSR+
+sensors, configure their settings, and stream GSR data live}
  into an app.
 
 Using this API, an Android app can start and stop GSR signal acquisition on the
-Shimmer, adjust parameters (such as the GSR measurement range or sampling rate),
-and retrieve the sensor readings in calibrated units.
+Shimmer, adjust parameters (such as the GSR measurement range or sampling rate), and
+retrieve the sensor readings in calibrated units.
 
-The primary purpose is to facilitate real-time data collection from the Shimmer3
-on Android devices --- for example, an app can display live GSR waveforms, log
-data for later analysis, or feed the signals into algorithms (e.g. for stress
-detection).
+The primary purpose is to facilitate real-time data collection from the Shimmer3 on
+Android devices --- for example, an app can display live GSR waveforms, log data for
+later analysis, or feed the signals into algorithms (e.g.  for stress detection).
 
 The SDK supports \textbf{bi-directional communication}
-with the Shimmer: the app can send commands (to configure sensors, LED
-indicators, etc.) and the Shimmer sends back sensor packets at the chosen sample
-rate.
+ with the Shimmer: the app can send commands (to configure sensors, LED indicators,
+ etc.) and the Shimmer sends back sensor packets at the chosen sample rate.
 
-Under the hood, the Shimmer3 GSR+ uses a Bluetooth 2.1 + EDR radio (RN42 module)
-for wireless data, so the SDK manages a classic Bluetooth SPP connection.
+Under the hood, the Shimmer3 GSR+ uses a Bluetooth 2.1 + EDR radio (RN42 module) for
+wireless data, so the SDK manages a classic Bluetooth SPP connection.
 
 In recent revisions (Shimmer3 R), \textbf{Bluetooth Low Energy (BLE)}
  is also supported【12†L388-L396\textbf{, but the API abstracts these details.
 
 Overall, the scope of the SDK is to provide a}
  reliable, real-time link\\
-textit{\} between Shimmer3 hardware and Android software, enabling researchers
-to integrate GSR/EDA signals into mobile apps for data logging, biofeedback, or
+textit{\} between Shimmer3 hardware and Android software, enabling researchers to
+integrate GSR/EDA signals into mobile apps for data logging, biofeedback, or
 synchronized multimodal experiments.
 
 \section{Installation}
 
-To integrate the Shimmer SDK into your Android project, you can use \textbf{Gradle dependencies}
+To integrate the Shimmer SDK into your Android project, you can use \textbf{Gradle
+dependencies}
  or a manual library import: \begin{itemize}
 
 \item \textbf{Gradle (GitHub Packages/JFrog):}
@@ -72,23 +74,22 @@ The Shimmer Android API is distributed as AAR artifacts.
 
 First, add Shimmer's Maven repository to your Gradle settings.
 
-For example, in your module's \texttt{build.gradle} repositories section
-include: \end{itemize}
+For example, in your module's \texttt{build.gradle} repositories section include:
+\end{itemize}
 
-<!--- ---> maven { url "https://shimmersensing.jfrog.io/artifactory/ShimmerAPI"
-}
+ <!--- ---> maven { url "https://shimmersensing.jfrog.io/artifactory/ShimmerAPI" }
 
 Then add the Shimmer SDK dependencies.
 
-The Shimmer API consists of several components, including the instrument driver
-and a Bluetooth manager.
+The Shimmer API consists of several components, including the instrument driver and a
+Bluetooth manager.
 
 For instance, you can include: implementation(group: "com.shimmersensing", name:
 "ShimmerAndroidInstrumentDriver", version: "3.0.74", ext: "aar")
-implementation(group: "com.shimmersensing", name: "ShimmerBluetoothManager",
-version: "0.9.42beta") implementation(group: "com.shimmersensing", name:
-"ShimmerDriver", version: "0.9.138beta") Ensure the versions match the latest
-release (as of writing, 3.0.73/3.0.74 are recent beta versions).
+implementation(group: "com.shimmersensing", name: "ShimmerBluetoothManager", version:
+"0.9.42beta") implementation(group: "com.shimmersensing", name: "ShimmerDriver",
+version: "0.9.138beta") Ensure the versions match the latest release (as of writing,
+3.0.73/3.0.74 are recent beta versions).
 
 Including these in Gradle will download the SDK AARs from Shimmer's repository.
 (Note: you may need to supply credentials or a GitHub token if the packages are
@@ -100,70 +101,75 @@ private; refer to Shimmer's documentation on accessing their GitHub Packages.)
 Alternatively, you can obtain the Shimmer Android API library from the official
 website or source code.
 
-Shimmer provides a downloadable AAR for the Android API (e.g., \textit{ShimmerAndroidAPI-v3.0-beta.aar}).
+Shimmer provides a downloadable AAR for the Android API (e.g.,
+\textit{ShimmerAndroidAPI-v3.0-beta.aar}).
 
 If you have this file (or built the SDK from source), add it to your project's
 \texttt{libs/} folder and include it in the Gradle dependencies: \end{itemize}
 
-<!--- ---> implementation files("libs/ShimmerAndroidAPI-v3.0.aar") You should
-also include any additional required libraries that come with the SDK (for
-example, the API may depend on \texttt{ShimmerDriver} and others as separate
-AARs if not bundled).
+ <!--- ---> implementation files("libs/ShimmerAndroidAPI-v3.0.aar") You should also
+ include any additional required libraries that come with the SDK (for example, the
+ API may depend on \texttt{ShimmerDriver} and others as separate AARs if not
+ bundled).
 
 After adding, sync your Gradle project so that the SDK classes are available.
 
 \textbf{Compatibility:}
 
-The Shimmer API is designed for Android Studio (Gradle) projects and has been
-updated to support AndroidX and API level 31+.
+The Shimmer API is designed for Android Studio (Gradle) projects and has been updated
+to support AndroidX and API level 31+.
 
-If you encounter dependency issues, check the Shimmer wiki on migrating to
-AndroidX.
+If you encounter dependency issues, check the Shimmer wiki on migrating to AndroidX.
 
-It's also recommended to use Java 8 or higher and enable multidex if your app
-hits the 64K method limit (the Shimmer library is fairly large).
+It's also recommended to use Java 8 or higher and enable multidex if your app hits
+the 64K method limit (the Shimmer library is fairly large).
 
-Once installed, you can reference the Shimmer classes (in the package \texttt{com.shimmerresearch.\textit{}) in your app code.
+Once installed, you can reference the Shimmer classes (in the package
+\texttt{com.shimmerresearch.\textit{}) in your app code.
 
-The SDK comes with example modules (e.g., }shimmerBasicExample\textit{) --- reviewing those can help ensure you included everything correctly.
+The SDK comes with example modules (e.g., }shimmerBasicExample\textit{) --- reviewing
+those can help ensure you included everything correctly.
 
 \section{Permissions}
 
-Because Shimmer3 devices communicate via Bluetooth, your Android app needs to
-declare and request the appropriate permissions: \begin{itemize}
+Because Shimmer3 devices communicate via Bluetooth, your Android app needs to declare
+and request the appropriate permissions: \begin{itemize}
 
 \item \textbf{Bluetooth Permissions:}
 
 In the app \textbf{manifest}
-, include \texttt{<uses-permission android:name="android.permission.BLUETOOTH"
-/>} and \texttt{<uses-permission
-android:name="android.permission.BLUETOOTH_ADMIN" />} (for older Android
-versions).
+, include \texttt{<uses-permission android:name="android.permission.BLUETOOTH" />}
+and \texttt{<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />}
+(for older Android versions).
 
 For \textbf{Android 12 (API 31)}
-and above, you must instead declare the new permissions \texttt{<uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation"/>} and \texttt{<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />} to scan for and connect to Bluetooth devices
-.
-(If your app will }advertise\textit{ or host a GATT server, also add \texttt{BLUETOOTH_ADVERTISE}.) The \texttt{neverForLocation} flag on SCAN indicates you are not using Bluetooth scans to derive location information.
+ and above, you must instead declare the new permissions \texttt{<uses-permission
+ android:name="android.permission.BLUETOOTH_SCAN"
+ android:usesPermissionFlags="neverForLocation"/>} and \texttt{<uses-permission
+ android:name="android.permission.BLUETOOTH_CONNECT" />} to scan for and connect to
+ Bluetooth devices.  (If your app will }advertise\textit{ or host a GATT server, also
+ add \texttt{BLUETOOTH_ADVERTISE}.) The \texttt{neverForLocation} flag on SCAN
+ indicates you are not using Bluetooth scans to derive location information.
 
 \item \textbf{Location Permission:}
 
-On Android 6.0 through Android 12, the system requires location access for
-Bluetooth device discovery.
+On Android 6.0 through Android 12, the system requires location access for Bluetooth
+device discovery.
 
 This is a security measure because BLE scans can be used to infer location.
 
 \textbf{If your Shimmer integration performs device scanning}
-(i.e., finding nearby unpaired Shimmer devices), you need to request
-\texttt{ACCESS_FINE_LOCATION} (or coarse) at runtime.
+ (i.e., finding nearby unpaired Shimmer devices), you need to request
+ \texttt{ACCESS_FINE_LOCATION} (or coarse) at runtime.
 
-In Android 12+, if you use the new Bluetooth permissions, you technically
-declare that scans are not for location (via the flag above), but in practice
-you should still prompt the user to enable location services during a BLE scan,
-as it may be needed for discovery mode.
+In Android 12+, if you use the new Bluetooth permissions, you technically declare
+that scans are not for location (via the flag above), but in practice you should
+still prompt the user to enable location services during a BLE scan, as it may be
+needed for discovery mode.
 
 If your app only connects to \textbf{already-paired devices by known MAC address}
-, you may not need location permission; however, it's common to include a
-scanning feature to let users pick their Shimmer device.
+, you may not need location permission; however, it's common to include a scanning
+feature to let users pick their Shimmer device.
 
 \item \textbf{Enable Bluetooth:}
 
@@ -180,86 +186,82 @@ This isn't a "permission" per se, but a necessary user action.
 
 \item \textbf{Other Permissions:}
 
-Generally, no other special permissions are needed solely for using the Shimmer
-API.
+Generally, no other special permissions are needed solely for using the Shimmer API.
 
-The GSR+ sensor streams data via Bluetooth; it does not require camera, storage,
-etc. (Unless your app separately needs those for other features, like saving
-files or using the phone camera, which would require their own permissions.)
-\end{itemize}
+The GSR+ sensor streams data via Bluetooth; it does not require camera, storage, etc.
+(Unless your app separately needs those for other features, like saving files or
+using the phone camera, which would require their own permissions.) \end{itemize}
 
  \textbf{Requesting at Runtime:}
 
 Remember that for \textbf{dangerous permissions}
-like \texttt{BLUETOOTH_SCAN}, \texttt{BLUETOOTH_CONNECT}, and
-\texttt{ACCESS_FINE_LOCATION}, you must request them at runtime on Android 6.0+.
+ like \texttt{BLUETOOTH_SCAN}, \texttt{BLUETOOTH_CONNECT}, and
+ \texttt{ACCESS_FINE_LOCATION}, you must request them at runtime on Android 6.0+.
 
-This means you should check \texttt{checkSelfPermission} and if not granted,
-call \texttt{requestPermissions(...)} to ask the user.
+This means you should check \texttt{checkSelfPermission} and if not granted, call
+\texttt{requestPermissions(...)} to ask the user.
 
 The Shimmer SDK's example app demonstrates this --- for instance, it checks for
-\texttt{BLUETOOTH_CONNECT} and location permission on startup and requests them
-if needed.
+\texttt{BLUETOOTH_CONNECT} and location permission on startup and requests them if
+needed.
 
-Ensure the user grants permissions }before\textit{ you attempt to scan or connect, or your calls will fail (and likely throw an exception or return no results).
+Ensure the user grants permissions }before\textit{ you attempt to scan or connect, or
+your calls will fail (and likely throw an exception or return no results).
 
 \section{Getting Started (Connecting & Streaming)}
 
-With the SDK integrated and permissions in place, you can now connect to a
-Shimmer3 GSR+ and begin streaming data.
+With the SDK integrated and permissions in place, you can now connect to a Shimmer3
+GSR+ and begin streaming data.
 
 The general workflow is: \textbf{1.
 
 Initialize the Shimmer object or manager:}
 
-The SDK provides a \texttt{Shimmer} class (representing a device connection) and
-a higher-level \texttt{ShimmerBluetoothManagerAndroid} for multi-device
-management.
+The SDK provides a \texttt{Shimmer} class (representing a device connection) and a
+higher-level \texttt{ShimmerBluetoothManagerAndroid} for multi-device management.
 
 For a single device, you can directly use \texttt{Shimmer}.
 
 Typically you instantiate it with a constructor specifying the context, a data
 handler, device name, sampling rate, and sensor settings.
 
-For example: // Create a Handler to process incoming data (runs on UI thread in
-this example) Handler shimmerHandler = new Handler(Looper.getMainLooper) {
-@Override public void handleMessage(Message msg) { if (msg.what ==
-Shimmer.MESSAGE_READ) { // A new sensor data packet was received ObjectCluster
-cluster = (ObjectCluster) msg.obj; // (Data extraction shown below) } else if
-(msg.what == Shimmer.MESSAGE_STATE_CHANGE) { // Connection state updates
-(connected, disconnected, etc.) } } }; // Configure which sensors to enable on
-the Shimmer (GSR, plus PPG in this case) int sensorMask = Shimmer.SENSOR_GSR |
-Shimmer.SENSOR_HEART; // GSR and PPG (Pulse) // Choose GSR range setting (0–3
-for fixed ranges, or 4 for auto-range) int gsrRange = 4; // 4 = Auto Range (the
-device will auto-select the best range) // Instantiate the Shimmer device object
-Shimmer shimmerDevice = new Shimmer( getApplicationContext, // Android context
-shimmerHandler, // Handler for data and events "ShimmerGSR", // Device nickname
-(can be any string) 128.0, // sampling rate in Hz (e.g. 128Hz) 0, // accel range
-(not used here, 0 = ±2g default) gsrRange, // GSR range setting sensorMask, //
-sensors to enable (bitmask) false // continuous sync (for packet syncing, false
-is fine) ); In the above code, we prepared a \texttt{Handler} to receive
-messages from the Shimmer API --- the SDK will send sensor data through
-\texttt{MESSAGE_READ} messages, containing an \texttt{ObjectCluster} with the
-sensor values.
+For example: // Create a Handler to process incoming data (runs on UI thread in this
+example) Handler shimmerHandler = new Handler(Looper.getMainLooper) { @Override
+public void handleMessage(Message msg) { if (msg.what == Shimmer.MESSAGE_READ) { // A
+new sensor data packet was received ObjectCluster cluster = (ObjectCluster) msg.obj;
+// (Data extraction shown below) } else if (msg.what == Shimmer.MESSAGE_STATE_CHANGE)
+{ // Connection state updates (connected, disconnected, etc.) } } }; // Configure
+which sensors to enable on the Shimmer (GSR, plus PPG in this case) int sensorMask =
+Shimmer.SENSOR_GSR | Shimmer.SENSOR_HEART; // GSR and PPG (Pulse) // Choose GSR range
+setting (0–3 for fixed ranges, or 4 for auto-range) int gsrRange = 4; // 4 = Auto
+Range (the device will auto-select the best range) // Instantiate the Shimmer device
+object Shimmer shimmerDevice = new Shimmer( getApplicationContext, // Android context
+shimmerHandler, // Handler for data and events "ShimmerGSR", // Device nickname (can
+be any string) 128.0, // sampling rate in Hz (e.g.  128Hz) 0, // accel range (not
+used here, 0 = ±2g default) gsrRange, // GSR range setting sensorMask, // sensors to
+enable (bitmask) false // continuous sync (for packet syncing, false is fine) ); In
+the above code, we prepared a \texttt{Handler} to receive messages from the Shimmer
+API --- the SDK will send sensor data through \texttt{MESSAGE_READ} messages,
+containing an \texttt{ObjectCluster} with the sensor values.
 
 We set the \textbf{sampling rate}
  to 128 Hz (common for EDA research).
 
-We enabled the GSR sensor and the PPG ("Heart") sensor; the Shimmer's sensor
-bitmap constants like \texttt{SENSOR_GSR} are ORed together to enable multiple
-channels.
+We enabled the GSR sensor and the PPG ("Heart") sensor; the Shimmer's sensor bitmap
+constants like \texttt{SENSOR_GSR} are ORed together to enable multiple channels.
 
-We also set \texttt{gsrRange = 4} which tells the Shimmer to use its \textbf{auto-ranging}
-feature for GSR (meaning the device will switch among its 4 hardware resistance
-ranges to best capture the signal without saturation).
+We also set \texttt{gsrRange = 4} which tells the Shimmer to use its
+\textbf{auto-ranging}
+ feature for GSR (meaning the device will switch among its 4 hardware resistance
+ ranges to best capture the signal without saturation).
 
-If needed, you could choose a fixed range (0 through 3 corresponding to 10
-kΩ---56 kΩ, 56---220 kΩ, 220---680 kΩ, or 680 kΩ---4.7 MΩ respectively).
+If needed, you could choose a fixed range (0 through 3 corresponding to 10 kΩ---56
+kΩ, 56---220 kΩ, 220---680 kΩ, or 680 kΩ---4.7 MΩ respectively).
 
 For most use cases, auto-range is convenient.
 
-The accelerometer range parameter is not relevant unless you enable motion
-sensors (we left it at default).
+The accelerometer range parameter is not relevant unless you enable motion sensors
+(we left it at default).
 
 The \texttt{Shimmer} object now encapsulates our configuration for the device.
 
@@ -267,21 +269,21 @@ The \texttt{Shimmer} object now encapsulates our configuration for the device.
 
 Connect to the Shimmer device:}
 
-Each Shimmer has a Bluetooth MAC address (e.g., printed on the device or
-discoverable via scanning).
+Each Shimmer has a Bluetooth MAC address (e.g., printed on the device or discoverable
+via scanning).
 
 To connect, call the \texttt{connect} method with the address.
 
-For example: String deviceMAC = "00:07:80:4D:2B:01"; // replace with your
-Shimmer's MAC shimmerDevice.connect(deviceMAC, "default"); The second parameter
-\texttt{"default"} specifies which Bluetooth library to use (the Shimmer API
-supports an alternative "gerdavax" library for certain older devices; for
-Shimmer3, \texttt{"default"} is appropriate).
+For example: String deviceMAC = "00:07:80:4D:2B:01"; // replace with your Shimmer's
+MAC shimmerDevice.connect(deviceMAC, "default"); The second parameter
+\texttt{"default"} specifies which Bluetooth library to use (the Shimmer API supports
+an alternative "gerdavax" library for certain older devices; for Shimmer3,
+\texttt{"default"} is appropriate).
 
 This will initiate a Bluetooth SPP connection in the background.
 
-The Shimmer's internal firmware will perform a handshake and initialization
-sequence once the link is established.
+The Shimmer's internal firmware will perform a handshake and initialization sequence
+once the link is established.
 
 The \texttt{shimmerHandler} we provided will get a \texttt{MESSAGE_STATE_CHANGE}
 message when the connection state updates.
@@ -296,22 +298,22 @@ You might wait for this state before allowing the user to start streaming.
 If your Shimmer device is not yet \textbf{paired}
  with the Android device, the connection attempt may fail.
 
-It's often best to pair via Android Settings or a scan dialog first (see }Troubleshooting\textit{ below for pairing instructions).
+It's often best to pair via Android Settings or a scan dialog first (see
+}Troubleshooting\textit{ below for pairing instructions).
 
 The Shimmer3 uses a default PIN code \textbf{1234}
-for pairing --- the SDK can initiate pairing if needed (it will prompt for the
-PIN).
+ for pairing --- the SDK can initiate pairing if needed (it will prompt for the PIN).
 
 \textbf{3.
 
 Start streaming data:}
 
-Once connected (i.e., in an initialized state), you can instruct the Shimmer to
-begin streaming sensor data.
+Once connected (i.e., in an initialized state), you can instruct the Shimmer to begin
+streaming sensor data.
 
-This is done by calling: shimmerDevice.startStreaming; After this call, the
-Shimmer hardware starts sampling its sensors at the configured rate (128 Hz) and
-sends packets to the phone.
+This is done by calling: shimmerDevice.startStreaming; After this call, the Shimmer
+hardware starts sampling its sensors at the configured rate (128 Hz) and sends
+packets to the phone.
 
 The \texttt{shimmerHandler} will begin receiving \texttt{MESSAGE_READ} messages
 continuously (multiple per second, depending on rate).
@@ -319,12 +321,11 @@ continuously (multiple per second, depending on rate).
 Each \texttt{MESSAGE_READ} contains an \texttt{ObjectCluster} object, which is
 essentially a timestamped bundle of all sensor readings captured at that moment.
 
-For example, if GSR and PPG are enabled, each packet will include a GSR
-measurement and a PPG measurement (and a timestamp, plus any other active
-channels).
+For example, if GSR and PPG are enabled, each packet will include a GSR measurement
+and a PPG measurement (and a timestamp, plus any other active channels).
 
-The handler's job is to extract the values and use them (e.g., update UI or save
-to file).
+The handler's job is to extract the values and use them (e.g., update UI or save to
+file).
 
 \textbf{4.
 
@@ -339,32 +340,34 @@ For GSR, the key sensor name is \textbf{"GSR"}
  for the calibrated skin resistance, and "GSR Raw" for the raw ADC reading.
 
 You can retrieve data by name, for example: @Override public void
-handleMessage(Message msg) { if (msg.what == Shimmer.MESSAGE_READ) {
-ObjectCluster cluster = (ObjectCluster) msg.obj; // Get calibrated GSR value (in
-kΩ by default) Collection<FormatCluster> gsrFormats =
-cluster.getData(Configuration.Shimmer3.ObjectClusterSensorName.GSR); if
-(gsrFormats != null && !gsrFormats.isEmpty) { FormatCluster calibratedGsr =
+handleMessage(Message msg) { if (msg.what == Shimmer.MESSAGE_READ) { ObjectCluster
+cluster = (ObjectCluster) msg.obj; // Get calibrated GSR value (in kΩ by default)
+Collection<FormatCluster> gsrFormats =
+cluster.getData(Configuration.Shimmer3.ObjectClusterSensorName.GSR); if (gsrFormats
+!= null && !gsrFormats.isEmpty) { FormatCluster calibratedGsr =
 ObjectCluster.returnFormatCluster(gsrFormats, "CAL"); double gsrValue =
-calibratedGsr.data; // gsrValue is the skin resistance in kilo-ohms } //
-(Likewise, you could get PPG in a similar way using SensorName.HEART or PPG) } }
+calibratedGsr.data; // gsrValue is the skin resistance in kilo-ohms } // (Likewise,
+you could get PPG in a similar way using SensorName.HEART or PPG) } }
 
-In the above snippet, \texttt{cluster.getData(...)} returns all formats of the
-GSR measurement.
+In the above snippet, \texttt{cluster.getData(...)} returns all formats of the GSR
+measurement.
 
 We then filtered for the calibrated value ("CAL").
 
 The \textbf{Shimmer API auto-calibrates GSR}
  using an internal formula to convert the raw ADC reading to resistance in kΩ.
 
-For example, if the raw reading is converted using the calibration factors }p1\textit{ and }p2\textit{, the formula is \texttt{GSR_kOhms = (1 / (p1}raw + p2)) \textit{ 1000}, yielding a result in kilo-ohms.
+For example, if the raw reading is converted using the calibration factors
+}p1\textit{ and }p2\textit{, the formula is \texttt{GSR_kOhms = (1 / (p1}raw + p2))
+\textit{ 1000}, yielding a result in kilo-ohms.
 
-Thus, \texttt{gsrValue} above would be, say, "432.5" meaning 432.5 kΩ skin
-resistance at that moment.
+Thus, \texttt{gsrValue} above would be, say, "432.5" meaning 432.5 kΩ skin resistance
+at that moment.
 
 Higher conductance (sweatier skin) corresponds to lower resistance.
 
-If you prefer skin conductance in microsiemens (µS), you can convert by σ =
-(1/R) \} 1e6, where R is in ohms --- e.g., 432.5 kΩ = 2.31 µS.
+If you prefer skin conductance in microsiemens (µS), you can convert by σ = (1/R) \}
+1e6, where R is in ohms --- e.g., 432.5 kΩ = 2.31 µS.
 
 The SDK focuses on resistance, but you can derive conductance easily in
 post-processing.
@@ -377,7 +380,9 @@ Typically, you can retrieve the device's timestamp with
 
 This represents the Shimmer's internal clock for the sample.
 
-If synchronizing with other data (like phone sensors or multiple Shimmers), you may use this along with system time --- see \textit{Timestamping} below or Shimmer's guidance on synchronization.
+If synchronizing with other data (like phone sensors or multiple Shimmers), you may
+use this along with system time --- see \textit{Timestamping} below or Shimmer's
+guidance on synchronization.
 
 \textbf{5.
 
@@ -387,11 +392,11 @@ To stop streaming, call \texttt{shimmerDevice.stopStreaming}.
 
 You might do this when the user ends a recording session.
 
-After stopping, you can keep the device connected (perhaps to start again), or
-you can disconnect by \texttt{shimmerDevice.disconnect}.
+After stopping, you can keep the device connected (perhaps to start again), or you
+can disconnect by \texttt{shimmerDevice.disconnect}.
 
-It's good practice to disconnect in a \texttt{onPause} or \texttt{onDestroy} if
-your app is closing, to free the Bluetooth channel.
+It's good practice to disconnect in a \texttt{onPause} or \texttt{onDestroy} if your
+app is closing, to free the Bluetooth channel.
 
 The Shimmer device will automatically stop sampling when disconnected.
 
@@ -399,21 +404,21 @@ The Shimmer device will automatically stop sampling when disconnected.
 
 The simplest usage pattern for one device is: Shimmer shimmer = new Shimmer(ctx,
 handler, ...config...); shimmer.connect(macAddress, "default"); // wait for
-MSG_STATE_FULLY_INITIALIZED (in handler) shimmer.startStreaming; // ... receive
-data in handler ... shimmer.stopStreaming; shimmer.disconnect; For multiple
-devices, the SDK provides \texttt{ShimmerBluetoothManagerAndroid} which can
-manage a collection of Shimmer objects and handle connections simultaneously.
+MSG_STATE_FULLY_INITIALIZED (in handler) shimmer.startStreaming; // ...  receive data
+in handler ...  shimmer.stopStreaming; shimmer.disconnect; For multiple devices, the
+SDK provides \texttt{ShimmerBluetoothManagerAndroid} which can manage a collection of
+Shimmer objects and handle connections simultaneously.
 
-In multi-device mode, you would create a manager, add each \texttt{Shimmer} to
-it, and use the manager's connect/start commands.
+In multi-device mode, you would create a manager, add each \texttt{Shimmer} to it,
+and use the manager's connect/start commands.
 
-The principle is similar but with more bookkeeping (ensuring each device has a
-unique handler or identifying the source of each message --- the ObjectCluster
-contains the device MAC, so you can differentiate samples).
+The principle is similar but with more bookkeeping (ensuring each device has a unique
+handler or identifying the source of each message --- the ObjectCluster contains the
+device MAC, so you can differentiate samples).
 
 The \textbf{Shimmer API does support multi-streaming}
-(e.g., two Shimmer GSR+ units at once) provided the Android device can handle
-the Bluetooth throughput.
+ (e.g., two Shimmer GSR+ units at once) provided the Android device can handle the
+ Bluetooth throughput.
 
 \section{Data Handling (GSR Data Format and Visualization)}
 
@@ -421,46 +426,44 @@ the Bluetooth throughput.
  GSR data from the Shimmer3 GSR+ can be obtained in raw or calibrated form.
 
 The raw signal is essentially the ADC reading from a resistor network (12-bit or
-16-bit depending on firmware), and the calibrated form is the skin resistance in
-kΩ as discussed.
+16-bit depending on firmware), and the calibrated form is the skin resistance in kΩ
+as discussed.
 
-When using the SDK's high-level methods (like
-\texttt{ObjectCluster.getData("GSR")}), you are typically getting the calibrated
-resistance.
+When using the SDK's high-level methods (like \texttt{ObjectCluster.getData("GSR")}),
+you are typically getting the calibrated resistance.
 
 If needed, you can also retrieve \textbf{raw GSR}
  by using the key \texttt{"GSR Raw"} or by looking for the format labeled "RAW".
 
 The Shimmer device also computes an intermediate value called \textbf{GSR Resistance}
-(sometimes labeled \texttt{"GSR Res"} in older APIs) which may be the same as
-the calibrated GSR in most contexts.
+ (sometimes labeled \texttt{"GSR Res"} in older APIs) which may be the same as the
+ calibrated GSR in most contexts.
 
 The \textbf{GSR range setting}
-affects the analog front-end gain: if you manually choose a range (0---3), the
-raw values will have different scaling.
+ affects the analog front-end gain: if you manually choose a range (0---3), the raw
+ values will have different scaling.
 
-In auto-range mode, the Shimmer's firmware will dynamically switch ranges and
-apply the correct calibration to always output a consistent resistance value.
+In auto-range mode, the Shimmer's firmware will dynamically switch ranges and apply
+the correct calibration to always output a consistent resistance value.
 
-This means the \texttt{ObjectCluster} "CAL" GSR values should already reflect
-the true skin resistance regardless of range.
+This means the \texttt{ObjectCluster} "CAL" GSR values should already reflect the
+true skin resistance regardless of range.
 
 \textbf{Packet Structure:}
 
-Each data packet from Shimmer3 contains a timestamp and the enabled sensor
-channels.
+Each data packet from Shimmer3 contains a timestamp and the enabled sensor channels.
 
 For GSR+ with PPG, a packet includes: timestamp, GSR raw, GSR resistance (or
-calibrated), and PPG value (raw or perhaps a derived HR if using certain
-firmware).
+calibrated), and PPG value (raw or perhaps a derived HR if using certain firmware).
 
-These are represented in the \texttt{ObjectCluster} as entries such as \textit{Time Stamp}, \textit{GSR}, \textit{PPG} etc.
+These are represented in the \texttt{ObjectCluster} as entries such as \textit{Time
+Stamp}, \textit{GSR}, \textit{PPG} etc.
 
-The timestamp is typically in milliseconds relative to device start, and it
-resets when you stop/start streaming.
+The timestamp is typically in milliseconds relative to device start, and it resets
+when you stop/start streaming.
 
-If precise alignment with phone time is needed, you might record a reference
-(e.g., note SystemClock when streaming started and correlate).
+If precise alignment with phone time is needed, you might record a reference (e.g.,
+note SystemClock when streaming started and correlate).
 
 \textbf{Accessing GSR Values:}
 
@@ -469,15 +472,14 @@ We showed above how to get the GSR value in code.
 Another approach the SDK allows is using the configuration constants.
 
 For example, the SDK defines
-\texttt{Configuration.Shimmer3.ObjectClusterSensorName.GSR} as the standard key
-for GSR.
+\texttt{Configuration.Shimmer3.ObjectClusterSensorName.GSR} as the standard key for
+GSR.
 
-You can use helper methods like
-\texttt{ObjectCluster.returnFormatCluster(cluster, "GSR", "CAL")} to directly
-get the calibrated number.
+You can use helper methods like \texttt{ObjectCluster.returnFormatCluster(cluster,
+"GSR", "CAL")} to directly get the calibrated number.
 
-If you needed the raw ADC for some reason (e.g., for custom filtering), you
-could request \texttt{"GSR", "RAW"} similarly.
+If you needed the raw ADC for some reason (e.g., for custom filtering), you could
+request \texttt{"GSR", "RAW"} similarly.
 
 But generally, the calibrated GSR is what you'll use for analysis (in kΩ).
 
@@ -489,12 +491,12 @@ A simple method is to create a CSV file.
 
 For example, write a header: \texttt{Time(ms), GSR_kOhm, PPG}.
 
-Then on each \texttt{MESSAGE_READ}, get the timestamp and sensor values, and
-append a line.
+Then on each \texttt{MESSAGE_READ}, get the timestamp and sensor values, and append a
+line.
 
-You could use the device's timestamp or the phone's System.currentTimeMillis;
-each has pros/cons (device timestamp is monotonic from stream start, while
-system time aligns with real-world clock).
+You could use the device's timestamp or the phone's System.currentTimeMillis; each
+has pros/cons (device timestamp is monotonic from stream start, while system time
+aligns with real-world clock).
 
 The Shimmer examples show writing CSV lines by extracting values from the
 ObjectCluster.
@@ -503,86 +505,86 @@ If streaming at 128 Hz, note that that is 128 lines per second; using a buffered
 writer or batching writes (e.g., write 128 lines at a time) is wise to avoid I/O
 overhead.
 
-Also consider the data volume: GSR is just one number per sample, so 128 Hz \~
-128 samples/sec is quite low (easily under 10 KB/s).
+Also consider the data volume: GSR is just one number per sample, so 128 Hz \~ 128
+samples/sec is quite low (easily under 10 KB/s).
 
 Even with PPG and accel, it remains manageable.
 
 \textbf{Visualization:}
 
-To visualize GSR in real time, you can update a UI element (like a graph view)
-each time a new sample comes in.
+To visualize GSR in real time, you can update a UI element (like a graph view) each
+time a new sample comes in.
 
 However, updating on every single sample at 128 Hz can be too fast for smooth UI
 drawing.
 
 A common approach is to buffer a few samples or downsample for display.
 
-For instance, update the graph at, say, 10 Hz with the latest value or an
-average of the last 10 samples.
+For instance, update the graph at, say, 10 Hz with the latest value or an average of
+the last 10 samples.
 
 This gives a responsive display without overloading the UI thread.
 
-The Shimmer API's \texttt{PlotManager} (if included) might assist in plotting
-data streams.
+The Shimmer API's \texttt{PlotManager} (if included) might assist in plotting data
+streams.
 
 Otherwise, you can use any chart library or even a simple custom Canvas drawing.
 
-Typically, GSR signals are displayed as a slowly varying waveform; you may plot
-time on the X-axis and resistance (or conductance) on the Y-axis.
+Typically, GSR signals are displayed as a slowly varying waveform; you may plot time
+on the X-axis and resistance (or conductance) on the Y-axis.
 
 The values can range widely (from \~10 kΩ (high arousal) to \~1000 kΩ (very
-calm/dry), depending on the person and electrode contact), often plotted in a
-scaled manner.
+calm/dry), depending on the person and electrode contact), often plotted in a scaled
+manner.
 
 \textbf{Processing:}
 
 If you intend to do real-time processing (e.g., smoothing the GSR or detecting
 peaks), you can do so in the handler or, better, offload to a background thread.
 
-For example, you might maintain a rolling average to compute a baseline and
-detect phasic responses (sudden drops in resistance indicating a skin
-conductance response).
+For example, you might maintain a rolling average to compute a baseline and detect
+phasic responses (sudden drops in resistance indicating a skin conductance response).
 
-The SDK doesn't provide specific algorithms for EDA analysis --- you would
-implement those or use third-party libraries.
+The SDK doesn't provide specific algorithms for EDA analysis --- you would implement
+those or use third-party libraries.
 
 But it gives you the raw data needed for such analysis.
 
 \textbf{Multiple Channels:}
 
-If you have enabled other channels (like PPG or accelerometer), the
-ObjectCluster will carry those too.
+If you have enabled other channels (like PPG or accelerometer), the ObjectCluster
+will carry those too.
 
 The extraction is analogous: e.g., \texttt{cluster.getData("PPG")} for the pulse
 sensor reading.
 
 PPG from the GSR+ unit comes as a raw infrared light intensity value.
 
-You could process it to compute heart rate or use the Shimmer's EXG module for
-HR if available.
+You could process it to compute heart rate or use the Shimmer's EXG module for HR if
+available.
 
-Ensure to label and log each channel accordingly so data columns don't get mixed
-up.
+Ensure to label and log each channel accordingly so data columns don't get mixed up.
 
-Finally, if you wish to visualize data after the fact, the CSV logs can be
-imported into tools like Excel, MATLAB, or Python for plotting.
+Finally, if you wish to visualize data after the fact, the CSV logs can be imported
+into tools like Excel, MATLAB, or Python for plotting.
 
 The \textbf{Shimmer Consensys}
-software is another option for live viewing, but since you're integrating into
-your own app, your app takes over that role.
+ software is another option for live viewing, but since you're integrating into your
+ own app, your app takes over that role.
 
 \section{Integration with \texttt{bucika_gsr}
 
 App Architecture}
 
-Integrating the Shimmer3 GSR+ SDK into the \texttt{bucika_gsr} \textbf{Android application}
+Integrating the Shimmer3 GSR+ SDK into the \texttt{bucika_gsr} \textbf{Android
+application}
  involves fitting the streaming logic into the app's existing architecture.
 
 In our project, the app is structured as a multimodal data collection system
 (combining thermal camera, RGB camera, and GSR sensor inputs).
 
-The Shimmer integration is handled by a dedicated module --- think of it as a \textbf{GSR Sensor Service}
+The Shimmer integration is handled by a dedicated module --- think of it as a
+\textbf{GSR Sensor Service}
  --- that manages the Shimmer device connection and data flow.
 
 There are two common approaches to incorporate this: \begin{itemize}
@@ -590,169 +592,170 @@ There are two common approaches to incorporate this: \begin{itemize}
 \item \textbf{Background Service Approach:}
 
 You can create an Android Service (either started or bound service) whose
-responsibility is to connect to the Shimmer and keep receiving data, independent
-of UI lifecycle.
+responsibility is to connect to the Shimmer and keep receiving data, independent of
+UI lifecycle.
 
-This is useful because GSR data collection might need to run continuously even
-if the user navigates away from the UI.
+This is useful because GSR data collection might need to run continuously even if the
+user navigates away from the UI.
 
-In \texttt{bucika_gsr}, for example, one could implement a
-\texttt{GsrCaptureService} that starts when a recording session begins.
+In \texttt{bucika_gsr}, for example, one could implement a \texttt{GsrCaptureService}
+that starts when a recording session begins.
 
-This service would initialize the Shimmer (as shown above), handle the
-connection, and start streaming.
+This service would initialize the Shimmer (as shown above), handle the connection,
+and start streaming.
 
-The service could then broadcast the incoming data or use a callback interface
-to pass GSR readings to other app components (such as a UI fragment that
-displays the values, or a logger that writes to file).
+The service could then broadcast the incoming data or use a callback interface to
+pass GSR readings to other app components (such as a UI fragment that displays the
+values, or a logger that writes to file).
 
-Running as a service ensures the data acquisition isn't interrupted by
-configuration changes or UI closures.
+Running as a service ensures the data acquisition isn't interrupted by configuration
+changes or UI closures.
 
-In practice, the Shimmer API even provides a helper (\texttt{ShimmerService}
-class in the SDK) that could be adapted --- but a custom implementation gives
-more control.
+In practice, the Shimmer API even provides a helper (\texttt{ShimmerService} class in
+the SDK) that could be adapted --- but a custom implementation gives more control.
 
-If using a service, consider marking it as a foreground service if it needs to
-run for long periods (to avoid being killed by the system; you'd show a
-notification during recording).
+If using a service, consider marking it as a foreground service if it needs to run
+for long periods (to avoid being killed by the system; you'd show a notification
+during recording).
 
 \item \textbf{Dependency Injection (DI) Approach:}
 
-If your app uses a dependency injection framework (like Dagger/Hilt), you can
-set up the Shimmer components to be provided as singletons and injected where
-needed.
+If your app uses a dependency injection framework (like Dagger/Hilt), you can set up
+the Shimmer components to be provided as singletons and injected where needed.
 
 For instance, you might define a \texttt{ShimmerModule} that provides a
 \texttt{ShimmerBluetoothManagerAndroid} instance.
 
-The \texttt{bucika_gsr} app could have a singleton manager allowing multiple
-parts of the app to obtain GSR data.
+The \texttt{bucika_gsr} app could have a singleton manager allowing multiple parts of
+the app to obtain GSR data.
 
 You could also inject a \texttt{ShimmerRecorder} object (see below) into, say, a
 ViewModel that coordinates the data recording.
 
-DI ensures that there's a single, app-wide source of Shimmer data that any
-component can access (e.g., the UI layer observing LiveData for GSR, and a
-repository layer saving data).
+DI ensures that there's a single, app-wide source of Shimmer data that any component
+can access (e.g., the UI layer observing LiveData for GSR, and a repository layer
+saving data).
 
 \end{itemize}
 
-In our architecture, we designed a \texttt{ShimmerRecorder} class to encapsulate
-all Shimmer functionality (scanning, connecting, streaming, etc.).
+In our architecture, we designed a \texttt{ShimmerRecorder} class to encapsulate all
+Shimmer functionality (scanning, connecting, streaming, etc.).
 
 This class can be treated as a \textbf{module}
  in the app's logic.
 
-For example, the \texttt{ShimmerRecorder} might be injected into an Activity or
-a higher-level controller that orchestrates the various sensors during a
-recording session.
+For example, the \texttt{ShimmerRecorder} might be injected into an Activity or a
+higher-level controller that orchestrates the various sensors during a recording
+session.
 
-When the user starts a session, the app calls methods on
-\texttt{ShimmerRecorder} like \texttt{connectDevices} and
-\texttt{startRecording}.
+When the user starts a session, the app calls methods on \texttt{ShimmerRecorder}
+like \texttt{connectDevices} and \texttt{startRecording}.
 
-Internally, the ShimmerRecorder uses the SDK to manage the connection(s) and
-data.
+Internally, the ShimmerRecorder uses the SDK to manage the connection(s) and data.
 
-It might spin up threads or use coroutines to handle the incoming data stream,
-and it provides callbacks or LiveData updates with the latest GSR values.
+It might spin up threads or use coroutines to handle the incoming data stream, and it
+provides callbacks or LiveData updates with the latest GSR values.
 
 By isolating the Shimmer logic in this module, the rest of the app can remain
-agnostic to Bluetooth specifics --- they just receive GSR data updates (for
-instance, the Synchronization manager in \texttt{bucika_gsr} can then timestamp
-these alongside camera frames).
+agnostic to Bluetooth specifics --- they just receive GSR data updates (for instance,
+the Synchronization manager in \texttt{bucika_gsr} can then timestamp these alongside
+camera frames).
 
 \textbf{Placement in Architecture:}
 
-In the \texttt{bucika_gsr} app (which features multiple modalities), the Shimmer
-GSR module runs in parallel with the camera modules.
+In the \texttt{bucika_gsr} app (which features multiple modalities), the Shimmer GSR
+module runs in parallel with the camera modules.
 
 All are coordinated by a central \textbf{Synchronization Manager}
  that ensures data from different threads are timestamped and aligned.
 
-Concretely, the GSR module (service) receives each Shimmer sample, immediately
-tags it with a timestamp from a common clock (e.g.,
-\texttt{SystemClock.elapsedRealtimeNanos} when received)(see implementation
-details in Appendix~F), and then either logs it or streams it out.
+Concretely, the GSR module (service) receives each Shimmer sample, immediately tags
+it with a timestamp from a common clock (e.g.,
+\texttt{SystemClock.elapsedRealtimeNanos} when received)(see implementation details
+in Appendix~F), and then either logs it or streams it out.
 
-In our implementation, because the Shimmer provides its own timestamp, we could
-use that and then map it to the common timeline (e.g., subtract the start
-offset), but a simpler method we adopted is to use the phone's time on reception
-since Bluetooth latency is low and consistent (on the order of 10---20 ms; see
-implementation details in Appendix~F).
+In our implementation, because the Shimmer provides its own timestamp, we could use
+that and then map it to the common timeline (e.g., subtract the start offset), but a
+simpler method we adopted is to use the phone's time on reception since Bluetooth
+latency is low and consistent (on the order of 10---20 ms; see implementation details
+in Appendix~F).
 
-Either way, the app's architecture treats the Shimmer data as another
-asynchronous data source feeding into the overall dataset.
+Either way, the app's architecture treats the Shimmer data as another asynchronous
+data source feeding into the overall dataset.
 
 \textbf{Service Modules vs DI:}
 
-Note that these approaches are not mutually exclusive --- you can use DI \textit{and} have the actual work done in a service.
+Note that these approaches are not mutually exclusive --- you can use DI \textit{and}
+have the actual work done in a service.
 
 For example, you might inject the \texttt{ShimmerRecorder} into a
 \texttt{RecordingService} that runs in the background.
 
-The \texttt{RecordingService} would call \texttt{shimmerRecorder.start} and
-handle the lifecycle (stop on end, handle errors, etc.), while the DI ensures
-that any other component (like an Activity or a ViewModel) can get references to
-the same recorder to query status or get real-time updates.
+The \texttt{RecordingService} would call \texttt{shimmerRecorder.start} and handle
+the lifecycle (stop on end, handle errors, etc.), while the DI ensures that any other
+component (like an Activity or a ViewModel) can get references to the same recorder
+to query status or get real-time updates.
 
-If using Hilt, the service could be annotated with \texttt{@AndroidEntryPoint}
-and inject a ViewModel-scoped recorder.
+If using Hilt, the service could be annotated with \texttt{@AndroidEntryPoint} and
+inject a ViewModel-scoped recorder.
 
 \textbf{Integration Points in bucika_gsr:}
 
-Depending on how \texttt{bucika_gsr} is structured, the Shimmer connection might fit in as follows: - If there is a \textbf{controller class}
-for sensors (like a \texttt{SessionManager}), that class would instantiate or obtain the Shimmer SDK object at start, then trigger connect/stream
-. - If using an MVVM pattern, a \textbf{ViewModel}
+Depending on how \texttt{bucika_gsr} is structured, the Shimmer connection might fit
+in as follows: - If there is a \textbf{controller class}
+ for sensors (like a \texttt{SessionManager}), that class would instantiate or obtain
+ the Shimmer SDK object at start, then trigger connect/stream.  - If using an MVVM
+ pattern, a \textbf{ViewModel}
  could initiate the Shimmer connection when the user presses "Start".
 
-The ViewModel would then expose the live GSR value via a \texttt{LiveData<Double>} that the UI observes to update a graph
-. - If using a \textbf{Service}
-, the UI could bind to the service and receive data through a callback interface
-or broadcasts.
+The ViewModel would then expose the live GSR value via a \texttt{LiveData<Double>}
+that the UI observes to update a graph.  - If using a \textbf{Service}
+, the UI could bind to the service and receive data through a callback interface or
+broadcasts.
 
-For example, the service could send a broadcast \texttt{ACTION_GSR_UPDATE} with
-an extra for current value, or use Messenger/aidl for a more robust interface.
+For example, the service could send a broadcast \texttt{ACTION_GSR_UPDATE} with an
+extra for current value, or use Messenger/aidl for a more robust interface.
 
 The advantage is the service can continue running if the app goes to background
 (useful for long recordings).
 
-In \texttt{bucika_gsr}, we integrated the Shimmer in a way that it \textbf{starts and stops in sync with the other modalities}
+In \texttt{bucika_gsr}, we integrated the Shimmer in a way that it \textbf{starts and
+stops in sync with the other modalities}
 .
 
-For instance, when starting a recording, the app (through a controller or
-service) calls Shimmer connect & stream at the same time as it starts the camera
-recordings, so that all data aligns from the start signal(following the MVVM
-architectural pattern; following the MVVM architectural pattern).
+For instance, when starting a recording, the app (through a controller or service)
+calls Shimmer connect & stream at the same time as it starts the camera recordings,
+so that all data aligns from the start signal(following the MVVM architectural
+pattern; following the MVVM architectural pattern).
 
 The GSR service thread continuously buffers GSR samples with timestamps, and the
-Synchronization Manager takes those along with video frame timestamps to ensure
-they can be merged later.
+Synchronization Manager takes those along with video frame timestamps to ensure they
+can be merged later.
 
 At the end of a session, a stop signal stops the camera capture and calls
 \texttt{shimmerDevice.stopStreaming}.
 
-We also implemented fail-safes: if the Shimmer disconnects mid-session (e.g.,
-battery died or out of range), the app logs an error and can attempt to
-reconnect or at least notify the user.
+We also implemented fail-safes: if the Shimmer disconnects mid-session (e.g., battery
+died or out of range), the app logs an error and can attempt to reconnect or at least
+notify the user.
 
-One helpful feature of the Shimmer SDK for integration is the \textbf{ShimmerBluetoothDialog}
---- a built-in UI dialog that lists paired Shimmer devices and can scan for new
-ones(see implementation details in Appendix~F).
+One helpful feature of the Shimmer SDK for integration is the
+\textbf{ShimmerBluetoothDialog}
+ --- a built-in UI dialog that lists paired Shimmer devices and can scan for new
+ ones(see implementation details in Appendix~F).
 
-We used this during setup: the user can press "Add GSR Device" which launches
-the ShimmerBluetoothDialog, selects the Shimmer3 from the list, and the dialog
-returns the MAC address to our app(see implementation details in Appendix~F).
+We used this during setup: the user can press "Add GSR Device" which launches the
+ShimmerBluetoothDialog, selects the Shimmer3 from the list, and the dialog returns
+the MAC address to our app(see implementation details in Appendix~F).
 
-We then store that MAC (maybe in SharedPreferences or in the Session config) and
-use it for connecting.
+We then store that MAC (maybe in SharedPreferences or in the Session config) and use
+it for connecting.
 
 This simplifies device selection UX.
 
 In code, it's invoked via \texttt{startActivityForResult(new Intent(this,
-ShimmerBluetoothDialog.class), REQUEST_SHIMMER)}, and on result you get extras
-like \texttt{EXTRA_DEVICE_ADDRESS}.
+ShimmerBluetoothDialog.class), REQUEST_SHIMMER)}, and on result you get extras like
+\texttt{EXTRA_DEVICE_ADDRESS}.
 
 For \texttt{bucika_gsr}, we integrated this into the device setup screen.
 
@@ -760,30 +763,29 @@ This is an example of how the SDK provides not just low-level API but also UI
 components to ease integration.
 
 In summary, within the \texttt{bucika_gsr} app, the Shimmer3 GSR+ integration is
-handled by a dedicated component (service/module) that interfaces with the
-Shimmer SDK.
+handled by a dedicated component (service/module) that interfaces with the Shimmer
+SDK.
 
 This component is started as part of the overall recording workflow (likely via
-dependency injection or explicit service start) and runs concurrently with the
-other sensor modules (thermal, RGB cameras).
+dependency injection or explicit service start) and runs concurrently with the other
+sensor modules (thermal, RGB cameras).
 
-It ensures GSR data is continuously captured and made available to the rest of
-the app: - In code, this means using the Shimmer API to connect and stream, as
-illustrated earlier. - In architecture, it means encapsulating that logic such
-that other parts of the app don't worry about Bluetooth details --- they just
-get GSR data (for example, the UI gets a stream of GSR values to display, and
-the data logger gets time-stamped values to write to file). - By utilizing DI
-patterns, we ensure the Shimmer connection persists across configuration changes
-and is easily accessible wherever needed (e.g., injection into both a Service
-and a ViewModel).
+It ensures GSR data is continuously captured and made available to the rest of the
+app: - In code, this means using the Shimmer API to connect and stream, as
+illustrated earlier.  - In architecture, it means encapsulating that logic such that
+other parts of the app don't worry about Bluetooth details --- they just get GSR data
+(for example, the UI gets a stream of GSR values to display, and the data logger gets
+time-stamped values to write to file).  - By utilizing DI patterns, we ensure the
+Shimmer connection persists across configuration changes and is easily accessible
+wherever needed (e.g., injection into both a Service and a ViewModel).
 
-By using a Service under the hood, we ensure the GSR streaming isn't paused if
-the user switches activities or the app goes background (important for
-uninterrupted data).
+By using a Service under the hood, we ensure the GSR streaming isn't paused if the
+user switches activities or the app goes background (important for uninterrupted
+data).
 
-This modular integration allows the \texttt{bucika_gsr} app to treat Shimmer GSR
-data as a plug-and-play input, similarly to how it treats the camera feeds,
-resulting in a cohesive synchronized data collection system.
+This modular integration allows the \texttt{bucika_gsr} app to treat Shimmer GSR data
+as a plug-and-play input, similarly to how it treats the camera feeds, resulting in a
+cohesive synchronized data collection system.
 
 \section{Troubleshooting & Tips}
 
@@ -794,43 +796,44 @@ Here are common issues and solutions when using the Shimmer3 GSR+ on Android:
 
 \item \textbf{Bluetooth Pairing Problems:}
 
-If your app cannot connect to the Shimmer, first verify the Shimmer is \textbf{paired}
+If your app cannot connect to the Shimmer, first verify the Shimmer is
+\textbf{paired}
  with the phone.
 
 Pairing is typically required for Bluetooth Classic devices.
 
-You can pair via Android Settings (Bluetooth menu) --- the Shimmer will appear
-as e.g. "Shimmer" or "Shimmer3".
+You can pair via Android Settings (Bluetooth menu) --- the Shimmer will appear as e.g.
+"Shimmer" or "Shimmer3".
 
 Select it, and when prompted for a PIN, enter \textbf{1234}
  (the default passcode for Shimmer3 GSR+).
 
-The device's LED will usually indicate pairing (consult Shimmer documentation
-for LED codes).
+The device's LED will usually indicate pairing (consult Shimmer documentation for LED
+codes).
 
-If you try to connect in-app to an unpaired Shimmer, newer Android versions
-might block it or require pairing on the fly.
+If you try to connect in-app to an unpaired Shimmer, newer Android versions might
+block it or require pairing on the fly.
 
 The Shimmer SDK's scan dialog can handle pairing (it will invoke the system PIN
 prompt), but if you see connection failures, always double-check pairing status.
 
-On some phones, you may need to remove ("Forget") a previously paired Shimmer
-and re-pair if connections hang.
+On some phones, you may need to remove ("Forget") a previously paired Shimmer and
+re-pair if connections hang.
 
 \item \textbf{Permissions and Discovery:}
 
 As mentioned, not granting the necessary permissions will cause failures.
 
-If \texttt{BLUETOOTH_SCAN}/\texttt{CONNECT} (or location on older OS) is
-missing, your scan may return 0 devices or \texttt{connect} may throw a
-SecurityException.
+If \texttt{BLUETOOTH_SCAN}/\texttt{CONNECT} (or location on older OS) is missing,
+your scan may return 0 devices or \texttt{connect} may throw a SecurityException.
 
-If your scan isn't finding any devices, ensure that \textbf{Location Services are turned on}
-(for BLE discovery, the GPS toggle needs to be on even if you have permission,
-on Android \<12).
+If your scan isn't finding any devices, ensure that \textbf{Location Services are
+turned on}
+ (for BLE discovery, the GPS toggle needs to be on even if you have permission, on
+ Android \<12).
 
-Also, ensure Bluetooth itself is on (it sounds obvious, but apps can only prompt
---- the user might say "Cancel" on the enable prompt, leaving BT off).
+Also, ensure Bluetooth itself is on (it sounds obvious, but apps can only prompt ---
+the user might say "Cancel" on the enable prompt, leaving BT off).
 
 \item \textbf{Connection Stability:}
 
@@ -844,18 +847,19 @@ GSR), you could approach Bluetooth bandwidth limits.
 If you notice data drops (the handler reports packet loss or you see gaps in
 timestamps), you might be hitting throughput limits.
 
-Shimmer's documentation notes strategies like enabling the \textbf{efficient data array}
-mode for better throughput on low-end devices(see implementation details in
-Appendix~F).
+Shimmer's documentation notes strategies like enabling the \textbf{efficient data
+array}
+ mode for better throughput on low-end devices(see implementation details in
+ Appendix~F).
 
 For GSR+ alone, this usually isn't an issue.
 
-But if you do see instability: try lowering sample rate (e.g., 51.2 Hz instead
-of 128 Hz) or disabling unnecessary channels.
+But if you do see instability: try lowering sample rate (e.g., 51.2 Hz instead of 128
+Hz) or disabling unnecessary channels.
 
-Interference in the 2.4 GHz band (Wi-Fi) can also occasionally cause Bluetooth
-packet loss --- keep the phone close to the Shimmer (within a few meters
-ideally) and away from heavy Wi-Fi routers if possible during recording.
+Interference in the 2.4 GHz band (Wi-Fi) can also occasionally cause Bluetooth packet
+loss --- keep the phone close to the Shimmer (within a few meters ideally) and away
+from heavy Wi-Fi routers if possible during recording.
 
 The Shimmer API can report packet loss events via a message
 (\texttt{MESSAGE_PACKET_LOSS_DETECTED}), and you can monitor
@@ -868,15 +872,14 @@ drop.
 
 The SDK should send a state change indicating disconnect.
 
-In your app logic, handle this gracefully: perhaps notify the user "Connection
-lost".
+In your app logic, handle this gracefully: perhaps notify the user "Connection lost".
 
-To reconnect, you may need to call \texttt{connect} again (after coming back in
-range or replacing battery).
+To reconnect, you may need to call \texttt{connect} again (after coming back in range
+or replacing battery).
 
-Sometimes the Bluetooth stack might not clean up immediately --- if
-\texttt{connect} fails, try calling \texttt{disconnect} first (even if you think
-it's disconnected) and then retry.
+Sometimes the Bluetooth stack might not clean up immediately --- if \texttt{connect}
+fails, try calling \texttt{disconnect} first (even if you think it's disconnected)
+and then retry.
 
 In some cases, toggling the phone's Bluetooth off/on helps reset a stuck state.
 
@@ -893,62 +896,55 @@ Ensure you know which one you have.
 
 The above instructions assume classic Bluetooth.
 
-One noticeable difference: for BLE, you definitely need location permission and
-the device won't appear in the "paired devices" list but rather needs scanning
-each time.
+One noticeable difference: for BLE, you definitely need location permission and the
+device won't appear in the "paired devices" list but rather needs scanning each time.
 
-The SDK in recent versions abstracts BLE Shimmers, but if something isn't
-connecting, verify if your Shimmer firmware is BLE-only.
+The SDK in recent versions abstracts BLE Shimmers, but if something isn't connecting,
+verify if your Shimmer firmware is BLE-only.
 
-The Shimmer wiki has a section on Shimmer3R BLE support(as detailed in the
-camera capture module).
+The Shimmer wiki has a section on Shimmer3R BLE support(as detailed in the camera
+capture module).
 
 \item \textbf{Android Version Quirks:}
 
 On Android 11 and above, scanning for classic Bluetooth devices (using
 \texttt{BluetoothAdapter.startDiscovery}) also requires location permission.
 
-If you use the Shimmer's dialog or your own scan code and nothing shows up on
-Android 11, this is likely why.
+If you use the Shimmer's dialog or your own scan code and nothing shows up on Android
+11, this is likely why.
 
 Also, Android 13 tightened some Bluetooth permissions; make sure your
 \texttt{targetSdkVersion} and permission requests are aligned with the latest
 requirements.
 
-The logcat will often tell you "java.lang.SecurityException: Need
-BLUETOOTH_CONNECT permission..." if you missed something.
+The logcat will often tell you "java.lang.SecurityException: Need BLUETOOTH_CONNECT
+permission..." if you missed something.
 
 Request and grant those permissions.
 
 \item \textbf{Data Accuracy and Calibration:}
 
-The Shimmer GSR+ comes calibrated from the factory (the API uses stored
-calibration constants \texttt{p1, p2} for the GSR formula).
+The Shimmer GSR+ comes calibrated from the factory (the API uses stored calibration
+constants \texttt{p1, p2} for the GSR formula).
 
 If you suspect the values are off (e.g., reading extremely high or zero when it
 shouldn't), a few things to check:
 \item Are the electrodes properly placed with good contact?
 
-Dry or misattached electrodes can cause readings to peg at the max range (e.g.,
-\~4.7 MΩ) or fluctuate with noise.
+Dry or misattached electrodes can cause readings to peg at the max range (e.g., \~4.7
+MΩ) or fluctuate with noise.
 
-\item Is the GSR channel definitely on? (In code, ensure \texttt{SENSOR_GSR} was
-included and that \texttt{startStreaming} was called.)
-\item Verify if auto-range is working: if you use a fixed range and the
-subject's resistance exceeds that range, the readings might saturate.
+\item Is the GSR channel definitely on? (In code, ensure \texttt{SENSOR_GSR} was included and that \texttt{startStreaming} was called.)
+\item Verify if auto-range is working: if you use a fixed range and the subject's resistance exceeds that range, the readings might saturate.
 
 Auto-range avoids that by switching --- if you used a fixed range by accident
 (gsrRange not set to 4), try enabling auto.
 
-\item There's a troubleshooting step in the Shimmer User Guide where you can
-short the GSR leads together and verify the reading goes to a known low value,
-to ensure the channel is functioning(as detailed in the camera capture module;
-as implemented in the Shimmer management component).
+\item There's a troubleshooting step in the Shimmer User Guide where you can short the GSR leads together and verify the reading goes to a known low value, to ensure the channel is functioning(as detailed in the camera capture module; as implemented in the Shimmer management component).
 
 Typically, shorting GSR leads should show near 0 kΩ (very high conductance).
 
-\item The Shimmer's internal battery level can sometimes be read via
-\texttt{SensorBattVoltage} channel.
+\item The Shimmer's internal battery level can sometimes be read via \texttt{SensorBattVoltage} channel.
 
 If the battery is very low, sensor performance could conceivably degrade or
 disconnect.
@@ -957,61 +953,58 @@ Ensure the Shimmer is charged (or plugged in via its base) for long sessions.
 
 \item \textbf{Streaming to External Applications:}
 
-If you plan to forward the GSR data from the phone to a PC in real-time (for
-example, for monitoring or recording on a server), consider using Wi-Fi or USB
-tethering for the outbound link.
+If you plan to forward the GSR data from the phone to a PC in real-time (for example,
+for monitoring or recording on a server), consider using Wi-Fi or USB tethering for
+the outbound link.
 
 Our setup used a custom TCP socket over Wi-Fi to send data lines to a PC(Shimmer
 recording implementation; Shimmer recording implementation).
 
-Trying to use the phone's Bluetooth for both connecting to Shimmer and sending
-data to PC can be problematic (the phone typically can only maintain one SPP
-connection at a time, and BLE + Classic simultaneously could strain it).
+Trying to use the phone's Bluetooth for both connecting to Shimmer and sending data
+to PC can be problematic (the phone typically can only maintain one SPP connection at
+a time, and BLE + Classic simultaneously could strain it).
 
 Wi-Fi or cellular is more robust for that.
 
-If you do use this, just ensure your network sending thread can handle the data
-rate (but as noted, GSR data is not heavy).
+If you do use this, just ensure your network sending thread can handle the data rate
+(but as noted, GSR data is not heavy).
 
-Also implement reconnection or buffering in case network drops, so you don't
-lose sensor data packets.
+Also implement reconnection or buffering in case network drops, so you don't lose
+sensor data packets.
 
 \item \textbf{Using Multiple Shimmers:}
 
-If you integrate more than one Shimmer (say two GSR units on different people),
-test with each individually first, then together.
+If you integrate more than one Shimmer (say two GSR units on different people), test
+with each individually first, then together.
 
 The Shimmer API supports multiple, but more devices = more bandwidth.
 
-The API's \texttt{ShimmerBluetoothManagerAndroid} is recommended to manage
-multiple connections in one app(see implementation details in Appendix~F; see
-implementation details in Appendix~F).
+The API's \texttt{ShimmerBluetoothManagerAndroid} is recommended to manage multiple
+connections in one app(see implementation details in Appendix~F; see implementation
+details in Appendix~F).
 
-If you see one device disconnect when the other connects, it could be a pairing
-issue or a collision --- it should not happen under normal conditions, but
-always verify each device has a unique MAC and you handle each connection
-separately in code.
+If you see one device disconnect when the other connects, it could be a pairing issue
+or a collision --- it should not happen under normal conditions, but always verify
+each device has a unique MAC and you handle each connection separately in code.
 
 \item \textbf{Debugging Data:}
 
-To ensure you are getting meaningful GSR readings, you might output some values
-to logcat.
+To ensure you are getting meaningful GSR readings, you might output some values to
+logcat.
 
 For example, in the handler, \texttt{Log.i("ShimmerGSR", "GSR = " + gsrValue + "
 kΩ")}.
 
-This can help confirm that the values change when expected (e.g., if someone
-does a quick deep breath or mild exercise, you should see the resistance drop
-(conductance rise) and recover slowly).
+This can help confirm that the values change when expected (e.g., if someone does a
+quick deep breath or mild exercise, you should see the resistance drop (conductance
+rise) and recover slowly).
 
-If you only see a flat line or extremely noisy values, revisit the electrode
-setup and make sure the fingers are properly prepared (clean, consistent
-contact).
+If you only see a flat line or extremely noisy values, revisit the electrode setup
+and make sure the fingers are properly prepared (clean, consistent contact).
 
 Also note the Shimmer GSR+ uses \textbf{dry electrodes}
-typically; sometimes a small amount of electrode gel or water can improve
-contact if the skin is very dry (though dry electrodes are designed to work
-without gel).
+ typically; sometimes a small amount of electrode gel or water can improve contact if
+ the skin is very dry (though dry electrodes are designed to work without gel).
 
 \item \textbf{Further Resources:}
 
@@ -1022,9 +1015,9 @@ exceptions, the FAQ suggests re-pairing or ensuring only one instance of
 \texttt{Shimmer} is using that MAC at a time(see implementation details in
 Appendix~F; see implementation details in Appendix~F).
 
-The Shimmer user community (forums, etc.) also has Q&A for common hurdles (like
-the StackOverflow question on integrating Shimmer which reiterates the need for
-SPP Bluetooth code(see implementation details in Appendix~F)).
+The Shimmer user community (forums, etc.) also has Q&A for common hurdles (like the
+StackOverflow question on integrating Shimmer which reiterates the need for SPP
+Bluetooth code(see implementation details in Appendix~F)).
 
 \end{itemize}
 
@@ -1039,43 +1032,53 @@ measurements for research and application development.
  \begin{itemize}
 
 \item \textbf{Shimmer3 GSR+ Product Page:}
- \textit{Shimmer3 GSR+ Unit} --- Official description and specifications of the GSR+ sensor device.
+ \textit{Shimmer3 GSR+ Unit} --- Official description and specifications of the GSR+
+ sensor device.
 
 \item \textbf{Shimmer Android API GitHub Repository:}
- \textit{ShimmerEngineering/ShimmerAndroidAPI} --- Source code and documentation for the Android SDK (BETA) used to communicate with Shimmer3 devices.
+ \textit{ShimmerEngineering/ShimmerAndroidAPI} --- Source code and documentation for
+ the Android SDK (BETA) used to communicate with Shimmer3 devices.
 
 Includes a Quick Start Guide and examples.
 
 \item \textbf{Shimmer3 GSR+ User Guide (PDF):}
- \textit{Shimmer GSR+ User Manual} --- Detailed user manual covering GSR signal acquisition, best practices, auto-range explanation, and hardware setup(as detailed in the camera capture module; as implemented in the Shimmer management component).
+ \textit{Shimmer GSR+ User Manual} --- Detailed user manual covering GSR signal
+ acquisition, best practices, auto-range explanation, and hardware setup(as detailed
+ in the camera capture module; as implemented in the Shimmer management component).
 
 \item \textbf{Android Integration Design (Multimodal):}
- \textit{Android-Based Multimodal Data Acquisition System} --- Research paper (IEEE conference) describing an Android app integrating Shimmer3 GSR, thermal camera, etc., with synchronization methods(see implementation details in Appendix~F; see implementation details in Appendix~F).
+ \textit{Android-Based Multimodal Data Acquisition System} --- Research paper (IEEE
+ conference) describing an Android app integrating Shimmer3 GSR, thermal camera,
+ etc., with synchronization methods(see implementation details in Appendix~F; see
+ implementation details in Appendix~F).
 
 Provides context on using the Shimmer API in a complex system.
 
 \item \textbf{Shimmer FAQ --- Bluetooth Details:}
- \textit{Shimmer Wireless Sensor Networks FAQs} --- Shimmer's FAQ page with info on Bluetooth type (RN42 module, PIN code) and API availability.
+ \textit{Shimmer Wireless Sensor Networks FAQs} --- Shimmer's FAQ page with info on
+ Bluetooth type (RN42 module, PIN code) and API availability.
 
 Helpful for troubleshooting pairing and understanding the device's wireless
 interface.
 
 \item \textbf{Shimmer Java/Android API Documentation:}
- \textit{Shimmer Java/Android API --- Docs & Downloads} --- Official documentation snippet stating the API's purpose (streaming data to Android) and listing of related software. (Accessible via Shimmer's Docs page and Getting Started guides.)
+ \textit{Shimmer Java/Android API --- Docs & Downloads} --- Official documentation
+ snippet stating the API's purpose (streaming data to Android) and listing of related
+ software.  (Accessible via Shimmer's Docs page and Getting Started guides.)
 \item \textbf{Example Code --- Shimmer Basic Example:}
 
 The Shimmer SDK includes an example app (\texttt{shimmerBasicExample}).
 
-Key sections of its \texttt{MainActivity.java} illustrate permission requests,
-device scanning(see implementation details in Appendix~F), and data handling
-(retrieving GSR from \texttt{ObjectCluster}).
+Key sections of its \texttt{MainActivity.java} illustrate permission requests, device
+scanning(see implementation details in Appendix~F), and data handling (retrieving GSR
+from \texttt{ObjectCluster}).
 
 Reviewing this code is recommended for practical understanding of the API usage.
 
 \end{itemize}
 
-Shimmer3 GSR+ Unit - Shimmer Wearable Sensor Technology Neuromarketing
-Technology \| Neural Sense FAQs - Shimmer Wearable Sensor Technology GitHub -
+Shimmer3 GSR+ Unit - Shimmer Wearable Sensor Technology Neuromarketing Technology \|
+Neural Sense FAQs - Shimmer Wearable Sensor Technology GitHub -
 ShimmerEngineering/ShimmerAndroidAPI Configuration.java Shimmer.java Quick Start
 Guide · ShimmerEngineering/ShimmerAndroidAPI Wiki · GitHub Data Structure ·
 ShimmerEngineering/ShimmerAndroidAPI Wiki · GitHub Shimmer3 GSR+ User Guide
