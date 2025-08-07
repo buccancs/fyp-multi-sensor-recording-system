@@ -1,5 +1,5 @@
-% Standalone wrapper for Chapter_4.tex
-% This file provides the minimal LaTeX structure needed to compile Chapter_4.tex as a standalone document
+% Standalone wrapper for Chapter\_4.tex
+% This file provides the minimal LaTeX structure needed to compile Chapter\_4.tex as a standalone document
 % while maintaining compatibility with the main thesis document
 
 \documentclass[11pt,a4paper]{report}
@@ -24,12 +24,7 @@
 \begin{document}
 
 % Chapter 4 content
-
-% Bibliography (minimal for standalone)
-\bibliographystyle{ieeetr}
-\bibliography{references}
-
-\end{document}\label{chap:4}
+\label{chap:4}
 
 \chapter{Chapter 4: Design and Implementation}
 
@@ -273,8 +268,8 @@ redundancy), the GSR conductance value (in microsiemens), PPG readings
 (raw or processed), acceleration values, and the sensor's battery
 level\cite{ElectrodermalActivityWiki}.
 For example, the header used in the CSV clearly enumerates these fields:
-\textit{Timestamp_ms, DeviceTime_ms, SystemTime_ms, GSR_Conductance_uS,
-PPG_A13, Accel_X_g, ... Battery_Percentage},
+\textit{Timestamp\_ms, DeviceTime\_ms, SystemTime\_ms, GSR\_Conductance\_uS,
+PPG\_A13, Accel\_X\_g, ... Battery\_Percentage},
 etc.\cite{ElectrodermalActivityWiki}.
 By storing both the device-reported time and the system time on
 reception, the system can later assess any clock drift or transmission
@@ -508,11 +503,11 @@ boundaries, allowing binary payloads (like images) to be transmitted if
 needed by encoding them (often images are base64-encoded within
 JSON)\cite{DeviceServer}\cite{DeviceServer}.
 The protocol defines several message types, including: \textit{control
-commands} (e.g., \texttt{start_recording}, \texttt{stop_recording}), \textit{status updates}
+commands} (e.g., \texttt{start\_recording}, \texttt{stop\_recording}), \textit{status updates}
 (e.g., the Android periodically sends a \texttt{status} message with battery
 level, free storage, current recording status, etc.), \textit{sensor data
-messages} for streaming (such as \texttt{preview_frame} for a JPEG preview
-image, or \texttt{gsr_sample} for a live GSR data point), and \textit{acknowledgments}
+messages} for streaming (such as \texttt{preview\_frame} for a JPEG preview
+image, or \texttt{gsr\_sample} for a live GSR data point), and \textit{acknowledgments}
 (the devices reply to key commands with an ACK/NACK to confirm
 receipt)\cite{WebcamCapture}.
 The PC's network service is multi-threaded and non-blocking --- it can
@@ -574,7 +569,7 @@ When a recording session is initiated, the PC doesn't just send a blind
 "start" command --- it issues a \textbf{coordinated start time}. For example,
 the PC might determine "start recording at time T = 1622541600.000 (Unix
 epoch seconds)" a few hundred milliseconds in the future, and send a
-message to each device: \textit{"start_recording at T with session_id X"}. Each
+message to each device: \textit{"start\_recording at T with session\_id X"}. Each
 Android device receives this and waits until its local clock
 (synchronized to master) hits T to begin capturing
 data\cite{DeviceServer}\cite{DeviceServer}.
@@ -692,10 +687,10 @@ enough, which is far smaller).
 All data on the Android is saved in a \textbf{structured file system
 hierarchy} (often organized by session). For each recording session,
 the app creates a session folder containing the various files: e.g.,
-\texttt{session_001_metadata.json} (with high-level info like session ID, start
-time, participant ID), \texttt{session_001_camera.mp4} (phone RGB video),
-\texttt{session_001_thermal.raw} (thermal binary file),
-\texttt{session_001_shimmer.csv} (physio data), etc. This local organization is
+\texttt{session\_001\_metadata.json} (with high-level info like session ID, start
+time, participant ID), \texttt{session\_001\_camera.mp4} (phone RGB video),
+\texttt{session\_001\_thermal.raw} (thermal binary file),
+\texttt{session\_001\_shimmer.csv} (physio data), etc. This local organization is
 part of the pipeline because it enforces consistent naming and indexing
 for later merging. The Persistence layer on Android ensures writes are
 flushed and files are closed safely at the end of sessions to avoid

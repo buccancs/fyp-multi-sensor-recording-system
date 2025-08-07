@@ -24,12 +24,7 @@
 \begin{document}
 
 % Chapter 3 content
-
-% Bibliography (minimal for standalone)
-\bibliographystyle{ieeetr}
-\bibliography{references}
-
-\end{document}\label{chap:3}
+\label{chap:3}
 
 \chapter{Chapter 3: Requirements and System Analysis}
 
@@ -669,7 +664,7 @@ testing\cite{MainViewModel}\cite{MainViewModel}.
 This makes it possible to extend support to new sensor types by adding
 new modules without altering the core logic. On the PC side, the
 networking is abstracted behind a \texttt{JsonSocketServer} class with
-well-defined events (device_connected, status_received, etc.), and the
+well-defined events (device\_connected, status\_received, etc.), and the
 GUI is kept separate in a Qt-based \texttt{MainWindow}. This separation
 enforces a \textbf{modular architecture} --- for example, one could develop an
 alternative web-based UI (and indeed, the code contains a \texttt{web\_ui}
@@ -692,7 +687,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
 1.  \textbf{Session Initiation (Command Flow):} The user action of starting a
     session on the PC triggers command messages over the network. The
     PC's JsonSocketServer sends a
-    \texttt{{"type": "command", "command": "start_recording", ...}} (for
+    \texttt{\{"type": "command", "command": "start\_recording", ...\}} (for
     example) to each connected Android
     device\cite{DeviceServer}\cite{DeviceServer}.
     These messages are small JSON payloads, prefixed with a length
@@ -700,7 +695,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     read)\cite{DeviceServer}.
     When an Android device receives the start command, it immediately
     responds (if needed) with an acknowledgment
-    (\texttt{{"type": "ack", "cmd": "start_recording", "status": "ok"}})\cite{DeviceServer}
+    (\texttt{\{"type": "ack", "cmd": "start\_recording", "status": "ok"\}})\cite{DeviceServer}
     and then begins its recording process. This command flow is
     one-to-many (one PC to multiple clients) and happens almost
     simultaneously to all devices (the PC either sends commands in a
@@ -781,10 +776,10 @@ final data aggregation \[Placeholder\].} Here is the sequence:
 8.  Device sends a \texttt{file\_info} message indicating it is about to send a
     file, including file name and
     size\cite{DeviceServer}\cite{DeviceServer}.
-    For example, \texttt{"name": "rgb_video.mp4", "size": 50012345}.
+    For example, \texttt{"name": "rgb\_video.mp4", "size": 50012345}.
 
 9.  PC prepares to receive by creating a new file in the session folder
-    (\texttt{DeviceID_rgb_video.mp4}) and responds (implicitly via ack or
+    (\texttt{DeviceID\_rgb\_video.mp4}) and responds (implicitly via ack or
     readiness).
 
 10. Device then sends a series of \texttt{file\_chunk} messages, each containing
@@ -821,7 +816,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
 
 13. Throughout this, the Session Manager on PC is aware of incoming
     files and uses
-    \texttt{add_file_to_session(device_id, file_type, path, size)} to update
+    \texttt{add\_file\_to\_session(device\_id, file\_type, path, size)} to update
     the session
     metadata\cite{SessionManager}\cite{SessionManager}.
     This means the session's JSON metadata will list, for each device,
@@ -849,11 +844,11 @@ final data aggregation \[Placeholder\].} Here is the sequence:
 
 \begin{itemize}
 \item recordings/session_20250806_101530/
-        session_metadata.json
-        DeviceA_rgb_video.mp4
-        DeviceA_thermal_video.mp4
-        DeviceB_rgb_video.mp4
-        DeviceB_sensors.csv
+        session\_metadata.json
+        DeviceA\_rgb\_video.mp4
+        DeviceA\_thermal\_video.mp4
+        DeviceB\_rgb\_video.mp4
+        DeviceB\_sensors.csv
         stimulus_events.csv
         calibration/ (folder with calibration images)
         processed/ (folder with segmented hand images)
@@ -1008,8 +1003,8 @@ compared\cite{DeviceServer}.
 After a session, the Session Manager on PC logs a \textbf{session summary}
 that includes whether each expected file is present and its
 size\cite{SessionManagerKt}.
-For example, the PC log might say "RGB Video: ✓ (50012345 bytes),
-Thermal Video: ✓ (12345678 bytes), Shimmer Data: ✓ (N bytes)" confirming
+For example, the PC log might say "RGB Video: OK (50012345 bytes),
+Thermal Video: OK (12345678 bytes), Shimmer Data: OK (N bytes)" confirming
 successful captures. In case a file is missing or incomplete, that is
 flagged in the log (and the PC UI would alert the user). The system
 avoids modifying the raw data once recorded --- all data files are
