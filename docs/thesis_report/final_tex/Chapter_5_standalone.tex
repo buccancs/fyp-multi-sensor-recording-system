@@ -16,6 +16,7 @@
 \usepackage{hyperref}
 \usepackage{geometry}
 \usepackage{setspace}
+\usepackage{textcomp}
 
 % Page geometry and spacing
 \geometry{margin=1in}
@@ -377,7 +378,7 @@ at least 99.5% over long runs).
 minimum thresholds derived from the system requirements and comparisons
 to similar research systems in
 literature\cite{GSRPPGMachineLearning2024}.
-They include absolute thresholds (like "\< 0.1\textdegree C difference from
+They include absolute thresholds (like "\$<\$ 0.1\textdegree C difference from
 reference" for thermal accuracy) and relative or statistical criteria
 (like the 95th percentile of response time under load). During testing,
 results are continuously checked against these criteria; if any metric
@@ -1655,7 +1656,7 @@ dataset. Temporal consistency means across the 5-minute session, all
 data streams share a common timeline (no drift beyond a few
 milliseconds). Data completeness \$\geq\$ 99% means essentially no significant
 data loss (if we expected 5 min × 60 FPS from each camera, each should
-have \~18000 frames; completeness 99% means at most 180 frames dropped,
+have \$\sim\$18000 frames; completeness 99% means at most 180 frames dropped,
 which is acceptable). Signal quality \$\geq\$ required means, for example, the
 GSR SNR was above 20 dB on average (so minimal noise/artifact). 5.
 \textbf{Export Verification:} Finally, the test simulates the user exporting
@@ -1675,7 +1676,7 @@ Ensuring calibration was done: initially, our \texttt{prepare\_research\_session
 didn't enforce a re-check of calibration, but the test failed the
 calibration\_status assert, which led us to integrate an automatic
 calibration check step into session start if needed. - Ensuring
-data\_completeness: in one early run, data\_completeness was \~0.95 (5%
+data\_completeness: in one early run, data\_completeness was \$\sim\$0.95 (5%
 data loss) which was too low; analysis revealed a buffer overflow in the
 network when all devices sent data at once at full rate. We addressed
 this by throttling slightly and increasing buffer sizes, and subsequent
@@ -1788,7 +1789,7 @@ Investigating, we found that the thread capturing thermal data had an
 unpredictable slight delay. We modified the synchronization algorithm to
 correct for that by timestamping at the source (device) and trusting
 those stamps more, and the next test run showed thermal vs video
-alignment within \~3ms, thus passing the \<5ms criterion. This
+alignment within \$\sim\$3ms, thus passing the \$<\$5ms criterion. This
 demonstrates how these tests directly led to improvements in the
 system's research applicability.
 
@@ -1825,35 +1826,35 @@ their target values:
   Performance      Target Value   Measured Value Achievement    Statistical
   Metric                                         Rate           Confidence
   ------------------------ --------------------- --------------------- --------------------- ---------------------
-  **End-to-End     \$\geq\$ 90% runs     71.4% ± 5.2%   *Needs         Based on 7
-  Test Success**   succeed                       Improvement*   suite runs
-                                                 (79% of        (variability
+  End-to-End     $\geq$ 90\% runs     71.4\% ± 5.2\%   Needs         Based on 7
+  Test Success   succeed                       Improvement   suite runs
+                                                 (79\% of        (variability
                                                  target)        observed)
 
-  \textbf{Network        \< 100 ms      1---500 ms      Variable       Extensive
+  Network        $<$ 100 ms      1---500 ms      Variable       Extensive
   Latency          added delay    (adaptive)     (acceptable up network
-  Tolerance}                                    to 500 ms)     resilience
+  Tolerance                                    to 500 ms)     resilience
                                                                 testing
 
-  \textbf{Device         \$\geq\$ 4 devices    4 devices      100% (meets    Multi-device
-  Coordination}                  (tested)       target)        coordination
+  Device         $\geq$ 4 devices    4 devices      100\% (meets    Multi-device
+  Coordination                  (tested)       target)        coordination
                                                                 validated (max
                                                                 tested = 4)
 
-  \textbf{Data           100% no        100%           100% (target   Verified via
-  Integrity}      corruption                    met)           checksums on
+  Data           100\% no        100\%           100\% (target   Verified via
+  Integrity      corruption                    met)           checksums on
                                                                 all data
                                                                 packets
 
-  \textbf{Test Suite     \< 300 s (all  272 s ± 15 s   109% (9%       95% confidence
-  Duration}       tests)                        faster)        interval over
+  Test Suite     $<$ 300 s (all  272 s ± 15 s   109\% (9\%       95\% confidence
+  Duration       tests)                        faster)        interval over
                                                                 runs
 
-  \textbf{Connection     \$\geq\$ 95% success  100% success   105% (exceeded Simulated
-  Recovery}                                     target)        dropout
+  Connection     $\geq$ 95\% success  100\% success   105\% (exceeded Simulated
+  Recovery                                     target)        dropout
                                                                 scenarios
 
-  **Message Loss   \< 10% loss    0---6.7%        \textit{Variable}     Dependent on
+  Message Loss   $<$ 10\% loss    0---6.7\%        \textit{Variable}     Dependent on
   Tolerance**                     observed       (within target severity of
                                                  range)         network issues
   ------------------------------------------------------------------------------------------------------------------
@@ -1869,7 +1870,7 @@ checks in protocol), test suite speed (running the whole test suite took
 about 4.5 minutes, which is within the 5 minute target), and automatic
 connection recovery (devices recovering from induced failures every time
 in testing) were all excellent. Message loss tolerance varied; in
-worst-case network simulations (very high packet loss), up to \~6.7% of
+worst-case network simulations (very high packet loss), up to \$\sim\$6.7% of
 messages were lost, which is below the 10% threshold, but indicates the
 system is reasonably robust to network unreliability up to a point.
 
@@ -1892,19 +1893,19 @@ not performed due to hardware limits):
   Count       Latency      Loss       Success                   Success    
               (avg)                                                        
   ---------------- ------------------ --------------- ------------------ ------------------ --------------- ----------------------
-  \textbf{1         \~1.0 ms     0%         100%         Excellent    100%       Baseline
-  Device}                                         (baseline)              performance
+  1         $\sim$1.0 ms     0\%         100\%         Excellent    100\%       Baseline
+  Device                                      (baseline)              performance
                                                                            (single device)
 
-  \textbf{2         \~1.2 ms     0%         100%         Excellent    100%       Linear scaling
-  Devices}                                                                so far
+  2         $\sim$1.2 ms     0\%         100\%         Excellent    100\%       Linear scaling
+  Devices                                                             so far
 
-  \textbf{4         46---198 ms   0---6.7%    100%         Good (slight 100%       Max tested
-  Devices}   (peak                                drift)                  configuration
+  4         46---198 ms   0---6.7\%    100\%         Good (slight 100\%       Max tested
+  Devices   (peak                                drift)                  configuration
               ranges)                                                      
 
-  **8+        \textit{Not tested} N/A        N/A          N/A          N/A        Future work
-  Devices\textbf{                                                                (expected need
+  8+        \textit{Not tested} N/A        N/A          N/A          N/A        Future work
+  Devices                                                                (expected need
                                                                            for
                                                                            optimization)
   ------------------------------------------------------------------------------------------------------------------------------------
@@ -1913,7 +1914,7 @@ Up to 4 devices, the system scaled well: all connections successful,
 synchronization remained good (though we noticed a slight increase in
 sync deviation at 4 devices, still within requirements), and network
 latency per device remained low on average (though with 4 devices
-saturating Wi-Fi, we saw occasional spikes up to \~0.2 s latency for
+saturating Wi-Fi, we saw occasional spikes up to \$\sim\$0.2 s latency for
 some packets, which did not affect success rate but did reduce sync
 quality slightly ---- still within our 5ms drift on average). We flagged
 that beyond 4 devices, careful attention would be needed; the table
@@ -1924,28 +1925,28 @@ data or further protocol tuning to handle more devices concurrently.
 Stress testing under varying network conditions (Table 5.4) demonstrated
 the system's robustness:
 
-}Table 5.4: Stress Testing Results Under Network Conditions\textbf{
+Table 5.4: Stress Testing Results Under Network Conditions
 
   ---------------------------------------------------------------------------------------------------------------------------
   Network        Duration    Network           System        Message     Data
   Scenario                   Characteristics   Response      Success     Integrity
   --------------------- ---------------- ------------------------- ------------------- ---------------- ----------------
-  }Ideal        20 s        1 ms latency, 0%  Optimal       100%        100%
-  Network\textbf{                  loss (wired)      performance               preserved
+  Ideal            20 s        1 ms latency, 0\%  Optimal       100\%        100\%
+  Network                        loss (wired)      performance               preserved
 
-  }High         21.5 s      500 ms latency,   Graceful      100%        100%
-  Latency\textbf{                  0% loss           adaptation                preserved
+  High             21.5 s      500 ms latency,   Graceful      100\%        100\%
+  Latency                        0\% loss           adaptation                preserved
 
-  }Packet Loss  20.8 s      50 ms latency, 5% Error         \~98%       100%
-  Burst\textbf{                    loss bursts       recovery                  preserved
-                                               active                    
+  Packet Loss      20.8 s      50 ms latency, 5\% Error         $\sim$98\%       100\%
+  Burst                          loss bursts       recovery                  preserved
+                                                   active
 
-  }Limited      21.6 s      100 ms latency,   Adaptive data \~98%       100%
-  Bandwidth\textbf{                1% loss, 1 Mbps   throttling                preserved
+  Limited          21.6 s      100 ms latency,   Adaptive data $\sim$98\%       100\%
+  Bandwidth                      1\% loss, 1 Mbps   throttling                preserved
 
-  }Unstable     20.8 s      200 ms latency,   Connection    \~93%       100%
-  Connection\textbf{               3% loss, varying  recovery                  preserved
-                             BW                                          
+  Unstable         20.8 s      200 ms latency,   Connection    $\sim$93\%       100\%
+  Connection                     3\% loss, varying  recovery                  preserved
+                                 BW
   ---------------------------------------------------------------------------------------------------------------------------
 
 In each scenario, the system maintained data integrity (thanks to
@@ -1954,17 +1955,17 @@ through) and a high message success rate. Under extreme conditions like
 an unstable connection (combining latency and loss and bandwidth drops),
 about 7% of messages were dropped. However, the system's design ensures
 that critical messages (like session control commands) have
-acknowledgment and retry, so they were not lost. The \~93% overall
+acknowledgment and retry, so they were not lost. The \$\sim\$93% overall
 success in that worst scenario refers mainly to non-critical data
 packets; even then, missing 7% of data in a very poor network is
 acceptable for short periods, and the system logs these incidents. More
-importantly, it }recovers\textbf{ automatically when the network improves (in
+importantly, it recovers automatically when the network improves (in
 tests, after conditions normalized, devices seamlessly resumed full data
 rate).
 
 \subsection{Reliability and Long-Duration Testing}
 
-To validate reliability, we conducted }endurance tests\textbf{ where the
+To validate reliability, we conducted endurance tests where the
 system runs continuously for extended periods (several hours to days).
 These tests are crucial for research usage because experiments can be
 long, and the system must not degrade or crash over time.
@@ -1972,31 +1973,31 @@ long, and the system must not degrade or crash over time.
 Table 5.5 shows metrics from an extended 168-hour (1 week) continuous
 run test and other long-run scenarios:
 
-}Table 5.5: Extended Operation Reliability Metrics\textbf{
+Table 5.5: Extended Operation Reliability Metrics
 
   ---------------------------------------------------------------------------------------------------------------
   Reliability    Target         Measured Value Test Duration  Statistical
   Metric                                                      Significance
   --------------------- --------------------- --------------------- --------------------- ---------------------
-  }System       \$\geq\$ 99.5%        **99.73% ±     168 hours (7   \textit{p} \< 0.001
-  Uptime\textbf{                      0.12%}        days)          (highly
+  System       $\geq$ 99.5\%        99.73\% ±     168 hours (7   \textit{p} $<$ 0.001
+  Uptime                      0.12\%        days)          (highly
                                                               significant)
 
-  \textbf{Data         \$\geq\$ 99%          }99.84% ±     720 sessions   99.9%
-  Collection                    0.08%\textbf{        (simulated)    confidence
-  Success Rate}                                              
+  Data         $\geq$ 99\%          99.84\% ±     720 sessions   99.9\%
+  Collection                    0.08\%        (simulated)    confidence
+  Success Rate
 
-  \textbf{Network      \$\geq\$ 98%          }99.21% ±     10,000         \textit{p} \< 0.01
-  Connection                    0.15%\textbf{        connection     
-  Stability}                                  events         
+  Network      $\geq$ 98\%          99.21\% ±     10,000         \textit{p} $<$ 0.01
+  Connection                    0.15\%        connection
+  Stability                                  events
 
-  \textbf{Automatic    \$\geq\$ 95%          }98.7% ±      156 failure    95% confidence
-  Recovery                      1.2%\textbf{         scenarios      
-  Success}                                                   
+  Automatic    $\geq$ 95\%          98.7\% ±      156 failure    95\% confidence
+  Recovery                      1.2\%         scenarios
+  Success
   ---------------------------------------------------------------------------------------------------------------
 
 These results were extremely positive: - Uptime of 99.73% over a week
-means the system was only down for 0.27% of the time (\~45 minutes in
+means the system was only down for 0.27% of the time (\$\sim\$45 minutes in
 total over 7 days, which included planned maintenance or restarts).
 Essentially, no crashes occurred; any downtime was likely due to
 external factors (like Windows updates forcing a reboot on the PC, which
@@ -2008,8 +2009,8 @@ sessions where a device battery died prematurely or similar minor
 issues. - Network connection stability 99.21% across 10,000
 connect/disconnect events (simulated by repeatedly
 connecting/disconnecting devices) demonstrates that reconnection logic
-works consistently with only \<1% of cases requiring manual
-intervention. That \<1% might correspond to situations like a device
+works consistently with only \$<\$1% of cases requiring manual
+intervention. That \$<\$1% might correspond to situations like a device
 completely powering off and not returning until a manual restart ---
 things outside typical operation or beyond what software alone can
 solve. - Automatic recovery success 98.7% means that in about 98.7% of
@@ -2020,7 +2021,7 @@ exceeded the 95% target, showing strong resilience.
 
 Statistical analysis (p-values, confidence intervals) indicates these
 are reliable metrics, not flukes: for instance, uptime significantly
-above 99.5% target (p\<0.001 means the chance that the true uptime is
+above 99.5% target (p\$<\$0.001 means the chance that the true uptime is
 below target is negligible given observed data). The high confidence in
 data success rate similarly indicates the system reliably collects data
 across sessions.
@@ -2046,10 +2047,10 @@ with screen on brightest) in a warm environment to see if they
 overheated or throttled. They did warm up, and the internal thermal
 management on phones did throttle CPU a bit, but our app handled it by
 slightly reducing frame rate to keep up, which is acceptable. No device
-shut down due to thermal overload during our stress test (which ran \~1
-hour in \~30\textdegree C ambient, pushing devices hard). On the PC side, we
+shut down due to thermal overload during our stress test (which ran \$\sim\$1
+hour in \$\sim\$30\textdegree C ambient, pushing devices hard). On the PC side, we
 stressed with multiple simultaneous video decoding tasks and ensured the
-application remained responsive (it did, using \~70% CPU on a quad-core
+application remained responsive (it did, using \$\sim\$70% CPU on a quad-core
 machine, under our 80% target).
 
 \textbf{Error Recovery Testing:} A subset of reliability tests focused on how
@@ -2100,17 +2101,17 @@ issues for each category:
   Testing Level   Coverage Scope    Test Cases   Pass Rate   Critical   Resolution      Confidence
                                     (executed)               Issues     Status          Level
   ---------------------- ------------------------- ------------------ ---------------- --------------- ---------------------- ------------------
-  \textbf{Unit          Individual        1,247 tests  98.7\%       3 critical ✅ Resolved     99.9\%
+  \textbf{Unit          Individual        1,247 tests  98.7\%       3 critical \checkmark Resolved     99.9\%
   Testing}       functions \&                                                           
                   methods                                                               
 
-  \textbf{Component     Modules and       342 tests    99.1\%       1 critical ✅ Resolved     99.8\%
+  \textbf{Component     Modules and       342 tests    99.1\%       1 critical \checkmark Resolved     99.8\%
   Testing}       classes                                                               
 
-  \textbf{Integration   Inter-component   156 tests    97.4\%       2 critical ✅ Resolved     99.5\%
+  \textbf{Integration   Inter-component   156 tests    97.4\%       2 critical \checkmark Resolved     99.5\%
   Testing}       communication                                                         
 
-  \textbf{System        End-to-end        89 tests     96.6\%       1 critical ✅ Resolved     99.2\%
+  \textbf{System        End-to-end        89 tests     96.6\%       1 critical \checkmark Resolved     99.2\%
   Testing}       workflows                                                             
 
   \textbf{Performance   Load \& stress     45 tests     94.4\%       0 critical N/A (none)      98.7\%
@@ -2131,7 +2132,7 @@ issues for each category:
   Validation}    accuracy \&                                                            
                   precision                                                             
 
-  **Overall       Comprehensive     618 tests\\textit{  }Pending*   Env.       🔧 In progress  Config.
+  **Overall       Comprehensive     618 tests\\textit{  }Pending*   Env.       In progress In progress  Config.
   System**        system validation                          issues                     required
   ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2173,7 +2174,7 @@ something noted for future calibration improvement).
 
 Overall, about \textbf{240+} distinct test methods were executed (if we count
 parameterizations and internal checks, the number is larger as shown in
-table). The combined \textbf{pass rate was \~99.5%}, meaning the system is
+table). The combined \textbf{pass rate was} $\sim$99.5\%, meaning the system is
 nearly error-free across all tested aspects. No critical defects
 remained open by the end of the testing phase.
 
@@ -2229,7 +2230,7 @@ as noted). - \textbf{FR-003 (Thermal Imaging Integration)}: validated through
 device integration tests and accuracy tests (achieved 0.1\textdegree C accuracy at
 25 fps, meeting the spec). - \textbf{FR-004 (Reference GSR Measurement)}:
 validated as we could capture GSR at 512 Hz with negligible data loss
-(\<0.1%), confirmed by comparing with reference device data streams. -
+(\$<\$0.1%), confirmed by comparing with reference device data streams. -
 \textbf{FR-005 (Session Management)}: validated through system tests that
 covered start/stop and lifecycle with all edge cases (pauses, resumes,
 multiple sessions sequentially).
@@ -2237,29 +2238,29 @@ multiple sessions sequentially).
 \subsubsection{Performance Benchmarks}
 
 We have already discussed many performance results. In summary: -
-\textbf{Response Times:} The average session start time on the PC was \~1.23
+\textbf{Response Times:} The average session start time on the PC was \$\sim\$1.23
 s (with four devices), well under our 2 s target, and even the max
-observed (p95) was \~2.45
+observed (p95) was \$\sim\$2.45
 s\cite{TopdonTC001},
-which is acceptable. Stopping sessions was faster (\~0.87 s avg). -
-\textbf{Device Sync Response:} Each sync cycle on average took \~0.34 s, max
-\~0.67 s, target was \<1.0 s --- so syncing is quick. - \textbf{Throughput:}
+which is acceptable. Stopping sessions was faster (\$\sim\$0.87 s avg). -
+\textbf{Device Sync Response:} Each sync cycle on average took \$\sim\$0.34 s, max
+\$\sim\$0.67 s, target was \$<\$1.0 s --- so syncing is quick. - \textbf{Throughput:}
 We measured network throughput when all sensors are active. The system
-handled \~45.2 Mbps on average and peaks \~78 Mbps without issue, within
+handled \$\sim\$45.2 Mbps on average and peaks \$\sim\$78 Mbps without issue, within
 the 100 Mbps theoretical Wi-Fi
 budget.
 This shows we can comfortably stream multiple video feeds and sensor
 data concurrently on a standard network. - \textbf{Resource Utilization:} CPU
-usage on the PC averaged \~67% during heavy recording (peak \~79%),
+usage on the PC averaged \$\sim\$67% during heavy recording (peak \$\sim\$79%),
 under our 80%
 target.
-Memory usage averaged \~2.1 GB (peak \~3.4 GB) out of a 4 GB
+Memory usage averaged \$\sim\$2.1 GB (peak \$\sim\$3.4 GB) out of a 4 GB
 budget,
 which is fine (the PC used had 16 GB RAM, so plenty of headroom). On
-Android devices, CPU stayed under \~70% and no out-of-memory issues were
-observed. - \textbf{Storage Rate:} Data was written to disk at \~3.2 GB/hour
+Android devices, CPU stayed under \$\sim\$70% and no out-of-memory issues were
+observed. - \textbf{Storage Rate:} Data was written to disk at \$\sim\$3.2 GB/hour
 on average (with video + thermal + GSR from multiple devices) and peaked
-at \~7.8 GB/hour when using highest
+at \$\sim\$7.8 GB/hour when using highest
 settings.
 This is manageable --- a typical experiment of 1 hour can produce a few
 GB of data, which is expected for high-res video; the system's storage
@@ -2274,32 +2275,24 @@ experiments, even with some margin for expansion or additional sensors.
 Having tested all aspects, we revisit the project's requirements to
 ensure each is fulfilled:
 
-##### Functional Requirements Validation
+\subsubsection{Functional Requirements Validation}
 
 All critical functional requirements were successfully validated through
 tests. For reference, here are a few key functional requirements and
 their status:
 
 \begin{itemize}
-\item \textbf{FR-001 Multi-Device Coordination}: ✅ \textit{Validated with up to 8
+\item \textbf{FR-001 Multi-Device Coordination}: \checkmark \textit{Validated with up to 8
   simultaneous devices.} (Tested with 4 physical devices; simulated
   scenario for 8 suggests readiness. The system architecture supports
   adding more with minor configuration.)
-\item \textbf{FR-002 Video Data Acquisition}: ✅ \textit{Achieved 4K @ 60fps recording
-  with 99.7% frame capture rate.} (The slight frame drops were within
-  tolerance and mostly due to device thermal throttling after long
-  durations.)
-\item \textbf{FR-003 Thermal Imaging Integration}: ✅ \textit{Confirmed ±0.1\textdegree C accuracy
+\item \textbf{FR-002 Video Data Acquisition}: \checkmark \textit{Achieved 4K @ 60fps recording with 99.7\% frame capture rate.} (The slight frame drops were within tolerance and mostly due to device thermal throttling after long durations.)
+\item \textbf{FR-003 Thermal Imaging Integration}: \checkmark \textit{Confirmed ±0.1\textdegree C accuracy
   at 25 fps for thermal camera data.} (The calibration and data quality
   tests showed the thermal sensor meets the accuracy specification after
   proper calibration.)
-\item \textbf{FR-004 Reference GSR Measurement}: ✅ \textit{Validated 512 Hz GSR
-  sampling with \< 0.1% data loss.} (The Shimmer sensor integration
-  delivered essentially continuous data; any tiny gaps were negligible.
-  Cross-correlation with a reference GSR instrument gave r ≈ 0.89, p \<
-  0.001, indicating strong
-  agreement.)
-\item \textbf{FR-005 Session Management}: ✅ \textit{Complete lifecycle management
+\item \textbf{FR-004 Reference GSR Measurement}: \checkmark \textit{Validated 512 Hz GSR sampling with $<$ 0.1\% data loss.} (The Shimmer sensor integration delivered essentially continuous data; any tiny gaps were negligible. Cross-correlation with a reference GSR instrument gave r $\approx$ 0.89, p $<$ 0.001, indicating strong agreement.)
+\item \textbf{FR-005 Session Management}: \checkmark \textit{Complete lifecycle management
   validated.} (Including session creation, configuration, start, stop,
   pause, resume, and data export --- all tested in sequence and
   independently.)
@@ -2309,7 +2302,7 @@ their status:
 statements can be made for each, with test cases covering all
 functionalities from data export to user interface controls.)}
 
-##### Non-Functional Requirements Assessment
+\subsubsection{# Non-Functional Requirements Assessment}
 
 The non-functional requirements (NFRs) ---- covering performance,
 reliability, usability, etc. ---- were likewise assessed:
@@ -2317,19 +2310,19 @@ reliability, usability, etc. ---- were likewise assessed:
   ----------------------------------------------------------------------------------------------------------------
   Requirement        Target            Achieved             Status
   --------------------------- ------------------------- ------------------------------ -------------------------
-  \textbf{System           4+ devices        8 devices            ✅ Exceeded
+  \textbf{System           4+ devices        8 devices            \checkmark Exceeded
   Throughput}                         (supported/tested)   
 
-  \textbf{Response Time}  \< 2 s (start)    1.23 s avg           ✅ Met
+  \textbf{Response Time}  \$<\$ 2 s (start)    1.23 s avg           \checkmark Met
 
-  \textbf{Resource Usage} \< 80% CPU usage  \~67.3% avg          ✅ Met
+  \textbf{Resource Usage} \$<\$ 80% CPU usage  \$\sim\$67.3% avg          \checkmark Met
 
-  \textbf{Availability}   99.5% uptime      99.7% measured       ✅ Exceeded
+  \textbf{Availability}   99.5% uptime      99.7% measured       \checkmark Exceeded
 
-  \textbf{Data Integrity} 100% no           99.98% (no           ✅ Nearly Perfect
+  \textbf{Data Integrity} 100% no           99.98% (no           \checkmark Nearly Perfect
                      loss/corrupt      corruption)          
 
-  \textbf{Sync Precision} ±5 ms             ±3.2 ms achieved     ✅ Exceeded
+  \textbf{Sync Precision} ±5 ms             ±3.2 ms achieved     \checkmark Exceeded
   ----------------------------------------------------------------------------------------------------------------
 
 To elaborate: - Throughput for at least 4 devices was required; we
@@ -2363,16 +2356,16 @@ loss in worst-case network conditions, which we consider acceptable. We
 could confidently claim the system achieves \textbf{research-grade
 performance}.
 
-##### Test Coverage Analysis
+\subsubsection{# Test Coverage Analysis}
 
 Our test suite provides comprehensive coverage across different
 dimensions: - \textbf{Functional coverage:} All core features (100%) were
-tested; most edge cases (\~87%) and error handling paths (\~92%) were
+tested; most edge cases (\$\sim\$87%) and error handling paths (\$\sim\$92%) were
 tested, as estimated by our coverage analysis
 script.
 Some minor edge scenarios remain (e.g., extremely unlikely error
 combinations) but those are tracked. - \textbf{Code coverage:} As noted, we
-attained \~93% statement coverage overall, \~89% branch coverage, \~95%
+attained \$\sim\$93% statement coverage overall, \$\sim\$89% branch coverage, \$\sim\$95%
 function
 coverage.
 These high numbers mean very little of the implementation is untested.
@@ -2391,7 +2384,7 @@ simulated various load scenarios (high CPU, low memory, various network
 conditions) and stress conditions (long runs, many sessions
 back-to-back). We also tested under resource constraints (running the PC
 app on a lower-end laptop to see if it still meets timing --- it did,
-albeit using more CPU). We covered \~95% of intended load
+albeit using more CPU). We covered \$\sim\$95% of intended load
 scenarios;
 a couple of extreme scenarios (like \>8 devices or 48-hour continuous
 with \>4 devices) were not tested due to practical limits, but those can
@@ -2402,7 +2395,7 @@ lurking bugs or unverified parts of the system that could surprise us
 later. Any gaps identified were deliberate (and documented as not
 critical or slated for future work).
 
-##### Defect Analysis
+\subsubsection{# Defect Analysis}
 
 Throughout testing, various defects were identified and resolved. We
 categorize them here for completeness:
@@ -2447,7 +2440,7 @@ categorize them here for completeness:
   deferred.
 
 \end{itemize}
-The defect resolution rate was \~94.3% (i.e., that percentage of all
+The defect resolution rate was \$\sim\$94.3% (i.e., that percentage of all
 identified issues have been
 resolved).
 Importantly, \textbf{no known defect compromises the system's core
@@ -2459,7 +2452,7 @@ cosmetic or enhancements to be addressed in future versions.
 Reflecting on the testing approach itself: - \textbf{Strengths:} The
 multi-layered methodology caught issues at appropriate stages (many bugs
 were fixed during unit tests or integration tests before ever doing a
-full system run). Early defect detection (we estimate \~89% of defects
+full system run). Early defect detection (we estimate \$\sim\$89% of defects
 were found and fixed before system testing) improved development
 speed.
 The realistic end-to-end tests gave us confidence in real usage. And by
@@ -2481,7 +2474,7 @@ test) could be done, though 1 week already gave a solid indication. -
 was spent on testing and test
 automation.
 This investment is justified by the outcome: a robust system with very
-few issues in deployment. The payoff is that likely \<0.1% of defects
+few issues in deployment. The payoff is that likely \$<\$0.1% of defects
 have escaped into the "field" (if any --- so far none observed in pilot
 usage), meaning near-zero troubleshooting during actual experiments.
 Also, a small user acceptance test (pilot study with a couple of
@@ -2646,7 +2639,7 @@ suite, preserving the reliability level achieved.
 The evaluation and testing of the Multi-Sensor Recording System
 demonstrate that it achieves exceptional reliability, performance, and
 data quality for GSR and thermal-based emotion analysis in research
-settings. With an overall test pass rate of \~99.5% across more than 240
+settings. With an overall test pass rate of \$\sim\$99.5% across more than 240
 test cases and all critical issues resolved, the system can be
 considered \textbf{research-ready}. It meets or exceeds all technical
 requirements identified in the thesis, providing empirical evidence in
