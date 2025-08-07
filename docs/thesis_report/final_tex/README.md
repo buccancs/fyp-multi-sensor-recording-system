@@ -6,7 +6,7 @@ This directory now contains a comprehensive bibliography system for the thesis.
 
 ### New Files
 - `references.bib` - Complete bibliography in BibTeX format containing all academic references
-- `thesis_example.tex` - Example LaTeX document showing how to use the bibliography
+- `thesis_example.tex` - Complete thesis example document with all chapters, proper formatting, and compilation instructions
 
 ### Updated Files
 All LaTeX files have been updated with proper academic citation keys:
@@ -40,7 +40,30 @@ The bibliography now follows proper academic format with:
 
 ## Usage
 
-To compile a thesis document using these references:
+### Complete Thesis Compilation
+
+The `thesis_example.tex` file provides a complete, ready-to-compile thesis template that includes:
+
+- Proper thesis document structure (report class)
+- All chapters (Project Plan, Chapters 1-6, Appendices)
+- Technical documentation appendices
+- Professional title page and abstract
+- Table of contents, list of figures and tables
+- Comprehensive citation examples
+- Compilation instructions
+
+To compile the full thesis:
+
+1. Ensure all `.tex` files and `references.bib` are in the same directory
+2. Run: `pdflatex thesis_example.tex`
+3. Run: `bibtex thesis_example`  
+4. Run: `pdflatex thesis_example.tex` (twice more for cross-references)
+
+Or use: `latexmk -pdf thesis_example.tex` for automatic compilation.
+
+### Custom Document Usage
+
+For custom documents using these references:
 
 1. Include `\usepackage{cite}` in your preamble
 2. Use `\bibliography{references}` to include the bibliography
@@ -49,16 +72,26 @@ To compile a thesis document using these references:
 
 Example:
 ```latex
-\documentclass{article}
+\documentclass{report}
 \usepackage{cite}
 
 \begin{document}
 % Your content with \cite{CitationKey} references
 
-\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 \bibliography{references}
 \end{document}
 ```
+
+### Complete Thesis Template
+
+The provided `thesis_example.tex` demonstrates:
+- Professional thesis structure with title page and abstract
+- Integration of all thesis chapters and appendices  
+- Multiple citation styles and examples
+- Proper LaTeX packages for academic writing
+- Table of contents and cross-reference handling
+- Ready-to-compile template for full thesis document
 
 ## Reference Categories
 
