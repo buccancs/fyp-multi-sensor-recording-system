@@ -25,7 +25,6 @@ import threading
 import time
 import unittest
 import uuid
-import webbrowser
 import zipfile
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
