@@ -1,28 +1,19 @@
-#!/usr/bin/env python3
-
 import os
 import sys
-
-
 def validate_documentation_files():
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
     new_docs_dir = os.path.join(docs_dir, 'new_documentation')
-
     required_files = [
         'README_python_desktop_controller.md',
         'USER_GUIDE_python_desktop_controller.md',
         'PROTOCOL_python_desktop_controller.md',
     ]
-
     other_required_files = [
         'DOCUMENTATION_INDEX.md'
     ]
-
     print("📋 Validating Documentation Files")
     print("=" * 50)
-
     all_files_exist = True
-
     for filename in required_files:
         filepath = os.path.join(new_docs_dir, filename)
         if os.path.exists(filepath):
@@ -31,7 +22,6 @@ def validate_documentation_files():
         else:
             print(f"❌ new_documentation/{filename} - NOT FOUND")
             all_files_exist = False
-
     for filename in other_required_files:
         filepath = os.path.join(docs_dir, filename)
         if os.path.exists(filepath):
@@ -40,13 +30,9 @@ def validate_documentation_files():
         else:
             print(f"❌ {filename} - NOT FOUND")
             all_files_exist = False
-
     return all_files_exist
-
-
 def validate_source_structure():
     src_dir = os.path.join(os.path.dirname(__file__), 'src')
-
     expected_structure = {
         'files': [
             'application.py',
@@ -61,12 +47,9 @@ def validate_source_structure():
             'utils'
         ]
     }
-
     print("\n📁 Validating Source Structure")
     print("=" * 50)
-
     all_structure_valid = True
-
     for filename in expected_structure['files']:
         filepath = os.path.join(src_dir, filename)
         if os.path.exists(filepath):
@@ -74,7 +57,6 @@ def validate_source_structure():
         else:
             print(f"❌ {filename} - NOT FOUND")
             all_structure_valid = False
-
     for dirname in expected_structure['directories']:
         dirpath = os.path.join(src_dir, dirname)
         if os.path.isdir(dirpath):
@@ -83,17 +65,12 @@ def validate_source_structure():
         else:
             print(f"❌ {dirname}/ - NOT FOUND")
             all_structure_valid = False
-
     return all_structure_valid
-
-
 def validate_documentation_content():
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
     new_docs_dir = os.path.join(docs_dir, 'new_documentation')
-
     print("\n📄 Validating Documentation Content")
     print("=" * 50)
-
     content_checks = [
         {
             'file': 'README_python_desktop_controller.md',
@@ -126,19 +103,15 @@ def validate_documentation_content():
             ]
         }
     ]
-
     all_content_valid = True
-
     for check in content_checks:
         if check['file'] in ['README_python_desktop_controller.md', 'USER_GUIDE_python_desktop_controller.md', 'PROTOCOL_python_desktop_controller.md']:
             filepath = os.path.join(new_docs_dir, check['file'])
         else:
             filepath = os.path.join(docs_dir, check['file'])
-
         if os.path.exists(filepath):
             with open(filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
-
             print(f"\n📖 {check['file']}:")
             for section in check['required_sections']:
                 if section in content:
@@ -149,59 +122,44 @@ def validate_documentation_content():
         else:
             print(f"\n❌ {check['file']} - FILE NOT FOUND")
             all_content_valid = False
-
     return all_content_valid
-
-
 def validate_mermaid_diagrams():
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
     new_docs_dir = os.path.join(docs_dir, 'new_documentation')
-
     print("\n🔗 Validating Mermaid Diagrams")
     print("=" * 50)
-
     files_to_check = [
         'README_python_desktop_controller.md',
         'USER_GUIDE_python_desktop_controller.md',
         'PROTOCOL_python_desktop_controller.md'
     ]
-
     diagram_count = 0
     for filename in files_to_check:
         filepath = os.path.join(new_docs_dir, filename)
         if os.path.exists(filepath):
             with open(filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
-
             mermaid_blocks = content.count('```mermaid')
             diagram_count += mermaid_blocks
             print(f"✓ {filename}: {mermaid_blocks} diagrams")
-
     print(f"\n📊 Total Mermaid diagrams found: {diagram_count}")
     return diagram_count > 0
-
-
 def check_documentation_index_references():
     docs_dir = os.path.join(os.path.dirname(__file__), '..', 'docs')
     index_file = os.path.join(docs_dir, 'DOCUMENTATION_INDEX.md')
-
     print("\n📇 Validating Documentation Index")
     print("=" * 50)
-
     if not os.path.exists(index_file):
         print("❌ DOCUMENTATION_INDEX.md not found")
         return False
-
     with open(index_file, 'r', encoding='utf-8') as f:
         content = f.read()
-
     required_references = [
         'README_python_desktop_controller.md',
         'USER_GUIDE_python_desktop_controller.md',
         'PROTOCOL_python_desktop_controller.md',
         'Python Desktop Controller'
     ]
-
     all_references_found = True
     for reference in required_references:
         if reference in content:
@@ -209,14 +167,10 @@ def check_documentation_index_references():
         else:
             print(f"❌ {reference} - NOT REFERENCED")
             all_references_found = False
-
     return all_references_found
-
-
 def main():
     print("🔍 Python Desktop Controller Documentation Validation")
     print("=" * 60)
-
     checks = [
         ("Documentation Files", validate_documentation_files),
         ("Source Structure", validate_source_structure),
@@ -224,7 +178,6 @@ def main():
         ("Mermaid Diagrams", validate_mermaid_diagrams),
         ("Documentation Index", check_documentation_index_references)
     ]
-
     results = []
     for check_name, check_function in checks:
         try:
@@ -233,18 +186,15 @@ def main():
         except Exception as e:
             print(f"\n❌ Error in {check_name}: {e}")
             results.append((check_name, False))
-
     print("\n" + "=" * 60)
     print("📋 VALIDATION SUMMARY")
     print("=" * 60)
-
     all_passed = True
     for check_name, result in results:
         status = "✅ PASSED" if result else "❌ FAILED"
         print(f"{check_name:.<40} {status}")
         if not result:
             all_passed = False
-
     print("=" * 60)
     if all_passed:
         print("🎉 ALL DOCUMENTATION VALIDATION CHECKS PASSED!")
@@ -252,10 +202,7 @@ def main():
     else:
         print("⚠️  Some documentation validation checks failed.")
         print("📝 Please review and update the documentation as needed.")
-
     return all_passed
-
-
 if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)

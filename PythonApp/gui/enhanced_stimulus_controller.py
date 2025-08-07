@@ -4,7 +4,6 @@ import time
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, Optional
-
 from PyQt5.QtCore import Qt, QTimer, QUrl, pyqtSignal
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -17,24 +16,17 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 try:
     import vlc
-
     VLC_AVAILABLE = True
     print("[DEBUG_LOG] VLC backend available")
 except ImportError:
     VLC_AVAILABLE = False
     print("[DEBUG_LOG] VLC backend not available, using QMediaPlayer only")
-
-
 class VideoBackend(Enum):
     QT_MULTIMEDIA = "qt_multimedia"
     VLC = "vlc"
-
-
 class CodecInfo:
-
     def __init__(self):
         self.qt_supported = [".mp4", ".avi", ".mov", ".mkv", ".wmv", ".m4v", ".3gp"]
         self.vlc_supported = [
@@ -55,7 +47,6 @@ class CodecInfo:
             ".m2ts",
         ]
         self.recommended_formats = [".mp4", ".avi", ".mov"]
-
     def is_supported(self, file_path: str, backend: VideoBackend) -> bool:
         ext = os.path.splitext(file_path)[1].lower()
         if backend == VideoBackend.QT_MULTIMEDIA:
@@ -63,7 +54,6 @@ class CodecInfo:
         elif backend == VideoBackend.VLC:
             return ext in self.vlc_supported
         return False
-
     def get_best_backend(self, file_path: str) -> Optional[VideoBackend]:
         ext = os.path.splitext(file_path)[1].lower()
         if ext in self.recommended_formats:
@@ -73,10 +63,7 @@ class CodecInfo:
         if ext in self.qt_supported:
             return VideoBackend.QT_MULTIMEDIA
         return None
-
-
 class EnhancedTimingLogger:
-
     def __init__(self, log_directory: str = "logs"):
         self.log_directory = log_directory
         self.current_log_file: Optional[str] = None
@@ -88,7 +75,6 @@ class EnhancedTimingLogger:
         self.clock_offset = 0.0
         self.calibrate_timing()
         os.makedirs(log_directory, exist_ok=True)
-
     def calibrate_timing(self):
         start_time = self.perf_clock()
         system_start = self.system_clock()
@@ -101,7 +87,6 @@ class EnhancedTimingLogger:
         print(
             f"[DEBUG_LOG] Timing calibration: offset={self.clock_offset * 1000:.3f}ms"
         )
-
     def get_precise_timestamp(self) -> Dict[str, float]:
         return {
             "system_time": self.system_clock(),
@@ -109,7 +94,6 @@ class EnhancedTimingLogger:
             "performance_time": self.perf_clock(),
             "corrected_time": self.system_clock() - self.clock_offset,
         }
-
     def start_experiment_log(self, video_file: str, backend: str) -> str:
         timestamp = time.strftime("%Y%m%d_%H%M%S")
         self.current_log_file = os.path.join(
@@ -137,7 +121,6 @@ class EnhancedTimingLogger:
         with open(self.current_log_file, "w") as f:
             json.dump(log_data, f, indent=2)
         return self.current_log_file
-
     def log_stimulus_start(self, video_duration_ms: int, frame_rate: float = None):
         if not self.current_log_file or not self.experiment_start_time:
             return
@@ -155,7 +138,6 @@ class EnhancedTimingLogger:
             "frame_rate": frame_rate,
         }
         self._append_event(event)
-
     def log_event_marker(
         self, video_position_ms: int, marker_label: str = "", frame_number: int = None
     ):
@@ -178,7 +160,6 @@ class EnhancedTimingLogger:
             "frame_number": frame_number,
         }
         self._append_event(event)
-
     def _append_event(self, event: Dict[str, Any]):
         if not self.current_log_file:
             return
@@ -190,14 +171,11 @@ class EnhancedTimingLogger:
                 json.dump(log_data, f, indent=2)
         except Exception as e:
             print(f"[DEBUG_LOG] Error writing to log file: {e}")
-
-
 class VLCVideoWidget(QWidget):
     position_changed = pyqtSignal(int)
     duration_changed = pyqtSignal(int)
     state_changed = pyqtSignal(str)
     error_occurred = pyqtSignal(str)
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setStyleSheet("background-color: black;")
@@ -217,7 +195,6 @@ class VLCVideoWidget(QWidget):
             self.media_player.set_xwindow(self.winId())
         elif hasattr(self.media_player, "set_nsobject"):
             self.media_player.set_nsobject(int(self.winId()))
-
     def load_media(self, file_path: str) -> bool:
         if not VLC_AVAILABLE or not self.media_player:
             return False
@@ -230,58 +207,47 @@ class VLCVideoWidget(QWidget):
         except Exception as e:
             self.error_occurred.emit(f"VLC load error: {str(e)}")
             return False
-
     def play(self):
         if self.media_player:
             self.media_player.play()
             self.position_timer.start()
             self.state_changed.emit("Playing")
-
     def pause(self):
         if self.media_player:
             self.media_player.pause()
             self.state_changed.emit("Paused")
-
     def stop(self):
         if self.media_player:
             self.media_player.stop()
             self.position_timer.stop()
             self.state_changed.emit("Stopped")
-
     def set_position(self, position_ms: int):
         if self.media_player and self.get_duration() > 0:
             position_ratio = position_ms / self.get_duration()
             self.media_player.set_position(position_ratio)
-
     def get_position(self) -> int:
         if self.media_player:
             duration = self.get_duration()
             if duration > 0:
                 return int(self.media_player.get_position() * duration)
         return 0
-
     def get_duration(self) -> int:
         if self.current_media:
             return self.current_media.get_duration()
         return 0
-
     def is_playing(self) -> bool:
         if self.media_player:
             return self.media_player.is_playing()
         return False
-
     def _update_position(self):
         if self.is_playing():
             self.position_changed.emit(self.get_position())
-
-
 class EnhancedStimulusController(QWidget):
     status_changed = pyqtSignal(str)
     experiment_started = pyqtSignal()
     experiment_ended = pyqtSignal()
     error_occurred = pyqtSignal(str)
     backend_changed = pyqtSignal(str)
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent_window = parent
@@ -302,7 +268,6 @@ class EnhancedStimulusController(QWidget):
         self.position_timer.setInterval(50)
         self.init_ui()
         self.connect_signals()
-
     def init_ui(self):
         layout = QVBoxLayout(self)
         info_layout = QHBoxLayout()
@@ -342,7 +307,6 @@ class EnhancedStimulusController(QWidget):
         self.switch_backend_btn.setEnabled(False)
         button_layout.addWidget(self.switch_backend_btn)
         layout.addLayout(button_layout)
-
     def connect_signals(self):
         self.qt_media_player.stateChanged.connect(self.on_qt_state_changed)
         self.qt_media_player.mediaStatusChanged.connect(self.on_qt_media_status_changed)
@@ -354,7 +318,6 @@ class EnhancedStimulusController(QWidget):
             self.vlc_video_widget.duration_changed.connect(self.on_vlc_duration_changed)
             self.vlc_video_widget.state_changed.connect(self.on_vlc_state_changed)
             self.vlc_video_widget.error_occurred.connect(self.on_vlc_error)
-
     def load_video(self, file_path: str) -> bool:
         if not os.path.exists(file_path):
             self.error_occurred.emit(f"Video file not found: {file_path}")
@@ -399,7 +362,6 @@ class EnhancedStimulusController(QWidget):
             return True
         self.error_occurred.emit("Failed to load video with any available backend")
         return False
-
     def _load_with_backend(self, file_path: str, backend: VideoBackend) -> bool:
         try:
             if backend == VideoBackend.QT_MULTIMEDIA:
@@ -416,7 +378,6 @@ class EnhancedStimulusController(QWidget):
         except Exception as e:
             print(f"[DEBUG_LOG] Backend {backend.value} load failed: {e}")
         return False
-
     def switch_backend(self):
         if not self.current_video_file:
             return
@@ -435,7 +396,6 @@ class EnhancedStimulusController(QWidget):
             self.status_changed.emit(f"Switched to {new_backend.value} backend")
         else:
             self.error_occurred.emit(f"Failed to switch to {new_backend.value} backend")
-
     def _update_backend_ui(self):
         if self.current_backend:
             self.backend_label.setText(f"Backend: {self.current_backend.value}")
@@ -447,7 +407,6 @@ class EnhancedStimulusController(QWidget):
                 self.qt_video_widget.hide()
                 if self.vlc_video_widget:
                     self.vlc_video_widget.show()
-
     def _enable_controls(self):
         self.test_play_btn.setEnabled(True)
         self.test_pause_btn.setEnabled(True)
@@ -455,7 +414,6 @@ class EnhancedStimulusController(QWidget):
         self.switch_backend_btn.setEnabled(
             VLC_AVAILABLE and self.current_video_file is not None
         )
-
     def start_stimulus_playback(self, screen_index: int = 0) -> bool:
         if not self.current_video_file or not self.current_backend:
             self.error_occurred.emit("No video loaded or backend selected")
@@ -489,13 +447,11 @@ class EnhancedStimulusController(QWidget):
                 f"Error starting enhanced stimulus playback: {str(e)}"
             )
             return False
-
     def stop_playback(self):
         if self.current_backend == VideoBackend.QT_MULTIMEDIA:
             self.qt_media_player.stop()
         elif self.current_backend == VideoBackend.VLC and self.vlc_video_widget:
             self.vlc_video_widget.stop()
-
     def position_video_on_screen(self, screen_index: int):
         screens = QApplication.screens()
         if 0 <= screen_index < len(screens):
@@ -503,7 +459,6 @@ class EnhancedStimulusController(QWidget):
             geometry = target_screen.geometry()
             if self.active_video_widget:
                 self.active_video_widget.setGeometry(geometry)
-
     def test_play(self):
         if self.current_backend == VideoBackend.QT_MULTIMEDIA:
             self.qt_media_player.play()
@@ -511,18 +466,15 @@ class EnhancedStimulusController(QWidget):
         elif self.current_backend == VideoBackend.VLC and self.vlc_video_widget:
             self.vlc_video_widget.play()
             self.vlc_video_widget.show()
-
     def test_pause(self):
         if self.current_backend == VideoBackend.QT_MULTIMEDIA:
             self.qt_media_player.pause()
         elif self.current_backend == VideoBackend.VLC and self.vlc_video_widget:
             self.vlc_video_widget.pause()
-
     def test_fullscreen(self):
         if self.active_video_widget:
             self.active_video_widget.showFullScreen()
             self.active_video_widget.setFocus()
-
     def update_position(self):
         if not self.is_experiment_active:
             return
@@ -535,7 +487,6 @@ class EnhancedStimulusController(QWidget):
                 performance = max(0, 100 - self.frame_drop_count * 2)
                 self.performance_bar.setValue(performance)
         self.last_frame_time = current_time
-
     def on_qt_state_changed(self, state):
         if self.current_backend != VideoBackend.QT_MULTIMEDIA:
             return
@@ -549,18 +500,14 @@ class EnhancedStimulusController(QWidget):
         if state == QMediaPlayer.PlayingState and self.is_experiment_active:
             duration = self.qt_media_player.duration()
             self.timing_logger.log_stimulus_start(duration)
-
     def on_qt_media_status_changed(self, status):
         if status == QMediaPlayer.EndOfMedia and self.is_experiment_active:
             self.stop_stimulus_playback("completed")
-
     def on_qt_position_changed(self, position):
         pass
-
     def on_qt_duration_changed(self, duration):
         if duration > 0:
             print(f"[DEBUG_LOG] Qt video duration: {duration / 1000:.1f}s")
-
     def on_qt_media_error(self, error):
         error_messages = {
             QMediaPlayer.NoError: "No error",
@@ -577,7 +524,6 @@ class EnhancedStimulusController(QWidget):
         ):
             error_msg += " - VLC backend available as alternative"
         self.error_occurred.emit(f"Qt backend error: {error_msg}")
-
     def on_vlc_state_changed(self, state):
         if self.current_backend != VideoBackend.VLC:
             return
@@ -585,17 +531,13 @@ class EnhancedStimulusController(QWidget):
         if state == "Playing" and self.is_experiment_active:
             duration = self.vlc_video_widget.get_duration()
             self.timing_logger.log_stimulus_start(duration)
-
     def on_vlc_position_changed(self, position):
         pass
-
     def on_vlc_duration_changed(self, duration):
         if duration > 0:
             print(f"[DEBUG_LOG] VLC video duration: {duration / 1000:.1f}s")
-
     def on_vlc_error(self, error_msg):
         self.error_occurred.emit(f"VLC backend error: {error_msg}")
-
     def stop_stimulus_playback(self, reason: str = "stopped"):
         if not self.is_experiment_active:
             return
@@ -614,7 +556,6 @@ class EnhancedStimulusController(QWidget):
             self.error_occurred.emit(
                 f"Error stopping enhanced stimulus playback: {str(e)}"
             )
-
     def mark_event(self, label: str = ""):
         if not self.is_experiment_active:
             return
@@ -627,21 +568,18 @@ class EnhancedStimulusController(QWidget):
             )
         except Exception as e:
             self.error_occurred.emit(f"Error marking enhanced event: {str(e)}")
-
     def get_current_position(self) -> int:
         if self.current_backend == VideoBackend.QT_MULTIMEDIA:
             return self.qt_media_player.position()
         elif self.current_backend == VideoBackend.VLC and self.vlc_video_widget:
             return self.vlc_video_widget.get_position()
         return 0
-
     def get_duration(self) -> int:
         if self.current_backend == VideoBackend.QT_MULTIMEDIA:
             return self.qt_media_player.duration()
         elif self.current_backend == VideoBackend.VLC and self.vlc_video_widget:
             return self.vlc_video_widget.get_duration()
         return 0
-
     def is_playing(self) -> bool:
         if self.current_backend == VideoBackend.QT_MULTIMEDIA:
             return self.qt_media_player.state() == QMediaPlayer.PlayingState
