@@ -18,6 +18,7 @@ import com.multisensor.recording.ui.compose.screens.*
 
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
     object Recording : Screen("recording", "Recording", Icons.Filled.RadioButtonChecked)
+    object ThermalPreview : Screen("thermal_preview", "Preview", Icons.Filled.Visibility)
     object Devices : Screen("devices", "Devices", Icons.Filled.Devices)
     object Calibration : Screen("calibration", "Calibration", Icons.Filled.Tune)
     object Files : Screen("files", "Files", Icons.Filled.Folder)
@@ -50,7 +51,18 @@ fun MainComposeNavigation(
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(Screen.Recording.route) {
-                RecordingScreen()
+                RecordingScreen(
+                    onNavigateToPreview = {
+                        navController.navigate(Screen.ThermalPreview.route)
+                    }
+                )
+            }
+            composable(Screen.ThermalPreview.route) {
+                ThermalPreviewScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
             }
             composable(Screen.Devices.route) {
                 DevicesScreen()
@@ -69,6 +81,7 @@ fun MainComposeNavigation(
 private fun BottomNavigation(navController: NavHostController) {
     val items = listOf(
         Screen.Recording,
+        Screen.ThermalPreview,
         Screen.Devices,
         Screen.Calibration,
         Screen.Files
