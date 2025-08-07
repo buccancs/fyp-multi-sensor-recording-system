@@ -232,7 +232,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Start Recording"
                                 android:layout_marginEnd="8dp"
-                                app:icon="@drawable/ic_play_arrow"/>
+                                app:icon="@drawable/ic_play"/>
 
                         <com.google.android.material.button.MaterialButton
                                 android:id="@+id/stop_streaming_button"
