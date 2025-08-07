@@ -21,21 +21,21 @@ unconscious stress or emotional responses. Even consumer technology has
 begun to leverage skin conductance: modern wearable devices (e.g. recent
 smartwatches by Apple and Samsung) incorporate sensors for continuous
 stress monitoring based on GSR or related
-metrics[\[2\]\[3\]](docs/thesis_report/draft/bibliography.md#L2-L5).
+metrics.
 This surge of interest underscores the *motivation* to harness
 physiological signals like GSR in everyday contexts.
 
 Despite its value, traditional GSR measurement requires skin-contact
 electrodes (typically attached to fingers or palms with conductive
-gel)[\[4\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L10-L18).
+gel).
 This method is inherently obtrusive -- the wires and electrodes can
 restrict natural movement and comfort, and long-term use may cause
 discomfort or skin
-irritation[\[5\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L14-L22)[\[6\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L18-L26).
+irritation.
 These practical limitations make it difficult to use GSR in natural,
 real-world settings outside the lab. Consequently, **contactless
 measurement techniques** for GSR have become an appealing research
-direction[\[7\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L31).
+direction.
 The idea is to infer GSR (or the underlying psychophysiological arousal)
 using remote sensors that do not require physical contact with the user.
 For example, thermal infrared cameras can detect subtle temperature
@@ -50,7 +50,7 @@ Similarly, high-resolution RGB cameras with advanced computer vision
 algorithms can non-invasively capture other physiological signals --
 prior work has demonstrated heart rate and breathing can be measured
 from video of a person's face or
-body[\[10\]](docs/thesis_report/draft/bibliography.md#L41-L45)[\[11\]](docs/thesis_report/draft/bibliography.md#L13-L17).
+body.
 These developments suggest that *multi-modal sensing*, combining
 traditional biosensors with imaging, could enable **contactless
 physiological monitoring** in the future. Research in affective
@@ -65,7 +65,7 @@ to collect and synchronize these diverse data streams. Most prior
 studies have tackled contactless GSR estimation in isolation or under
 highly controlled conditions, often using separate devices that are not
 synchronized in real
-time[\[13\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)[\[14\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34).
+time.
 For instance, thermal cameras and wearable GSR sensors have typically
 been used independently, with any fusion of their data done post hoc.
 This piecemeal approach complicates the development of machine learning
@@ -95,7 +95,7 @@ which hinders the development of machine learning models for contactless
 GSR prediction*. While traditional GSR sensors provide reliable
 ground-truth measurements, they are intrusive for real-world use, and
 purely contactless approaches remain unvalidated or
-imprecise[\[13\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32).
+imprecise.
 To bridge this gap, researchers require a platform that can record
 **multiple modalities simultaneously** -- for example, capturing a
 person's skin conductance with a wearable sensor while concurrently
@@ -122,10 +122,10 @@ following specific objectives have been defined to achieve this aim:
   **wearable GSR sensor** and **camera-based sensors** into one
   platform. In practice, the system will use a research-grade Shimmer3
   GSR+ device for ground-truth skin conductance
-  measurement[\[15\]](docs/thesis_report/draft/bibliography.md#L2-L5),
+  measurement,
   a thermal infrared camera (Topdon TC001) attached to a smartphone for
   capturing thermal
-  video[\[15\]](docs/thesis_report/draft/bibliography.md#L2-L5),
+  video,
   and the smartphone's own RGB camera for high-resolution video. A
   **smartphone-based sensor node** will be coordinated with a **desktop
   controller** application to start/stop recordings in unison and
@@ -287,27 +287,3 @@ Data-driven analysis of facial thermal responses and multimodal
 physiological consistency among subjects - PMC
 
 <https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/>
-
-[\[2\]](docs/thesis_report/draft/bibliography.md#L2-L5)
-[\[3\]](docs/thesis_report/draft/bibliography.md#L2-L5)
-[\[10\]](docs/thesis_report/draft/bibliography.md#L41-L45)
-[\[11\]](docs/thesis_report/draft/bibliography.md#L13-L17)
-[\[15\]](docs/thesis_report/draft/bibliography.md#L2-L5)
-bibliography.md
-
-<docs/thesis_report/draft/bibliography.md>
-
-[\[4\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L10-L18)
-[\[5\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L14-L22)
-[\[6\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L18-L26)
-[\[7\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L31)
-[\[13\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)
-[\[14\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34)
-Chapter_1\_\_Introduction.md
-
-<docs/thesis_report/draft/Chapter_1__Introduction.md>
-
-[\[16\]](AndroidApp/README.md#L2-L5)
-README.md
-
-<AndroidApp/README.md>
