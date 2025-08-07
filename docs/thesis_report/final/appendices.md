@@ -6,12 +6,12 @@ The **Multi-Sensor Recording System** comprises multiple coordinated
 components and devices, each with dedicated technical documentation. The
 core system includes an **Android Mobile Application** and a **Python
 Desktop Controller**, along with subsystems for multi-device
-synchronization, session management, camera integration, and sensor
+synchronisation, session management, camera integration, and sensor
 interfaces[\[1\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L68).
 These components communicate over a local network using a custom
 protocol (WebSocket over TLS with JSON messages) to ensure real-time
 data exchange and time
-synchronization[\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119).
+synchronisation[\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119).
 
 **System Setup:** To deploy the system, a compatible Android device
 (e.g. Samsung Galaxy S22) is connected to a **TopDon TC001 thermal
@@ -34,10 +34,10 @@ precise timing.
 **Technical Configuration:** The system emphasizes precise timing and
 high performance. It runs a local **NTP time server** and a **PC
 server** on the desktop to coordinate clocks and commands across up to 8
-devices, achieving temporal synchronization accuracy on the order of
+devices, achieving temporal synchronisation accuracy on the order of
 ±3.2
 ms[\[7\]](docs/README.md#L2-L5).
-The hybrid star-mesh network topology and multi-threaded design minimize
+The hybrid star-mesh network topology and multi-threaded design minimis\1
 latency and jitter. A configuration interface allows adjusting session
 parameters, sensor sampling rates, and calibration settings. For
 example, the thermal camera can be set to auto-calibration mode, and the
@@ -60,7 +60,7 @@ maintenance schedule is outlined in the documentation, covering daily
 checks, weekly maintenance, monthly calibration, and annual system
 updates -- *placeholder for future maintenance
 doc*[\[11\]](docs/thesis_report/Chapter_7_Appendices.md#L14-L22).)
-The design choices in the technology stack favor maintainability: for
+The design choices in the technology stack favour maintainability: for
 instance, **Python + FastAPI** was chosen over alternatives for rapid
 prototyping and rich library support, **Kotlin (Android)** for efficient
 camera control, and **SQLite + JSON** for simple data storage -- all to
@@ -109,12 +109,12 @@ desktop; the system will automatically command all devices to begin
 recording simultaneously. During recording, the desktop dashboard
 displays live data streams (thermal camera feed, GSR waveform, etc.) and
 device status indicators. For example, a **quality monitor panel** on
-the desktop shows real-time data quality metrics with color codes (green
+the desktop shows real-time data quality metrics with colour codes (green
 = good, yellow = warning, red =
 error)[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818).
 The Android app shows its own recording status and live preview (with
 overlays for thermal data if applicable). Both interfaces provide a
-**synchronization status** display to ensure all devices are within the
+**synchronisation status** display to ensure all devices are within the
 allowed timing drift (typically a few
 milliseconds)[\[19\]](docs/thesis_report/Chapter_7_Appendices.md#L812-L818).
 If needed, the session can be paused or an **Emergency Stop** triggered
@@ -139,7 +139,7 @@ follows[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866):
 
 - *System Calibration (≈3 min):* Run the thermal camera calibration
   routine (via the app's calibration controls) so temperature readings
-  are accurate, and synchronize device clocks (the system can do this
+  are accurate, and synchronise device clocks (the system can do this
   automatically at start via NTP). Perform a short test recording to
   ensure all streams start and stop in sync and that data quality
   indicators are
@@ -154,7 +154,7 @@ follows[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866):
   (yellow/red) will appear so you can take corrective
   action[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818).
   Otherwise, minimal user intervention is needed; the system handles
-  synchronization and data logging automatically. Researchers should
+  synchronisation and data logging automatically. Researchers should
   note any significant events or participant reactions for later
   correlation.
 
@@ -172,7 +172,7 @@ follows[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866):
   packets)[\[22\]](docs/thesis_report/Chapter_7_Appendices.md#L870-L879)[\[23\]](docs/thesis_report/Chapter_7_Appendices.md#L882-L890).
 
 - *Post-Session Cleanup (≈10 min):* Power down or detach equipment and
-  perform any needed cleanup. For example, remove and sanitize GSR
+  perform any needed cleanup. For example, remove and sanitise GSR
   sensor electrodes, recharge devices if another session will follow,
   and archive the raw data securely. The user should also verify that
   the session's data was recorded completely (the system integrity
@@ -185,7 +185,7 @@ solutions. If the Android device isn't found by the desktop app, first
 check that both are on the same WiFi network (and not
 firewalled)[\[24\]](docs/QUICK_START.md#L66-L74).
 If connection fails due to port issues, try switching to alternate ports
-(the system by default uses ports 8080+). For synchronization problems
+(the system by default uses ports 8080+). For synchronisation problems
 (e.g. a warning that a device clock is out of sync), ensure the devices'
 system times are correct or restart the sync service -- the system's
 tolerance is ±50 ms drift, beyond which a recalibration is
@@ -227,7 +227,7 @@ known values). These technical specs ensure that the contactless
 measurement apparatus is comparable to traditional instruments.
 Appendix C also contains any relevant **protocols or algorithms**
 related to calibration -- for example, the procedures for thermal camera
-calibration and synchronization calibration are outlined (chessboard
+calibration and synchronisation calibration are outlined (chessboard
 pattern detection for camera alignment, clock sync methods, etc.) to
 enable replication of the
 setup[\[30\]](docs/thesis_report/Chapter_7_Appendices.md#L92-L100)[\[31\]](docs/thesis_report/Chapter_7_Appendices.md#L96-L99).
@@ -251,7 +251,7 @@ encoding (such as binary file chunks for recorded data). It also
 documents the network performance: e.g. the system maintains \<50 ms
 end-to-end latency and \>99.9% message reliability under normal WiFi
 conditions[\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119).
-Additionally, any **synchronization protocol** details are described --
+Additionally, any **synchronisation protocol** details are described --
 the system uses an NTP-based scheme with custom offset compensation to
 keep devices within ±25 ms of each
 other[\[34\]](docs/thesis_report/Chapter_7_Appendices.md#L113-L115).
@@ -299,7 +299,7 @@ the outcome of each test category. All test levels exhibited extremely
 high pass rates. For instance, out of 1,247 unit test cases, **98.7%
 passed** (with only 3 critical issues, all of which were
 resolved)[\[39\]](docs/thesis_report/Chapter_7_Appendices.md#L156-L163).
-Integration tests (covering inter-device communication, synchronization,
+Integration tests (covering inter-device communication, synchronisation,
 etc.) passed \~97.4% of cases, and system-level tests (full recording
 sessions) had \~96.6% pass
 rate[\[39\]](docs/thesis_report/Chapter_7_Appendices.md#L156-L163).
@@ -316,7 +316,7 @@ board[\[41\]](evaluation_results/execution_logs.md#L50-L58).
 
 **Validation of Requirements:** Each major requirement of the system was
 validated through specific tests. The appendix highlights key validation
-results: The **synchronization precision** was tested by measuring clock
+results: The **synchronisation precision** was tested by measuring clock
 offsets between devices over long runs -- results confirmed the system
 kept devices synchronized within about ±2.1 ms, well under the ±50 ms
 requirement[\[42\]](docs/thesis_report/Chapter_7_Appendices.md#L8-L11).
@@ -355,7 +355,7 @@ validation. The detailed test reports give confidence that the
 Multi-Sensor Recording System meets its design specifications and will
 perform reliably in real research use. By presenting quantitative
 results (coverage percentages, timing accuracy, error rates) and
-qualitative analyses (observations of system behavior under stress),
+qualitative analyses (observations of system behaviour under stress),
 this appendix provides the evidence of the system's quality and
 robustness.
 
@@ -379,7 +379,7 @@ usability[\[47\]](docs/thesis_report/Chapter_7_Appendices.md#L110-L111).
 Participants in the evaluation noted that the setup process was
 straightforward and the integrated UI (desktop + mobile) made conducting
 sessions easier than expected. Key advantages cited were the minimal
-need for manual synchronization and the clear real-time indicators
+need for manual synchronisation and the clear real-time indicators
 (which helped users trust the data quality). Appendix E includes a
 breakdown of the usability survey results, showing high scores in
 categories like "ease of setup," "learnability," and "efficiency in
@@ -441,14 +441,14 @@ supplemental evaluation data underscore that the system meets its
 ultimate goals: enabling high-quality, contactless physiological data
 collection with ease of use and scientific integrity.
 
-## Appendix F: Code Listings -- Selected Code Excerpts (Synchronization, Data Pipeline, Integration)
+## Appendix F: Code Listings -- Selected Code Excerpts (Synchronisation, Data Pipeline, Integration)
 
 This appendix provides key excerpts from the source code to illustrate
 how critical aspects of the system are implemented. The following
-listings highlight the synchronization mechanism, data processing
+listings highlight the synchronisation mechanism, data processing
 pipeline, and sensor integration logic, with inline commentary:
 
-**1. Synchronization (Master Clock Coordination):** The code below is
+**1. Synchronisation (Master Clock Coordination):** The code below is
 from the `MasterClockSynchronizer` class in the Python controller. It
 starts an NTP time server and the PC server (for network messages) and
 launches a background thread to continually monitor sync status. This
@@ -456,11 +456,11 @@ ensures all connected devices share a common clock reference. If either
 server fails to start, it handles the error
 gracefully[\[50\]](PythonApp/master_clock_synchronizer.py#L86-L94)[\[51\]](PythonApp/master_clock_synchronizer.py#L95-L102):
 
-`python try: logger.info("Starting master clock synchronization system...") if not self.ntp_server.start(): logger.error("Failed to start NTP server") return False if not self.pc_server.start(): logger.error("Failed to start PC server") self.ntp_server.stop() return False self.is_running = True self.master_start_time = time.time() self.sync_thread = threading.Thread( target=self._sync_monitoring_loop, name="SyncMonitor" ) self.sync_thread.daemon = True self.sync_thread.start() logger.info("Master clock synchronization system started successfully")`[\[52\]](PythonApp/master_clock_synchronizer.py#L86-L102)
+`python try: logger.info("Starting master clock synchronisation system...") if not self.ntp_server.start(): logger.error("Failed to start NTP server") return False if not self.pc_server.start(): logger.error("Failed to start PC server") self.ntp_server.stop() return False self.is_running = True self.master_start_time = time.time() self.sync_thread = threading.Thread( target=self._sync_monitoring_loop, name="SyncMonitor" ) self.sync_thread.daemon = True self.sync_thread.start() logger.info("Master clock synchronisation system started successfully")`[\[52\]](PythonApp/master_clock_synchronizer.py#L86-L102)
 
 In this snippet, after starting the NTP and PC servers, the system
 spawns a thread (`SyncMonitor`) that continuously checks and maintains
-synchronization. Each Android device periodically syncs with the PC's
+synchronisation. Each Android device periodically syncs with the PC's
 NTP server, and the PC broadcasts timing commands. When a recording
 session starts, the `MasterClockSynchronizer` sends a **start command
 with a master timestamp** to all devices, ensuring they begin recording
@@ -509,14 +509,14 @@ excerpt from the `ShimmerManager` class (Python controller) shows how an
 Android-integrated Shimmer sensor is initialized and
 managed[\[55\]](PythonApp/shimmer_manager.py#L241-L249)[\[56\]](PythonApp/shimmer_manager.py#L250-L258):
 
-`python if self.enable_android_integration: logger.info("Initializing Android device integration...") self.android_device_manager = AndroidDeviceManager( server_port=self.android_server_port, logger=self.logger ) self.android_device_manager.add_data_callback(self._on_android_shimmer_data) self.android_device_manager.add_status_callback(self._on_android_device_status) if not self.android_device_manager.initialize(): logger.error("Failed to initialize Android device manager") if not PYSHIMMER_AVAILABLE: return False else: logger.warning("Continuing with direct connections only") self.enable_android_integration = False else: logger.info(f"Android device server listening on port {self.android_server_port}")`[\[57\]](PythonApp/shimmer_manager.py#L241-L258)
+`python if self.enable_android_integration: logger.info("Initialising Android device integration...") self.android_device_manager = AndroidDeviceManager( server_port=self.android_server_port, logger=self.logger ) self.android_device_manager.add_data_callback(self._on_android_shimmer_data) self.android_device_manager.add_status_callback(self._on_android_device_status) if not self.android_device_manager.initialise(): logger.error("Failed to initialise Android device manager") if not PYSHIMMER_AVAILABLE: return False else: logger.warning("Continuing with direct connections only") self.enable_android_integration = False else: logger.info(f"Android device server listening on port {self.android_server_port}")`[\[57\]](PythonApp/shimmer_manager.py#L241-L258)
 
 This snippet demonstrates how the system handles sensor integration in a
 flexible way. If Android-based integration is enabled, it spins up an
 `AndroidDeviceManager` (which listens on a port for Android devices'
 connections). It registers callbacks to receive sensor data and status
 updates from the Android side (e.g., the Shimmer sensor data that the
-phone relays). When initializing, if the Android channel fails (for
+phone relays). When initialising, if the Android channel fails (for
 instance, if the phone app isn't responding), the code falls back: if a
 direct USB/Bluetooth method (`PyShimmer`) is available, it will use that
 instead (or otherwise run in simulation
@@ -529,12 +529,12 @@ The system can discover devices via Bluetooth or via the Android app,
 and will coordinate data streaming from whichever path is
 active[\[59\]](PythonApp/shimmer_manager.py#L269-L278)[\[60\]](PythonApp/shimmer_manager.py#L280-L289).
 Additional code (not shown here) in the `ShimmerManager` handles the
-live data stream, timestamp synchronization of sensor samples, and error
+live data stream, timestamp synchronisation of sensor samples, and error
 recovery (reconnecting a sensor if the link is
 lost)[\[61\]](PythonApp/shimmer_manager.py#L145-L151).
 
 Through these code excerpts, Appendix F illustrates the implementation
-of the system's key features. The synchronization code shows how strict
+of the system's key features. The synchronisation code shows how strict
 timing is achieved programmatically; the data pipeline code reveals the
 real-time analysis capabilities; and the integration code highlights the
 system's versatility in accommodating different hardware configurations.

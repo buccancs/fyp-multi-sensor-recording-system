@@ -5,7 +5,7 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.20-blue)](https://kotlinlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
 
-A sophisticated Android application for synchronized multi-sensor data collection in research environments. This mobile application serves as a sensor node in a distributed recording system, coordinating with a Python desktop controller to achieve research-grade temporal synchronization across multiple data modalities.
+A sophisticated Android application for synchronized multi-sensor data collection in research environments. This mobile application serves as a sensor node in a distributed recording system, coordinating with a Python desktop controller to achieve research-grade temporal synchronisation across multiple data modalities.
 
 ## 🔧 Build Status: ✅ OPERATIONAL
 
@@ -170,7 +170,7 @@ sequenceDiagram
     APP->>PC: Handshake Response
     
     PC->>APP: Start Recording Command
-    APP->>CAM: Initialize Camera2
+    APP->>CAM: Initialise Camera2
     APP->>THERMAL: Connect USB-C OTG
     APP->>SHIMMER: Connect Bluetooth
     
@@ -238,7 +238,7 @@ Integration with Topdon TC001 thermal cameras through USB-C OTG connectivity:
 **Features:**
 - **Real-time Thermal Imaging**: Live thermal data capture and processing
 - **Temperature Mapping**: Calibrated temperature measurement across the sensor field
-- **Synchronization**: Temporal alignment with RGB video streams
+- **Synchronisation**: Temporal alignment with RGB video streams
 - **Multiple Formats**: Support for both processed thermal images and raw sensor data
 
 #### Shimmer3 GSR+ Integration
@@ -297,7 +297,7 @@ graph TB
         AUTH[Authentication<br/>Device Registration]
         CMD[Command Processing<br/>Start/Stop/Config]
         STREAM[Data Streaming<br/>Preview/Status]
-        SYNC[Synchronization<br/>Clock Alignment]
+        SYNC[Synchronisation<br/>Clock Alignment]
         
         CONN --> AUTH
         AUTH --> CMD
@@ -652,7 +652,7 @@ Camera2 integration with advanced configuration options:
 ```kotlin
 interface CameraManager {
     /**
-     * Initialize camera with specified configuration
+     * Initialise camera with specified configuration
      * @param config Camera configuration parameters
      */
     suspend fun initializeCamera(config: CameraConfig): Result<Unit>
@@ -782,7 +782,7 @@ The application includes complete unit tests covering all major components:
 **Test Coverage Areas:**
 - **ViewModels**: Business logic and state management
 - **Managers**: Recording, network, and session management
-- **Data Models**: Serialization and validation
+- **Data Models**: Serialisation and validation
 - **Utilities**: Helper functions and extensions
 
 ### Integration Testing
@@ -852,9 +852,9 @@ class RecordingIntegrationTest {
 
 ## Performance
 
-### Optimization Strategies
+### Optimisation Strategies
 
-The application implements several performance optimization strategies for research-grade recording:
+The application implements several performance optimisation strategies for research-grade recording:
 
 #### Memory Management
 
@@ -875,21 +875,21 @@ class MemoryOptimizedRecorder {
 }
 ```
 
-#### CPU Optimization
+#### CPU Optimisation
 
 - **Background Processing**: Compute-intensive operations on background threads
 - **Hardware Acceleration**: GPU-accelerated image processing where available
 - **Adaptive Quality**: Dynamic quality adjustment based on device capabilities
 
-#### Network Optimization
+#### Network Optimisation
 
 ```mermaid
 graph LR
-    subgraph "Network Optimization"
+    subgraph "Network Optimisation"
         COMP[Data Compression<br/>GZIP/LZ4]
         BATCH[Batch Transmission<br/>Reduce Overhead]
         CACHE[Local Caching<br/>Reliability]
-        QOS[Quality of Service<br/>Prioritization]
+        QOS[Quality of Service<br/>Prioritisation]
         
         COMP --> BATCH
         BATCH --> CACHE
@@ -908,7 +908,7 @@ graph LR
 - **GSR Sampling**: 128Hz continuous sampling
 - **Network Latency**: < 50ms command response time
 
-#### Resource Utilization
+#### Resource Utilisation
 
 **Memory Usage:**
 - **Baseline**: < 200MB at application start
@@ -916,9 +916,9 @@ graph LR
 - **Peak**: < 800MB during intensive processing
 
 **CPU Usage:**
-- **Idle**: < 5% CPU utilization
-- **Recording**: < 40% CPU utilization (sustained)
-- **Peak**: < 80% CPU utilization (brief spikes)
+- **Idle**: < 5% CPU utilisation
+- **Recording**: < 40% CPU utilisation (sustained)
+- **Peak**: < 80% CPU utilisation (brief spikes)
 
 **Battery Consumption:**
 - **Standard Recording**: 10-15% per hour
@@ -1025,7 +1025,7 @@ Solution:
 
 #### Camera Issues
 
-**Issue**: Camera initialization fails
+**Issue**: Camera initialisation fails
 ```
 Error: Camera2 device not available
 Solution:
@@ -1203,7 +1203,7 @@ abstract class RecordingModule {
 
 [Clark2018] Clarke, E. M., Henzinger, T. A., Veith, H., & Bloem, R. (2018). Handbook of Model Checking. Springer.
 
-[Cristian1989] Cristian, F. (1989). Probabilistic clock synchronization. Distributed Computing, 3(3), 146-158.
+[Cristian1989] Cristian, F. (1989). Probabilistic clock synchronisation. Distributed Computing, 3(3), 146-158.
 
 [Gamma1994] Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley Professional.
 
@@ -1213,7 +1213,7 @@ abstract class RecordingModule {
 
 [Healey2005] Healey, J. A., & Picard, R. W. (2005). Detecting stress during real-world driving tasks using physiological sensors. IEEE Transactions on Intelligent Transportation Systems, 6(2), 156-166.
 
-[IEEE1588-2008] IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
+[IEEE1588-2008] IEEE Standard for a Precision Clock Synchronisation Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
 
 [Kotlin2023] JetBrains. (2023). Kotlin Programming Language. Retrieved from https://kotlinlang.org/
 
@@ -1225,7 +1225,7 @@ abstract class RecordingModule {
 
 [MediaPipe2023] Google Research. (2023). MediaPipe: Cross-platform ML solutions. Retrieved from https://mediapipe.dev/
 
-[Mills1991] Mills, D. L. (1991). Internet time synchronization: the network time protocol. IEEE Transactions on Communications, 39(10), 1482-1493.
+[Mills1991] Mills, D. L. (1991). Internet time synchronisation: the network time protocol. IEEE Transactions on Communications, 39(10), 1482-1493.
 
 [Picard1997] Picard, R. W. (1997). Affective Computing. MIT Press.
 
@@ -1233,7 +1233,7 @@ abstract class RecordingModule {
 
 [Topdon2023] Topdon Technology. (2023). TC001 Thermal Camera Specifications. Retrieved from https://www.topdon.com/
 
-[Wilhelm2010] Wilhelm, F. H., Pfaltz, M. C., & Grossman, P. (2010). Continuous electronic data capture of physiology, behavior and environment in ambulatory subjects. Behavior Research Methods, 38(1), 157-165.
+[Wilhelm2010] Wilhelm, F. H., Pfaltz, M. C., & Grossman, P. (2010). Continuous electronic data capture of physiology, behaviour and environment in ambulatory subjects. Behaviour Research Methods, 38(1), 157-165.
 
 ---
 
@@ -1243,6 +1243,6 @@ This project is licensed under the MIT License - see the [LICENSE](../LICENSE) f
 
 ## Acknowledgments
 
-This Android application is part of the Multi-Sensor Recording System developed for advanced research applications requiring precise temporal synchronization across diverse sensor modalities. The implementation leverages modern Android development practices and scientific computing principles to provide a robust platform for multi-modal data collection in experimental research environments.
+This Android application is part of the Multi-Sensor Recording System developed for advanced research applications requiring precise temporal synchronisation across diverse sensor modalities. The implementation leverages modern Android development practices and scientific computing principles to provide a robust platform for multi-modal data collection in experimental research environments.
 
 For complete system documentation, see the [main project README](../README.md) and the [Python Desktop Controller README](../PythonApp/README.md).

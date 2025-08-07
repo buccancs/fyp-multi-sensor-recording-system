@@ -13,7 +13,7 @@ The Python PC controller application manages critical research data and coordina
 - **Multi-device Coordination**: Type-safe communication protocols between PC and Android devices
 - **Research Quality**: Academic-grade reliability with minimal runtime errors
 - **Complex Async Operations**: Type-safe handling of concurrent device operations
-- **API Contracts**: Clear interfaces for calibration, synchronization, and recording subsystems
+- **API Contracts**: Clear interfaces for calibration, synchronisation, and recording subsystems
 
 Without static type checking, the Python codebase experienced runtime errors that compromised research sessions and data quality. The team needed a robust type safety solution suitable for research-grade applications.
 
@@ -212,7 +212,7 @@ def calibrate_device(device_id: str) -> Result[CalibrationData, CalibrationError
 ```
 
 ### Migration Strategy
-1. **Core Modules First**: Start with critical device management and synchronization
+1. **Core Modules First**: Start with critical device management and synchronisation
 2. **Public APIs**: Ensure all public interfaces are fully typed
 3. **Gradual Internal Coverage**: Add types to internal functions incrementally
 4. **CI Enforcement**: Enable strict checking once core modules are compliant
@@ -231,7 +231,7 @@ def calibrate_device(device_id: str) -> Result[CalibrationData, CalibrationError
 - [PEP 484 - Type Hints](https://www.python.org/dev/peps/pep-0484/) - Python Enhancement Proposal
 - [Effective Python Type Checking](https://realpython.com/python-type-checking/) - Best practices guide
 - Wilson, P. et al. (2023). "Static Type Analysis in Scientific Python Applications." *Journal of Computational Science*, 45, 123-135.
-- [ADR-004: Distributed Device Synchronization](./ADR-004-distributed-synchronization.md) - Related type-safe coordination architecture
+- [ADR-004: Distributed Device Synchronisation](./ADR-004-distributed-synchronisation.md) - Related type-safe coordination architecture
 
 ## Revision History
 

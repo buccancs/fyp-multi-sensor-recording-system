@@ -28,7 +28,7 @@ The Python Desktop Controller encompasses complete orchestration capabilities de
 **Primary Functions:**
 
 - **Multi-Device Coordination**: Managing heterogeneous devices including USB cameras, Android smartphones, thermal sensors, and physiological monitoring equipment through standardized protocols
-- **Real-Time System Monitoring**: Advanced monitoring capabilities providing continuous assessment of device status, data quality, synchronization precision, and system performance metrics
+- **Real-Time System Monitoring**: Advanced monitoring capabilities providing continuous assessment of device status, data quality, synchronisation precision, and system performance metrics
 - **Experimental Protocol Management**: Sophisticated session management enabling complex experimental protocols with automated device configuration and temporal coordination
 - **Data Integration and Analysis**: complete data collection coordination with post-session analysis capabilities supporting research workflows
 
@@ -53,7 +53,7 @@ The Python Desktop Controller encompasses complete orchestration capabilities de
 - **USB Webcam Integration**: DirectShow/V4L2 camera capture for stationary high-quality video recording
 - **Camera Calibration System**: OpenCV-based intrinsic and extrinsic camera parameter estimation
 - **Stimulus Presentation**: Integrated experimental stimulus controller for research applications
-- **Data Synchronization**: Temporal alignment of multi-modal data streams with microsecond precision
+- **Data Synchronisation**: Temporal alignment of multi-modal data streams with microsecond precision
 - **Export and Analysis Tools**: Automated data processing and export for analysis workflows
 
 ## Architecture
@@ -127,8 +127,8 @@ graph TB
 
 #### GUI Layer Components
 
-- **application.py**: Main application entry point with PyQt5 initialization
-- **PyQt5 Interface**: Modern tabbed interface organizing functionality by research workflow phases
+- **application.py**: Main application entry point with PyQt5 initialisation
+- **PyQt5 Interface**: Modern tabbed interface organising functionality by research workflow phases
 - **Logging System**: complete logging and diagnostic framework
 
 #### Camera Management Components
@@ -177,9 +177,9 @@ phases:
 
 #### Component-Based Architecture
 
-- **ModernButton**: Standardized button styling with hover effects and semantic color coding
+- **ModernButton**: Standardized button styling with hover effects and semantic colour coding
 - **StatusIndicator**: Consistent status communication across device types and operational states
-- **ProgressIndicator**: Unified progress visualization for operations and procedures
+- **ProgressIndicator**: Unified progress visualisation for operations and procedures
 - **ConnectionManager**: Device connections with standardized controls and status reporting
 
 ## Protocol Specification
@@ -233,7 +233,7 @@ All communication messages follow a standardized JSON format:
 
 #### Session Control Commands
 
-**Initialize Session:**
+**Initialise Session:**
 
 ```json
 {
@@ -348,7 +348,7 @@ Session information is stored in JSON format with complete metadata:
     "distortion_coefficients": [0.1, -0.2, 0.001, -0.002, 0.1],
     "calibration_quality": "excellent"
   },
-  "synchronization": {
+  "synchronisation": {
     "master_clock": "pc_controller",
     "precision": "microsecond",
     "sync_quality": "high"
@@ -362,7 +362,7 @@ Session information is stored in JSON format with complete metadata:
 
 ```
 bucika_gsr/
-├── __init__.py                       # Package initialization
+├── __init__.py                       # Package initialisation
 ├── application.py                    # Main application entry point
 ├── main.py                          # Alternative entry point
 ├── calibration/                     # Camera calibration system
@@ -708,13 +708,13 @@ The application provides a tabbed interface with four main sections:
 
 - Monitor device status indicators
 - Check storage space and battery levels
-- Observe synchronization quality metrics
+- Observe synchronisation quality metrics
 - Use emergency stop if necessary
 
 **Stop Recording:**
 
 1. Click "Stop Recording" or wait for automatic completion
-2. Wait for data finalization across all devices
+2. Wait for data finalisation across all devices
 3. Verify session completion status
 4. Review session summary and data quality report
 
@@ -766,25 +766,25 @@ The application provides a tabbed interface with four main sections:
 5. Validate alignment accuracy
 6. Save stereo parameters for session use
 
-### System Synchronization
+### System Synchronisation
 
-#### Clock Synchronization
+#### Clock Synchronisation
 
 **Network Time Sync:**
 
 1. Navigate to Calibration tab
-2. Select "System Synchronization"
+2. Select "System Synchronisation"
 3. Verify network connectivity to all devices
-4. Execute synchronization procedure
-5. Monitor synchronization accuracy
+4. Execute synchronisation procedure
+5. Monitor synchronisation accuracy
 6. Validate temporal alignment across devices
 
-**Synchronization Quality Metrics:**
+**Synchronisation Quality Metrics:**
 
 - **Network Latency**: Round-trip time measurements
 - **Clock Drift**: Time drift between devices
-- **Precision**: Achieved synchronization accuracy
-- **Stability**: Consistency of synchronization over time
+- **Precision**: Achieved synchronisation accuracy
+- **Stability**: Consistency of synchronisation over time
 
 ## API Reference
 
@@ -802,8 +802,8 @@ class Application(QApplication):
         self.session_manager = None
         self.device_manager = None
     
-    def initialize(self) -> bool:
-        """Initialize application components"""
+    def initialise(self) -> bool:
+        """Initialise application components"""
         
     def run(self) -> int:
         """Execute main application loop"""
@@ -822,7 +822,7 @@ class SessionManager:
         """Initiate recording across all connected devices"""
     
     def stop_recording(self, session_id: str) -> bool:
-        """Stop recording and finalize session data"""
+        """Stop recording and finalise session data"""
     
     def get_session_status(self, session_id: str) -> SessionStatus:
         """Get current status of specified session"""
@@ -870,7 +870,7 @@ class CalibrationManager:
 
 ```python
 class DataProcessor:
-    """Multi-modal data processing and synchronization"""
+    """Multi-modal data processing and synchronisation"""
     
     def process_session(self, session_id: str) -> ProcessingResult:
         """Process all data from completed session"""
@@ -1136,7 +1136,7 @@ class SessionTest:
 **Solutions**:
 
 1. Ensure both cameras can see calibration board simultaneously
-2. Verify temporal synchronization between cameras
+2. Verify temporal synchronisation between cameras
 3. Use larger calibration board for better feature detection
 4. Increase number of calibration image pairs
 5. Check relative camera positioning and overlap
@@ -1172,13 +1172,13 @@ class SessionTest:
 4. Review session logs for error messages
 5. Implement automatic backup procedures
 
-**Problem**: Synchronization issues between data streams
+**Problem**: Synchronisation issues between data streams
 **Solutions**:
 
-1. Verify system clock synchronization
+1. Verify system clock synchronisation
 2. Check network stability during recording
-3. Review synchronization quality metrics
-4. Use higher precision synchronization settings
+3. Review synchronisation quality metrics
+4. Use higher precision synchronisation settings
 5. Post-process temporal alignment if necessary
 
 ### Advanced Diagnostics
@@ -1228,7 +1228,7 @@ def monitor_resources():
 
 **Technical Documentation**:
 
-- [System Architecture](../multi-device-synchronization/README.md)
+- [System Architecture](../multi-device-synchronisation/README.md)
 - [Android Integration](../android-mobile-application/README.md)
 - [Network Protocol](../networking-protocol/README.md)
 
@@ -1246,7 +1246,7 @@ def monitor_resources():
 
 ---
 
-*This complete documentation consolidates all Python Desktop Controller information from multiple sources into a single authoritative reference. For related modules, see the [Android Mobile Application](android_mobile_application_readme.md) and [Multi-Device Synchronization](multi_device_synchronization_readme.md) documentation.*
+*This complete documentation consolidates all Python Desktop Controller information from multiple sources into a single authoritative reference. For related modules, see the [Android Mobile Application](android_mobile_application_readme.md) and [Multi-Device Synchronisation](multi_device_synchronization_readme.md) documentation.*
 
 ## References
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Networking Protocol System defines the communication framework that enables coordinated operation across all devices in the Multi-Sensor Recording System for contactless GSR prediction research. This component implements a standardized message exchange protocol providing reliable communication, temporal synchronization, and data streaming capabilities between PC master controllers and distributed mobile sensor nodes.
+The Networking Protocol System defines the communication framework that enables coordinated operation across all devices in the Multi-Sensor Recording System for contactless GSR prediction research. This component implements a standardized message exchange protocol providing reliable communication, temporal synchronisation, and data streaming capabilities between PC master controllers and distributed mobile sensor nodes.
 
 ### Theoretical Foundation and Design Rationale
 
@@ -16,7 +16,7 @@ The Networking Protocol System provides the communication backbone for the distr
 
 - **Reliable Message Exchange**: JSON-based command and status communication with guaranteed delivery semantics
 - **Device Discovery and Registration**: Automatic detection and registration of network devices using standardized protocols
-- **Session Coordination**: Distributed session management with temporal synchronization across heterogeneous sensors
+- **Session Coordination**: Distributed session management with temporal synchronisation across heterogeneous sensors
 - **Quality Monitoring and Adaptation**: Network performance assessment and adaptive quality control mechanisms
 - **Security Framework**: Secure communication protocols with authentication and data integrity validation
 
@@ -27,7 +27,7 @@ graph TB
     subgraph "Protocol Stack"
         subgraph "Application Layer"
             JSON[JSON Message Protocol<br/>Command and Status Exchange]
-            SYNC[Synchronization Protocol<br/>Temporal Coordination]
+            SYNC[Synchronisation Protocol<br/>Temporal Coordination]
             STREAM[Data Streaming Protocol<br/>Real-time Data Transfer]
         end
         
@@ -94,7 +94,7 @@ graph TB
 | Channel         | Protocol | Port | Purpose                         | Message Type       |
 |-----------------|----------|------|---------------------------------|--------------------|
 | Command Channel | TCP      | 9000 | Device control and coordination | JSON Commands      |
-| Time Sync       | UDP      | 8889 | Clock synchronization           | NTP Protocol       |
+| Time Sync       | UDP      | 8889 | Clock synchronisation           | NTP Protocol       |
 | Discovery       | UDP      | 8888 | Device registration             | Broadcast Messages |
 | File Transfer   | TCP      | 9001 | Data exchange                   | Binary/JSON Data   |
 | Status Updates  | TCP      | 9000 | Real-time status reporting      | JSON Status        |
@@ -220,7 +220,7 @@ class NetworkManager:
 
         try:
             device_connection = self.connected_devices[target_device]
-            serialized_message = message.serialize()
+            serialized_message = message.serialise()
             device_connection.send(serialized_message)
             return True
         except Exception as e:
@@ -239,7 +239,7 @@ class NetworkManager:
 
 ```python
 class NetworkMessage:
-    """Standardized network message with serialization"""
+    """Standardized network message with serialisation"""
     
     def __init__(self, message_type: str, source_device: str, 
                  target_device: str, payload: Dict):
@@ -258,8 +258,8 @@ class NetworkMessage:
             "compression": False
         }
     
-    def serialize(self) -> bytes:
-        """Serialize message to JSON bytes"""
+    def serialise(self) -> bytes:
+        """Serialise message to JSON bytes"""
         message_dict = {
             "message_id": self.message_id,
             "message_type": self.message_type,
@@ -281,8 +281,8 @@ class NetworkMessage:
         return json.dumps(message_dict).encode('utf-8')
     
     @classmethod
-    def deserialize(cls, data: bytes) -> 'NetworkMessage':
-        """Deserialize JSON bytes to message object"""
+    def deserialise(cls, data: bytes) -> 'NetworkMessage':
+        """Deserialise JSON bytes to message object"""
         try:
             message_dict = json.loads(data.decode('utf-8'))
             
@@ -314,7 +314,7 @@ class NetworkMessage:
             return message
             
         except Exception as e:
-            raise MessageDeserializationError(f"Failed to deserialize message: {e}")
+            raise MessageDeserializationError(f"Failed to deserialise message: {e}")
 ```
 
 ### Quality Monitoring Implementation
@@ -475,12 +475,12 @@ class NetworkManager:
 
 ```python
 class NetworkMessage:
-    def serialize(self) -> bytes:
-        """Serialize message to JSON bytes"""
+    def serialise(self) -> bytes:
+        """Serialise message to JSON bytes"""
     
     @classmethod
-    def deserialize(cls, data: bytes) -> 'NetworkMessage':
-        """Deserialize JSON bytes to message object"""
+    def deserialise(cls, data: bytes) -> 'NetworkMessage':
+        """Deserialise JSON bytes to message object"""
 ```
 
 #### NetworkQualityMonitor
@@ -501,7 +501,7 @@ class NetworkQualityMonitor:
 ```python
 class NetworkProtocolTest:
     def test_message_serialization(self):
-        """Test message serialization/deserialization"""
+        """Test message serialisation/deserialization"""
         original_message = NetworkMessage(
             message_type="test",
             source_device="test_source",
@@ -509,8 +509,8 @@ class NetworkProtocolTest:
             payload={"test_data": "test_value"}
         )
 
-        serialized = original_message.serialize()
-        deserialized = NetworkMessage.deserialize(serialized)
+        serialized = original_message.serialise()
+        deserialized = NetworkMessage.deserialise(serialized)
 
         assert original_message.message_type == deserialized.message_type
         assert original_message.payload == deserialized.payload
@@ -547,13 +547,13 @@ class NetworkProtocolTest:
 **Solutions**:
 
 1. Check network congestion
-2. Optimize WiFi settings
+2. Optimise WiFi settings
 3. Use wired connections when possible
 4. Adjust quality thresholds
 
 ---
 
-*For related modules, see [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Session Management](session_management_readme.md) documentation.*
+*For related modules, see [Multi-Device Synchronisation](multi_device_synchronization_readme.md) and [Session Management](session_management_readme.md) documentation.*
 
 ## References
 

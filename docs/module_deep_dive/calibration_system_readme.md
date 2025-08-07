@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Calibration System provides complete camera calibration and quality assessment capabilities for the Multi-Sensor Recording System, ensuring accurate spatial alignment and temporal synchronization across all camera modalities. This component implements established computer vision calibration methodologies [Zhang2000] to maintain research-grade geometric accuracy essential for contactless GSR prediction research.
+The Calibration System provides complete camera calibration and quality assessment capabilities for the Multi-Sensor Recording System, ensuring accurate spatial alignment and temporal synchronisation across all camera modalities. This component implements established computer vision calibration methodologies [Zhang2000] to maintain research-grade geometric accuracy essential for contactless GSR prediction research.
 
 ### Theoretical Foundation
 
@@ -10,7 +10,7 @@ The calibration system builds upon well-established computer vision principles a
 
 - **Zhang's Camera Calibration Method** [Zhang2000]: Planar pattern-based intrinsic parameter estimation providing robust calibration with minimal user intervention
 - **Stereo Vision Fundamentals** [Hartley2003]: Multi-camera geometric relationships enabling precise spatial alignment between RGB and thermal sensor modalities  
-- **Bundle Adjustment Optimization** [Triggs2000]: Optimal parameter estimation through non-linear optimization for enhanced calibration accuracy
+- **Bundle Adjustment Optimisation** [Triggs2000]: Optimal parameter estimation through non-linear optimisation for enhanced calibration accuracy
 - **OpenCV Calibration Framework** [Bradski2008]: Production-ready implementation of calibration algorithms with validated accuracy
 
 ### System Role and Responsibilities
@@ -22,7 +22,7 @@ The Calibration System serves as the foundation for accurate spatial and tempora
 - **Intrinsic Camera Calibration**: Individual camera parameter estimation for geometric distortion correction and accurate metric measurements
 - **Stereo Calibration**: RGB-thermal camera alignment with precise rotation and translation matrix computation for spatial correspondence
 - **Quality Assessment**: complete calibration quality evaluation with coverage analysis and statistical validation [Bouguet2004]
-- **Temporal Calibration**: Synchronization parameter estimation and validation ensuring sub-millisecond temporal alignment
+- **Temporal Calibration**: Synchronisation parameter estimation and validation ensuring sub-millisecond temporal alignment
 - **Data Persistence**: Structured JSON-based calibration parameter storage with metadata for reproducible research
 
 ### Technology Foundation
@@ -31,7 +31,7 @@ The calibration system builds upon established computer vision principles:
 
 - **Zhang's Camera Calibration** [Zhang2000]: Planar pattern-based intrinsic parameter estimation
 - **Stereo Vision Fundamentals** [Hartley2003]: Multi-camera geometric relationships
-- **Bundle Adjustment** [Triggs2000]: Optimal parameter estimation through non-linear optimization
+- **Bundle Adjustment** [Triggs2000]: Optimal parameter estimation through non-linear optimisation
 - **OpenCV Calibration Framework** [Bradski2008]: Robust implementation of calibration algorithms
 
 ### Calibration Capabilities
@@ -41,7 +41,7 @@ The calibration system builds upon established computer vision principles:
 - **Intrinsic Parameters**: Camera matrix, distortion coefficients, principal point
 - **Pattern Detection**: Chessboard and circle grid detection with sub-pixel accuracy
 - **Quality Metrics**: RMS error analysis, coverage assessment, parameter confidence intervals
-- **Distortion Modeling**: Radial and tangential distortion correction
+- **Distortion Modelling**: Radial and tangential distortion correction
 
 #### Stereo Calibration
 
@@ -52,7 +52,7 @@ The calibration system builds upon established computer vision principles:
 
 #### Temporal Calibration
 
-- **Synchronization Validation**: Frame-level temporal alignment assessment
+- **Synchronisation Validation**: Frame-level temporal alignment assessment
 - **Latency Measurement**: Inter-device timing offset estimation
 - **Quality Monitoring**: Continuous temporal alignment quality assessment
 
@@ -83,7 +83,7 @@ graph TB
         
         subgraph "Integration Layer"
             CI[CameraInterface<br/>Hardware Integration]
-            TI[TemporalInterface<br/>Synchronization]
+            TI[TemporalInterface<br/>Synchronisation]
             UI[UserInterface<br/>Interactive Controls]
         end
     end
@@ -118,7 +118,7 @@ graph TB
 
 - **CalibrationProcessor**: OpenCV-based calibration algorithm implementation
 - **PatternDetector**: Robust calibration pattern detection with sub-pixel accuracy
-- **OptimizationProcessor**: Non-linear parameter optimization and refinement
+- **OptimizationProcessor**: Non-linear parameter optimisation and refinement
 
 #### Data Management Layer
 
@@ -129,8 +129,8 @@ graph TB
 #### Integration Layer
 
 - **CameraInterface**: Hardware abstraction for diverse camera platforms
-- **TemporalInterface**: Synchronization calibration and validation
-- **UserInterface**: Interactive calibration controls and progress visualization
+- **TemporalInterface**: Synchronisation calibration and validation
+- **UserInterface**: Interactive calibration controls and progress visualisation
 
 ### Calibration Workflow Architecture
 
@@ -139,13 +139,13 @@ graph TB
 1. **Pattern Presentation**: Automated or manual calibration pattern display
 2. **Image Acquisition**: Synchronized image capture across multiple cameras
 3. **Feature Detection**: Robust corner or circle detection with quality filtering
-4. **Parameter Estimation**: Non-linear optimization using detected features
+4. **Parameter Estimation**: Non-linear optimisation using detected features
 5. **Quality Assessment**: complete validation and coverage analysis
 6. **Result Storage**: Structured persistence with metadata and provenance
 
 #### Multi-Camera Coordination
 
-1. **Device Synchronization**: Temporal alignment of image capture across cameras
+1. **Device Synchronisation**: Temporal alignment of image capture across cameras
 2. **Simultaneous Capture**: Coordinated image acquisition for stereo calibration
 3. **Cross-Modal Alignment**: RGB-thermal spatial relationship estimation
 4. **Quality Validation**: Consistency checks across multiple camera views
@@ -676,7 +676,7 @@ class QualityAssessment:
 
 ```
 bucika_gsr/calibration/
-├── __init__.py                       # Package initialization
+├── __init__.py                       # Package initialisation
 ├── calibration_manager.py            # Main calibration coordination
 ├── calibration_processor.py          # OpenCV algorithm implementation
 ├── calibration_result.py             # Result data structures
@@ -722,7 +722,7 @@ bucika_gsr/calibration/
 
 #### Step-by-Step Procedure
 
-1. **Initialize Calibration Session**:
+1. **Initialise Calibration Session**:
     - Navigate to Calibration tab in PC controller
     - Select "Single Camera Calibration"
     - Choose target camera (USB webcam or Android device)
@@ -735,7 +735,7 @@ bucika_gsr/calibration/
     - Position calibration pattern in camera view
     - Ensure pattern is fully visible and in focus
     - Capture images from various positions and angles:
-        - Center, corners, and edges of image
+        - Centre, corners, and edges of image
         - Different distances (near and far)
         - Various tilting angles (±30 degrees)
     - Target: 15-25 high-quality images
@@ -749,7 +749,7 @@ bucika_gsr/calibration/
 4. **Calibration Processing**:
     - Execute calibration algorithm
     - Review RMS error (target: <1.0 pixels)
-    - Analyze quality metrics and coverage score
+    - Analyse quality metrics and coverage score
     - Save calibration parameters
 
 #### Quality Criteria
@@ -787,7 +787,7 @@ bucika_gsr/calibration/
 
 2. **Calibration Procedure**:
     - Configure stereo calibration mode
-    - Verify temporal synchronization between cameras
+    - Verify temporal synchronisation between cameras
     - Capture synchronized image pairs (15-20 pairs recommended)
     - Process stereo calibration parameters
     - Validate epipolar geometry
@@ -803,11 +803,11 @@ bucika_gsr/calibration/
 1. **Network Calibration**:
     - Define camera network topology
     - Establish pairwise stereo relationships
-    - Process bundle adjustment optimization
+    - Process bundle adjustment optimisation
     - Validate global consistency
 
 2. **Temporal Alignment**:
-    - Synchronize capture timing across all cameras
+    - Synchronise capture timing across all cameras
     - Validate frame-level temporal alignment
     - Compensate for network and processing delays
 
@@ -1109,7 +1109,7 @@ class CalibrationIntegrationTest:
        print("Image may be blurry - check camera focus")
    ```
 
-2. **Lighting Optimization**:
+2. **Lighting Optimisation**:
     - Use diffuse, even lighting
     - Avoid shadows and reflections
     - Ensure sufficient contrast between pattern and background
@@ -1119,7 +1119,7 @@ class CalibrationIntegrationTest:
 **Symptoms**: RMS error > 2.0 pixels, poor quality grade
 **Diagnosis**:
 
-1. Analyze error distribution across images
+1. Analyse error distribution across images
 2. Check calibration pattern quality
 3. Review image capture diversity
 4. Validate camera stability during capture
@@ -1145,22 +1145,22 @@ class CalibrationIntegrationTest:
 **Symptoms**: High epipolar error, poor rectification quality
 **Diagnosis**:
 
-1. Verify temporal synchronization between cameras
+1. Verify temporal synchronisation between cameras
 2. Check camera overlap and baseline geometry
 3. Validate individual camera calibrations
 4. Review pattern visibility in both cameras
 
 **Solutions**:
 
-1. **Synchronization Verification**:
+1. **Synchronisation Verification**:
    ```python
    # Test temporal alignment
-   sync_quality = test_camera_synchronization(camera1, camera2)
+   sync_quality = test_camera_synchronisation(camera1, camera2)
    if sync_quality.offset > 1.0:  # 1ms threshold
        print("Cameras may not be properly synchronized")
    ```
 
-2. **Baseline Optimization**:
+2. **Baseline Optimisation**:
     - Verify adequate baseline distance (>5% of working distance)
     - Ensure sufficient camera overlap (>60%)
     - Check for parallel optical axes
@@ -1175,11 +1175,11 @@ def diagnose_calibration_quality(calibration_result: CalibrationResult):
     """complete calibration quality diagnosis"""
     quality = calibration_result.quality_metrics
     
-    # Analyze RMS error
+    # Analyse RMS error
     if quality.rms_error > 2.0:
         print("WARNING: High RMS error - check pattern quality and image diversity")
     
-    # Analyze coverage
+    # Analyse coverage
     if quality.coverage_score < 0.6:
         print("WARNING: Poor coverage - capture more images from diverse positions")
     
@@ -1193,7 +1193,7 @@ def diagnose_calibration_quality(calibration_result: CalibrationResult):
     return recommendations
 ```
 
-#### Performance Optimization
+#### Performance Optimisation
 
 ```bash
 # Profile calibration performance
@@ -1211,7 +1211,7 @@ python calibration_benchmark.py --iterations 100 --cross-validation
 **Technical Documentation**:
 
 - [Computer Vision Fundamentals](../android_mobile_application_readme.md)
-- [Multi-Device Synchronization](../multi_device_synchronization_readme.md)
+- [Multi-Device Synchronisation](../multi_device_synchronization_readme.md)
 - [System Integration Guide](../../README.md)
 
 **Diagnostic Tools**:
@@ -1229,7 +1229,7 @@ python calibration_benchmark.py --iterations 100 --cross-validation
 
 ---
 
-*This complete documentation consolidates all Calibration System information into a single authoritative reference. For related modules, see the [Multi-Device Synchronization](multi_device_synchronization_readme.md) and [Android Mobile Application](android_mobile_application_readme.md) documentation.*
+*This complete documentation consolidates all Calibration System information into a single authoritative reference. For related modules, see the [Multi-Device Synchronisation](multi_device_synchronization_readme.md) and [Android Mobile Application](android_mobile_application_readme.md) documentation.*
 
 ## References
 

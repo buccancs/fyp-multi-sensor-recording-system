@@ -53,7 +53,7 @@
 
 - 4.3 Desktop Controller Design and Functionality
 
-- 4.4 Communication Protocol and Synchronization Mechanism
+- 4.4 Communication Protocol and Synchronisation Mechanism
 
 - 4.5 Data Processing Pipeline
 
@@ -65,7 +65,7 @@
 
 - 5.2 Unit Testing (Android and PC Components)
 
-- 5.3 Integration Testing (Multi-Device Synchronization & Networking)
+- 5.3 Integration Testing (Multi-Device Synchronisation & Networking)
 
 - 5.4 System Performance Evaluation
 
@@ -98,4 +98,4 @@
   analyses
 
 - **Appendix F: Code Listings** -- Selected code excerpts
-  (synchronization, data pipeline, integration)
+  (synchronisation, data pipeline, integration)

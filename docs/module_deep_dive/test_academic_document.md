@@ -31,7 +31,7 @@ Academic requirements:
 - Formal tone
 -->
 
-This research presents a detailed analysis of a multisensor Galvanic Skin Response (GSR) data acquisition system designed for real-time biometric monitoring. The study addresses the critical need for accurate and synchronized physiological data collection in research environments. The methodology employs a novel approach combining Bluetooth connectivity with Android-based mobile applications to create a robust data acquisition framework. The system integrates multiple GSR sensors with thermal imaging capabilities to provide complete biometric analysis. Results demonstrate significant improvements in data synchronization accuracy, achieving sub-millisecond precision in timestamp alignment across multiple sensor channels. The calibration procedures developed ensure consistent data quality across different environmental conditions. Performance evaluation reveals the system maintains stable operation during extended recording sessions while preserving data integrity. The findings indicate that the proposed multisensor approach provides superior data quality compared to single-sensor configurations. This research contributes to the advancement of biometric monitoring technologies and establishes a foundation for future developments in physiological data acquisition systems.
+This research presents a detailed analysis of a multisensor Galvanic Skin Response (GSR) data acquisition system designed for real-time biometric monitoring. The study addresses the critical need for accurate and synchronized physiological data collection in research environments. The methodology employs a novel approach combining Bluetooth connectivity with Android-based mobile applications to create a robust data acquisition framework. The system integrates multiple GSR sensors with thermal imaging capabilities to provide complete biometric analysis. Results demonstrate significant improvements in data synchronisation accuracy, achieving sub-millisecond precision in timestamp alignment across multiple sensor channels. The calibration procedures developed ensure consistent data quality across different environmental conditions. Performance evaluation reveals the system maintains stable operation during extended recording sessions while preserving data integrity. The findings indicate that the proposed multisensor approach provides superior data quality compared to single-sensor configurations. This research contributes to the advancement of biometric monitoring technologies and establishes a foundation for future developments in physiological data acquisition systems.
 
 ## Introduction
 <!-- 
@@ -48,7 +48,7 @@ The development of mobile computing platforms has created new opportunities for 
 
 This research addresses the fundamental challenge of creating a synchronized multisensor GSR data acquisition system that maintains high accuracy while providing real-time monitoring capabilities. The primary research questions focus on: (1) How can multiple GSR sensors be effectively synchronized to ensure temporal accuracy? (2) What calibration procedures are necessary to maintain data quality across different environmental conditions? (3) How does the integration of thermal imaging enhance the overall system performance?
 
-The significance of this research lies in its potential to advance biometric monitoring technologies and provide researchers with more accurate and reliable data collection tools. The proposed system offers improvements in data synchronization, calibration procedures, and overall system reliability compared to existing solutions.
+The significance of this research lies in its potential to advance biometric monitoring technologies and provide researchers with more accurate and reliable data collection tools. The proposed system offers improvements in data synchronisation, calibration procedures, and overall system reliability compared to existing solutions.
 
 This paper presents the methodology, implementation details, performance evaluation, and analysis of the multisensor GSR data acquisition system. The structure includes detailed descriptions of the hardware configuration, software architecture, calibration procedures, and experimental validation of the system performance.
 
@@ -58,7 +58,7 @@ This paper presents the methodology, implementation details, performance evaluat
 
 The multisensor GSR data acquisition system employs a distributed architecture combining hardware sensors, mobile computing platforms, and data processing algorithms. The system architecture consists of three primary components: sensor nodes, communication infrastructure, and data processing units.
 
-Sensor nodes incorporate high-precision GSR measurement circuits with integrated Bluetooth communication modules. Each sensor node operates independently while maintaining synchronization with the central data collection system. The communication infrastructure utilizes Bluetooth Low Energy (BLE) protocols to ensure reliable data transmission while minimizing power consumption.
+Sensor nodes incorporate high-precision GSR measurement circuits with integrated Bluetooth communication modules. Each sensor node operates independently while maintaining synchronisation with the central data collection system. The communication infrastructure utilizes Bluetooth Low Energy (BLE) protocols to ensure reliable data transmission while minimising power consumption.
 
 ### Hardware Configuration
 
@@ -70,13 +70,13 @@ Calibration hardware includes precision resistor networks for sensor validation 
 
 The Android application implements real-time data acquisition, processing, and storage capabilities. The software architecture follows a modular design pattern with separate components for sensor communication, data processing, calibration management, and user interface functionality.
 
-Data synchronization algorithms ensure temporal alignment across multiple sensor channels using high-resolution timestamps and drift compensation techniques. The calibration module implements automated procedures for sensor validation and environmental compensation.
+Data synchronisation algorithms ensure temporal alignment across multiple sensor channels using high-resolution timestamps and drift compensation techniques. The calibration module implements automated procedures for sensor validation and environmental compensation.
 
 ## Results
 
-### Synchronization Performance
+### Synchronisation Performance
 
-Experimental evaluation demonstrates the system achieves sub-millisecond synchronization accuracy across multiple sensor channels. Timestamp alignment analysis reveals standard deviation values below 0.5 milliseconds for eight-channel configurations. The synchronization performance remains stable during extended recording sessions exceeding four hours.
+Experimental evaluation demonstrates the system achieves sub-millisecond synchronisation accuracy across multiple sensor channels. Timestamp alignment analysis reveals standard deviation values below 0.5 milliseconds for eight-channel configurations. The synchronisation performance remains stable during extended recording sessions exceeding four hours.
 
 ### Calibration Accuracy
 
@@ -88,7 +88,7 @@ Long-term stability testing reveals the system maintains consistent operation du
 
 ## Discussion
 
-The experimental results demonstrate the effectiveness of the multisensor GSR data acquisition system in providing accurate and synchronized biometric data collection. The sub-millisecond synchronization accuracy represents a significant improvement over existing single-sensor approaches. This level of precision enables detailed analysis of physiological responses with temporal resolution suitable for research applications.
+The experimental results demonstrate the effectiveness of the multisensor GSR data acquisition system in providing accurate and synchronized biometric data collection. The sub-millisecond synchronisation accuracy represents a significant improvement over existing single-sensor approaches. This level of precision enables detailed analysis of physiological responses with temporal resolution suitable for research applications.
 
 The calibration procedures developed ensure consistent data quality across varying environmental conditions. The automated calibration approach reduces user intervention requirements while maintaining measurement accuracy. This feature enhances the system usability in field research applications where manual calibration may be impractical.
 
@@ -98,9 +98,9 @@ System reliability analysis confirms the robustness of the proposed approach for
 
 ## Conclusion
 
-This research presents a complete multisensor GSR data acquisition system that addresses key limitations of existing biometric monitoring approaches. The system demonstrates superior synchronization accuracy, robust calibration procedures, and reliable long-term operation. The integration of thermal imaging enhances the analytical capabilities while maintaining system simplicity.
+This research presents a complete multisensor GSR data acquisition system that addresses key limitations of existing biometric monitoring approaches. The system demonstrates superior synchronisation accuracy, robust calibration procedures, and reliable long-term operation. The integration of thermal imaging enhances the analytical capabilities while maintaining system simplicity.
 
-The contributions of this research include: (1) Development of sub-millisecond synchronization algorithms for multisensor configurations, (2) Implementation of automated calibration procedures for environmental compensation, (3) Integration of thermal imaging for enhanced physiological monitoring, and (4) Validation of system performance through complete experimental evaluation.
+The contributions of this research include: (1) Development of sub-millisecond synchronisation algorithms for multisensor configurations, (2) Implementation of automated calibration procedures for environmental compensation, (3) Integration of thermal imaging for enhanced physiological monitoring, and (4) Validation of system performance through complete experimental evaluation.
 
 Future research directions include expansion to additional physiological parameters, development of advanced signal processing algorithms, and integration with cloud-based data analysis platforms. The established foundation provides a robust platform for continued advancement in biometric monitoring technologies.
 
@@ -120,4 +120,4 @@ QUALITY_CHECKS:
 -->
 
 <!-- Vale configuration reference: AndroidApp/src/test/.vale.ini -->
-<!-- Academic vocabulary: GSR, multisensor, Bluetooth, Android, calibration, synchronization, thermal, biometric -->
+<!-- Academic vocabulary: GSR, multisensor, Bluetooth, Android, calibration, synchronisation, thermal, biometric -->

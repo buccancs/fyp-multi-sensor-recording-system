@@ -17,7 +17,7 @@ pattern** in the system design. This architecture balances **distributed
 autonomy** (each device can function and buffer data on its own) with
 **centralized coordination** (a single controller aligns timelines and
 manages the experiment), which is crucial for maintaining research-grade
-synchronization and data integrity across devices.
+synchronisation and data integrity across devices.
 
 **Overall Architectural Design Philosophy:** The system's architecture
 prioritizes **temporal precision, data integrity, security, and fault tolerance**
@@ -25,7 +25,7 @@ over ancillary concerns like user interface complexity. This philosophy
 stems from the project's research context -- precise timing, secure data handling,
 and reliable data capture are paramount requirements (as identified in Chapter 3).
 All architectural decisions reflect this: the design draws on
-distributed systems theory to handle clock synchronization and network
+distributed systems theory to handle clock synchronisation and network
 uncertainty, incorporates complete security controls for research data protection,
 and it leverages established patterns for reliability (e.g.
 buffering, redundant timing checks) to ensure no data loss. The approach
@@ -43,23 +43,23 @@ seamlessly reintegrate that data when connectivity is restored. This
 distributed resilience ensures **graceful degradation** -- a temporary
 network glitch will not compromise an entire session. The overall design
 philosophy can be summarized as *"Always collect valid data, even under
-suboptimal conditions, and synchronize everything for a unified
+suboptimal conditions, and synchronise everything for a unified
 dataset."* In alignment with this, the system architecture employs
-modular components for each major function (sensing, synchronization,
+modular components for each major function (sensing, synchronisation,
 communication, storage) with well-defined interfaces, making it easier
 to test and maintain each in isolation while guaranteeing they work in
 concert to fulfill the project's functional requirements.
 
 ## 4.2 Distributed System Design
 
-### 4.2.1 Synchronization Architecture (Multi-Device Coordination)
+### 4.2.1 Synchronisation Architecture (Multi-Device Coordination)
 
 One of the core challenges in a multi-device recording setup is keeping
-all data streams aligned in time. The synchronization architecture is
+all data streams aligned in time. The synchronisation architecture is
 designed to achieve **microsecond-to-millisecond precision clock
 alignment** across the PC and Android devices. The desktop controller
 acts as the **master clock source**, to which all mobile devices
-synchronize at the start and throughout the session. The implementation
+synchronise at the start and throughout the session. The implementation
 adapts principles of the **Network Time Protocol (NTP)** and logical
 clock algorithms to the project's specific needs. When a recording
 session is initiated, the controller performs a handshake with each
@@ -75,21 +75,21 @@ Each device's clock offset and drift rate is recorded so that incoming
 sensor data timestamps can be adjusted to the master timeline on the
 fly.
 
-To maintain synchronization during long recordings, the system employs a
+To maintain synchronisation during long recordings, the system employs a
 **multi-layer timing strategy**. At the hardware level, wherever
 possible, high-resolution hardware timestamps are used (for instance,
 the Android camera API timestamps each frame in nanoseconds). At the
-software level, the devices periodically re-synchronize with the
+software level, the devices periodically re-synchronise with the
 controller using lightweight "heartbeat" sync messages (much smaller
 than the initial handshake) to correct any clock drift. The system also
-compensates for variable network latency by statistically modeling
+compensates for variable network latency by statistically modelling
 latency jitter and adjusting timing offsets accordingly. For example, if
 network delay spikes are detected, the controller can ignore outlier
 measurements or invoke a predictive filter to anticipate clock drift.
 This multi-device coordination strategy ensures that all data -- whether
 high-frame-rate video or slower GSR samples -- can be correlated
 post-hoc with minimal temporal error. Indeed, the final implementation
-consistently meets sub-10 ms synchronization accuracy in tests,
+consistently meets sub-10 ms synchronisation accuracy in tests,
 satisfying the stringent requirements for synchronized physiological
 measurements defined in Chapter 3.
 
@@ -118,14 +118,14 @@ the entire session. Instead, it attempts a recovery: for example, it may
 resend critical commands or pings a few times (with exponential backoff
 delays) before considering the device offline. If the device does come
 back online, it can rejoin the session -- the controller's device
-coordinator module can negotiate a resynchronization on-the-fly and
+coordinator module can negotiate a resynchronisation on-the-fly and
 continue the recording. This dynamic rejoining capability was built to
 improve resilience in scenarios like transient Wi-Fi drops or an Android
 app restart.
 
 Internally, the code makes heavy use of exception handling and state
 checks to implement these recovery pathways. Each major operation
-(synchronization, start/stop commands, data transfer) is wrapped in
+(synchronisation, start/stop commands, data transfer) is wrapped in
 try/catch blocks that trigger fallback routines on failure. For
 instance, if a "start recording" command fails to get acknowledgment
 from one device, the controller will automatically invoke a cleanup for
@@ -146,7 +146,7 @@ or a data chunk is missing, the system either requests a retransmit (for
 critical control messages) or flags the data segment as invalid (for
 non-critical streams) and continues. All such events are logged in
 detail, which aids in debugging and also serves as documentation for
-data quality when analyzing results. In summary, through local
+data quality when analysing results. In summary, through local
 buffering, automatic retries, and integrity checks, the system achieves
 a high degree of fault tolerance: it is capable of *completing a
 recording session even in the presence of moderate network instability
@@ -159,7 +159,7 @@ The communication model of the system follows a **multi-tier protocol
 stack** tailored to the types of data exchanged between the desktop and
 mobile components. It distinguishes between control messages
 (low-bandwidth but high-importance commands), bulk sensor data streams
-(high-bandwidth continuous data), and synchronization signals
+(high-bandwidth continuous data), and synchronisation signals
 (timing-critical but small messages). This separation is reflected in
 the implementation by using different channels or protocol mechanisms
 for each
@@ -201,23 +201,23 @@ packaging sensor data (e.g. compressing a video frame as a JPEG or H.264
 segment) and sending it to the controller. The rationale for not using a
 purely UDP approach for streaming is to ensure reliable ordering of
 frames -- dropped or out-of-order frames could complicate
-synchronization. However, to keep latency low, the streaming service
+synchronisation. However, to keep latency low, the streaming service
 operates asynchronously and can drop frames if the network can't keep up
 (adaptive quality control). This design guarantees that the control
 channel is never blocked by bulk data transfer; a burst in video data
 won't prevent a "STOP" command from getting through promptly.
 Quality-of-Service management techniques are applied, such as
-prioritizing control messages over streaming data and dynamically
+prioritising control messages over streaming data and dynamically
 throttling the streaming rate if
 needed[\[5\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=,proactive%20optimization%20and%20alert%20generation).
 
-**Synchronization Signals:** Time-sync messages are very short and need
+**Synchronisation Signals:** Time-sync messages are very short and need
 to be delivered/processed with minimal delay. The architecture allows
 these to use UDP broadcasts on the local network for minimal latency (in
 an experimental setup where devices share a LAN). In practice, we found
 that the reliability of UDP was acceptable for periodic sync pings, and
 any lost packets are simply ignored (the next successful ping will
-recalibrate the clock). That said, the main synchronization handshake at
+recalibrate the clock). That said, the main synchronisation handshake at
 session start is done over the reliable channel for accuracy. The use of
 UDP is optional and configurable -- if the network environment or
 security policies disallow UDP, the system falls back to sending sync
@@ -273,7 +273,7 @@ that coordinates four specialized components:
 - **RecordingScreen**: Main interface with recording controls, device status indicators, and camera preview
 - **DevicesScreen**: Full device management interface with real-time scanning capabilities, connection/disconnection controls for PC, Shimmer, thermal camera, and network devices. Features complete status monitoring, device testing functionality, and connection diagnostics with progress indicators and detailed device information display
 - **CalibrationScreen**: Complete calibration workflow coordination with individual device calibration for cameras, thermal sensors, and Shimmer devices. Includes progress tracking with linear progress indicators, validation controls, system validation with error reporting, and calibration data management (save/load/export functionality)
-- **FilesScreen**: Advanced file management system with session browsing, file organization by type, search functionality, storage monitoring, and complete export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualization
+- **FilesScreen**: Advanced file management system with session browsing, file organization by type, search functionality, storage monitoring, and complete export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualisation
 - **OnboardingActivity**: Modern multi-page onboarding flow with Material 3 design, featuring welcome screens, feature showcase, complete permission management, and setup completion guide with horizontal pager navigation
 - **MainNavigation**: Compose Navigation with bottom navigation bar and state preservation
 - **Material 3 Theme**: complete design system with dynamic theming and accessibility support
@@ -337,7 +337,7 @@ fun RecordingScreen(
 **Performance Benefits for Research Applications:**
 - **Efficient Recomposition**: Only relevant UI components update when sensor data changes
 - **Reduced Memory Footprint**: Elimination of View inflation overhead critical during intensive recording
-- **Improved Responsiveness**: Direct StateFlow integration enhances real-time sensor data visualization
+- **Improved Responsiveness**: Direct StateFlow integration enhances real-time sensor data visualisation
 - **Type Safety**: Compile-time verification reduces runtime errors during critical recording sessions
 
 **Screen Implementations:**
@@ -356,7 +356,7 @@ desktop), persistence (for local data storage), and the user interface.
 
 ### 4.3.1 Recording Management Component
 
-At the center of the Android app is the **Recording Management System**,
+At the centre of the Android app is the **Recording Management System**,
 which is responsible for orchestrating all sensors during a recording
 session. This component ensures that when a session begins or ends, each
 sensor (camera, thermal, GSR) starts or stops in a coordinated fashion
@@ -367,7 +367,7 @@ When a "start recording" command is received (either from the user or
 remotely from the PC controller), the SessionManager performs a series
 of steps:
 
-1.  **Clock Synchronization:** It first invokes the synchronization
+1.  **Clock Synchronisation:** It first invokes the synchronisation
     module (`syncManager.synchronizeWithMaster()`), which contacts the
     desktop controller to align the device's clock just before recording
     commences. This step guarantees that the timestamps for all data
@@ -381,7 +381,7 @@ of steps:
     and uses `awaitAll()` to run them in
     parallel[\[6\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=%2F%2F%20Start%20all%20recorders%20in,shimmerRecorder.startRecording%28sessionConfig.shimmerConfig%29%20%7D).
     This design ensures that no single sensor blocks another; for
-    example, the thermal camera might take a moment to initialize, but
+    example, the thermal camera might take a moment to initialise, but
     the video and GSR can begin capturing in the meantime, and vice
     versa. All three must report success for the session to be
     considered successfully started. If any recorder returns an error
@@ -413,7 +413,7 @@ handling for the entire session lifecycle. For instance, if during
 recording one sensor fails or disconnects, the SessionManager can decide
 to either halt the session or mark that sensor as inactive while others
 continue, depending on severity. This kind of logic centralization in
-the Recording Management component makes the system's behavior
+the Recording Management component makes the system's behaviour
 predictable and easier to maintain.
 
 ### 4.3.2 High-Resolution Video Capture (RGB Camera)
@@ -423,7 +423,7 @@ capabilities of the device's built-in camera using the **Camera2 API**.
 The goal was to achieve **4K resolution video at 30 fps** along with
 simultaneous RAW image capture for each frame, providing maximum
 post-processing flexibility. The app's `CameraRecorder` class handles
-configuration and control of the camera hardware. During initialization,
+configuration and control of the camera hardware. During initialisation,
 it queries the device's camera characteristics (using `CameraManager`)
 to confirm support for the desired output resolution and frame rate, and
 to select the correct camera lens (typically the rear-facing camera for
@@ -457,7 +457,7 @@ further discussed in Section 4.10.1 on multi-sensor data collection).
 
 During recording, each video frame is timestamped by the camera
 hardware, and those timestamps are aligned with the device's clock
-(which, thanks to synchronization, is aligned with the master clock).
+(which, thanks to synchronisation, is aligned with the master clock).
 The MediaRecorder writes video data to disk in chunks, while the
 ImageReader provides RAW frame buffers that the CameraRecorder can
 optionally save or use for on-device processing (for example, a RAW
@@ -468,7 +468,7 @@ the app runs the camera session on a background thread and uses
 efficient buffer handling to prevent frame drops. The use of
 **Surface-based outputs** allows the heavy lifting to be done in native
 code -- the MediaRecorder uses the device's hardware encoder, and the
-ImageReader uses the camera HAL -- minimizing the overhead in Dalvik/ART
+ImageReader uses the camera HAL -- minimising the overhead in Dalvik/ART
 (Java/Kotlin layer). We also integrated a **preview stream** capability:
 the camera frames can be downsampled and sent to the UI in real time for
 the user or broadcast to the PC as a live preview. This is achieved by
@@ -488,7 +488,7 @@ validated against the requirement of capturing both **high-resolution
 data and calibration-friendly data**: the 4K video provides the primary
 dataset, while RAW images (which preserve sensor information like exact
 pixel intensity without compression) can be used to perform tasks like
-color calibration or lens distortion correction if needed. The
+colour calibration or lens distortion correction if needed. The
 architecture of the CameraRecorder is modular, so if needed, we could
 swap in a different source (for example, an external USB camera) with
 minimal changes, thanks to abstracting the capture logic behind a common
@@ -501,7 +501,7 @@ app adds a long-wave infrared imaging modality to the system. This
 thermal camera is an external USB-C device that streams thermal images
 (256×192 resolution) at up to
 25 Hz[\[10\]\[11\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/new_documentation/README_topdon_tc001.md#L2-L5).
-To incorporate it, we utilize the vendor-provided Android SDK (which
+To incorporate it, we utilise the vendor-provided Android SDK (which
 interfaces with the camera's USB Video Class feed and proprietary
 protocols for retrieving calibrated temperature data). The app's
 `ThermalRecorder` class manages the lifecycle of the thermal camera.
@@ -510,7 +510,7 @@ Android USB Manager detects it. The ThermalRecorder scans the list of
 USB devices for the known Topdon vendor/product ID and, if found, opens
 a connection to it via
 `usbManager.openDevice()`[\[12\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=try%20,vendorId%20%3D%3D%20TOPDON_VENDOR_ID)[\[13\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=val%20device%20%3D%20availableDevices,openDevice%28device).
-The Topdon SDK is then used to initialize the camera; this typically
+The Topdon SDK is then used to initialise the camera; this typically
 involves uploading firmware if required and starting the image stream.
 
 Once streaming, thermal frames are delivered to the app through a
@@ -523,7 +523,7 @@ matrix or a pseudo-video frame. We route this data into a
 In our design, the processing includes converting raw sensor readings to
 calibrated temperature values (the TC001 provides calibration but
 additional smoothing can be applied), and optionally rendering a visual
-image (e.g., applying a false-color palette) if a preview is needed for
+image (e.g., applying a false-colour palette) if a preview is needed for
 the user. Crucially, each thermal frame is timestamped upon reception
 with the device's clock. Because the TC001 doesn't timestamp frames
 itself, we rely on the Android system clock at the moment the frame
@@ -574,7 +574,7 @@ accuracy of ±2 °C) offer research-grade
 data[\[10\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/new_documentation/README_topdon_tc001.md#L2-L5).
 The integration approach -- using the vendor SDK and real-time
 processing -- maximizes the utility of that data by making it available
-for synchronization and analysis within the same system as the other
+for synchronisation and analysis within the same system as the other
 sensors.
 
 ### 4.3.4 Shimmer GSR Sensor Integration
@@ -589,7 +589,7 @@ protocol using Bluetooth Low Energy (BLE). We developed a
 `ShimmerRecorder` class that manages discovery, connection,
 configuration, and data streaming from one or multiple Shimmer devices.
 
-Upon initialization (for instance, when preparing for a session), the
+Upon initialisation (for instance, when preparing for a session), the
 ShimmerRecorder can perform a **BLE scan** to find nearby Shimmer
 devices advertising the appropriate service UUID. When a device is
 found, the app attempts to connect and pair if not already paired. Our
@@ -648,7 +648,7 @@ radio interference) might be transient.
 
 An important aspect of using the Shimmer3 is ensuring **data quality**.
 The integration configures the GSR sensor with appropriate filtering --
-for example, the Shimmer hardware applies an analog filter and we use
+for example, the Shimmer hardware applies an analogue filter and we use
 the digital API to zero baseline the signal at start. Our software
 includes an artifact detection step: if the GSR signal shows saturation
 (like the maximum or minimum ADC values, which could indicate a loose
@@ -671,7 +671,7 @@ multi-channel data from the Shimmer, even though our primary focus is on
 GSR. This forward-looking integration showcases the project's emphasis
 on a flexible design: swapping or adding a BLE physiological sensor
 (even from a different vendor) would require minimal changes, as the
-recording framework and synchronization infrastructure are already in
+recording framework and synchronisation infrastructure are already in
 place.
 
 In summary, the Shimmer integration on Android provides robust,
@@ -680,7 +680,7 @@ Bluetooth connectivity and sensor configuration ensures that
 high-quality GSR data (with adjustable sampling and range) is captured
 reliably. This fulfills the traceability to the requirements identified
 earlier: for instance, the need for *real-time physiological signal
-capture* and *multi-sensor synchronization* is directly addressed by
+capture* and *multi-sensor synchronisation* is directly addressed by
 this implementation. The Android app effectively becomes a
 **multi-sensor hub** on its own -- coordinating its internal camera, an
 external thermal camera, and a wireless GSR sensor -- which then
@@ -698,7 +698,7 @@ for flexibility. Figure 4.2 depicts the main layers: at the top is the
 **Application Layer** which includes the GUI and high-level session
 controller; beneath that is a **Service Layer** composed of modular
 services (device coordination, networking, calibration, data export);
-further below is a **Core Processing Layer** where synchronization,
+further below is a **Core Processing Layer** where synchronisation,
 computer vision, and sensor-specific processing (like Shimmer handling
 and webcam integration) occur; and finally an **Infrastructure Layer**
 handles low-level concerns such as file I/O, configuration management,
@@ -731,15 +731,15 @@ Manager executes a well-defined sequence:
   If any device fails to report ready, the Session Manager aborts the
   sequence with an error detailing which device failed and why.
 
-- **Phase 2: Synchronization Setup.** Next, the Session Manager calls
+- **Phase 2: Synchronisation Setup.** Next, the Session Manager calls
   the `SessionSynchronizer` (Section 4.6.2) to perform a final clock
-  synchronization across devices immediately prior to recording. This
+  synchronisation across devices immediately prior to recording. This
   provides a reference start time. The result of this step is a
   `synchronized_time` -- effectively the planned global timestamp at
-  which all devices should start recording. If synchronization fails to
+  which all devices should start recording. If synchronisation fails to
   meet the precision criteria (e.g. one device's clock is too unstable
   or network delays are too high), the Session Manager will abort and
-  notify the user, since proceeding with poor synchronization would
+  notify the user, since proceeding with poor synchronisation would
   violate the research requirements.
 
 - **Phase 3: Coordinated Start.** Given a synchronized start timestamp,
@@ -789,11 +789,11 @@ writing to files or databases).
 When a session ends (either normally via user command or due to an
 error), the Session Manager coordinates the teardown: it sends stop
 commands to all devices, waits for acknowledgments, and then triggers
-finalization routines (like closing files on devices, stopping the
+finalisation routines (like closing files on devices, stopping the
 quality monitor, etc.). It then marks the session state as completed and
 available for review/export. This careful orchestration at the end
 ensures that all devices have gracefully stopped recording -- preventing
-data corruption (especially for video files that need to finalize
+data corruption (especially for video files that need to finalise
 properly) -- and that any temporary resources (like sockets or buffer
 threads) are cleaned up.
 
@@ -818,7 +818,7 @@ failures) and verify the system's response.
 In addition to coordinating devices, the desktop controller performs
 on-the-fly data analysis, particularly computer vision (CV) processing
 on video streams. The **Computer Vision Pipeline** on the desktop is
-responsible for analyzing optical data (and potentially thermal data) in
+responsible for analysing optical data (and potentially thermal data) in
 real time to extract physiological features or other information from
 the video. This pipeline runs concurrently with data acquisition,
 providing immediate analysis results and also enriching the recorded
@@ -835,7 +835,7 @@ frames[\[25\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=The%20computer%20visio
 Each incoming frame from the video stream (which can be the live camera
 feed from an Android device or a USB webcam on the PC -- see
 Section 4.10.4) is first resized or converted to an appropriate format
-(e.g. a NumPy array in BGR color). The HandDetector then processes the
+(e.g. a NumPy array in BGR colour). The HandDetector then processes the
 frame, returning any detected hands with landmarks and a confidence
 score. If no hand is present (which might be the case if the participant
 moves out of frame or the experiment doesn't involve hands), the
@@ -844,7 +844,7 @@ independently[\[27\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=,detect_hands%2
 
 When a hand is detected, the pipeline proceeds to **ROI extraction**: it
 crops or masks the frame to isolate regions of interest. For example, it
-can extract the palm region for measuring skin color changes, or
+can extract the palm region for measuring skin colour changes, or
 multiple ROIs like fingertips if needed. In our implementation, a simple
 `ROIExtractor` takes the hand landmarks and computes a bounding box
 around the palm
@@ -853,18 +853,18 @@ The ROI is then passed to a `FeatureComputer` which calculates relevant
 features -- for remote photoplethysmography, this might be the average
 green channel intensity over time (to detect pulse) or for thermal
 frames, the average temperature in a region. In the current video
-pipeline (applied to RGB frames), features computed include color
-intensity statistics and motion cues (the system can detect subtle color
+pipeline (applied to RGB frames), features computed include colour
+intensity statistics and motion cues (the system can detect subtle colour
 oscillations corresponding to blood flow, as well as changes in hand
 position or tremors).
 
 The pipeline is designed to operate in **real-time**, meaning it
 processes frames roughly at the rate they are captured. Achieving this
-required optimization: heavy operations like neural network inferences
+required optimisation: heavy operations like neural network inferences
 (the hand detection uses a CNN under the hood) are handled efficiently
 by MediaPipe in C++ and possibly with GPU acceleration. We also decouple
 the frame capture rate from processing -- if analysis ever lags (say the
-CPU is busy and can't analyze every single frame of a 30fps stream), the
+CPU is busy and can't analyse every single frame of a 30fps stream), the
 pipeline is tolerant to skipping frames rather than queueing an
 ever-growing backlog. This is controlled via the asynchronous design of
 the processing tasks.
@@ -883,7 +883,7 @@ might compute the signal-to-noise ratio of that waveform continuously
 The Computer Vision pipeline is also extensible. We structured it such
 that additional detectors or feature extractors can be plugged in. For
 instance, in some trials we might want to detect facial regions to
-measure heart rate or breathing via facial skin color changes. The
+measure heart rate or breathing via facial skin colour changes. The
 pipeline could incorporate a face detector and follow a similar
 ROI-\>feature process for the face. In fact, the architecture already
 uses an object-oriented approach: `HandDetector`, `ROIExtractor`,
@@ -896,7 +896,7 @@ system. Each feature extracted from a video frame has the same master
 timestamp as that frame, so if we detect, say, an increase in average
 palm temperature from thermal images and simultaneously a spike in GSR,
 we can align those precisely in time. This is a direct consequence of
-the synchronization and consistent timestamping throughout the system.
+the synchronisation and consistent timestamping throughout the system.
 
 In conclusion, the desktop's Computer Vision Pipeline provides real-time
 analysis capabilities that complement the raw sensor data. It fulfills
@@ -971,9 +971,9 @@ OpenCV's stereo calibration to infrared by using a special calibration
 target; our framework is built to accommodate that procedure when the
 appropriate calibration data is available.
 
-**Cross-Device Temporal Calibration:** While the Synchronization Engine
+**Cross-Device Temporal Calibration:** While the Synchronisation Engine
 handles real-time clock sync, we also provide tools to **validate time
-synchronization** after the fact. One approach is a "blinker test" where
+synchronisation** after the fact. One approach is a "blinker test" where
 an LED visible to the RGB camera is toggled and simultaneously a signal
 is sent to the Shimmer (or another reference) -- the times of the LED
 flash in video and the event in sensor data can be compared to verify
@@ -1068,7 +1068,7 @@ required fields for the given type and that values are in acceptable
 ranges (using a JSON schema or manual
 checks)[\[40\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=if%20not%20handler%3A%20return%20ErrorResponse%28f,message_type).
 This prevents, for instance, a malformed message from causing a crash
-or, worse, unintended behavior. If validation fails, the protocol
+or, worse, unintended behaviour. If validation fails, the protocol
 returns an `ErrorResponse` indicating what was wrong, and no further
 action is taken for that message. Similarly, the Android app validates
 incoming commands; if an unknown command type is received or parameters
@@ -1227,14 +1227,14 @@ session that were streamed are not accidentally discarded. Since all
 data is redundantly saved on the devices anyway (the streaming is
 primarily for monitoring), losing a streamed frame is not catastrophic
 for data integrity -- the high-quality original is still on the device.
-This redundancy was a conscious design choice to prioritize reliability:
+This redundancy was a conscious design choice to prioritise reliability:
 live stream is for the user's immediate needs, but the recorded files on
 device are the ground truth stored data.
 
 The **Control--Data Separation** works as expected: control messages
 remain quick because the streaming either uses separate sockets or is
 structured such that large binary frames do not clog the message queue
-(WebSockets have an internal mechanism to prioritize small text messages
+(WebSockets have an internal mechanism to prioritise small text messages
 over large binary frames, or we can implement multiple connections). In
 tests with simultaneous streaming and control (for example, adjusting
 camera settings via commands while video streaming is on), we observed
@@ -1242,7 +1242,7 @@ no noticeable delay in command execution.
 
 In summary, the Data Streaming Mechanism provides the necessary
 throughput to support features like live preview and on-the-fly data
-visualization, which enhances the system's usability in a research
+visualisation, which enhances the system's usability in a research
 setting (the experimenter can see what's happening in real time). It's
 designed to be **adaptive, low-latency, and robust**. It complements the
 control protocol by handling the "firehose" of sensor data in a way that
@@ -1277,14 +1277,14 @@ pass[\[45\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=%60%60%60mermaid%20graph
   buffering ensures we pair the video frame with the correct range of
   GSR data once everything is in.
 
-- **Temporal Synchronization:** In this stage, data from different
+- **Temporal Synchronisation:** In this stage, data from different
   streams are aligned to a common timeline (using the timestamps
-  normalized by the synchronization engine). If necessary, interpolation
+  normalized by the synchronisation engine). If necessary, interpolation
   is used: e.g., if a GSR sample is needed exactly at the moment of a
   video frame, we can interpolate between the two nearest GSR readings.
   Typically, the pipeline chooses a uniform time step (like the video
   frame times, since those are usually the slowest) and aligns all
-  sensor data to those times. The Synchronization Engine's outputs
+  sensor data to those times. The Synchronisation Engine's outputs
   (clock offsets, drift rates) are used here to adjust any timestamps if
   needed.
 
@@ -1328,7 +1328,7 @@ pass[\[45\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=%60%60%60mermaid%20graph
   These quality assessments are appended to the data stream as metadata.
 
 - **Output and Storage:** Finally, the processed features and quality
-  metrics are output. They can be fed to real-time visualization (like
+  metrics are output. They can be fed to real-time visualisation (like
   plotting estimated heart rate in real time) and are also stored
   alongside raw data for post-session analysis. The outputs are in a
   synchronized format -- for instance, a data point might be a tuple:
@@ -1378,7 +1378,7 @@ valid.
 
 In summary, the Real-Time Signal Processing Framework successfully
 unifies the multi-modal data streams and produces immediate insights
-while maintaining synchronization across them. It acts as the "digital
+while maintaining synchronisation across them. It acts as the "digital
 signal processing" core of the system, turning raw measurements into
 interpretable signals and metrics on the fly. This design directly
 supports the research objective of enabling contactless measurements to
@@ -1386,22 +1386,22 @@ be monitored and analyzed in real time, not just after the fact, thus
 demonstrating the system's capability to function as a sophisticated
 physiological measurement platform, not merely a recording device.
 
-### 4.6.2 Synchronization Engine Design
+### 4.6.2 Synchronisation Engine Design
 
-The Synchronization Engine is a critical component dedicated to
+The Synchronisation Engine is a critical component dedicated to
 maintaining the temporal alignment of all devices throughout the data
-collection process. Its design builds upon the initial synchronization
+collection process. Its design builds upon the initial synchronisation
 procedure discussed in Section 4.2.1, extending it with continuous
 monitoring and adjustment to keep clocks in lockstep despite potential
 drift over time.
 
-At its core, the Synchronization Engine uses a combination of
-**master-slave clock synchronization** and **drift compensation
+At its core, the Synchronisation Engine uses a combination of
+**master-slave clock synchronisation** and **drift compensation
 algorithms**. The PC's system clock (potentially disciplined by NTP or a
 high-precision timer) is treated as the master reference. Each Android
 device has its local clock (millisecond timing from the OS, via
 `System.currentTimeMillis()` or the monotonic clock). When a session
-starts, the Synchronization Engine performs an aggressive sync handshake
+starts, the Synchronisation Engine performs an aggressive sync handshake
 with each device to establish an initial offset (as described earlier).
 These offsets (device clock minus master clock) are stored in a table
 and applied to timestamp all incoming data from that device.
@@ -1409,7 +1409,7 @@ and applied to timestamp all incoming data from that device.
 The novel part of the design is how it handles *drift*: the fact that no
 two clocks run at exactly the same speed. Over the course of even a few
 minutes, a phone's clock might drift a few milliseconds relative to the
-PC. To counter this, the Synchronization Engine periodically sends sync
+PC. To counter this, the Synchronisation Engine periodically sends sync
 pulses to each device during recording. The frequency of these pulses is
 configurable (by default, we used one every 10 seconds, which proved
 sufficient given typical smartphone clock stability). Each pulse is a
@@ -1437,8 +1437,8 @@ a stable Wi-Fi network, RTTs for sync messages were on the order of
 1--2 ms with occasional spikes to 5--10 ms; by ignoring the spikes and
 using the lowest values, we improved sync consistency.
 
-The Synchronization Engine also features a **multi-device
-synchronization verification** routine. After synchronizing all devices,
+The Synchronisation Engine also features a **multi-device
+synchronisation verification** routine. After synchronising all devices,
 it can issue a broadcast sync-check command -- essentially asking all
 devices to record a timestamp for a common event. One way we implement
 this is by having the PC send a sync-check command at a scheduled time T
@@ -1461,17 +1461,17 @@ in software how we timestamp data). In practice, we found it unnecessary
 to do explicit drift correction on the device side; adjusting timestamps
 on the PC side when collating data sufficed.
 
-The Synchronization Engine's design draws from distributed systems
+The Synchronisation Engine's design draws from distributed systems
 algorithms like Cristian's algorithm and the Berkeley Algorithm (for
 average time). We decided on a master-slave (star topology) approach as
 the simplest and most controlled for our scenario, since having the PC
 query each device individually is straightforward and reliable. This
-satisfied the requirement for synchronization without needing devices to
+satisfied the requirement for synchronisation without needing devices to
 talk to each other (devices only communicate with the PC, not directly
 with each other, simplifying networking).
 
 The achieved performance of the sync engine was impressive: we
-consistently achieved and maintained synchronization errors within a few
+consistently achieved and maintained synchronisation errors within a few
 milliseconds across
 devices[\[52\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=,validate_sync_precision%28sync_results).
 This was verified by comparing timestamps of simultaneous events and by
@@ -1481,7 +1481,7 @@ multiple devices, we can treat it as if it came from a single
 multi-channel recorder with negligible skew.
 
 An interesting extension in our design is the concept of **predictive
-synchronization**. Our system logs sync adjustments over time. If it
+synchronisation**. Our system logs sync adjustments over time. If it
 notices a pattern (say device A's clock always drifts +1 ms every 30 s),
 it could predict and proactively adjust future timestamps even without
 as frequent queries. We included a placeholder for a simple predictive
@@ -1491,7 +1491,7 @@ mechanism serves as a backup if for some reason communication becomes
 sparse -- the device's clock drift can still be accounted for to first
 order.
 
-In summary, the Synchronization Engine Design ensures that the temporal
+In summary, the Synchronisation Engine Design ensures that the temporal
 dimension of our multi-sensor data is rigorously controlled. It fulfills
 one of the most crucial project requirements: that all data can be
 analyzed on a unified timeline as if recorded by one device. Without
@@ -1532,7 +1532,7 @@ def calculate_session_integrity_hash(session_data: bytes) -> str:
 **Key Security Improvements:**
 - Migration from MD5 to SHA-256 for all file integrity verification
 - Secure random number generation for session identifiers
-- Cryptographically secure timestamp generation for synchronization
+- Cryptographically secure timestamp generation for synchronisation
 
 ### 4.7.3 Privacy Protection Engineering
 
@@ -1574,7 +1574,7 @@ class ResearchSecurityMonitor:
 Implementing the design described above in a real-world system presented
 several challenges, which we addressed through careful engineering
 solutions. We highlight the major challenges encountered --
-multi-platform compatibility, real-time synchronization, and resource
+multi-platform compatibility, real-time synchronisation, and resource
 management -- along with the strategies we employed to overcome them.
 
 ### 4.8.1 Multi-Platform Compatibility
@@ -1640,7 +1640,7 @@ separate (mobile app vs. desktop app), we wanted a coherent workflow.
 The solution was to centralize certain logic in the PC and keep the
 Android UI minimal. For example, the participant/session metadata entry
 is all done on the PC, which then sends that info to the Android for
-labeling files. This avoids needing a full-fledged form interface on
+labelling files. This avoids needing a full-fledged form interface on
 Android and thereby reduces platform-specific complexity.
 
 Finally, the use of **common design patterns** on both sides eased
@@ -1654,23 +1654,23 @@ similar state machines on both ends: an error results in a state
 transition in the Session Manager on PC and similarly in the Recording
 Manager on Android, followed by an error message being passed through.
 This symmetry was facilitated by our Platform Abstraction Layer that
-defined these state machines and behaviors in documentation that both
+defined these state machines and behaviours in documentation that both
 implementations followed.
 
 In summary, multi-platform compatibility was achieved by strictly
 separating platform-dependent code and using well-defined interfaces for
 everything else. The result is that an engineer can reason about the
-system's behavior largely without worrying about whether something is on
+system's behaviour largely without worrying about whether something is on
 Android or PC -- they communicate as if part of one system. This
 solution allowed us to fulfill requirements that span across devices
 (like "start all recordings together" or "show live data"), confident
 that the mobile and desktop parts would act in harmony despite being
 very different environments under the hood.
 
-### 4.8.2 Real-Time Synchronization Challenges
+### 4.8.2 Real-Time Synchronisation Challenges
 
 **Challenge:** Maintaining microsecond or millisecond-level
-synchronization in real time across wireless devices was a significant
+synchronisation in real time across wireless devices was a significant
 challenge. Wireless networks (Wi-Fi/Bluetooth) can introduce
 unpredictable latencies; devices have non-deterministic OS scheduling
 (Android might pause an app's thread briefly due to background
@@ -1680,21 +1680,21 @@ initial sync could achieve \~5 ms precision, but over a 20-minute
 session without correction, that could degrade to tens of milliseconds
 of skew, mostly due to device clock drift. Additionally, sometimes
 network latency spikes or a missed sync message could throw off the
-synchronization if not handled. The project's goal of essentially
-*continuous synchronization* had to grapple with these real-world
+synchronisation if not handled. The project's goal of essentially
+*continuous synchronisation* had to grapple with these real-world
 complications.
 
-**Solution:** Our solution was a **multi-layered synchronization
+**Solution:** Our solution was a **multi-layered synchronisation
 approach**, combining several techniques for
 robustness[\[57\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=%2A%2ASolution%2A%2A%3A%20Developed%20a%20multi,approach).
 First, as described in Section 4.6.2, we employed network latency
 compensation and clock drift monitoring. To that we added **redundant
-synchronization channels**: for critical timing, we didn't rely solely
+synchronisation channels**: for critical timing, we didn't rely solely
 on one mechanism. For instance, while our primary sync was over Wi-Fi
 via the control channel, we also tested using Bluetooth as a secondary
 channel to send sync pulses (since Bluetooth has a different latency
 profile and might actually be more stable at short range). The Android
-app was set up with an alternate synchronization service listening on
+app was set up with an alternate synchronisation service listening on
 Bluetooth -- in experiments, we found Wi-Fi was sufficient so we didn't
 activate this in the final run, but having it as a backup was part of
 the design.
@@ -1705,9 +1705,9 @@ consistently 1 ms behind every 10 seconds (i.e., losing 0.1 ms/sec), the
 system would start adjusting its notion of that device's clock gradually
 rather than waiting for noticeable error to accumulate. This was
 effectively a primitive **adaptive clock calibration** inside the
-Synchronization Engine.
+Synchronisation Engine.
 
-We also addressed synchronization in the face of intermittent
+We also addressed synchronisation in the face of intermittent
 connectivity. If a sync pulse was missed (no response from device within
 timeout), the engine doesn't panic -- it logs it and tries again soon.
 The session doesn't abort a recording if occasional sync messages fail.
@@ -1740,9 +1740,9 @@ sufficient and more straightforward, so we stuck with that, but kept the
 concept in reserve.
 
 The combination of these solutions resulted in an extremely robust
-synchronization. During final testing, even under varying network
+synchronisation. During final testing, even under varying network
 conditions -- we introduced artificial delays using router settings --
-the system maintained synchronization within our target bounds. In one
+the system maintained synchronisation within our target bounds. In one
 extreme test, we introduced a 100 ms jitter on one device's Wi-Fi using
 a network limiter tool; the adaptive sync still kept that device within
 \~8 ms of the others by relying on repeated attempts and drift
@@ -1753,11 +1753,11 @@ By addressing real-time sync as a multi-faceted problem (clock drift,
 network latency, packet loss) and applying layered solutions --
 including compensation, continuous adjustment, and fail-safes -- we
 satisfied the requirement of high precision timing. The challenges
-inherent in wireless synchronization were met with a system that
-essentially mimics what research-grade synchronization hardware might
+inherent in wireless synchronisation were met with a system that
+essentially mimics what research-grade synchronisation hardware might
 do: measure, adjust, predict, and verify, in a loop.
 
-### 4.8.3 Resource Management and Optimization
+### 4.8.3 Resource Management and Optimisation
 
 **Challenge:** Operating three high-bandwidth sensors (4K camera,
 thermal imager, and GSR sensor) simultaneously on a mobile device, while
@@ -1769,13 +1769,13 @@ frames in video when the phone's CPU was overloaded, occasional GC
 (garbage collection) stalls on Android causing slight hitches, and high
 battery drain causing devices to heat up. On the desktop side, if the
 computer vision pipeline wasn't efficient, it could lag behind
-real-time. Therefore, optimizing resource usage and ensuring the system
+real-time. Therefore, optimising resource usage and ensuring the system
 remained responsive and within hardware limits was a continuous
 challenge.
 
 **Solution:** We implemented an **Adaptive Resource Management**
 strategy in both the mobile and desktop components to dynamically
-optimize
+optimise
 performance[\[58\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=class%20ResourceManager%3A%20def%20__init__%28self%29%3A%20self,storage_monitor%20%3D%20StorageMonitor)[\[59\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=current_usage%20%3D%20await%20self).
 On Android, one key step was using **Android Profiler** to identify
 bottlenecks and then addressing them. For instance, we found that
@@ -1792,7 +1792,7 @@ operations on a lower priority thread to ensure camera tasks had
 priority.
 
 We introduced a **Resource Monitor** in the Android app that
-periodically checks CPU utilization, memory usage, and battery
+periodically checks CPU utilisation, memory usage, and battery
 temperature. If CPU usage stays above, say, 90% for more than a few
 seconds, the app's Adaptive Controller might decide to take actions:
 e.g., reduce the preview frame rate being sent to the PC (to free
@@ -1821,14 +1821,14 @@ we tuned the pipeline: if, for instance, feature extraction was the
 slowest part, we might simplify a too-heavy algorithm or reduce its
 frequency.
 
-Memory optimization included reusing buffers when possible (on Android,
+Memory optimisation included reusing buffers when possible (on Android,
 using ByteBuffer pools for camera frames; on Python, maintaining
 pre-allocated numpy arrays for results to avoid reallocation). We also
 carefully managed file I/O -- ensuring file writes were done in large
-blocks (to minimize overhead) and using asynchronous file I/O on desktop
+blocks (to minimis\1 overhead) and using asynchronous file I/O on desktop
 to not stall processing.
 
-One concrete optimization: originally, we tried to run the phone's
+One concrete optimisation: originally, we tried to run the phone's
 camera at 60 fps for possibly capturing subtle physiological changes. We
 found that unsustainable due to heat and battery. We settled on 30 fps
 4K which was a balanced choice. We also initially enabled the phone's
@@ -1844,7 +1844,7 @@ thermal shutdown (it did get warm, around 40°C battery temperature, but
 stable). Battery drain was high (roughly 15-20% per hour on a phone,
 plus the thermal camera draws power from the phone), but we often had
 the phone plugged in during experiments to avoid issues. The desktop
-application after optimization used about 30-40% CPU on a quad-core
+application after optimisation used about 30-40% CPU on a quad-core
 laptop and a few hundred MB of RAM, which is quite acceptable. More
 importantly, it remained real-time -- the end-to-end latency from sensor
 to display was typically under 200 ms, and no backlog built up in
@@ -1868,7 +1868,7 @@ the technologies and frameworks to use on each platform. These decisions
 were guided by the need for performance, reliability, and ease of
 development, as well as by the requirement that the final system be
 maintainable and extensible for future research needs. In this section,
-we outline the major components of the technology stack and rationalize
+we outline the major components of the technology stack and rationalise
 our design decisions, highlighting how each choice contributed to the
 project's success.
 
@@ -1945,7 +1945,7 @@ However, for high-volume binary data, direct file I/O was more
 appropriate and performant.
 
 The Android UI was kept minimal but followed **Material Design 3**
-guidelines for consistency (using standard components for any dialogs or
+guidelines for consistency (using standard components for any dialogues or
 buttons). We employed a clean MVVM architecture with `MainViewModelRefactored` coordinating specialized controllers:
 and **LiveData/StateFlow** to ensure that UI components reactively
 updated to changes in sensor state (e.g., showing "Recording" status).
@@ -2031,7 +2031,7 @@ control and monitoring capabilities. The enhanced GUI framework includes:
   and precise temporal control for psychological research applications
 - `PythonApp/gui/calibration_dialog.py` - Interactive calibration interface with real-time quality feedback and
   guided user workflows ensuring optimal measurement precision
-- `PythonApp/gui/device_panel.py` - Real-time device status visualization with complete health monitoring and
+- `PythonApp/gui/device_panel.py` - Real-time device status visualisation with complete health monitoring and
   connectivity management for multi-device coordination
 - `PythonApp/gui/preview_panel.py` - Multi-stream video preview with synchronized display and quality assessment
   enabling real-time monitoring during recording sessions
@@ -2040,31 +2040,31 @@ control and monitoring capabilities. The enhanced GUI framework includes:
 
 **Advanced Performance and Integration Components:**
 
-The system incorporates sophisticated performance optimization and integration capabilities:
+The system incorporates sophisticated performance optimisation and integration capabilities:
 
 - `PythonApp/enhanced_main_with_web.py` - Web-integrated main application providing remote access and control
-  capabilities while maintaining full synchronization precision
-- `PythonApp/performance_optimizer.py` - complete performance optimization framework dynamically adapting
-  resource utilization and processing load based on real-time system metrics
-- `PythonApp/master_clock_synchronizer.py` - High-precision master clock synchronization maintaining temporal alignment
+  capabilities while maintaining full synchronisation precision
+- `PythonApp/performance_optimizer.py` - complete performance optimisation framework dynamically adapting
+  resource utilisation and processing load based on real-time system metrics
+- `PythonApp/master_clock_synchronizer.py` - High-precision master clock synchronisation maintaining temporal alignment
   across all devices with sub-millisecond accuracy and automatic drift correction
 - `PythonApp/calibration/` - Advanced calibration system with automated quality assessment, drift detection, and
   precision validation algorithms ensuring measurement accuracy throughout extended sessions
 
-**Android Advanced Architecture and Performance Optimization:**
+**Android Advanced Architecture and Performance Optimisation:**
 
-The Android application has evolved to incorporate enterprise-grade architectural patterns and performance optimization:
+The Android application has evolved to incorporate enterprise-grade architectural patterns and performance optimisation:
 
 - `AndroidApp/src/main/java/com/multisensor/recording/di/` - complete Dagger Hilt dependency injection framework
   providing modular architecture, enhanced testability, and runtime configuration flexibility for research scenarios
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Intelligent network traffic
-  optimization with adaptive bandwidth management and quality-of-service control for optimal data transmission
+  optimisation with adaptive bandwidth management and quality-of-service control for optimal data transmission
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Advanced power management with
-  thermal throttling and battery optimization extending recording sessions while maintaining performance
+  thermal throttling and battery optimisation extending recording sessions while maintaining performance
 - `AndroidApp/src/main/java/com/multisensor/recording/calibration/CalibrationQualityAssessment.kt` - Real-time
   calibration quality evaluation with automated feedback systems and precision validation algorithms
 - `AndroidApp/src/main/java/com/multisensor/recording/monitoring/` - complete system monitoring with predictive
-  analytics and health assessment providing proactive optimization and alert generation
+  analytics and health assessment providing proactive optimisation and alert generation
 - `AndroidApp/src/main/java/com/multisensor/recording/security/` - Enterprise-grade security framework with data
   protection, access control, and compliance monitoring for research data protection
 
@@ -2077,7 +2077,7 @@ sticking with Python.
 Overall, the Python desktop application, with PyQt for interface and
 powerful libraries for processing, aligns with the project's goals by
 providing a flexible yet performant environment. It allowed us to
-implement complex logic like synchronization algorithms and multi-modal
+implement complex logic like synchronisation algorithms and multi-modal
 analysis succinctly and in a readable form (which aids verification and
 maintenance, as academic projects might be handed over to others).
 
@@ -2165,7 +2165,7 @@ stored in a structured directory format on the devices and is later
 transferred to the PC if needed. We opted for this approach because the
 volume of data (especially video) is very high, and storing large
 binaries in a database is not efficient. File storage also simplifies
-using standard tools to playback or analyze (e.g., an MP4 can be played
+using standard tools to playback or analyse (e.g., an MP4 can be played
 directly).
 
 For metadata -- like session info, timestamps of significant events,
@@ -2194,7 +2194,7 @@ concept for data streaming: the system stores data locally on devices
 and does not necessarily rely on streaming to PC for storage. This
 ensures that even if the PC disconnects, the device still has all the
 data. At the end of a session or periodically, data can be synced to the
-PC or an external storage. This decision was made to prioritize data
+PC or an external storage. This decision was made to prioritise data
 integrity and was informed by the possibility of network failure --
 local storage on the phone is the primary store during recording, with
 PC acting as a backup/monitor.
@@ -2217,7 +2217,7 @@ accumulate. Our design using filesystem directories means sessions can
 easily be archived or moved to tertiary storage without affecting
 others, as opposed to a big monolithic database that could become
 unwieldy. This approach aligns well with research workflows, where one
-might manually organize and backup sessions.
+might manually organise and backup sessions.
 
 In conclusion, our database/storage decisions were guided by reliability
 and simplicity: use the right tool for each type of data. Database where
@@ -2403,7 +2403,7 @@ The Multi-Sensor Recording System implements a complete code quality framework t
 **Android Application Systematic Enhancement:**
 - **590+ exception handlers systematically improved** (84% completion rate)
 - **CancellationException preservation** maintaining coroutine integrity
-- **Specific exception categorization**: SecurityException, IllegalStateException, IOException
+- **Specific exception categorisation**: SecurityException, IllegalStateException, IOException
 - **35% overall performance improvement** in error handling and recovery
 
 ### 4.11.2 Multi-Layer Exception Handling Architecture

@@ -78,8 +78,8 @@ The physiological foundations directly inform:
   in [Shimmer3 GSR+ Integration](../05_Shimmer3_GSR_Plus_Integration_Comprehensive.md)
 - **Thermal camera integration** detailed
   in [Thermal Camera Integration](../06_Thermal_Camera_Integration_TopDon_TC001_Comprehensive.md)
-- **Multi-device synchronization** requirements outlined
-  in [Multi-Device Synchronization](../01_Multi_Device_Synchronization_System_Comprehensive.md)
+- **Multi-device synchronisation** requirements outlined
+  in [Multi-Device Synchronisation](../01_Multi_Device_Synchronization_System_Comprehensive.md)
 
 ### Research Context and Validation
 
@@ -295,18 +295,18 @@ algorithms and validation procedures.
 
 ### Research Problem Definition and Academic Significance
 
-The fundamental research problem addressed by this thesis centers on the challenge of developing cost-effective,
-scalable, and accessible research instrumentation that maintains scientific rigor while democratizing access to advanced
+The fundamental research problem addressed by this thesis centres on the challenge of developing cost-effective,
+scalable, and accessible research instrumentation that maintains scientific rigor while democratising access to advanced
 physiological measurement capabilities. Extensive research in photoplethysmography applications has established the
 theoretical foundations for contactless physiological measurement, while traditional research instrumentation requires
 substantial financial investment, specialized technical expertise, and dedicated laboratory spaces that limit research
-accessibility and constrain experimental designs to controlled environments that may not reflect naturalistic behavior
+accessibility and constrain experimental designs to controlled environments that may not reflect naturalistic behaviour
 patterns.
 
 The research significance extends beyond immediate technical achievements to encompass methodological contributions that
 enable new research paradigms in human-computer interaction, social psychology, and behavioral science. The emerging
 field of affective computing has identified the critical need for unobtrusive physiological measurement that preserves
-natural behavior patterns, while the system enables research applications previously constrained by measurement
+natural behaviour patterns, while the system enables research applications previously constrained by measurement
 methodology limitations, including large-scale social interaction studies, naturalistic emotion recognition research,
 and longitudinal physiological monitoring in real-world environments.
 
@@ -322,7 +322,7 @@ development.
 
 The Multi-Sensor Recording System represents several significant technical innovations that advance the state of
 knowledge in distributed systems engineering, mobile computing, and research instrumentation development. Fundamental
-principles of distributed systems design inform the coordination architecture, while the primary innovation centers on
+principles of distributed systems design inform the coordination architecture, while the primary innovation centres on
 the development of sophisticated coordination algorithms that achieve research-grade temporal precision across wireless
 networks with inherent latency and jitter characteristics that would normally preclude scientific measurement
 applications.
@@ -330,14 +330,14 @@ applications.
 The system demonstrates that consumer-grade mobile devices can achieve measurement precision comparable to dedicated
 laboratory equipment when supported by advanced software algorithms, thorough validation procedures, and systematic
 quality management systems. Research in distributed systems concepts and design provides theoretical foundations for the
-architectural approach, while this demonstration opens new possibilities for democratizing access to advanced research
+architectural approach, while this demonstration opens new possibilities for democratising access to advanced research
 capabilities while maintaining scientific validity and research quality standards that support peer-reviewed publication
 and academic validation.
 
 The architectural innovations include the development of hybrid coordination topologies that balance centralized control
-simplicity with distributed system resilience, advanced synchronization algorithms that compensate for network latency
+simplicity with distributed system resilience, advanced synchronisation algorithms that compensate for network latency
 and device timing variations, and complete quality management systems that provide real-time assessment and
-optimization across multiple sensor modalities. Foundational work in distributed algorithms establishes the mathematical
+optimisation across multiple sensor modalities. Foundational work in distributed algorithms establishes the mathematical
 principles underlying the coordination approach, while these contributions establish new patterns for distributed
 research system design that are applicable to broader scientific instrumentation challenges requiring coordination of
 heterogeneous hardware platforms.
@@ -353,7 +353,7 @@ heterogeneous hardware platforms.
 Emotion analysis through physiological measurement has emerged as a critical component of modern human-computer
 interaction research, with applications spanning from adaptive user interfaces to therapeutic interventions. The field
 of affective computing, pioneered by Picard (1997), has demonstrated the potential for automated emotion recognition
-systems to enhance human-computer interaction by providing computers with the ability to recognize, interpret, and
+systems to enhance human-computer interaction by providing computers with the ability to recognise, interpret, and
 respond to human emotional states.
 
 Research in emotion-aware computing has shown significant practical applications in education technology, where
@@ -377,7 +377,7 @@ in laboratory settings.
 ### Social and Behavioral Research Applications
 
 Social psychology research has increasingly adopted physiological measurement to study interpersonal dynamics, group
-behavior, and social stress responses. Research by Mendes (2009) has shown that physiological synchrony between
+behaviour, and social stress responses. Research by Mendes (2009) has shown that physiological synchrony between
 individuals can indicate social bonding and interpersonal connection, while studies of social stress have revealed
 distinct physiological signatures associated with different types of social threat.
 
@@ -393,7 +393,7 @@ rational decision processes.
 Traditional physiological measurement approaches require direct physical contact with sensors, which can introduce
 significant artifacts and limitations that compromise measurement validity and ecological validity. Contact-based
 electrodermal activity measurement requires electrode placement that can cause discomfort, restrict movement, and create
-awareness of monitoring that may alter natural behavior patterns (Boucsein, 2012).
+awareness of monitoring that may alter natural behaviour patterns (Boucsein, 2012).
 
 The process of electrode attachment itself can trigger stress responses, particularly in populations sensitive to
 medical procedures or physical contact. Research by Healey and Picard (2005) has documented how the anticipation and
@@ -410,7 +410,7 @@ movement and comfort are essential.
 Contactless physiological measurement offers significant advantages in ecological validity by allowing researchers to
 study emotional responses without the awareness and behavioral constraints associated with attached sensors. Research by
 Poh et al. (2010) has demonstrated that camera-based heart rate measurement can achieve accuracy comparable to
-contact-based approaches while maintaining participant comfort and natural behavior.
+contact-based approaches while maintaining participant comfort and natural behaviour.
 
 The development of thermal imaging approaches for physiological measurement provides additional advantages in terms of
 spatial resolution and the ability to capture regional physiological responses that may not be detectable through
@@ -422,7 +422,7 @@ emotional responses with high temporal resolution while providing spatial inform
 Recent advances in computer vision and signal processing have enabled sophisticated contactless measurement approaches
 that extract physiological information from subtle changes in facial coloration, texture, and thermal patterns. Research
 by Verkruysse et al. (2008) established the theoretical foundation for camera-based photoplethysmography, demonstrating
-that standard video cameras can detect cardiac-related color changes in facial regions.
+that standard video cameras can detect cardiac-related colour changes in facial regions.
 
 Machine learning approaches have further enhanced the capability of contactless measurement systems. Studies by McDuff
 et al. (2014) have shown that deep learning algorithms can extract multiple physiological signals from video data,
@@ -470,7 +470,7 @@ definitions and lived experience has important implications for research design 
 
 Operational definitions of stress in research contexts typically focus on specific, measurable aspects of the stress
 response. These may include physiological indicators (elevated cortisol, increased heart rate, enhanced skin
-conductance), behavioral measures (performance decrements, avoidance behaviors), or subjective reports (perceived stress
+conductance), behavioral measures (performance decrements, avoidance behaviours), or subjective reports (perceived stress
 scales, mood ratings). The choice of operational definition significantly influences research findings and their
 interpretation.
 
@@ -676,7 +676,7 @@ changes, while other studies have characterized responses in the nasal region, c
 
 The development of pattern recognition approaches has enabled automated detection of stress-related thermal signatures
 that are more robust than single-region temperature measurements. Studies by Hernández et al. (2018) have shown that
-machine learning algorithms can identify stress-related thermal patterns with high accuracy by analyzing multiple facial
+machine learning algorithms can identify stress-related thermal patterns with high accuracy by analysing multiple facial
 regions simultaneously.
 
 ### 2.6.2 Thermal Imaging in Stress and Emotion Research
@@ -708,7 +708,7 @@ traditional physiological monitoring approaches would be impractical.
 Thermal imaging for stress detection faces several technical challenges that must be addressed for reliable research
 applications. Environmental factors including ambient temperature, air currents, and lighting conditions can affect
 thermal measurements and their interpretation. Research by Ring et al. (2007) has established protocols for controlling
-these factors and standardizing thermal imaging procedures for research applications.
+these factors and standardising thermal imaging procedures for research applications.
 
 The spatial resolution and sensitivity of thermal cameras also influence their utility for stress detection
 applications. While consumer-grade thermal cameras have become more accessible, they may lack the spatial resolution and
@@ -721,11 +721,11 @@ provide superior performance but at significantly higher cost and complexity.
 
 The comparison between RGB and thermal imaging for physiological measurement reveals fundamentally different types of
 information that can be combined through machine learning approaches to enhance stress detection accuracy. RGB imaging
-captures surface color variations related to blood volume changes and oxygenation levels, while thermal imaging directly
+captures surface colour variations related to blood volume changes and oxygenation levels, while thermal imaging directly
 measures temperature variations related to blood flow and autonomic regulation.
 
 Research by McDuff et al. (2014) has demonstrated that RGB camera-based photoplethysmography can extract heart rate and
-heart rate variability information that correlates with stress responses. This approach leverages subtle color changes
+heart rate variability information that correlates with stress responses. This approach leverages subtle colour changes
 in facial regions caused by cardiac-related blood volume variations that are detectable through careful image analysis
 and signal processing.
 
@@ -766,7 +766,7 @@ stress detection systems against established physiological measures.
 Statistical analysis frameworks for comparing multi-modal stress detection approaches must account for the complex
 dependencies between physiological signals and the potential for overfitting in machine learning models.
 Cross-validation approaches and careful attention to data leakage prevention are essential for generating reliable
-performance estimates that will generalize to new data and participants.
+performance estimates that will generalise to new data and participants.
 
 ### Practical Implementation Considerations
 
@@ -792,11 +792,11 @@ measurement accuracy, research community adoption, technical support, and integr
 has established itself as a leading research-grade wearable sensor system with extensive validation in physiological
 monitoring applications and complete documentation that supports research use.
 
-Technical specifications of the Shimmer3 GSR+ platform include high-precision analog-to-digital conversion (16-bit
+Technical specifications of the Shimmer3 GSR+ platform include high-precision analogue-to-digital conversion (16-bit
 resolution), configurable sampling rates up to 512 Hz, and low-noise signal conditioning that enables detection of
 subtle physiological changes. The platform provides multiple sensor modalities integrated into a single device,
 including GSR, photoplethysmography, accelerometry, and gyroscopy, enabling complete physiological monitoring with
-temporal synchronization across signals.
+temporal synchronisation across signals.
 
 Research validation of the Shimmer3 platform has been extensive, with studies demonstrating measurement accuracy
 comparable to laboratory-grade equipment for various physiological parameters. Research by Burns et al. (2010)
@@ -806,7 +806,7 @@ its use across diverse research applications including stress monitoring, activi
 ### Platform Advantages and Research Suitability
 
 The Shimmer3 platform offers several advantages that make it particularly suitable for multi-modal research
-applications. The wireless connectivity enables untethered monitoring that preserves naturalistic behavior, while the
+applications. The wireless connectivity enables untethered monitoring that preserves naturalistic behaviour, while the
 compact form factor minimizes obtrusiveness and participant burden. The platform's open architecture and complete
 software development kit enable custom applications and integration with other research systems.
 
@@ -835,7 +835,7 @@ for stress detection applications.
 The USB-C connectivity of the TC001 enables direct integration with mobile devices through USB On-The-Go (OTG)
 protocols, eliminating the need for separate power supplies or wireless connectivity that could introduce reliability
 issues. This direct connection approach simplifies system architecture while ensuring reliable data communication and
-synchronization with other sensor modalities.
+synchronisation with other sensor modalities.
 
 ### Performance Characteristics and Research Applications
 
@@ -845,7 +845,7 @@ ability to detect stress-related thermal changes with accuracy comparable to mor
 
 Image quality considerations include the camera's ability to provide clear thermal images with good contrast that enable
 automated analysis of facial thermal patterns. The TC001's thermal processing capabilities include real-time temperature
-measurement, color mapping, and image enhancement features that support both manual analysis and automated computer
+measurement, colour mapping, and image enhancement features that support both manual analysis and automated computer
 vision approaches.
 
 Integration software provided by Topdon includes complete APIs and software development kits that enable custom
@@ -855,7 +855,7 @@ facilitates the development of specialized research applications that extend bey
 ### 2.8.3 Integration and Compatibility Considerations
 
 The integration of Shimmer3 GSR+ sensors and Topdon thermal cameras into a unified multi-sensor system requires careful
-consideration of communication protocols, temporal synchronization, and data management approaches. Both platforms
+consideration of communication protocols, temporal synchronisation, and data management approaches. Both platforms
 provide extensive software development support that enables custom integration solutions tailored to specific research
 requirements.
 
@@ -864,9 +864,9 @@ platform supports Bluetooth Low Energy communication that provides reliable wire
 consumption, while the Topdon thermal camera uses USB-C connectivity that ensures reliable data transfer and eliminates
 wireless interference concerns.
 
-Temporal synchronization represents a critical consideration for multi-modal research applications where precise timing
+Temporal synchronisation represents a critical consideration for multi-modal research applications where precise timing
 relationships between sensor modalities are essential for valid analysis. Both platforms provide timestamp capabilities
-and synchronization support that enable coordination across sensor modalities with sufficient precision for stress
+and synchronisation support that enable coordination across sensor modalities with sufficient precision for stress
 detection applications.
 
 ### Software Development and Research Support
@@ -897,12 +897,12 @@ methodologies that can be adapted for research instrumentation applications.
 ### Distributed Systems and Mobile Computing Research
 
 The distributed systems literature provides fundamental theoretical foundations for coordinating heterogeneous devices
-in research applications, with particular relevance to timing synchronization, fault tolerance, and scalability
+in research applications, with particular relevance to timing synchronisation, fault tolerance, and scalability
 considerations. Classical work in distributed systems theory establishes the mathematical foundations for distributed
-consensus and temporal ordering, providing core principles for achieving coordinated behavior across asynchronous
-networks that directly inform the synchronization algorithms implemented in the Multi-Sensor Recording System. Lamport's
+consensus and temporal ordering, providing core principles for achieving coordinated behaviour across asynchronous
+networks that directly inform the synchronisation algorithms implemented in the Multi-Sensor Recording System. Lamport's
 seminal work on distributed consensus algorithms, particularly the Paxos protocol, establishes theoretical foundations
-for achieving coordinated behavior despite network partitions and device failures.
+for achieving coordinated behaviour despite network partitions and device failures.
 
 Research in mobile sensor networks provides critical insights into energy-efficient coordination protocols, adaptive
 quality management, and fault tolerance mechanisms specifically applicable to resource-constrained devices operating in
@@ -911,7 +911,7 @@ data collection and processing that directly influence the mobile agent design i
 components. The information processing approach to wireless sensor networks provides systematic methodologies for
 coordinating diverse devices while maintaining data quality and system reliability.
 
-The mobile computing literature addresses critical challenges related to resource management, power optimization, and
+The mobile computing literature addresses critical challenges related to resource management, power optimisation, and
 user experience considerations that must be balanced with research precision requirements. Research in pervasive
 computing has identified the fundamental challenges of seamlessly integrating computing capabilities into natural
 environments, while advanced work in mobile application architecture and design patterns provides validated approaches
@@ -925,7 +925,7 @@ challenges associated with camera-based physiological monitoring, providing esse
 measurement principles implemented in the system. Pioneering research in remote plethysmographic imaging using ambient
 light established the optical foundations for contactless cardiovascular monitoring that inform the computer vision
 algorithms implemented in the camera recording components. The fundamental principles of photoplethysmography provide
-the theoretical basis for extracting physiological signals from subtle color variations in facial regions captured by
+the theoretical basis for extracting physiological signals from subtle colour variations in facial regions captured by
 standard cameras.
 
 Research conducted at MIT Media Lab has significantly advanced contactless measurement methodologies through
@@ -957,10 +957,10 @@ Multi-modal sensor integration research provides critical insights into data fus
 techniques, and quality assessment methodologies that enable effective coordination of diverse sensor modalities.
 complete approaches to multisensor data fusion establish mathematical frameworks for combining information from
 heterogeneous sensors while maintaining statistical validity and measurement precision that directly inform the data
-processing pipeline design. Advanced techniques in sensor calibration and characterization provide essential
+processing pipeline design. Advanced techniques in sensor calibration and characterisation provide essential
 methodologies for ensuring measurement accuracy across diverse hardware platforms and environmental conditions.
 
-Research in sensor calibration and characterization provides essential methodologies for ensuring measurement accuracy
+Research in sensor calibration and characterisation provides essential methodologies for ensuring measurement accuracy
 across diverse hardware platforms and environmental conditions. The measurement, instrumentation and sensors handbook
 establishes complete approaches to sensor validation and quality assurance, while these calibration methodologies
 are adapted and extended in the Multi-Sensor Recording System to address the unique challenges of coordinating
@@ -1037,7 +1037,7 @@ and system reliability are paramount.
 The coroutines architecture enables independent management of camera recording, thermal sensor communication,
 physiological data streaming, and network communication without blocking the user interface or introducing timing
 artifacts that could compromise measurement accuracy. The structured concurrency patterns ensure that all background
-operations are properly cancelled when sessions end, preventing resource leaks and ensuring consistent system behavior
+operations are properly cancelled when sessions end, preventing resource leaks and ensuring consistent system behaviour
 across research sessions.
 
 **Room Database (androidx.room 2.4.3)**: The Room persistence library provides local data storage with compile-time SQL
@@ -1052,15 +1052,15 @@ loss while supporting export capabilities that enable integration with external 
 packages.
 
 **Retrofit 2 (com.squareup.retrofit2 2.9.0)**: Retrofit provides type-safe HTTP client capabilities for communication
-with the Python desktop controller, offering automatic JSON serialization, complete error handling, and adaptive
+with the Python desktop controller, offering automatic JSON serialisation, complete error handling, and adaptive
 connection management. The Retrofit implementation includes automatic retry mechanisms, timeout management, and
 connection pooling that ensure reliable communication despite network variability and temporary connectivity issues
 typical in research environments.
 
 The HTTP client design supports both REST API communication for control messages and streaming protocols for real-time
-data transmission, enabling flexible communication patterns that optimize bandwidth utilization while maintaining
+data transmission, enabling flexible communication patterns that optimise bandwidth utilisation while maintaining
 real-time responsiveness. The implementation includes complete logging and diagnostics capabilities that support
-network troubleshooting and performance optimization during research operations.
+network troubleshooting and performance optimisation during research operations.
 
 **OkHttp 4 (com.squareup.okhttp3 4.10.0)**: OkHttp provides the underlying HTTP/WebSocket communication foundation with
 advanced features including connection pooling, transparent GZIP compression, and complete TLS/SSL support. The
@@ -1183,9 +1183,9 @@ while maintaining the precision and reliability standards required for rigorous 
   with real-time monitoring capabilities
 - **Network Layer Architecture**: Sophisticated communication protocols enabling seamless coordination across
   heterogeneous device platforms
-- **Multi-Modal Data Processing**: Real-time integration and synchronization of RGB cameras, thermal imaging, and
+- **Multi-Modal Data Processing**: Real-time integration and synchronisation of RGB cameras, thermal imaging, and
   physiological sensor data streams
-- **Quality Assurance Engine**: Continuous monitoring and optimization systems ensuring research-grade data quality and
+- **Quality Assurance Engine**: Continuous monitoring and optimisation systems ensuring research-grade data quality and
   system reliability
 
 #### GUI Framework and User Interface Libraries
@@ -1235,12 +1235,12 @@ validation. The NumPy integration supports both real-time processing requirement
 essential for complete research data processing pipelines.
 
 **SciPy (scipy 1.10.1)**: SciPy extends NumPy with advanced scientific computing capabilities including signal
-processing, statistical analysis, and optimization algorithms essential for sophisticated physiological data analysis.
+processing, statistical analysis, and optimisation algorithms essential for sophisticated physiological data analysis.
 The SciPy implementation provides validated algorithms for frequency domain analysis, filtering operations, and
 statistical validation that ensure research-grade data quality and analysis accuracy.
 
 The scientific computing capabilities include advanced signal processing algorithms for physiological data analysis,
-complete statistical functions for quality assessment and hypothesis testing, and optimization algorithms for
+complete statistical functions for quality assessment and hypothesis testing, and optimisation algorithms for
 calibration parameter estimation. The SciPy integration enables sophisticated data analysis workflows while maintaining
 computational efficiency essential for real-time research applications.
 
@@ -1271,7 +1271,7 @@ complete logging and diagnostics capabilities.
 
 **SQLAlchemy (sqlalchemy 2.0.17)**: SQLAlchemy provides complete database abstraction with support for multiple
 database engines, advanced ORM capabilities, and migration management essential for research data management. The
-SQLAlchemy implementation enables sophisticated data modeling while providing database-agnostic code that supports
+SQLAlchemy implementation enables sophisticated data modelling while providing database-agnostic code that supports
 deployment across diverse research computing environments.
 
 The database capabilities include complete metadata management, automatic schema migration, and advanced querying
@@ -1308,7 +1308,7 @@ diverse research requirements and future extensions.
 
 **Protocol Buffer Alternative Evaluation**: While JSON was selected for its human-readability and debugging advantages,
 Protocol Buffers were evaluated as an alternative for high-throughput data communication. The evaluation considered
-factors including serialization efficiency, schema evolution capabilities, cross-platform support, and debugging
+factors including serialisation efficiency, schema evolution capabilities, cross-platform support, and debugging
 complexity, ultimately selecting JSON for its superior developer experience and research environment requirements.
 
 #### Network Security and Encryption
@@ -1318,7 +1318,7 @@ for securing research data during transmission and storage. The implementation i
 protection, secure key management, and digital signature capabilities that ensure data integrity and confidentiality
 throughout the research process.
 
-The security implementation includes complete threat modeling for research environments, secure communication
+The security implementation includes complete threat modelling for research environments, secure communication
 protocols with perfect forward secrecy, and complete audit logging that supports security compliance and data
 protection requirements. The cryptography integration maintains security while preserving the performance
 characteristics essential for real-time research applications.
@@ -1380,7 +1380,7 @@ includes automatic formatting workflows, complete style checking, and consistent
 collaborative development and long-term code maintainability.
 
 The code quality framework includes complete linting with automated error detection, systematic security scanning
-with vulnerability assessment, and performance analysis with optimization recommendations. The quality assurance
+with vulnerability assessment, and performance analysis with optimisation recommendations. The quality assurance
 integration maintains high code standards while supporting rapid development cycles essential for research software
 applications with evolving requirements.
 
@@ -1443,7 +1443,7 @@ NumPy, SciPy, OpenCV, and Pandas that provide validated algorithms for data proc
 computer vision operations essential for research applications.
 
 The Python ecosystem includes complete machine learning frameworks, statistical analysis tools, and data
-visualization capabilities that enable sophisticated research data analysis workflows while maintaining compatibility
+visualisation capabilities that enable sophisticated research data analysis workflows while maintaining compatibility
 with external analysis tools including R, MATLAB, and SPSS. The interpretive nature of Python enables rapid prototyping
 and experimental development approaches that accommodate the evolving requirements typical in research software
 development.
@@ -1494,7 +1494,7 @@ despite network variability typical in research environments. The protocol desig
 data streaming and low-latency command execution while maintaining the simplicity essential for research software
 development and troubleshooting.
 
-**JSON vs. Binary Protocol Decision**: The selection of JSON for message serialization reflects detailed evaluation
+**JSON vs. Binary Protocol Decision**: The selection of JSON for message serialisation reflects detailed evaluation
 of human readability, debugging capability, schema validation, and development productivity considerations. JSON
 provides human-readable message formats that facilitate debugging and system monitoring while supporting complete
 schema validation and automatic code generation that reduce development errors and ensure protocol reliability.
@@ -1519,7 +1519,7 @@ needs. SQLite provides embedded database capabilities with ACID compliance, comp
 zero-configuration deployment that eliminates database administration overhead while ensuring data integrity and
 reliability essential for research applications.
 
-The SQLite implementation enables sophisticated data modeling with foreign key constraints, transaction management, and
+The SQLite implementation enables sophisticated data modelling with foreign key constraints, transaction management, and
 complete indexing while maintaining single-file deployment that simplifies backup, archival, and data sharing
 procedures essential for research workflows. Alternative database solutions including PostgreSQL, MySQL, and MongoDB
 were evaluated but determined to require additional deployment complexity, ongoing administration, and external
@@ -1544,9 +1544,9 @@ system design decisions and validation procedures.
 
 ### Distributed Systems Theory and Temporal Coordination
 
-The synchronization algorithms implemented in the Multi-Sensor Recording System build upon fundamental theoretical
+The synchronisation algorithms implemented in the Multi-Sensor Recording System build upon fundamental theoretical
 principles from distributed systems research, particularly the work of Lamport on logical clocks and temporal ordering
-that provides mathematical foundations for achieving coordinated behavior across asynchronous networks. The Lamport
+that provides mathematical foundations for achieving coordinated behaviour across asynchronous networks. The Lamport
 timestamps provide the theoretical foundation for implementing happened-before relationships that enable precise
 temporal ordering of events across distributed devices despite clock drift and network latency variations.
 
@@ -1555,20 +1555,20 @@ events and causal dependencies essential for multi-modal sensor data analysis. T
 complete temporal analysis of sensor events while providing mathematical guarantees about causal relationships that
 support scientific analysis and validation procedures.
 
-**Network Time Protocol (NTP) Adaptation**: The synchronization framework adapts Network Time Protocol principles for
+**Network Time Protocol (NTP) Adaptation**: The synchronisation framework adapts Network Time Protocol principles for
 research applications requiring microsecond-level precision across consumer-grade wireless networks. The NTP adaptation
 includes sophisticated algorithms for network delay estimation, clock drift compensation, and outlier detection that
 maintain temporal accuracy despite the variable latency characteristics of wireless communication.
 
-The temporal coordination algorithms implement Cristian's algorithm for clock synchronization with adaptations for
+The temporal coordination algorithms implement Cristian's algorithm for clock synchronisation with adaptations for
 mobile device constraints and wireless network characteristics. The implementation includes complete statistical
-analysis of synchronization accuracy with confidence interval estimation and quality metrics that enable objective
+analysis of synchronisation accuracy with confidence interval estimation and quality metrics that enable objective
 assessment of temporal precision throughout research sessions.
 
 **Byzantine Fault Tolerance Principles**: The fault tolerance design incorporates principles from Byzantine fault
 tolerance research to handle arbitrary device failures and network partitions while maintaining system operation and
 data integrity. The Byzantine fault tolerance adaptation enables continued operation despite device failures, network
-partitions, or malicious behavior while providing complete logging and validation that ensure research data
+partitions, or malicious behaviour while providing complete logging and validation that ensure research data
 integrity.
 
 ### Signal Processing Theory and Physiological Measurement
@@ -1576,7 +1576,7 @@ integrity.
 The physiological measurement algorithms implement validated signal processing techniques specifically adapted for
 contactless measurement applications while maintaining scientific accuracy and research validity. The signal processing
 foundation includes digital filtering algorithms, frequency domain analysis, and statistical signal processing
-techniques that extract physiological information from optical and thermal sensor data while minimizing noise and
+techniques that extract physiological information from optical and thermal sensor data while minimising noise and
 artifacts.
 
 **Photoplethysmography Signal Processing**: The contactless GSR prediction algorithms build upon established
@@ -1663,7 +1663,7 @@ coordinating multiple sensor modalities for physiological measurement applicatio
 maintain temporal precision across diverse hardware platforms and communication protocols.
 
 The Multi-Sensor Recording System addresses this gap through sophisticated multi-modal coordination algorithms that
-achieve microsecond-level synchronization across thermal imaging, optical sensors, and reference physiological
+achieve microsecond-level synchronisation across thermal imaging, optical sensors, and reference physiological
 measurements while providing complete quality assessment and validation across all sensor modalities. The system
 demonstrates that consumer-grade hardware can achieve research-grade precision when supported by advanced coordination
 algorithms and systematic validation procedures.
@@ -1692,24 +1692,24 @@ characteristics. The validation framework provides statistical analysis of measu
 assessment procedures, and systematic calibration approaches that ensure research-grade reliability despite hardware
 limitations and environmental challenges.
 
-**Temporal Synchronization Across Heterogeneous Wireless Networks**: The distributed systems literature provides
+**Temporal Synchronisation Across Heterogeneous Wireless Networks**: The distributed systems literature provides
 extensive theoretical foundations for temporal coordination but limited practical implementation guidance for research
 applications requiring microsecond-level precision across consumer-grade wireless networks with variable latency and
-reliability characteristics. Existing synchronization approaches typically assume dedicated network infrastructure or
+reliability characteristics. Existing synchronisation approaches typically assume dedicated network infrastructure or
 specialized hardware that may not be available in research environments.
 
-The Multi-Sensor Recording System addresses this gap through adaptive synchronization algorithms that achieve
+The Multi-Sensor Recording System addresses this gap through adaptive synchronisation algorithms that achieve
 research-grade temporal precision despite wireless network variability while providing complete quality metrics and
-validation procedures that enable objective assessment of synchronization accuracy throughout research sessions. The
+validation procedures that enable objective assessment of synchronisation accuracy throughout research sessions. The
 implementation demonstrates that sophisticated software algorithms can compensate for hardware limitations while
 maintaining scientific validity and measurement accuracy.
 
 ### Research Opportunities and Future Directions
 
 **Machine Learning Integration for Adaptive Quality Management**: Future research opportunities include integration of
-machine learning algorithms for adaptive quality management that can automatically optimize system parameters based on
+machine learning algorithms for adaptive quality management that can automatically optimise system parameters based on
 environmental conditions, participant characteristics, and experimental requirements. Machine learning approaches could
-provide predictive quality assessment, automated parameter optimization, and adaptive error correction that enhance
+provide predictive quality assessment, automated parameter optimisation, and adaptive error correction that enhance
 measurement accuracy while reducing operator workload and training requirements.
 
 The modular architecture design enables systematic integration of machine learning capabilities while maintaining the
@@ -1737,7 +1737,7 @@ quality while reducing development overhead for individual research teams.
 
 The complete documentation standards and modular architecture design enable systematic community contribution while
 maintaining code quality and scientific validity standards essential for research applications. Future community
-initiatives could include collaborative testing frameworks, shared hardware characterization databases, and standardized
+initiatives could include collaborative testing frameworks, shared hardware characterisation databases, and standardized
 validation protocols that support scientific reproducibility and technology transfer across research institutions.
 
 ---
@@ -1763,7 +1763,7 @@ research validity.
 
 The theoretical integration reveals how consumer-grade hardware can achieve research-grade precision when supported by
 advanced algorithms that compensate for hardware limitations through sophisticated software approaches. This integration
-establishes the scientific foundation for democratizing access to advanced physiological measurement capabilities while
+establishes the scientific foundation for democratising access to advanced physiological measurement capabilities while
 maintaining the measurement accuracy and reliability required for peer-reviewed research applications.
 
 ### Literature Analysis and Research Gap Identification
@@ -1844,7 +1844,7 @@ code components. All referenced files include detailed code snippets in **Append
 
 - `PythonApp/hand_segmentation/hand_segmentation_processor.py` - Advanced computer vision pipeline implementing
   MediaPipe and OpenCV for contactless analysis (See Appendix F.25)
-- `PythonApp/webcam/webcam_capture.py` - Multi-camera synchronization with Stage 3 RAW extraction based on computer
+- `PythonApp/webcam/webcam_capture.py` - Multi-camera synchronisation with Stage 3 RAW extraction based on computer
   vision research (See Appendix F.26)
 - `PythonApp/calibration/calibration_processor.py` - Signal processing algorithms for multi-modal calibration based
   on DSP literature (See Appendix F.27)
@@ -1857,7 +1857,7 @@ code components. All referenced files include detailed code snippets in **Append
   See Appendix F.29)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless network coordination
   with automatic discovery protocols (See Appendix F.30)
-- `PythonApp/session/session_synchronizer.py` - Cross-device temporal synchronization implementing academic timing
+- `PythonApp/session/session_synchronizer.py` - Cross-device temporal synchronisation implementing academic timing
   algorithms (See Appendix F.31)
 - `PythonApp/master_clock_synchronizer.py` - Master clock implementation based on distributed systems literature (
   See Appendix F.32)
@@ -1879,7 +1879,7 @@ code components. All referenced files include detailed code snippets in **Append
   methodologies (See Appendix F.37)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/SessionInfo.kt` - Session data management with academic
   research protocols (See Appendix F.38)
-- `PythonApp/webcam/dual_webcam_capture.py` - Dual-camera synchronization implementing multi-view geometry
+- `PythonApp/webcam/dual_webcam_capture.py` - Dual-camera synchronisation implementing multi-view geometry
   principles (See Appendix F.39)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation
   based on academic data integrity standards (See Appendix F.40)
@@ -1923,7 +1923,7 @@ Business Media.
 
 Boucsein, W. (2012). *Electrodermal activity*. Springer Science & Business Media.
 
-Bradley, M. M., & Lang, P. J. (2000). Measuring emotion: Behavior, feeling, and physiology. *Cognitive neuroscience of
+Bradley, M. M., & Lang, P. J. (2000). Measuring emotion: Behaviour, feeling, and physiology. *Cognitive neuroscience of
 emotion*, 25, 49-59.
 
 Burns, A., Greene, B. R., McGrath, M. J., O'Shea, T. J., Kuris, B., Ayer, S. M., ... & Cionca, V. (2010). SHIMMER™–A
@@ -1997,7 +1997,7 @@ Loewenstein, G., & Lerner, J. S. (2003). The role of affect in decision making. 
 Lupien, S. J., McEwen, B. S., Gunnar, M. R., & Heim, C. (2009). Effects of stress throughout the lifespan on the brain,
 behaviour and cognition. *Nature reviews neuroscience*, 10(6), 434-445.
 
-Lykken, D. T., & Venables, P. H. (1971). Direct measurement of skin conductance: a proposal for standardization.
+Lykken, D. T., & Venables, P. H. (1971). Direct measurement of skin conductance: a proposal for standardisation.
 *Psychophysiology*, 8(5), 656-672.
 
 Martin, R. C. (2008). *Clean Code: A Handbook of Agile Software Craftsmanship*. Prentice Hall.
@@ -2041,7 +2041,7 @@ Venables, P. H., & Christie, M. J. (1980). Electrodermal activity. *Techniques i
 Verkruysse, W., Svaasand, L. O., & Nelson, J. S. (2008). Remote plethysmographic imaging using ambient light. *Optics
 express*, 16(26), 21434-21445.
 
-Webster, J., & Watson, R. T. (2002). Analyzing the past to prepare for the future: Writing a literature review. *MIS
+Webster, J., & Watson, R. T. (2002). Analysing the past to prepare for the future: Writing a literature review. *MIS
 quarterly*, xiii-xxiii.
 
 - `PythonApp/comprehensive_test_summary.py` - Statistical analysis and confidence interval calculations for research

@@ -16,7 +16,7 @@
     - 2.2. [B.2 Algorithm Validation Results](#b2-algorithm-validation-results)
     - 2.3. [B.3 Multi-Device Coordination Test Results](#b3-multi-device-coordination-test-results)
     - 2.4. [B.4 Network Performance Test Results](#b4-network-performance-test-results)
-    - 2.5. [B.5 Synchronization Precision Results](#b5-synchronization-precision-results)
+    - 2.5. [B.5 Synchronisation Precision Results](#b5-synchronisation-precision-results)
     - 2.6. [B.6 Throughput and Scalability Assessment Results](#b6-throughput-and-scalability-assessment-results)
     - 2.7. [B.7 Reliability and Fault Tolerance Results](#b7-reliability-and-fault-tolerance-results)
     - 2.8. [B.8 User Experience and Usability Results](#b8-user-experience-and-usability-results)
@@ -67,7 +67,7 @@ The Multi-Sensor Recording System is organized into self-contained components, e
     - Component guide: `../python_desktop_controller_readme.md`
     - Quick start: `../QUICK_START.md`
 
-- **Multi-Device Synchronization**: `../multi_device_synchronization_readme.md`
+- **Multi-Device Synchronisation**: `../multi_device_synchronization_readme.md`
     - Component guide: `../multi_device_synchronization_readme.md`
     - Architecture: `../ARCHITECTURE_DIAGRAMS.md`
 
@@ -112,7 +112,7 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 |-----------------------|---------------------------|---------------------------------------|----------------------------------|----------------------------------|
 | **Transport Layer**   | WebSocket over TLS 1.3    | Bidirectional real-time communication | <50ms latency, 99.9% reliability | End-to-end encryption            |
 | **Application Layer** | JSON-based messaging      | Structured data exchange              | <10ms parsing time               | Message integrity validation     |
-| **Synchronization**   | NTP + custom compensation | Temporal alignment                    | ±25ms precision                  | Tamper-resistant timestamps      |
+| **Synchronisation**   | NTP + custom compensation | Temporal alignment                    | ±25ms precision                  | Tamper-resistant timestamps      |
 | **Discovery Layer**   | mDNS/Bonjour              | Automatic device discovery            | <30s discovery time              | Certificate-based authentication |
 | **Error Recovery**    | Automatic reconnection    | Fault tolerance                       | <15s recovery time               | Session state preservation       |
 | **Data Integrity**    | CRC32 + MD5 checksums     | Corruption detection                  | 100% error detection             | Cryptographic signatures         |
@@ -123,7 +123,7 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 
 | Performance Metric           | Target Specification | Achieved Performance | Performance Ratio | Status           |
 |------------------------------|----------------------|----------------------|-------------------|------------------|
-| **Temporal Synchronization** | ±50ms accuracy       | ±18.7ms (avg)        | 267% better       | ✅ Exceeds target |
+| **Temporal Synchronisation** | ±50ms accuracy       | ±18.7ms (avg)        | 267% better       | ✅ Exceeds target |
 | **Frame Rate Consistency**   | 24 FPS minimum       | 29.8 FPS (avg)       | 124% of target    | ✅ Exceeds target |
 | **Data Throughput**          | 25 MB/s minimum      | 47.3 MB/s (avg)      | 189% of target    | ✅ Exceeds target |
 | **System Uptime**            | 95% availability     | 99.73% achieved      | 105% of target    | ✅ Exceeds target |
@@ -169,7 +169,7 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 | Algorithm Category     | Test Cases | Accuracy Target  | Achieved Accuracy | Performance Target | Achieved Performance |
 |------------------------|------------|------------------|-------------------|--------------------|----------------------|
 | **Camera Calibration** | 45 tests   | <0.5 pixel RMS   | 0.23 ± 0.08 pixel | <10s processing    | 6.4 ± 1.2s           |
-| **Synchronization**    | 120 tests  | <5ms precision   | 2.1 ± 0.8ms       | <1s coordination   | 0.34 ± 0.12s         |
+| **Synchronisation**    | 120 tests  | <5ms precision   | 2.1 ± 0.8ms       | <1s coordination   | 0.34 ± 0.12s         |
 | **Signal Processing**  | 78 tests   | >95% correlation | 97.8 ± 1.4%       | <100ms latency     | 67 ± 15ms            |
 | **Thermal Processing** | 32 tests   | ±0.1°C accuracy  | ±0.06°C           | <50ms frame        | 28 ± 8ms             |
 
@@ -196,11 +196,11 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 | **Poor**          | 200-500ms | 5%          | 92.3%        | 99.45%         | 10-30s        |
 | **Critical**      | >500ms    | >10%        | 78.9%        | 98.92%         | 30-120s       |
 
-### B.5 Synchronization Precision Results
+### B.5 Synchronisation Precision Results
 
-**Table B.5.1: Synchronization Precision Results**
+**Table B.5.1: Synchronisation Precision Results**
 
-| Synchronization Metric | Target Precision | Measured Precision   | Sample Size  | Statistical Analysis           |
+| Synchronisation Metric | Target Precision | Measured Precision   | Sample Size  | Statistical Analysis           |
 |------------------------|------------------|----------------------|--------------|--------------------------------|
 | **Initial Sync**       | ≤50ms            | 23.7ms ± 8.2ms       | n=500        | Mean ± SD, normal distribution |
 | **Sustained Sync**     | ≤25ms            | 18.4ms ± 6.1ms       | n=10,000     | 95.7% within tolerance         |
@@ -215,7 +215,7 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 | Performance Metric  | 2 Devices | 4 Devices | 6 Devices  | 8 Devices  | Scalability Factor  |
 |---------------------|-----------|-----------|------------|------------|---------------------|
 | **Data Throughput** | 45.2 MB/s | 87.3 MB/s | 126.8 MB/s | 158.4 MB/s | Linear (0.92)       |
-| **CPU Utilization** | 32.1%     | 58.7%     | 78.9%      | 95.2%      | Near-linear (0.88)  |
+| **CPU Utilisation** | 32.1%     | 58.7%     | 78.9%      | 95.2%      | Near-linear (0.88)  |
 | **Memory Usage**    | 1.8 GB    | 3.2 GB    | 4.7 GB     | 6.8 GB     | Super-linear (1.15) |
 | **Response Time**   | 0.8s      | 1.2s      | 1.9s       | 3.1s       | Exponential (1.42)  |
 | **Error Rate**      | 0.1%      | 0.3%      | 0.8%       | 2.1%       | Exponential (1.89)  |
@@ -287,13 +287,13 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 This section provides consolidated technical specifications from all complete component documentation integrated
 into the thesis framework.
 
-**Multi-Device Synchronization System Technical Specifications:**
+**Multi-Device Synchronisation System Technical Specifications:**
 
-The synchronization system implements sophisticated Network Time Protocol (NTP) algorithms optimized for local network
+The synchronisation system implements sophisticated Network Time Protocol (NTP) algorithms optimized for local network
 precision and mobile device coordination. The system achieves sub-millisecond temporal alignment across diverse sensor
 modalities through advanced clock drift compensation and network-resilient communication protocols.
 
-*Core Synchronization Components:*
+*Core Synchronisation Components:*
 
 - **MasterClockSynchronizer**: Central time authority with precision drift compensation
 - **SessionSynchronizer**: Coordinated session management with automatic recovery mechanisms
@@ -302,10 +302,10 @@ modalities through advanced clock drift compensation and network-resilient commu
 
 *Performance Specifications:*
 
-- **Temporal Precision**: ±3.2ms synchronization accuracy across all connected devices
+- **Temporal Precision**: ±3.2ms synchronisation accuracy across all connected devices
 - **Network Latency Tolerance**: 1ms to 500ms with adaptive quality management
 - **Device Coordination**: Support for up to 8 simultaneous devices with horizontal scaling
-- **Session Recovery**: Automatic synchronization recovery following network interruptions
+- **Session Recovery**: Automatic synchronisation recovery following network interruptions
 
 **Android Mobile Application Architecture Specifications:**
 
@@ -324,8 +324,8 @@ persistence, and Kotlin Coroutines for structured concurrency.
 *Performance Specifications:*
 
 - **Video Recording**: 4K resolution at sustained 60fps with simultaneous RAW capture
-- **Battery Optimization**: 5.8 ± 0.4 hours continuous operation with intelligent power management
-- **Memory Management**: 2.8 ± 0.3GB peak usage with automatic resource optimization
+- **Battery Optimisation**: 5.8 ± 0.4 hours continuous operation with intelligent power management
+- **Memory Management**: 2.8 ± 0.3GB peak usage with automatic resource optimisation
 - **Sensor Integration**: Real-time processing of multiple high-bandwidth sensor streams
 
 **Python Desktop Controller Technical Specifications:**
@@ -338,7 +338,7 @@ maintaining individual device autonomy.
 
 - **Application Container**: Advanced IoC container with lifecycle management and service orchestration
 - **Network Layer**: Sophisticated TCP/WebSocket server supporting up to 8 simultaneous connections
-- **Synchronization Engine**: Master clock synchronizer with custom NTP protocol implementation
+- **Synchronisation Engine**: Master clock synchronizer with custom NTP protocol implementation
 - **Quality Assurance Engine**: Real-time monitoring ensuring research-grade data quality
 - **Session Management**: complete lifecycle control with automatic recovery and validation
 
@@ -346,21 +346,21 @@ maintaining individual device autonomy.
 
 - **System Response Time**: 1.34 ± 0.18s with intelligent load balancing
 - **Data Throughput**: 47.3 ± 2.1 MB/s with adaptive quality management
-- **CPU Utilization**: 56.2 ± 8.4% across diverse operational scenarios
+- **CPU Utilisation**: 56.2 ± 8.4% across diverse operational scenarios
 - **Concurrent Processing**: Asynchronous architecture supporting multiple device coordination
 
 **Camera Recording System Technical Specifications:**
 
 The camera system implements Stage 3 RAW extraction with Samsung-specific optimizations and multi-stream configuration
 capabilities. The system supports simultaneous 4K video recording and DNG RAW capture with precise temporal
-synchronization.
+synchronisation.
 
 *Technical Features:*
 
-- **Multi-Stream Configuration**: Independent video and RAW capture with quality optimization
-- **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic detection
+- **Multi-Stream Configuration**: Independent video and RAW capture with quality optimisation
+- **Samsung S21/S22 Optimisation**: LEVEL_3 hardware capability utilisation with automatic detection
 - **RAW Processing Pipeline**: DNG file generation with complete metadata embedding
-- **Synchronized Capture**: Microsecond-level synchronization across multiple camera devices
+- **Synchronized Capture**: Microsecond-level synchronisation across multiple camera devices
 - **Quality Validation**: complete error management and recovery with visual confirmation
 
 *Performance Specifications:*
@@ -498,9 +498,9 @@ graph TB
     SWITCH <--> NAS
     STORAGE <--> NAS
     
-    style PC fill:#1565c0,color:#ffffff
-    style ROUTER fill:#f57c00,color:#ffffff
-    style NAS fill:#2e7d32,color:#ffffff
+    style PC fill:#1565c0,colour:#ffffff
+    style ROUTER fill:#f57c00,colour:#ffffff
+    style NAS fill:#2e7d32,colour:#ffffff
 ```
 
 #### A.1 System Requirements and Hardware Specifications
@@ -554,8 +554,8 @@ graph TB
 
 Top Panel: Overview of complete laboratory setup with 360-degree view
 - Central controller workstation with dual 27" monitors displaying system dashboard
-- Organized cable management with color-coded cables for different systems
-- Professional lighting setup with adjustable color temperature
+- Organized cable management with colour-coded cables for different systems
+- Professional lighting setup with adjustable colour temperature
 
 Middle Panel: Participant interaction area
 - Comfortable ergonomic seating for research participants
@@ -577,9 +577,9 @@ Bottom Panel: Technical infrastructure detail
 | **Research Network SSID**    | ResearchLab_5GHz_Sensors                   | Dedicated 5GHz band for sensors        | WPA3-Enterprise with certificate authentication |
 | **IP Address Range**         | 192.168.100.0/24                           | Isolated subnet for research equipment | VLAN isolation from institutional network       |
 | **DHCP Lease Time**          | 24 hours                                   | Stable addressing for long sessions    | Static reservations for critical devices        |
-| **Quality of Service (QoS)** | Video: High, Data: Medium, Management: Low | Prioritize real-time data streams      | Bandwidth allocation per device type            |
+| **Quality of Service (QoS)** | Video: High, Data: Medium, Management: Low | Prioritise real-time data streams      | Bandwidth allocation per device type            |
 | **Firewall Rules**           | Block external internet, allow internal    | Research data protection               | Prevent unauthorized data exfiltration          |
-| **Network Time Protocol**    | Internal NTP server at 192.168.100.1       | Precise time synchronization           | GPS-synchronized reference clock                |
+| **Network Time Protocol**    | Internal NTP server at 192.168.100.1       | Precise time synchronisation           | GPS-synchronized reference clock                |
 | **VPN Access**               | IPSec tunnel for remote administration     | Secure remote system access            | Multi-factor authentication required            |
 | **Monitoring and Logging**   | SNMP monitoring with syslog aggregation    | Network performance tracking           | Centralized log analysis and alerting           |
 
@@ -639,9 +639,9 @@ flowchart TD
     TEST --> DEMO
     DEMO --> DOCS
     
-    style START fill:#4caf50,color:#ffffff
-    style DEMO fill:#ff9800,color:#ffffff
-    style DOCS fill:#2196f3,color:#ffffff
+    style START fill:#4caf50,colour:#ffffff
+    style DEMO fill:#ff9800,colour:#ffffff
+    style DOCS fill:#2196f3,colour:#ffffff
 ```
 
 **Configuration File Examples:**
@@ -694,7 +694,7 @@ graph TB
     
     subgraph "Service Layer"
         COORD[Device Coordinator<br/>Connection Management]
-        SYNC[Synchronization Service<br/>Temporal Alignment]
+        SYNC[Synchronisation Service<br/>Temporal Alignment]
         PROC[Processing Service<br/>Data Analysis Pipeline]
         QUAL[Quality Service<br/>Assessment and Monitoring]
     end
@@ -758,7 +758,7 @@ graph TB
 
 - Location: `docs/troubleshooting/system_diagnostics_guide.md`
 - Content: Step-by-step troubleshooting procedures for common system issues
-- Expected sections: Network connectivity, device discovery, synchronization problems, data quality issues
+- Expected sections: Network connectivity, device discovery, synchronisation problems, data quality issues
 
 **[PLACEHOLDER: Maintenance Schedule Documentation]**
 
@@ -809,12 +809,12 @@ Session Control Panel:
 |------------------------------|--------------------------------------|-----------------------------------|--------------------------------------------|----------------------------------------------|
 | **Device Discovery Button**  | Scan for available Android devices   | Click "Discover Devices"          | Devices appear in sidebar list             | Check Wi-Fi connectivity if no devices found |
 | **Session Start Control**    | Begin synchronized recording         | Click "Start Session" after setup | All devices begin recording simultaneously | Verify all devices show green status         |
-| **Quality Monitor Panel**    | Real-time assessment of data quality | Monitor automatically updates     | Color indicators show quality status       | Red indicators require attention             |
+| **Quality Monitor Panel**    | Real-time assessment of data quality | Monitor automatically updates     | Colour indicators show quality status       | Red indicators require attention             |
 | **Emergency Stop Button**    | Immediately halt all recording       | Click red "STOP" button           | All devices stop, data saved automatically | Use only in emergency situations             |
 | **Export Data Wizard**       | Convert and export research data     | Click "Export Session Data"       | Step-by-step data conversion process       | Check storage space before export            |
 | **Device Configuration**     | Adjust individual device settings    | Right-click device in sidebar     | Context menu with device options           | Changes apply immediately to device          |
 | **Network Status Indicator** | Show connection health               | Automatic real-time updates       | Green=good, Yellow=warning, Red=error      | Check network infrastructure if red          |
-| **Synchronization Display**  | Show timing accuracy across devices  | Automatic real-time monitoring    | ±ms deviation from reference time          | Recalibrate if deviation exceeds ±50ms       |
+| **Synchronisation Display**  | Show timing accuracy across devices  | Automatic real-time monitoring    | ±ms deviation from reference time          | Recalibrate if deviation exceeds ±50ms       |
 
 **Figure B.2: Android Mobile Application Interface Screenshots**
 
@@ -843,7 +843,7 @@ Recording Status Screen:
 - Network connection strength and data transfer rate
 - Battery level with estimated remaining recording time
 - Temperature monitoring for device health
-- GSR sensor data stream visualization
+- GSR sensor data stream visualisation
 
 Settings and Configuration Screen:
 - User profile selection for personalized settings
@@ -860,10 +860,10 @@ Settings and Configuration Screen:
 |-----------------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------|--------------------------------------------|
 | **Pre-Session Setup**       | 10-15 minutes | 1. Power on all equipment<br/>2. Verify network connectivity<br/>3. Check device battery levels<br/>4. Load participant configuration             | All devices connected and green status    | 100% device connectivity, >4 hours battery |
 | **Participant Preparation** | 5-8 minutes   | 1. Position participant comfortably<br/>2. Attach GSR sensors (if using reference)<br/>3. Adjust camera angles<br/>4. Confirm participant consent | Optimal sensor placement and comfort      | Clear video framing, sensor signal quality |
-| **System Calibration**      | 3-5 minutes   | 1. Run thermal calibration sequence<br/>2. Synchronize all device clocks<br/>3. Test recording start/stop<br/>4. Verify data quality indicators   | Calibration within tolerance, sync <±25ms | All quality indicators green               |
+| **System Calibration**      | 3-5 minutes   | 1. Run thermal calibration sequence<br/>2. Synchronise all device clocks<br/>3. Test recording start/stop<br/>4. Verify data quality indicators   | Calibration within tolerance, sync <±25ms | All quality indicators green               |
 | **Recording Session**       | Variable      | 1. Monitor real-time quality indicators<br/>2. Maintain visual supervision<br/>3. Note any anomalies or events<br/>4. Ensure continuous recording | Quality maintained throughout session     | <1% frame drops, continuous data streams   |
 | **Session Completion**      | 5-10 minutes  | 1. Stop all recordings safely<br/>2. Verify data integrity<br/>3. Export/backup session data<br/>4. Document session notes                        | Complete data capture verified            | 100% data integrity, successful backup     |
-| **Post-Session Cleanup**    | 10-15 minutes | 1. Sanitize GSR sensors and equipment<br/>2. Charge device batteries<br/>3. Update session database<br/>4. Archive raw data files                 | Equipment ready for next session          | Clean equipment, charged batteries         |
+| **Post-Session Cleanup**    | 10-15 minutes | 1. Sanitise GSR sensors and equipment<br/>2. Charge device batteries<br/>3. Update session database<br/>4. Archive raw data files                 | Equipment ready for next session          | Clean equipment, charged batteries         |
 
 **Figure B.3: Data Export and Analysis Workflow**
 
@@ -906,8 +906,8 @@ flowchart TD
 | Scenario                      | Symptoms                                  | Probable Cause                            | Resolution Steps                                                                                                | Prevention                                           |
 |-------------------------------|-------------------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
 | **Device Connection Lost**    | Device shows red status, stops responding | Network interruption, device sleep        | 1. Check Wi-Fi signal strength<br/>2. Restart device networking<br/>3. Re-pair device if necessary              | Use dedicated research network, disable device sleep |
-| **Poor Video Quality**        | Blurry images, low frame rate             | Insufficient lighting, network congestion | 1. Improve lighting conditions<br/>2. Check network bandwidth usage<br/>3. Adjust video quality settings        | Optimize lighting setup, monitor network load        |
-| **Synchronization Drift**     | Timing deviation >±50ms                   | Clock drift, network latency              | 1. Recalibrate time synchronization<br/>2. Check network latency<br/>3. Restart synchronization service         | Regular calibration schedule, stable network         |
+| **Poor Video Quality**        | Blurry images, low frame rate             | Insufficient lighting, network congestion | 1. Improve lighting conditions<br/>2. Check network bandwidth usage<br/>3. Adjust video quality settings        | Optimise lighting setup, monitor network load        |
+| **Synchronisation Drift**     | Timing deviation >±50ms                   | Clock drift, network latency              | 1. Recalibrate time synchronisation<br/>2. Check network latency<br/>3. Restart synchronisation service         | Regular calibration schedule, stable network         |
 | **Storage Full**              | Recording stops unexpectedly              | Insufficient storage space                | 1. Clear old session data<br/>2. Add additional storage<br/>3. Enable automatic cleanup                         | Monitor storage usage, automated archival            |
 | **GSR Sensor Issues**         | No signal or erratic readings             | Poor electrode contact, battery low       | 1. Check electrode placement<br/>2. Replace sensor battery<br/>3. Clean electrode surfaces                      | Regular sensor maintenance, spare batteries          |
 | **Thermal Calibration Error** | Inaccurate temperature readings           | Environmental factors, sensor drift       | 1. Allow thermal equilibration time<br/>2. Use reference target for calibration<br/>3. Check ambient conditions | Controlled environment, regular calibration          |
@@ -982,7 +982,7 @@ python -m pytest PythonApp/
 | 2                    | Launch central controller application             | 1 minute                          | No error messages, dashboard loads completely |
 | 3                    | Verify device discovery and registration          | 2 minutes                         | All expected devices appear in device list    |
 | 4                    | Configure session parameters and participant info | 3 minutes                         | Complete participant consent and setup forms  |
-| 5                    | Perform synchronization test                      | 1 minute                          | Temporal offset within ±25ms tolerance        |
+| 5                    | Perform synchronisation test                      | 1 minute                          | Temporal offset within ±25ms tolerance        |
 | 6                    | Execute pre-recording quality check               | 2 minutes                         | All quality indicators show green status      |
 | **Total Setup Time** | **≤12 minutes**                                   | **Research-ready state achieved** |
 
@@ -997,7 +997,7 @@ flowchart LR
         CHECK[Status Check<br/>📱 Battery levels<br/>📶 Network connectivity<br/>💾 Storage capacity]
     end
     
-    subgraph "System Initialization"
+    subgraph "System Initialisation"
         LAUNCH[Launch Application<br/>🖥️ Central controller<br/>📱 Android apps<br/>🔗 Auto-discovery]
         CONNECT[Establish Connections<br/>🌐 Network handshake<br/>🔐 Authentication<br/>⏰ Time sync]
     end
@@ -1073,17 +1073,17 @@ flowchart LR
 | **Topdon TC001 Thermal Camera #2** | Black-body reference at 37°C   | ±0.09°C              | 0.03°C/hour | 2024-01-15      | ✅ Research-grade     |
 | **Shimmer3 GSR+ Sensor #1**        | 1kΩ precision resistor network | ±0.1µS               | 0.05µS/hour | 2024-01-10      | ✅ Research-grade     |
 | **Shimmer3 GSR+ Sensor #2**        | 1kΩ precision resistor network | ±0.12µS              | 0.04µS/hour | 2024-01-10      | ✅ Research-grade     |
-| **Samsung Galaxy S22 Camera #1**   | Color checker card validation  | 95.2% color accuracy | N/A         | 2024-01-12      | ✅ Validated          |
-| **Samsung Galaxy S22 Camera #2**   | Color checker card validation  | 94.8% color accuracy | N/A         | 2024-01-12      | ✅ Validated          |
-| **Network Time Synchronization**   | GPS reference clock            | ±2.1ms               | 0.3ms/hour  | 2024-01-20      | ✅ Research-grade     |
+| **Samsung Galaxy S22 Camera #1**   | Colour checker card validation  | 95.2% colour accuracy | N/A         | 2024-01-12      | ✅ Validated          |
+| **Samsung Galaxy S22 Camera #2**   | Colour checker card validation  | 94.8% colour accuracy | N/A         | 2024-01-12      | ✅ Validated          |
+| **Network Time Synchronisation**   | GPS reference clock            | ±2.1ms               | 0.3ms/hour  | 2024-01-20      | ✅ Research-grade     |
 
-**Figure D.1: Calibration Test Results Visualization**
+**Figure D.1: Calibration Test Results Visualisation**
 
 *Missing diagram - referenced calibration test results not available as image file*
 
 ```mermaid
 xychart-beta
-    title "Temporal Synchronization Accuracy Distribution"
+    title "Temporal Synchronisation Accuracy Distribution"
     x-axis ["-50ms", "-40ms", "-30ms", "-20ms", "-10ms", "0ms", "+10ms", "+20ms", "+30ms", "+40ms", "+50ms"]
     y-axis "Frequency (%)" 0 --> 25
     line [0.2, 0.8, 2.3, 8.7, 18.9, 24.1, 19.2, 9.1, 2.5, 0.9, 0.3]
@@ -1117,7 +1117,7 @@ specifications:
 | Message Type             | JSON Structure                                                                     | Size (bytes) | Frequency        | Error Handling                 |
 |--------------------------|------------------------------------------------------------------------------------|--------------|------------------|--------------------------------|
 | **Device Registration**  | `{"type":"register","device_id":"string","capabilities":[]}`                       | 128-512      | Once per session | Retry with exponential backoff |
-| **Time Synchronization** | `{"type":"sync","timestamp":"ISO8601","ntp_offset":"float"}`                       | 256          | Every 30 seconds | NTP fallback protocol          |
+| **Time Synchronisation** | `{"type":"sync","timestamp":"ISO8601","ntp_offset":"float"}`                       | 256          | Every 30 seconds | NTP fallback protocol          |
 | **Video Frame Metadata** | `{"type":"frame","timestamp":"ISO8601","frame_id":"int","quality":"float"}`        | 128          | 30 Hz            | Frame drop tolerance           |
 | **GSR Data Stream**      | `{"type":"gsr","timestamp":"ISO8601","value":"float","sensor_id":"string"}`        | 64           | 128 Hz           | Data interpolation             |
 | **Quality Alert**        | `{"type":"alert","level":"warning/error","message":"string","device_id":"string"}` | 256          | Event-driven     | Immediate delivery             |
@@ -1164,7 +1164,7 @@ specifications:
 
 - Location: `docs/calibration/detailed_calibration_procedures.md`
 - Content: Step-by-step calibration procedures for all system components
-- Expected sections: Thermal camera calibration, GSR sensor calibration, camera synchronization calibration
+- Expected sections: Thermal camera calibration, GSR sensor calibration, camera synchronisation calibration
 
 **[PLACEHOLDER: Hardware Compatibility Matrix]**
 
@@ -1203,7 +1203,7 @@ specifications:
 
 **Figure D.1: Test Coverage Heatmap**
 
-*Note: This duplicates Figure D.1 above - missing diagram for test coverage visualization*
+*Note: This duplicates Figure D.1 above - missing diagram for test coverage visualisation*
 
 ```mermaid
 graph TB
@@ -1216,12 +1216,12 @@ graph TB
         F[Quality Assessment<br/>Coverage: 95.1%<br/>Status: ✅ Excellent]
     end
     
-    style A fill:#4caf50,color:#ffffff
-    style B fill:#4caf50,color:#ffffff
-    style C fill:#8bc34a,color:#ffffff
-    style D fill:#8bc34a,color:#ffffff
-    style E fill:#ffc107,color:#000000
-    style F fill:#4caf50,color:#ffffff
+    style A fill:#4caf50,colour:#ffffff
+    style B fill:#4caf50,colour:#ffffff
+    style C fill:#8bc34a,colour:#ffffff
+    style D fill:#8bc34a,colour:#ffffff
+    style E fill:#ffc107,colour:#000000
+    style F fill:#4caf50,colour:#ffffff
 ```
 
 **Table D.2: Reliability Testing Results (168-hour Continuous Operation)**
@@ -1465,7 +1465,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
         
-        // Initialize system health monitoring
+        // Initialise system health monitoring
         lifecycleScope.launch {
             viewModel.startSystemHealthMonitoring()
         }
@@ -1488,13 +1488,13 @@ class MultiSensorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         
-        // Initialize logging system
-        AppLogger.initialize(this)
+        // Initialise logging system
+        AppLogger.initialise(this)
         
         // Log application startup
         logger.logI(TAG, "MultiSensorApplication started")
         
-        // Initialize system monitoring
+        // Initialise system monitoring
         initializeSystemMonitoring()
     }
     
@@ -1643,7 +1643,7 @@ def register_device(self, device_info: Dict) -> bool:
         return False
     
     # Validate device capabilities
-    required_capabilities = ["recording", "synchronization"]
+    required_capabilities = ["recording", "synchronisation"]
     device_capabilities = device_info.get("capabilities", [])
     
     if not all(cap in device_capabilities for cap in required_capabilities):
@@ -1961,7 +1961,7 @@ and technical innovations that address the unique challenges of research-grade d
 | **Start Recording** | Green "Start" button | Ctrl+R | Synchronized recording begins across all devices |
 | **Pause Recording** | Yellow "Pause" button | Ctrl+P | All devices pause simultaneously, resume capability
 maintained |
-| **Stop Recording** | Red "Stop" button | Ctrl+S | Complete session termination, data finalization initiated |
+| **Stop Recording** | Red "Stop" button | Ctrl+S | Complete session termination, data finalisation initiated |
 | **Add Marker** | "Marker" button | Ctrl+M | Timestamp marker added to all data streams |
 | **Quality Check** | "Quality" button | Ctrl+Q | Real-time quality assessment displayed |
 | **Emergency Stop** | Emergency button | Ctrl+E | Immediate termination with data preservation |
@@ -2004,7 +2004,7 @@ maintained |
 | **Android Cameras**      | Checkerboard pattern analysis   | <0.5 pixel reprojection error | 20-point grid validation          | Monthly                |
 | **Thermal Cameras**      | Blackbody reference calibration | ±0.08°C absolute accuracy     | Temperature reference validation  | Weekly                 |
 | **GSR Sensors**          | Known resistance calibration    | ±0.1µS precision              | Multi-point resistance validation | Before each session    |
-| **Time Synchronization** | NTP + network compensation      | ±18.7ms across all devices    | Reference clock validation        | Continuous             |
+| **Time Synchronisation** | NTP + network compensation      | ±18.7ms across all devices    | Reference clock validation        | Continuous             |
 
 **Figure C.1: Calibration Validation Results**
 
@@ -2110,7 +2110,7 @@ class NewSensorDriver(BaseSensorDriver):
     
     def process_data(self, raw_data):
         """Convert raw data to standard format"""
-        # Standardization for compatibility
+        # Standardisation for compatibility
         return standardized_data
 ```
 
@@ -2172,7 +2172,7 @@ python -m tools.thermal_diagnostic --usb-port [PORT]
 
 ### complete Guide for System Operation
 
-This user manual provides step-by-step instructions for researchers and technical operators to effectively utilize the
+This user manual provides step-by-step instructions for researchers and technical operators to effectively utilise the
 Multi-Sensor Recording System for contactless GSR prediction studies. The procedures have been validated through
 extensive user testing and incorporate feedback from multiple research teams.
 
@@ -2190,7 +2190,7 @@ begins.
     - Test GSR sensor battery levels (minimum 70% charge required)
     - Validate central controller network connectivity
 
-2. **Software Initialization** (Estimated time: 3 minutes)
+2. **Software Initialisation** (Estimated time: 3 minutes)
     - Launch Python controller application
     - Verify device discovery and connection status
     - Confirm sensor calibration status
@@ -2228,11 +2228,11 @@ research teams. The procedures balance experimental rigor with practical usabili
     - Verify informed consent documentation
     - Conduct baseline measurement validation
 
-2. **System Initialization** (2 minutes)
+2. **System Initialisation** (2 minutes)
     - Start central controller application
     - Verify device connectivity (expect 100% connection rate)
-    - Confirm synchronization accuracy (target: ±5ms)
-    - Initialize recording buffers
+    - Confirm synchronisation accuracy (target: ±5ms)
+    - Initialise recording buffers
 
 3. **Data Collection** (Variable duration)
     - Begin coordinated recording across all devices
@@ -2248,7 +2248,7 @@ research teams. The procedures balance experimental rigor with practical usabili
 
 **Quality Assurance During Recording:**
 
-Real-time quality monitoring procedures ensure data validity while minimizing session interruption. The quality
+Real-time quality monitoring procedures ensure data validity while minimising session interruption. The quality
 indicators have been calibrated through extensive validation testing.
 
 ```
@@ -2256,7 +2256,7 @@ Quality Indicators:
 ✓ Video frame rate: 30±2 fps
 ✓ Thermal stability: ±0.1°C
 ✓ GSR signal quality: >80% valid samples
-✓ Synchronization drift: <5ms
+✓ Synchronisation drift: <5ms
 ✓ Data transmission: >99% packet success
 ```
 
@@ -2304,7 +2304,7 @@ python -m analysis.validate_session --session-id [SESSION_ID]
 
 # Expected validation results:
 # - Temporal continuity: 100% coverage
-# - Synchronization accuracy: ≤5ms drift
+# - Synchronisation accuracy: ≤5ms drift
 # - Data completeness: ≥99% valid samples
 # - Quality metrics: Within specified thresholds
 ```
@@ -2390,7 +2390,7 @@ GSR Calibration Protocol:
 1. Electrode impedance verification: <50kΩ
 2. Baseline stability test: <0.1μS drift over 5 minutes
 3. Response calibration: Standard stimulus protocol
-4. Cross-sensor synchronization: ±1ms accuracy verification
+4. Cross-sensor synchronisation: ±1ms accuracy verification
 5. Data quality assessment: >95% valid sample rate
 ```
 
@@ -2530,7 +2530,7 @@ Data Integrity Test Results:
 1. **Enhanced Stress Testing**: Failed with exit code 1 after 76.73 seconds
     - Issue: Resource monitoring and concurrent session handling under extreme load
     - Impact: System performance under maximum stress conditions not fully validated
-    - Next Steps: Optimize memory management and concurrent session handling
+    - Next Steps: Optimise memory management and concurrent session handling
 
 2. **Network Resilience Testing**: Failed with exit code 1 after 104.99 seconds
     - Issue: Packet loss tolerance exceeded acceptable thresholds (15.7% vs 5% target)
@@ -2689,7 +2689,7 @@ Quantitative Performance Analysis:
 - Processing latency: 62±8ms (target: <100ms)
 - System availability: 99.7% during testing
 - Error rate: <0.1% in successful test scenarios
-- Resource utilization: Optimal CPU and memory usage
+- Resource utilisation: Optimal CPU and memory usage
 
 Test Category Performance:
 
@@ -2768,7 +2768,7 @@ User Experience Survey Results (n=24 researchers):
 Qualitative Feedback Themes:
 
 - "Revolutionary for multi-participant studies"
-- "Finally enables natural behavior research"
+- "Finally enables natural behaviour research"
 - "Cost-effective solution for resource-limited labs"
 - "Outstanding technical documentation and support"
 
@@ -2855,13 +2855,13 @@ class Application(QObject):
     def _create_services(self):
         """Create backend services with dependency injection"""
         try:
-            # Initialize core services
+            # Initialise core services
             self.session_manager = SessionManager()
             self.json_server = JsonSocketServer(session_manager=self.session_manager)
             self.webcam_capture = WebcamCapture()
             self.stimulus_controller = StimulusController()
             
-            # Initialize main controller with service dependencies
+            # Initialise main controller with service dependencies
             self.main_controller = MainController(
                 session_manager=self.session_manager,
                 json_server=self.json_server,
@@ -3053,7 +3053,7 @@ def register_device(self, device_info: Dict) -> bool:
         return False
     
     # Validate device capabilities for multi-device coordination
-    required_capabilities = ["recording", "synchronization", "communication"]
+    required_capabilities = ["recording", "synchronisation", "communication"]
     device_capabilities = device_info.get("capabilities", [])
     
     if not all(cap in device_capabilities for cap in required_capabilities):
@@ -3072,13 +3072,13 @@ def register_device(self, device_info: Dict) -> bool:
     return True
 ```
 
-### F.52 Temporal Synchronization (NFR-002) - PythonApp/session/session_synchronizer.py
+### F.52 Temporal Synchronisation (NFR-002) - PythonApp/session/session_synchronizer.py
 
 ```python
-"""Microsecond-precision temporal synchronization implementing NFR-002"""
+"""Microsecond-precision temporal synchronisation implementing NFR-002"""
 
 class SessionSynchronizer:
-    """Multi-device temporal synchronization with research-grade precision"""
+    """Multi-device temporal synchronisation with research-grade precision"""
     
     def __init__(self):
         self.master_clock = time.time()
@@ -3086,10 +3086,10 @@ class SessionSynchronizer:
         self.sync_precision_target = 1e-6  # 1 microsecond precision (NFR-002)
         
     async def synchronize_device(self, device_id: str) -> Dict:
-        """Achieve microsecond precision synchronization with device"""
+        """Achieve microsecond precision synchronisation with device"""
         sync_samples = []
         
-        # Multiple synchronization rounds for precision
+        # Multiple synchronisation rounds for precision
         for i in range(10):
             t1 = time.perf_counter()
             device_time = await self._request_device_time(device_id)
@@ -3159,12 +3159,12 @@ class ServiceContainer:
         raise ServiceNotRegisteredException(f"Service {service_type} not registered")
     
     def initialize_all_services(self):
-        """Initialize all registered services in dependency order"""
+        """Initialise all registered services in dependency order"""
         for service_type in self._initialization_order:
             if service_type in self._singletons:
                 service = self._singletons[service_type]
-                if hasattr(service, 'initialize'):
-                    service.initialize()
+                if hasattr(service, 'initialise'):
+                    service.initialise()
 ```
 
 ### F.75 Network Architecture - PythonApp/network/device_server.py
@@ -3459,7 +3459,7 @@ and `AndroidApp/` directories.*
   diagrams)*
 - **Figure B.4**: Data Export Workflow Interface *(Note: could potentially use 13_data_export_workflow.png)*
 - **Figure C.1**: Calibration Validation Results
-- **Figure D.1**: Calibration Test Results Visualization
+- **Figure D.1**: Calibration Test Results Visualisation
 - **Figure E.1**: User Satisfaction Analysis
 
 ### Missing Tables
@@ -3592,7 +3592,7 @@ references in Chapters 3-6 and appendices.
 - *Status*: ❌ Missing diagram file
 - *Description*: Visual heatmap showing test coverage across different system components
 - *Referenced in*: Chapter 5, Test results section
-- *Suggested creation*: Color-coded grid or heatmap visualization
+- *Suggested creation*: Colour-coded grid or heatmap visualisation
 
 **Figure 5.3: Performance Benchmark Results Over Time**
 
@@ -3615,16 +3615,16 @@ references in Chapters 3-6 and appendices.
 - *Referenced in*: Chapter 5, Reliability assessment
 - *Suggested creation*: Reliability curve with confidence intervals
 
-**Figure 5.6: Temporal Synchronization Distribution Analysis**
+**Figure 5.6: Temporal Synchronisation Distribution Analysis**
 
 - *Status*: ❌ Missing diagram file
-- *Description*: Statistical distribution of synchronization accuracy measurements
-- *Referenced in*: Chapter 5, Synchronization precision validation
+- *Description*: Statistical distribution of synchronisation accuracy measurements
+- *Referenced in*: Chapter 5, Synchronisation precision validation
 - *Suggested creation*: Histogram or distribution plot
 
 #### H.1.4 Chapter 6 Missing Diagrams (4 diagrams missing)
 
-**Figure 6.1: Achievement Visualization Dashboard**
+**Figure 6.1: Achievement Visualisation Dashboard**
 
 - *Status*: ❌ Missing diagram file
 - *Description*: complete dashboard showing all system achievements and metrics
@@ -3645,10 +3645,10 @@ references in Chapters 3-6 and appendices.
 - *Referenced in*: Chapter 6, Innovation assessment
 - *Suggested creation*: Annotated architecture diagram with innovation callouts
 
-**Figure 6.4: Performance Excellence Metrics Visualization**
+**Figure 6.4: Performance Excellence Metrics Visualisation**
 
 - *Status*: ❌ Missing diagram file
-- *Description*: complete visualization of performance achievements
+- *Description*: complete visualisation of performance achievements
 - *Referenced in*: Chapter 6, Performance excellence validation
 - *Suggested creation*: Multi-metric performance dashboard
 
@@ -3661,10 +3661,10 @@ references in Chapters 3-6 and appendices.
 - *Referenced in*: Appendix C, Supporting documentation
 - *Current status*: Mermaid chart placeholder exists
 
-**Figure D.1: Calibration Test Results Visualization** (duplicate reference)
+**Figure D.1: Calibration Test Results Visualisation** (duplicate reference)
 
 - *Status*: ❌ Missing diagram file
-- *Description*: Visualization of calibration test outcomes and statistics
+- *Description*: Visualisation of calibration test outcomes and statistics
 - *Referenced in*: Appendix D, twice with different contexts
 - *Current status*: Mermaid chart placeholder exists
 
@@ -3707,7 +3707,7 @@ connections exist.
 **Unused Available Diagrams:**
 
 - `01_table_of_contents.png` - Documentation structure overview
-- `08_data_collection_flow.png` - Alternative data flow visualization
+- `08_data_collection_flow.png` - Alternative data flow visualisation
 - `16_software_architecture_of_pc_app.png` - Alternative PC architecture view
 
 ### H.3 Summary Statistics
@@ -3729,7 +3729,7 @@ connections exist.
 **Recommendation Priority:**
 
 1. **High Priority**: Create Chapter 3 requirement analysis diagrams for academic completeness
-2. **Medium Priority**: Develop Chapter 5 testing and validation visualization for research credibility
+2. **Medium Priority**: Develop Chapter 5 testing and validation visualisation for research credibility
 3. **Low Priority**: Generate Chapter 6 conclusion dashboards for presentation enhancement
 
 ### H.4 Implementation Recommendations
@@ -3746,7 +3746,7 @@ For academic submission, the following diagram categories should be prioritized:
     - Multi-layered testing architecture for methodology validation
     - Performance benchmark visualizations for quantitative evidence
 
-3. **Achievement Visualization** (Chapter 6)
+3. **Achievement Visualisation** (Chapter 6)
     - Goal achievement timeline for research contribution demonstration
     - Performance excellence metrics for academic impact assessment
 

@@ -10,8 +10,8 @@
         - 4.1.3. [Data Flow Architecture](#413-data-flow-architecture)
     - 4.2. [Android Application Design and Sensor Integration](#42-android-application-design-and-sensor-integration)
         - 4.2.1. [Application Architecture and Component Design](#421-application-architecture-and-component-design)
-        - 4.2.2. [Multi-Threading and Performance Optimization](#422-multi-threading-and-performance-optimization)
-        - 4.2.3. [Resource Management and Power Optimization](#423-resource-management-and-power-optimization)
+        - 4.2.2. [Multi-Threading and Performance Optimisation](#422-multi-threading-and-performance-optimisation)
+        - 4.2.3. [Resource Management and Power Optimisation](#423-resource-management-and-power-optimisation)
         - 4.2.4. [Camera Recording Implementation](#424-camera-recording-implementation)
     - 4.3. [Android Application Sensor Integration](#43-android-application-sensor-integration)
         - 4.3.1. [Thermal Camera Integration (Topdon)](#431-thermal-camera-integration-topdon)
@@ -20,9 +20,9 @@
         - 4.4.1. [Session Coordination and Management](#441-session-coordination-and-management)
         - 4.4.2. [Real-Time Monitoring and Quality Assurance](#442-real-time-monitoring-and-quality-assurance)
         - 4.4.3. [User Interface Design and Usability](#443-user-interface-design-and-usability)
-    - 4.5. [Communication Protocol and Synchronization Mechanism](#45-communication-protocol-and-synchronization-mechanism)
+    - 4.5. [Communication Protocol and Synchronisation Mechanism](#45-communication-protocol-and-synchronisation-mechanism)
         - 4.5.1. [Multi-Layer Communication Architecture](#451-multi-layer-communication-architecture)
-        - 4.5.2. [Temporal Synchronization Implementation](#452-temporal-synchronization-implementation)
+        - 4.5.2. [Temporal Synchronisation Implementation](#452-temporal-synchronisation-implementation)
         - 4.5.3. [Error Recovery and Fault Tolerance](#453-error-recovery-and-fault-tolerance)
     - 4.6. [Security Architecture and Implementation](#46-security-architecture-and-implementation)
         - 4.6.1. [Security Design Principles](#461-security-design-principles)
@@ -33,7 +33,7 @@
         - 4.7.1. [Real-Time Processing Architecture](#471-real-time-processing-architecture)
         - 4.7.2. [Post-Processing and Analysis Preparation](#472-post-processing-and-analysis-preparation)
     - 4.8. [Implementation Challenges and Solutions](#48-implementation-challenges-and-solutions)
-        - 4.8.1. [Synchronization Precision Challenges](#481-synchronization-precision-challenges)
+        - 4.8.1. [Synchronisation Precision Challenges](#481-synchronisation-precision-challenges)
         - 4.8.2. [Multi-Modal Data Integration Challenges](#482-multi-modal-data-integration-challenges)
         - 4.8.3. [Platform Integration and Compatibility](#483-platform-integration-and-compatibility)
         - 4.8.4. [Security Implementation Challenges](#484-security-implementation-challenges)
@@ -71,7 +71,7 @@ The system architecture draws upon established distributed systems patterns [Bus
 specialized adaptations required for physiological measurement applications that must coordinate consumer-grade mobile
 devices with research-grade precision requirements. The design philosophy emphasizes fault tolerance [Gray1993], data
 integrity [Date2003], and temporal precision [Mills1991] as fundamental requirements that cannot be compromised for
-convenience or performance optimization, implemented through sophisticated algorithms in
+convenience or performance optimisation, implemented through sophisticated algorithms in
 `PythonApp/master_clock_synchronizer.py` and `AndroidApp/src/main/java/com/multisensor/recording/SessionManager.kt`.
 
 ### 4.1.1 Architectural Principles and Design Philosophy
@@ -85,11 +85,11 @@ for each major component:
     - Technical documentation: `../android_mobile_application_readme.md`
     - Quick start guide: `../QUICK_START.md`
 
-- **Python Desktop Controller**: Central coordination hub for multi-device synchronization
+- **Python Desktop Controller**: Central coordination hub for multi-device synchronisation
     - Technical documentation: `../python_desktop_controller_readme.md`
     - Quick start guide: `../QUICK_START.md`
 
-- **Multi-Device Synchronization Framework**: Coordination protocols for distributed operation
+- **Multi-Device Synchronisation Framework**: Coordination protocols for distributed operation
     - Technical documentation: `../multi_device_synchronization_readme.md`
     - Architecture overview: `../ARCHITECTURE_DIAGRAMS.md`
 
@@ -140,7 +140,7 @@ physiological measurement systems, complete study of distributed systems princip
 of the specific requirements and constraints inherent in contactless measurement
 research [CITE - Lamport, L. (2001). Paxos made simple. ACM SIGACT News, 32(4), 18-25]. The design recognizes that
 research applications have fundamentally different characteristics from typical consumer or enterprise software
-applications, requiring specialized approaches that prioritize data quality, temporal precision, measurement accuracy,
+applications, requiring specialized approaches that prioritise data quality, temporal precision, measurement accuracy,
 and operational reliability over factors such as user interface sophistication, feature richness, or commercial market
 appeal.
 
@@ -155,16 +155,16 @@ operational reliability while maintaining the precise coordination necessary for
 analysis [CITE - Fischer, M.J., Lynch, N.A., & Paterson, M.S. (1985). Impossibility of distributed consensus with one faulty process. Journal of the ACM, 32(2), 374-382].
 Each mobile device operates as an independent and fully capable data collection agent with complete responsibility for
 sensor management, data acquisition, local storage, and quality control, while simultaneously participating in
-coordinated measurement sessions managed by a central controller that provides synchronization, configuration
+coordinated measurement sessions managed by a central controller that provides synchronisation, configuration
 management, and cross-device coordination services.
 
 This distributed autonomy principle manifests in several critical design decisions that fundamentally shape system
-behavior and capabilities. Each mobile device maintains complete operational capability independent of network
+behaviour and capabilities. Each mobile device maintains complete operational capability independent of network
 connectivity status, enabling continued data collection even during temporary communication interruptions that might
 otherwise compromise research
 sessions [CITE - Chandra, T.D., & Toueg, S. (1996). Unreliable failure detectors for reliable distributed systems. Journal of the ACM, 43(2), 225-267].
 complete local data buffering and storage mechanisms ensure that no data is lost due to network latency, temporary
-connection issues, or central controller unavailability, while sophisticated timestamp management and synchronization
+connection issues, or central controller unavailability, while sophisticated timestamp management and synchronisation
 systems enable precise post-session temporal alignment when real-time coordination is temporarily unavailable.
 
 **Systematic Modularity and Clear Separation of Concerns**: The system architecture enforces strict modularity
@@ -197,7 +197,7 @@ data corruption, and adaptive quality management protocols that automatically ad
 optimal performance despite changing environmental
 conditions [CITE - Jalote, P. (1994). Fault tolerance in distributed systems. Prentice-Hall]. The system continuously
 monitors component health across all subsystems and automatically adjusts operational parameters to maintain optimal
-performance while providing complete logging for post-session analysis, troubleshooting, and system optimization.
+performance while providing complete logging for post-session analysis, troubleshooting, and system optimisation.
 
 When graceful degradation becomes necessary due to component failures or resource constraints, the system prioritizes
 maintenance of core measurement functionality while providing complete logging and documentation for post-session
@@ -206,8 +206,8 @@ interpretation [CITE - Lee, P.A., & Anderson, T. (1990). Fault tolerance: princi
 The degradation strategies are designed to preserve scientific validity even when operating under suboptimal conditions,
 ensuring that research sessions can continue and produce meaningful results despite technical challenges.
 
-**Systematic Performance Optimization and Horizontal Scalability Considerations**: The architectural design incorporates
-systematic performance optimization strategies and scalability mechanisms that address the computational demands of
+**Systematic Performance Optimisation and Horizontal Scalability Considerations**: The architectural design incorporates
+systematic performance optimisation strategies and scalability mechanisms that address the computational demands of
 real-time multi-modal processing while maintaining scalability for future research applications that may require
 additional sensors, participants, or analytical
 capabilities [CITE - Bondi, A.B. (2000). Characteristics of scalability and their impact on performance. Proceedings of the 2nd International Workshop on Software and Performance, 195-203].
@@ -215,12 +215,12 @@ The design recognizes that physiological measurement applications require sustai
 extended periods, often spanning several hours of continuous data collection, necessitating careful resource management
 and intelligent computational load distribution across available hardware resources.
 
-Performance optimization manifests through several interconnected architectural decisions including intelligent
-computational load distribution across available hardware resources that maximizes utilization while preventing
+Performance optimisation manifests through several interconnected architectural decisions including intelligent
+computational load distribution across available hardware resources that maximizes utilisation while preventing
 bottlenecks, adaptive quality management systems that dynamically adjust processing complexity based on real-time system
-capacity assessment, and efficient data flow patterns that minimize computational overhead while maintaining
+capacity assessment, and efficient data flow patterns that minimis\1 computational overhead while maintaining
 research-grade data quality and temporal
-precision [CITE - Jain, R. (1990). The art of computer systems performance analysis: techniques for experimental design, measurement, simulation, and modeling. John Wiley & Sons].
+precision [CITE - Jain, R. (1990). The art of computer systems performance analysis: techniques for experimental design, measurement, simulation, and modelling. John Wiley & Sons].
 The scalability design enables seamless addition of processing capacity through horizontal scaling without requiring
 fundamental architectural modifications or system redesign.
 
@@ -233,14 +233,14 @@ measurement quality for concurrent sessions.
 
 **Communication Protocol Architecture:**
 
-The network architecture employs multiple protocols to optimize different types of data exchange:
+The network architecture employs multiple protocols to optimise different types of data exchange:
 
 - **Control Channel (WebSocket)**: Bidirectional command and status communication between PC controller and mobile
   devices. Provides reliable message delivery with automatic reconnection.
 - **Data Channel (TCP Streaming)**: High-throughput data streaming for real-time preview and sensor data. Optimized for
   low latency with adaptive compression.
-- **Synchronization Channel (UDP)**: Time-critical synchronization messages with minimal overhead. Used for clock
-  synchronization and recording triggers.
+- **Synchronisation Channel (UDP)**: Time-critical synchronisation messages with minimal overhead. Used for clock
+  synchronisation and recording triggers.
 
 The network communication architecture implements multiple protocol layers for optimal performance and security.
 Detailed protocol specifications are provided in Appendix A.3.
@@ -346,7 +346,7 @@ flowchart TD
     subgraph "Network Communication Layer"
         PROTOCOL[WebSocket Protocol]
         ENCRYPT[Data Encryption]
-        SYNC[Time Synchronization]
+        SYNC[Time Synchronisation]
         TRANSFER[Data Transfer]
     end
     
@@ -414,7 +414,7 @@ flowchart TD
 
 | Performance Metric           | Target Specification | Achieved Performance | Performance Ratio | Status           |
 |------------------------------|----------------------|----------------------|-------------------|------------------|
-| **Temporal Synchronization** | ±50ms accuracy       | ±18.7ms (avg)        | 267% better       | ✅ Exceeds target |
+| **Temporal Synchronisation** | ±50ms accuracy       | ±18.7ms (avg)        | 267% better       | ✅ Exceeds target |
 | **Frame Rate Consistency**   | 24 FPS minimum       | 29.8 FPS (avg)       | 124% of target    | ✅ Exceeds target |
 | **Data Throughput**          | 25 MB/s minimum      | 47.3 MB/s (avg)      | 189% of target    | ✅ Exceeds target |
 | **System Uptime**            | 95% availability     | 99.73% achieved      | 105% of target    | ✅ Exceeds target |
@@ -485,15 +485,15 @@ graph TD
 - **RecordingScreen**: Recording controls with start/stop functionality, real-time device status indicators (Camera, Thermal, GSR, PC), camera preview integration, and session duration tracking with Material 3 Card components
 - **DevicesScreen**: Full device management interface with real-time scanning capabilities, connection/disconnection controls for PC, Shimmer, thermal camera, and network devices. Features complete status monitoring, device testing functionality, and connection diagnostics with progress indicators and detailed device information display
 - **CalibrationScreen**: Complete calibration workflow coordination with individual device calibration for cameras, thermal sensors, and Shimmer devices. Includes progress tracking with linear progress indicators, validation controls, system validation with error reporting, and calibration data management (save/load/export functionality)
-- **FilesScreen**: Advanced file management system with session browsing, file organization by type, search functionality, storage monitoring, and complete export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualization
+- **FilesScreen**: Advanced file management system with session browsing, file organization by type, search functionality, storage monitoring, and complete export operations. Features session selection with file listing, individual file deletion, bulk operations, and storage usage visualisation
 - **OnboardingActivity**: Modern multi-page onboarding flow with Material 3 design, featuring welcome screens, feature showcase, complete permission management, and setup completion guide with horizontal pager navigation
 - **MainNavigation**: Compose Navigation implementation with bottom navigation bar, proper state preservation, and deep link support
 
-**Material 3 Design System Integration**: complete theme system with dynamic color support, custom color schemes (Purple80/Purple40 primary colors), typography definitions, and accessibility compliance. The theme automatically adapts to system dark/light mode preferences and supports Android 12+ dynamic theming. All UI components follow Material 3 design principles with proper elevation, spacing, and interaction patterns.
+**Material 3 Design System Integration**: complete theme system with dynamic colour support, custom colour schemes (Purple80/Purple40 primary colours), typography definitions, and accessibility compliance. The theme automatically adapts to system dark/light mode preferences and supports Android 12+ dynamic theming. All UI components follow Material 3 design principles with proper elevation, spacing, and interaction patterns.
 
 ### 4.2.2 Enhanced User Interface Implementation and User Experience
 
-The Android application implements a sophisticated user interface architecture that seamlessly integrates research-grade functionality with modern mobile design principles. The enhanced UI implementation represents a complete approach to mobile research applications, prioritizing both usability and scientific rigor.
+The Android application implements a sophisticated user interface architecture that seamlessly integrates research-grade functionality with modern mobile design principles. The enhanced UI implementation represents a complete approach to mobile research applications, prioritising both usability and scientific rigor.
 
 #### 4.2.2.1 Advanced Screen Implementation Architecture
 
@@ -599,7 +599,7 @@ Research-Oriented File Management Features:
 - **Advanced Search Functionality**: Real-time search across session IDs, device types, and file metadata
 - **Storage Monitoring**: Visual storage usage indicators with warning thresholds and cleanup recommendations
 - **complete Export Options**: Multiple export formats with metadata preservation for research analysis
-- **File Type Classification**: Automatic categorization of video, thermal, GSR, and metadata files
+- **File Type Classification**: Automatic categorisation of video, thermal, GSR, and metadata files
 
 #### 4.2.2.2 Modern Onboarding and User Orientation
 
@@ -629,7 +629,7 @@ Onboarding Experience Components:
 - **Setup Guidance**: Step-by-step configuration assistance with validation and troubleshooting support
 - **Progress Tracking**: Visual progress indicators and navigation controls for seamless user experience
 
-#### 4.2.2.3 Advanced State Management and Performance Optimization
+#### 4.2.2.3 Advanced State Management and Performance Optimisation
 
 The UI implementation leverages sophisticated state management patterns that ensure optimal performance during resource-intensive recording operations:
 
@@ -651,12 +651,12 @@ fun RecordingScreen(viewModel: MainViewModelRefactored = hiltViewModel()) {
 }
 ```
 
-Performance Optimization Features:
+Performance Optimisation Features:
 - **Selective Recomposition**: Minimal UI updates through strategic state partitioning and stable composition
 - **Memory Efficiency**: Optimized component lifecycle management with automatic resource cleanup
 - **Background Thread Integration**: Seamless integration with background sensor data processing without UI blocking
 - **Accessibility Compliance**: Built-in accessibility support with screen reader compatibility and dynamic text sizing**Multi-Sensor Coordination Engine**: Simultaneous management of RGB cameras, thermal imaging, and Shimmer3 GSR+ sensors
-with real-time processing, providing coordinated data collection with precise temporal synchronization across all sensor
+with real-time processing, providing coordinated data collection with precise temporal synchronisation across all sensor
 modalities.
 
 **Local Data Management**: Room database implementation with automatic backup, data validation, and integrity
@@ -666,7 +666,7 @@ events.
 **Network Communication Layer**: Retrofit 2 and OkHttp 4 implementation providing robust WebSocket communication with
 automatic reconnection, complete error handling, and adaptive quality management based on network conditions.
 
-### 4.2.2 Multi-Threading and Performance Optimization
+### 4.2.2 Multi-Threading and Performance Optimisation
 
 The Android application implements sophisticated multi-threading architecture using Kotlin Coroutines that enables
 responsive user interface operation while managing complex sensor coordination tasks and data processing operations.
@@ -697,7 +697,7 @@ class MultiSensorCoordinator @Inject constructor(
                 launch { manageDataFlow() }
                 launch { maintainNetworkSync() }
                 
-                // Wait for all sensors to initialize
+                // Wait for all sensors to initialise
                 val results = sensorOperations.awaitAll()
                 
                 if (results.all { it.isSuccess }) {
@@ -723,20 +723,20 @@ class MultiSensorCoordinator @Inject constructor(
 }
 ```
 
-**Performance Optimization Strategies:**
+**Performance Optimisation Strategies:**
 
 - **Adaptive Resource Management**: Dynamic allocation of computational resources based on real-time system performance
   assessment and battery level monitoring
-- **Background Processing Optimization**: Intelligent task scheduling that prioritizes critical data collection
+- **Background Processing Optimisation**: Intelligent task scheduling that prioritizes critical data collection
   operations while maintaining responsive user interface
-- **Memory Management**: complete memory optimization with automatic garbage collection tuning and resource cleanup
+- **Memory Management**: complete memory optimisation with automatic garbage collection tuning and resource cleanup
   procedures
-- **Network Optimization**: Adaptive data compression and transmission strategies that optimize bandwidth utilization
+- **Network Optimisation**: Adaptive data compression and transmission strategies that optimise bandwidth utilisation
   while maintaining data quality
 
-### 4.2.3 Resource Management and Power Optimization
+### 4.2.3 Resource Management and Power Optimisation
 
-The Android application implements complete resource management and power optimization strategies specifically
+The Android application implements complete resource management and power optimisation strategies specifically
 designed for extended research sessions that may span several hours of continuous operation.
 
 **Intelligent Power Management System:**
@@ -774,7 +774,7 @@ class PowerOptimizationManager @Inject constructor(
         // Lower video quality settings
         performanceController.adjustVideoQuality(VideoQuality.POWER_SAVING)
         
-        // Minimize background processing
+        // Minimis\1 background processing
         performanceController.pauseNonEssentialOperations()
         
         return PowerOptimizationResult.criticalMode()
@@ -782,18 +782,18 @@ class PowerOptimizationManager @Inject constructor(
 }
 ```
 
-**Resource Optimization Features:**
+**Resource Optimisation Features:**
 
-- **Battery Life Prediction**: Advanced algorithms that predict battery consumption patterns and recommend optimization
+- **Battery Life Prediction**: Advanced algorithms that predict battery consumption patterns and recommend optimisation
   strategies for extended session duration
 - **Adaptive Quality Management**: Dynamic adjustment of recording quality parameters based on available system
   resources and session requirements
 - **Thermal Management**: complete thermal monitoring with automatic performance scaling to prevent device
   overheating during intensive recording sessions
-- **Storage Optimization**: Intelligent data compression and local storage management with automatic cleanup and
+- **Storage Optimisation**: Intelligent data compression and local storage management with automatic cleanup and
   archival procedures
 
-### 4.2.3.1 Jetpack Compose Performance Optimization
+### 4.2.3.1 Jetpack Compose Performance Optimisation
 
 The migration to Jetpack Compose brings significant performance improvements and architectural advantages that directly benefit the multi-sensor recording application's real-time requirements and resource efficiency.
 
@@ -833,8 +833,8 @@ fun RecordingScreen(
 - **Efficient Recomposition**: Compose's smart recomposition system ensures only affected UI components update when state changes, reducing CPU overhead during real-time sensor data updates
 - **Declarative State Management**: Direct integration with `StateFlow` and `LiveData` eliminates complex UI update coordination, improving responsiveness during high-frequency sensor data processing
 - **Memory Efficiency**: Elimination of View inflation and XML parsing reduces memory footprint, particularly beneficial during intensive multi-sensor recording sessions
-- **Reduced Thread Switching**: Compose's integration with Kotlin Coroutines minimizes context switching between UI and background threads during sensor data visualization
-- **Material 3 Optimization**: Built-in performance optimizations in Material 3 components, including efficient ripple effects and dynamic color calculations
+- **Reduced Thread Switching**: Compose's integration with Kotlin Coroutines minimizes context switching between UI and background threads during sensor data visualisation
+- **Material 3 Optimisation**: Built-in performance optimizations in Material 3 components, including efficient ripple effects and dynamic colour calculations
 
 **Architectural Advantages for Research Applications:**
 
@@ -855,7 +855,7 @@ high-quality video documentation and detailed frame analysis capabilities.
 - **RAW Image Capture**: Simultaneous DNG capture with full sensor resolution and metadata
 - **Manual Controls**: Exposure time, ISO, focus, white balance for consistent research conditions
 - **Multi-Stream Configuration**: Parallel video and still capture with independent quality settings
-- **Synchronization**: Microsecond-level coordination with other sensor modalities
+- **Synchronisation**: Microsecond-level coordination with other sensor modalities
 
 **Camera Recording Implementation:**
 
@@ -939,10 +939,10 @@ class CameraRecorder @Inject constructor(
 
 - **Multi-Stream Configuration**: Simultaneous video and RAW capture with independent quality settings and processing
   pipelines
-- **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic device detection and
-  performance optimization
+- **Samsung S21/S22 Optimisation**: LEVEL_3 hardware capability utilisation with automatic device detection and
+  performance optimisation
 - **RAW Processing Pipeline**: DNG file generation with complete metadata embedding and quality validation
-- **Synchronized Capture**: Microsecond-level synchronization across multiple camera devices with automatic calibration
+- **Synchronized Capture**: Microsecond-level synchronisation across multiple camera devices with automatic calibration
   integration
 
 The camera recording system provides complete error handling, quality validation, and performance monitoring to
@@ -989,9 +989,9 @@ object SecurityModule {
 }
 ```
 
-**Performance Optimization Framework** (`AndroidApp/src/main/java/com/multisensor/recording/performance/`):
+**Performance Optimisation Framework** (`AndroidApp/src/main/java/com/multisensor/recording/performance/`):
 
-Advanced performance optimization capabilities include intelligent power management, network optimization, and adaptive resource allocation for sustained recording sessions.
+Advanced performance optimisation capabilities include intelligent power management, network optimisation, and adaptive resource allocation for sustained recording sessions.
 
 ```kotlin
 @Singleton
@@ -1051,7 +1051,7 @@ class NetworkOptimizer @Inject constructor(
 
 **complete Monitoring Framework** (`AndroidApp/src/main/java/com/multisensor/recording/monitoring/`):
 
-Real-time analytics and performance monitoring provide detailed insights into system behavior and data quality metrics throughout recording sessions.
+Real-time analytics and performance monitoring provide detailed insights into system behaviour and data quality metrics throughout recording sessions.
 
 ```kotlin
 @Singleton
@@ -1124,7 +1124,7 @@ class SecurityUtils @Inject constructor() {
 **Key Architectural Advantages:**
 
 - **Modular Design**: Complete separation of concerns through dependency injection enabling independent testing and maintenance
-- **Performance Optimization**: Automatic resource management and adaptive performance tuning for extended recording sessions
+- **Performance Optimisation**: Automatic resource management and adaptive performance tuning for extended recording sessions
 - **Security-First Approach**: complete encryption, privacy protection, and secure data handling throughout the application lifecycle
 - **Real-time Monitoring**: Continuous system health and data quality assessment with proactive issue detection and resolution
 - **Research-Grade Reliability**: Enterprise-level error handling, logging, and recovery mechanisms ensuring data integrity in critical research applications
@@ -1177,7 +1177,7 @@ class ThermalRecorder @Inject constructor(
                 val connection = usbManager.openDevice(device)
                 
                 thermalDevice = TopdonDevice(device, connection).apply {
-                    initialize()
+                    initialise()
                     setFrameCallback { frame ->
                         processFrame(frame)
                     }
@@ -1284,7 +1284,7 @@ class ShimmerRecorder @Inject constructor(
 
 - **High-Precision GSR Measurement**: 24-bit ADC resolution with 0.01 µS measurement accuracy and complete noise
   filtering algorithms
-- **Adaptive Sampling Rate**: Configurable sampling rates (1Hz to 1024Hz) with automatic optimization based on signal
+- **Adaptive Sampling Rate**: Configurable sampling rates (1Hz to 1024Hz) with automatic optimisation based on signal
   characteristics and battery conservation requirements
 - **Real-Time Signal Processing**: Advanced signal filtering with artifact detection, baseline correction, and
   statistical quality assessment
@@ -1294,8 +1294,8 @@ class ShimmerRecorder @Inject constructor(
 **Bluetooth Low Energy Communication:**
 
 - **Robust Connection Management**: Automatic device discovery with RSSI monitoring and adaptive connection parameter
-  optimization
-- **Data Streaming Optimization**: Adaptive packet size management with error detection and automatic retransmission for
+  optimisation
+- **Data Streaming Optimisation**: Adaptive packet size management with error detection and automatic retransmission for
   reliable data delivery
 - **Battery Status Monitoring**: Continuous battery level monitoring with predictive analysis and low-power mode
   management
@@ -1303,7 +1303,7 @@ class ShimmerRecorder @Inject constructor(
 
 ## 4.4 Desktop Controller Design and Functionality
 
-The desktop application implements advanced distributed systems patterns while providing complete user interfaces including both native PyQt5 GUI components and a web-based dashboard interface (implemented in `PythonApp/web_ui/`) for remote monitoring and control. The architecture demonstrates sophisticated integration of multiple UI paradigms, performance optimization frameworks, and distributed coordination mechanisms within a unified research platform.
+The desktop application implements advanced distributed systems patterns while providing complete user interfaces including both native PyQt5 GUI components and a web-based dashboard interface (implemented in `PythonApp/web_ui/`) for remote monitoring and control. The architecture demonstrates sophisticated integration of multiple UI paradigms, performance optimisation frameworks, and distributed coordination mechanisms within a unified research platform.
 
 **Table 4.1: System Component Specifications**
 
@@ -1311,7 +1311,7 @@ The desktop application implements advanced distributed systems patterns while p
 |----------------------------|----------------------------------|-------------------------------------|------------------------------------|-------------------------|
 | **PC Controller**          | Python 3.9+, FastAPI, SQLAlchemy | Central coordination and management | ≥8GB RAM, Quad-core CPU            | REST API + WebSocket    |
 | **Web Dashboard**          | Flask-SocketIO, EventLet, WebRTC | Remote monitoring and control       | Browser-based, real-time updates   | WebSocket + HTTP API    |
-| **Performance Optimizer**  | PSUtil, AsyncIO, ThreadPoolExecutor | System resource optimization     | Adaptive memory/CPU management      | Background monitoring   |
+| **Performance Optimizer**  | PSUtil, AsyncIO, ThreadPoolExecutor | System resource optimisation     | Adaptive memory/CPU management      | Background monitoring   |
 | **Android Devices**        | Android 11+, Kotlin, Camera2 API | Video/thermal data acquisition      | ≥6GB RAM, 128GB storage            | WebSocket communication |
 | **Shimmer3 GSR+**          | Bluetooth LE, proprietary SDK    | Reference physiological measurement | 128Hz sampling, ±0.1µS resolution  | Bluetooth LE protocol   |
 | **Topdon TC001**           | USB Video Class, thermal SDK     | Thermal imaging capture             | 256x192 resolution, 9Hz frame rate | USB integration         |
@@ -1334,7 +1334,7 @@ class EnhancedMainWindow(QMainWindow):
         self.setup_web_integration()
         
     def setup_web_integration(self):
-        """Initialize web dashboard with native GUI integration"""
+        """Initialise web dashboard with native GUI integration"""
         from web_ui.web_dashboard import WebDashboardServer
         self.web_dashboard = WebDashboardServer(
             host="0.0.0.0",
@@ -1357,9 +1357,9 @@ The web dashboard provides complete remote access to all system functions throug
 
 - **Real-time Device Monitoring**: Live status updates for all connected devices with WebSocket-based communication
 - **Session Management Interface**: Complete recording session control with start/stop functionality and configuration management
-- **Data Visualization Dashboard**: Real-time sensor data plotting with synchronized multi-device viewing capabilities
+- **Data Visualisation Dashboard**: Real-time sensor data plotting with synchronized multi-device viewing capabilities
 - **File Management System**: complete file browser with download, preview, and batch operation capabilities
-- **System Performance Monitoring**: Live CPU, memory, and network utilization tracking with optimization controls
+- **System Performance Monitoring**: Live CPU, memory, and network utilisation tracking with optimisation controls
 
 ```python
 class WebDashboardServer:
@@ -1397,11 +1397,11 @@ class WebDashboardServer:
             })
 ```
 
-### 4.4.2 Performance Optimization Framework
+### 4.4.2 Performance Optimisation Framework
 
 **Adaptive Resource Management** (`PythonApp/performance_optimizer.py`):
 
-The performance optimization framework implements sophisticated resource monitoring and adaptive management capabilities that ensure optimal system performance during intensive multi-sensor recording sessions. The optimizer provides automatic memory management, CPU load balancing, and network bandwidth optimization.
+The performance optimisation framework implements sophisticated resource monitoring and adaptive management capabilities that ensure optimal system performance during intensive multi-sensor recording sessions. The optimizer provides automatic memory management, CPU load balancing, and network bandwidth optimisation.
 
 ```python
 @dataclass
@@ -1428,7 +1428,7 @@ class PerformanceOptimizer:
         ]
         
     async def optimize_system_performance(self):
-        """Real-time performance optimization with adaptive strategies"""
+        """Real-time performance optimisation with adaptive strategies"""
         current_metrics = await self.collect_system_metrics()
         self.metrics_history.append(current_metrics)
         
@@ -1437,7 +1437,7 @@ class PerformanceOptimizer:
                 await strategy.apply_optimization(current_metrics)
 ```
 
-**System Resource Monitoring**: The performance optimizer continuously monitors system resources including CPU utilization, memory consumption, network bandwidth, and disk I/O operations. Advanced algorithms detect performance bottlenecks and automatically apply optimization strategies to maintain optimal recording performance.
+**System Resource Monitoring**: The performance optimizer continuously monitors system resources including CPU utilisation, memory consumption, network bandwidth, and disk I/O operations. Advanced algorithms detect performance bottlenecks and automatically apply optimisation strategies to maintain optimal recording performance.
 
 **Adaptive Load Balancing**: The framework implements dynamic load balancing across multiple worker threads and processes, automatically adjusting resource allocation based on current system demands and recording requirements. This ensures consistent performance during high-intensity multi-device recording sessions.
 
@@ -1467,7 +1467,7 @@ flowchart TD
     subgraph "Network Communication Layer"
         PROTOCOL[WebSocket Protocol]
         ENCRYPT[Data Encryption]
-        SYNC[Time Synchronization]
+        SYNC[Time Synchronisation]
         TRANSFER[Data Transfer]
     end
 
@@ -1516,7 +1516,7 @@ flowchart TD
 |-----------------------|---------------------------|---------------------------------------|----------------------------------|----------------------------------|
 | **Transport Layer**   | WebSocket over TLS 1.3    | Bidirectional real-time communication | <50ms latency, 99.9% reliability | End-to-end encryption            |
 | **Application Layer** | JSON-based messaging      | Structured data exchange              | <10ms parsing time               | Message integrity validation     |
-| **Synchronization**   | NTP + custom compensation | Temporal alignment                    | ±25ms precision                  | Tamper-resistant timestamps      |
+| **Synchronisation**   | NTP + custom compensation | Temporal alignment                    | ±25ms precision                  | Tamper-resistant timestamps      |
 | **Discovery Layer**   | mDNS/Bonjour              | Automatic device discovery            | <30s discovery time              | Certificate-based authentication |
 | **Error Recovery**    | Automatic reconnection    | Fault tolerance                       | <15s recovery time               | Session state preservation       |
 | **Data Integrity**    | CRC32 + MD5 checksums     | Corruption detection                  | 100% error detection             | Cryptographic signatures         |
@@ -1525,7 +1525,7 @@ flowchart TD
 
 ```mermaid
 graph TB
-    subgraph "Master Coordinator (Star Center)"
+    subgraph "Master Coordinator (Star Centre)"
         MASTER[PC Controller<br/>Central Hub]
     end
 
@@ -1566,11 +1566,11 @@ network through standardized protocols and interfaces, while the central coordin
 accommodate varying device counts and configurations.
 
 **Centralized Coordination Hub Architecture**: The central coordination hub represents the system's brain, responsible
-for session management, synchronization coordination, and complete data integration. The hub architecture
+for session management, synchronisation coordination, and complete data integration. The hub architecture
 implements a layered design that separates coordination concerns from data processing tasks, enabling independent
-optimization and scaling of different functional areas.
+optimisation and scaling of different functional areas.
 
-The synchronization engine maintains precise timing coordination across all devices through sophisticated network time
+The synchronisation engine maintains precise timing coordination across all devices through sophisticated network time
 protocol implementation and latency compensation algorithms. The data storage manager provides structured organization
 of multi-modal data streams with complete metadata generation and validation. The processing pipeline enables
 real-time analysis and quality assessment, while the health monitor ensures continuous system status tracking and
@@ -1578,7 +1578,7 @@ proactive issue detection.
 
 **Distributed Mobile Data Collection Network**: The mobile device network provides the primary data collection
 capability, with each device functioning as an autonomous agent responsible for specific sensing modalities. The network
-design enables flexible participant-to-device assignment while maintaining consistent data quality and synchronization
+design enables flexible participant-to-device assignment while maintaining consistent data quality and synchronisation
 across all devices.
 
 Each mobile device implements a complete data collection stack including sensor management, data acquisition, local
@@ -1590,8 +1590,8 @@ sensors and external specialized measurement equipment. The integration architec
 diverse hardware types while accommodating the specific communication and control requirements of each sensor category.
 
 The ecosystem design enables flexible sensor configuration for different research applications while maintaining
-consistent data formats and synchronization across all sensing modalities. Sensor integration includes automatic
-detection and configuration capabilities that minimize setup complexity and reduce the potential for configuration
+consistent data formats and synchronisation across all sensing modalities. Sensor integration includes automatic
+detection and configuration capabilities that minimis\1 setup complexity and reduce the potential for configuration
 errors.
 
 ---
@@ -1599,7 +1599,7 @@ errors.
 ## Distributed System Design
 
 The complete distributed system design represents the sophisticated architectural core that enables precise
-coordination of multiple independent computing platforms while maintaining the rigorous temporal synchronization, data
+coordination of multiple independent computing platforms while maintaining the rigorous temporal synchronisation, data
 integrity, and operational reliability required for scientific applications of the highest
 caliber [CITE - Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565].
 The design systematically addresses fundamental challenges in distributed computing theory and practice while adapting
@@ -1609,7 +1609,7 @@ platforms [CITE - Lynch, N.A. (1996). Distributed algorithms. Morgan Kaufmann].
 
 The complete approach carefully balances well-established theoretical distributed systems principles with practical
 implementation constraints imposed by mobile platforms, wireless networking limitations, and the dynamic research
-environment conditions that characterize real-world deployment
+environment conditions that characterise real-world deployment
 scenarios [CITE - Tanenbaum, A.S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. CreateSpace Independent Publishing Platform].
 The resulting design represents a novel synthesis of academic research in distributed systems with practical engineering
 solutions that enable research-grade measurement capabilities using commercially available devices and infrastructure.
@@ -1620,9 +1620,9 @@ The distributed system design philosophy emerged from extensive and systematic a
 inherent in coordinating heterogeneous mobile devices for scientific data collection applications where data quality,
 temporal precision, and measurement reliability are paramount
 concerns [CITE - Fischer, M.J., Lynch, N.A., & Paterson, M.S. (1985). Impossibility of distributed consensus with one faulty process. Journal of the ACM, 32(2), 374-382].
-Traditional distributed systems often prioritize horizontal scalability, eventual consistency, and high availability
+Traditional distributed systems often prioritise horizontal scalability, eventual consistency, and high availability
 over precision timing requirements, but physiological measurement applications present fundamentally different
-requirements that demand strong consistency, precise temporal coordination, and deterministic behavior that enables
+requirements that demand strong consistency, precise temporal coordination, and deterministic behaviour that enables
 meaningful scientific analysis and interpretation.
 
 The design systematically adapts established distributed systems patterns, algorithms, and architectural approaches
@@ -1634,7 +1634,7 @@ latency and intermittent connectivity while maintaining reliable operation despi
 constraints, and performance variability typical of mobile devices and consumer networking equipment.
 
 The complete theoretical foundation draws extensively from several interconnected areas of distributed systems
-research including advanced clock synchronization algorithms, Byzantine fault-tolerant consensus protocols, adaptive
+research including advanced clock synchronisation algorithms, Byzantine fault-tolerant consensus protocols, adaptive
 failure detection mechanisms, and systematic fault-tolerant system design
 principles [CITE - Schneider, F.B. (1990). Implementing fault-tolerant services using the state machine approach: A tutorial. ACM Computing Surveys, 22(4), 299-319].
 However, the specific and often unprecedented requirements of physiological measurement research necessitated
@@ -1645,7 +1645,7 @@ encountered in traditional distributed computing applications.
 hybrid coordination model that strategically combines beneficial aspects of both centralized and decentralized
 distributed system architectures while mitigating the inherent limitations and vulnerabilities of each
 approach [CITE - Mullender, S. (Ed.). (1993). Distributed systems. ACM Press]. The hybrid approach enables the system to
-achieve the operational precision, simplicity of management, and deterministic behavior characteristics of centralized
+achieve the operational precision, simplicity of management, and deterministic behaviour characteristics of centralized
 coordination while simultaneously maintaining the resilience, scalability characteristics, and fault tolerance
 properties of decentralized systems that are essential for robust operation in research environments.
 
@@ -1657,12 +1657,12 @@ The hybrid model enables graceful degradation under adverse conditions while mai
 optimal conditions are available.
 
 The hybrid coordination model manifests through an sophisticated master-coordinator pattern where the central PC
-controller provides complete session coordination, precise synchronization services, and centralized data
+controller provides complete session coordination, precise synchronisation services, and centralized data
 integration while mobile devices maintain complete autonomous operation capability, independent data collection
 functionality, and local decision-making
 authority [CITE - Lamport, L. (2001). Paxos made simple. ACM SIGACT News, 32(4), 18-25]. This architectural design
 enables the system to continue critical data collection operations even during temporary coordination interruptions,
-network connectivity issues, or central controller unavailability while ensuring precise synchronization and temporal
+network connectivity issues, or central controller unavailability while ensuring precise synchronisation and temporal
 coordination when full coordination capability is available.
 
 **Advanced Consensus and Coordination Algorithms with Machine Learning Enhancement**: The system employs sophisticated
@@ -1676,25 +1676,25 @@ conclusions.
 
 The consensus implementation incorporates modified Byzantine fault tolerance concepts specifically adapted for mobile
 device coordination environments, where individual devices may exhibit temporary performance variations, intermittent
-connectivity issues, or resource constraint-induced behavior changes without compromising overall system integrity,
+connectivity issues, or resource constraint-induced behaviour changes without compromising overall system integrity,
 measurement quality, or research
 objectives [CITE - Bracha, G., & Toueg, S. (1985). Asynchronous consensus and broadcast protocols. Journal of the ACM, 32(4), 824-840].
 The algorithms maintain strict temporal ordering guarantees and measurement consistency while accommodating the
 inherently dynamic and unpredictable nature of mobile device networks operating in research environments.
 
-**Sophisticated Clock Synchronization and Intelligent Drift Compensation**: The system implements advanced clock
-synchronization algorithms that extend and enhance traditional Network Time Protocol (NTP) approaches with machine
+**Sophisticated Clock Synchronisation and Intelligent Drift Compensation**: The system implements advanced clock
+synchronisation algorithms that extend and enhance traditional Network Time Protocol (NTP) approaches with machine
 learning-based drift prediction, adaptive compensation mechanisms, and statistical analysis techniques specifically
 designed for maintaining research-grade temporal precision across heterogeneous mobile
-platforms [CITE - Mills, D.L. (2006). Computer network time synchronization: the network time protocol on earth and in space. CRC Press].
-The synchronization framework systematically accounts for the diverse timing characteristics, hardware capabilities, and
+platforms [CITE - Mills, D.L. (2006). Computer network time synchronisation: the network time protocol on earth and in space. CRC Press].
+The synchronisation framework systematically accounts for the diverse timing characteristics, hardware capabilities, and
 operational constraints of different mobile platforms while maintaining the temporal precision required for meaningful
 physiological research applications.
 
 The intelligent drift compensation system continuously monitors timing characteristics across all connected devices,
-analyzes historical performance patterns, and applies sophisticated predictive corrections that maintain synchronization
+analyzes historical performance patterns, and applies sophisticated predictive corrections that maintain synchronisation
 accuracy even during extended periods of limited network connectivity or challenging environmental
-conditions [CITE - Elson, J., & Estrin, D. (2001). Time synchronization for wireless sensor networks. Proceedings 15th International Parallel and Distributed Processing Symposium, 1965-1970].
+conditions [CITE - Elson, J., & Estrin, D. (2001). Time synchronisation for wireless sensor networks. Proceedings 15th International Parallel and Distributed Processing Symposium, 1965-1970].
 This capability is absolutely essential for extended recording sessions where cumulative timing drift could
 significantly compromise data correlation accuracy and scientific validity of research conclusions.
 
@@ -1715,7 +1715,7 @@ graph TD
     subgraph "Coordination Management Layer"
         MASTER[PC Master Controller<br/>Central Decision Authority]
         COORD[Session Coordinator<br/>Protocol Manager]
-        SYNC[Synchronization Manager<br/>Time Reference Authority]
+        SYNC[Synchronisation Manager<br/>Time Reference Authority]
         HEALTH[Health Monitor<br/>Status Aggregation]
         RESOURCE[Resource Manager<br/>Load Balancing]
     end
@@ -1766,9 +1766,9 @@ graph TD
 ```
 
 **Central Master Controller Responsibilities**: The master controller serves as the authoritative decision-making entity
-responsible for session lifecycle management, synchronization coordination, and system-wide resource allocation. The
+responsible for session lifecycle management, synchronisation coordination, and system-wide resource allocation. The
 controller implements sophisticated state management that tracks the operational status of all system components while
-coordinating complex multi-phase operations such as session initialization, synchronized recording start/stop, and
+coordinating complex multi-phase operations such as session initialisation, synchronized recording start/stop, and
 graceful session termination.
 
 The master controller's design emphasizes reliability and fault tolerance, implementing complete error handling and
@@ -1777,7 +1777,7 @@ persistent state information that enables session recovery after temporary failu
 logging for research documentation and system troubleshooting.
 
 **Mobile Agent Architecture**: Each mobile device implements a sophisticated agent architecture that balances autonomous
-operation with coordinated behavior. The agent design enables independent data collection and local processing while
+operation with coordinated behaviour. The agent design enables independent data collection and local processing while
 participating in coordinated measurement sessions through standardized communication protocols. The architecture
 provides resilience against network connectivity issues while maintaining the real-time responsiveness required for
 physiological measurement applications.
@@ -1787,40 +1787,40 @@ interruptions while maintaining compatibility with centralized session managemen
 complete data buffering, local storage management, and quality assessment capabilities that ensure data integrity
 regardless of network conditions.
 
-### Advanced Synchronization Architecture
+### Advanced Synchronisation Architecture
 
-The synchronization architecture represents one of the most technically sophisticated aspects of the system design,
+The synchronisation architecture represents one of the most technically sophisticated aspects of the system design,
 addressing the fundamental challenge of achieving precise temporal coordination across wireless networks with inherent
-latency and jitter characteristics. The synchronization design implements multiple complementary approaches that work
+latency and jitter characteristics. The synchronisation design implements multiple complementary approaches that work
 together to achieve timing precision comparable to dedicated laboratory equipment.
 
-**Multi-Layer Synchronization Strategy**: The system implements a layered synchronization approach that addresses timing
+**Multi-Layer Synchronisation Strategy**: The system implements a layered synchronisation approach that addresses timing
 coordination at multiple levels of the system architecture. This multi-layer strategy provides both coarse-grained
 session coordination and fine-grained timestamp precision, ensuring that data from different modalities can be
 accurately aligned for scientific analysis.
 
-The synchronization layers include network time protocol implementation for coarse synchronization, software-based clock
+The synchronisation layers include network time protocol implementation for coarse synchronisation, software-based clock
 coordination for medium-precision timing, and hardware timestamp extraction for maximum precision. Each layer
-contributes to overall timing accuracy while providing redundancy and validation for other synchronization mechanisms.
+contributes to overall timing accuracy while providing redundancy and validation for other synchronisation mechanisms.
 
 **Network Latency Compensation Algorithms**: The system implements sophisticated algorithms that dynamically measure and
-compensate for network latency variations that would otherwise compromise synchronization accuracy. These algorithms
-continuously monitor round-trip communication times and adjust synchronization parameters to maintain accuracy despite
+compensate for network latency variations that would otherwise compromise synchronisation accuracy. These algorithms
+continuously monitor round-trip communication times and adjust synchronisation parameters to maintain accuracy despite
 changing network conditions.
 
 The latency compensation implementation includes predictive algorithms that anticipate network condition changes based
-on historical patterns, enabling proactive synchronization adjustments that maintain accuracy during network congestion
+on historical patterns, enabling proactive synchronisation adjustments that maintain accuracy during network congestion
 or quality variations. The system also implements fallback mechanisms that maintain operation during severe network
 degradation while providing appropriate quality indicators for post-session analysis.
 
 **Clock Drift Detection and Correction**: Long-duration recording sessions require ongoing clock drift detection and
-correction to maintain synchronization accuracy throughout extended experimental periods. The system implements
+correction to maintain synchronisation accuracy throughout extended experimental periods. The system implements
 continuous monitoring of clock drift across all devices with automatic correction algorithms that maintain
-synchronization without disrupting ongoing data collection.
+synchronisation without disrupting ongoing data collection.
 
 The drift correction implementation balances accuracy with stability, applying corrections gradually to avoid
 introducing artificial timing discontinuities that could affect physiological analysis. The system maintains
-complete drift monitoring logs that enable post-session validation of synchronization quality and identification of
+complete drift monitoring logs that enable post-session validation of synchronisation quality and identification of
 periods requiring special attention during analysis.
 
 ### Fault Tolerance and Recovery Mechanisms
@@ -1832,7 +1832,7 @@ detection, automatic recovery mechanisms, and graceful degradation strategies.
 
 **Proactive Health Monitoring**: The system implements complete health monitoring that continuously assesses the
 operational status of all system components and identifies potential issues before they result in failures. The
-monitoring system tracks performance metrics, resource utilization, network connectivity quality, and data collection
+monitoring system tracks performance metrics, resource utilisation, network connectivity quality, and data collection
 parameters while maintaining historical baselines that enable trend analysis and predictive failure detection.
 
 Health monitoring extends beyond simple status checking to include quality assessment of collected data, enabling early
@@ -1843,7 +1843,7 @@ documentation for research quality assurance.
 **Automatic Recovery and Reconnection**: The system implements sophisticated automatic recovery mechanisms that restore
 normal operation after temporary failures without requiring manual intervention. Recovery mechanisms include automatic
 device reconnection after network interruptions, session state restoration after temporary coordinator failures, and
-data synchronization after communication gaps.
+data synchronisation after communication gaps.
 
 The recovery implementation prioritizes data integrity over operational continuity, ensuring that no data is lost or
 corrupted during recovery operations even if this requires temporary operation suspension. Recovery mechanisms include
@@ -1851,7 +1851,7 @@ thorough validation procedures that verify system integrity before resuming norm
 
 **Graceful Degradation Strategies**: When complete recovery is not possible, the system implements graceful degradation
 strategies that maintain partial functionality while providing clear indication of operational limitations. Degradation
-strategies prioritize core data collection functionality while temporarily suspending advanced features that require
+strategies prioritise core data collection functionality while temporarily suspending advanced features that require
 full system coordination.
 
 The degradation implementation includes dynamic quality assessment that adjusts operational parameters based on
@@ -1860,7 +1860,7 @@ their impact on data quality, enabling informed decisions about data analysis ap
 
 ### Communication Architecture
 
-The communication design employs multiple protocols to optimize different types of data exchange:
+The communication design employs multiple protocols to optimise different types of data exchange:
 
 **Control Channel (WebSocket)**: Bidirectional command and status communication between PC controller and mobile
 devices. Provides reliable message delivery with automatic reconnection.
@@ -1868,8 +1868,8 @@ devices. Provides reliable message delivery with automatic reconnection.
 **Data Channel (TCP Streaming)**: High-throughput data streaming for real-time preview and sensor data. Optimized for
 low latency with adaptive compression.
 
-**Synchronization Channel (UDP)**: Time-critical synchronization messages with minimal overhead. Used for clock
-synchronization and recording triggers.
+**Synchronisation Channel (UDP)**: Time-critical synchronisation messages with minimal overhead. Used for clock
+synchronisation and recording triggers.
 
 ### Fault Tolerance Design
 
@@ -1924,7 +1924,7 @@ graph TD
 
 #### Recording Management System
 
-The recording system coordinates multiple data sources with precise temporal synchronization:
+The recording system coordinates multiple data sources with precise temporal synchronisation:
 
 ```kotlin
 class SessionManager @Inject constructor(
@@ -1935,7 +1935,7 @@ class SessionManager @Inject constructor(
 ) {
     suspend fun startRecording(sessionConfig: SessionConfiguration): Result<Unit> {
         return try {
-            // Synchronize device clocks
+            // Synchronise device clocks
             syncManager.synchronizeWithMaster()
 
             // Start all recorders in coordinated sequence
@@ -2038,7 +2038,7 @@ class ThermalRecorder @Inject constructor(
                 val connection = usbManager.openDevice(device)
 
                 thermalDevice = TopdonDevice(device, connection).apply {
-                    initialize()
+                    initialise()
                     setFrameCallback { frame ->
                         processFrame(frame)
                     }
@@ -2182,10 +2182,10 @@ class SessionManager:
             if not device_status.all_ready:
                 return SessionResult.failure(f"Device preparation failed: {device_status.errors}")
 
-            # Phase 2: Synchronization Setup
+            # Phase 2: Synchronisation Setup
             sync_result = await self.sync_engine.synchronize_devices(device_status.devices)
             if not sync_result.success:
-                return SessionResult.failure(f"Synchronization failed: {sync_result.error}")
+                return SessionResult.failure(f"Synchronisation failed: {sync_result.error}")
 
             # Phase 3: Coordinated Recording Start
             recording_commands = self._generate_recording_commands(session_config)
@@ -2425,12 +2425,12 @@ graph TD
     subgraph "Transport Protocols"
         WS[WebSocket<br/>Reliable Control]
         TCP[TCP Streaming<br/>Data Transfer]
-        UDP[UDP<br/>Time Synchronization]
+        UDP[UDP<br/>Time Synchronisation]
     end
 
     subgraph "Network Layer"
         IP[IP Networking<br/>Wi-Fi Infrastructure]
-        QOS[Quality of Service<br/>Traffic Prioritization]
+        QOS[Quality of Service<br/>Traffic Prioritisation]
     end
 
     CTRL --> WS
@@ -2582,7 +2582,7 @@ class DataStreamingService:
 
 ## 4.6 Security Architecture and Implementation
 
-The Multi-Sensor Recording System implements a complete security framework designed specifically for research environments while maintaining the flexibility and usability required for scientific applications [Anderson2020]. The security architecture balances rigorous data protection with practical research workflows, recognizing that academic research environments have unique security requirements distinct from commercial applications [Denning2016].
+The Multi-Sensor Recording System implements a complete security framework designed specifically for research environments while maintaining the flexibility and usability required for scientific applications [Anderson2020]. The security architecture balances rigorous data protection with practical research workflows, recognising that academic research environments have unique security requirements distinct from commercial applications [Denning2016].
 
 ### 4.6.1 Security Design Principles
 
@@ -2594,7 +2594,7 @@ Multiple layers of security controls protect research data throughout the entire
 - **Application Layer**: Hardware-backed encryption, secure token generation, and complete input validation
 - **Network Layer**: TLS/SSL encrypted communication with certificate pinning and authentication enforcement
 - **Data Layer**: AES-GCM encryption for data at rest, secure file deletion, and transparent encryption management
-- **Privacy Layer**: GDPR-compliant consent management, automatic PII sanitization, and data anonymization
+- **Privacy Layer**: GDPR-compliant consent management, automatic PII sanitisation, and data anonymization
 
 #### Hardware-Backed Security Foundation
 The system leverages Android Keystore for hardware-backed encryption:
@@ -3160,19 +3160,19 @@ class SessionSynchronizer:
         self.sync_precision = 0.005  # 5ms precision target
 
     async def synchronize_devices(self, devices: List[Device]) -> SynchronizationResult:
-        """Perform complete device synchronization with validation."""
+        """Perform complete device synchronisation with validation."""
         try:
             # Establish reference time
             reference_time = self.reference_clock.get_reference_time()
 
-            # Synchronize each device
+            # Synchronise each device
             sync_results = []
             for device in devices:
                 device_sync = await self._synchronize_device(device, reference_time)
                 sync_results.append(device_sync)
                 self.device_clocks[device.id] = device_sync.device_clock
 
-            # Validate synchronization precision
+            # Validate synchronisation precision
             precision_validation = self._validate_sync_precision(sync_results)
 
             if precision_validation.meets_requirements:
@@ -3191,12 +3191,12 @@ class SessionSynchronizer:
             return SynchronizationResult.error(str(e))
 
     async def _synchronize_device(self, device: Device, reference_time: float) -> DeviceSyncResult:
-        """Synchronize individual device clock with thorough validation."""
+        """Synchronise individual device clock with thorough validation."""
         sync_attempts = []
 
         for attempt in range(MAX_SYNC_ATTEMPTS):
             try:
-                # Send synchronization request
+                # Send synchronisation request
                 request_time = time.time()
                 response = await device.send_sync_request(reference_time)
                 response_time = time.time()
@@ -3236,7 +3236,7 @@ class SessionSynchronizer:
 
         return DeviceSyncResult.failure(
             device_id=device.id,
-            error="Failed to achieve synchronization precision",
+            error="Failed to achieve synchronisation precision",
             attempts=sync_attempts
         )
 ```
@@ -3269,15 +3269,15 @@ class PlatformAbstractionLayer:
             return self.android_handlers.translate_to_python(response)
 ```
 
-### 4.8.2 Real-Time Synchronization
+### 4.8.2 Real-Time Synchronisation
 
-**Challenge**: Maintaining microsecond-precision synchronization across wireless networks with variable latency.
+**Challenge**: Maintaining microsecond-precision synchronisation across wireless networks with variable latency.
 
-**Solution**: Developed a multi-layered synchronization approach:
+**Solution**: Developed a multi-layered synchronisation approach:
 
 1. **Network Latency Compensation**: RTT measurement and statistical analysis
 2. **Clock Drift Correction**: Continuous monitoring and adjustment
-3. **Predictive Synchronization**: Machine learning-based latency prediction
+3. **Predictive Synchronisation**: Machine learning-based latency prediction
 4. **Fallback Mechanisms**: Graceful degradation when precision requirements cannot be met
 
 ### 4.8.3 Resource Management
@@ -3294,7 +3294,7 @@ class ResourceManager:
         self.storage_monitor = StorageMonitor()
 
     async def optimize_resource_allocation(self) -> OptimizationResult:
-        """Dynamically optimize resource allocation based on current system state."""
+        """Dynamically optimise resource allocation based on current system state."""
         current_usage = await self._assess_current_usage()
 
         if current_usage.cpu_usage > CPU_THRESHOLD:
@@ -3372,7 +3372,7 @@ def _check_for_secrets(self, line: str, file_path: Path) -> bool:
 
 **Jetpack Compose Architecture**: Declarative UI toolkit that revolutionizes Android UI development by eliminating the need for XML layouts and complex View hierarchies. The implementation includes:
 - **Compose BOM 2024.12.01**: Ensures compatibility across all Compose libraries
-- **Material 3 Components**: Latest Material Design implementation with dynamic colors
+- **Material 3 Components**: Latest Material Design implementation with dynamic colours
 - **Navigation Compose**: Type-safe navigation with state preservation and deep linking
 - **Hilt Navigation Compose**: Seamless dependency injection integration
 
@@ -3405,7 +3405,7 @@ operations.
 
 | Decision                     | Rationale                                                       | Trade-offs                                       |
 |------------------------------|-----------------------------------------------------------------|--------------------------------------------------|
-| **Distributed Architecture** | Leverages mobile device capabilities, reduces network bandwidth | Increased complexity, synchronization challenges |
+| **Distributed Architecture** | Leverages mobile device capabilities, reduces network bandwidth | Increased complexity, synchronisation challenges |
 | **Hybrid Protocol Stack**    | Optimizes different data types with appropriate protocols       | Multiple protocol maintenance overhead           |
 | **Component-Based Design**   | Enables parallel development and thorough testing          | Increased abstraction layers                     |
 | **Real-Time Processing**     | Provides immediate feedback for research applications           | Higher resource requirements                     |
@@ -3440,17 +3440,17 @@ recording [CITE - Google Android Developers. (2024). Camera2 API Reference]:
 - **Manual Exposure Control**: Precise ISO sensitivity adjustment (50-3200) with exposure time control (1/8000s to 30s)
   enabling optimal image quality across diverse lighting conditions and research requirements
 - **Focus Distance Management**: Manual focus control with hyperfocal distance calculation and depth of field
-  optimization for consistent subject tracking and measurement accuracy
-- **White Balance Optimization**: Automatic and manual white balance control with color temperature adjustment (
-  2000K-8000K) ensuring consistent color reproduction across research sessions
+  optimisation for consistent subject tracking and measurement accuracy
+- **White Balance Optimisation**: Automatic and manual white balance control with colour temperature adjustment (
+  2000K-8000K) ensuring consistent colour reproduction across research sessions
 - **Simultaneous Recording Modes**: Concurrent 4K video recording at 30fps with RAW DNG image capture for calibration
   procedures and quality validation
 - **Multi-Stream Configuration**: Simultaneous video and RAW capture with independent quality settings and processing
   pipelines
-- **Samsung S21/S22 Optimization**: LEVEL_3 hardware capability utilization with automatic device detection and
-  performance optimization
+- **Samsung S21/S22 Optimisation**: LEVEL_3 hardware capability utilisation with automatic device detection and
+  performance optimisation
 - **RAW Processing Pipeline**: DNG file generation with complete metadata embedding and quality validation
-- **Synchronized Capture**: Microsecond-level synchronization across multiple camera devices with automatic calibration
+- **Synchronized Capture**: Microsecond-level synchronisation across multiple camera devices with automatic calibration
   integration
 
 **Real-Time Preview and Quality Assessment:**
@@ -3517,7 +3517,7 @@ management [CITE - Topdon Technology. (2024). TC001 SDK Documentation]:
 
 - **Automatic Device Detection**: complete USB device enumeration with vendor/product ID validation and automatic
   driver installation
-- **Power Management**: Intelligent power management with device prioritization and battery consumption optimization for
+- **Power Management**: Intelligent power management with device prioritisation and battery consumption optimisation for
   extended research sessions
 - **Error Recovery**: Sophisticated error handling with automatic reconnection and complete device health
   monitoring
@@ -3567,7 +3567,7 @@ assessment [CITE - Shimmer Research. (2024). Shimmer3 GSR+ Documentation]:
 
 - **High-Precision GSR Measurement**: 24-bit ADC resolution with 0.01 µS measurement accuracy and complete noise
   filtering algorithms
-- **Adaptive Sampling Rate**: Configurable sampling rates (1Hz to 1024Hz) with automatic optimization based on signal
+- **Adaptive Sampling Rate**: Configurable sampling rates (1Hz to 1024Hz) with automatic optimisation based on signal
   characteristics and battery conservation requirements
 - **Real-Time Signal Processing**: Advanced signal filtering with artifact detection, baseline correction, and
   statistical quality assessment
@@ -3577,14 +3577,14 @@ assessment [CITE - Shimmer Research. (2024). Shimmer3 GSR+ Documentation]:
 **Bluetooth Low Energy Communication:**
 
 - **Robust Connection Management**: Automatic device discovery with RSSI monitoring and adaptive connection parameter
-  optimization
-- **Data Streaming Optimization**: Adaptive packet size management with error detection and automatic retransmission for
+  optimisation
+- **Data Streaming Optimisation**: Adaptive packet size management with error detection and automatic retransmission for
   reliable data delivery
 - **Battery Status Monitoring**: Continuous battery level monitoring with predictive analysis and low-power mode
   management
 - **Quality Assessment**: Real-time signal quality analysis with artifact detection and measurement validity assessment
 
-The Shimmer integration includes sophisticated synchronization with other sensor modalities:
+The Shimmer integration includes sophisticated synchronisation with other sensor modalities:
 
 ```kotlin
 class ShimmerGSRController {
@@ -3627,7 +3627,7 @@ applications [CITE - Wilson, G., et al. (2014). Best practices for scientific co
 
 #### complete Session Lifecycle Management
 
-**Session Initialization and Configuration:**
+**Session Initialisation and Configuration:**
 
 - **Participant Management**: complete participant registration with demographics tracking, consent management, and
   privacy protection protocols
@@ -3642,9 +3642,9 @@ applications [CITE - Wilson, G., et al. (2014). Best practices for scientific co
 
 - **Live Data Quality Assessment**: Continuous monitoring of signal quality across all sensor modalities with real-time
   alerts and corrective guidance
-- **Resource Utilization Tracking**: complete monitoring of device resources including battery levels, storage
-  capacity, and network bandwidth utilization
-- **Synchronization Validation**: Real-time verification of temporal synchronization across all devices with precision
+- **Resource Utilisation Tracking**: complete monitoring of device resources including battery levels, storage
+  capacity, and network bandwidth utilisation
+- **Synchronisation Validation**: Real-time verification of temporal synchronisation across all devices with precision
   measurement and drift detection
 - **Error Detection and Recovery**: Sophisticated error monitoring with automatic recovery procedures and complete
   logging for research documentation
@@ -3668,7 +3668,7 @@ class SessionManager {
                 return SessionInitializationResult.error(configValidation.errors)
             }
 
-            // Initialize devices
+            // Initialise devices
             val deviceInitialization = deviceCoordinator.initializeDevices(
                 sessionConfig.deviceConfiguration
             )
@@ -3685,7 +3685,7 @@ class SessionManager {
             return SessionInitializationResult.success()
 
         } catch (exception: Exception) {
-            return SessionInitializationResult.error("Session initialization failed: ${exception.message}")
+            return SessionInitializationResult.error("Session initialisation failed: ${exception.message}")
         }
     }
 }
@@ -3710,7 +3710,7 @@ class SessionManager {
   identifier for organized data management
 - **Metadata Preservation**: complete metadata embedding in all data files with calibration parameters, device
   configuration, and quality assessment results
-- **Export Format Optimization**: Multiple export formats including research-standard formats for integration with
+- **Export Format Optimisation**: Multiple export formats including research-standard formats for integration with
   external analysis tools and statistical software
 - **Backup and Recovery**: Automatic backup procedures with data redundancy and recovery capabilities for critical
   research data protection
@@ -3727,9 +3727,9 @@ environments [CITE - Tanenbaum, A.S., & Wetherall, D.J. (2010). Computer network
 
 - **Reliable Command Execution**: Bidirectional command and control communication with guaranteed delivery and
   complete error handling
-- **Session State Synchronization**: Real-time synchronization of session state across all devices with conflict
+- **Session State Synchronisation**: Real-time synchronisation of session state across all devices with conflict
   resolution and consistency validation
-- **Quality of Service Management**: Adaptive quality control with bandwidth optimization and priority-based message
+- **Quality of Service Management**: Adaptive quality control with bandwidth optimisation and priority-based message
   handling
 - **Security and Encryption**: AES-256 encryption with secure key exchange and digital signature validation for research
   data protection
@@ -3737,8 +3737,8 @@ environments [CITE - Tanenbaum, A.S., & Wetherall, D.J. (2010). Computer network
 **High-Throughput Data Streaming:**
 
 - **Adaptive Streaming Protocols**: Dynamic protocol selection based on network conditions and data characteristics with
-  automatic optimization
-- **Compression and Optimization**: Advanced compression algorithms with quality preservation and bandwidth optimization
+  automatic optimisation
+- **Compression and Optimisation**: Advanced compression algorithms with quality preservation and bandwidth optimisation
   for efficient data transmission
 - **Buffer Management**: Sophisticated buffering with overflow protection and priority-based queue management for
   reliable data delivery
@@ -3787,7 +3787,7 @@ class NetworkController {
 ### Advanced User Interface and Interaction Design
 
 The user interface implementation follows modern Android design principles while addressing the specific requirements of
-research applications including accessibility, workflow optimization, and complete status
+research applications including accessibility, workflow optimisation, and complete status
 monitoring [CITE - Google Material Design. (2024). Material Design Guidelines]:
 
 #### complete UI Architecture
@@ -3796,7 +3796,7 @@ monitoring [CITE - Google Material Design. (2024). Material Design Guidelines]:
 
 - **Centralized State Management**: complete application state coordination with reactive UI updates and consistent
   data flow management
-- **Workflow Optimization**: Streamlined research workflows with guided procedures and automatic quality validation
+- **Workflow Optimisation**: Streamlined research workflows with guided procedures and automatic quality validation
 - **Dynamic Theming**: Adaptive visual design with accessibility compliance and customizable appearance for diverse
   research environments
 - **Real-Time Status Display**: complete status monitoring with visual indicators, progress tracking, and alert
@@ -3881,7 +3881,7 @@ components [CITE - Martin, R.C. (2008). Clean code: a handbook of agile software
 
 - **Platform Abstraction**: Operating system abstraction layer supporting Windows, macOS, and Linux with
   platform-specific optimizations
-- **Resource Management**: Intelligent resource allocation with memory management, CPU optimization, and storage
+- **Resource Management**: Intelligent resource allocation with memory management, CPU optimisation, and storage
   coordination
 - **Plugin Architecture**: Extensible plugin system enabling custom sensors, analysis algorithms, and export formats
 - **API Integration**: complete API for external tool integration and custom research applications
@@ -3897,7 +3897,7 @@ class Application:
 
     async def initialize_services(self) -> ServiceInitializationResult:
         try:
-            # Initialize core services with dependency injection
+            # Initialise core services with dependency injection
             await self.services.register_service(
                 'network_layer',
                 JsonSocketServer(self.config.network_config)
@@ -3919,7 +3919,7 @@ class Application:
             return ServiceInitializationResult.success()
 
         except ServiceInitializationException as e:
-            return ServiceInitializationResult.error(f"Service initialization failed: {e}")
+            return ServiceInitializationResult.error(f"Service initialisation failed: {e}")
 ```
 
 ### Enhanced GUI Framework and User Experience
@@ -3944,7 +3944,7 @@ features [CITE - Riverbank Computing. (2024). PyQt5 Documentation]:
 **Modern Visual Design Framework:**
 
 - **PsychoPy-Inspired Interface**: Professional research software aesthetics with consistent visual hierarchy and
-  scientific color schemes
+  scientific colour schemes
 - **Responsive Layout Management**: Dynamic layout adaptation with multi-monitor support and flexible workspace
   organization
 - **Real-Time Status Monitoring**: complete status displays with visual indicators, progress tracking, and alert
@@ -4010,7 +4010,7 @@ assurance [CITE - Socket.IO. (2024). Socket.IO Python Documentation]:
   validation
 - **Session-Based Communication**: Sophisticated session management with room-based messaging and targeted device
   communication
-- **Quality of Service Monitoring**: Continuous network quality assessment with adaptive optimization and performance
+- **Quality of Service Monitoring**: Continuous network quality assessment with adaptive optimisation and performance
   reporting
 
 **Advanced Message Processing:**
@@ -4024,7 +4024,7 @@ assurance [CITE - Socket.IO. (2024). Socket.IO Python Documentation]:
 - **Security and Authentication**: complete security with device authentication, message encryption, and access
   control management
 
-The network layer implements advanced coordination algorithms for multi-device synchronization:
+The network layer implements advanced coordination algorithms for multi-device synchronisation:
 
 ```python
 class JsonSocketServer:
@@ -4069,8 +4069,8 @@ assessment [CITE - Bradski, G. (2000). The OpenCV Library]:
   assessment
 - **Multi-Camera Coordination**: Simultaneous management of multiple USB cameras with synchronized capture and frame
   alignment
-- **Resolution and Format Optimization**: Automatic format selection with quality optimization and bandwidth management
-- **Advanced Camera Controls**: Manual exposure control, focus adjustment, and white balance optimization for
+- **Resolution and Format Optimisation**: Automatic format selection with quality optimisation and bandwidth management
+- **Advanced Camera Controls**: Manual exposure control, focus adjustment, and white balance optimisation for
   research-grade image quality
 
 **Computer Vision Processing Pipeline:**
@@ -4097,7 +4097,7 @@ class WebcamService:
             # Detect available cameras
             available_cameras = self.camera_manager.detect_cameras()
 
-            # Initialize each camera with optimal settings
+            # Initialise each camera with optimal settings
             for camera_info in available_cameras:
                 camera_instance = await self.camera_manager.initialize_camera(
                     camera_info,
@@ -4113,7 +4113,7 @@ class WebcamService:
             return CameraInitializationResult.success(self.camera_manager.active_cameras)
 
         except CameraInitializationException as e:
-            return CameraInitializationResult.error(f"Camera initialization failed: {e}")
+            return CameraInitializationResult.error(f"Camera initialisation failed: {e}")
 ```
 
 ### Advanced Calibration Service and Validation Framework
@@ -4237,7 +4237,7 @@ class StimulusController:
             participant: ParticipantData
     ) -> ExperimentResult:
         try:
-            # Initialize experimental session
+            # Initialise experimental session
             session_initialization = await self.initialize_experiment_session(
                 protocol,
                 participant
@@ -4267,7 +4267,7 @@ class StimulusController:
 ## Advanced Data Processing Pipeline and Quality Management
 
 The data processing pipeline implements sophisticated algorithms for real-time multi-modal data processing with
-complete quality assessment and adaptive optimization specifically designed for research applications requiring
+complete quality assessment and adaptive optimisation specifically designed for research applications requiring
 validated accuracy and scientific
 rigor [CITE - Oppenheim, A.V., & Schafer, R.W. (2010). Discrete-time signal processing].
 
@@ -4295,7 +4295,7 @@ participants [CITE - Smith, S.W. (1997). The scientist and engineer's guide to d
 - **Adaptive Quality Control**: Dynamic quality management with automatic parameter adjustment based on real-time
   assessment and environmental monitoring
 - **Predictive Quality Assessment**: Machine learning algorithms for predictive quality assessment with proactive
-  optimization and alert generation
+  optimisation and alert generation
 - **complete Quality Metrics**: Statistical quality measures including signal-to-noise ratio, artifact detection,
   and measurement validity assessment
 - **Quality Assurance Documentation**: complete documentation of quality metrics with statistical validation and
@@ -4388,7 +4388,7 @@ assurance [CITE - Myers, G.J., Sandler, C., & Badgett, T. (2011). The art of sof
 
 - **Cross-Platform Integration**: complete testing of Android-Python communication with protocol validation and
   error handling verification
-- **Multi-Device Coordination**: Systematic testing of device coordination algorithms with synchronization accuracy
+- **Multi-Device Coordination**: Systematic testing of device coordination algorithms with synchronisation accuracy
   validation
 - **Network Protocol Testing**: complete protocol testing with network simulation and error injection
 - **Database Integration Testing**: Complete database integration validation with transaction testing and data integrity
@@ -4421,7 +4421,7 @@ assurance [CITE - Myers, G.J., Sandler, C., & Badgett, T. (2011). The art of sof
 - **Scalability Assessment**: Performance validation with increasing device counts and participant numbers
 - **Network Resilience Testing**: Communication system validation under adverse network conditions with quality
   degradation analysis
-- **Battery Life Validation**: Extended operation testing with power consumption analysis and optimization validation
+- **Battery Life Validation**: Extended operation testing with power consumption analysis and optimisation validation
 
 The testing framework implements sophisticated validation procedures with complete statistical analysis:
 
@@ -4468,9 +4468,9 @@ class ComprehensiveTestingFramework:
             return ValidationResult.error(f"Validation failed: {e}")
 ```
 
-### Advanced Performance Analysis and Optimization
+### Advanced Performance Analysis and Optimisation
 
-The performance analysis framework implements complete benchmarking and optimization procedures specifically
+The performance analysis framework implements complete benchmarking and optimisation procedures specifically
 designed for research applications requiring consistent performance and resource
 efficiency [CITE - Jain, R. (1990). The art of computer systems performance analysis]:
 
@@ -4478,12 +4478,12 @@ efficiency [CITE - Jain, R. (1990). The art of computer systems performance anal
 
 **Real-Time Performance Assessment:**
 
-- **Resource Utilization Monitoring**: Continuous monitoring of CPU, memory, and network utilization with trend analysis
-  and optimization recommendations
+- **Resource Utilisation Monitoring**: Continuous monitoring of CPU, memory, and network utilisation with trend analysis
+  and optimisation recommendations
 - **Latency Analysis**: complete latency measurement across all communication paths with statistical analysis and
   quality assessment
-- **Throughput Optimization**: Data throughput optimization with adaptive algorithms and quality preservation
-- **Battery Consumption Analysis**: Detailed power consumption monitoring with optimization strategies and efficiency
+- **Throughput Optimisation**: Data throughput optimisation with adaptive algorithms and quality preservation
+- **Battery Consumption Analysis**: Detailed power consumption monitoring with optimisation strategies and efficiency
   assessment
 
 **Performance Benchmarking Framework:**
@@ -4493,39 +4493,39 @@ efficiency [CITE - Jain, R. (1990). The art of computer systems performance anal
 - **Regression Detection**: Automated detection of performance regressions with statistical significance testing and
   alert generation
 - **Comparative Analysis**: Performance comparison with established benchmarks and research software standards
-- **Optimization Validation**: Systematic validation of optimization strategies with quantitative assessment and quality
+- **Optimisation Validation**: Systematic validation of optimisation strategies with quantitative assessment and quality
   verification
 
 ---
 
-## Advanced Multi-Device Synchronization Implementation
+## Advanced Multi-Device Synchronisation Implementation
 
-The multi-device synchronization system implements sophisticated algorithms that achieve research-grade temporal
+The multi-device synchronisation system implements sophisticated algorithms that achieve research-grade temporal
 precision across distributed wireless networks with complete quality assessment and adaptive
-optimization [CITE - Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system]:
+optimisation [CITE - Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system]:
 
 ### Temporal Coordination Architecture
 
-The synchronization framework implements multiple complementary approaches that work together to achieve
+The synchronisation framework implements multiple complementary approaches that work together to achieve
 microsecond-level precision across heterogeneous devices with varying capabilities and network
-characteristics [CITE - Mills, D.L. (1991). Internet time synchronization: the network time protocol]:
+characteristics [CITE - Mills, D.L. (1991). Internet time synchronisation: the network time protocol]:
 
-#### Advanced Synchronization Algorithms
+#### Advanced Synchronisation Algorithms
 
 **Network Time Protocol Adaptation:**
 
-- **High-Precision Clock Synchronization**: Microsecond-level clock synchronization with network latency compensation
+- **High-Precision Clock Synchronisation**: Microsecond-level clock synchronisation with network latency compensation
   and statistical accuracy assessment
 - **Drift Detection and Correction**: Continuous monitoring of clock drift with predictive correction and quality
   validation
 - **Network Latency Compensation**: Sophisticated algorithms for measuring and compensating network latency variations
-  with statistical modeling
-- **Quality Metrics Calculation**: complete quality metrics for synchronization accuracy with confidence intervals
+  with statistical modelling
+- **Quality Metrics Calculation**: complete quality metrics for synchronisation accuracy with confidence intervals
   and trend analysis
 
 **Multi-Layer Timing Architecture:**
 
-- **Hardware Timestamp Extraction**: Utilization of hardware timestamps where available with quality assessment and
+- **Hardware Timestamp Extraction**: Utilisation of hardware timestamps where available with quality assessment and
   validation
 - **Software Clock Coordination**: Sophisticated software-based clock coordination with statistical analysis and
   accuracy validation
@@ -4533,7 +4533,7 @@ characteristics [CITE - Mills, D.L. (1991). Internet time synchronization: the n
 - **Temporal Alignment Algorithms**: Advanced algorithms for post-session temporal alignment with quality assessment and
   validation
 
-The synchronization system implements sophisticated algorithms with complete quality assessment:
+The synchronisation system implements sophisticated algorithms with complete quality assessment:
 
 ```python
 class MultiDeviceSynchronizationSystem:
@@ -4548,7 +4548,7 @@ class MultiDeviceSynchronizationSystem:
             device_network: DeviceNetwork
     ) -> SynchronizationResult:
         try:
-            # Initialize clock synchronization
+            # Initialise clock synchronisation
             clock_sync_result = await self.clock_synchronizer.synchronize_network_clocks(
                 device_network
             )
@@ -4558,7 +4558,7 @@ class MultiDeviceSynchronizationSystem:
                 device_network
             )
 
-            # Validate synchronization quality
+            # Validate synchronisation quality
             quality_assessment = await self.quality_assessor.assess_synchronization_quality(
                 clock_sync_result,
                 latency_compensation
@@ -4574,7 +4574,7 @@ class MultiDeviceSynchronizationSystem:
                 return SynchronizationResult.degraded_quality(quality_assessment)
 
         except SynchronizationException as e:
-            return SynchronizationResult.error(f"Synchronization failed: {e}")
+            return SynchronizationResult.error(f"Synchronisation failed: {e}")
 ```
 
 ---
@@ -4593,7 +4593,7 @@ assurance [CITE - Joint Committee for Guides in Metrology. (2008). Evaluation of
 
 #### Session Lifecycle Management
 
-**Session Initialization and Configuration:**
+**Session Initialisation and Configuration:**
 
 - **Participant Registration**: complete participant data management with demographics, consent tracking, and
   privacy protection
@@ -4607,9 +4607,9 @@ assurance [CITE - Joint Committee for Guides in Metrology. (2008). Evaluation of
 
 - **Multi-Modal Data Quality Assessment**: Continuous monitoring of data quality across all sensor modalities with
   real-time alerts
-- **Resource Utilization Tracking**: complete monitoring of system resources with optimization recommendations and
+- **Resource Utilisation Tracking**: complete monitoring of system resources with optimisation recommendations and
   alert generation
-- **Synchronization Quality Validation**: Real-time validation of temporal synchronization with precision measurement
+- **Synchronisation Quality Validation**: Real-time validation of temporal synchronisation with precision measurement
   and quality assessment
 - **Error Detection and Recovery**: Advanced error detection with automatic recovery procedures and complete
   logging
@@ -4629,9 +4629,9 @@ assurance [CITE - Joint Committee for Guides in Metrology. (2008). Evaluation of
 
 - **Standardized Naming Conventions**: Systematic file naming with complete metadata embedding and organizational
   structure
-- **Export Format Optimization**: Multiple export formats optimized for research analysis tools and statistical software
+- **Export Format Optimisation**: Multiple export formats optimized for research analysis tools and statistical software
 - **Backup and Recovery Systems**: Automated backup procedures with data redundancy and recovery capabilities
-- **Archive Management**: Long-term data archival with compression optimization and retrieval capabilities
+- **Archive Management**: Long-term data archival with compression optimisation and retrieval capabilities
 
 ---
 
@@ -4644,14 +4644,14 @@ assessment [CITE - Hartley, R., & Zisserman, A. (2003). Multiple view geometry i
 ### complete Computer Vision Pipeline
 
 The computer vision framework implements validated algorithms for physiological measurement with advanced quality
-assessment and optimization
+assessment and optimisation
 procedures [CITE - Verkruysse, W., Svaasand, L.O., & Nelson, J.S. (2008). Remote plethysmographic imaging using ambient light]:
 
 #### Advanced Image Processing Algorithms
 
 **Physiological Signal Extraction:**
 
-- **Region of Interest Detection**: Sophisticated facial detection and tracking with quality assessment and optimization
+- **Region of Interest Detection**: Sophisticated facial detection and tracking with quality assessment and optimisation
 - **Photoplethysmography Signal Processing**: Advanced signal extraction algorithms with noise reduction and quality
   validation
 - **Motion Artifact Compensation**: complete motion detection and compensation with quality preservation
@@ -4724,7 +4724,7 @@ class ComputerVisionAnalysisSystem:
 This complete enhancement of Chapter 4 provides exhaustive documentation of all features, modules, and solutions
 from the new_documentation while maintaining academic rigor and following the example thesis structure with detailed
 technical implementation covering Android application features, Python desktop controller capabilities, testing
-frameworks, synchronization systems, session management, and computer vision analysis with extensive academic citations
+frameworks, synchronisation systems, session management, and computer vision analysis with extensive academic citations
 and sophisticated code examples that demonstrate the research-grade quality and technical innovation of the Multi-Sensor
 Recording System.
 
@@ -4753,7 +4753,7 @@ with detailed code snippets provided in **Appendix F**.
 
 - `PythonApp/network/device_server.py` - Asynchronous JSON socket server with distributed coordination protocols (
   See Appendix F.75)
-- `PythonApp/session/session_synchronizer.py` - Multi-device temporal synchronization engine with drift correction
+- `PythonApp/session/session_synchronizer.py` - Multi-device temporal synchronisation engine with drift correction
   algorithms (See Appendix F.76)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt` - Wireless device discovery and
   connection management with state machine implementation (See Appendix F.77)
@@ -4769,7 +4769,7 @@ with detailed code snippets provided in **Appendix F**.
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt` - Android camera recording with
   adaptive control (See Appendix F.81)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/AdaptiveFrameRateController.kt` - Dynamic performance
-  optimization with machine learning adaptation (See Appendix F.82)
+  optimisation with machine learning adaptation (See Appendix F.82)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DeviceStatusTracker.kt` - Real-time health monitoring
   with predictive analytics (See Appendix F.83)
 
@@ -4777,11 +4777,11 @@ with detailed code snippets provided in **Appendix F**.
 
 - `PythonApp/session/session_manager.py` - Session lifecycle management with state persistence and recovery (See
   Appendix F.84)
-- `PythonApp/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction and synchronization (See
+- `PythonApp/webcam/webcam_capture.py` - Multi-camera recording with Stage 3 RAW extraction and synchronisation (See
   Appendix F.85)
 - `PythonApp/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and
   validation (See Appendix F.86)
-- `PythonApp/performance_optimizer.py` - System performance monitoring and optimization with adaptive resource 
+- `PythonApp/performance_optimizer.py` - System performance monitoring and optimisation with adaptive resource 
   management (See Appendix F.86.1)
 - `PythonApp/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix
   F.87)
@@ -4796,7 +4796,7 @@ with detailed code snippets provided in **Appendix F**.
   and precise temporal control (See Appendix F.87.3)
 - `PythonApp/gui/calibration_dialog.py` - Interactive calibration interface with real-time quality feedback and
   guided user workflows (See Appendix F.87.4)
-- `PythonApp/gui/device_panel.py` - Real-time device status visualization with complete health monitoring and
+- `PythonApp/gui/device_panel.py` - Real-time device status visualisation with complete health monitoring and
   connectivity management (See Appendix F.87.5)
 - `PythonApp/gui/preview_panel.py` - Multi-stream video preview with synchronized display and quality assessment (See
   Appendix F.87.6)
@@ -4814,14 +4814,14 @@ with detailed code snippets provided in **Appendix F**.
 - `AndroidApp/src/main/java/com/multisensor/recording/handsegmentation/HandSegmentationProcessor.kt` - Android computer
   vision pipeline implementation (See Appendix F.98)
 
-**Android Advanced Architecture and Performance Optimization:**
+**Android Advanced Architecture and Performance Optimisation:**
 
 - `AndroidApp/src/main/java/com/multisensor/recording/di/` - complete Dagger Hilt dependency injection framework
   providing modular architecture and enhanced testability (See Appendix F.98.1)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Intelligent network traffic
-  optimization with adaptive bandwidth management (See Appendix F.98.2)
+  optimisation with adaptive bandwidth management (See Appendix F.98.2)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Advanced power management with
-  thermal throttling and battery optimization (See Appendix F.98.3)
+  thermal throttling and battery optimisation (See Appendix F.98.3)
 - `AndroidApp/src/main/java/com/multisensor/recording/calibration/CalibrationQualityAssessment.kt` - Real-time
   calibration quality evaluation with automated feedback systems (See Appendix F.98.4)
 - `AndroidApp/src/main/java/com/multisensor/recording/monitoring/` - complete system monitoring with predictive
@@ -4835,7 +4835,7 @@ with detailed code snippets provided in **Appendix F**.
 - `PythonApp/network/protocol_handler.py` - Protocol processing with error recovery and versioning (See Appendix
   F.100)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/PCCommunicationHandler.kt` - PC-Android communication
-  with state synchronization (See Appendix F.101)
+  with state synchronisation (See Appendix F.101)
 - `AndroidApp/src/main/java/com/multisensor/recording/recording/DataSchemaValidator.kt` - Real-time data validation with
   schema compliance checking (See Appendix F.102)
 
@@ -4850,12 +4850,12 @@ with detailed code snippets provided in **Appendix F**.
 - `PythonApp/utils/data_validation.py` - complete data integrity validation with statistical analysis (See
   Appendix F.99)
 
-**Performance Optimization and System Monitoring:**
+**Performance Optimisation and System Monitoring:**
 
-- `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Adaptive network optimization
+- `AndroidApp/src/main/java/com/multisensor/recording/performance/NetworkOptimizer.kt` - Adaptive network optimisation
   with bandwidth management (See Appendix F.100)
 - `AndroidApp/src/main/java/com/multisensor/recording/performance/PowerManager.kt` - Intelligent power management with
-  battery optimization (See Appendix F.101)
+  battery optimisation (See Appendix F.101)
 - `PythonApp/production/performance_benchmark.py` - complete performance benchmarking with statistical
   reporting (See Appendix F.102)
 
@@ -4983,7 +4983,7 @@ try {
 
 1. **Core Recording Components** (`RecordingService.kt`, `CameraRecorder.kt`, `ThermalRecorder.kt`, `ShimmerRecorder.kt`):
    - Fixed 45+ exception handlers in recording operations
-   - Enhanced device initialization error specificity
+   - Enhanced device initialisation error specificity
    - Improved session management error handling
 
 2. **Network Operations** (`NetworkController.kt`, `CommandProcessor.kt`, `JsonSocketClient.kt`):
@@ -5012,9 +5012,9 @@ operational observability:
 - **Performance monitoring** integration with log analysis capabilities
 
 **Android Application Logging:**
-- **Android Log framework** integration with proper tag categorization
+- **Android Log framework** integration with proper tag categorisation
 - **Crash reporting** mechanisms for production debugging
-- **Performance profiling** integration for optimization identification
+- **Performance profiling** integration for optimisation identification
 
 ### 4.9.3 System Reliability and Maintainability Impact
 
@@ -5057,7 +5057,7 @@ from transient failures:
 **Device Management Recovery:**
 - **Automatic device rediscovery** when connections are lost
 - **Session state recovery** from persistent storage
-- **Graceful sensor initialization** with fallback configurations
+- **Graceful sensor initialisation** with fallback configurations
 
 **Data Integrity Protection:**
 - **Transactional recording operations** with rollback capabilities
@@ -5091,12 +5091,12 @@ referenced throughout this chapter.*
 Edition." Addison-Wesley, 1986.
 
 [Alexander2001] Alexander, C. "The Nature of Order: An Essay on the Art of Building and the Nature of the Universe."
-Center for Environmental Structure, 2001.
+Centre for Environmental Structure, 2001.
 
 [Android2023] Google LLC. "Android Developers Documentation - Architecture
 Components." https://developer.android.com/topic/architecture, 2023.
 
-[Booch2007] Booch, G., Rumbaugh, J., & Jacobson, I. "Unified Modeling Language User Guide, 2nd Edition." Addison-Wesley
+[Booch2007] Booch, G., Rumbaugh, J., & Jacobson, I. "Unified Modelling Language User Guide, 2nd Edition." Addison-Wesley
 Professional, 2007.
 
 [Brooks1995] Brooks, F. P. "The Mythical Man-Month: Essays on Software Engineering, Anniversary Edition." Addison-Wesley
@@ -5131,7 +5131,7 @@ Solutions." Addison-Wesley Professional, 2003.
 [IEEE1471] IEEE Computer Society. "IEEE Recommended Practice for Architectural Description of Software-Intensive
 Systems." IEEE Standard 1471-2000, 2000.
 
-[Jackson2001] Jackson, M. "Problem Frames: Analyzing and Structuring Software Development Problems." Addison-Wesley,
+[Jackson2001] Jackson, M. "Problem Frames: Analysing and Structuring Software Development Problems." Addison-Wesley,
 2001.
 
 [Kotlin2023] JetBrains. "Kotlin Programming Language Documentation." https://kotlinlang.org/docs/, 2023.

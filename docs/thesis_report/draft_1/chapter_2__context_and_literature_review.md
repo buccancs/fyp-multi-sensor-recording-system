@@ -2,12 +2,12 @@
 
 ## 2.1 Emotion Analysis and Affective Computing Applications
 
-Emotion analysis, often referred to as affective computing (Picard, 1997), has emerged as a prominent interdisciplinary research domain with extensive practical applications across healthcare, education, human-computer interaction, and commercial sectors. Contemporary systems capable of automatically recognizing and responding to human emotional states are increasingly deployed in applications ranging from clinical patient monitoring to adaptive educational technologies and marketing research.
+Emotion analysis, often referred to as affective computing (Picard, 1997), has emerged as a prominent interdisciplinary research domain with extensive practical applications across healthcare, education, human-computer interaction, and commercial sectors. Contemporary systems capable of automatically recognising and responding to human emotional states are increasingly deployed in applications ranging from clinical patient monitoring to adaptive educational technologies and marketing research.
 
 ![Figure 2.1: Evolution of Physiological Technologies](../diagrams/figure_3_2_evolution_physiological_technologies.png)
 *Figure 2.1: Historical evolution of physiological measurement technologies showing the progression from invasive clinical methods to modern contactless sensing approaches.*
 
-In healthcare applications, emotion recognition technology enables remote patient monitoring and therapeutic intervention, allowing healthcare providers to assess patients' emotional states in real-time outside traditional clinical environments (Healey & Picard, 2005). Educational technology systems utilize emotional awareness to adapt tutoring algorithms and learning platform feedback based on students' frustration or engagement levels, demonstrating improved learning outcomes through affective-responsive interfaces. Automotive safety systems employ driver monitoring technologies to detect stress, fatigue, or cognitive overload as preventive measures against traffic accidents, while marketing research increasingly employs physiological sensors and computer vision analysis to measure consumers' unconscious emotional responses to advertisements and product interfaces.
+In healthcare applications, emotion recognition technology enables remote patient monitoring and therapeutic intervention, allowing healthcare providers to assess patients' emotional states in real-time outside traditional clinical environments (Healey & Picard, 2005). Educational technology systems utilise emotional awareness to adapt tutoring algorithms and learning platform feedback based on students' frustration or engagement levels, demonstrating improved learning outcomes through affective-responsive interfaces. Automotive safety systems employ driver monitoring technologies to detect stress, fatigue, or cognitive overload as preventive measures against traffic accidents, while marketing research increasingly employs physiological sensors and computer vision analysis to measure consumers' unconscious emotional responses to advertisements and product interfaces.
 
 Recent advances in machine learning algorithms and multimodal sensing technologies have significantly enhanced the accuracy and practical applicability of emotion recognition systems. Traditional methodologies relied primarily on subjective self-report measures or behavioral observation, but contemporary approaches leverage objective physiological signals including facial expressions, vocal patterns, postural changes, and autonomic nervous system indicators such as heart rate variability and skin conductance (Goodfellow et al., 2016).
 
@@ -22,21 +22,21 @@ Traditional physiological measurement methodologies for emotional and stress res
 ![Figure 2.2: Research Impact vs Implementation Complexity Matrix](../diagrams/figure_3_3_research_impact_complexity_matrix.png)
 *Figure 2.2: Comparative analysis of contactless versus traditional physiological measurement approaches showing the trade-offs between research impact potential and implementation complexity.*
 
-Contactless physiological measurement represents a fundamental paradigm shift addressing these limitations through remote sensing technologies that acquire physiological data without direct physical attachment to participants. The primary rationale for contactless approaches centers on preserving natural behavior patterns and maintaining ecological validity: when individuals can be monitored without awareness of sensor presence or physical constraints, their emotional and physiological responses remain more authentic and less influenced by measurement artifacts.
+Contactless physiological measurement represents a fundamental paradigm shift addressing these limitations through remote sensing technologies that acquire physiological data without direct physical attachment to participants. The primary rationale for contactless approaches centres on preserving natural behaviour patterns and maintaining ecological validity: when individuals can be monitored without awareness of sensor presence or physical constraints, their emotional and physiological responses remain more authentic and less influenced by measurement artifacts.
 
 This technological approach enables novel research scenarios including multi-participant group monitoring, longitudinal stress tracking in naturalistic environments, and participant observation in realistic settings beyond controlled laboratory conditions. The implications extend beyond research applications to practical deployment in healthcare monitoring, educational assessment, and workplace wellness programs where traditional sensor attachment proves impractical or intrusive.
 
 ### Computer Vision-Based Physiological Measurement
 
-Several technological methodologies have emerged for contactless measurement of stress and emotional responses. Computer vision techniques applied to standard RGB video represent one major approach for inferring physiological signals from optical data. Pioneering research demonstrated that conventional webcam systems can detect subtle skin color fluctuations caused by cardiac pulse patterns, a methodology known as remote photoplethysmography (rPPG) (Poh et al., 2010).
+Several technological methodologies have emerged for contactless measurement of stress and emotional responses. Computer vision techniques applied to standard RGB video represent one major approach for inferring physiological signals from optical data. Pioneering research demonstrated that conventional webcam systems can detect subtle skin colour fluctuations caused by cardiac pulse patterns, a methodology known as remote photoplethysmography (rPPG) (Poh et al., 2010).
 
-Through extraction of pulse rate and heart rate variability from facial video analysis, researchers can assess stress levels utilizing established physiological relationships between elevated heart rate, reduced heart rate variability, and autonomic stress responses. Recent validation studies demonstrate that non-contact rPPG methodologies achieve stress detection accuracy comparable to traditional contact-based sensors under controlled measurement conditions (McDuff et al., 2016).
+Through extraction of pulse rate and heart rate variability from facial video analysis, researchers can assess stress levels utilising established physiological relationships between elevated heart rate, reduced heart rate variability, and autonomic stress responses. Recent validation studies demonstrate that non-contact rPPG methodologies achieve stress detection accuracy comparable to traditional contact-based sensors under controlled measurement conditions (McDuff et al., 2016).
 
-Alternative computer vision approaches focus on facial expression and muscle activity analysis for stress recognition. Machine learning models have been developed to recognize facial action units including brow furrowing, jaw tension, and micro-expression patterns that correlate with acute stress responses. While facial indicators of stress exhibit greater subtlety and individual variability compared to primary emotions such as joy or anger, recent research reports success in distinguishing stress-related facial patterns using deep learning algorithms applied to video data in constrained experimental settings.
+Alternative computer vision approaches focus on facial expression and muscle activity analysis for stress recognition. Machine learning models have been developed to recognise facial action units including brow furrowing, jaw tension, and micro-expression patterns that correlate with acute stress responses. While facial indicators of stress exhibit greater subtlety and individual variability compared to primary emotions such as joy or anger, recent research reports success in distinguishing stress-related facial patterns using deep learning algorithms applied to video data in constrained experimental settings.
 
 ### Thermal Imaging for Physiological Monitoring
 
-Thermal imaging technology offers a particularly promising approach for contactless physiological measurement through infrared detection of heat patterns associated with blood flow and perspiration responses. Thermal cameras can visualize autonomic nervous system responses accompanying stress, including changes in peripheral circulation and subtle perspiration patterns that produce measurable thermal signatures on facial and skin surfaces.
+Thermal imaging technology offers a particularly promising approach for contactless physiological measurement through infrared detection of heat patterns associated with blood flow and perspiration responses. Thermal cameras can visualise autonomic nervous system responses accompanying stress, including changes in peripheral circulation and subtle perspiration patterns that produce measurable thermal signatures on facial and skin surfaces.
 
 High-resolution infrared imaging can capture stress-induced temperature variations, such as temperature decreases at the nasal tip caused by sympathetic vasoconstriction during autonomic stress responses. These thermal signatures provide contactless indicators that can be monitored continuously without participant awareness or behavioral interference.
 
@@ -72,7 +72,7 @@ Research has established strong correlations between GSR magnitude and various p
 
 Conventional GSR measurement employs a pair of electrodes placed on the skin surface, typically on the fingers or palm, with conductive gel to ensure optimal electrical contact. The measurement system applies a small constant voltage (typically 0.5V) between the electrodes and measures the resulting current, which varies with skin conductance changes (Biopac Systems Inc., 2018).
 
-Standard GSR recording systems such as the Shimmer3 GSR+ sensor utilize silver/silver chloride electrodes with sampling rates ranging from 1-1000 Hz, providing high temporal resolution for capturing rapid electrodermal responses. These systems achieve measurement precision suitable for research applications but require direct skin contact, limiting their applicability in naturalistic settings.
+Standard GSR recording systems such as the Shimmer3 GSR+ sensor utilise silver/silver chloride electrodes with sampling rates ranging from 1-1000 Hz, providing high temporal resolution for capturing rapid electrodermal responses. These systems achieve measurement precision suitable for research applications but require direct skin contact, limiting their applicability in naturalistic settings.
 
 ### Limitations of Contact-Based Approaches
 
@@ -90,16 +90,16 @@ The technical challenges include environmental sensitivity, individual physiolog
 
 ## 2.4 Distributed Systems and Sensor Fusion for Physiological Monitoring
 
-The development of multi-sensor physiological monitoring systems requires robust distributed system architectures capable of coordinating data acquisition across multiple devices while maintaining temporal synchronization and data integrity. This technical requirement becomes particularly critical when integrating contactless sensors with traditional physiological measurement equipment for validation and calibration purposes.
+The development of multi-sensor physiological monitoring systems requires robust distributed system architectures capable of coordinating data acquisition across multiple devices while maintaining temporal synchronisation and data integrity. This technical requirement becomes particularly critical when integrating contactless sensors with traditional physiological measurement equipment for validation and calibration purposes.
 
 ![Figure 2.4: Requirements Dependency Network](../diagrams/figure_3_4_requirements_dependency_network.png)
-*Figure 2.4: Network diagram showing the interdependencies between system requirements including hardware integration, software coordination, temporal synchronization, and data fusion capabilities.*
+*Figure 2.4: Network diagram showing the interdependencies between system requirements including hardware integration, software coordination, temporal synchronisation, and data fusion capabilities.*
 
-### Temporal Synchronization in Distributed Sensor Systems
+### Temporal Synchronisation in Distributed Sensor Systems
 
 Physiological research requires precise temporal coordination between sensor modalities to enable meaningful signal correlation and analysis. The challenge intensifies when integrating sensors with different sampling rates, data formats, and processing latencies across distributed computing platforms (Lamport, 1978).
 
-Modern distributed sensor systems employ various synchronization strategies including Network Time Protocol (NTP) for coarse synchronization and specialized timing protocols for microsecond-level precision. The implementation architecture for this research, primarily developed in `PythonApp/src/network/device_server.py`, utilizes JSON socket communication with embedded timestamps to maintain temporal coordination across Android mobile devices and desktop computing platforms.
+Modern distributed sensor systems employ various synchronisation strategies including Network Time Protocol (NTP) for coarse synchronisation and specialized timing protocols for microsecond-level precision. The implementation architecture for this research, primarily developed in `PythonApp/src/network/device_server.py`, utilizes JSON socket communication with embedded timestamps to maintain temporal coordination across Android mobile devices and desktop computing platforms.
 
 ### Multi-Modal Data Fusion Architectures  
 
@@ -142,7 +142,7 @@ distinguishing the pathways of stress response. It identifies the
 activated under stress. The SAM axis produces the immediate "fight or
 flight" response (e.g., releasing adrenaline and increasing heart rate),
 while the HPA axis releases glucocorticoid hormones (primarily cortisol)
-to mobilize energy and modulate longer-term adaptive
+to mobilise energy and modulate longer-term adaptive
 changes[\[22\]](https://www.sciencedirect.com/topics/medicine-and-dentistry/stress-clinical-finding#:~:text=Topics%20www,adverse%20stimuli%2C%20events%20or%20triggers).
 Thus, scientifically, stress can be defined as a state of threatened
 homeostasis that elicits these coordinated autonomic and endocrine
@@ -216,7 +216,7 @@ limitations.
 *Cortisol* is often regarded as the "gold-standard" biochemical marker
 of stress. It is a glucocorticoid hormone released by the adrenal cortex
 under the direction of the HPA axis when an individual encounters a
-stressor. Cortisol's role is to mobilize energy (increasing blood
+stressor. Cortisol's role is to mobilise energy (increasing blood
 sugar), suppress non-essential functions (like digestion or immune
 responses), and help the body cope with prolonged stress. Because of
 this central role, cortisol levels are tightly associated with stress:
@@ -390,7 +390,7 @@ indicating greater
 arousal[\[34\]](https://noldus.com/blog/what-is-galvanic-skin-response#:~:text=The%20galvanic%20skin%20response%20refers,like%20stress%2C%20fear%2C%20or%20excitement).
 
 Physiologically, there are two components of EDA that researchers often
-analyze. The **tonic level** (skin conductance level, SCL) is the
+analyse. The **tonic level** (skin conductance level, SCL) is the
 baseline conductance that can drift slowly due to factors like general
 arousal, thermoregulation, or circadian rhythms. Overlaid on this are
 **phasic responses** (skin conductance responses, SCRs), which are rapid
@@ -600,7 +600,7 @@ thermal videos. For instance, one study reported around 90% accuracy in
 detecting acute stress from facial thermal
 imagery[\[50\]](https://arxiv.org/pdf/1908.10307#:~:text=match%20at%20L1393%20detection%20of,discomfort%20study%20used%20a%20non),
 though the authors noted that rigorous validation is needed to ensure
-such models generalize. Another research group (Cho et al.) developed an
+such models generalise. Another research group (Cho et al.) developed an
 **end-to-end deep learning system** that analyzes the thermal patterns
 of breathing on the nose and achieved about 84% accuracy in classifying
 stress vs. calm
@@ -647,7 +647,7 @@ been widely used for various forms of affect recognition. For stress
 detection, one primary approach with RGB is to extract *physiological
 signals* from the video that correlate with stress. As mentioned
 earlier, remote photoplethysmography (rPPG) is a key technique: by
-analyzing tiny color changes in the face, algorithms can estimate heart
+analysing tiny colour changes in the face, algorithms can estimate heart
 rate and even heart rate variability from a regular camera
 feed[\[10\]](https://www.mdpi.com/1424-8220/22/10/3780#:~:text=match%20at%20L766%20%28rPPG%29%20,video%20must%20be%20high%2C%20the).
 Elevated heart rate and decreased variability often accompany stress and
@@ -664,7 +664,7 @@ respiration rate) have shown good performance in distinguishing stress
 versus rest conditions.
 
 Beyond vital signs, RGB video allows analysis of *facial expressions and
-behavior*. Under stress, people often show behavioral cues: frowning,
+behaviour*. Under stress, people often show behavioral cues: frowning,
 furrowed brows, lip compression, jaw clenching, blinking rate changes,
 or looking away. While none of these is a foolproof sign of stress,
 computer vision algorithms can quantify facial muscle movements using
@@ -677,7 +677,7 @@ to achieve significant above-chance stress recognition from video of the
 face during stress
 tasks[\[12\]](https://www.sciencedirect.com/science/article/abs/pii/S0169260724005005#:~:text=Stress%20recognition%20identifying%20relevant%20facial,Machine%20and%20Deep%20Learning%20techniques).
 Additionally, general demeanor changes (restlessness, touching one's
-face, etc.) might be captured by analyzing the whole scene or posture
+face, etc.) might be captured by analysing the whole scene or posture
 via video.
 
 The **advantages** of RGB video for stress detection include the
@@ -702,7 +702,7 @@ measure stress via the phone camera). In this project, the RGB cameras
 are used primarily for high-resolution video recording, which could
 enable offline analysis of facial expressions or rPPG for stress if
 needed. The synergy of these signals with thermal data is something we
-hypothesize about in section 2.7.3.
+hypothesise about in section 2.7.3.
 
 ### 2.7.2 Stress Detection via Thermal Imaging (Infrared Spectrum)
 
@@ -804,7 +804,7 @@ potential gain. The machine learning model in that case learned that
 when both a nasal temp drop and a cardiovascular change occur together,
 it's a strong indicator of stress.
 
-We hypothesize that an RGB+Thermal system could leverage at least the
+We hypothesise that an RGB+Thermal system could leverage at least the
 following feature combinations: (1) **Physiological cross-check** --
 thermal vasoconstriction features alongside rPPG heart rate features, to
 detect consistent arousal patterns; (2) **Behavioral context** --
@@ -822,9 +822,9 @@ RGB lighting is poor), the other can still provide data. Many real-world
 deployments of stress detection -- say in a car -- could face varying
 conditions; having dual modalities ensures the system is less brittle.
 Of course, multi-modal systems are more complex and require careful
-synchronization and calibration (one must ensure the thermal frame and
+synchronisation and calibration (one must ensure the thermal frame and
 RGB frame correspond to the same moment, which our system addresses via
-synchronization protocols). They also demand more computational power if
+synchronisation protocols). They also demand more computational power if
 deep learning is applied to both streams. Nonetheless, the cost is
 justified if it significantly boosts detection reliability.
 
@@ -888,7 +888,7 @@ motion data. This suits the project's broader goal of multi-sensor
 integration, as the Shimmer3 could provide ground-truth heart rate to
 compare with the camera's rPPG, and movement data to later correlate
 stress with activity or to filter motion artifacts. The device's
-capability to synchronize multiple data streams internally is a big
+capability to synchronise multiple data streams internally is a big
 plus.
 
 Another rationale for choosing Shimmer3 is its **wireless connectivity
@@ -968,7 +968,7 @@ temperature matrices, and adjusting image settings. This level of
 control is crucial for research: for example, we can calibrate the
 camera against known temperature references if needed, and ensure we're
 reading actual temperature values to feed into algorithms (rather than
-just color-mapped images). The Topdon's integration architecture was
+just colour-mapped images). The Topdon's integration architecture was
 described in documentation as combining standard USB protocols with
 vendor-specific extensions for radiometric
 streaming[\[64\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/new_documentation/TOPDON_TC001_COMPREHENSIVE_DOCUMENTATION.md#L62-L70),
@@ -1000,7 +1000,7 @@ factor; any thermal changes on the order of 0.1°C to 0.2°C should be
 discernible in the recorded data.
 
 Finally, choosing Topdon was also about **integration into the
-multi-sensor system**. Since this project involves synchronizing various
+multi-sensor system**. Since this project involves synchronising various
 devices (Android phone camera, thermal camera, Shimmer sensor, etc.),
 having a thermal camera that can be directly controlled via the same
 Android device (through OTG USB) simplifies the system architecture. The

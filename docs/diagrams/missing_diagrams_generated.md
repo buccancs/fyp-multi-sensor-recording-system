@@ -22,7 +22,7 @@ graph LR
     
     subgraph CONTACTLESS ["Contactless Multi-Sensor Measurement"]
         direction TB
-        CONT_SUBJECT["Research Subject<br/>Natural Behavior"]
+        CONT_SUBJECT["Research Subject<br/>Natural Behaviour"]
         CONT_CAMERAS["Camera Systems<br/>• Thermal Imaging<br/>• RGB Video<br/>• Remote Sensing"]
         CONT_WIRELESS["Wireless Sensors<br/>• Minimal Contact GSR<br/>• Bluetooth LE<br/>• Real-time Data"]
         CONT_MOBILE["Mobile Platform<br/>• Android Controllers<br/>• Edge Processing<br/>• Synchronized Recording"]
@@ -32,7 +32,7 @@ graph LR
         CONT_CAMERAS --> CONT_MOBILE
         CONT_WIRELESS --> CONT_MOBILE
         
-        CONT_ADVANTAGES["Advantages:<br/>• Natural Behavior<br/>• Multi-Modal Data<br/>• Scalable Setup<br/>• Reduced Artifacts"]
+        CONT_ADVANTAGES["Advantages:<br/>• Natural Behaviour<br/>• Multi-Modal Data<br/>• Scalable Setup<br/>• Reduced Artifacts"]
     end
     
     TRADITIONAL --> |Evolution| CONTACTLESS
@@ -66,7 +66,7 @@ timeline
                  : Chart Recorders
     
     section Electronic Era (1950-1990)
-        1950-1970 : Analog Systems
+        1950-1970 : Analogue Systems
                  : ECG Machines
                  : EEG Recording
                  : Signal Conditioning
@@ -107,11 +107,11 @@ graph LR
             direction LR
             
             subgraph LOW_COMPLEXITY_HIGH ["Low Complexity<br/>High Impact"]
-                LC_HI["• Basic GSR Recording<br/>• Single-Camera Setup<br/>• Manual Synchronization"]
+                LC_HI["• Basic GSR Recording<br/>• Single-Camera Setup<br/>• Manual Synchronisation"]
             end
             
             subgraph HIGH_COMPLEXITY_HIGH ["High Complexity<br/>High Impact"]
-                HC_HI["• Multi-Modal Integration<br/>• Automated Synchronization<br/>• Real-time Processing<br/>• Contactless Measurement"]
+                HC_HI["• Multi-Modal Integration<br/>• Automated Synchronisation<br/>• Real-time Processing<br/>• Contactless Measurement"]
                 TARGET["🎯 TARGET SOLUTION<br/>Multi-Sensor Recording System"]
             end
         end
@@ -156,7 +156,7 @@ graph LR
 ```mermaid
 graph TB
     subgraph CORE_REQUIREMENTS ["Core System Requirements"]
-        SYNC["Temporal Synchronization<br/>±10ms accuracy"]
+        SYNC["Temporal Synchronisation<br/>±10ms accuracy"]
         MULTI_MODAL["Multi-Modal Data Collection<br/>Thermal + GSR + Video"]
         REAL_TIME["Real-Time Processing<br/>Live monitoring"]
     end
@@ -258,7 +258,7 @@ graph TB
     end
     
     subgraph DATA_FLOW ["Data Integration Flow"]
-        SYNC_ENGINE["Synchronization Engine<br/>• Temporal Alignment<br/>• Clock Coordination<br/>• Drift Compensation"]
+        SYNC_ENGINE["Synchronisation Engine<br/>• Temporal Alignment<br/>• Clock Coordination<br/>• Drift Compensation"]
         DATA_PROCESSOR["Data Processing Pipeline<br/>• Real-time Analysis<br/>• Quality Validation<br/>• Format Conversion"]
     end
     
@@ -306,13 +306,13 @@ graph TB
         
         subgraph USER_LAYER ["User Interaction Layer"]
             RESEARCHER["Research Operator<br/>• Session Configuration<br/>• Real-time Monitoring<br/>• Data Analysis"]
-            SUBJECT["Research Subject<br/>• Natural Behavior<br/>• Minimal Interference<br/>• Contactless Measurement"]
+            SUBJECT["Research Subject<br/>• Natural Behaviour<br/>• Minimal Interference<br/>• Contactless Measurement"]
         end
         
         subgraph CONTROL_LAYER ["Control and Coordination Layer"]
             DESKTOP_APP["Python Desktop Controller<br/>• Session Management<br/>• Device Coordination<br/>• Real-time Monitoring<br/>• Data Export"]
             
-            subgraph SYNC_SUBSYSTEM ["Synchronization Subsystem"]
+            subgraph SYNC_SUBSYSTEM ["Synchronisation Subsystem"]
                 MASTER_CLOCK["Master Clock<br/>• Temporal Reference<br/>• Drift Compensation<br/>• Precision Timing"]
                 SYNC_PROTOCOL["Sync Protocol<br/>• Clock Distribution<br/>• Event Coordination<br/>• Status Monitoring"]
             end
@@ -426,7 +426,7 @@ graph TB
         subgraph PERFORMANCE_TESTS ["Performance Testing Layer"]
             LOAD_TESTS["Load Testing<br/>• High Data Throughput<br/>• Multiple Devices<br/>• Extended Sessions"]
             STRESS_TESTS["Stress Testing<br/>• Resource Limits<br/>• Error Conditions<br/>• Recovery Testing"]
-            TIMING_TESTS["Timing Validation<br/>• Synchronization Accuracy<br/>• Latency Measurement<br/>• Clock Drift Analysis"]
+            TIMING_TESTS["Timing Validation<br/>• Synchronisation Accuracy<br/>• Latency Measurement<br/>• Clock Drift Analysis"]
         end
         
         subgraph VALIDATION_TESTS ["Validation Testing Layer"]
@@ -500,7 +500,7 @@ graph TB
         
         subgraph INTEGRATION_COVERAGE ["Integration Test Coverage"]
             direction LR
-            MULTI_DEVICE["Multi-Device Sync<br/>🟡 75% Coverage<br/>• Device Coordination<br/>• Clock Synchronization<br/>• Data Alignment"]
+            MULTI_DEVICE["Multi-Device Sync<br/>🟡 75% Coverage<br/>• Device Coordination<br/>• Clock Synchronisation<br/>• Data Alignment"]
             END_TO_END["End-to-End Flows<br/>🟡 72% Coverage<br/>• Complete Workflows<br/>• User Scenarios<br/>• Error Handling"]
             PERFORMANCE["Performance Tests<br/>🟢 88% Coverage<br/>• Throughput Testing<br/>• Latency Validation<br/>• Resource Usage"]
         end
@@ -552,14 +552,14 @@ graph TB
     subgraph PERFORMANCE_BENCHMARKS ["Performance Benchmark Results Over Time"]
         direction TB
         
-        subgraph SYNCHRONIZATION_PERFORMANCE ["Synchronization Performance Evolution"]
+        subgraph SYNCHRONIZATION_PERFORMANCE ["Synchronisation Performance Evolution"]
             direction LR
             
             BASELINE_SYNC_PERF["Initial Performance<br/>📊 Week 1-2<br/>Accuracy: ±12.3ms<br/>Stability: 78%<br/>Jitter: ±4.2ms"]
             
-            OPTIMIZATION_PHASE_1["First Optimization<br/>📊 Week 3-4<br/>Accuracy: ±8.7ms<br/>Stability: 85%<br/>Jitter: ±3.1ms"]
+            OPTIMIZATION_PHASE_1["First Optimisation<br/>📊 Week 3-4<br/>Accuracy: ±8.7ms<br/>Stability: 85%<br/>Jitter: ±3.1ms"]
             
-            OPTIMIZATION_PHASE_2["Second Optimization<br/>📊 Week 5-6<br/>Accuracy: ±5.1ms<br/>Stability: 92%<br/>Jitter: ±2.3ms"]
+            OPTIMIZATION_PHASE_2["Second Optimisation<br/>📊 Week 5-6<br/>Accuracy: ±5.1ms<br/>Stability: 92%<br/>Jitter: ±2.3ms"]
             
             FINAL_PERFORMANCE["Final Performance<br/>📊 Week 7-8<br/>Accuracy: ±3.2ms<br/>Stability: 97%<br/>Jitter: ±0.8ms"]
             
@@ -573,7 +573,7 @@ graph TB
             
             BASELINE_THROUGHPUT["Initial Throughput<br/>📈 Week 1-2<br/>Rate: 8.2 MB/s<br/>Peak: 11.5 MB/s<br/>Drops: 12%"]
             
-            BUFFER_OPTIMIZATION["Buffer Optimization<br/>📈 Week 3-4<br/>Rate: 14.7 MB/s<br/>Peak: 18.3 MB/s<br/>Drops: 6%"]
+            BUFFER_OPTIMIZATION["Buffer Optimisation<br/>📈 Week 3-4<br/>Rate: 14.7 MB/s<br/>Peak: 18.3 MB/s<br/>Drops: 6%"]
             
             NETWORK_TUNING["Network Tuning<br/>📈 Week 5-6<br/>Rate: 19.8 MB/s<br/>Peak: 24.1 MB/s<br/>Drops: 3%"]
             
@@ -600,7 +600,7 @@ graph TB
             FAULT_TOLERANCE --> FINAL_RELIABILITY
         end
         
-        subgraph RESOURCE_UTILIZATION ["Resource Utilization Performance Evolution"]
+        subgraph RESOURCE_UTILIZATION ["Resource Utilisation Performance Evolution"]
             direction TB
             
             INITIAL_RESOURCES["Initial Resource Usage<br/>💾 CPU: 45% avg<br/>💾 Memory: 2.8 GB<br/>💾 Network: 65% util<br/>💾 Storage: 12 GB/hr"]
@@ -614,7 +614,7 @@ graph TB
     subgraph BENCHMARK_ANALYSIS ["Performance Analysis Summary"]
         direction LR
         
-        IMPROVEMENT_METRICS["Overall Improvements<br/>📊 Synchronization: 260% better<br/>📊 Throughput: 289% increase<br/>📊 Reliability: 113% improvement<br/>📊 Resource efficiency: 37% reduction"]
+        IMPROVEMENT_METRICS["Overall Improvements<br/>📊 Synchronisation: 260% better<br/>📊 Throughput: 289% increase<br/>📊 Reliability: 113% improvement<br/>📊 Resource efficiency: 37% reduction"]
         
         PERFORMANCE_TARGETS["Target Achievement<br/>🎯 All targets exceeded<br/>🎯 Quality standards met<br/>🎯 Performance benchmarks surpassed<br/>🎯 Research requirements fulfilled"]
         
@@ -698,11 +698,11 @@ graph TB
     subgraph SCALABILITY_RECOMMENDATIONS ["Scalability Recommendations"]
         direction TB
         
-        OPTIMAL_CONFIGURATION["Optimal Configuration<br/>🎯 2-3 Android devices recommended<br/>🎯 Session duration: 1-2 hours<br/>🎯 Data volume: 2-8 GB optimal<br/>🎯 Network utilization: <70%"]
+        OPTIMAL_CONFIGURATION["Optimal Configuration<br/>🎯 2-3 Android devices recommended<br/>🎯 Session duration: 1-2 hours<br/>🎯 Data volume: 2-8 GB optimal<br/>🎯 Network utilisation: <70%"]
         
         SCALING_STRATEGIES["Scaling Strategies<br/>📈 Horizontal scaling: Add PC controllers<br/>📈 Load balancing: Distribute processing<br/>📈 Data partitioning: Split by sensor type<br/>📈 Caching: Implement data buffering"]
         
-        FUTURE_IMPROVEMENTS["Future Improvements<br/>🚀 Cloud processing integration<br/>🚀 Edge computing optimization<br/>🚀 AI-powered compression<br/>🚀 5G network utilization"]
+        FUTURE_IMPROVEMENTS["Future Improvements<br/>🚀 Cloud processing integration<br/>🚀 Edge computing optimisation<br/>🚀 AI-powered compression<br/>🚀 5G network utilisation"]
     end
     
     classDef low fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
@@ -720,18 +720,18 @@ graph TB
 
 ## Chapter 6 Missing Diagrams
 
-### Figure 6.1: Achievement Visualization Dashboard
+### Figure 6.1: Achievement Visualisation Dashboard
 
 ```mermaid
 graph TB
-    subgraph ACHIEVEMENT_DASHBOARD ["Project Achievement Visualization Dashboard"]
+    subgraph ACHIEVEMENT_DASHBOARD ["Project Achievement Visualisation Dashboard"]
         direction TB
         
         subgraph TECHNICAL_ACHIEVEMENTS ["Technical Achievement Metrics"]
             direction LR
             
             subgraph SYSTEM_PERFORMANCE ["System Performance Achievements"]
-                SYNC_ACCURACY["Synchronization Accuracy<br/>🎯 Target: ±10ms<br/>✅ Achieved: ±3.2ms<br/>📈 220% better than target"]
+                SYNC_ACCURACY["Synchronisation Accuracy<br/>🎯 Target: ±10ms<br/>✅ Achieved: ±3.2ms<br/>📈 220% better than target"]
                 THROUGHPUT["Data Throughput<br/>🎯 Target: 10MB/s<br/>✅ Achieved: 23.7MB/s<br/>📈 237% of target"]
                 RELIABILITY["System Reliability<br/>🎯 Target: 95% uptime<br/>✅ Achieved: 99.2% uptime<br/>📈 104% of target"]
             end
@@ -747,7 +747,7 @@ graph TB
             direction LR
             
             subgraph DATA_QUALITY ["Data Quality Achievements"]
-                MEASUREMENT_PRECISION["Measurement Precision<br/>🎯 Research grade quality<br/>✅ Temporal alignment ±3ms<br/>✅ Multi-modal synchronization"]
+                MEASUREMENT_PRECISION["Measurement Precision<br/>🎯 Research grade quality<br/>✅ Temporal alignment ±3ms<br/>✅ Multi-modal synchronisation"]
                 DATA_INTEGRITY["Data Integrity<br/>✅ 100% data validation<br/>✅ Quality assurance checks<br/>✅ Error detection systems"]
                 EXPORT_CAPABILITY["Export Capability<br/>✅ Multiple data formats<br/>✅ Research tool integration<br/>✅ Batch processing"]
             end
@@ -765,11 +765,11 @@ graph TB
             subgraph TECHNOLOGICAL_INNOVATION ["Technological Innovation"]
                 CONTACTLESS_APPROACH["Contactless Measurement<br/>🚀 Novel approach to physiology<br/>🚀 Reduced subject interference<br/>🚀 Enhanced data quality"]
                 MOBILE_INTEGRATION["Mobile Platform Integration<br/>🚀 Consumer-grade hardware<br/>🚀 Research-grade precision<br/>🚀 Cost-effective solution"]
-                HYBRID_ARCHITECTURE["Hybrid Architecture<br/>🚀 PC-Android coordination<br/>🚀 Distributed processing<br/>🚀 Real-time synchronization"]
+                HYBRID_ARCHITECTURE["Hybrid Architecture<br/>🚀 PC-Android coordination<br/>🚀 Distributed processing<br/>🚀 Real-time synchronisation"]
             end
             
             subgraph METHODOLOGICAL_INNOVATION ["Methodological Innovation"]
-                MULTI_MODAL_SYNC["Multi-Modal Synchronization<br/>🔬 Temporal alignment<br/>🔬 Cross-sensor correlation<br/>🔬 Unified data streams"]
+                MULTI_MODAL_SYNC["Multi-Modal Synchronisation<br/>🔬 Temporal alignment<br/>🔬 Cross-sensor correlation<br/>🔬 Unified data streams"]
                 QUALITY_FRAMEWORK["Quality Assurance Framework<br/>🔬 Real-time validation<br/>🔬 Automated quality checks<br/>🔬 Error detection and recovery"]
                 RESEARCH_WORKFLOW["Research Workflow Integration<br/>🔬 Seamless data export<br/>🔬 Analysis tool compatibility<br/>🔬 Standardized formats"]
             end
@@ -824,13 +824,13 @@ graph TB
         subgraph PHASE_2 ["Phase 2: Core Implementation (Months 4-6)"]
             direction LR
             MONTH_4["Month 4<br/>📷 Sensor Integration<br/>📷 Thermal Camera Implementation<br/>📷 GSR Bluetooth Connection<br/>✅ Completed"]
-            MONTH_5["Month 5<br/>⏱️ Synchronization Engine<br/>⏱️ Temporal Alignment Algorithm<br/>⏱️ Data Quality Framework<br/>✅ Completed"]
+            MONTH_5["Month 5<br/>⏱️ Synchronisation Engine<br/>⏱️ Temporal Alignment Algorithm<br/>⏱️ Data Quality Framework<br/>✅ Completed"]
             MONTH_6["Month 6<br/>🖥️ User Interface Development<br/>🖥️ Desktop Controller GUI<br/>🖥️ Session Management System<br/>✅ Completed"]
         end
         
-        subgraph PHASE_3 ["Phase 3: Optimization and Testing (Months 7-9)"]
+        subgraph PHASE_3 ["Phase 3: Optimisation and Testing (Months 7-9)"]
             direction LR
-            MONTH_7["Month 7<br/>⚡ Performance Optimization<br/>⚡ Synchronization Accuracy Tuning<br/>⚡ Resource Usage Optimization<br/>✅ Completed"]
+            MONTH_7["Month 7<br/>⚡ Performance Optimisation<br/>⚡ Synchronisation Accuracy Tuning<br/>⚡ Resource Usage Optimisation<br/>✅ Completed"]
             MONTH_8["Month 8<br/>🧪 complete Testing<br/>🧪 Performance Benchmarking<br/>🧪 Quality Assurance Validation<br/>✅ Completed"]
             MONTH_9["Month 9<br/>🔄 System Integration Testing<br/>🔄 Multi-Device Coordination<br/>🔄 Long-term Stability Testing<br/>✅ Completed"]
         end
@@ -866,21 +866,21 @@ graph TB
         
         MILESTONES_ACHIEVED["Major Milestones Achieved<br/>✅ 12/12 Monthly goals completed<br/>✅ 4/4 Phase objectives met<br/>✅ 100% deliverable completion<br/>✅ All quality targets exceeded"]
         
-        PERFORMANCE_METRICS["Performance Achievement<br/>📊 Synchronization: ±3.2ms (target: ±10ms)<br/>📊 Throughput: 23.7MB/s (target: 10MB/s)<br/>📊 Reliability: 99.2% (target: 95%)<br/>📊 User satisfaction: 4.7/5.0"]
+        PERFORMANCE_METRICS["Performance Achievement<br/>📊 Synchronisation: ±3.2ms (target: ±10ms)<br/>📊 Throughput: 23.7MB/s (target: 10MB/s)<br/>📊 Reliability: 99.2% (target: 95%)<br/>📊 User satisfaction: 4.7/5.0"]
         
         PROJECT_SUCCESS["Project Success Indicators<br/>🎯 Research objectives achieved<br/>🎯 Technical innovation demonstrated<br/>🎯 Quality standards exceeded<br/>🎯 Timeline adherence maintained"]
     end
     
     classDef foundation fill:#fff3e0,stroke:#ff9800,stroke-width:2px
     classDef implementation fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
-    classDef optimization fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    classDef optimisation fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
     classDef validation fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
     classDef summary fill:#e1f5fe,stroke:#03a9f4,stroke-width:2px
     classDef completed fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
     
     class PHASE_1,MONTH_1,MONTH_2,MONTH_3 foundation
     class PHASE_2,MONTH_4,MONTH_5,MONTH_6 implementation
-    class PHASE_3,MONTH_7,MONTH_8,MONTH_9 optimization
+    class PHASE_3,MONTH_7,MONTH_8,MONTH_9 optimisation
     class PHASE_4,MONTH_10,MONTH_11,MONTH_12 validation
     class MILESTONES_ACHIEVED,PERFORMANCE_METRICS,PROJECT_SUCCESS summary
 ```
@@ -894,10 +894,10 @@ graph TB
     subgraph CALIBRATION_VALIDATION ["Calibration Validation Results Analysis"]
         direction TB
         
-        subgraph TEMPORAL_CALIBRATION ["Temporal Synchronization Calibration"]
+        subgraph TEMPORAL_CALIBRATION ["Temporal Synchronisation Calibration"]
             direction LR
             
-            subgraph SYNC_ACCURACY_RESULTS ["Synchronization Accuracy Results"]
+            subgraph SYNC_ACCURACY_RESULTS ["Synchronisation Accuracy Results"]
                 BASELINE_SYNC["Baseline Measurement<br/>📊 Initial accuracy: ±12.3ms<br/>📊 Target accuracy: ±10ms<br/>📊 Required improvement: 23%"]
                 
                 CALIBRATED_SYNC["Post-Calibration Results<br/>📊 Final accuracy: ±3.2ms<br/>📊 Improvement: 260%<br/>📊 Target exceeded: 213%"]
@@ -933,7 +933,7 @@ graph TB
             
             CORRELATION_ANALYSIS["Cross-Sensor Correlation<br/>📊 Thermal-GSR correlation: r=0.94<br/>📊 Video-Thermal alignment: ±1.8ms<br/>📊 Multi-modal coherence: 96.7%"]
             
-            VALIDATION_METRICS["Validation Success Metrics<br/>✅ All sensors within spec<br/>✅ Synchronization verified<br/>✅ Data quality confirmed<br/>✅ Research standards met"]
+            VALIDATION_METRICS["Validation Success Metrics<br/>✅ All sensors within spec<br/>✅ Synchronisation verified<br/>✅ Data quality confirmed<br/>✅ Research standards met"]
             
             CORRELATION_ANALYSIS --> VALIDATION_METRICS
         end
@@ -943,7 +943,7 @@ graph TB
             
             REFERENCE_STANDARDS["Reference Standards<br/>🎯 IEEE 1588 time sync<br/>🎯 NIST temperature standards<br/>🎯 Research-grade protocols<br/>🎯 Validation benchmarks"]
             
-            CALIBRATION_PROCESS["Calibration Process<br/>🔧 Multi-point calibration<br/>🔧 Cross-reference validation<br/>🔧 Iterative optimization<br/>🔧 Quality verification"]
+            CALIBRATION_PROCESS["Calibration Process<br/>🔧 Multi-point calibration<br/>🔧 Cross-reference validation<br/>🔧 Iterative optimisation<br/>🔧 Quality verification"]
             
             VERIFICATION_TESTS["Verification Testing<br/>🧪 Independent validation<br/>🧪 Repeatability testing<br/>🧪 Long-term stability<br/>🧪 Performance benchmarks"]
             
@@ -955,7 +955,7 @@ graph TB
     subgraph CALIBRATION_OUTCOMES ["Calibration Outcomes Summary"]
         SUCCESS_METRICS["Calibration Success<br/>✅ 100% sensor calibration success<br/>✅ All performance targets exceeded<br/>✅ Quality standards achieved<br/>✅ Research validation confirmed"]
         
-        IMPROVEMENT_SUMMARY["Performance Improvements<br/>📈 Synchronization: 260% improvement<br/>📈 Temperature accuracy: 150% improvement<br/>📈 GSR latency: 257% improvement<br/>📈 Overall system quality: 96.7%"]
+        IMPROVEMENT_SUMMARY["Performance Improvements<br/>📈 Synchronisation: 260% improvement<br/>📈 Temperature accuracy: 150% improvement<br/>📈 GSR latency: 257% improvement<br/>📈 Overall system quality: 96.7%"]
         
         RESEARCH_READINESS["Research Readiness<br/>🔬 All sensors research-grade<br/>🔬 Data quality validated<br/>🔬 Measurement precision confirmed<br/>🔬 System reliability verified"]
     end
@@ -1038,7 +1038,7 @@ graph TB
                 
                 SPEED_RESPONSIVENESS["Speed & Responsiveness<br/>⭐⭐⭐⭐ 4.6/5.0<br/>'Fast data processing'<br/>'Quick session startup'"]
                 
-                ACCURACY_PRECISION["Accuracy & Precision<br/>⭐⭐⭐⭐⭐ 4.9/5.0<br/>'Research-grade quality'<br/>'Excellent synchronization'"]
+                ACCURACY_PRECISION["Accuracy & Precision<br/>⭐⭐⭐⭐⭐ 4.9/5.0<br/>'Research-grade quality'<br/>'Excellent synchronisation'"]
             end
         end
         
@@ -1081,13 +1081,13 @@ graph TD
     subgraph RELIABILITY_CHART ["System Reliability Over Extended Operation (70-Day Study)"]
         direction TB
         
-        METRICS["📊 Reliability Metrics<br/>Data Synchronization: 99.8% → 98.8%<br/>Camera System: 99.5% → 97.6%<br/>GSR Sensors: 99.9% → 98.9%<br/>Network Communication: 99.2% → 97.2%<br/>Overall System: 99.1% → 97.1%"]
+        METRICS["📊 Reliability Metrics<br/>Data Synchronisation: 99.8% → 98.8%<br/>Camera System: 99.5% → 97.6%<br/>GSR Sensors: 99.9% → 98.9%<br/>Network Communication: 99.2% → 97.2%<br/>Overall System: 99.1% → 97.1%"]
         
         TIMEPERIODS["📅 Time Period Analysis<br/>Week 1-2: Excellent (>99%)<br/>Week 3-4: Very Good (>98%)<br/>Week 5-6: Good (>97%)<br/>Week 7-10: Acceptable (>96%)"]
         
         DEGRADATION["📉 Degradation Factors<br/>• Component aging<br/>• Network instability<br/>• Sensor drift<br/>• Battery wear<br/>• Environmental conditions"]
         
-        MAINTENANCE["🔧 Maintenance Impact<br/>• Weekly calibration: +2% reliability<br/>• Component replacement: +5% reliability<br/>• Network optimization: +3% reliability<br/>• Preventive maintenance: Slow degradation"]
+        MAINTENANCE["🔧 Maintenance Impact<br/>• Weekly calibration: +2% reliability<br/>• Component replacement: +5% reliability<br/>• Network optimisation: +3% reliability<br/>• Preventive maintenance: Slow degradation"]
         
         RECOMMENDATION["✅ Recommendations<br/>• Maintenance cycle: Every 2 weeks<br/>• Component inspection: Weekly<br/>• Performance monitoring: Continuous<br/>• Backup systems: Critical components"]
     end
@@ -1110,36 +1110,36 @@ graph TD
     class RECOMMENDATION recommendation
 ```
 
-### Figure 5.6: Temporal Synchronization Distribution Analysis
+### Figure 5.6: Temporal Synchronisation Distribution Analysis
 
 ```mermaid
 graph TD
-    subgraph SYNC_ANALYSIS ["Temporal Synchronization Distribution Analysis"]
+    subgraph SYNC_ANALYSIS ["Temporal Synchronisation Distribution Analysis"]
         direction TB
         
-        LATENCY_DIST["📊 Synchronization Latency Distribution<br/>Camera-GSR Sync:<br/>• <1ms: 42% (Excellent)<br/>• 1-2ms: 28% (Very Good)<br/>• 2-3ms: 15% (Good)<br/>• 3-4ms: 8% (Acceptable)<br/>• 4-5ms: 4% (Fair)<br/>• >5ms: 3% (Poor)"]
+        LATENCY_DIST["📊 Synchronisation Latency Distribution<br/>Camera-GSR Sync:<br/>• <1ms: 42% (Excellent)<br/>• 1-2ms: 28% (Very Good)<br/>• 2-3ms: 15% (Good)<br/>• 3-4ms: 8% (Acceptable)<br/>• 4-5ms: 4% (Fair)<br/>• >5ms: 3% (Poor)"]
         
-        MULTI_CAMERA["📹 Multi-Camera Synchronization<br/>• <1ms: 38% (Excellent)<br/>• 1-2ms: 32% (Very Good)<br/>• 2-3ms: 18% (Good)<br/>• 3-4ms: 7% (Acceptable)<br/>• 4-5ms: 3% (Fair)<br/>• >5ms: 2% (Poor)"]
+        MULTI_CAMERA["📹 Multi-Camera Synchronisation<br/>• <1ms: 38% (Excellent)<br/>• 1-2ms: 32% (Very Good)<br/>• 2-3ms: 18% (Good)<br/>• 3-4ms: 7% (Acceptable)<br/>• 4-5ms: 3% (Fair)<br/>• >5ms: 2% (Poor)"]
         
-        NETWORK_SYNC["🌐 Network Timestamp Synchronization<br/>• <1ms: 35% (Excellent)<br/>• 1-2ms: 30% (Very Good)<br/>• 2-3ms: 20% (Good)<br/>• 3-4ms: 10% (Acceptable)<br/>• 4-5ms: 3% (Fair)<br/>• >5ms: 2% (Poor)"]
+        NETWORK_SYNC["🌐 Network Timestamp Synchronisation<br/>• <1ms: 35% (Excellent)<br/>• 1-2ms: 30% (Very Good)<br/>• 2-3ms: 20% (Good)<br/>• 3-4ms: 10% (Acceptable)<br/>• 4-5ms: 3% (Fair)<br/>• >5ms: 2% (Poor)"]
         
         PERFORMANCE_SUMMARY["🎯 Performance Summary<br/>• Target: <3ms (85% achievement)<br/>• Mean Latency: 1.8ms<br/>• 95th Percentile: 4.2ms<br/>• 99th Percentile: 8.1ms<br/>• Standard Deviation: 1.3ms"]
         
-        OPTIMIZATION["⚡ Optimization Strategies<br/>• Hardware timestamping: -40% latency<br/>• Buffer optimization: -25% jitter<br/>• Priority scheduling: -30% variance<br/>• Network tuning: -20% packet delay"]
+        OPTIMISATION["⚡ Optimisation Strategies<br/>• Hardware timestamping: -40% latency<br/>• Buffer optimisation: -25% jitter<br/>• Priority scheduling: -30% variance<br/>• Network tuning: -20% packet delay"]
     end
     
     LATENCY_DIST --> PERFORMANCE_SUMMARY
     MULTI_CAMERA --> PERFORMANCE_SUMMARY
     NETWORK_SYNC --> PERFORMANCE_SUMMARY
-    PERFORMANCE_SUMMARY --> OPTIMIZATION
+    PERFORMANCE_SUMMARY --> OPTIMISATION
     
     classDef distribution fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
     classDef summary fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    classDef optimization fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef optimisation fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     
     class LATENCY_DIST,MULTI_CAMERA,NETWORK_SYNC distribution
     class PERFORMANCE_SUMMARY summary
-    class OPTIMIZATION optimization
+    class OPTIMISATION optimisation
 ```
 
 ### Figure 6.3: Technical Architecture Innovation Map
@@ -1153,17 +1153,17 @@ graph TD
         
         MULTIMODAL["📹 Multi-Modal Integration<br/>• Thermal + RGB Fusion<br/>• Real-time Processing<br/>• Edge Computing<br/>• Sensor Fusion Algorithms"]
         
-        CONTACTLESS["📡 Contactless Sensing Innovation<br/>• Remote GSR Prediction<br/>• Non-invasive Monitoring<br/>• Behavioral Analysis<br/>• Physiological Modeling"]
+        CONTACTLESS["📡 Contactless Sensing Innovation<br/>• Remote GSR Prediction<br/>• Non-invasive Monitoring<br/>• Behavioral Analysis<br/>• Physiological Modelling"]
         
         DISTRIBUTED["🌐 Distributed Systems Architecture<br/>• Star-Mesh Topology<br/>• Fault Tolerance<br/>• Scalable Architecture<br/>• Data Consistency"]
         
-        MOBILE["📱 Mobile Computing Innovation<br/>• Android Controllers<br/>• Offline-First Design<br/>• Edge Intelligence<br/>• Battery Optimization"]
+        MOBILE["📱 Mobile Computing Innovation<br/>• Android Controllers<br/>• Offline-First Design<br/>• Edge Intelligence<br/>• Battery Optimisation"]
         
-        SYNCHRONIZATION["⏱️ Synchronization Excellence<br/>• Sub-millisecond Precision<br/>• Temporal Alignment<br/>• Multi-device Coordination<br/>• Hardware Timestamping"]
+        SYNCHRONISATION["⏱️ Synchronisation Excellence<br/>• Sub-millisecond Precision<br/>• Temporal Alignment<br/>• Multi-device Coordination<br/>• Hardware Timestamping"]
         
         RESEARCH["🔬 Research Contributions<br/>• Academic Innovation<br/>• Technical Excellence<br/>• Community Impact<br/>• Open Source Framework"]
         
-        PERFORMANCE["⚡ Performance Innovations<br/>• Real-time Processing: <10ms latency<br/>• Synchronization: <1ms precision<br/>• Scalability: 10+ devices<br/>• Reliability: >98% uptime"]
+        PERFORMANCE["⚡ Performance Innovations<br/>• Real-time Processing: <10ms latency<br/>• Synchronisation: <1ms precision<br/>• Scalability: 10+ devices<br/>• Reliability: >98% uptime"]
         
         QUALITY["✅ Quality Assurance<br/>• complete Testing<br/>• Code Quality Metrics<br/>• Documentation Excellence<br/>• Reproducible Research"]
     end
@@ -1172,7 +1172,7 @@ graph TD
     CENTRAL --> CONTACTLESS
     CENTRAL --> DISTRIBUTED
     CENTRAL --> MOBILE
-    CENTRAL --> SYNCHRONIZATION
+    CENTRAL --> SYNCHRONISATION
     CENTRAL --> RESEARCH
     CENTRAL --> PERFORMANCE
     CENTRAL --> QUALITY
@@ -1180,7 +1180,7 @@ graph TD
     MULTIMODAL -.-> PERFORMANCE
     CONTACTLESS -.-> RESEARCH
     DISTRIBUTED -.-> QUALITY
-    MOBILE -.-> SYNCHRONIZATION
+    MOBILE -.-> SYNCHRONISATION
     
     classDef central fill:#fff3e0,stroke:#f57c00,stroke-width:3px
     classDef innovation fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
@@ -1188,25 +1188,25 @@ graph TD
     classDef performance fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
     
     class CENTRAL central
-    class MULTIMODAL,CONTACTLESS,DISTRIBUTED,MOBILE,SYNCHRONIZATION,RESEARCH innovation
+    class MULTIMODAL,CONTACTLESS,DISTRIBUTED,MOBILE,SYNCHRONISATION,RESEARCH innovation
     class QUALITY quality
     class PERFORMANCE performance
 ```
 
-### Figure 6.4: Performance Excellence Metrics Visualization
+### Figure 6.4: Performance Excellence Metrics Visualisation
 
 ```mermaid
 graph TD
-    subgraph PERFORMANCE_METRICS ["Performance Excellence Metrics Visualization"]
+    subgraph PERFORMANCE_METRICS ["Performance Excellence Metrics Visualisation"]
         direction TB
         
-        SYNC_METRICS["⏱️ Synchronization Accuracy: 95%<br/>• Target: <1ms latency<br/>• Achieved: 0.8ms average<br/>• 99th percentile: 2.1ms<br/>• Jitter: ±0.3ms<br/>• Success rate: 99.2%"]
+        SYNC_METRICS["⏱️ Synchronisation Accuracy: 95%<br/>• Target: <1ms latency<br/>• Achieved: 0.8ms average<br/>• 99th percentile: 2.1ms<br/>• Jitter: ±0.3ms<br/>• Success rate: 99.2%"]
         
         THROUGHPUT_METRICS["📊 Data Throughput: 92%<br/>• Target: 100MB/s<br/>• Achieved: 92MB/s<br/>• Peak: 127MB/s<br/>• Minimum: 78MB/s<br/>• Compression ratio: 3.2:1"]
         
         RELIABILITY_METRICS["🛡️ System Reliability: 98%<br/>• Uptime: 99.1%<br/>• Error rate: 0.2%<br/>• Recovery time: <30s<br/>• Data integrity: 99.98%<br/>• Fault tolerance: Excellent"]
         
-        EFFICIENCY_METRICS["⚡ Resource Efficiency: 88%<br/>• CPU usage: 65% average<br/>• Memory: 2.1GB average<br/>• Battery life: 8.5 hours<br/>• Network bandwidth: 85% utilization<br/>• Storage efficiency: 92%"]
+        EFFICIENCY_METRICS["⚡ Resource Efficiency: 88%<br/>• CPU usage: 65% average<br/>• Memory: 2.1GB average<br/>• Battery life: 8.5 hours<br/>• Network bandwidth: 85% utilisation<br/>• Storage efficiency: 92%"]
         
         SCALABILITY_METRICS["📈 Scalability: 85%<br/>• Max devices: 12 (target: 10)<br/>• Linear scaling: Up to 8 devices<br/>• Performance degradation: <5% per device<br/>• Load balancing: Automatic<br/>• Resource sharing: Optimized"]
         
