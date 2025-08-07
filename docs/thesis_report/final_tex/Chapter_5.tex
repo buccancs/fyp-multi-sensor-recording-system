@@ -779,7 +779,7 @@ others did not cause performance metrics to skew.
         end
 
         subgraph "Specialized Testing Tools"
-            NETWORK[Network Simulation<br/>Latency & Packet Loss]
+            NETWORK[Network Simulation<br/>Latency \& Packet Loss]
             LOAD[Load Testing<br/>Device Scaling]
             MONITOR[Resource Monitoring<br/>Performance Metrics]
         end
@@ -2078,35 +2078,35 @@ issues for each category:
   Testing Level   Coverage Scope    Test Cases   Pass Rate   Critical   Resolution      Confidence
                                     (executed)               Issues     Status          Level
   ---------------------- ------------------------- ------------------ ---------------- --------------- ---------------------- ------------------
-  \textbf{Unit          Individual        1,247 tests  98.7%       3 critical ✅ Resolved     99.9%
-  Testing}       functions &                                                           
+  \textbf{Unit          Individual        1,247 tests  98.7\%       3 critical ✅ Resolved     99.9\%
+  Testing}       functions \&                                                           
                   methods                                                               
 
-  \textbf{Component     Modules and       342 tests    99.1%       1 critical ✅ Resolved     99.8%
+  \textbf{Component     Modules and       342 tests    99.1\%       1 critical ✅ Resolved     99.8\%
   Testing}       classes                                                               
 
-  \textbf{Integration   Inter-component   156 tests    97.4%       2 critical ✅ Resolved     99.5%
+  \textbf{Integration   Inter-component   156 tests    97.4\%       2 critical ✅ Resolved     99.5\%
   Testing}       communication                                                         
 
-  \textbf{System        End-to-end        89 tests     96.6%       1 critical ✅ Resolved     99.2%
+  \textbf{System        End-to-end        89 tests     96.6\%       1 critical ✅ Resolved     99.2\%
   Testing}       workflows                                                             
 
-  \textbf{Performance   Load & stress     45 tests     94.4%       0 critical N/A (none)      98.7%
+  \textbf{Performance   Load \& stress     45 tests     94.4\%       0 critical N/A (none)      98.7\%
   Testing}       scenarios                                                             
 
-  \textbf{Reliability   Extended          12 tests     100%        0 critical N/A (none)      99.9%
+  \textbf{Reliability   Extended          12 tests     100\%        0 critical N/A (none)      99.9\%
   Testing}       operation                                                             
                   scenarios                                                             
 
-  \textbf{Security      Data protection & 23 tests     100%        0 critical N/A (none)      99.9%
+  \textbf{Security      Data protection \& 23 tests     100\%        0 critical N/A (none)      99.9\%
   Testing}       access control                                                        
 
-  \textbf{Usability     User experience & 34 tests     91.2%       0 critical N/A             95.8%
+  \textbf{Usability     User experience \& 34 tests     91.2\%       0 critical N/A             95.8\%
   Testing}       workflow                                              (improvements   
                                                                         ongoing)        
 
-  \textbf{Research      Scientific        67 tests     97.0%       0 critical N/A (none)      99.3%
-  Validation}    accuracy &                                                            
+  \textbf{Research      Scientific        67 tests     97.0\%       0 critical N/A (none)      99.3\%
+  Validation}    accuracy \&                                                            
                   precision                                                             
 
   **Overall       Comprehensive     618 tests\\textit{  }Pending*   Env.       🔧 In progress  Config.
@@ -2357,7 +2357,7 @@ These high numbers mean very little of the implementation is untested.
 The few untested lines are typically defensive code or platform-specific
 fallbacks that are hard to trigger but also low risk. - \textbf{Platform
 coverage:} We tested on multiple Android versions (7.0 through 12.0)
-and multiple OS for the desktop (Windows 10 & 11, Ubuntu 20.04 LTS, and
+and multiple OS for the desktop (Windows 10 \& 11, Ubuntu 20.04 LTS, and
 macOS
 12)\cite{DeviceServer}.
 All tested platforms ran the system successfully, with only minor
