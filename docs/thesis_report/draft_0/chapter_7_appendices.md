@@ -3,15 +3,15 @@
 ## Table of Contents
 
 1. [Appendix A: System Manual](#appendix-a-system-manual)
-    -
+---
     1.1. [Technical Documentation for System Maintenance and Extension](#technical-documentation-for-system-maintenance-and-extension)
     - 1.2. [A.1 Component Documentation Reference](#a1-component-documentation-reference)
-    -
+---
     1.3. [A.2 Literature Review and Technical Foundation Tables](#a2-literature-review-and-technical-foundation-tables)
     - 1.4. [A.3 Network Communication Protocol Specifications](#a3-network-communication-protocol-specifications)
     - 1.5. [A.4 System Performance Specifications](#a4-system-performance-specifications)
     - 1.6. [A.5 Technology Stack Justification Matrix](#a5-technology-stack-justification-matrix)
-2. [Appendix B: Testing and Evaluation Results](#appendix-b-testing-and-evaluation-results)
+1. [Appendix B: Testing and Evaluation Results](#appendix-b-testing-and-evaluation-results)
     - 2.1. [B.1 Multi-Level Testing Coverage Analysis](#b1-multi-level-testing-coverage-analysis)
     - 2.2. [B.2 Algorithm Validation Results](#b2-algorithm-validation-results)
     - 2.3. [B.3 Multi-Device Coordination Test Results](#b3-multi-device-coordination-test-results)
@@ -23,28 +23,26 @@
     - 2.9. [B.9 Performance Validation Summary](#b9-performance-validation-summary)
     - 2.10. [B.10 Reliability Assessment Results](#b10-reliability-assessment-results)
     - 2.11. [B.11 Usability and Effectiveness Summary](#b11-usability-and-effectiveness-summary)
-3. [Appendix C: User Manual](#appendix-c-user-manual)
+2. [Appendix C: User Manual](#appendix-c-user-manual)
     - 3.1. [complete User Guide for Research Operations](#complete-user-guide-for-research-operations)
     - 3.2. [C.1 Getting Started - First-Time Setup](#c1-getting-started---first-time-setup)
     - 3.3. [C.2 Recording Session Management](#c2-recording-session-management)
     - 3.4. [C.3 Data Export and Analysis](#c3-data-export-and-analysis)
-4. [Appendix D: Supporting Documentation and Data](#appendix-d-supporting-documentation-and-data)
+3. [Appendix D: Supporting Documentation and Data](#appendix-d-supporting-documentation-and-data)
     - 4.1. [D.1 Technical Specifications and Calibration Data](#d1-technical-specifications-and-calibration-data)
     - 4.2. [D.2 Network Protocol Specifications](#d2-network-protocol-specifications)
-5. [Appendix E: Test Results and Reports](#appendix-e-test-results-and-reports)
+4. [Appendix E: Test Results and Reports](#appendix-e-test-results-and-reports)
     - 5.1. [E.1 complete Testing Results Summary](#e1-complete-testing-results-summary)
     - 5.2. [E.2 Statistical Validation Results](#e2-statistical-validation-results)
-6. [Appendix F: Evaluation Data and Results](#appendix-f-evaluation-data-and-results)
+5. [Appendix F: Evaluation Data and Results](#appendix-f-evaluation-data-and-results)
     - 6.1. [F.1 User Experience Evaluation](#f1-user-experience-evaluation)
     - 6.2. [F.2 Scientific Validation with Research Protocols](#f2-scientific-validation-with-research-protocols)
-7. [Appendix G: Code Listing](#appendix-g-code-listing)
+6. [Appendix G: Code Listing](#appendix-g-code-listing)
     - 7.1. [G.1 Key Implementation Components](#g1-key-implementation-components)
-8. [Appendix H: Missing Diagrams and Visual Content](#appendix-h-missing-diagrams-and-visual-content)
+7. [Appendix H: Missing Diagrams and Visual Content](#appendix-h-missing-diagrams-and-visual-content)
     - 8.1. [H.1 Missing Diagram Inventory](#h1-missing-diagram-inventory)
     - 8.2. [H.2 Available Diagram Mappings](#h2-available-diagram-mappings)
-
 ---
-
 ## Appendix A: System Manual
 
 ### Technical Documentation for System Maintenance and Extension
@@ -60,40 +58,40 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 **Core System Components:**
 
 - **Android Mobile Application**: `../android_mobile_application_readme.md`
-    - Component guide: `../android_mobile_application_readme.md`
-    - Quick start: `../QUICK_START.md`
+  - Component guide: `../android_mobile_application_readme.md`
+  - Quick start: `../QUICK_START.md`
 
 - **Python Desktop Controller**: `../python_desktop_controller_readme.md`
-    - Component guide: `../python_desktop_controller_readme.md`
-    - Quick start: `../QUICK_START.md`
+  - Component guide: `../python_desktop_controller_readme.md`
+  - Quick start: `../QUICK_START.md`
 
 - **Multi-Device Synchronisation**: `../multi_device_synchronization_readme.md`
-    - Component guide: `../multi_device_synchronization_readme.md`
-    - Architecture: `../ARCHITECTURE_DIAGRAMS.md`
+  - Component guide: `../multi_device_synchronization_readme.md`
+  - Architecture: `../ARCHITECTURE_DIAGRAMS.md`
 
 - **Camera Recording System**: See Android Mobile Application documentation above
-    - Camera integration: `../thermal_camera_integration_readme.md`
-    - UI architecture: `../ui_architecture_readme.md`
+  - Camera integration: `../thermal_camera_integration_readme.md`
+  - UI architecture: `../ui_architecture_readme.md`
 
 - **Session Management**: `../session_management_readme.md`
-    - Component guide: `../session_management_readme.md`
-    - Quick start: `../QUICK_START.md`
+  - Component guide: `../session_management_readme.md`
+  - Quick start: `../QUICK_START.md`
 
 **Hardware Integration Components:**
 
 - **Shimmer3 GSR+ Sensor**: `../shimmer_integration_readme.md`
-    - Component guide: `../shimmer_integration_readme.md`
-    - Quick start: `../QUICK_START.md`
+  - Component guide: `../shimmer_integration_readme.md`
+  - Quick start: `../QUICK_START.md`
 
 - **TopDon TC001 Thermal Camera**: `../thermal_camera_integration_readme.md`
-    - Component guide: `../thermal_camera_integration_readme.md`
-    - Quick start: `../QUICK_START.md`
+  - Component guide: `../thermal_camera_integration_readme.md`
+  - Quick start: `../QUICK_START.md`
 
 **Testing and Validation:**
 
 - **Testing and QA Framework**: `../testing_framework_readme.md`
-    - Component guide: `../testing_framework_readme.md`
-    - Quick start: `../QUICK_START.md`
+  - Component guide: `../testing_framework_readme.md`
+  - Quick start: `../QUICK_START.md`
 
 ### A.2 Literature Review and Technical Foundation Tables
 
@@ -146,7 +144,6 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 | **Bluetooth LE**       | WiFi Direct, USB        | Low power, standardized protocol             | Power efficient               | Medium complexity      |
 
 ---
-
 ## Appendix B: Testing and Evaluation Results
 
 ### B.1 Multi-Level Testing Coverage Analysis
@@ -281,7 +278,6 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 | **User Satisfaction** | >85%     | 91.2% ± 4.3%    | n=75        | 91%          |
 
 ---
-
 ## Appendix C: User Manual
 
 This section provides consolidated technical specifications from all complete component documentation integrated
@@ -431,8 +427,8 @@ integration.
 - **Security Standards**: Zero high-severity vulnerabilities with complete penetration testing
 - **Research Compliance**: Systematic validation of scientific methodology and data integrity
 - **Testing Framework**: `../testing_framework_readme.md`
-    - Component guide: `../testing_framework_readme.md`
-    - Quick start: `../QUICK_START.md`
+  - Component guide: `../testing_framework_readme.md`
+  - Quick start: `../QUICK_START.md`
 
 ### A.2 Validated System Configuration
 
@@ -456,14 +452,14 @@ graph TB
             MONITOR[Primary Display<br/>System Status Dashboard]
             STORAGE[Network Storage<br/>10TB Research Data]
         end
-        
+---
         subgraph "Mobile Device Network"
             A1[Android Device 1<br/>Samsung Galaxy S22<br/>Primary RGB Camera]
             A2[Android Device 2<br/>Samsung Galaxy S22<br/>Thermal Integration]
             A3[Android Device 3<br/>Samsung Galaxy S22<br/>Secondary Angle]
             A4[Android Device 4<br/>Samsung Galaxy S22<br/>Reference Position]
         end
-        
+---
         subgraph "Sensor Hardware Array"
             T1[Topdon TC001<br/>Thermal Camera #1]
             T2[Topdon TC001<br/>Thermal Camera #2]
@@ -471,33 +467,33 @@ graph TB
             S2[Shimmer3 GSR+<br/>Reference Sensor #2]
             W1[USB Webcam<br/>Logitech C920]
         end
-        
+---
         subgraph "Network Infrastructure"
             ROUTER[Research Wi-Fi Router<br/>802.11ac, Dual Band]
             SWITCH[Gigabit Ethernet Switch<br/>8-port managed]
             NAS[Network Attached Storage<br/>Backup and Archival]
         end
     end
-    
+---
     PC <--> ROUTER
     MONITOR --> PC
     PC --> STORAGE
-    
+---
     A1 <--> ROUTER
     A2 <--> ROUTER
     A3 <--> ROUTER
     A4 <--> ROUTER
-    
+---
     T1 --> A2
     T2 --> A4
     S1 -.-> A1
     S2 -.-> A3
     W1 --> PC
-    
+---
     ROUTER <--> SWITCH
     SWITCH <--> NAS
     STORAGE <--> NAS
-    
+---
     style PC fill:#1565c0,colour:#ffffff
     style ROUTER fill:#f57c00,colour:#ffffff
     style NAS fill:#2e7d32,colour:#ffffff
@@ -603,30 +599,30 @@ Bottom Panel: Technical infrastructure detail
 ```mermaid
 flowchart TD
     START[Begin Installation]
-    
+---
     subgraph "Environment Preparation"
         PREREQ[Verify Prerequisites<br/>- Python 3.8+<br/>- Android SDK<br/>- Git access]
         DEPS[Install Dependencies<br/>- OpenCV<br/>- WebSocket libraries<br/>- Research packages]
     end
-    
+---
     subgraph "Core System Setup"
         CLONE[Clone Repository<br/>git clone project-repo]
         VENV[Create Virtual Environment<br/>python -m venv research-env]
         INSTALL[Install Packages<br/>pip install -r requirements.txt]
     end
-    
+---
     subgraph "Configuration"
         CONFIG[Generate Configuration<br/>python setup_config.py]
         NETWORK[Configure Network<br/>Set IP ranges and ports]
         DEVICES[Register Devices<br/>Add device certificates]
     end
-    
+---
     subgraph "Validation"
         TEST[Run Test Suite<br/>pytest tests/ --complete]
         DEMO[Execute Demo Session<br/>Verify end-to-end operation]
         DOCS[Generate Documentation<br/>sphinx-build docs/]
     end
-    
+---
     START --> PREREQ
     PREREQ --> DEPS
     DEPS --> CLONE
@@ -638,7 +634,7 @@ flowchart TD
     DEVICES --> TEST
     TEST --> DEMO
     DEMO --> DOCS
-    
+---
     style START fill:#4caf50,colour:#ffffff
     style DEMO fill:#ff9800,colour:#ffffff
     style DOCS fill:#2196f3,colour:#ffffff
@@ -691,48 +687,48 @@ graph TB
         API[REST API<br/>FastAPI Framework]
         WEBSOCKET[WebSocket Handler<br/>Real-time Communication]
     end
-    
+---
     subgraph "Service Layer"
         COORD[Device Coordinator<br/>Connection Management]
         SYNC[Synchronisation Service<br/>Temporal Alignment]
         PROC[Processing Service<br/>Data Analysis Pipeline]
         QUAL[Quality Service<br/>Assessment and Monitoring]
     end
-    
+---
     subgraph "Data Layer"
         BUFFER[Data Buffer Manager<br/>Temporary Storage]
         DB[Database Service<br/>PostgreSQL Backend]
         FS[File System Manager<br/>Research Data Storage]
         EXPORT[Export Service<br/>Data Format Conversion]
     end
-    
+---
     subgraph "Hardware Interface Layer"
         ANDROID[Android Interface<br/>Mobile Device Communication]
         THERMAL[Thermal Interface<br/>Camera Integration]
         GSR[GSR Interface<br/>Bluetooth Sensor Management]
         WEBCAM[Webcam Interface<br/>USB Video Capture]
     end
-    
+---
     UI --> API
     API --> COORD
     API --> SYNC
     API --> PROC
     API --> QUAL
-    
+---
     WEBSOCKET <--> ANDROID
     COORD --> ANDROID
     COORD --> THERMAL
     COORD --> GSR
     COORD --> WEBCAM
-    
+---
     PROC --> BUFFER
     BUFFER --> DB
     BUFFER --> FS
     FS --> EXPORT
-    
+---
     SYNC --> QUAL
     QUAL --> PROC
-    
+---
     style UI fill:#e3f2fd
     style DB fill:#fff3e0
     style ANDROID fill:#e8f5e8
@@ -765,9 +761,7 @@ graph TB
 - Location: `docs/maintenance/system_maintenance_schedule.md`
 - Content: Regular maintenance procedures and schedules for optimal system performance
 - Expected sections: Daily checks, weekly maintenance, monthly calibration, annual updates
-
 ---
-
 ## Appendix B: User Manual
 
 ### complete User Guide for Research Operations
@@ -878,24 +872,24 @@ flowchart TD
     D -->|No| F[Quality Issue Documentation]
     F --> G[Partial Data Recovery]
     G --> E
-    
+---
     E --> H[CSV Export for Statistical Analysis]
     E --> I[JSON Export for Custom Processing]
     E --> J[MATLAB Format for Signal Processing]
     E --> K[Video Files for Manual Review]
-    
+---
     H --> L[Statistical Software Import]
     I --> M[Custom Analysis Pipeline]
     J --> N[MATLAB/Octave Processing]
     K --> O[Video Annotation Tools]
-    
+---
     L --> P[Research Analysis]
     M --> P
     N --> P
     O --> P
-    
+---
     P --> Q[Publication-Ready Results]
-    
+---
     style D fill:#fff3e0
     style P fill:#e8f5e8
     style Q fill:#e3f2fd
@@ -984,7 +978,7 @@ python -m pytest PythonApp/
 | 4                    | Configure session parameters and participant info | 3 minutes                         | Complete participant consent and setup forms  |
 | 5                    | Perform synchronisation test                      | 1 minute                          | Temporal offset within ±25ms tolerance        |
 | 6                    | Execute pre-recording quality check               | 2 minutes                         | All quality indicators show green status      |
-| **Total Setup Time** | **≤12 minutes**                                   | **Research-ready state achieved** |
+| **Total Setup Time** | **≤12 minutes**                                   | **Research-ready state achieved** | **All checks passed** |
 
 **Figure B.2: Device Setup Workflow**
 
@@ -996,23 +990,23 @@ flowchart LR
         POWER[Power On Devices<br/>⚡ Android devices<br/>⚡ Thermal cameras<br/>⚡ GSR sensors]
         CHECK[Status Check<br/>📱 Battery levels<br/>📶 Network connectivity<br/>💾 Storage capacity]
     end
-    
+---
     subgraph "System Initialisation"
         LAUNCH[Launch Application<br/>🖥️ Central controller<br/>📱 Android apps<br/>🔗 Auto-discovery]
         CONNECT[Establish Connections<br/>🌐 Network handshake<br/>🔐 Authentication<br/>⏰ Time sync]
     end
-    
+---
     subgraph "Session Configuration"
         CONFIG[Configure Session<br/>👤 Participant details<br/>📋 Protocol selection<br/>⚙️ Quality settings]
         VALIDATE[Validation Check<br/>✅ Device readiness<br/>✅ Quality metrics<br/>✅ Storage space]
     end
-    
+---
     POWER --> CHECK
     CHECK --> LAUNCH
     LAUNCH --> CONNECT
     CONNECT --> CONFIG
     CONFIG --> VALIDATE
-    
+---
     style POWER fill:#ffeb3b
     style CONNECT fill:#4caf50
     style VALIDATE fill:#2196f3
@@ -1058,9 +1052,7 @@ flowchart LR
 - Location: `templates/workflows/`
 - Content: Pre-configured workflow templates for common research scenarios
 - Expected files: `stress_response_workflow.json`, `cognitive_load_workflow.json`, `longitudinal_study_workflow.json`
-
 ---
-
 ## Appendix D: Supporting Documentation and Data
 
 ### G.1 Technical Specifications and Calibration Data
@@ -1183,9 +1175,7 @@ specifications:
 - Location: `tests/integration/test_specifications.md`
 - Content: Detailed specifications for integration testing across system components
 - Expected sections: End-to-end test scenarios, component interaction tests, failure recovery tests
-
 ---
-
 ## Appendix E: Test Results and Reports
 
 ### G.1 complete Testing Results Summary
@@ -1215,7 +1205,7 @@ graph TB
         E[Hardware Interface<br/>Coverage: 87.5%<br/>Status: ⚠️ Acceptable]
         F[Quality Assessment<br/>Coverage: 95.1%<br/>Status: ✅ Excellent]
     end
-    
+---
     style A fill:#4caf50,colour:#ffffff
     style B fill:#4caf50,colour:#ffffff
     style C fill:#8bc34a,colour:#ffffff
@@ -1274,9 +1264,7 @@ graph TB
 - Location: `test_results/benchmarks/`
 - Content: Raw performance benchmarking data and analysis across different hardware configurations
 - Expected files: `cpu_benchmark_results.csv`, `memory_benchmark_results.csv`, `network_benchmark_results.csv`
-
 ---
-
 ## Appendix F: Evaluation Data and Results
 
 ### G.1 User Experience Evaluation
@@ -1344,9 +1332,7 @@ xychart-beta
 - Content: Comparative analysis against existing systems and industry standards
 - Expected files: `commercial_system_comparison.pdf`, `academic_system_benchmarks.pdf`,
   `industry_standard_compliance.md`
-
 ---
-
 ## Appendix G: Code Listing
 
 ### G.1 Key Implementation Components
@@ -1357,9 +1343,7 @@ concepts discussed in the academic content.
 
 *Note: Code snippets are organized by reference numbers (F.1-F.177) corresponding to file mentions in the chapter
 sections. Complete source code is available in the project repository.*
-
 ---
-
 ## Chapter 1 References
 
 ### G.1 Core Application Architecture - PythonApp/application.py
@@ -1377,7 +1361,7 @@ from webcam.webcam_capture import WebcamCapture
 
 class Application(QObject):
     """Dependency injection container for backend services"""
-    
+---
     def __init__(self, use_simplified_ui=True):
         super().__init__()
         self.logger = get_logger(__name__)
@@ -1387,7 +1371,7 @@ class Application(QObject):
         self.webcam_capture = None
         self._create_services()
         self.logger.info("application initialized")
-    
+---
     def _create_services(self):
         """Create backend services with dependency injection"""
         try:
@@ -1416,12 +1400,12 @@ class EnhancedApplication:
         self.web_interface = WebInterface()
         self.flask_app = Flask(__name__)
         self._setup_routes()
-    
+---
     def _setup_routes(self):
         @self.flask_app.route('/')
         def index():
             return render_template('dashboard.html')
-        
+---
         @self.flask_app.route('/api/status')
         def status():
             return jsonify({
@@ -1440,31 +1424,31 @@ class EnhancedApplication:
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    
+---
     private lateinit var binding: ActivityMainFragmentsBinding
     private lateinit var viewModel: MainViewModelRefactored
     private lateinit var appBarConfiguration: AppBarConfiguration
-    
+---
     @Inject
     lateinit var logger: Logger
-    
+---
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+---
         binding = ActivityMainFragmentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+---
         setupViewModel()
         setupNavigation()
         observeUiState()
-        
+---
         logger.logD(TAG, "MainActivity created successfully")
     }
-    
+---
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
-        
+---
         // Initialise system health monitoring
         lifecycleScope.launch {
             viewModel.startSystemHealthMonitoring()
@@ -1481,28 +1465,28 @@ class MainActivity : AppCompatActivity() {
  */
 @HiltAndroidApp
 class MultiSensorApplication : Application() {
-    
+---
     @Inject
     lateinit var logger: Logger
-    
+---
     override fun onCreate() {
         super.onCreate()
-        
+---
         // Initialise logging system
         AppLogger.initialise(this)
-        
+---
         // Log application startup
         logger.logI(TAG, "MultiSensorApplication started")
-        
+---
         // Initialise system monitoring
         initializeSystemMonitoring()
     }
-    
+---
     private fun initializeSystemMonitoring() {
         // Setup crash reporting and performance monitoring
         logger.logD(TAG, "System monitoring initialized")
     }
-    
+---
     companion object {
         private const val TAG = "MultiSensorApp"
     }
@@ -1522,18 +1506,18 @@ from utils.logging_config import get_logger
 
 class SessionManager:
     """Session manager for coordinating multi-device recording sessions"""
-    
+---
     def __init__(self, base_recordings_dir: str = "recordings"):
         self.logger = get_logger(__name__)
         self.base_recordings_dir = Path(base_recordings_dir)
         self.current_session: Optional[Dict] = None
         self.session_history: List[Dict] = []
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
-    
+---
     def create_session(self, session_name: Optional[str] = None) -> Dict:
         """Create a new recording session with standardized structure"""
         timestamp = datetime.now()
-        
+---
         if session_name is None:
             session_id = timestamp.strftime("session_%Y%m%d_%H%M%S")
         else:
@@ -1542,10 +1526,10 @@ class SessionManager:
                 for c in session_name.replace(" ", "_")
             )
             session_id = f"{safe_name}_{timestamp.strftime('%Y%m%d_%H%M%S')}"
-        
+---
         session_dir = self.base_recordings_dir / session_id
         session_dir.mkdir(parents=True, exist_ok=True)
-        
+---
         session_info = {
             "session_id": session_id,
             "session_name": session_name,
@@ -1554,14 +1538,12 @@ class SessionManager:
             "devices": {},
             "status": "created"
         }
-        
+---
         self.current_session = session_info
         self.logger.info(f"Created session: {session_id}")
         return session_info
 ```
-
 ---
-
 ## Chapter 2 References (Literature Review Implementation)
 
 ### G.25 Hand Segmentation Computer Vision - PythonApp/hand_segmentation/hand_segmentation_processor.py
@@ -1579,7 +1561,7 @@ class HandSegmentationProcessor:
     Computer vision processor for contactless hand analysis
     Implements academic computer vision algorithms for physiological measurement
     """
-    
+---
     def __init__(self):
         self.mp_hands = mp.solutions.hands
         self.hands = self.mp_hands.Hands(
@@ -1589,38 +1571,36 @@ class HandSegmentationProcessor:
             min_tracking_confidence=0.5
         )
         self.mp_drawing = mp.solutions.drawing_utils
-        
+---
     def process_frame(self, frame: np.ndarray) -> Tuple[np.ndarray, List[Dict]]:
         """
         Process video frame for hand detection and analysis
-        
+---
         Args:
             frame: Input video frame (BGR format)
-            
+---
         Returns:
             Tuple of processed frame and hand landmarks data
         """
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = self.hands.process(rgb_frame)
-        
+---
         hand_data = []
         annotated_frame = frame.copy()
-        
+---
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
                 # Extract landmark coordinates
                 landmarks = self._extract_landmarks(hand_landmarks)
                 hand_data.append(landmarks)
-                
+---
                 # Draw landmarks on frame
                 self.mp_drawing.draw_landmarks(
                     annotated_frame, hand_landmarks, self.mp_hands.HAND_CONNECTIONS)
-        
+---
         return annotated_frame, hand_data
 ```
-
 ---
-
 ## Chapter 3 References (Requirements Implementation)
 
 ### F.45 Multi-Device Coordination - PythonApp/session/session_manager.py
@@ -1636,20 +1616,20 @@ def register_device(self, device_info: Dict) -> bool:
     if not self.current_session:
         self.logger.error("No active session for device registration")
         return False
-    
+---
     device_id = device_info.get("device_id")
     if not device_id:
         self.logger.error("Device registration missing device_id")
         return False
-    
+---
     # Validate device capabilities
     required_capabilities = ["recording", "synchronisation"]
     device_capabilities = device_info.get("capabilities", [])
-    
+---
     if not all(cap in device_capabilities for cap in required_capabilities):
         self.logger.error(f"Device {device_id} missing required capabilities")
         return False
-    
+---
     # Register device in session
     self.current_session["devices"][device_id] = {
         "info": device_info,
@@ -1657,13 +1637,11 @@ def register_device(self, device_info: Dict) -> bool:
         "status": "registered",
         "last_heartbeat": datetime.now().isoformat()
     }
-    
+---
     self.logger.info(f"Device {device_id} registered successfully")
     return True
 ```
-
 ---
-
 ## Chapter 4 References (Design Implementation)
 
 ### F.71 Dependency Injection Architecture - PythonApp/application.py
@@ -1676,35 +1654,33 @@ class ServiceContainer:
     Dependency injection container implementing IoC pattern
     Manages service lifecycle and dependencies
     """
-    
+---
     def __init__(self):
         self._services = {}
         self._singletons = {}
         self._factories = {}
-    
+---
     def register_singleton(self, service_type: type, instance):
         """Register singleton service instance"""
         self._singletons[service_type] = instance
-    
+---
     def register_factory(self, service_type: type, factory_func):
         """Register service factory function"""
         self._factories[service_type] = factory_func
-    
+---
     def get_service(self, service_type: type):
         """Resolve service instance with dependency injection"""
         if service_type in self._singletons:
             return self._singletons[service_type]
-        
+---
         if service_type in self._factories:
             instance = self._factories[service_type]()
             self._singletons[service_type] = instance
             return instance
-        
+---
         raise ValueError(f"Service {service_type} not registered")
 ```
-
 ---
-
 ## Chapter 5 References (Testing Implementation)
 
 ### G.104 Integration Testing Framework - PythonApp/test_integration_logging.py
@@ -1724,42 +1700,40 @@ class IntegrationTestFramework(unittest.TestCase):
     Integration testing with thorough validation
     Tests system components working together
     """
-    
+---
     def setUp(self):
         """Setup test environment with real components"""
         self.session_manager = SessionManager("test_recordings")
         self.device_server = JsonSocketServer(self.session_manager)
         self.test_devices = []
-    
+---
     def test_end_to_end_session_workflow(self):
         """Test complete session workflow with multiple devices"""
         # Create session
         session = self.session_manager.create_session("integration_test")
         self.assertIsNotNone(session)
-        
+---
         # Start device server
         self.device_server.start()
         time.sleep(0.1)  # Allow server to start
-        
+---
         # Simulate device connections
         device_configs = [
             {"device_id": "test_phone", "type": "android", "capabilities": ["gsr", "camera"]},
             {"device_id": "test_webcam", "type": "webcam", "capabilities": ["video"]}
         ]
-        
+---
         for config in device_configs:
             result = self.session_manager.register_device(config)
             self.assertTrue(result, f"Failed to register device {config['device_id']}")
-        
+---
         # Verify integration
         self.assertEqual(len(self.session_manager.current_session["devices"]), 2)
-        
+---
         # Cleanup
         self.device_server.stop()
 ```
-
 ---
-
 ## Chapter 6 References (Conclusions Evidence)
 
 ### G.141 Performance Benchmarking - PythonApp/production/performance_benchmark.py
@@ -1790,27 +1764,27 @@ class PerformanceBenchmark:
     System performance benchmarking with statistical reporting
     Provides evidence for system capability achievements
     """
-    
+---
     def __init__(self):
         self.logger = get_logger(__name__)
         self.metrics = {}
-    
+---
     def benchmark_operation(self, operation_name: str, operation_func, 
                           iterations: int = 100) -> PerformanceMetrics:
         """
         Benchmark an operation with statistical analysis
-        
+---
         Args:
             operation_name: Name of the operation being benchmarked
             operation_func: Function to benchmark
             iterations: Number of iterations to run
-            
+---
         Returns:
             PerformanceMetrics with statistical analysis
         """
         execution_times = []
         successes = 0
-        
+---
         for i in range(iterations):
             start_time = time.perf_counter()
             try:
@@ -1821,7 +1795,7 @@ class PerformanceBenchmark:
             finally:
                 end_time = time.perf_counter()
                 execution_times.append(end_time - start_time)
-        
+---
         # Calculate statistics
         if execution_times:
             metrics = PerformanceMetrics(
@@ -1843,7 +1817,7 @@ class PerformanceBenchmark:
                 max_time=0,
                 success_rate=0
             )
-        
+---
         self.metrics[operation_name] = metrics
         self.logger.info(f"Benchmarked {operation_name}: {metrics.mean_time:.4f}s avg, {metrics.success_rate:.2%} success")
         return metrics
@@ -1855,41 +1829,41 @@ class PerformanceBenchmark:
 class QualityAssessmentEngine {
     private val qualityMetrics = QualityMetrics()
     private val alertThresholds = QualityThresholds()
-    
+---
     fun assessFrameQuality(frame: Mat, timestamp: Long): QualityReport {
         val quality = QualityReport(timestamp)
-        
+---
         // Assess multiple quality dimensions
         quality.brightness = assessBrightness(frame)
         quality.contrast = assessContrast(frame)
         quality.sharpness = assessSharpness(frame)
         quality.noiseLevel = assessNoise(frame)
-        
+---
         // complete quality score calculation
         quality.overallScore = calculateCompositeScore(quality)
-        
+---
         // Real-time alert generation for quality issues
         if (quality.overallScore < alertThresholds.minimumAcceptable) {
             generateQualityAlert(quality)
         }
-        
+---
         // Update running statistics for trend analysis
         qualityMetrics.updateStatistics(quality)
-        
+---
         return quality
     }
-    
+---
     private fun assessSharpness(frame: Mat): Double {
         val gray = Mat()
         Imgproc.cvtColor(frame, gray, Imgproc.COLOR_BGR2GRAY)
-        
+---
         val laplacian = Mat()
         Imgproc.Laplacian(gray, laplacian, CvType.CV_64F)
-        
+---
         val mu = MatOfDouble()
         val sigma = MatOfDouble()
         Core.meanStdDev(laplacian, mu, sigma)
-        
+---
         // Return variance of Laplacian as sharpness metric
         return sigma.get(0, 0)[0].pow(2)
     }
@@ -1904,12 +1878,12 @@ class ResearchProtocolHandler:
     Handles research-specific network communication protocols
     with automatic error recovery and data integrity validation.
     """
-    
+---
     async def handle_device_message(self, websocket, message: str):
         try:
             data = json.loads(message)
             message_type = data.get('type')
-            
+---
             # Message routing with complete error handling
             match message_type:
                 case 'device_registration':
@@ -1922,13 +1896,13 @@ class ResearchProtocolHandler:
                     await self.handle_heartbeat(websocket, data)
                 case _:
                     logger.warning(f"Unknown message type: {message_type}")
-                    
+---
         except json.JSONDecodeError as e:
             await self.send_error_response(websocket, "Invalid JSON format")
         except Exception as e:
             logger.error(f"Message handling error: {e}")
             await self.handle_protocol_error(websocket, e)
-    
+---
     async def ensure_data_integrity(self, data: dict) -> bool:
         """
         Validates data integrity using checksums and consistency checks.
@@ -1939,17 +1913,17 @@ class ResearchProtocolHandler:
             calculated_checksum = hashlib.sha256(
                 json.dumps(data, sort_keys=True).encode()
             ).hexdigest()
-            
+---
             if calculated_checksum != expected_checksum:
                 logger.error("Data integrity check failed")
                 return False
-        
+---
         # Validate timestamp consistency
         timestamp = data.get('timestamp')
         if timestamp and not self.is_valid_timestamp(timestamp):
             logger.error("Invalid timestamp format")
             return False
-            
+---
         return True
 ```
 
@@ -1992,7 +1966,6 @@ maintained |
 | **Custom Research** | Specialized analysis pipelines        | Variable   | Project-specific     | Variable        |
 
 ---
-
 ## Appendix C: Supporting Documentation and Data
 
 ### Technical Specifications and Research Protocols
@@ -2032,7 +2005,11 @@ xychart-beta
 | **Emotion Recognition Validation** | 15 minutes                  | 1 participant     | High-res RGB + Thermal | Computer vision research   |
 | **Group Dynamics Study**           | 60 minutes                  | 4-12 participants | Distributed sensing    | Organizational research    |
 | **Longitudinal Monitoring**        | Multiple sessions           | 1-2 participants  | All modalities         | Clinical research          |
- adb logcat                         | grep "MultiSensorRecording" 
+
+**Debug Command:**
+
+```bash
+adb logcat | grep "MultiSensorRecording"
 
 ```
 
@@ -2054,7 +2031,7 @@ system:
     android:
       discovery_timeout: 10
       connection_retry: 3
-    
+---
     gsr_sensors:
       sampling_rate: 128
       connection_timeout: 15
@@ -2097,17 +2074,17 @@ class NewSensorDriver(BaseSensorDriver):
     def __init__(self, config):
         super().__init__(config)
         self.sensor_type = "new_sensor"
-    
+---
     async def connect(self):
         """Establish connection to sensor"""
         # Implementation specific to new sensor
         pass
-    
+---
     async def start_recording(self):
         """Begin data acquisition"""
         # Implementation with proper error handling
         pass
-    
+---
     def process_data(self, raw_data):
         """Convert raw data to standard format"""
         # Standardisation for compatibility
@@ -2126,7 +2103,7 @@ class ProtocolExtension:
         'new_sensor_data': 'NEW_SENSOR_DATA',
         'new_command': 'NEW_COMMAND'
     }
-    
+---
     def handle_new_message(self, message):
         """Process new message types"""
         # Implementation following established patterns
@@ -2165,9 +2142,7 @@ python -m tools.gsr_diagnostic --device-id [DEVICE_ID]
 # Thermal camera diagnostics
 python -m tools.thermal_diagnostic --usb-port [PORT]
 ```
-
 ---
-
 ## Appendix B: User Manual
 
 ### complete Guide for System Operation
@@ -2190,13 +2165,13 @@ begins.
     - Test GSR sensor battery levels (minimum 70% charge required)
     - Validate central controller network connectivity
 
-2. **Software Initialisation** (Estimated time: 3 minutes)
+1. **Software Initialisation** (Estimated time: 3 minutes)
     - Launch Python controller application
     - Verify device discovery and connection status
     - Confirm sensor calibration status
     - Test communication pathways with all devices
 
-3. **Environmental Setup** (Estimated time: 2 minutes)
+1. **Environmental Setup** (Estimated time: 2 minutes)
     - Position devices according to experimental protocol
     - Verify adequate lighting conditions for RGB capture
     - Confirm thermal imaging field of view
@@ -2228,19 +2203,19 @@ research teams. The procedures balance experimental rigor with practical usabili
     - Verify informed consent documentation
     - Conduct baseline measurement validation
 
-2. **System Initialisation** (2 minutes)
+1. **System Initialisation** (2 minutes)
     - Start central controller application
     - Verify device connectivity (expect 100% connection rate)
     - Confirm synchronisation accuracy (target: ±5ms)
     - Initialise recording buffers
 
-3. **Data Collection** (Variable duration)
+1. **Data Collection** (Variable duration)
     - Begin coordinated recording across all devices
     - Monitor real-time quality indicators
     - Ensure continuous data flow validation
     - Maintain participant comfort and engagement
 
-4. **Session Completion** (3 minutes)
+1. **Session Completion** (3 minutes)
     - Stop recording on all devices simultaneously
     - Verify data integrity and completeness
     - Export data in standardized formats
@@ -2308,9 +2283,7 @@ python -m analysis.validate_session --session-id [SESSION_ID]
 # - Data completeness: ≥99% valid samples
 # - Quality metrics: Within specified thresholds
 ```
-
 ---
-
 ## Appendix C: Supporting Documentation and Data
 
 ### Technical Specifications and Reference Materials
@@ -2426,9 +2399,7 @@ requirements. The schema supports future protocol extensions without breaking ba
   }
 }
 ```
-
 ---
-
 ## Appendix E: Test Results and Reports
 
 ### complete Testing Validation Results
@@ -2532,12 +2503,12 @@ Data Integrity Test Results:
     - Impact: System performance under maximum stress conditions not fully validated
     - Next Steps: Optimise memory management and concurrent session handling
 
-2. **Network Resilience Testing**: Failed with exit code 1 after 104.99 seconds
+1. **Network Resilience Testing**: Failed with exit code 1 after 104.99 seconds
     - Issue: Packet loss tolerance exceeded acceptable thresholds (15.7% vs 5% target)
     - Impact: Performance degradation under high packet loss conditions
     - Next Steps: Enhance packet loss recovery and retry mechanisms
 
-3. **complete Recording Session**: Failed with exit code 1 after 0.39 seconds
+1. **complete Recording Session**: Failed with exit code 1 after 0.39 seconds
     - Issue: Complex integration scenario rapid failure
     - Impact: End-to-end recording workflow needs refinement
     - Next Steps: Enhanced error handling and dependency management
@@ -2640,9 +2611,7 @@ Results demonstrate research-grade measurement accuracy
 suitable for psychophysiological research applications.
 
 ```
-
 ---
-
 ## Appendix F: Evaluation Data and Results
 
 ### complete System Evaluation and Validation Analysis
@@ -2795,9 +2764,7 @@ Research Productivity Impact:
   distributed research across multiple institutions
 
 ```
-
 ---
-
 ## Appendix G: Code Listing
 
 ### Code Implementation References and Detailed Snippets
@@ -2807,9 +2774,7 @@ This section provides complete code snippets for all files referenced throughout
 The code snippets are organized by reference numbers (F.1-F.177) as cited in the chapter sections. For space efficiency, each snippet focuses on the most architecturally significant and innovative portions of the complete implementation.
 
 *Note: Complete source code with full implementations is available in the project repository at `PythonApp/` and `AndroidApp/` directories.*
-
 ---
-
 ## F.1-F.24 Chapter 1 Implementation References
 
 ### G.1 Core Application Architecture - PythonApp/application.py
@@ -2836,7 +2801,7 @@ from gui.simplified_main_window import SimplifiedMainWindow
 
 class Application(QObject):
     """dependency injection container for backend services"""
-    
+---
     def __init__(self, use_simplified_ui=True):
         super().__init__()
         self.logger = get_logger(__name__)
@@ -2847,11 +2812,11 @@ class Application(QObject):
         self.stimulus_controller = None
         self.main_controller = None
         self.main_window = None
-        
+---
         # Create backend services with dependency injection
         self._create_services()
         self.logger.info("application initialized")
-    
+---
     def _create_services(self):
         """Create backend services with dependency injection"""
         try:
@@ -2860,7 +2825,7 @@ class Application(QObject):
             self.json_server = JsonSocketServer(session_manager=self.session_manager)
             self.webcam_capture = WebcamCapture()
             self.stimulus_controller = StimulusController()
-            
+---
             # Initialise main controller with service dependencies
             self.main_controller = MainController(
                 session_manager=self.session_manager,
@@ -2868,7 +2833,7 @@ class Application(QObject):
                 webcam_capture=self.webcam_capture,
                 stimulus_controller=self.stimulus_controller
             )
-            
+---
         except Exception as e:
             self.logger.error(f"failed to create services: {e}")
             raise
@@ -2881,21 +2846,21 @@ class Application(QObject):
 
 class SessionManager:
     """Session manager for coordinating multi-device recording sessions"""
-    
+---
     def __init__(self, base_recordings_dir: str = "recordings"):
         self.logger = get_logger(__name__)
         self.base_recordings_dir = Path(base_recordings_dir)
         self.current_session: Optional[Dict] = None
         self.session_history: List[Dict] = []
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
-    
+---
     def create_session(self, session_name: Optional[str] = None) -> Dict:
         """Create a new recording session with standardized structure"""
         timestamp = datetime.now()
         session_id = self._generate_session_id(session_name, timestamp)
         session_dir = self.base_recordings_dir / session_id
         session_dir.mkdir(parents=True, exist_ok=True)
-        
+---
         session_info = {
             "session_id": session_id,
             "session_name": session_name,
@@ -2904,7 +2869,7 @@ class SessionManager:
             "devices": {},
             "status": "created"
         }
-        
+---
         self.current_session = session_info
         self.logger.info(f"Created session: {session_id}")
         return session_info
@@ -2924,21 +2889,21 @@ class ConnectionManager @Inject constructor(
     private val isConnected = AtomicBoolean(false)
     private val connectionState = MutableStateFlow(ConnectionState.DISCONNECTED)
     private var socket: Socket? = null
-    
+---
     suspend fun connectToPC(ipAddress: String, port: Int): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             logger.logI(TAG, "Attempting connection to $ipAddress:$port")
-            
+---
             socket = Socket().apply {
                 soTimeout = CONNECTION_TIMEOUT_MS
                 connect(InetSocketAddress(ipAddress, port), CONNECTION_TIMEOUT_MS)
             }
-            
+---
             isConnected.set(true)
             connectionState.value = ConnectionState.CONNECTED
             logger.logI(TAG, "Successfully connected to PC")
             Result.success(Unit)
-            
+---
         } catch (e: Exception) {
             logger.logE(TAG, "Connection failed", e)
             Result.failure(e)
@@ -2946,9 +2911,7 @@ class ConnectionManager @Inject constructor(
     }
 }
 ```
-
 ---
-
 ## F.25-F.44 Chapter 2 Literature Review Implementation
 
 ### G.25 Computer Vision Pipeline - PythonApp/hand_segmentation/hand_segmentation_processor.py
@@ -2958,7 +2921,7 @@ class ConnectionManager @Inject constructor(
 
 class HandSegmentationProcessor:
     """Computer vision processor implementing academic CV algorithms"""
-    
+---
     def __init__(self):
         self.mp_hands = mp.solutions.hands
         self.hands = self.mp_hands.Hands(
@@ -2967,21 +2930,21 @@ class HandSegmentationProcessor:
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5
         )
-        
+---
     def process_frame(self, frame: np.ndarray) -> Tuple[np.ndarray, List[Dict]]:
         """Process video frame for hand detection and physiological analysis"""
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = self.hands.process(rgb_frame)
-        
+---
         hand_data = []
         annotated_frame = frame.copy()
-        
+---
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
                 landmarks = self._extract_landmarks(hand_landmarks)
                 physiological_data = self._compute_physiological_metrics(landmarks)
                 hand_data.append(physiological_data)
-                
+---
         return annotated_frame, hand_data
 ```
 
@@ -2992,7 +2955,7 @@ class HandSegmentationProcessor:
 
 class JsonSocketServer:
     """Asynchronous JSON socket server for distributed device coordination"""
-    
+---
     def __init__(self, session_manager, host="localhost", port=12345):
         self.session_manager = session_manager
         self.host = host
@@ -3001,40 +2964,38 @@ class JsonSocketServer:
         self.connected_clients = {}
         self.message_handlers = {}
         self._setup_message_handlers()
-    
+---
     async def start_server(self):
         """Start the asynchronous server with connection management"""
         self.server = await asyncio.start_server(
             self.handle_client_connection, self.host, self.port
         )
         logger.info(f"JSON socket server started on {self.host}:{self.port}")
-    
+---
     async def handle_client_connection(self, reader, writer):
         """Handle individual client connections with protocol management"""
         client_addr = writer.get_extra_info('peername')
         logger.info(f"Client connected from {client_addr}")
-        
+---
         try:
             while True:
                 data = await reader.read(1024)
                 if not data:
                     break
-                    
+---
                 message = json.loads(data.decode())
                 response = await self.process_message(message)
-                
+---
                 writer.write(json.dumps(response).encode())
                 await writer.drain()
-                
+---
         except Exception as e:
             logger.error(f"Error handling client {client_addr}: {e}")
         finally:
             writer.close()
             await writer.wait_closed()
 ```
-
 ---
-
 ## F.45-F.70 Chapter 3 Requirements Implementation
 
 ### F.45 Multi-Device Coordination (FR-001) - PythonApp/session/session_manager.py
@@ -3047,19 +3008,19 @@ def register_device(self, device_info: Dict) -> bool:
     if not self.current_session:
         self.logger.error("No active session for device registration")
         return False
-    
+---
     device_id = device_info.get("device_id")
     if not device_id:
         return False
-    
+---
     # Validate device capabilities for multi-device coordination
     required_capabilities = ["recording", "synchronisation", "communication"]
     device_capabilities = device_info.get("capabilities", [])
-    
+---
     if not all(cap in device_capabilities for cap in required_capabilities):
         self.logger.error(f"Device {device_id} missing required capabilities")
         return False
-    
+---
     # Register device with coordination metadata
     self.current_session["devices"][device_id] = {
         "info": device_info,
@@ -3068,7 +3029,7 @@ def register_device(self, device_info: Dict) -> bool:
         "coordination_role": device_info.get("role", "participant"),
         "sync_capabilities": device_capabilities
     }
-    
+---
     return True
 ```
 
@@ -3079,48 +3040,46 @@ def register_device(self, device_info: Dict) -> bool:
 
 class SessionSynchronizer:
     """Multi-device temporal synchronisation with research-grade precision"""
-    
+---
     def __init__(self):
         self.master_clock = time.time()
         self.device_offsets = {}
         self.sync_precision_target = 1e-6  # 1 microsecond precision (NFR-002)
-        
+---
     async def synchronize_device(self, device_id: str) -> Dict:
         """Achieve microsecond precision synchronisation with device"""
         sync_samples = []
-        
+---
         # Multiple synchronisation rounds for precision
         for i in range(10):
             t1 = time.perf_counter()
             device_time = await self._request_device_time(device_id)
             t2 = time.perf_counter()
-            
+---
             # Calculate round-trip latency compensation
             network_latency = (t2 - t1) / 2
             corrected_time = device_time + network_latency
             offset = self.master_clock - corrected_time
-            
+---
             sync_samples.append(offset)
-        
+---
         # Statistical analysis for precision validation
         mean_offset = statistics.mean(sync_samples)
         std_deviation = statistics.stdev(sync_samples)
-        
+---
         # Verify precision meets NFR-002 requirement
         precision_achieved = std_deviation < self.sync_precision_target
-        
+---
         self.device_offsets[device_id] = {
             "offset": mean_offset,
             "precision": std_deviation,
             "meets_requirement": precision_achieved,
             "samples": len(sync_samples)
         }
-        
+---
         return self.device_offsets[device_id]
 ```
-
 ---
-
 ## F.71-F.103 Chapter 4 Design Implementation
 
 ### F.71 IoC Pattern Implementation - PythonApp/application.py
@@ -3130,34 +3089,34 @@ class SessionSynchronizer:
 
 class ServiceContainer:
     """Dependency injection container implementing IoC pattern"""
-    
+---
     def __init__(self):
         self._services = {}
         self._singletons = {}
         self._factories = {}
         self._initialization_order = []
-    
+---
     def register_singleton(self, service_type: type, instance):
         """Register singleton service with lifecycle management"""
         self._singletons[service_type] = instance
         self._initialization_order.append(service_type)
-    
+---
     def register_factory(self, service_type: type, factory_func):
         """Register service factory with lazy instantiation"""
         self._factories[service_type] = factory_func
-    
+---
     def get_service(self, service_type: type):
         """Resolve service with dependency injection"""
         if service_type in self._singletons:
             return self._singletons[service_type]
-        
+---
         if service_type in self._factories:
             instance = self._factories[service_type]()
             self._singletons[service_type] = instance
             return instance
-        
+---
         raise ServiceNotRegisteredException(f"Service {service_type} not registered")
-    
+---
     def initialize_all_services(self):
         """Initialise all registered services in dependency order"""
         for service_type in self._initialization_order:
@@ -3174,7 +3133,7 @@ class ServiceContainer:
 
 class DistributedCoordinationProtocol:
     """Advanced network protocol for distributed device coordination"""
-    
+---
     def __init__(self):
         self.protocol_version = "1.2"
         self.message_types = {
@@ -3183,35 +3142,33 @@ class DistributedCoordinationProtocol:
             "DATA_STREAM": self._handle_data_streaming,
             "HEARTBEAT": self._handle_heartbeat
         }
-        
+---
     async def process_message(self, message: Dict, client_writer) -> Dict:
         """Process incoming message with protocol validation"""
         try:
             # Validate message structure
             if not self._validate_message_structure(message):
                 return self._create_error_response("INVALID_MESSAGE_FORMAT")
-            
+---
             message_type = message.get("type")
             if message_type not in self.message_types:
                 return self._create_error_response("UNKNOWN_MESSAGE_TYPE")
-            
+---
             # Route to appropriate handler
             handler = self.message_types[message_type]
             response = await handler(message, client_writer)
-            
+---
             # Add protocol metadata
             response["protocol_version"] = self.protocol_version
             response["timestamp"] = time.time()
-            
+---
             return response
-            
+---
         except Exception as e:
             logger.error(f"Protocol error: {e}")
             return self._create_error_response("INTERNAL_PROTOCOL_ERROR")
 ```
-
 ---
-
 ## F.104-F.140 Chapter 5 Testing Implementation
 
 ### G.104 Integration Testing Framework - PythonApp/test_integration_logging.py
@@ -3221,43 +3178,43 @@ class DistributedCoordinationProtocol:
 
 class IntegrationTestFramework(unittest.TestCase):
     """Multi-component integration testing with statistical validation"""
-    
+---
     def setUp(self):
         """Setup thorough test environment"""
         self.session_manager = SessionManager("test_recordings")
         self.device_server = JsonSocketServer(self.session_manager)
         self.performance_metrics = []
         self.test_start_time = time.time()
-        
+---
     def test_end_to_end_multi_device_workflow(self):
         """Test complete workflow with statistical validation"""
         # Performance benchmark
         start_time = time.perf_counter()
-        
+---
         # Create session with validation
         session = self.session_manager.create_session("integration_test")
         self.assertIsNotNone(session)
         self.assertEqual(session["status"], "created")
-        
+---
         # Device registration workflow
         test_devices = self._create_test_devices(count=3)
         registration_times = []
-        
+---
         for device in test_devices:
             reg_start = time.perf_counter()
             result = self.session_manager.register_device(device)
             reg_end = time.perf_counter()
-            
+---
             self.assertTrue(result, f"Device {device['device_id']} registration failed")
             registration_times.append(reg_end - reg_start)
-        
+---
         # Statistical validation of performance
         mean_reg_time = statistics.mean(registration_times)
         self.assertLess(mean_reg_time, 0.1, "Device registration exceeds performance threshold")
-        
+---
         # Validate session state
         self.assertEqual(len(self.session_manager.current_session["devices"]), 3)
-        
+---
         # Record performance metrics
         total_time = time.perf_counter() - start_time
         self.performance_metrics.append({
@@ -3275,38 +3232,38 @@ class IntegrationTestFramework(unittest.TestCase):
 
 class PerformanceBenchmark:
     """complete performance measurement for system validation"""
-    
+---
     def __init__(self):
         self.logger = get_logger(__name__)
         self.metrics = {}
         self.confidence_level = 0.95
-        
+---
     def benchmark_session_creation(self, iterations: int = 100) -> Dict:
         """Benchmark session creation with statistical analysis"""
         execution_times = []
         memory_usage = []
-        
+---
         for i in range(iterations):
             # Memory before
             process = psutil.Process()
             mem_before = process.memory_info().rss
-            
+---
             # Benchmark operation
             start_time = time.perf_counter()
             session_manager = SessionManager()
             session = session_manager.create_session(f"benchmark_session_{i}")
             end_time = time.perf_counter()
-            
+---
             # Memory after
             mem_after = process.memory_info().rss
-            
+---
             execution_times.append(end_time - start_time)
             memory_usage.append(mem_after - mem_before)
-        
+---
         # Statistical analysis
         stats = self._calculate_confidence_intervals(execution_times)
         memory_stats = self._calculate_confidence_intervals(memory_usage)
-        
+---
         return {
             "operation": "session_creation",
             "iterations": iterations,
@@ -3314,15 +3271,15 @@ class PerformanceBenchmark:
             "memory_stats": memory_stats,
             "performance_grade": self._calculate_performance_grade(stats)
         }
-    
+---
     def _calculate_confidence_intervals(self, data: List[float]) -> Dict:
         """Calculate statistical confidence intervals"""
         mean = statistics.mean(data)
         std_dev = statistics.stdev(data) if len(data) > 1 else 0
-        
+---
         # 95% confidence interval
         margin_error = 1.96 * (std_dev / math.sqrt(len(data)))
-        
+---
         return {
             "mean": mean,
             "std_deviation": std_dev,
@@ -3332,9 +3289,7 @@ class PerformanceBenchmark:
             "median": statistics.median(data)
         }
 ```
-
 ---
-
 ## F.141-F.177 Chapter 6 Conclusions Evidence
 
 ### G.141 System Achievement Validation - PythonApp/production/performance_benchmark.py
@@ -3344,11 +3299,11 @@ class PerformanceBenchmark:
 
 class SystemAchievementValidator:
     """Validates and demonstrates system achievements with quantitative evidence"""
-    
+---
     def __init__(self):
         self.achievement_metrics = {}
         self.validation_results = {}
-        
+---
     def validate_multi_device_coordination_achievement(self) -> Dict:
         """Validate achievement of multi-device coordination capability"""
         test_scenarios = [
@@ -3356,15 +3311,15 @@ class SystemAchievementValidator:
             {"device_count": 5, "expected_sync_precision": 1e-6},
             {"device_count": 10, "expected_sync_precision": 1e-5}
         ]
-        
+---
         results = []
         for scenario in test_scenarios:
             result = self._test_device_coordination(scenario)
             results.append(result)
-        
+---
         # Calculate achievement score
         success_rate = sum(1 for r in results if r["success"]) / len(results)
-        
+---
         achievement = {
             "capability": "multi_device_coordination",
             "success_rate": success_rate,
@@ -3372,7 +3327,7 @@ class SystemAchievementValidator:
             "precision_achieved": min(r["precision"] for r in results if r["success"]),
             "achievement_validated": success_rate >= 0.8
         }
-        
+---
         self.achievement_metrics["multi_device_coordination"] = achievement
         return achievement
 ```
@@ -3384,19 +3339,19 @@ class SystemAchievementValidator:
 
 class ComprehensiveTestAnalyzer:
     """Statistical analysis of system performance and achievement validation"""
-    
+---
     def __init__(self):
         self.test_results = {}
         self.confidence_level = 0.95
-        
+---
     def analyze_system_performance(self, test_data: Dict) -> Dict:
         """complete statistical analysis of system capabilities"""
         performance_analysis = {}
-        
+---
         for component, data in test_data.items():
             if not data:
                 continue
-                
+---
             # Calculate complete statistics
             stats = {
                 "mean": statistics.mean(data),
@@ -3406,35 +3361,33 @@ class ComprehensiveTestAnalyzer:
                 "max": max(data),
                 "sample_size": len(data)
             }
-            
+---
             # Calculate confidence intervals
             if len(data) > 1:
                 confidence_interval = self._calculate_confidence_interval(data)
                 stats["confidence_interval_95"] = confidence_interval
-            
+---
             # Performance grade based on requirements
             grade = self._calculate_performance_grade(component, stats)
             stats["performance_grade"] = grade
-            
+---
             performance_analysis[component] = stats
-        
+---
         # Overall system score
         overall_score = self._calculate_overall_system_score(performance_analysis)
         performance_analysis["overall_system_score"] = overall_score
-        
+---
         return performance_analysis
-    
+---
     def _calculate_confidence_interval(self, data: List[float]) -> Tuple[float, float]:
         """Calculate 95% confidence interval for data"""
         mean = statistics.mean(data)
         std_error = statistics.stdev(data) / math.sqrt(len(data))
         margin_error = 1.96 * std_error  # 95% confidence level
-        
+---
         return (mean - margin_error, mean + margin_error)
 ```
-
 ---
-
 ## Additional Code References Summary
 
 The remaining code references (F.146-F.177) follow similar patterns, implementing:
@@ -3474,7 +3427,7 @@ provided in sections F.1-F.177 as referenced.*
 
 ## References
 
-[Android2023] Google LLC. "Android Developers Documentation - Complete Reference." https://developer.android.com/, 2023.
+[Android2023] Google LLC. "Android Developers Documentation - Complete Reference." <https://developer.android.com/>, 2023.
 
 [Blanchette2008] Blanchette, J., & Summerfield, M. "C++ GUI Programming with Qt 4, 2nd Edition." Prentice Hall, 2008.
 
@@ -3485,13 +3438,13 @@ provided in sections F.1-F.177 as referenced.*
 [Goodrich2013] Goodrich, M. T., Tamassia, R., & Goldwasser, M. H. "Data Structures and Algorithms in Java, 6th Edition."
 John Wiley & Sons, 2013.
 
-[Kotlin2023] JetBrains. "Kotlin Programming Language Documentation." https://kotlinlang.org/docs/, 2023.
+[Kotlin2023] JetBrains. "Kotlin Programming Language Documentation." <https://kotlinlang.org/docs/>, 2023.
 
 [Lutz2013] Lutz, M. "Learning Python, 5th Edition." O'Reilly Media, 2013.
 
 [Phillips2016] Phillips, D. "Python 3 Object-Oriented Programming, 2nd Edition." Packt Publishing, 2016.
 
-[Python2023] Python Software Foundation. "Python 3.11 Documentation." https://docs.python.org/3/, 2023.
+[Python2023] Python Software Foundation. "Python 3.11 Documentation." <https://docs.python.org/3/>, 2023.
 
 [Ramalho2015] Ramalho, L. "Fluent Python: Clear, Concise, and Effective Programming." O'Reilly Media, 2015.
 
@@ -3520,9 +3473,7 @@ Starch Press, 2015.
 - Location: `docs/development/development_workflow.md`
 - Content: Step-by-step development workflow for contributors
 - Expected sections: Git workflow, testing procedures, code review process, release procedures
-
 ---
-
 ## Appendix H: Missing Diagrams and Visual Content
 
 ### H.1 Missing Diagram Inventory
@@ -3742,11 +3693,11 @@ For academic submission, the following diagram categories should be prioritized:
     - Traditional vs. contactless comparison for establishing research motivation
     - Requirements dependency network for systematic analysis demonstration
 
-2. **Testing Framework Diagrams** (Chapter 5)
+1. **Testing Framework Diagrams** (Chapter 5)
     - Multi-layered testing architecture for methodology validation
     - Performance benchmark visualizations for quantitative evidence
 
-3. **Achievement Visualisation** (Chapter 6)
+1. **Achievement Visualisation** (Chapter 6)
     - Goal achievement timeline for research contribution demonstration
     - Performance excellence metrics for academic impact assessment
 
@@ -3760,6 +3711,4 @@ For academic submission, the following diagram categories should be prioritized:
 **Estimated effort for complete diagram creation**: 40-60 hours
 **Minimum viable diagram set**: 12 diagrams (covering Chapter 3 and key Chapter 5 visualizations)
 **Academic submission readiness**: Requires completion of Chapter 3 and Chapter 5 diagram sets
-
 ---
-

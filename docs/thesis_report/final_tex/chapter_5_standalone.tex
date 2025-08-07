@@ -338,12 +338,12 @@ targets that the system needed to meet or exceed during testing:
 %   \textbf{Reliability   Extended       System         \$\geq\$99.5% uptime  Long-duration
 %   Testing}       operation      availability   during testing continuous
 %                                                                stress testing
-% 
+%
 %   \textbf{Accuracy      All            Measurement    \$\leq\$5 ms time     Comparative
 %   Testing}       measurement    precision      sync error,    analysis with
 %                   modalities                    \$\leq\$0.1 \textdegree C        reference
 %                                                 thermal        standards
-%                                                 accuracy       
+%                                                 accuracy
   ------------------------------------------------------------------------------------------------------------------
 
 \textbf{Coverage Target Justification:} These coverage targets reflect the
@@ -857,7 +857,8 @@ programmatically.
                 'stress': StressTestEnvironment()
             }
 
-        async def setup\_environment(self, test\_type: str, config: TestConfig) -> TestEnvironment:
+        async def setup\_environment(self, test\_type: str, config: TestConfig) ->
+        TestEnvironment:
             """Setup test environment with appropriate configuration and resources."""
             environment = self.environments[test\_type]
             try:
@@ -958,7 +959,8 @@ example of such a test class:
                 colorFormat = ColorFormat.YUV\_420\_888
             )
             \texttt{when}(configValidator.validate(validConfig)).thenReturn(ValidationResult.success())
-            \texttt{when}(cameraManager.openCamera(any(), any(), any())).thenAnswer { invocation ->
+            \texttt{when}(cameraManager.openCamera(any(), any(), any())).thenAnswer {
+            invocation ->
                 // Simulate camera opening successfully by immediately calling onOpened callback
                 val callback = invocation.getArgument<CameraDevice.StateCallback>(1)
                 callback.onOpened(mockCameraDevice)
@@ -990,7 +992,8 @@ example of such a test class:
 
             // Assert
             assertTrue(result.isFailure)
-            assertEquals("Invalid configuration: $validationErrors", result.exceptionOrNull()?.message)
+            assertEquals("Invalid configuration: $validationErrors",
+            result.exceptionOrNull()?.message)
         }
 
         @Test
@@ -1007,7 +1010,7 @@ example of such a test class:
             val resultSecond = secondRecording.await()
 
             // Assert
-            assertTrue(resultSecond.isFailure) 
+            assertTrue(resultSecond.isFailure)
             // e.g., second attempt returns failure indicating a recording is already in progress
             assertEquals(1, failureCount, "Second recording should fail")
         }
@@ -1079,7 +1082,8 @@ the sensor.
         }
 
         @Test
-        fun \texttt{connection to Shimmer device should configure sensors correctly}() = runTest {
+        fun \texttt{connection to Shimmer device should configure sensors
+        correctly}() = runTest {
             // Arrange
             val mockDevice = createMockBluetoothDevice("Shimmer\_1234")
             val mockShimmer = mock<Shimmer>()
@@ -1095,7 +1099,7 @@ the sensor.
             assertTrue(result.isSuccess)
             verify(mockShimmer).connect()
             verify(mockShimmer).configureSensors(argThat { config ->
-                config.contains(ShimmerSensor.GSR) && 
+                config.contains(ShimmerSensor.GSR) &&
                 config.contains(ShimmerSensor.ACCELEROMETER)
             })
         }
@@ -1127,7 +1131,8 @@ which provides powerful features for fixtures, parametrization, and
 async testing. Many components of the Python app are asynchronous (for
 example, waiting for network messages or sensor data), so we utilized
 \texttt{pytest-asyncio} to write async test functions. We also used the
-built-in \texttt{unittest.mock} library (via \texttt{patch}, \texttt{Mock}, \texttt{AsyncMock},
+built-in \texttt{unittest.mock} library (via \texttt{patch}, \texttt{Mock},
+\texttt{AsyncMock},
 etc.) to isolate units.
 
 \subsubsection{Calibration System Tests}
@@ -1162,7 +1167,8 @@ cases.
                 images.append(image)
             return images
 
-        def test\_camera\_calibration\_with\_sufficient\_images(self, calibration\_manager, sample\_calibration\_images):
+        def test\_camera\_calibration\_with\_sufficient\_images(self,
+        calibration\_manager, sample\_calibration\_images):
             """Test successful calibration with sufficient number of images."""
             # Arrange
             pattern\_config = PatternConfig(
@@ -1173,7 +1179,7 @@ cases.
 
             # Act
             result = calibration\_manager.perform\_camera\_calibration(
-                sample\_calibration\_images, 
+                sample\_calibration\_images,
                 pattern\_config
             )
 
@@ -1182,12 +1188,14 @@ cases.
             assert result.intrinsic\_matrix is not None
             assert result.distortion\_coefficients is not None
             assert result.reprojection\_error < 1.0  # Sub-pixel accuracy threshold
-            assert len(result.quality\_metrics) > 0   # Some quality metrics (e.g., per-view error) should be reported
+            assert len(result.quality\_metrics) > 0 # Some quality metrics (e.g.,
+            per-view error) should be reported
 
         def test\_calibration\_with\_insufficient\_images(self, calibration\_manager):
             """Test calibration failure when providing too few images."""
             # Arrange
-            insufficient\_images = [np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8) for \_ in range(3)]
+            insufficient\_images = [np.random.randint(0, 255, (480, 640, 3),
+            dtype=np.uint8) for \_ in range(3)]
             pattern\_config = PatternConfig(
                 pattern\_type=PatternType.CHESSBOARD,
                 pattern\_size=(9, 6),
@@ -1196,7 +1204,7 @@ cases.
 
             # Act
             result = calibration\_manager.perform\_camera\_calibration(
-                insufficient\_images, 
+                insufficient\_images,
                 pattern\_config
             )
 
@@ -1205,10 +1213,12 @@ cases.
             assert "insufficient" in result.error\_message.lower()
 
         @patch('src.calibration.calibration\_processor.cv2.findChessboardCorners')
-        def test\_pattern\_detection\_failure\_handling(self, mock\_find\_corners, calibration\_manager, sample\_calibration\_images):
+        def test\_pattern\_detection\_failure\_handling(self, mock\_find\_corners,
+        calibration\_manager, sample\_calibration\_images):
             """Test handling of pattern detection failures."""
             # Arrange
-            mock\_find\_corners.return\_value = (False, None)  # Simulate OpenCV failing to find pattern
+            mock\_find\_corners.return\_value = (False, None) # Simulate OpenCV
+            failing to find pattern
             pattern\_config = PatternConfig(
                 pattern\_type=PatternType.CHESSBOARD,
                 pattern\_size=(9, 6),
@@ -1217,7 +1227,7 @@ cases.
 
             # Act
             result = calibration\_manager.perform\_camera\_calibration(
-                sample\_calibration\_images, 
+                sample\_calibration\_images,
                 pattern\_config
             )
 
@@ -1298,7 +1308,8 @@ required precision.
             for device in mock\_devices:
                 # The device's own timestamp plus some small network delay
                 device.send\_sync\_request.return\_value = SyncResponse(
-                    device\_timestamp=reference\_time + random.uniform(-0.001, 0.001),  # within 1ms of reference
+                    device\_timestamp=reference\_time + random.uniform(-0.001,
+                    0.001), # within 1ms of reference
                     response\_time=time.time() + 0.01  # simulate ~10ms round-trip
                 )
             sync\_engine.devices = mock\_devices
@@ -1332,8 +1343,10 @@ required precision.
 
             # Assert
             assert sync\_results.success  # overall sync can still succeed
-            assert "device\_0" in sync\_results.warnings  # a warning or note about the timed-out device
-            # The other devices should have been synchronized (e.g., check their offsets are set, not shown here)
+            assert "device\_0" in sync\_results.warnings # a warning or note about
+            the timed-out device
+            # The other devices should have been synchronized (e.g., check their
+            offsets are set, not shown here)
 
 In these tests: - We create mock device objects that have an async
 method \texttt{send\_sync\_request}, which represents asking the device to
@@ -1578,7 +1591,8 @@ For example, one full system test scenario we executed was a
             # Set up 4 simulated Android devices
             await system.setup\_android\_simulators(count=4)
             # Configure a controlled network environment (latency, bandwidth)
-            await system.configure\_network(bandwidth=100\_000\_000, latency=10, packet\_loss=0.1)
+            await system.configure\_network(bandwidth=100\_000\_000, latency=10,
+            packet\_loss=0.1)
             yield system
             # Cleanup after test
             await system.cleanup()
@@ -1605,10 +1619,12 @@ For example, one full system test scenario we executed was a
             assert prep\_result.success
             assert len(prep\_result.ready\_devices) == 4
 
-            # Phase 2: Calibration Verification (e.g., check all devices calibrated their thermal camera)
+            # Phase 2: Calibration Verification (e.g., check all devices calibrated
+            their thermal camera)
             calibration\_status = await system.verify\_calibration\_status()
             assert calibration\_status.all\_devices\_calibrated
-            assert calibration\_status.calibration\_quality >= 0.8  # e.g., all calibrations at least 80% quality score
+            assert calibration\_status.calibration\_quality >= 0.8 # e.g., all
+            calibrations at least 80% quality score
 
             # Phase 3: Session Execution
             session\_result = await system.execute\_research\_session(research\_config)
@@ -1618,8 +1634,10 @@ For example, one full system test scenario we executed was a
             # Phase 4: Data Validation
             validation\_result = await system.validate\_collected\_data()
             assert validation\_result.temporal\_consistency  # timestamps aligned
-            assert validation\_result.data\_completeness >= 0.99  # at least 99% of expected data present
-            assert validation\_result.signal\_quality >= research\_config.quality\_requirements.min\_signal\_quality
+            assert validation\_result.data\_completeness >= 0.99 # at least 99% of
+            expected data present
+            assert validation\_result.signal\_quality >=
+            research\_config.quality\_requirements.min\_signal\_quality
 
             # Phase 5: Export Verification
             export\_result = await system.export\_session\_data()
@@ -1704,7 +1722,8 @@ across all data sources:
         async def test\_temporal\_synchronization\_accuracy(self):
             """Test temporal synchronization accuracy across all data sources."""
             session = TestSession()
-            await session.start\_recording(duration=60)  # record for 60 seconds with, say, 2 devices
+            await session.start\_recording(duration=60) # record for 60 seconds with,
+            say, 2 devices
             # Collect temporal logs from all sources
             temporal\_data = await session.extract\_temporal\_data()
 
@@ -1720,7 +1739,8 @@ across all data sources:
             for source in temporal\_data.sources:
                 timestamps = temporal\_data.get\_timestamps(source)
                 gaps = self.\_calculate\_timestamp\_gaps(timestamps)
-                assert all(gap > 0 for gap in gaps), "No non-positive timestamp gaps (monotonic increase)"
+                assert all(gap > 0 for gap in gaps), "No non-positive timestamp gaps
+                (monotonic increase)"
 
         # helper for gaps
         def \_calculate\_timestamp\_gaps(self, timestamps):
@@ -1745,8 +1765,10 @@ quality analyzer:
     # Analyze GSR signal quality
     gsr\_quality = GSRQualityAnalyzer().analyze(recorded\_gsr\_samples)
     assert gsr\_quality.signal\_to\_noise\_ratio > 20  # >20 dB SNR required
-    assert gsr\_quality.sampling\_rate\_consistency > 0.99  # >99% of samples at correct rate
-    assert gsr\_quality.baseline\_stability > 0.8  # baseline drift within acceptable range
+    assert gsr\_quality.sampling\_rate\_consistency > 0.99 # >99% of samples at
+    correct rate
+    assert gsr\_quality.baseline\_stability > 0.8 # baseline drift within acceptable
+    range
 
 This ensures that our GSR data collection process (hardware + software)
 is delivering a clean signal: an SNR above 20 dB means the physiological
@@ -1762,9 +1784,12 @@ Similarly, for the thermal camera data, we had a
 \texttt{ThermalQualityAnalyzer}:
 
     thermal\_quality = ThermalQualityAnalyzer().analyze(recorded\_thermal\_frames)
-    assert thermal\_quality.temperature\_accuracy < 0.1  # within 0.1\textdegree C of reference
-    assert thermal\_quality.spatial\_resolution >= 160   # at least 160x120 effective resolution
-    assert thermal\_quality.temporal\_stability > 0.9    # minimal fluctuation when scene is static
+    assert thermal\_quality.temperature\_accuracy < 0.1 # within 0.1\textdegree C of
+    reference
+    assert thermal\_quality.spatial\_resolution >= 160 # at least 160x120 effective
+    resolution
+    assert thermal\_quality.temporal\_stability > 0.9 # minimal fluctuation when
+    scene is static
 
 This would require having some reference or known target for the thermal
 data. In practice, we might have recorded a static scene of a known
@@ -1825,7 +1850,8 @@ their target values:
   ------------------------------------------------------------------------------------------------------------------
   Performance      Target Value   Measured Value Achievement    Statistical
   Metric                                         Rate           Confidence
-  ------------------------ --------------------- --------------------- --------------------- ---------------------
+  ------------------------ --------------------- ---------------------
+  --------------------- ---------------------
   End-to-End     $\geq$ 90\% runs     71.4\% ± 5.2\%   Needs         Based on 7
   Test Success   succeed                       Improvement   suite runs
                                                  (79\% of        (variability
@@ -1890,21 +1916,22 @@ not performed due to hardware limits):
 
   ------------------------------------------------------------------------------------------------------------------------------------
   Device      Network      Message    Connection   Sync Quality Overall    Notes
-  Count       Latency      Loss       Success                   Success    
-              (avg)                                                        
-  ---------------- ------------------ --------------- ------------------ ------------------ --------------- ----------------------
-  1         $\sim$1.0 ms     0\%         100\%         Excellent    100\%       Baseline
+  Count       Latency      Loss       Success                   Success
+              (avg)
+  ---------------- ------------------ --------------- ------------------
+  ------------------ --------------- ----------------------
+  1 $\sim$1.0 ms 0\% 100\% Excellent 100\% Baseline
   Device                                      (baseline)              performance
                                                                            (single device)
 
-  2         $\sim$1.2 ms     0\%         100\%         Excellent    100\%       Linear scaling
+  2 $\sim$1.2 ms 0\% 100\% Excellent 100\% Linear scaling
   Devices                                                             so far
 
-  4         46---198 ms   0---6.7\%    100\%         Good (slight 100\%       Max tested
+  4 46---198 ms 0---6.7\% 100\% Good (slight 100\% Max tested
   Devices   (peak                                drift)                  configuration
-              ranges)                                                      
+              ranges)
 
-  8+        \textit{Not tested} N/A        N/A          N/A          N/A        Future work
+  8+ \textit{Not tested} N/A N/A N/A N/A Future work
   Devices                                                                (expected need
                                                                            for
                                                                            optimization)
@@ -1930,7 +1957,8 @@ Table 5.4: Stress Testing Results Under Network Conditions
   ---------------------------------------------------------------------------------------------------------------------------
   Network        Duration    Network           System        Message     Data
   Scenario                   Characteristics   Response      Success     Integrity
-  --------------------- ---------------- ------------------------- ------------------- ---------------- ----------------
+  --------------------- ---------------- -------------------------
+  ------------------- ---------------- ----------------
   Ideal            20 s        1 ms latency, 0\%  Optimal       100\%        100\%
   Network                        loss (wired)      performance               preserved
 
@@ -1978,7 +2006,8 @@ Table 5.5: Extended Operation Reliability Metrics
   ---------------------------------------------------------------------------------------------------------------
   Reliability    Target         Measured Value Test Duration  Statistical
   Metric                                                      Significance
-  --------------------- --------------------- --------------------- --------------------- ---------------------
+  --------------------- --------------------- ---------------------
+  --------------------- ---------------------
   System       $\geq$ 99.5\%        99.73\% ±     168 hours (7   \textit{p} $<$ 0.001
   Uptime                      0.12\%        days)          (highly
                                                               significant)
@@ -2098,42 +2127,46 @@ issues for each category:
 \textbf{Table 5.1: complete Testing Results Summary}
 
   ---------------------------------------------------------------------------------------------------------------------------------------------------
-  Testing Level   Coverage Scope    Test Cases   Pass Rate   Critical   Resolution      Confidence
+  Testing Level Coverage Scope Test Cases Pass Rate Critical Resolution Confidence
                                     (executed)               Issues     Status          Level
-  ---------------------- ------------------------- ------------------ ---------------- --------------- ---------------------- ------------------
-  \textbf{Unit          Individual        1,247 tests  98.7\%       3 critical \checkmark Resolved     99.9\%
-  Testing}       functions \&                                                           
-                  methods                                                               
+  ---------------------- ------------------------- ------------------
+  ---------------- --------------- ---------------------- ------------------
+  \textbf{Unit Individual 1,247 tests 98.7\% 3 critical \checkmark Resolved 99.9\%
+  Testing}       functions \&
+                  methods
 
-  \textbf{Component     Modules and       342 tests    99.1\%       1 critical \checkmark Resolved     99.8\%
-  Testing}       classes                                                               
+  \textbf{Component Modules and 342 tests 99.1\% 1 critical \checkmark Resolved
+  99.8\%
+  Testing}       classes
 
-  \textbf{Integration   Inter-component   156 tests    97.4\%       2 critical \checkmark Resolved     99.5\%
-  Testing}       communication                                                         
+  \textbf{Integration Inter-component 156 tests 97.4\% 2 critical \checkmark Resolved
+  99.5\%
+  Testing}       communication
 
-  \textbf{System        End-to-end        89 tests     96.6\%       1 critical \checkmark Resolved     99.2\%
-  Testing}       workflows                                                             
+  \textbf{System End-to-end 89 tests 96.6\% 1 critical \checkmark Resolved 99.2\%
+  Testing}       workflows
 
-  \textbf{Performance   Load \& stress     45 tests     94.4\%       0 critical N/A (none)      98.7\%
-  Testing}       scenarios                                                             
+  \textbf{Performance Load \& stress 45 tests 94.4\% 0 critical N/A (none) 98.7\%
+  Testing}       scenarios
 
-  \textbf{Reliability   Extended          12 tests     100\%        0 critical N/A (none)      99.9\%
-  Testing}       operation                                                             
-                  scenarios                                                             
+  \textbf{Reliability Extended 12 tests 100\% 0 critical N/A (none) 99.9\%
+  Testing}       operation
+                  scenarios
 
-  \textbf{Security      Data protection \& 23 tests     100\%        0 critical N/A (none)      99.9\%
-  Testing}       access control                                                        
+  \textbf{Security Data protection \& 23 tests 100\% 0 critical N/A (none) 99.9\%
+  Testing}       access control
 
-  \textbf{Usability     User experience \& 34 tests     91.2\%       0 critical N/A             95.8\%
-  Testing}       workflow                                              (improvements   
-                                                                        ongoing)        
+  \textbf{Usability User experience \& 34 tests 91.2\% 0 critical N/A 95.8\%
+  Testing}       workflow                                              (improvements
+                                                                        ongoing)
 
-  \textbf{Research      Scientific        67 tests     97.0\%       0 critical N/A (none)      99.3\%
-  Validation}    accuracy \&                                                            
-                  precision                                                             
+  \textbf{Research Scientific 67 tests 97.0\% 0 critical N/A (none) 99.3\%
+  Validation}    accuracy \&
+                  precision
 
-  **Overall       complete     618 tests\\textit{  }Pending*   Env.       In progress In progress  Config.
-  System**        system validation                          issues                     required
+  **Overall complete 618 tests\\textit{ }Pending* Env.  In progress In progress
+  Config.
+  System** system validation issues required
   ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 \textit{Note:} The test infrastructure currently includes 618 Python test
@@ -2186,21 +2219,22 @@ were:
 
   ----------------------------------------------------------------------------------------------------------
   Component         Unit Test         Integration       System Coverage
-                    Coverage          Coverage          
-  ------------------------- ------------------------- ------------------------- -------------------------
+                    Coverage          Coverage
+  ------------------------- ------------------------- -------------------------
+  -------------------------
   \textbf{Android App}   92.3%             88.7%             94.1%
 
   \textbf{Python          94.7%             91.2%             96.3%
-  Controller}                                          
+  Controller}
 
   \textbf{Communication   89.4%             93.8%             91.7%
-  Layer}                                               
+  Layer}
 
   \textbf{Calibration     96.1%             87.3%             89.2%
-  System}                                              
+  System}
 
   \textbf{Overall         93.1%             90.3%             92.8%
-  System}                                              
+  System}
   ----------------------------------------------------------------------------------------------------------
 
 "Unit Test Coverage" refers to line coverage by unit tests on that
@@ -2309,18 +2343,19 @@ reliability, usability, etc. ---- were likewise assessed:
 
   ----------------------------------------------------------------------------------------------------------------
   Requirement        Target            Achieved             Status
-  --------------------------- ------------------------- ------------------------------ -------------------------
+  --------------------------- -------------------------
+  ------------------------------ -------------------------
   \textbf{System           4+ devices        8 devices            \checkmark Exceeded
-  Throughput}                         (supported/tested)   
+  Throughput}                         (supported/tested)
 
   \textbf{Response Time}  \$<\$ 2 s (start)    1.23 s avg           \checkmark Met
 
-  \textbf{Resource Usage} \$<\$ 80% CPU usage  \$\sim\$67.3% avg          \checkmark Met
+  \textbf{Resource Usage} \$<\$ 80% CPU usage \$\sim\$67.3% avg \checkmark Met
 
   \textbf{Availability}   99.5% uptime      99.7% measured       \checkmark Exceeded
 
-  \textbf{Data Integrity} 100% no           99.98% (no           \checkmark Nearly Perfect
-                     loss/corrupt      corruption)          
+  \textbf{Data Integrity} 100% no 99.98% (no \checkmark Nearly Perfect
+                     loss/corrupt      corruption)
 
   \textbf{Sync Precision} ±5 ms             ±3.2 ms achieved     \checkmark Exceeded
   ----------------------------------------------------------------------------------------------------------------
@@ -2365,7 +2400,8 @@ tested, as estimated by our coverage analysis
 script.
 Some minor edge scenarios remain (e.g., extremely unlikely error
 combinations) but those are tracked. - \textbf{Code coverage:} As noted, we
-attained \$\sim\$93% statement coverage overall, \$\sim\$89% branch coverage, \$\sim\$95%
+attained \$\sim\$93% statement coverage overall, \$\sim\$89% branch coverage,
+\$\sim\$95%
 function
 coverage.
 These high numbers mean very little of the implementation is untested.

@@ -589,9 +589,7 @@ future. The next steps will involve deploying this platform in
 experimental settings, collecting a complete dataset, and then
 utilising it to train and evaluate the machine learning models that
 motivated its creation.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Top%20Applications%20of%20Galvanic%20Skin,Response%20in%20Research%20and%20Industry)
 [\[2\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Psychological%20Research%20Psychological%20studies%20utilize,with%20dogs%20in%20later%20life)
 [\[3\]](https://imotions.com/blog/learning/research-fundamentals/galvanic-skin-response/#:~:text=Clinical%20Research%C2%A0%26%20Psychotherapy%20Clinical%20populations,success%20of%20the%20therapeutic%20intervention)
