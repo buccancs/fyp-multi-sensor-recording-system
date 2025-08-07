@@ -2,280 +2,45 @@
 
 ## 1.1 Motivation and Research Context
 
-In recent years, there has been growing interest in **physiological
-computing** -- the use of bodily signals to infer a person\'s internal
-states for health monitoring, affective computing, and human-computer
-interaction. One physiological signal that has proven especially
-valuable is the **Galvanic Skin Response (GSR)** (also known as
-electrodermal activity or skin conductance). GSR measures subtle changes
-in the skin's electrical conductance caused by sweat gland activity,
-which is directly modulated by the sympathetic nervous
-system[\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=Galvanic%20skin%20response%20,conditions%20which%20recent%20studies%20have).
-Because these changes are involuntary and reflect emotional arousal and
-stress, GSR is widely regarded as a reliable indicator of autonomic
-nervous system
-activity[\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=Galvanic%20skin%20response%20,conditions%20which%20recent%20studies%20have).
-Applications of GSR span clinical psychology (e.g. biofeedback therapy
-and polygraph testing) and user experience research, where it can reveal
-unconscious stress or emotional responses. Even consumer technology has
-begun to leverage skin conductance: modern wearable devices (e.g. recent
-smartwatches by Apple and Samsung) incorporate sensors for continuous
-stress monitoring based on GSR or related
-metrics[\[2\]\[3\]](docs/thesis_report/draft/bibliography.md#L2-L5).
-This surge of interest underscores the *motivation* to harness
-physiological signals like GSR in everyday contexts.
+**Physiological computing** uses bodily signals to infer internal states for health monitoring, affective computing, and human-computer interaction. **Galvanic Skin Response (GSR)**, also known as electrodermal activity, measures changes in skin electrical conductance caused by sweat gland activity modulated by the sympathetic nervous system[\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=Galvanic%20skin%20response%20,conditions%20which%20recent%20studies%20have). As these changes are involuntary and reflect emotional arousal, GSR serves as a reliable indicator of autonomic nervous system activity[\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=Galvanic%20skin%20response%20,conditions%20which%20recent%20studies%20have).
 
-Despite its value, traditional GSR measurement requires skin-contact
-electrodes (typically attached to fingers or palms with conductive
-gel)[\[4\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L10-L18).
-This method is inherently obtrusive -- the wires and electrodes can
-restrict natural movement and comfort, and long-term use may cause
-discomfort or skin
-irritation[\[5\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L14-L22)[\[6\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L18-L26).
-These practical limitations make it difficult to use GSR in natural,
-real-world settings outside the lab. Consequently, **contactless
-measurement techniques** for GSR have become an appealing research
-direction[\[7\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L31).
-The idea is to infer GSR (or the underlying psychophysiological arousal)
-using remote sensors that do not require physical contact with the user.
-For example, thermal infrared cameras can detect subtle temperature
-changes on the skin surface due to blood flow and perspiration, offering
-a proxy for stress-induced
-responses[\[8\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=measures%20targeting%20a%20variety%20of,in%20affective%20research7%20%E2%80%93%2032).
-Facial infrared imaging has shown promise as a complementary measure in
-emotion research, capitalizing on the fact that stress and
-thermoregulation are linked (e.g. perspiration causes evaporative
-cooling)[\[9\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=compliments%20the%20traditional%20measures%20is,results%20in%20affective%20research%2031%E2%80%939).
-Similarly, high-resolution RGB cameras with advanced computer vision
-algorithms can non-invasively capture other physiological signals --
-prior work has demonstrated heart rate and breathing can be measured
-from video of a person's face or
-body[\[10\]](docs/thesis_report/draft/bibliography.md#L41-L45)[\[11\]](docs/thesis_report/draft/bibliography.md#L13-L17).
-These developments suggest that *multi-modal sensing*, combining
-traditional biosensors with imaging, could enable **contactless
-physiological monitoring** in the future. Research in affective
-computing increasingly points to the benefit of fusing multiple
-modalities (e.g. GSR, heart rate, facial thermal signals) to more
-robustly capture emotional or stress
-states[\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=Galvanic%20skin%20response%20,conditions%20which%20recent%20studies%20have)[\[12\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=compliments%20the%20traditional%20measures%20is,results%20in%20affective%20research%2031%E2%80%939).
+GSR applications span clinical psychology, user experience research, and consumer technology. Modern wearables now incorporate skin conductance sensors for continuous stress monitoring[\[2\]\[3\]](docs/thesis_report/draft/bibliography.md#L2-L5), demonstrating growing interest in physiological signals for everyday contexts.
 
-However, realizing such a vision requires overcoming significant
-challenges. A key *research gap* is the lack of an integrated platform
-to collect and synchronize these diverse data streams. Most prior
-studies have tackled contactless GSR estimation in isolation or under
-highly controlled conditions, often using separate devices that are not
-synchronized in real
-time[\[13\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)[\[14\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34).
-For instance, thermal cameras and wearable GSR sensors have typically
-been used independently, with any fusion of their data done post hoc.
-This piecemeal approach complicates the development of machine learning
-models, which require well-aligned datasets of inputs (e.g.
-video/thermal data) and ground truth outputs (measured GSR). There is a
-clear need for a **multi-modal data collection platform** that can
-simultaneously record GSR signals alongside other sensor modalities in a
-*synchronized* manner. Such a platform would enable researchers to
-gather rich, time-aligned datasets -- for example, thermal video of a
-participant's face recorded in lockstep with their GSR signal -- thereby
-laying the groundwork for training and validating predictive models that
-infer GSR from alternative sensors. **The primary contribution of this
-thesis is the development of precisely such a platform:** a modular,
-multi-sensor system for synchronized physiological data acquisition
-geared toward future GSR prediction research. In summary, the motivation
-behind this work stems from recent trends in physiological computing and
-multimodal sensing, and the recognized need for robust, synchronized
-datasets to advance *contactless* GSR measurement.
+Traditional GSR measurement requires skin-contact electrodes attached to fingers or palms[\[4\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L10-L18). This method is obtrusive--electrodes and wires restrict movement and may cause discomfort[\[5\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L14-L22)[\[6\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L18-L26). These limitations complicate GSR use in natural, real-world settings, making **contactless measurement techniques** an appealing research direction[\[7\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L31).
+
+Contactless approaches aim to infer GSR using remote sensors without physical contact. Thermal infrared cameras can detect skin temperature changes from blood flow and perspiration[\[8\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=measures%20targeting%20a%20variety%20of,in%20affective%20research7%20%E2%80%93%2032), while RGB cameras with computer vision algorithms can capture physiological signals like heart rate and breathing from video[\[10\]](docs/thesis_report/draft/bibliography.md#L41-L45)[\[11\]](docs/thesis_report/draft/bibliography.md#L13-L17). Research increasingly shows benefits of **multi-modal sensing** that combines traditional biosensors with imaging for robust emotional state capture[\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=Galvanic%20skin%20response%20,conditions%20which%20recent%20studies%20have)[\[12\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=compliments%20the%20traditional%20measures%20is,results%20in%20affective%20research%2031%E2%80%939).
+
+However, a key **research gap** exists: most prior studies tackled contactless GSR estimation in isolation using separate, unsynchronized devices[\[13\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32)[\[14\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L30-L34). This piecemeal approach complicates machine learning model development, which requires well-aligned datasets. There is clear need for a **multi-modal data collection platform** that simultaneously records GSR alongside other sensor modalities in a synchronized manner. **The primary contribution of this thesis is developing such a platform:** a modular, multi-sensor system for synchronized physiological data acquisition for GSR prediction research.
 
 ## 1.2 Research Problem and Objectives
 
-Given the above context, the **research problem** can be stated as
-follows: *there is currently no readily available system that enables
-synchronized collection of GSR signals together with complementary data
-streams (such as thermal and visual data) in naturalistic settings,
-which hinders the development of machine learning models for contactless
-GSR prediction*. While traditional GSR sensors provide reliable
-ground-truth measurements, they are intrusive for real-world use, and
-purely contactless approaches remain unvalidated or
-imprecise[\[13\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32).
-To bridge this gap, researchers require a platform that can record
-**multiple modalities simultaneously** -- for example, capturing a
-person's skin conductance with a wearable sensor while concurrently
-recording thermal camera footage and standard video. Crucially, all data
-must be time-synchronized with high precision to allow meaningful
-correlation and learning. The absence of such an integrated system forms
-the core problem that this thesis addresses.
+The **research problem** is: *no readily available system enables synchronized collection of GSR signals with complementary data streams (thermal and visual) in naturalistic settings, hindering machine learning model development for contactless GSR prediction*. Traditional GSR sensors provide reliable measurements but are intrusive, while purely contactless approaches remain unvalidated[\[13\]](docs/thesis_report/draft/Chapter_1__Introduction.md#L24-L32). Researchers need a platform that records **multiple modalities simultaneously** with high-precision time synchronization for meaningful correlation and learning.
 
-The *objective* of this research, therefore, is to design and implement
-a **multi-modal physiological data collection platform** that enables
-the creation of a synchronized dataset for future GSR prediction models.
-Unlike end-user applications or final predictive systems, the focus here
-is on the data acquisition infrastructure -- in other words, building
-the *foundation* upon which real-time GSR inference algorithms can later
-be developed. It is important to clarify that **real-time GSR prediction
-is not within the scope of this thesis**. Instead, the aim is to
-facilitate future machine learning by providing a robust means to gather
-ground-truth GSR and candidate predictor signals in unison. The
-following specific objectives have been defined to achieve this aim:
+The objective is to design and implement a **multi-modal physiological data collection platform** that creates synchronized datasets for future GSR prediction models. The focus is on data acquisition infrastructure--building the foundation for future real-time GSR inference algorithms. **Real-time GSR prediction is not within scope**; instead, the aim is facilitating future machine learning by providing robust means to gather ground-truth GSR and candidate predictor signals together.
 
-- **Objective 1: Multi-Modal Platform Development.** *Design and develop
-  a modular data acquisition system capable of recording synchronized
-  physiological and imaging data.* This involves integrating a
-  **wearable GSR sensor** and **camera-based sensors** into one
-  platform. In practice, the system will use a research-grade Shimmer3
-  GSR+ device for ground-truth skin conductance
-  measurement[\[15\]](docs/thesis_report/draft/bibliography.md#L2-L5),
-  a thermal infrared camera (Topdon TC001) attached to a smartphone for
-  capturing thermal
-  video[\[15\]](docs/thesis_report/draft/bibliography.md#L2-L5),
-  and the smartphone's own RGB camera for high-resolution video. A
-  **smartphone-based sensor node** will be coordinated with a **desktop
-  controller** application to start/stop recordings in unison and
-  timestamp data streams consistently. The architecture should ensure
-  that all modalities can be recorded **simultaneously** with
-  millisecond-level timestamp alignment.
+**Specific objectives:**
 
-- **Objective 2: Synchronized Data Acquisition and Management.**
-  *Implement methods for precise time synchronization and data handling
-  across devices.* A custom **control and synchronization layer**
-  (developed in Python) will coordinate the sensor node(s) and ensure
-  that GSR readings, thermal frames, and RGB frames are logged with
-  synchronized timestamps. This objective includes establishing a
-  reliable communication protocol between the smartphone and the PC
-  controller to transmit control commands and streaming
-  data[\[16\]](AndroidApp/README.md#L2-L5).
-  It also involves data management aspects: storing the multi-modal data
-  with appropriate formats and metadata so that they can be easily
-  combined for analysis. By the end, the platform should produce a
-  well-synchronized dataset (e.g. timestamps of physiological samples
-  aligned with video frame times) that can serve as a training corpus
-  for machine learning.
+- **Objective 1: Multi-Modal Platform Development.** Design and develop a modular data acquisition system recording synchronized physiological and imaging data. This integrates a **wearable GSR sensor** and **camera-based sensors**: Shimmer3 GSR+ for ground-truth measurement[\[15\]](docs/thesis_report/draft/bibliography.md#L2-L5), thermal infrared camera (Topdon TC001) on smartphone for thermal video[\[15\]](docs/thesis_report/draft/bibliography.md#L2-L5), and smartphone RGB camera for high-resolution video. A **smartphone-based sensor node** coordinates with a **desktop controller** for synchronized start/stop recording with millisecond-level timestamp alignment.
 
-- **Objective 3: System Validation through Pilot Data Collection.**
-  *Evaluate the integrated platform's performance and data integrity in
-  a real recording scenario.* To verify that the system meets
-  research-grade requirements, a series of test recording sessions will
-  be conducted. For example, pilot experiments might involve human
-  participants performing tasks designed to elicit varying GSR responses
-  (stress, stimuli, etc.) while the platform records all modalities. The
-  **validation** will focus on checking temporal synchronization
-  accuracy (e.g. confirming that events are correctly aligned across
-  sensor streams) and the quality of the recorded signals (such as
-  signal-to-noise ratio of GSR, resolution of thermal data, etc.). We
-  will analyze the collected data to ensure that the GSR signals and the
-  corresponding thermal/RGB data show the expected correlations or
-  time-locked changes. Successful validation will demonstrate that the
-  platform can reliably capture synchronized multi-modal data suitable
-  for subsequent machine learning analysis. (Developing the predictive
-  model itself is left for future work; here we concentrate on
-  validating the *data pipeline* that would feed such a model.)
+- **Objective 2: Synchronized Data Acquisition and Management.** Implement precise time synchronization and data handling across devices. A custom **control and synchronization layer** (Python) coordinates sensor nodes ensuring GSR readings, thermal frames, and RGB frames are logged with synchronized timestamps. This includes reliable communication protocol between smartphone and PC controller[\[16\]](AndroidApp/README.md#L2-L5) and data management with appropriate formats and metadata for easy analysis combination.
 
-By accomplishing these objectives, the thesis will deliver a proven
-multi-sensor data collection platform that fills the current
-technological gap. This platform will enable researchers to build
-**multimodal datasets** for GSR prediction, accelerating progress toward
-truly contactless and real-time stress monitoring systems. The emphasis
-is on creating a flexible, extensible setup -- a **modular sensing
-system** -- that not only integrates the specific devices in this
-project (GSR sensor and thermal/RGB cameras) but can be extended to
-additional modalities in the future. Ultimately, this work lays the
-groundwork for future studies to train and test machine learning
-algorithms that estimate GSR from camera data, by first solving the
-critical challenge of *acquiring synchronized ground-truth data*.
+- **Objective 3: System Validation through Pilot Data Collection.** Evaluate platform performance and data integrity in real recording scenarios. Test recording sessions with human participants performing tasks eliciting varying GSR responses verify temporal synchronization accuracy and signal quality. Analysis ensures GSR signals and corresponding thermal/RGB data show expected correlations, demonstrating the platform reliably captures synchronized multi-modal data for machine learning analysis.
 
 ## 1.3 Thesis Outline
 
-This thesis is organized into six chapters, following a logical
-progression from background concepts through system development to
-evaluation:
+This thesis follows a logical progression from background through system development to evaluation:
 
-- **Chapter 2 -- Background and Research Context:** This chapter reviews
-  the relevant literature and technical background underpinning the
-  project. It discusses physiological computing and emotion recognition,
-  the significance of GSR in stress research, and prior approaches to
-  contactless physiological measurement. Key related works in
-  **multimodal data collection** and sensor fusion are examined to
-  highlight the state of the art and the gap that this research
-  addresses. The chapter also introduces the rationale behind the
-  selected sensors (Shimmer3 GSR+ and Topdon thermal camera) and the
-  expected advantages of a multimodal approach.
+- **Chapter 2 -- Background and Research Context:** Reviews literature and technical background on physiological computing, GSR in stress research, and contactless physiological measurement. Examines multimodal data collection and sensor fusion to highlight current gaps and introduces the rationale for selected sensors.
 
-- **Chapter 3 -- Requirements Analysis:** In this chapter, the specific
-  requirements for the data collection platform are defined. The
-  research problem is analyzed in detail to derive both **functional
-  requirements** (such as the ability to record multiple streams
-  concurrently, synchronization accuracy, user interface needs for the
-  recording system) and **non-functional requirements** (such as system
-  reliability, timing precision, and data storage considerations).
-  Use-case scenarios and user stories are presented to ground the
-  requirements in practical research situations. By the end of this
-  chapter, the scope of the system and the criteria for success are
-  clearly established.
+- **Chapter 3 -- Requirements Analysis:** Defines specific requirements for the data collection platform, analyzing the research problem to derive functional and non-functional requirements. Presents use-case scenarios grounding requirements in practical research situations.
 
-- **Chapter 4 -- System Design and Architecture:** This chapter
-  describes the design of the proposed multi-modal recording system. It
-  presents the overall **architecture**, detailing how hardware
-  components and software modules interact. Key design decisions are
-  discussed, such as the choice of a distributed setup with an Android
-  smartphone as a sensor hub and a PC as a central
-  controller[\[16\]](AndroidApp/README.md#L2-L5).
-  The chapter covers how the **hardware integration** is achieved
-  (mounting and connecting the thermal camera to the phone, Bluetooth
-  pairing with the GSR sensor, etc.) and how the software is structured
-  into modules for camera capture, sensor communication, network
-  synchronization, and data logging. Diagrams are provided to illustrate
-  the flow of data and control commands between the Android app and the
-  Python desktop application. The design ensures modularity, so that
-  each sensing component (thermal, RGB, GSR) can operate in sync under
-  the coordination of the central controller. Important considerations
-  like timestamp synchronization protocols, latency handling, and error
-  recovery mechanisms are also described here.
+- **Chapter 4 -- System Design and Architecture:** Describes the multi-modal recording system design, presenting overall architecture and hardware-software interactions. Covers hardware integration, software module structure, and key design decisions including distributed setup with Android smartphone and PC controller[\[16\]](AndroidApp/README.md#L2-L5).
 
-- **Chapter 5 -- Implementation Testing and Validation:** In this
-  chapter, the focus is on evaluating the implemented platform and
-  demonstrating that it meets the thesis objectives. The **evaluation
-  methodology** is first outlined, including the test setup and metrics
-  for assessing synchronization and data quality. Results from pilot
-  recordings are then presented: for example, timing logs verifying that
-  the disparity between camera frame timestamps and GSR signal
-  timestamps is within acceptable bounds (on the order of milliseconds),
-  and qualitative examples of data (such as parallel plots of GSR peaks
-  alongside thermal video frames during a stress event). The chapter
-  discusses any challenges encountered during testing -- for instance,
-  connectivity issues or drift in clocks -- and how they were resolved
-  or mitigated. We interpret the results to confirm that the system can
-  reliably produce synchronized multi-modal datasets. This validation
-  demonstrates the platform's capability to serve as a data collection
-  tool for future GSR prediction research. Any limitations observed
-  (such as minor synchronization offsets or sensor noise issues) are
-  also noted to inform future improvements.
+- **Chapter 5 -- Implementation Testing and Validation:** Evaluates the implemented platform, outlining methodology and metrics for assessing synchronization and data quality. Presents pilot recording results, discusses challenges and resolutions, and confirms reliable synchronized multi-modal dataset production.
 
-- **Chapter 6 -- Conclusion and Future Work:** The final chapter
-  summarizes the contributions of the thesis and reflects on the extent
-  to which the objectives were achieved. The **achievements** of
-  developing a working multi-modal physiological data collection
-  platform are highlighted, and the significance of this platform for
-  the research community is discussed. The chapter also candidly
-  addresses the **limitations** of the current system (for example, if
-  real-time analysis was not implemented or if certain environments were
-  not tested). Finally, it outlines **future work** and recommendations
-  -- including the next steps of using the collected data to train
-  machine learning models for GSR prediction, improving the platform's
-  real-time capabilities, and possibly extending the system with
-  additional sensors (such as heart rate or respiration sensors) to
-  broaden its application. By charting these future directions, the
-  thesis concludes with a roadmap for transitioning from this data
-  collection foundation to full-fledged **real-time GSR inference** in
-  forthcoming research.
+- **Chapter 6 -- Conclusion and Future Work:** Summarizes contributions, reflects on objective achievement, addresses limitations, and outlines future work including machine learning model development and system extensions.
 
-Overall, **Chapter 1** (this introduction) has set the stage by
-identifying the motivation and research problem, and the subsequent
-chapters proceed to address that problem through systematic development
-and evaluation of the multi-modal GSR data collection platform.
-Together, these chapters document the journey from concept to
-realization of a synchronized sensing system that will enable advanced
-research into predicting GSR from multiple sensor modalities. The
-outcome is a valuable tool and dataset for the community, marking a step
-toward more ubiquitous and contact-free physiological monitoring in the
-future.
+**Chapter 1** has identified the motivation and research problem; subsequent chapters systematically address this through development and evaluation of the multi-modal GSR data collection platform.
 
 ------------------------------------------------------------------------
 
