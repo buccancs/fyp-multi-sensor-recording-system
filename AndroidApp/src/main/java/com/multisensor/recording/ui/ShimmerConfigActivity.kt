@@ -40,6 +40,8 @@ class ShimmerConfigActivity : AppCompatActivity() {
     private lateinit var selectDeviceButton: Button
     private lateinit var crcSpinner: Spinner
     private lateinit var deviceInfoText: TextView
+    private lateinit var gsrRangeSpinner: Spinner
+    private lateinit var accelRangeSpinner: Spinner
 
     @Inject
     lateinit var logger: Logger
@@ -99,6 +101,8 @@ class ShimmerConfigActivity : AppCompatActivity() {
         selectDeviceButton = findViewById(R.id.select_device_button)
         crcSpinner = findViewById(R.id.crc_spinner)
         deviceInfoText = findViewById(R.id.device_info_text)
+        gsrRangeSpinner = findViewById(R.id.gsr_range_spinner)
+        accelRangeSpinner = findViewById(R.id.accel_range_spinner)
 
         sensorCheckboxes =
             mapOf(
@@ -172,6 +176,10 @@ class ShimmerConfigActivity : AppCompatActivity() {
         sensorCheckboxes.values.forEach { checkbox ->
             checkbox.isEnabled = state.isDeviceConnected && !state.isConfiguring
         }
+        
+        // Enable range spinners when device is connected
+        gsrRangeSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
+        accelRangeSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
 
         if (state.isRecording && state.dataPacketsReceived > 0) {
             val duration = state.recordingDuration / 1000
@@ -273,6 +281,43 @@ class ShimmerConfigActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (crcSpinner.isEnabled) {
                     viewModel.updateCrcConfiguration(position)
+                }
+            }
+            
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        
+        // Setup GSR Range spinner
+        val gsrRanges = arrayOf("40kΩ to 4MΩ", "10kΩ to 1MΩ", "3.2kΩ to 0.32MΩ", "1kΩ to 0.1MΩ", "0.3kΩ to 0.03MΩ")
+        val gsrRangeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, gsrRanges)
+        gsrRangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        gsrRangeSpinner.adapter = gsrRangeAdapter
+        gsrRangeSpinner.setSelection(4) // Default range 4
+        gsrRangeSpinner.isEnabled = false
+        
+        gsrRangeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (gsrRangeSpinner.isEnabled) {
+                    viewModel.updateGsrRange(position)
+                }
+            }
+            
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        
+        // Setup Accelerometer Range spinner
+        val accelRanges = arrayOf("±2g", "±4g", "±8g", "±16g")
+        val accelRangeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accelRanges)
+        accelRangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        accelRangeSpinner.adapter = accelRangeAdapter
+        accelRangeSpinner.setSelection(0) // Default to ±2g
+        accelRangeSpinner.isEnabled = false
+        
+        accelRangeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (accelRangeSpinner.isEnabled) {
+                    val ranges = arrayOf(2, 4, 8, 16)
+                    viewModel.updateAccelRange(ranges[position])
                 }
             }
             

@@ -289,7 +289,60 @@
                             android:id="@+id/checkbox_emg"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="EMG"/>
+                            android:text="EMG"
+                            android:layout_marginBottom="12dp"/>
+                            
+                    <!-- Sensor Range Configuration Section -->
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sensor Range Settings"
+                            android:textAppearance="?attr/textAppearanceBodyLarge"
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"/>
+                            
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
+
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="GSR Range:"
+                                android:textAppearance="?attr/textAppearanceBodyMedium"
+                                android:gravity="center_vertical"/>
+
+                        <Spinner
+                                android:id="@+id/gsr_range_spinner"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+                    
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
+
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Accel Range:"
+                                android:textAppearance="?attr/textAppearanceBodyMedium"
+                                android:gravity="center_vertical"/>
+
+                        <Spinner
+                                android:id="@+id/accel_range_spinner"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

@@ -505,4 +505,88 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
+    
+    fun updateGsrRange(rangeIndex: Int) {
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(isConfiguring = true) }
+                
+                val device = _uiState.value.selectedDevice
+                if (device != null) {
+                    logger.info("Updating GSR range for device ${device.macAddress}: range $rangeIndex")
+                    
+                    val success = shimmerRecorder.setGSRRange(device.macAddress, rangeIndex)
+                    if (success) {
+                        logger.info("GSR range updated successfully")
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                errorMessage = "Failed to update GSR range",
+                                showErrorDialog = true
+                            )
+                        }
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            errorMessage = "No device selected for GSR range configuration",
+                            showErrorDialog = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Error updating GSR range", e)
+                _uiState.update {
+                    it.copy(
+                        errorMessage = "GSR range configuration error: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+            } finally {
+                _uiState.update { it.copy(isConfiguring = false) }
+            }
+        }
+    }
+    
+    fun updateAccelRange(rangeG: Int) {
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(isConfiguring = true) }
+                
+                val device = _uiState.value.selectedDevice
+                if (device != null) {
+                    logger.info("Updating Accelerometer range for device ${device.macAddress}: ±${rangeG}g")
+                    
+                    val success = shimmerRecorder.setAccelRange(device.macAddress, rangeG)
+                    if (success) {
+                        logger.info("Accelerometer range updated successfully")
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                errorMessage = "Failed to update accelerometer range",
+                                showErrorDialog = true
+                            )
+                        }
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            errorMessage = "No device selected for accelerometer range configuration",
+                            showErrorDialog = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Error updating accelerometer range", e)
+                _uiState.update {
+                    it.copy(
+                        errorMessage = "Accelerometer range configuration error: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+            } finally {
+                _uiState.update { it.copy(isConfiguring = false) }
+            }
+        }
+    }
 }
