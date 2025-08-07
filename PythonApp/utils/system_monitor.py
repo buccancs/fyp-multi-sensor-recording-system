@@ -323,7 +323,7 @@ class SystemMonitor:
             logger.error(f"Error getting temperature info: {e}")
             return {}
 
-    def get_comprehensive_status(self) -> Dict[str, Any]:
+    def get_complete_status(self) -> Dict[str, Any]:
         current_time = time.time()
         status = {
             "timestamp": current_time,

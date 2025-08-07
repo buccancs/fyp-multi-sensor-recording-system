@@ -158,7 +158,7 @@ New contributors should review key ADRs to understand architectural decisions:
 ### ADR Review Checklist
 
 - [ ] **Clear Context**: Problem and constraints are well-defined
-- [ ] **Comprehensive Alternatives**: Multiple options evaluated
+- [ ] **complete Alternatives**: Multiple options evaluated
 - [ ] **Evidence-Based**: Decisions supported by research or testing
 - [ ] **Consequence Analysis**: Both positive and negative impacts identified
 - [ ] **Implementation Guidance**: Clear direction for developers

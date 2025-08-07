@@ -286,7 +286,7 @@ class UIControllerTest {
     }
 
     @Test
-    fun `getUIStatus should return comprehensive status information`() {
+    fun `getUIStatus should return complete status information`() {
         uiController.setCallback(mockCallback)
 
         val status = uiController.getUIStatus()

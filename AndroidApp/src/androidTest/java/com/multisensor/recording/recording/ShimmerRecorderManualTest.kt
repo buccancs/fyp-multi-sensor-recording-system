@@ -553,7 +553,7 @@ class ShimmerRecorderManualTest {
     fun testComplete_ShimmerHardwareValidation() =
         runBlocking {
             println("[DEBUG_LOG] ========================================")
-            println("[DEBUG_LOG] COMPREHENSIVE SHIMMER HARDWARE VALIDATION")
+            println("[DEBUG_LOG] complete SHIMMER HARDWARE VALIDATION")
             println("[DEBUG_LOG] ========================================")
 
             try {

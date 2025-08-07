@@ -606,7 +606,7 @@ integration involves technical steps (initializing the camera via the
 SDK, managing data flow) and conceptual steps (deciding which thermal
 features to extract and log). Once implemented, the app can record
 synchronized thermal and GSR data for each session, offering a more
-comprehensive view of the user's physiological responses than either
+complete view of the user's physiological responses than either
 modality alone.
 
 ## Troubleshooting

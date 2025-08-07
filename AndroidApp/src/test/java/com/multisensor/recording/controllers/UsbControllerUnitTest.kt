@@ -230,7 +230,7 @@ class UsbControllerUnitTest {
     }
 
     @Test
-    fun `getUsbStatusSummary should provide comprehensive status information`() {
+    fun `getUsbStatusSummary should provide complete status information`() {
         val supportedDevice = createMockUsbDevice(
             vendorId = 0x0BDA,
             productId = 0x3901,
@@ -508,7 +508,7 @@ class UsbControllerUnitTest {
     }
 
     @Test
-    fun `getMultiDeviceStatusSummary should provide comprehensive information`() {
+    fun `getMultiDeviceStatusSummary should provide complete information`() {
         val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
         val device2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5840, deviceName = "/dev/bus/usb/001/002")
 
@@ -641,7 +641,7 @@ class UsbControllerUnitTest {
     }
 
     @Test
-    fun `should generate comprehensive performance analytics report`() {
+    fun `should generate complete performance analytics report`() {
         val device = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901)
         every { mockUsbDeviceManager.isSupportedTopdonDevice(device) } returns true
         every { mockCallback.areAllPermissionsGranted() } returns true
@@ -772,7 +772,7 @@ class UsbControllerUnitTest {
     }
 
     @Test
-    fun `should generate comprehensive system status report`() {
+    fun `should generate complete system status report`() {
         val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
         val device2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5840, deviceName = "/dev/bus/usb/001/002")
 
@@ -792,7 +792,7 @@ class UsbControllerUnitTest {
 
         assertTrue(
             "Should contain system analysis title",
-            systemStatus.contains("Comprehensive USB Controller System Analysis")
+            systemStatus.contains("complete USB Controller System Analysis")
         )
         assertTrue("Should contain multi-device status", systemStatus.contains("MULTI-DEVICE STATUS"))
         assertTrue("Should contain performance analytics", systemStatus.contains("PERFORMANCE ANALYTICS"))

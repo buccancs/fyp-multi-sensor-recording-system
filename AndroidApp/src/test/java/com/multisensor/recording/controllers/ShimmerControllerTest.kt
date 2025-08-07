@@ -303,7 +303,7 @@ class ShimmerControllerTest {
     }
 
     @Test
-    fun `getConnectionStatus should return comprehensive status`() = runTest {
+    fun `getConnectionStatus should return complete status`() = runTest {
         shimmerController.setCallback(mockCallback)
         shimmerController.handleDeviceSelectionResult(testDeviceAddress, testDeviceName)
 

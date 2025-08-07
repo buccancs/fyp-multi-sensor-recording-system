@@ -10,7 +10,7 @@ object LoggingTestUtility {
     private const val TAG = "LoggingTestUtility"
 
     fun runComprehensiveLoggingTest(context: Context) {
-        AppLogger.logMethodEntry(TAG, "runComprehensiveLoggingTest", "Starting comprehensive logging test")
+        AppLogger.logMethodEntry(TAG, "runComprehensiveLoggingTest", "Starting complete logging test")
 
         CoroutineScope(Dispatchers.IO).launch {
             try {

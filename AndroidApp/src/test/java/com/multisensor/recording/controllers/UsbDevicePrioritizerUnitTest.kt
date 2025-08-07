@@ -195,7 +195,7 @@ class UsbDevicePrioritizerUnitTest {
     }
 
     @Test
-    fun `should generate comprehensive priority analysis report`() {
+    fun `should generate complete priority analysis report`() {
         val assessment1 =
             createMockAssessment("device_001", mockDevice1, 0.9, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
         val assessment2 = createMockAssessment("device_002", mockDevice2, 0.7, UsbDevicePrioritizer.PriorityLevel.HIGH)

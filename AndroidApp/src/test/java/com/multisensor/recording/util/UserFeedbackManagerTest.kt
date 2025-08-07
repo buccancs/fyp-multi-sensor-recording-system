@@ -55,7 +55,7 @@ class UserFeedbackManagerTest {
     }
 
     @Test
-    fun `getSystemStatusMessage should provide comprehensive status information`() {
+    fun `getSystemStatusMessage should provide complete status information`() {
         val allGoodMessage = userFeedbackManager.getSystemStatusMessage(
             isCameraOk = true,
             isThermalOk = true,

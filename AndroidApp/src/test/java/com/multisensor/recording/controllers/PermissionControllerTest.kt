@@ -343,7 +343,7 @@ class PermissionControllerTest {
     }
 
     @Test
-    fun `getPermissionStatus should return comprehensive status string`() {
+    fun `getPermissionStatus should return complete status string`() {
         permissionController.setCallback(mockContext as PermissionController.PermissionCallback)
         every { mockSharedPreferences.getLong("last_permission_request_time", 0) } returns 12345L
 

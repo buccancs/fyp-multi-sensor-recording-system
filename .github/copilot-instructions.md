@@ -48,7 +48,7 @@ You are a computer science Master's student writing a thesis on "Multi-Sensor Re
 ### README Files
 - Start with a clear project overview and context
 - Include quick start guides with prerequisites clearly listed
-- Provide comprehensive setup instructions
+- Provide complete setup instructions
 - Include troubleshooting sections for common issues
 
 ### Technical Documentation

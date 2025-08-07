@@ -560,7 +560,7 @@ class WebDashboardServer:
             try:
                 if SYSTEM_MONITOR_AVAILABLE:
                     system_monitor = get_system_monitor()
-                    status = system_monitor.get_comprehensive_status()
+                    status = system_monitor.get_complete_status()
                     return jsonify({"success": True, "status": status})
                 else:
                     import platform

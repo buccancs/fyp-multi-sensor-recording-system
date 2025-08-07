@@ -2,9 +2,9 @@
 
 [![Build Status](https://github.com/buccancs/bucika_gsr/workflows/CI/badge.svg)](https://github.com/buccancs/bucika_gsr/actions)
 [![Test Coverage](https://img.shields.io/badge/test%20coverage-%3E95%25-brightgreen)](./evaluation_suite/)
-[![Research Ready](https://img.shields.io/badge/research%20ready-yes-success)](./docs/TEST_EXECUTION_GUIDE.md)
+[![Research Ready](https://img.shields.io/badge/research%20ready-yes-success)](./docs/test_execution_guide.md)
 
-A comprehensive multi-sensor recording system designed for contactless GSR (Galvanic Skin Response) prediction research. This system integrates multiple data streams including thermal imaging, traditional cameras, and Shimmer GSR sensors to create synchronized multi-modal datasets for advanced physiological research.
+A complete multi-sensor recording system designed for contactless GSR (Galvanic Skin Response) prediction research. This system integrates multiple data streams including thermal imaging, traditional cameras, and Shimmer GSR sensors to create synchronized multi-modal datasets for advanced physiological research.
 
 ## 🏗️ System Architecture
 
@@ -138,13 +138,13 @@ All critical compilation errors have been successfully resolved (commit 3ee81f2)
 - Build system fully operational
 - Test framework configured and functional
 - All components compile without errors
-- Ready for comprehensive testing and research deployment
+- Ready for thorough testing and research deployment
 
-## 📊 Comprehensive Testing & Validation
+## 📊 complete Testing & Validation
 
 ### Unified Test Framework
 
-The system includes a **research-grade evaluation suite** with comprehensive real component testing (zero mocking). All test documentation, results, and execution guidance has been consolidated into a single comprehensive resource.
+The system includes a **research-grade evaluation suite** with complete real component testing (zero mocking). All test documentation, results, and execution guidance has been consolidated into a single complete resource.
 
 **📋 [UNIFIED TEST DOCUMENTATION](./UNIFIED_TEST_DOCUMENTATION.md)** - Complete test framework documentation
 
@@ -169,7 +169,7 @@ python run_evaluation_suite.py --category integration_tests
 - **Android Foundation**: 5/5 tests passed (100.0%) ✅
 - **PC Foundation**: 6/6 tests passed (100.0%) ✅  
 - **Integration Tests**: 6/6 tests passed (100.0%) ✅
-- **Total Duration**: 1.6 seconds (comprehensive mode)
+- **Total Duration**: 1.6 seconds (complete mode)
 - **Build Status**: All compilation errors resolved ✅
 - **Research Deployment**: Ready ✅
 
@@ -178,14 +178,14 @@ python run_evaluation_suite.py --category integration_tests
 ### Test Coverage
 
 #### Foundation Tests (Real Component Validation)
-- **Android Components** (5 comprehensive tests):
+- **Android Components** (5 complete tests):
   - Camera recording validation with real MainActivity.kt testing
   - Shimmer GSR sensor integration with Bluetooth permissions validation
   - Network communication with WebSocket implementation testing
   - Thermal camera integration with dependency validation
   - Session management with recording coordination testing
 
-- **PC Components** (6 comprehensive tests):
+- **PC Components** (6 complete tests):
   - Calibration system with real CalibrationManager validation
   - Network server with PCServer implementation testing
   - Shimmer manager with device communication validation
@@ -227,14 +227,14 @@ bucika_gsr/
 │   ├── session/               # Session management
 │   ├── gui/                   # User interface
 │   └── main.py               # Application entry point
-├── evaluation_suite/          # Comprehensive testing framework
+├── evaluation_suite/          # complete testing framework
 │   ├── foundation/           # Unit tests for components
 │   ├── integration/          # Cross-component tests
 │   └── framework/            # Test execution framework
 ├── docs/                     # Documentation
-│   ├── TEST_EXECUTION_GUIDE.md
-│   ├── TEST_TROUBLESHOOTING.md
-│   └── ARCHITECTURE.md
+│   ├── test_execution_guide.md
+│   ├── test_troubleshooting.md
+│   └── architecture.md
 └── protocol/                 # Communication protocols
 ```
 
@@ -321,7 +321,7 @@ class PrivacyManager(context: Context, logger: Logger) {
 - **Automated Calibration**: Camera calibration with validation
 
 ### Data Quality Assurance
-- **Comprehensive Validation**: Multi-layer testing ensures research-grade quality
+- **complete Validation**: Multi-layer testing ensures research-grade quality
 - **Statistical Analysis**: Quality metrics with confidence intervals
 - **Reproducibility Testing**: Consistent performance across sessions
 - **Error Detection**: Automated identification of data quality issues
@@ -342,17 +342,17 @@ class PrivacyManager(context: Context, logger: Logger) {
 
 ### Reliability Features
 - **Error Recovery**: >80% automatic recovery from connection failures
-- **Data Integrity**: Comprehensive validation and corruption detection
+- **Data Integrity**: complete validation and corruption detection
 - **Graceful Degradation**: Continued operation despite individual device failures
 - **Resource Management**: Adaptive resource allocation based on available hardware
 
 ## 📚 Documentation
 
 ### Quick References
-- **[Test Execution Guide](./docs/TEST_EXECUTION_GUIDE.md)**: Comprehensive testing procedures
-- **[Troubleshooting Guide](./docs/TEST_TROUBLESHOOTING.md)**: Solutions for common issues
+- **[Test Execution Guide](./docs/test_execution_guide.md)**: complete testing procedures
+- **[Troubleshooting Guide](./docs/test_troubleshooting.md)**: Solutions for common issues
 - **[API Documentation](./docs/api/)**: Detailed API reference
-- **[Architecture Overview](./docs/ARCHITECTURE.md)**: System design and layer separation
+- **[Architecture Overview](./docs/architecture.md)**: System design and layer separation
 - **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Infrastructure utilities and patterns
 - **[Scaling Architecture](./docs/SCALING_ARCHITECTURE.md)**: Scaling beyond 8 devices
 
@@ -405,12 +405,12 @@ The Multi-Sensor Recording System maintains exceptional code quality through sys
 #### Professional Standards
 - **Research-grade reliability** suitable for scientific instrumentation
 - **Industry-standard exception handling** practices implemented throughout
-- **Comprehensive observability** through structured logging framework
+- **complete observability** through structured logging framework
 - **Enhanced maintainability** with specific error context preservation
 
 #### Validation Results
 - **Test Coverage**: >95% for critical components, 99.5% overall success rate
-- **Documentation**: Comprehensive documentation with academic rigor
+- **Documentation**: complete documentation with academic rigor
 - **Performance**: Research-grade timing precision (<1ms synchronization)
 - **Quality Assurance**: Multi-dimensional reliability assessment at 97% confidence
 
@@ -435,8 +435,8 @@ If you use this system in your research, please cite:
 ## 🆘 Support
 
 ### Getting Help
-- **Documentation**: Check comprehensive guides in `docs/` directory
-- **Testing Issues**: Review [troubleshooting guide](./docs/TEST_TROUBLESHOOTING.md)
+- **Documentation**: Check complete guides in `docs/` directory
+- **Testing Issues**: Review [troubleshooting guide](./docs/test_troubleshooting.md)
 - **Research Questions**: Consult research documentation and methodology guides
 - **Technical Support**: Open an issue with detailed error logs and system information
 

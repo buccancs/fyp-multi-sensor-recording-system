@@ -448,7 +448,7 @@ def test_system_integration():
 
 def generate_test_report():
     print("\n" + "=" * 60)
-    print("COMPREHENSIVE SYSTEM TEST REPORT")
+    print("complete SYSTEM TEST REPORT")
     print("=" * 60)
 
     tests = [

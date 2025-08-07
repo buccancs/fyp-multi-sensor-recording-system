@@ -153,7 +153,7 @@ class PerformanceMonitorIntegration:
         
         while self.monitoring_active:
             try:
-                status = self.get_comprehensive_status()
+                status = self.get_complete_status()
                 self.performance_history.append({
                     "timestamp": time.time(),
                     "status": status
@@ -238,7 +238,7 @@ class PerformanceMonitorIntegration:
             if was_monitoring:
                 await self.start_monitoring()
                 
-    def get_comprehensive_status(self) -> Dict[str, Any]:
+    def get_complete_status(self) -> Dict[str, Any]:
         degradation_status = self.degradation_manager.get_current_status()
         
         status = {
@@ -299,7 +299,7 @@ class PerformanceMonitorIntegration:
         return recommendations
         
     def generate_performance_report(self) -> Dict[str, Any]:
-        current_status = self.get_comprehensive_status()
+        current_status = self.get_complete_status()
         
         history_analysis = self._analyze_performance_history()
         
@@ -457,7 +457,7 @@ async def main():
             try:
                 while True:
                     await asyncio.sleep(10)
-                    status = monitor.get_comprehensive_status()
+                    status = monitor.get_complete_status()
                     print(f"Status: {status['performance_level']} | "
                           f"Degradations: {len(status['active_degradations'])} | "
                           f"Alerts: {status['recent_alerts_count']}")
@@ -477,7 +477,7 @@ async def main():
             
         else:
             print("Generating current status report...")
-            status = monitor.get_comprehensive_status()
+            status = monitor.get_complete_status()
             
             print(f"Performance Level: {status['performance_level']}")
             print(f"Active Degradations: {len(status['active_degradations'])}")

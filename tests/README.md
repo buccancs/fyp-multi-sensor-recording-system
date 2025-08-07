@@ -19,7 +19,7 @@ This directory contains the consolidated test infrastructure for the Multi-Senso
 **Current Test Execution Status:**
 - 3 tests executing and passing (SimpleInfrastructureTest)
 - 0 tests discovered from Robolectric test suite (majority of tests)
-- Test configuration needs comprehensive review and fixes
+- Test configuration needs detailed review and fixes
 
 ## Structure
 

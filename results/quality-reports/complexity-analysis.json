@@ -20,7 +20,7 @@
       "priority": "MEDIUM",
       "category": "Documentation",
       "description": "106 complex functions lack documentation",
-      "action": "Add comprehensive docstrings explaining logic and parameters"
+      "action": "Add complete docstrings explaining logic and parameters"
     }
   ],
   "detailed_analysis": [

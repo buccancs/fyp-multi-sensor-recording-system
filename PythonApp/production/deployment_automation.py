@@ -363,7 +363,7 @@ Version: {self.version}
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 
-The Multi-Sensor Recording System is a comprehensive solution for synchronized recording
+The Multi-Sensor Recording System is a complete solution for synchronized recording
 across multiple devices including Android cameras, Shimmer sensors, and thermal cameras.
 
 

@@ -51,7 +51,7 @@ class ShimmerManagerEnhancedTest {
     }
 
     @Test
-    fun `getDeviceStatistics returns comprehensive statistics when data available`() {
+    fun `getDeviceStatistics returns complete statistics when data available`() {
         every { mockSharedPreferences.getInt("connection_count", 0) } returns 5
         every { mockSharedPreferences.getLong("last_connection_time", 0L) } returns 1700000000000L
         every { mockSharedPreferences.getInt("error_count", 0) } returns 2

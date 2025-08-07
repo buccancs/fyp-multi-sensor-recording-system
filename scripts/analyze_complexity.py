@@ -289,7 +289,7 @@ def generate_documentation_report(results: List[ComplexityAnalysis], output_file
             'priority': 'MEDIUM',
             'category': 'Documentation',
             'description': f'{len(undocumented_complex)} complex functions lack documentation',
-            'action': 'Add comprehensive docstrings explaining logic and parameters'
+            'action': 'Add complete docstrings explaining logic and parameters'
         })
     
     for result in results_by_complexity[:20]:

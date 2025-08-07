@@ -517,7 +517,7 @@ Features:
 • Enhanced Timing Precision: Multiple clock sources with calibration
 • Performance Monitoring: Real-time frame timing analysis
 • Automatic Backend Selection: Smart codec compatibility
-• Comprehensive Error Handling: Detailed error reporting
+• complete Error Handling: Detailed error reporting
 
 PsychoPy-Inspired Improvements:
 • Frame-accurate timing control

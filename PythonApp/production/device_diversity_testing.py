@@ -554,8 +554,8 @@ class DevicePerformanceTester:
             }
         )
         
-    def run_comprehensive_test_suite(self, device_spec: DeviceSpecification) -> DeviceProfile:
-        self.logger.info(f"DevicePerformanceTester: Running comprehensive test suite on {device_spec.device_model}")
+    def run_complete_test_suite(self, device_spec: DeviceSpecification) -> DeviceProfile:
+        self.logger.info(f"DevicePerformanceTester: Running thorough test suite on {device_spec.device_model}")
         
         device_spec.calculate_tier_and_score()
         
@@ -673,7 +673,7 @@ class DeviceDiversityAnalyzer:
         profiles = []
         
         for device_spec in sample_devices:
-            profile = tester.run_comprehensive_test_suite(device_spec)
+            profile = tester.run_complete_test_suite(device_spec)
             profiles.append(profile)
             self.add_device_profile(profile)
             
@@ -929,7 +929,7 @@ def main():
             
             device_spec = tester.detect_device_specifications(args.test_device)
             
-            profile = tester.run_comprehensive_test_suite(device_spec)
+            profile = tester.run_complete_test_suite(device_spec)
             analyzer.add_device_profile(profile)
             
             print(f"\nDevice Test Results:")
