@@ -1,5 +1,10 @@
 package com.multisensor.recording.ui
 
+import android.graphics.Bitmap
+import com.multisensor.recording.recording.DeviceStatus
+import com.multisensor.recording.util.ThermalColorPalette
+import com.multisensor.recording.util.TemperatureRange
+
 data class SessionDisplayInfo(
     val sessionId: String,
     val startTime: Long,
@@ -104,7 +109,13 @@ data class MainUiState(
     val showErrorDialog: Boolean = false,
 
     val isLoadingRecording: Boolean = false,
-    val isLoadingCalibration: Boolean = false
+    val isLoadingCalibration: Boolean = false,
+
+    // Enhanced thermal and UI properties
+    val currentThermalFrame: Bitmap? = null,
+    val temperatureRange: TemperatureRange = TemperatureRange.BODY_TEMPERATURE,
+    val colorPalette: ThermalColorPalette = ThermalColorPalette.IRON,
+    val connectedDevices: Map<String, DeviceStatus> = emptyMap()
 ) {
 
     val canStartRecording: Boolean
