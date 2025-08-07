@@ -44,11 +44,11 @@ These application areas underscore the importance of reliable emotional
 state detection. They motivate the creation of robust data collection
 platforms to fuel machine learning models that can recognise stress or
 emotion. A multi-modal approach -- combining **physiological signals**
-(like GSR) with **behavioral cues** (like facial expressions or thermal
+(like GSR) with **behavioural cues** (like facial expressions or thermal
 signatures) -- promises richer data for these applications. The ultimate
 goal is to enable models that can detect or predict stress accurately in
 natural settings, which requires complete, high-quality datasets.
-By capturing synchronized multimodal data, the proposed platform aims to
+By capturing synchronised multimodal data, the proposed platform aims to
 provide the ground truth needed to train and validate such advanced
 affective computing systems.
 
@@ -125,7 +125,7 @@ mechanisms.
 feeling of pressure, tension, or anxiety. In everyday usage, someone
 saying "I feel stressed" typically means they are experiencing mental or
 emotional strain. This informal definition aligns with descriptions like
-that of the World Health Organization, which defines stress as a state
+that of the World Health Organisation, which defines stress as a state
 of worry or mental tension in response to a difficult
 situation[\[11\]](https://www.who.int/news-room/questions-and-answers/item/stress#:~:text=Stress%20can%20be%20defined%20as,prompts%20us%20to%20address).
 Colloquial stress is often used as an umbrella term encompassing both
@@ -218,7 +218,7 @@ synchronisation with other modalities (like video frames or thermal
 readings) on a fine timescale. Cortisol, while not practical for
 real-time data collection (given the need for sampling bodily fluids and
 the latency of response), provides valuable scientific validation.
-Indeed, one study modeled a *cortisol-equivalent stress indicator* from
+Indeed, one study modelled a *cortisol-equivalent stress indicator* from
 GSR peaks and found significant correlation with measured salivary
 cortisol[\[12\]](https://www.frontiersin.org/journals/computer-science/articles/10.3389/fcomp.2020.00039/full#:~:text=In%20order%20to%20find%20a,completed%20stressful%2C%20boring%2C%20and%20performance),
 suggesting that carefully processed GSR data can approximate the
@@ -441,7 +441,7 @@ movements), and facial action units (muscle movements indicating
 emotion). **Thermal video** frames can be processed to extract
 temperature-based features like the nose-facial temperature gradient,
 rate of thermal change, or the presence of cool spots from sweating. Our
-hypothesis is that a model trained on a well-synchronized dataset of
+hypothesis is that a model trained on a well-synchronised dataset of
 both types of data alongside ground-truth GSR will learn latent patterns
 that correlate with stress more strongly than either alone. For
 instance, a sudden stress event might cause a combination of cues: a
@@ -450,7 +450,7 @@ temperature. A multimodal model could learn this joint signature whereas
 a unimodal model might catch only one and be less certain.
 
 To facilitate this, our data collection platform is designed to record
-**synchronized RGB and thermal streams**. By capturing both, we ensure
+**synchronised RGB and thermal streams**. By capturing both, we ensure
 that for every moment in time, we have aligned data: a thermal image and
 a corresponding RGB image (and of course the physiological readings like
 GSR). This alignment is crucial for training algorithms to exploit
@@ -472,7 +472,7 @@ machine learning experiments using the collected dataset.
 To realise the above goals, we carefully chose the hardware components
 for our multimodal data collection platform. The selection of sensors
 was based on their signal quality, compatibility, and ability to provide
-**synchronized, high-resolution data**. The platform's current
+**synchronised, high-resolution data**. The platform's current
 configuration centres on two primary devices: the **Shimmer 3 GSR+
 sensor** for electrodermal activity and the **Topdon TC001 thermal
 camera** for infrared imaging. We detail the rationale for each:
@@ -508,7 +508,7 @@ camera** for infrared imaging. We detail the rationale for each:
 - **Topdon TC001 Thermal Camera (USB, Android-compatible):** For the
   thermal imaging component, we required a camera that is **portable**,
   offers **high infrared resolution**, and can integrate with a mobile
-  platform for synchronized recording. The Topdon TC001 thermal camera
+  platform for synchronised recording. The Topdon TC001 thermal camera
   was selected after evaluating several thermal imaging options. It
   features an **IR sensor resolution of 256×192 pixels** (which can be
   enhanced via image processing to an equivalent 512×384
@@ -528,7 +528,7 @@ camera** for infrared imaging. We detail the rationale for each:
   sensors. Additionally, the Topdon camera operates at a decent frame
   rate (up to \~25--30 frames per second), enabling us to capture fluid
   thermal video of physiological changes. We also considered the
-  device's **calibration and accuracy**: the TC001 has an optimized
+  device's **calibration and accuracy**: the TC001 has an optimised
   temperature accuracy and includes a calibration shutter, which helps
   maintain accurate absolute temperature readings across sessions
   (useful if we need actual temperature values for analysis, not just
@@ -563,12 +563,12 @@ this as needed. The hardware and software design allows adding further
 sensors such as a heart rate chest strap or a respiration belt, as long
 as they can interface via Bluetooth or USB to the same system -- future
 researchers or developers can plug in new data streams and have them
-synchronized with the existing ones. The Shimmer's modular nature (it
+synchronised with the existing ones. The Shimmer's modular nature (it
 can be fitted with other sensing modules like ECG or EMG) and the
 Android platform's connectivity mean the **multi-modal platform can
 grow** to incorporate new physiological signals or environmental sensors
 with minimal changes. This extensibility supports our central
-motivation: to create a **synchronized, high-quality multimodal
+motivation: to create a **synchronised, high-quality multimodal
 dataset** that is *future-proof* for various machine learning modelling
 efforts. Whether the goal is to predict GSR from thermal images, to
 classify stress vs. no-stress from all modalities, or to explore new
@@ -632,7 +632,7 @@ Validation
 <https://www.frontiersin.org/journals/computer-science/articles/10.3389/fcomp.2020.00039/full>
 
 [\[11\]](https://www.who.int/news-room/questions-and-answers/item/stress#:~:text=Stress%20can%20be%20defined%20as,prompts%20us%20to%20address)
-Stress - World Health Organization (WHO)
+Stress - World Health Organisation (WHO)
 
 <https://www.who.int/news-room/questions-and-answers/item/stress>
 

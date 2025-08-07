@@ -7,7 +7,7 @@ The validation methodology for the Multi-Sensor Recording System employs a syste
 ![Figure 5.1: Multi-Layered Testing Architecture](../diagrams/figure_5_1_multi_layered_testing_architecture.png)
 *Figure 5.1: complete testing framework showing the hierarchical validation approach from unit testing through system integration to experimental validation.*
 
-The testing philosophy integrates established software engineering practices with specialized validation methods for scientific instrumentation, balancing full coverage with practical implementation constraints while prioritising critical system components and behaviours that directly impact research outcomes.
+The testing philosophy integrates established software engineering practices with specialised validation methods for scientific instrumentation, balancing full coverage with practical implementation constraints while prioritising critical system components and behaviours that directly impact research outcomes.
 
 ### Multi-Level Testing Hierarchy
 
@@ -26,7 +26,7 @@ Standard software testing methodologies require augmentation to address research
 
 **Temporal Synchronisation Validation:** Custom validation procedures assess timestamp alignment accuracy across distributed sensor nodes, with target specifications requiring synchronisation precision within 5 milliseconds. Testing protocols verify synchronisation maintenance under various network conditions and device configurations.
 
-**Sensor Data Quality Assessment:** Specialized validation metrics evaluate GSR signal fidelity, thermal imaging quality, and camera data integrity. Quality assessment includes signal-to-noise ratio analysis, correlation validation with reference sensors, and statistical validation of measurement precision.
+**Sensor Data Quality Assessment:** Specialised validation metrics evaluate GSR signal fidelity, thermal imaging quality, and camera data integrity. Quality assessment includes signal-to-noise ratio analysis, correlation validation with reference sensors, and statistical validation of measurement precision.
 
 **Long-term Reliability Characterisation:** Extended testing protocols assess system performance during prolonged operation, including evaluation of synchronisation drift, data loss rates, and hardware stability under continuous operation conditions.
 example, one key metric is **synchronisation precision** between devices
@@ -90,7 +90,7 @@ testing engine** (using Pytest for the Python controller), and an
 Coordinator can trigger tests on the Android device (or emulator) and
 the desktop application in tandem, and it ensures that any coordinated
 tests (like starting a session from the PC and verifying the Android
-response) happen in a synchronized fashion. Test results from all
+response) happen in a synchronised fashion. Test results from all
 components are sent to a central **Metrics Collector**, which aggregates
 logs and quantitative measurements (such as timing data or pass/fail
 counts). Finally, an **Analysis & Reporting** module processes these
@@ -167,7 +167,7 @@ data characteristics (including some noise and variability) so that the
 tests remain
 realistic[\[8\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=system%20addresses%20the%20unique%20challenges,characteristics%20of%20human%20physiological%20responses)[\[9\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=Synthetic%20data%20generation%20includes%20temporal,environmental%20conditions%2C%20and%20experimental%20scenarios).
 In cases where real data was needed (e.g., to verify that a recorded
-video and GSR signal can be synchronized post-hoc), we used **anonymized
+video and GSR signal can be synchronised post-hoc), we used **anonymized
 sample data** collected during early trial runs, with all personal
 identifiers removed. This allowed testing of data export and analysis
 functions on real-world-like data without violating privacy.
@@ -470,7 +470,7 @@ Overall, the multi-device integration tests demonstrated that the
 correctly** under normal conditions and degrades gracefully under
 abnormal conditions. The successful synchronisation of start/stop
 commands and data timestamps confirms that the core promise of the
-system -- synchronized multi-modal data capture -- is fulfilled by the
+system -- synchronised multi-modal data capture -- is fulfilled by the
 integration of its parts.
 
 ### 5.4.2 Network Communication Testing
@@ -494,7 +494,7 @@ passed[\[34\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8eff
 The high-latency scenario was more interesting -- here the start command
 from PC took about half a second to reach the phone and similarly for
 stop, etc. The system still worked (the devices all connected and
-synchronized), just that actions took longer to reflect. The test logged
+synchronised), just that actions took longer to reflect. The test logged
 \~500 ms average latency (matching what we injected) and still 0% packet
 loss[\[36\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_05_test_network_resilience_output.txt#L51-L59)[\[37\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_05_test_network_resilience_output.txt#L72-L80).
 All assertions passed in this scenario, showing that the system can
@@ -551,7 +551,7 @@ induced a drop after everything was recording, causing the PC to lose
 contact with the Android for a short period. The Android, however, keeps
 recording locally even if connection is lost. When the connection was
 restored (we simulated a 5-second outage), the PC and Android
-re-synchronized -- the PC noted a gap in heartbeats and then received a
+re-synchronised -- the PC noted a gap in heartbeats and then received a
 fresh status update once the link was back. The session continued and
 eventually was stopped successfully. This test was considered passed
 (with some warnings in the logs). It validates NFR-010 (system
@@ -641,7 +641,7 @@ listed in Chapter 3's functional requirements) were met in practice.
 FR-001 (coordination) was seen by the fact that one button press
 coordinated three devices. FR-002 (synchronisation) was evidenced by
 aligned timestamps as discussed. FR-003 (session management) was shown
-by the ability to start/stop and get outputs labeled by session, with
+by the ability to start/stop and get outputs labelled by session, with
 the system handling the state transitions correctly. FR-004 (GSR
 integration) clearly succeeded -- the sensor data was captured and
 saved. FR-005 (user interface & control) was validated by the user (in
@@ -780,7 +780,7 @@ than adequate; if anything, our analysis code might round to the nearest
 millisecond for convenience, but the raw data is precise.
 
 To summarise the data quality evaluation: the system produces **complete
-and synchronized datasets** of multi-modal recordings, with error rates
+and synchronised datasets** of multi-modal recordings, with error rates
 (frame drops, data loss) well below thresholds that would pose problems.
 There were no instances of critical data corruption or misalignment.
 Minor issues like an occasional dropped frame or a momentary sensor
@@ -953,7 +953,7 @@ targets set for the project:
   after extended duration -- but that was an stretch goal, not a
   requirement. We also tested lower resolutions (for example, 720p) and
   found the phone could handle even 120 FPS at 720p if needed, which
-  might be useful for some specialized analysis. So performance-wise,
+  might be useful for some specialised analysis. So performance-wise,
   the video recording capability is excellent.
 - **Resource Utilisation:** On the Android device, CPU usage during
   recording \~45% (one big core mostly) and memory \~250 MB; on Desktop,
@@ -1265,7 +1265,7 @@ scenario[\[54\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,error%20detection%2
 **Bluetooth Reconnection Delay:** When testing sensor reconnect, we
 found that if the Shimmer sensor lost connection, the system would
 attempt to reconnect but sometimes only after a long timeout (around 10
-seconds). We optimized the reconnection logic to detect disconnection
+seconds). We optimised the reconnection logic to detect disconnection
 faster and retry sooner. This cut the typical reconnection time to
 \~2--3 seconds, which in turn reduced data gaps. This improvement was
 recorded as fixing a major issue in reliability. - **Edge Case in
@@ -1302,7 +1302,7 @@ frame of the thermal camera after start would be blank; the workaround
 is trivial (it's immediately filled by the next frame), so we left this
 as-is since it doesn't affect data beyond the first half-second. - We
 also identified potential enhancements like integrating a second GSR
-sensor or adding live visualizations on the desktop -- but those are not
+sensor or adding live visualisations on the desktop -- but those are not
 defects, just future extensions.
 
 The **defect analysis** shows that most issues discovered were caught

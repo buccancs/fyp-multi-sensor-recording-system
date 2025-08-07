@@ -3,9 +3,9 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue)](https://www.python.org/)
 [![PyQt5](https://img.shields.io/badge/PyQt5-5.15.7-green)](https://www.riverbankcomputing.com/software/pyqt/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.8.0-red)](https://opencv.org/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
+[![Licence](https://img.shields.io/badge/Licence-MIT-blue.svg)](../LICENCE)
 
-A complete Python desktop application that serves as the central orchestrator for the Multi-Sensor Recording System. This controller coordinates multiple Android devices, USB cameras, and Bluetooth sensors to achieve research-grade synchronized data collection across heterogeneous sensor modalities.
+A complete Python desktop application that serves as the central orchestrator for the Multi-Sensor Recording System. This controller coordinates multiple Android devices, USB cameras, and Bluetooth sensors to achieve research-grade synchronised data collection across heterogeneous sensor modalities.
 
 ## 🔧 System Status: ✅ FULLY OPERATIONAL
 
@@ -40,7 +40,7 @@ A complete Python desktop application that serves as the central orchestrator fo
 
 ## Overview
 
-The Multi-Sensor Desktop Controller implements a distributed coordination system that orchestrates synchronized data collection from multiple sensor nodes. The application follows distributed systems principles [Lamport1978, Cristian1989] to achieve microsecond-precision temporal synchronisation across all connected sensors while providing an intuitive interface for research applications.
+The Multi-Sensor Desktop Controller implements a distributed coordination system that orchestrates synchronised data collection from multiple sensor nodes. The application follows distributed systems principles [Lamport1978, Cristian1989] to achieve microsecond-precision temporal synchronisation across all connected sensors while providing an intuitive interface for research applications.
 
 ### Key Capabilities
 
@@ -58,7 +58,7 @@ The Multi-Sensor Desktop Controller implements a distributed coordination system
 
 The desktop controller is designed for advanced research scenarios requiring precise multi-modal data coordination:
 
-- **Physiological Computing**: Synchronized physiological and behavioural data collection [Picard1997]
+- **Physiological Computing**: Synchronised physiological and behavioural data collection [Picard1997]
 - **Human-Computer Interaction**: Multi-perspective analysis with temporal precision [Shneiderman2016]
 - **Computer Vision Research**: RGB-thermal-depth data fusion for algorithm development
 - **Clinical Research**: Non-invasive monitoring with research-grade accuracy [Wilhelm2010]
@@ -212,7 +212,7 @@ The desktop controller manages multiple heterogeneous sensor devices simultaneou
 
 ```python
 class DeviceCoordinator:
-    """Coordinates multiple sensor devices for synchronized recording."""
+    """Coordinates multiple sensor devices for synchronised recording."""
     
     def __init__(self):
         self.android_devices = {}
@@ -369,7 +369,7 @@ class ShimmerManager:
 - **Multi-Library Support**: Fallback support for pyshimmer, bluetooth, and pybluez
 - **Device Discovery**: Bluetooth scanning with automatic device detection
 - **Real-time Streaming**: Continuous GSR data with configurable sampling rates
-- **Session Management**: Session-based data organization with CSV export
+- **Session Management**: Session-based data organisation with CSV export
 - **Error Recovery**: Graceful handling of connection failures and library issues
 
 ### Advanced Features
@@ -753,7 +753,7 @@ python PythonApp/application.py --log-level DEBUG
 
 #### GUI Interface Overview
 
-The desktop controller features a tabbed interface organized by workflow:
+The desktop controller features a tabbed interface organised by workflow:
 
 ```mermaid
 graph TB
@@ -826,7 +826,7 @@ graph TB
 
 3. **Recording Execution**:
    ```python
-   # Start synchronized recording across all devices
+   # Start synchronised recording across all devices
    session_config = SessionConfig(
        session_name="experiment_001",
        duration=300,  # 5 minutes
@@ -915,7 +915,7 @@ class DataExporter:
             raise ValueError(f"Unsupported export format: {format}")
     
     def _export_research_format(self, session: SessionInfo):
-        """Export in standardized research format with metadata."""
+        """Export in standardised research format with metadata."""
         export_package = {
             'metadata': session.metadata,
             'video_files': session.video_files,
@@ -1292,7 +1292,7 @@ graph TB
     subgraph "Data Management Architecture"
         INGEST[Data Ingestion<br/>Multi-source Collection]
         VALIDATE[Validation<br/>Integrity Checking]
-        ORGANIS\1[Organization<br/>Session Structure]
+        ORGANIS\1[Organisation<br/>Session Structure]
         COMPRESS[Compression<br/>Storage Optimisation]
         INDEX[Indexing<br/>Metadata Database]
         EXPORT[Export<br/>Analysis Formats]
@@ -1362,7 +1362,7 @@ class PerformanceOptimizer:
         self.gpu_available = self._check_gpu_availability()
         
     async def process_video_frame(self, frame: np.ndarray) -> ProcessedFrame:
-        """Optimized video frame processing."""
+        """Optimised video frame processing."""
         if self.gpu_available:
             return await self._process_frame_gpu(frame)
         else:
@@ -1874,9 +1874,9 @@ class RobustErrorHandling:
 
 ---
 
-## License
+## Licence
 
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+This project is licenced under the MIT Licence - see the [LICENCE](../LICENCE) file for details.
 
 ## Acknowledgments
 

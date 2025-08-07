@@ -53,7 +53,7 @@ technical specifications available in the docs/ directory.
 
 ### A.1 Component Documentation Reference
 
-The Multi-Sensor Recording System is organized into self-contained components, each with complete documentation:
+The Multi-Sensor Recording System is organised into self-contained components, each with complete documentation:
 
 **Core System Components:**
 
@@ -140,8 +140,8 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 | **Kotlin + Camera2**   | Java + CameraX, Flutter | Native performance, modern async support     | Maximum performance           | Medium complexity      |
 | **WebSocket Protocol** | HTTP REST, gRPC         | Real-time bidirectional communication        | Low latency communication     | Low complexity         |
 | **SQLite + JSON**      | PostgreSQL, MongoDB     | Local storage simplicity                     | Fast local queries            | Low complexity         |
-| **OpenCV Integration** | Custom image processing | Mature computer vision library               | Optimized algorithms          | Medium complexity      |
-| **Bluetooth LE**       | WiFi Direct, USB        | Low power, standardized protocol             | Power efficient               | Medium complexity      |
+| **OpenCV Integration** | Custom image processing | Mature computer vision library               | Optimised algorithms          | Medium complexity      |
+| **Bluetooth LE**       | WiFi Direct, USB        | Low power, standardised protocol             | Power efficient               | Medium complexity      |
 
 ---
 ## Appendix B: Testing and Evaluation Results
@@ -285,7 +285,7 @@ into the thesis framework.
 
 **Multi-Device Synchronisation System Technical Specifications:**
 
-The synchronisation system implements sophisticated Network Time Protocol (NTP) algorithms optimized for local network
+The synchronisation system implements sophisticated Network Time Protocol (NTP) algorithms optimised for local network
 precision and mobile device coordination. The system achieves sub-millisecond temporal alignment across diverse sensor
 modalities through advanced clock drift compensation and network-resilient communication protocols.
 
@@ -293,7 +293,7 @@ modalities through advanced clock drift compensation and network-resilient commu
 
 - **MasterClockSynchronizer**: Central time authority with precision drift compensation
 - **SessionSynchronizer**: Coordinated session management with automatic recovery mechanisms
-- **NTPTimeServer**: Custom NTP implementation optimized for local network operation
+- **NTPTimeServer**: Custom NTP implementation optimised for local network operation
 - **Clock Drift Compensation**: Advanced algorithms maintaining accuracy over extended sessions
 
 *Performance Specifications:*
@@ -347,7 +347,7 @@ maintaining individual device autonomy.
 
 **Camera Recording System Technical Specifications:**
 
-The camera system implements Stage 3 RAW extraction with Samsung-specific optimizations and multi-stream configuration
+The camera system implements Stage 3 RAW extraction with Samsung-specific optimisations and multi-stream configuration
 capabilities. The system supports simultaneous 4K video recording and DNG RAW capture with precise temporal
 synchronisation.
 
@@ -356,7 +356,7 @@ synchronisation.
 - **Multi-Stream Configuration**: Independent video and RAW capture with quality optimisation
 - **Samsung S21/S22 Optimisation**: LEVEL_3 hardware capability utilisation with automatic detection
 - **RAW Processing Pipeline**: DNG file generation with complete metadata embedding
-- **Synchronized Capture**: Microsecond-level synchronisation across multiple camera devices
+- **Synchronised Capture**: Microsecond-level synchronisation across multiple camera devices
 - **Quality Validation**: complete error management and recovery with visual confirmation
 
 *Performance Specifications:*
@@ -389,7 +389,7 @@ complementary physiological signals.
 
 **TopDon Thermal Camera Integration Technical Specifications:**
 
-The thermal camera integration provides sophisticated temperature measurement capabilities optimized for physiological
+The thermal camera integration provides sophisticated temperature measurement capabilities optimised for physiological
 research applications. The system features uncooled microbolometer technology with research-grade accuracy.
 
 *Hardware Specifications:*
@@ -397,7 +397,7 @@ research applications. The system features uncooled microbolometer technology wi
 - **Resolution**: 256×192 pixel thermal sensor with high-precision measurement
 - **Temperature Range**: -20°C to +650°C (TC001 Plus) with ±1.5°C accuracy
 - **Frame Rate**: Up to 25 Hz with real-time thermal data processing
-- **Spectral Range**: 8-14 μm LWIR optimized for human physiological monitoring
+- **Spectral Range**: 8-14 μm LWIR optimised for human physiological monitoring
 - **Connectivity**: USB-C OTG with Android device integration and automatic detection
 
 *Processing Capabilities:*
@@ -529,17 +529,17 @@ graph TB
 
 **Table A.2: Software Environment Specifications**
 
-| Software Component      | Version                  | License Type   | Installation Source            | Configuration Notes                            |
+| Software Component      | Version                  | Licence Type   | Installation Source            | Configuration Notes                            |
 |-------------------------|--------------------------|----------------|--------------------------------|------------------------------------------------|
-| **Operating System**    | Windows 10/11 Pro        | Commercial     | Microsoft Store/Volume License | Enable Developer Mode for Android debugging    |
+| **Operating System**    | Windows 10/11 Pro        | Commercial     | Microsoft Store/Volume Licence | Enable Developer Mode for Android debugging    |
 | **Python Runtime**      | Python 3.9+ with conda   | Open Source    | Anaconda Distribution          | Use conda environment for dependency isolation |
 | **Android Studio**      | 2022.3.1+ (Electric Eel) | Open Source    | Google Developer Tools         | Include Android SDK and ADB tools              |
-| **OpenCV**              | 4.8.0+                   | BSD License    | pip/conda install              | Computer vision and image processing           |
-| **FastAPI**             | 0.104.0+                 | MIT License    | pip install                    | Web API framework for device communication     |
-| **SQLAlchemy**          | 2.0+                     | MIT License    | pip install                    | Database ORM for session management            |
-| **WebSocket Libraries** | websockets 11.0+         | BSD License    | pip install                    | Real-time bidirectional communication          |
+| **OpenCV**              | 4.8.0+                   | BSD Licence    | pip/conda install              | Computer vision and image processing           |
+| **FastAPI**             | 0.104.0+                 | MIT Licence    | pip install                    | Web API framework for device communication     |
+| **SQLAlchemy**          | 2.0+                     | MIT Licence    | pip install                    | Database ORM for session management            |
+| **WebSocket Libraries** | websockets 11.0+         | BSD Licence    | pip install                    | Real-time bidirectional communication          |
 | **PyQt5**               | 5.15.0+                  | GPL/Commercial | pip install                    | GUI framework for desktop controller           |
-| **psutil**              | 5.8.0+                   | BSD License    | pip install                    | System monitoring and resource tracking        |
+| **psutil**              | 5.8.0+                   | BSD Licence    | pip install                    | System monitoring and resource tracking        |
 
 **Figure A.2: Physical Laboratory Setup Configuration**
 
@@ -550,7 +550,7 @@ graph TB
 
 Top Panel: Overview of complete laboratory setup with 360-degree view
 - Central controller workstation with dual 27" monitors displaying system dashboard
-- Organized cable management with colour-coded cables for different systems
+- Organised cable management with colour-coded cables for different systems
 - Professional lighting setup with adjustable colour temperature
 
 Middle Panel: Participant interaction area
@@ -575,7 +575,7 @@ Bottom Panel: Technical infrastructure detail
 | **DHCP Lease Time**          | 24 hours                                   | Stable addressing for long sessions    | Static reservations for critical devices        |
 | **Quality of Service (QoS)** | Video: High, Data: Medium, Management: Low | Prioritise real-time data streams      | Bandwidth allocation per device type            |
 | **Firewall Rules**           | Block external internet, allow internal    | Research data protection               | Prevent unauthorized data exfiltration          |
-| **Network Time Protocol**    | Internal NTP server at 192.168.100.1       | Precise time synchronisation           | GPS-synchronized reference clock                |
+| **Network Time Protocol**    | Internal NTP server at 192.168.100.1       | Precise time synchronisation           | GPS-synchronised reference clock                |
 | **VPN Access**               | IPSec tunnel for remote administration     | Secure remote system access            | Multi-factor authentication required            |
 | **Monitoring and Logging**   | SNMP monitoring with syslog aggregation    | Network performance tracking           | Centralized log analysis and alerting           |
 
@@ -802,7 +802,7 @@ Session Control Panel:
 | Interface Element            | Function                             | User Action                       | Expected Result                            | Troubleshooting                              |
 |------------------------------|--------------------------------------|-----------------------------------|--------------------------------------------|----------------------------------------------|
 | **Device Discovery Button**  | Scan for available Android devices   | Click "Discover Devices"          | Devices appear in sidebar list             | Check Wi-Fi connectivity if no devices found |
-| **Session Start Control**    | Begin synchronized recording         | Click "Start Session" after setup | All devices begin recording simultaneously | Verify all devices show green status         |
+| **Session Start Control**    | Begin synchronised recording         | Click "Start Session" after setup | All devices begin recording simultaneously | Verify all devices show green status         |
 | **Quality Monitor Panel**    | Real-time assessment of data quality | Monitor automatically updates     | Colour indicators show quality status       | Red indicators require attention             |
 | **Emergency Stop Button**    | Immediately halt all recording       | Click red "STOP" button           | All devices stop, data saved automatically | Use only in emergency situations             |
 | **Export Data Wizard**       | Convert and export research data     | Click "Export Session Data"       | Step-by-step data conversion process       | Check storage space before export            |
@@ -910,7 +910,7 @@ flowchart TD
 [PLACEHOLDER: Screenshot collection showing:
 1. Main dashboard with device status indicators
 2. Session configuration interface with participant setup
-3. Real-time monitoring view with synchronized data streams
+3. Real-time monitoring view with synchronised data streams
 4. Quality assessment panel with statistical metrics
 5. Data export interface with format selection options]
 ```
@@ -1021,7 +1021,7 @@ flowchart LR
 ```
 [PLACEHOLDER: Detailed screenshots showing:
 1. Session start interface with countdown timer
-2. Live data monitoring with synchronized timestamps
+2. Live data monitoring with synchronised timestamps
 3. Quality indicators with real-time alerts
 4. Manual annotation interface for researchers
 5. Session completion summary with data statistics]
@@ -1311,7 +1311,7 @@ xychart-beta
 **[PLACEHOLDER: User Feedback Forms]**
 
 - Location: `docs/evaluation/user_feedback_forms.pdf`
-- Content: Standardized feedback forms used for user experience evaluation
+- Content: Standardised feedback forms used for user experience evaluation
 - Expected sections: System usability scale, custom research workflow questionnaires, technical difficulty assessments
 
 **[PLACEHOLDER: Statistical Analysis Reports]**
@@ -1341,7 +1341,7 @@ This appendix provides detailed code snippets for all files referenced in the th
 corresponds to specific file references mentioned in Chapters 1-6, demonstrating the technical implementation of
 concepts discussed in the academic content.
 
-*Note: Code snippets are organized by reference numbers (F.1-F.177) corresponding to file mentions in the chapter
+*Note: Code snippets are organised by reference numbers (F.1-F.177) corresponding to file mentions in the chapter
 sections. Complete source code is available in the project repository.*
 ---
 ## Chapter 1 References
@@ -1515,7 +1515,7 @@ class SessionManager:
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
 ---
     def create_session(self, session_name: Optional[str] = None) -> Dict:
-        """Create a new recording session with standardized structure"""
+        """Create a new recording session with standardised structure"""
         timestamp = datetime.now()
 ---
         if session_name is None:
@@ -1932,7 +1932,7 @@ Python and Kotlin implementations. The full codebase is available in the project
 documentation, unit tests, and deployment scripts. The selected listings above demonstrate key architectural patterns
 and technical innovations that address the unique challenges of research-grade distributed sensor coordination.
 |---|---|---|---|
-| **Start Recording** | Green "Start" button | Ctrl+R | Synchronized recording begins across all devices |
+| **Start Recording** | Green "Start" button | Ctrl+R | Synchronised recording begins across all devices |
 | **Pause Recording** | Yellow "Pause" button | Ctrl+P | All devices pause simultaneously, resume capability
 maintained |
 | **Stop Recording** | Red "Stop" button | Ctrl+S | Complete session termination, data finalisation initiated |
@@ -1963,7 +1963,7 @@ maintained |
 | **JSON**            | Web applications, Python analysis     | Medium     | High                 | Fast            |
 | **MATLAB .mat**     | MATLAB/Octave analysis                | Medium     | MATLAB ecosystem     | Medium          |
 | **HDF5**            | Large dataset analysis (Python, R)    | Compressed | Scientific computing | Slow            |
-| **Custom Research** | Specialized analysis pipelines        | Variable   | Project-specific     | Variable        |
+| **Custom Research** | Specialised analysis pipelines        | Variable   | Project-specific     | Variable        |
 
 ---
 ## Appendix C: Supporting Documentation and Data
@@ -2218,7 +2218,7 @@ research teams. The procedures balance experimental rigor with practical usabili
 1. **Session Completion** (3 minutes)
     - Stop recording on all devices simultaneously
     - Verify data integrity and completeness
-    - Export data in standardized formats
+    - Export data in standardised formats
     - Generate session summary report
 
 **Quality Assurance During Recording:**
@@ -2239,7 +2239,7 @@ Quality Indicators:
 
 **Data Export Procedures:**
 
-The export system provides multiple format options optimized for different analysis workflows commonly used in
+The export system provides multiple format options optimised for different analysis workflows commonly used in
 psychophysiological research. Format selection should align with subsequent analysis requirements and computational
 resources.
 
@@ -2260,7 +2260,7 @@ export_data(
     include_raw_video=False
 )
 
-# MATLAB format for specialized toolboxes
+# MATLAB format for specialised toolboxes
 export_data(
     format='mat',
     matlab_version='v7.3',
@@ -2289,7 +2289,7 @@ python -m analysis.validate_session --session-id [SESSION_ID]
 ### Technical Specifications and Reference Materials
 
 This appendix provides complete technical documentation, reference data, and supporting materials that supplement
-the main thesis content. The materials are organized to support both immediate research applications and future system
+the main thesis content. The materials are organised to support both immediate research applications and future system
 development efforts.
 
 #### C.1 Hardware Specifications
@@ -2771,7 +2771,7 @@ Research Productivity Impact:
 
 This section provides complete code snippets for all files referenced throughout the thesis chapters. Each code listing corresponds to specific file references mentioned in Chapters 1-6, demonstrating the technical implementation of concepts discussed in the academic content.
 
-The code snippets are organized by reference numbers (F.1-F.177) as cited in the chapter sections. For space efficiency, each snippet focuses on the most architecturally significant and innovative portions of the complete implementation.
+The code snippets are organised by reference numbers (F.1-F.177) as cited in the chapter sections. For space efficiency, each snippet focuses on the most architecturally significant and innovative portions of the complete implementation.
 
 *Note: Complete source code with full implementations is available in the project repository at `PythonApp/` and `AndroidApp/` directories.*
 ---
@@ -2855,7 +2855,7 @@ class SessionManager:
         self.base_recordings_dir.mkdir(parents=True, exist_ok=True)
 ---
     def create_session(self, session_name: Optional[str] = None) -> Dict:
-        """Create a new recording session with standardized structure"""
+        """Create a new recording session with standardised structure"""
         timestamp = datetime.now()
         session_id = self._generate_session_id(session_name, timestamp)
         session_dir = self.base_recordings_dir / session_id
@@ -3689,26 +3689,26 @@ connections exist.
 
 For academic submission, the following diagram categories should be prioritized:
 
-1. **Requirements Analysis Visualizations** (Chapter 3)
+1. **Requirements Analysis Visualisations** (Chapter 3)
     - Traditional vs. contactless comparison for establishing research motivation
     - Requirements dependency network for systematic analysis demonstration
 
 1. **Testing Framework Diagrams** (Chapter 5)
     - Multi-layered testing architecture for methodology validation
-    - Performance benchmark visualizations for quantitative evidence
+    - Performance benchmark visualisations for quantitative evidence
 
 1. **Achievement Visualisation** (Chapter 6)
     - Goal achievement timeline for research contribution demonstration
     - Performance excellence metrics for academic impact assessment
 
-#### H.4.2 Repository Organization Recommendations
+#### H.4.2 Repository Organisation Recommendations
 
-1. **Create placeholder image files** with standardized naming convention
+1. **Create placeholder image files** with standardised naming convention
 2. **Maintain diagram-to-reference mapping table** in repository documentation
 3. **Implement automated diagram reference validation** in documentation build process
 4. **Establish diagram creation guidelines** for future development
 
 **Estimated effort for complete diagram creation**: 40-60 hours
-**Minimum viable diagram set**: 12 diagrams (covering Chapter 3 and key Chapter 5 visualizations)
+**Minimum viable diagram set**: 12 diagrams (covering Chapter 3 and key Chapter 5 visualisations)
 **Academic submission readiness**: Requires completion of Chapter 3 and Chapter 5 diagram sets
 ---

@@ -8,10 +8,10 @@ The user's feedback highlighted that our previous implementation lacked the comp
 
 | Category | Previous Implementation | **Shimmer Pro (New)** | Official Shimmer Apps |
 |----------|------------------------|----------------------|----------------------|
-| **Data Visualization** | ❌ Text-only display | ✅ **Real-time charts with MPAndroidChart** | ✅ Basic charts |
+| **Data Visualisation** | ❌ Text-only display | ✅ **Real-time charts with MPAndroidChart** | ✅ Basic charts |
 | **UI Design** | ❌ Basic Material Design | ✅ **Professional Material Design 3** | ✅ Professional UI |
 | **Device Status** | ❌ Simple text status | ✅ **Visual indicators with progress bars** | ✅ Status indicators |
-| **Battery Monitoring** | ❌ Text percentage only | ✅ **Visual progress bar with color coding** | ✅ Battery visualization |
+| **Battery Monitoring** | ❌ Text percentage only | ✅ **Visual progress bar with colour coding** | ✅ Battery visualisation |
 | **Signal Quality** | ❌ Text dBm value | ✅ **Real-time signal strength bars** | ✅ Signal indicators |
 | **Data Export** | ❌ No export functionality | ✅ **CSV/JSON export with metadata** | ✅ Data export |
 | **Real-time Statistics** | ❌ Basic packet count | ✅ **Live dashboard with rate, duration, quality** | ✅ Statistics display |
@@ -21,7 +21,7 @@ The user's feedback highlighted that our previous implementation lacked the comp
 | **Device Information** | ✅ Basic info display | ✅ **Comprehensive device panel with formatting** | ✅ Device details |
 | **Configuration Presets** | ✅ Basic presets | ✅ **Enhanced preset system with quick setup** | ✅ Preset management |
 | **Error Handling** | ✅ Basic toast messages | ✅ **Visual error states with proper feedback** | ✅ Error management |
-| **Performance** | ✅ Basic functionality | ✅ **Optimized charts with ring buffer (500 pts)** | ✅ Optimized performance |
+| **Performance** | ✅ Basic functionality | ✅ **Optimised charts with ring buffer (500 pts)** | ✅ Optimised performance |
 
 ## Professional Features Added
 
@@ -31,9 +31,9 @@ The user's feedback highlighted that our previous implementation lacked the comp
 - **Complete session metadata** including device info and timestamps
 - **Real-time data rate monitoring** for quality assessment
 
-### 📊 Advanced Data Visualization
+### 📊 Advanced Data Visualisation
 - **Interactive charts** with professional styling and animations
-- **Color-coded sensor data** for easy identification
+- **Colour-coded sensor data** for easy identification
 - **Zoom and pan capabilities** for detailed analysis
 - **Tab-based chart switching** for multi-sensor monitoring
 
@@ -43,8 +43,8 @@ The user's feedback highlighted that our previous implementation lacked the comp
 - **Progress bars** for quantitative data (battery, signal strength)
 - **Consistent iconography** throughout the interface
 
-### ⚡ Performance Optimizations
-- **Efficient chart updates** with optimized data structures
+### ⚡ Performance Optimisations
+- **Efficient chart updates** with optimised data structures
 - **Ring buffer implementation** for smooth real-time display
 - **Lazy loading** of non-essential UI components
 - **Coroutine-based** data processing for UI responsiveness
@@ -58,7 +58,7 @@ The user's feedback highlighted that our previous implementation lacked the comp
 - No data analysis capabilities
 
 ### After: Professional Research Platform
-- **Real-time data visualization** enables immediate quality assessment
+- **Real-time data visualisation** enables immediate quality assessment
 - **Export capabilities** allow integration with research workflows
 - **Professional appearance** suitable for research presentations
 - **Comprehensive monitoring** provides confidence in data collection
@@ -69,7 +69,7 @@ The user's feedback highlighted that our previous implementation lacked the comp
 |---------|------------------------------|-------------------|-----------|
 | Device Selection | Basic ShimmerBluetoothDialog | Enhanced custom dialog with filtering | ✅ **More intuitive** |
 | CRC Configuration | 3-option spinner | ✅ **Exact same functionality** | ✅ **100% compatible** |
-| Data Visualization | Basic text output | **Professional real-time charts** | ✅ **Superior visualization** |
+| Data Visualisation | Basic text output | **Professional real-time charts** | ✅ **Superior visualisation** |
 | UI Framework | Basic Android Views | **Material Design 3 components** | ✅ **Modern design** |
 | Architecture | Single Activity + Handlers | **MVVM + Coroutines + Hilt DI** | ✅ **Better architecture** |
 | Data Export | Manual file handling | **Professional export system** | ✅ **Research-grade** |
@@ -80,9 +80,9 @@ The user's feedback highlighted that our previous implementation lacked the comp
 
 ### ✅ Research Software Standards
 - **Proper data export formats** with complete metadata
-- **Professional documentation** and code organization
+- **Professional documentation** and code organisation
 - **Error handling** with user-friendly messages
-- **Performance optimization** for real-time data processing
+- **Performance optimisation** for real-time data processing
 
 ### ✅ Modern Android Development
 - **MVVM architecture** with reactive state management

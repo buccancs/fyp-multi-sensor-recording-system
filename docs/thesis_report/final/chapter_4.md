@@ -9,7 +9,7 @@ sensor node responsible for data capture, while the PC acts as a central
 coordinator or hub. This **PC--Android system design** follows a
 master--slave paradigm in which the Python desktop application
 orchestrates one or more Android sensor nodes, achieving precise
-synchronized operation across all
+synchronised operation across all
 devices[\[1\]](AndroidApp/README.md#L8-L16)[\[2\]](PythonApp/README.md#L70-L78).
 The design balances device autonomy with centralized control: each
 Android device can operate independently for local sensor management and
@@ -42,7 +42,7 @@ coordination services (network server, synchronisation engine, data
 manager), sending control commands to the Android app and receiving live
 status and preview data. The design shows a* *hybrid star topology: the
 PC is the hub coordinating distributed mobile nodes, enabling
-synchronized start/stop triggers, real-time monitoring, and unified
+synchronised start/stop triggers, real-time monitoring, and unified
 timekeeping across the system.*
 
 ## 4.2 Android Application Design and Sensor Integration
@@ -56,13 +56,13 @@ external devices. It is developed in Kotlin and structured using a clear
 logic layer** of managers and controllers, which in turn utilise
 lower-level sensor interfacing components. This design maximizes
 modularity and maintainability, allowing each sensor modality to be
-managed independently while ensuring all subsystems remain synchronized.
+managed independently while ensuring all subsystems remain synchronised.
 Key architectural components include a `SessionManager` for coordinating
 recording sessions, a `DeviceManager` for handling attached sensor
 devices, and a `ConnectionManager` for managing the network link to the
 PC
 controller[\[4\]](AndroidApp/README.md#L82-L90).
-The data acquisition layer comprises specialized recorder classes for
+The data acquisition layer comprises specialised recorder classes for
 each modality -- e.g. a `CameraRecorder` for the phone's RGB camera, a
 `ThermalRecorder` for the USB thermal camera, and a `ShimmerRecorder`
 for the GSR sensor -- each encapsulating the details of interfacing with
@@ -81,7 +81,7 @@ logging and configuration, further decoupling components.
 Importantly, the Android application is built to facilitate **precise
 time alignment** of multi-modal data at the point of capture. All sensor
 readings and frames are timestamped using a common reference (system
-clock or a synchronized clock source) as they are recorded. For example,
+clock or a synchronised clock source) as they are recorded. For example,
 when a recording session begins under remote command, the app
 initializes each sensor nearly simultaneously and tags the data with
 timestamps that can later be correlated across devices. The Android app
@@ -143,7 +143,7 @@ represented as a colour or grayscale thermogram) and underlying
 temperature data for each pixel. The `ThermalRecorder` obtains each
 frame from the SDK callback in a background thread to avoid stalling the
 UI. Each frame is timestamped with a high-resolution timestamp
-(synchronized to the system clock or a master clock) and placed into a
+(synchronised to the system clock or a master clock) and placed into a
 queue for processing and storage. The app writes the raw thermal data
 stream to a file in real-time during recording -- typically this is a
 proprietary binary format that includes a header (with metadata like
@@ -192,7 +192,7 @@ preview image is sent over the network to the PC for real-time
 monitoring. The diagram also highlights the coordination required: the
 PC's "start recording" command triggers the camera initialisation
 (opening the USB device and starting capture) almost concurrently with
-other sensors, ensuring the thermal stream is synchronized with the
+other sensors, ensuring the thermal stream is synchronised with the
 overall session timeline.)*
 
 ### 4.2.2 GSR Sensor Integration (Shimmer)
@@ -320,7 +320,7 @@ contains core logic components. The central piece is often called the
 `Application Controller` or `Session Manager` on the PC side -- this
 orchestrates the overall workflow of a recording session (responding to
 user inputs from the UI, coordinating timing, and updating UI status).
-Complementing it are specialized managers such as a `DeviceManager` (to
+Complementing it are specialised managers such as a `DeviceManager` (to
 keep track of all connected Android devices and other sensors like USB
 webcams), a `CalibrationManager` (for handling multi-camera calibration
 routines using OpenCV), and possibly a `StimulusController` if the
@@ -380,7 +380,7 @@ From a **functionality** perspective, the desktop controller provides
 the researcher with a one-stop interface to **manage multi-device
 recording sessions**. Using the UI, the user can configure an experiment
 session (select which devices/sensors are active, set participant or
-session metadata, etc.), then initiate a synchronized start. When the
+session metadata, etc.), then initiate a synchronised start. When the
 user hits \"Start\", the controller sends out start commands to all
 connected Android devices (and starts any local recordings like webcams
 or Shimmer) nearly
@@ -391,10 +391,10 @@ readouts or simple plots of sensor data like GSR -- giving confidence
 that all modalities are functioning. It also updates status indicators
 (battery levels of phones, available storage, current timestamp offsets,
 etc.) in real time. The PC periodically checks that all devices are
-still synchronized (drift monitoring) and can even warn if, say, an
+still synchronised (drift monitoring) and can even warn if, say, an
 Android device's clock starts diverging or if data throughput from a
 device is lagging. When the user stops the session, the controller
-issues a synchronized stop command to all devices and awaits
+issues a synchronised stop command to all devices and awaits
 confirmation that each has safely finalized its data. It then collates
 metadata about the session (e.g., file names from each device, any
 timing offsets, calibration info) and can present a summary or save a
@@ -408,7 +408,7 @@ and the thermal camera), and a **stimulus presentation module** which
 can display images or play audio on a connected screen as part of a
 study protocol. These are implemented as part of the UI and controlled
 through the same session manager to ensure any stimuli are timestamped
-and synchronized with the sensor data.
+and synchronised with the sensor data.
 
 In summary, the desktop controller is the **brains of the system**,
 coordinating all pieces to work in unison. It abstracts the complexity
@@ -418,7 +418,7 @@ Python with Qt and libraries like OpenCV, NumPy, and PySerial/Bluetooth
 gives it the power and flexibility needed for a research environment: it
 can be easily extended or scripted for new functionality (for example,
 adding support for another type of sensor or a new analysis routine)
-while maintaining real-time performance through optimized libraries and
+while maintaining real-time performance through optimised libraries and
 asynchronous design. The combination of a robust backend and an
 easy-to-use frontend makes the desktop application a critical component
 that bridges researchers with the distributed sensing network.
@@ -543,7 +543,7 @@ the PC might determine "start recording at time T = 1622541600.000 (Unix
 epoch seconds)" a few hundred milliseconds in the future, and send a
 message to each device: *"start_recording at T with session_id X"*. Each
 Android device receives this and waits until its local clock
-(synchronized to master) hits T to begin capturing
+(synchronised to master) hits T to begin capturing
 data[\[46\]](PythonApp/master_clock_synchronizer.py#L164-L173)[\[47\]](PythonApp/master_clock_synchronizer.py#L170-L178).
 Because all devices are sync'd to the master within a few milliseconds
 accuracy, this effectively aligns the start of recording across devices
@@ -580,7 +580,7 @@ pervasive inclusion of timestamps means that even if absolute clock sync
 had a small error, each piece of data can be re-aligned precisely in
 post-processing using interpolation or offset adjustment.
 
-In summary, the **PC--Android communication** is realized via a reliable
+In summary, the **PC--Android communication** is realised via a reliable
 JSON/TCP socket protocol, enabling complete remote control and live
 data streaming, while the **synchronisation mechanism** ensures all
 devices operate on a unified timeline. Together, these allow the system
@@ -596,7 +596,7 @@ collection with the necessary timing guarantees.
 
 *(Figure 4.6: Communication and synchronisation sequence. This figure
 illustrates the sequence of interactions for device connection and a
-synchronized session start. Initially, each Android device connects to
+synchronised session start. Initially, each Android device connects to
 the desktop's socket server and sends a JSON handshake (including device
 ID and sensor capabilities). The desktop acknowledges and lists the
 device as ready. The figure then shows the* *synchronisation phase: the
@@ -620,7 +620,7 @@ devices in time.)*
 The **data processing pipeline** in the Multi-Sensor Recording System
 encompasses the steps from raw data capture to the production of
 analysis-ready outputs. It involves components on both the Android side
-(which perform on-the-fly processing and organization of data as it's
+(which perform on-the-fly processing and organisation of data as it's
 collected) and the desktop side (which aggregates and post-processes
 data from all devices after or during a recording session). The design
 aim is to ensure that by the end of a session, all the heterogeneous
@@ -657,12 +657,12 @@ analysis of hand presence -- just saving the coordinates or mask is
 enough, which is far smaller).
 
 All data on the Android is saved in a **structured file system
-hierarchy** (often organized by session). For each recording session,
+hierarchy** (often organised by session). For each recording session,
 the app creates a session folder containing the various files: e.g.,
 `session_001_metadata.json` (with high-level info like session ID, start
 time, participant ID), `session_001_camera.mp4` (phone RGB video),
 `session_001_thermal.raw` (thermal binary file),
-`session_001_shimmer.csv` (physio data), etc. This local organization is
+`session_001_shimmer.csv` (physio data), etc. This local organisation is
 part of the pipeline because it enforces consistent naming and indexing
 for later merging. The Persistence layer on Android ensures writes are
 flushed and files are closed safely at the end of sessions to avoid
@@ -713,7 +713,7 @@ analysis[\[54\]](docs/python_desktop_controller_readme.md#L158-L163).
 Commonly, researchers might want all sensor data in a single file or
 database, or in a form that can be loaded into Python or MATLAB for
 analysis. The system might generate a unified CSV or HDF5 file that
-contains synchronized timestamps and all sensor readings. For video
+contains synchronised timestamps and all sensor readings. For video
 data, it might extract per-frame timestamps and save them alongside the
 physiological signals. If needed, the video and thermal imagery can be
 merged -- for example, some studies may overlay the thermal data on the
@@ -742,20 +742,20 @@ data and plot it (e.g., graph the GSR over time and allow overlaying
 markers where certain events happened, or scrub through the video with
 the corresponding thermal images). This isn't so much a part of the
 pipeline that creates new data, but it helps in verifying and exploring
-the synchronized dataset.
+the synchronised dataset.
 
 In summary, the data processing pipeline ensures that raw streams from
 multiple sensors are first captured reliably (with minimal real-time
 processing except what's necessary for compression or region-of-interest
-extraction), then centrally synchronized and validated, and finally
+extraction), then centrally synchronised and validated, and finally
 exported in a cohesive format. The pipeline leverages the structured
-approach of the system: each modality's data is handled by specialized
+approach of the system: each modality's data is handled by specialised
 code, but they converge in a common timeline. The design choice to
 timestamp everything and log rich metadata greatly simplifies the later
 stages of the pipeline, since the heavy lifting of alignment is mostly
 solved by design. This allows the **researchers to focus on analysis**,
 knowing that the incoming data has been properly collected and
-synchronized by the system. The pipeline thus transforms raw multi-modal
+synchronised by the system. The pipeline thus transforms raw multi-modal
 data into an integrated dataset suitable for tasks like machine learning
 model training, statistical analysis of physiological responses, or
 visualisation in publications.
@@ -769,8 +769,8 @@ files on the device. In the middle, the* *synchronisation and
 aggregation* *step: the PC collects the metadata and possibly the data
 files from all devices, aligning them on a common timeline (using the
 master clock and timestamps). At the right, the* *output stage* *shows
-the generation of synchronized data outputs -- for example, combined
-datasets, synchronized video playback with sensor overlays, and summary
+the generation of synchronised data outputs -- for example, combined
+datasets, synchronised video playback with sensor overlays, and summary
 reports. Also indicated is a quality check loop, where the system
 validates data integrity (e.g., checking for missing frames or drift)
 and logs any issues. This pipeline ensures that by the end of this
@@ -812,7 +812,7 @@ adopted to address them:
   through **concurrency and efficient data handling**. On Android, each
   sensor recorder runs largely on its own thread or coroutine, writing
   to dedicated files or buffers so that no single thread becomes a
-  bottleneck. We used optimized libraries (Camera2 with hardware codecs,
+  bottleneck. We used optimised libraries (Camera2 with hardware codecs,
   buffered I/O streams for sensor data) to reduce CPU usage. Moreover,
   by performing some data reduction in real time (e.g., not every frame
   is forwarded as a preview, or sending compressed images), we kept the
@@ -884,7 +884,7 @@ adopted to address them:
   constraints. We encountered issues like the phone's CPU heating up and
   throttling during long sessions, or the garbage collector pausing the
   app if too much memory was used improperly. Our solution was two-fold:
-  **optimise and monitor**. We optimized by using efficient data
+  **optimise and monitor**. We optimised by using efficient data
   structures and avoiding unnecessary copies of data (for instance,
   reusing byte buffers for thermal frames rather than allocating new
   ones each time). We also leveraged lower-level APIs when possible
@@ -916,7 +916,7 @@ strategies by combining well-known techniques (like NTP time sync,
 buffering, multithreading) with custom engineering (like our JSON
 command protocol and cross-checking of timestamps). The result is a
 robust system where all components work together smoothly despite the
-complexities involved, providing high-quality, synchronized data for the
+complexities involved, providing high-quality, synchronised data for the
 research objectives. Each solution reinforced the system's reliability
 and validated the chosen design principles in a real-world setting.
 ---

@@ -51,7 +51,7 @@ graph TB
             end
 
             subgraph NODE2 ["Secondary Node"]
-                S22_2["Samsung Galaxy S22<br/>• Secondary Android Controller<br/>• 4K Video Recording<br/>• Synchronized Capture"]
+                S22_2["Samsung Galaxy S22<br/>• Secondary Android Controller<br/>• 4K Video Recording<br/>• Synchronised Capture"]
                 TC001_2["TopDon TC001<br/>• Thermal Imaging Camera<br/>• USB-C OTG Interface<br/>• 256x192 Resolution"]
                 GSR_2["Shimmer3 GSR+<br/>• Galvanic Skin Response<br/>• Bluetooth LE Protocol<br/>• Real-time Physiological Data"]
                 S22_2 -.->|USB - C OTG<br/>High - Speed Data| TC001_2
@@ -188,7 +188,7 @@ graph TB
             end
 
             subgraph STORAGE ["Storage and Persistence"]
-                FS["FileSystemManager<br/>• Local Storage Management<br/>• Session Organization<br/>• File Hierarchy"]
+                FS["FileSystemManager<br/>• Local Storage Management<br/>• Session Organisation<br/>• File Hierarchy"]
                 MS["MetadataSerializer<br/>• JSON Serialisation<br/>• Session Persistence<br/>• Data Integrity"]
                 CS["ConfigurationStore<br/>• Settings Persistence<br/>• Shared Preferences<br/>• Configuration Management"]
             end
@@ -293,7 +293,7 @@ graph TB
             subgraph MANAGERS ["Management Services"]
                 SM["SessionManager<br/>• Session Lifecycle Management<br/>• Metadata Coordination<br/>• State Persistence<br/>• Archive Management"]
                 DM["DeviceManager<br/>• Multi-device Coordination<br/>• Health Monitoring<br/>• Connection Pool Management<br/>• Error Handling"]
-                FM["FileManager<br/>• File System Management<br/>• Storage Organization<br/>• Backup Coordination<br/>• Cleanup Operations"]
+                FM["FileManager<br/>• File System Management<br/>• Storage Organisation<br/>• Backup Coordination<br/>• Cleanup Operations"]
                 NM["NetworkManager<br/>• Network Communication<br/>• Socket Management<br/>• Protocol Handling<br/>• Reconnection Logic"]
             end
         end
@@ -402,9 +402,9 @@ graph TD
             end
 
             subgraph DEVICE2 ["Secondary Mobile Node"]
-                CAM2[" Camera2 API<br/>• 4K Video @ 30fps<br/>• RAW Image Capture<br/>• Synchronized Recording<br/>• Multi-angle Coverage"]
+                CAM2[" Camera2 API<br/>• 4K Video @ 30fps<br/>• RAW Image Capture<br/>• Synchronised Recording<br/>• Multi-angle Coverage"]
                 THERMAL2["TopDon Thermal<br/>• 256x192 Resolution<br/>• 30fps Thermal Imaging<br/>• Temperature Analysis<br/>• Coordinated Capture"]
-                GSR2["Shimmer3 GSR+<br/>• Galvanic Skin Response<br/>• 1KHz Sampling Rate<br/>• Synchronized Streaming<br/>• Physiological Monitoring"]
+                GSR2["Shimmer3 GSR+<br/>• Galvanic Skin Response<br/>• 1KHz Sampling Rate<br/>• Synchronised Streaming<br/>• Physiological Monitoring"]
             end
         end
 
@@ -419,7 +419,7 @@ graph TD
 
             subgraph MOBILE_PROC ["Mobile Processing"]
                 ANDROID1["Android App Node 1<br/>• Real-time Data Processing<br/>• Local Storage Management<br/>• Network Communication<br/>• Quality Control"]
-                ANDROID2["Android App Node 2<br/>• Real-time Data Processing<br/>• Synchronized Operations<br/>• Backup Recording<br/>• Status Monitoring"]
+                ANDROID2["Android App Node 2<br/>• Real-time Data Processing<br/>• Synchronised Operations<br/>• Backup Recording<br/>• Status Monitoring"]
             end
 
             subgraph MASTER_CTRL ["Master Controller Hub"]
@@ -445,7 +445,7 @@ graph TD
             direction TB
 
             subgraph LOCAL_STORAGE ["Local Storage Tier"]
-                MOBILE_STORAGE["Mobile Local Storage<br/>• Device-specific Storage<br/>• Session Organization<br/>• Temporary Buffering<br/>• Quick Access"]
+                MOBILE_STORAGE["Mobile Local Storage<br/>• Device-specific Storage<br/>• Session Organisation<br/>• Temporary Buffering<br/>• Quick Access"]
                 PC_STORAGE["PC Primary Storage<br/>• High-speed NVMe SSD<br/>• Master Data Repository<br/>• Real-time Writing<br/>• Performance Optimisation"]
             end
 
@@ -466,7 +466,7 @@ graph TD
     CAM1 ==>|Video Stream<br/>4K @ 30fps<br/>Real - time| ANDROID1
     THERMAL1 ==>|Thermal Data<br/>256x192 @ 30fps<br/>USB - C| ANDROID1
     GSR1 ==>|Physiological Data<br/>1KHz Sampling<br/>Bluetooth LE| ANDROID1
-    CAM2 ==>|Video Stream<br/>4K @ 30fps<br/>Synchronized| ANDROID2
+    CAM2 ==>|Video Stream<br/>4K @ 30fps<br/>Synchronised| ANDROID2
     THERMAL2 ==>|Thermal Data<br/>256x192 @ 30fps<br/>USB - C| ANDROID2
     GSR2 ==>|Physiological Data<br/>1KHz Sampling<br/>Bluetooth LE| ANDROID2
 %% Stationary Sources to Master Controller
@@ -477,7 +477,7 @@ graph TD
     ANDROID2 ==>|Processed Data<br/>JSON Protocol<br/>WiFi 5GHz| PC_CTRL
 %% Master Controller to Synchronisation
     PC_CTRL ==>|Multi - stream Data<br/>Real - time Coordination<br/>Command Distribution| MASTER_CLOCK
-    MASTER_CLOCK ==>|Synchronized Timing<br/>Global Time Reference<br/>Precision Control| SYNC_ENGINE
+    MASTER_CLOCK ==>|Synchronised Timing<br/>Global Time Reference<br/>Precision Control| SYNC_ENGINE
 %% Synchronisation to Quality Control
     SYNC_ENGINE ==>|Aligned Data Streams<br/>Timestamp Corrected<br/>Buffer Managed| QC_ENGINE
     QC_ENGINE ==>|Validated Data<br/>Quality Assured<br/>Error Corrected| REDUNDANCY
@@ -558,7 +558,7 @@ graph TB
             
             subgraph MOBILE_ENDPOINTS ["Mobile Endpoints"]
                 ANDROID_1["Android Device 1<br/>• WiFi 5GHz Client<br/>• JSON Socket Client<br/>• Real-time Streaming<br/>• Error Recovery"]
-                ANDROID_2["Android Device 2<br/>• WiFi 5GHz Client<br/>• JSON Socket Client<br/>• Synchronized Communication<br/>• Backup Channel"]
+                ANDROID_2["Android Device 2<br/>• WiFi 5GHz Client<br/>• JSON Socket Client<br/>• Synchronised Communication<br/>• Backup Channel"]
             end
             
             subgraph PC_ENDPOINT ["PC Master Endpoint"]
@@ -710,7 +710,7 @@ flowchart TD
     STOP_RECORDING --> FINALIZE_DATA[Finalise Data Collection]
     FINALIZE_DATA --> DATA_VALIDATION[Data Validation]
     DATA_VALIDATION --> METADATA_COMPLETE[Complete Metadata]
-    METADATA_COMPLETE --> FILE_ORGANIZATION[File Organization]
+    METADATA_COMPLETE --> FILE_ORGANIZATION[File Organisation]
     
     %% Data Processing and Storage
     FILE_ORGANIZATION --> COMPRESSION[Data Compression]
@@ -901,7 +901,7 @@ graph TB
             
             ROOT["/bucika_gsr_data<br/>• Root Data Directory<br/>• Master Index<br/>• Configuration Files<br/>• System Metadata"]
             
-            ROOT --> SESSIONS["/sessions<br/>• Session-based Organization<br/>• Temporal Grouping<br/>• Unique Session IDs<br/>• Metadata Integration"]
+            ROOT --> SESSIONS["/sessions<br/>• Session-based Organisation<br/>• Temporal Grouping<br/>• Unique Session IDs<br/>• Metadata Integration"]
             ROOT --> CALIBRATION["/calibration<br/>• Sensor Calibration Data<br/>• Reference Standards<br/>• Validation Results<br/>• Historical Calibrations"]
             ROOT --> EXPORTS["/exports<br/>• Export Packages<br/>• Formatted Data<br/>• Analysis Ready<br/>• Distribution Copies"]
             ROOT --> BACKUP["/backup<br/>• Automated Backups<br/>• Redundant Copies<br/>• Recovery Data<br/>• Archive Storage"]
@@ -914,11 +914,11 @@ graph TB
             
             SESSION_DIR --> METADATA_DIR["/metadata<br/>• Session Configuration<br/>• Device Information<br/>• Participant Data<br/>• Processing History"]
             SESSION_DIR --> RAW_DATA["/raw_data<br/>• Original Sensor Data<br/>• Unprocessed Files<br/>• Device-specific Formats<br/>• Maximum Quality"]
-            SESSION_DIR --> PROCESSED["/processed<br/>• Processed Data Files<br/>• Synchronized Streams<br/>• Quality Enhanced<br/>• Analysis Ready"]
-            SESSION_DIR --> PREVIEWS["/previews<br/>• Preview Media<br/>• Thumbnails<br/>• Quick Reference<br/>• Web Optimized"]
+            SESSION_DIR --> PROCESSED["/processed<br/>• Processed Data Files<br/>• Synchronised Streams<br/>• Quality Enhanced<br/>• Analysis Ready"]
+            SESSION_DIR --> PREVIEWS["/previews<br/>• Preview Media<br/>• Thumbnails<br/>• Quick Reference<br/>• Web Optimised"]
         end
         
-        subgraph DEVICE_ORGANIZATION ["Device-Specific Data Organization"]
+        subgraph DEVICE_ORGANIZATION ["Device-Specific Data Organisation"]
             direction TB
             
             RAW_DATA --> ANDROID1_DATA["/android_device_1<br/>• Primary Android Data<br/>• Video Files (MP4)<br/>• Thermal Images<br/>• GSR Data Streams"]
@@ -929,8 +929,8 @@ graph TB
             ANDROID1_DATA --> A1_THERMAL["thermal_stream.csv<br/>thermal_images/<br/>• Temperature Data<br/>• Thermal Image Sequences"]
             ANDROID1_DATA --> A1_GSR["gsr_data.csv<br/>gsr_realtime.log<br/>• Physiological Data<br/>• Real-time Streaming Log"]
             
-            ANDROID2_DATA --> A2_VIDEO["video_4k.mp4<br/>video_raw.dng<br/>• Synchronized Video<br/>• Multi-angle Coverage"]
-            ANDROID2_DATA --> A2_THERMAL["thermal_stream.csv<br/>thermal_images/<br/>• Coordinated Thermal<br/>• Synchronized Capture"]
+            ANDROID2_DATA --> A2_VIDEO["video_4k.mp4<br/>video_raw.dng<br/>• Synchronised Video<br/>• Multi-angle Coverage"]
+            ANDROID2_DATA --> A2_THERMAL["thermal_stream.csv<br/>thermal_images/<br/>• Coordinated Thermal<br/>• Synchronised Capture"]
             ANDROID2_DATA --> A2_GSR["gsr_data.csv<br/>gsr_realtime.log<br/>• Physiological Monitoring<br/>• Continuous Streaming"]
             
             PC_DATA --> PC_USB1["usb_camera_1.mp4<br/>• Primary USB Camera<br/>• Fixed Position<br/>• High Quality"]
@@ -972,8 +972,8 @@ graph TB
     end
     
     %% File System Relationships
-    ROOT ==>|Organized Structure<br/>Hierarchical Access| SESSIONS
-    SESSION_DIR ==>|Session Data<br/>Temporal Organization| RAW_DATA
+    ROOT ==>|Organised Structure<br/>Hierarchical Access| SESSIONS
+    SESSION_DIR ==>|Session Data<br/>Temporal Organisation| RAW_DATA
     RAW_DATA ==>|Device-specific<br/>Multi-modal Data| ANDROID1_DATA
     METADATA_DIR ==>|Session Information<br/>Configuration Data| SESSION_CONFIG
     
@@ -1026,8 +1026,8 @@ flowchart TD
         CALIB_APPLY[Calibration Application<br/>Geometric Correction<br/>Thermal Calibration<br/>Colour Correction]
     end
     
-    subgraph "Data Organization"
-        STRUCT_ORG[Structure Organization<br/>Hierarchical Layout<br/>Naming Convention<br/>Category Grouping]
+    subgraph "Data Organisation"
+        STRUCT_ORG[Structure Organisation<br/>Hierarchical Layout<br/>Naming Convention<br/>Category Grouping]
         META_COMPILE[Metadata Compilation<br/>Session Information<br/>Configuration Data<br/>Quality Metrics]
         DOC_GEN[Documentation Generation<br/>Dataset Description<br/>Usage Instructions<br/>Reference Materials]
     end
@@ -1172,7 +1172,7 @@ graph TB
             end
             
             subgraph "Data Services"
-                FILE_SERV[File Service<br/>Storage Management<br/>Naming Convention<br/>Organization Logic]
+                FILE_SERV[File Service<br/>Storage Management<br/>Naming Convention<br/>Organisation Logic]
                 META_SERV[Metadata Service<br/>JSON Processing<br/>Configuration Management<br/>Schema Validation]
                 BACKUP_SERV[Backup Service<br/>Replication Logic<br/>Integrity Verification<br/>Archive Management]
             end
@@ -1192,7 +1192,7 @@ graph TB
             end
             
             subgraph "File System Abstraction"
-                LOCAL_FS[Local File System<br/>Direct File Access<br/>Performance Optimized<br/>Security Controlled]
+                LOCAL_FS[Local File System<br/>Direct File Access<br/>Performance Optimised<br/>Security Controlled]
                 NETWORK_FS[🌐 Network File System<br/>📡 Remote Access<br/>Synchronisation<br/>Distributed Storage]
                 CLOUD_FS[Cloud File System<br/>🌐 Cloud Integration<br/>Scalable Storage<br/>Encrypted Access]
             end
@@ -1227,7 +1227,7 @@ graph TB
         subgraph "Hardware Layer"
             subgraph "Computing Hardware"
                 MOBILE_HW[Mobile Hardware<br/>Samsung S22<br/>ARM Processor<br/>Storage + Memory]
-                PC_HW[PC Hardware<br/>🖥️ Intel/AMD Processor<br/>High-speed Storage<br/>Performance Optimized]
+                PC_HW[PC Hardware<br/>🖥️ Intel/AMD Processor<br/>High-speed Storage<br/>Performance Optimised]
                 NET_HW[🌐 Network Hardware<br/>📡 WiFi Router/Switch<br/>Gigabit Infrastructure<br/>Low Latency Design]
             end
             
@@ -1520,7 +1520,7 @@ graph TB
             subgraph "GUI Framework"
                 PYQT5_FW[🖼️ PyQt5 Framework<br/>Widget System<br/>Event Handling<br/>🎛️ Layout Management]
                 MAIN_WIN[🏠 MainWindow<br/>Tab Container<br/>🎛️ Menu System<br/>Status Bar]
-                TAB_MGR[📑 Tab Manager<br/>Tab Switching<br/>State Persistence<br/>Content Organization]
+                TAB_MGR[📑 Tab Manager<br/>Tab Switching<br/>State Persistence<br/>Content Organisation]
             end
         end
         
@@ -1547,7 +1547,7 @@ graph TB
                 DATA_MGR[DataManager<br/>Stream Processing<br/>Storage Coordination<br/>Real-time Analysis]
             end
             
-            subgraph "Specialized Systems"
+            subgraph "Specialised Systems"
                 WEBCAM_SYS[📹 WebcamSystem<br/>📷 USB Camera Control<br/>🎥 Dual Camera Support<br/>Settings Management]
                 CALIB_SYS[CalibrationSystem<br/>OpenCV Integration<br/>Quality Assessment<br/>Result Management]
                 SHIMMER_SYS[ShimmerSystem<br/>📶 Bluetooth Management<br/>Data Processing<br/>Multi-library Support]
@@ -1570,7 +1570,7 @@ graph TB
             subgraph "Hardware Services"
                 USB_SERV[🔌 USBService<br/>📹 Webcam Interface<br/>Device Detection<br/>Power Management]
                 BT_SERV[📶 BluetoothService<br/>📡 Device Discovery<br/>Connection Management<br/>Protocol Handling]
-                FILE_SERV[FileService<br/>Storage Management<br/>Organization Logic<br/>Backup Coordination]
+                FILE_SERV[FileService<br/>Storage Management<br/>Organisation Logic<br/>Backup Coordination]
             end
             
             subgraph "Processing Services"

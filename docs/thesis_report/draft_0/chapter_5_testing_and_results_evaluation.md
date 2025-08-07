@@ -107,7 +107,7 @@ systematic validation of research-specific quality attributes including measurem
 integrity, long-term reliability, and scientific reproducibility that often have quantitative requirements significantly
 exceeding typical software quality
 standards [CITE - Basili, V.R., & Weiss, D.M. (1984). A methodology for collecting valid software engineering data. IEEE Transactions on Software Engineering, 10(6), 728-738].
-These stringent attributes necessitate specialized testing methodologies, sophisticated measurement techniques, and
+These stringent attributes necessitate specialised testing methodologies, sophisticated measurement techniques, and
 statistical validation approaches that provide confidence intervals, uncertainty estimates, and statistical significance
 assessments for critical performance metrics that directly impact research validity.
 
@@ -207,7 +207,7 @@ integration. The framework includes:
 
 - **Pytest Framework (7.4.0)**: Core testing engine with advanced fixture management, parametrized testing, and
   complete reporting capabilities
-- **Pytest-asyncio Integration**: Specialized testing for asynchronous operations including network communication and
+- **Pytest-asyncio Integration**: Specialised testing for asynchronous operations including network communication and
   sensor coordination
 - **Pytest-cov Coverage Analysis**: complete code coverage analysis with branch coverage and integration testing
   metrics
@@ -379,12 +379,12 @@ controlled variations that test system adaptability and robustness. The testing 
 studies, extended duration sessions, varying environmental conditions, and different hardware configurations to ensure
 complete operational validation.
 
-**Specialized Testing Layer Excellence**: The specialized testing layer addresses non-functional requirements and
+**Specialised Testing Layer Excellence**: The specialised testing layer addresses non-functional requirements and
 quality attributes that are critical for research applications but may not be adequately covered by functional testing
 alone. This layer includes performance testing under realistic load conditions, stress testing that validates system
 behaviour at operational limits, and reliability testing that demonstrates stable operation over extended periods.
 
-Specialized testing incorporates domain-specific validation approaches including measurement accuracy testing that
+Specialised testing incorporates domain-specific validation approaches including measurement accuracy testing that
 compares system outputs against reference standards, temporal precision testing that validates synchronisation accuracy
 under various network conditions, and data integrity testing that ensures complete preservation of research data
 throughout all system operations.
@@ -428,7 +428,7 @@ conditions typical in research environments.
 
 Foundation testing includes complete unit testing with automated test generation for boundary conditions and edge
 cases. The testing framework implements property-based testing approaches that generate test cases automatically based
-on specified constraints and invariants, ensuring thorough coverage of input domains and behavioral specifications.
+on specified constraints and invariants, ensuring thorough coverage of input domains and behavioural specifications.
 
 **Integration Testing Layer Coordination**: The integration layer validates the complex interactions between system
 components, with particular emphasis on cross-platform communication and hardware integration challenges. This layer
@@ -436,7 +436,7 @@ addresses the unique challenges of coordinating Android applications with Python
 reliable communication with diverse hardware sensors.
 
 Integration testing encompasses communication protocol validation, data format compatibility verification, and error
-handling validation across component boundaries. The framework includes specialized testing tools for simulating network
+handling validation across component boundaries. The framework includes specialised testing tools for simulating network
 conditions, hardware failures, and timing variations that enable thorough validation of integration robustness.
 
 **System Testing Layer Completeness**: The system testing layer provides end-to-end validation of complete research
@@ -448,12 +448,12 @@ System testing includes complete scenario-based testing that replicates actual r
 designs. The framework provides tools for generating realistic test data and simulating participant behaviour that enable
 validation of system performance under conditions that closely match real research applications.
 
-**Specialized Testing Layer Requirements**: The specialized testing layer addresses specific quality attributes that are
+**Specialised Testing Layer Requirements**: The specialised testing layer addresses specific quality attributes that are
 critical for research applications but may not be adequately covered by traditional testing approaches. This layer
 includes performance testing, reliability validation, security verification, and usability assessment tailored to
 research software requirements.
 
-Specialized testing implements sophisticated measurement and analysis techniques that provide quantitative validation of
+Specialised testing implements sophisticated measurement and analysis techniques that provide quantitative validation of
 quality attributes with statistical confidence intervals. The framework includes tools for long-duration testing, stress
 testing under extreme conditions, and security assessment using research-specific threat models.
 
@@ -497,14 +497,14 @@ sophisticated coordination mechanisms that can validate both individual platform
 integration while providing complete result aggregation and analysis capabilities.
 
 The framework architecture emerged from analysis of existing testing approaches for distributed systems, combined with
-specialized requirements for physiological measurement validation and research software quality assurance. The design
+specialised requirements for physiological measurement validation and research software quality assurance. The design
 prioritizes reproducibility, scalability, and automation while providing the flexibility needed to accommodate diverse
 research applications and evolving system requirements.
 
 ### complete Multi-Platform Testing Architecture
 
 The multi-platform testing architecture addresses the fundamental challenge of coordinating test execution across
-Android mobile devices, Python desktop applications, and embedded sensor hardware while maintaining synchronized timing
+Android mobile devices, Python desktop applications, and embedded sensor hardware while maintaining synchronised timing
 and complete result collection. The architecture implements a sophisticated orchestration system that manages test
 execution, data collection, and result analysis across the complete system topology.
 
@@ -584,9 +584,9 @@ continuation of test suites despite individual test case failures. The system pr
 resource utilisation monitoring that enables optimisation of test execution efficiency while ensuring full
 coverage of all validation requirements.
 
-**Platform-Specific Testing Engine Integration**: Each platform-specific testing engine provides specialized validation
+**Platform-Specific Testing Engine Integration**: Each platform-specific testing engine provides specialised validation
 capabilities tailored to the unique characteristics and constraints of different system components. The engines
-implement standardized interfaces that enable unified control and result collection while preserving the specialized
+implement standardised interfaces that enable unified control and result collection while preserving the specialised
 functionality needed for effective platform-specific testing.
 
 The Android testing engine integrates with the Android instrumentation framework and provides thorough testing of
@@ -621,7 +621,7 @@ testing of analysis algorithms. The generation system includes models of physiol
 characteristics, and environmental variation that provide thorough test coverage without requiring human subjects.
 
 Synthetic data generation includes temporal correlation modelling that ensures generated data maintains the complex
-temporal relationships characteristic of physiological signals. The system provides parameterized generation that
+temporal relationships characteristic of physiological signals. The system provides parameterised generation that
 enables testing across diverse participant characteristics, environmental conditions, and experimental scenarios.
 
 **Real Data Integration and Privacy Protection**: The framework provides capabilities for integrating anonymized real
@@ -696,7 +696,7 @@ graph TB
         PSYSTEM[System Tests<br/>End-to-End Validation]
     end
 ---
-    subgraph "Specialized Testing Tools"
+    subgraph "Specialised Testing Tools"
         NETWORK[Network Simulation<br/>Latency & Packet Loss]
         LOAD[Load Testing<br/>Device Scaling]
         MONITOR[Resource Monitoring<br/>Performance Metrics]
@@ -2084,7 +2084,7 @@ During the testing process, several categories of defects were identified and re
 
 - **UI responsiveness under high load**: Improved through background processing optimisation
 - **Calibration edge case handling**: Enhanced error detection and user guidance
-- **Network reconnection delay**: Optimized reconnection algorithms
+- **Network reconnection delay**: Optimised reconnection algorithms
 - **Export format compatibility**: Expanded format support and validation
 
 #### Tracked Issues (Non-critical)
@@ -2108,7 +2108,7 @@ development velocity:
 
 **Areas for Improvement:**
 
-- Automated test execution could be further optimized
+- Automated test execution could be further optimised
 - Cross-platform testing could benefit from additional device variations
 - Long-term reliability testing duration could be extended
 
@@ -2385,7 +2385,7 @@ graph TD
         ACCEPTANCE[Acceptance Tests<br/>Stakeholder Requirement Validation<br/>8 test cases<br/>100% pass rate]
     end
 ---
-    subgraph "Specialized Testing Layer"
+    subgraph "Specialised Testing Layer"
         PERFORMANCE[Performance Tests<br/>Load and Scalability Validation<br/>4 device coordination]
         STRESS[Stress Tests<br/>Resource Limit Testing<br/>71.4% success rate]
         RELIABILITY[Reliability Tests<br/>Network Resilience Testing<br/>1ms-500ms latency tolerance]

@@ -25,7 +25,7 @@ graph LR
         CONT_SUBJECT["Research Subject<br/>Natural Behaviour"]
         CONT_CAMERAS["Camera Systems<br/>• Thermal Imaging<br/>• RGB Video<br/>• Remote Sensing"]
         CONT_WIRELESS["Wireless Sensors<br/>• Minimal Contact GSR<br/>• Bluetooth LE<br/>• Real-time Data"]
-        CONT_MOBILE["Mobile Platform<br/>• Android Controllers<br/>• Edge Processing<br/>• Synchronized Recording"]
+        CONT_MOBILE["Mobile Platform<br/>• Android Controllers<br/>• Edge Processing<br/>• Synchronised Recording"]
         
         CONT_SUBJECT -.->|Non-Invasive| CONT_CAMERAS
         CONT_SUBJECT -.->|Minimal Contact| CONT_WIRELESS
@@ -242,7 +242,7 @@ graph TB
         end
         
         subgraph NODE2 ["Secondary Android Node"]
-            S22_SECONDARY["Samsung Galaxy S22<br/>• Secondary Controller<br/>• Synchronized Recording<br/>• Backup Data"]
+            S22_SECONDARY["Samsung Galaxy S22<br/>• Secondary Controller<br/>• Synchronised Recording<br/>• Backup Data"]
             THERMAL_SECONDARY["TopDon TC001<br/>• Secondary Thermal<br/>• USB-C OTG<br/>• Coordinated Capture"]
         end
     end
@@ -329,14 +329,14 @@ graph TB
             subgraph MOBILE_PLATFORM_2 ["Mobile Platform 2"]
                 ANDROID_APP_2["Android Controller<br/>• Secondary Node<br/>• Coordinated Recording<br/>• Backup Data"]
                 THERMAL_CAM_2["Thermal Camera<br/>TopDon TC001<br/>• Coordinated Capture<br/>• USB-C Interface"]
-                VIDEO_CAM_2["RGB Camera<br/>• 4K Recording<br/>• Synchronized Capture<br/>• Multi-angle View"]
+                VIDEO_CAM_2["RGB Camera<br/>• 4K Recording<br/>• Synchronised Capture<br/>• Multi-angle View"]
             end
         end
         
         subgraph DATA_LAYER ["Data Processing and Storage Layer"]
             REAL_TIME_PROC["Real-time Processing<br/>• Stream Analysis<br/>• Quality Monitoring<br/>• Event Detection"]
             LOCAL_STORAGE["Local Storage<br/>• Session Data<br/>• Raw Recordings<br/>• Processed Results"]
-            EXPORT_SYSTEM["Export System<br/>• Data Formatting<br/>• File Organization<br/>• Research Integration"]
+            EXPORT_SYSTEM["Export System<br/>• Data Formatting<br/>• File Organisation<br/>• Research Integration"]
         end
         
         subgraph NETWORK_LAYER ["Network Communication Layer"]
@@ -605,7 +605,7 @@ graph TB
             
             INITIAL_RESOURCES["Initial Resource Usage<br/>💾 CPU: 45% avg<br/>💾 Memory: 2.8 GB<br/>💾 Network: 65% util<br/>💾 Storage: 12 GB/hr"]
             
-            OPTIMIZED_RESOURCES["Optimized Resource Usage<br/>💾 CPU: 28% avg<br/>💾 Memory: 1.9 GB<br/>💾 Network: 42% util<br/>💾 Storage: 8.3 GB/hr"]
+            OPTIMIZED_RESOURCES["Optimised Resource Usage<br/>💾 CPU: 28% avg<br/>💾 Memory: 1.9 GB<br/>💾 Network: 42% util<br/>💾 Storage: 8.3 GB/hr"]
             
             INITIAL_RESOURCES --> OPTIMIZED_RESOURCES
         end
@@ -623,12 +623,12 @@ graph TB
     
     classDef baseline fill:#ffcdd2,stroke:#f44336,stroke-width:2px
     classDef intermediate fill:#fff9c4,stroke:#ffc107,stroke-width:2px
-    classDef optimized fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
+    classDef optimised fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
     classDef analysis fill:#e1f5fe,stroke:#03a9f4,stroke-width:2px
     
     class BASELINE_SYNC_PERF,BASELINE_THROUGHPUT,BASELINE_RELIABILITY,INITIAL_RESOURCES baseline
     class OPTIMIZATION_PHASE_1,OPTIMIZATION_PHASE_2,BUFFER_OPTIMIZATION,NETWORK_TUNING,ERROR_HANDLING,FAULT_TOLERANCE intermediate
-    class FINAL_PERFORMANCE,FINAL_THROUGHPUT,FINAL_RELIABILITY,OPTIMIZED_RESOURCES optimized
+    class FINAL_PERFORMANCE,FINAL_THROUGHPUT,FINAL_RELIABILITY,OPTIMIZED_RESOURCES optimised
     class IMPROVEMENT_METRICS,PERFORMANCE_TARGETS,SCALABILITY_VALIDATION analysis
 ```
 
@@ -771,7 +771,7 @@ graph TB
             subgraph METHODOLOGICAL_INNOVATION ["Methodological Innovation"]
                 MULTI_MODAL_SYNC["Multi-Modal Synchronisation<br/>🔬 Temporal alignment<br/>🔬 Cross-sensor correlation<br/>🔬 Unified data streams"]
                 QUALITY_FRAMEWORK["Quality Assurance Framework<br/>🔬 Real-time validation<br/>🔬 Automated quality checks<br/>🔬 Error detection and recovery"]
-                RESEARCH_WORKFLOW["Research Workflow Integration<br/>🔬 Seamless data export<br/>🔬 Analysis tool compatibility<br/>🔬 Standardized formats"]
+                RESEARCH_WORKFLOW["Research Workflow Integration<br/>🔬 Seamless data export<br/>🔬 Analysis tool compatibility<br/>🔬 Standardised formats"]
             end
         end
         
@@ -915,13 +915,13 @@ graph TB
             subgraph THERMAL_CALIBRATION ["Thermal Camera Calibration"]
                 THERMAL_BASELINE["Thermal Baseline<br/>📈 Temperature accuracy: ±0.5°C<br/>📈 Spatial resolution: 256x192<br/>📈 Frame rate: 25 FPS"]
                 
-                THERMAL_OPTIMIZED["Optimized Performance<br/>📈 Temperature accuracy: ±0.2°C<br/>📈 Temporal alignment: ±2.1ms<br/>📈 Synchronized capture: 100%"]
+                THERMAL_OPTIMIZED["Optimised Performance<br/>📈 Temperature accuracy: ±0.2°C<br/>📈 Temporal alignment: ±2.1ms<br/>📈 Synchronised capture: 100%"]
             end
             
             subgraph GSR_CALIBRATION ["GSR Sensor Calibration"]
                 GSR_BASELINE["GSR Baseline<br/>📉 Sampling rate: 128 Hz<br/>📉 Signal quality: Good<br/>📉 Bluetooth latency: ±15ms"]
                 
-                GSR_OPTIMIZED["Optimized Performance<br/>📉 Sampling consistency: 99.8%<br/>📉 Signal integrity: Excellent<br/>📉 Bluetooth latency: ±4.2ms"]
+                GSR_OPTIMIZED["Optimised Performance<br/>📉 Sampling consistency: 99.8%<br/>📉 Signal integrity: Excellent<br/>📉 Bluetooth latency: ±4.2ms"]
             end
             
             THERMAL_BASELINE --> THERMAL_OPTIMIZED
@@ -961,13 +961,13 @@ graph TB
     end
     
     classDef baseline fill:#ffcdd2,stroke:#f44336,stroke-width:2px
-    classDef optimized fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
+    classDef optimised fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
     classDef validation fill:#e1f5fe,stroke:#03a9f4,stroke-width:2px
     classDef process fill:#fff9c4,stroke:#ffc107,stroke-width:2px
     classDef outcome fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
     
     class BASELINE_SYNC,THERMAL_BASELINE,GSR_BASELINE baseline
-    class CALIBRATED_SYNC,SYNC_STABILITY,THERMAL_OPTIMIZED,GSR_OPTIMIZED optimized
+    class CALIBRATED_SYNC,SYNC_STABILITY,THERMAL_OPTIMIZED,GSR_OPTIMIZED optimised
     class CORRELATION_ANALYSIS,VALIDATION_METRICS,VERIFICATION_TESTS validation
     class REFERENCE_STANDARDS,CALIBRATION_PROCESS process
     class SUCCESS_METRICS,IMPROVEMENT_SUMMARY,RESEARCH_READINESS outcome
@@ -1030,7 +1030,7 @@ graph TB
                 
                 SOFTWARE_INTERFACE["Software Interface<br/>⭐⭐⭐⭐ 4.5/5.0<br/>'Clean and intuitive'<br/>'Could use more automation'"]
                 
-                DATA_MANAGEMENT["Data Management<br/>⭐⭐⭐⭐⭐ 4.7/5.0<br/>'Excellent export options'<br/>'Good file organization'"]
+                DATA_MANAGEMENT["Data Management<br/>⭐⭐⭐⭐⭐ 4.7/5.0<br/>'Excellent export options'<br/>'Good file organisation'"]
             end
             
             subgraph PERFORMANCE_SATISFACTION ["Performance Satisfaction"]
@@ -1153,7 +1153,7 @@ graph TD
         
         MULTIMODAL["📹 Multi-Modal Integration<br/>• Thermal + RGB Fusion<br/>• Real-time Processing<br/>• Edge Computing<br/>• Sensor Fusion Algorithms"]
         
-        CONTACTLESS["📡 Contactless Sensing Innovation<br/>• Remote GSR Prediction<br/>• Non-invasive Monitoring<br/>• Behavioral Analysis<br/>• Physiological Modelling"]
+        CONTACTLESS["📡 Contactless Sensing Innovation<br/>• Remote GSR Prediction<br/>• Non-invasive Monitoring<br/>• Behavioural Analysis<br/>• Physiological Modelling"]
         
         DISTRIBUTED["🌐 Distributed Systems Architecture<br/>• Star-Mesh Topology<br/>• Fault Tolerance<br/>• Scalable Architecture<br/>• Data Consistency"]
         
@@ -1208,7 +1208,7 @@ graph TD
         
         EFFICIENCY_METRICS["⚡ Resource Efficiency: 88%<br/>• CPU usage: 65% average<br/>• Memory: 2.1GB average<br/>• Battery life: 8.5 hours<br/>• Network bandwidth: 85% utilisation<br/>• Storage efficiency: 92%"]
         
-        SCALABILITY_METRICS["📈 Scalability: 85%<br/>• Max devices: 12 (target: 10)<br/>• Linear scaling: Up to 8 devices<br/>• Performance degradation: <5% per device<br/>• Load balancing: Automatic<br/>• Resource sharing: Optimized"]
+        SCALABILITY_METRICS["📈 Scalability: 85%<br/>• Max devices: 12 (target: 10)<br/>• Linear scaling: Up to 8 devices<br/>• Performance degradation: <5% per device<br/>• Load balancing: Automatic<br/>• Resource sharing: Optimised"]
         
         UX_METRICS["👤 User Experience: 90%<br/>• Setup time: <5 minutes<br/>• Interface responsiveness: <100ms<br/>• Learning curve: Minimal<br/>• Error recovery: Intuitive<br/>• Satisfaction score: 4.5/5"]
         

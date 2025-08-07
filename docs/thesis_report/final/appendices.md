@@ -166,7 +166,7 @@ follows[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866):
   function to combine and convert data as needed (e.g. exporting to CSV
   or JSON for
   analysis)[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818).
-  The system provides an export wizard that can output synchronized
+  The system provides an export wizard that can output synchronised
   datasets and even generate a basic quality assessment report
   (including any dropped frames or lost
   packets)[\[22\]](docs/thesis_report/Chapter_7_Appendices.md#L870-L879)[\[23\]](docs/thesis_report/Chapter_7_Appendices.md#L882-L890).
@@ -286,7 +286,7 @@ The test suite achieved \~95% unit test coverage, indicating that nearly
 all critical code paths are
 verified[\[35\]](docs/README.md#L83-L88).
 Appendix D describes how the test environment was set up (real devices
-vs. simulated, test data used, etc.) and how tests were organized (for
+vs. simulated, test data used, etc.) and how tests were organised (for
 example, separate suites for Android app fundamentals, PC controller
 fundamentals, and cross-platform
 integration)[\[36\]](evaluation_results/execution_logs.md#L16-L24)[\[37\]](evaluation_results/execution_logs.md#L38-L46).
@@ -318,7 +318,7 @@ board[\[41\]](evaluation_results/execution_logs.md#L50-L58).
 validated through specific tests. The appendix highlights key validation
 results: The **synchronisation precision** was tested by measuring clock
 offsets between devices over long runs -- results confirmed the system
-kept devices synchronized within about ±2.1 ms, well under the ±50 ms
+kept devices synchronised within about ±2.1 ms, well under the ±50 ms
 requirement[\[42\]](docs/thesis_report/Chapter_7_Appendices.md#L8-L11).
 **Data integrity** was verified by simulating network interruptions and
 ensuring less than 1% data loss; in practice the system achieved 99.98%
@@ -370,7 +370,7 @@ statistical analyses performed on collected data.
 **User Experience Evaluation:** Since the system is intended for use by
 researchers (potentially non-developers), usability is crucial.
 Appendix E summarizes feedback from trial uses by researchers and
-technicians. Using standardized metrics like the System Usability Scale
+technicians. Using standardised metrics like the System Usability Scale
 (SUS) and custom questionnaires, the system's interface and workflow
 were rated very highly. In fact, user feedback indicated a near-perfect
 satisfaction score -- approximately **4.9 out of 5.0** on average for
@@ -393,7 +393,7 @@ traditional contact-based measurements**. Thus, the appendix presents
 data from side-by-side comparisons. In a controlled study, subjects were
 measured with the contactless system (thermal camera + video for remote
 GSR prediction) as well as a conventional GSR sensor. The resulting
-signals were analyzed for correlation and agreement. The analysis found
+signals were analysed for correlation and agreement. The analysis found
 a **high correlation (≈97.8%)** between the contactless-derived
 physiological signals and the reference
 signals[\[42\]](docs/thesis_report/Chapter_7_Appendices.md#L8-L11).
@@ -464,7 +464,7 @@ synchronisation. Each Android device periodically syncs with the PC's
 NTP server, and the PC broadcasts timing commands. When a recording
 session starts, the `MasterClockSynchronizer` sends a **start command
 with a master timestamp** to all devices, ensuring they begin recording
-at the same synchronized
+at the same synchronised
 moment[\[53\]](PythonApp/master_clock_synchronizer.py#L164-L172).
 This design achieves tightly coupled timing across devices, which is
 crucial for data alignment.

@@ -7,11 +7,11 @@ The Multi-Sensor Recording System implements a sophisticated distributed archite
 
 ### System Mission and Research Context
 
-This system addresses fundamental challenges in physiological computing research by providing synchronized multi-modal data collection capabilities that bridge traditional contact-based physiological measurement with emerging contactless prediction methodologies. The architecture enables researchers to collect simultaneous data streams from visual cameras, thermal sensors, and traditional GSR sensors while maintaining research-grade temporal precision and data integrity.
+This system addresses fundamental challenges in physiological computing research by providing synchronised multi-modal data collection capabilities that bridge traditional contact-based physiological measurement with emerging contactless prediction methodologies. The architecture enables researchers to collect simultaneous data streams from visual cameras, thermal sensors, and traditional GSR sensors while maintaining research-grade temporal precision and data integrity.
 
 ### Architectural Principles
 
-The system follows a **distributed star-mesh topology** with PC master-controller coordination, implementing an **offline-first recording** approach that ensures data collection reliability in diverse research environments. Communication between components utilizes a standardized **JSON socket protocol** designed for real-time coordination while maintaining flexibility for heterogeneous device integration.
+The system follows a **distributed star-mesh topology** with PC master-controller coordination, implementing an **offline-first recording** approach that ensures data collection reliability in diverse research environments. Communication between components utilizes a standardised **JSON socket protocol** designed for real-time coordination while maintaining flexibility for heterogeneous device integration.
 
 ## Complete System Architecture
 
@@ -153,7 +153,7 @@ The PC Master Controller serves as the central command and coordination hub, imp
 
 **Session Manager** (`PythonApp/session/`)
 - **Responsibility**: Complete recording session lifecycle management
-- **Features**: Multi-device coordination, session state management, data organization
+- **Features**: Multi-device coordination, session state management, data organisation
 - **Integration**: Coordinates with all system components through centralized state management
 - **Academic Foundation**: Implements established session management patterns [Wilson2014]
 
@@ -193,7 +193,7 @@ The Android application implements sophisticated sensor data collection with cle
 
 #### Refactored Architecture Overview
 
-The Android application underwent architectural refactoring, transforming from a monolithic 2035-line MainViewModel into specialized controllers achieving a **78% code reduction** while dramatically improving maintainability and testability.
+The Android application underwent architectural refactoring, transforming from a monolithic 2035-line MainViewModel into specialised controllers achieving a **78% code reduction** while dramatically improving maintainability and testability.
 
 #### Business Logic Controllers
 
@@ -226,8 +226,8 @@ The Android application underwent architectural refactoring, transforming from a
 **CameraRecorder** (`AndroidApp/src/main/java/com/multisensor/recording/recording/`)
 - **Responsibility**: High-resolution video capture using Camera2 API
 - **Features**: 1920x1080@30fps recording, real-time preview, format optimisation
-- **Integration**: Synchronized frame capture with temporal metadata
-- **Performance**: Optimized for continuous recording with minimal battery impact
+- **Integration**: Synchronised frame capture with temporal metadata
+- **Performance**: Optimised for continuous recording with minimal battery impact
 
 **ThermalRecorder** (`AndroidApp/src/main/java/com/multisensor/recording/recording/`)
 - **Responsibility**: Thermal camera integration and temperature data collection
@@ -238,12 +238,12 @@ The Android application underwent architectural refactoring, transforming from a
 **ShimmerRecorder** (`AndroidApp/src/main/java/com/multisensor/recording/recording/`)
 - **Responsibility**: Shimmer GSR sensor integration via Bluetooth
 - **Features**: Real-time GSR data streaming, device configuration, quality monitoring
-- **Integration**: Provides physiological ground truth synchronized with visual data
+- **Integration**: Provides physiological ground truth synchronised with visual data
 - **Reliability**: Automatic reconnection and data integrity validation
 
 ### 3. Communication Protocol System
 
-The communication infrastructure provides reliable, secure, and efficient data exchange between all system components using standardized protocols.
+The communication infrastructure provides reliable, secure, and efficient data exchange between all system components using standardised protocols.
 
 #### Protocol Architecture
 
@@ -557,7 +557,7 @@ graph TB
     subgraph "Research Applications and Workflow Integration"
         subgraph "Data Collection Research"
             CONTACTLESS[Contactless GSR Prediction<br/>Computer Vision Models]
-            MULTIMODAL[Multi-Modal Physiological Research<br/>Synchronized Data Streams]
+            MULTIMODAL[Multi-Modal Physiological Research<br/>Synchronised Data Streams]
             HCI[Human-Computer Interaction<br/>Real-Time Monitoring]
             STRESS[Stress Response Analysis<br/>Longitudinal Studies]
         end
@@ -613,7 +613,7 @@ graph TB
 - **Consequences**: Enhanced development experience and reduced debugging time
 
 ### ADR-003: Function Decomposition Strategy
-- **Decision**: Decompose monolithic components into specialized controllers
+- **Decision**: Decompose monolithic components into specialised controllers
 - **Rationale**: Improves testability, maintainability, and single responsibility adherence
 - **Consequences**: 78% code reduction in Android ViewModel with improved architecture clarity
 
@@ -621,7 +621,7 @@ graph TB
 
 ### Component Communication Patterns
 
-The system implements established communication patterns optimized for research-grade distributed systems:
+The system implements established communication patterns optimised for research-grade distributed systems:
 
 1. **Command-Response Pattern**: Structured command execution with guaranteed response acknowledgment
 2. **Publisher-Subscriber Pattern**: Real-time status updates and data streaming
@@ -635,7 +635,7 @@ graph LR
     subgraph "Data Flow Architecture"
         subgraph "Collection Layer"
             SENSORS[Sensor Data Collection<br/>Multi-Modal Sources]
-            CAPTURE[Data Capture<br/>Synchronized Acquisition]
+            CAPTURE[Data Capture<br/>Synchronised Acquisition]
             BUFFER[Buffer Management<br/>Real-Time Processing]
         end
         
@@ -736,4 +736,4 @@ graph LR
 
 ---
 
-**Multi-Sensor Recording System** - Complete architecture enabling advanced physiological research through synchronized multi-modal data collection with research-grade reliability and academic rigor.
+**Multi-Sensor Recording System** - Complete architecture enabling advanced physiological research through synchronised multi-modal data collection with research-grade reliability and academic rigor.

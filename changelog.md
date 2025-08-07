@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Complexity Reduction Targets Identified**: Analysis revealed 67 high-complexity functions requiring refactoring
   - Priority targets: ShimmerManager (complexity: 152), WebDashboardServer (complexity: 143)
-  - Recommended approach: Extract specialized managers for device discovery, data streaming, and Android integration
+  - Recommended approach: Extract specialised managers for device discovery, data streaming, and Android integration
   - Quality gate: Maintain <15 complexity per function as per project guidelines
 
 ### Documentation
@@ -130,7 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Performance
 
-- Optimized user feedback mechanisms with appropriate Toast durations
+- Optimised user feedback mechanisms with appropriate Toast durations
 - Maintained efficient compilation and build processes
 
 ---

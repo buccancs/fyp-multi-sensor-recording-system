@@ -87,11 +87,11 @@
 
 ### ✨ Visual Improvements
 - **Material Design 3** cards with elevation and modern styling
-- **Color-coded status indicators** (green/yellow/red)
+- **Colour-coded status indicators** (green/yellow/red)
 - **Progress bars** for battery and signal strength
 - **Professional iconography** throughout the interface
 
-### 📊 Data Visualization
+### 📊 Data Visualisation
 - **Real-time charts** with MPAndroidChart library
 - **Multi-sensor tabs** for GSR, PPG, Accel, Gyro
 - **Interactive charts** with zoom and pan capabilities

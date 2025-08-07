@@ -3,9 +3,9 @@
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](build.gradle.kts)
 [![API Level](https://img.shields.io/badge/API-24+-brightgreen)](https://developer.android.com/about/versions/nougat)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.20-blue)](https://kotlinlang.org/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
+[![Licence](https://img.shields.io/badge/Licence-MIT-blue.svg)](../LICENCE)
 
-A sophisticated Android application for synchronized multi-sensor data collection in research environments. This mobile application serves as a sensor node in a distributed recording system, coordinating with a Python desktop controller to achieve research-grade temporal synchronisation across multiple data modalities.
+A sophisticated Android application for synchronised multi-sensor data collection in research environments. This mobile application serves as a sensor node in a distributed recording system, coordinating with a Python desktop controller to achieve research-grade temporal synchronisation across multiple data modalities.
 
 ## 🔧 Build Status: ✅ OPERATIONAL
 
@@ -41,7 +41,7 @@ A sophisticated Android application for synchronized multi-sensor data collectio
 
 ## Overview
 
-The Multi-Sensor Android Application implements a research-grade mobile data collection platform that enables synchronized recording from multiple sensor modalities including smartphone cameras, thermal imaging, and physiological sensors. The application follows principles of distributed systems design [Lamport1978] to achieve temporal precision required for multi-modal research applications.
+The Multi-Sensor Android Application implements a research-grade mobile data collection platform that enables synchronised recording from multiple sensor modalities including smartphone cameras, thermal imaging, and physiological sensors. The application follows principles of distributed systems design [Lamport1978] to achieve temporal precision required for multi-modal research applications.
 
 ### Key Capabilities
 
@@ -50,18 +50,18 @@ The Multi-Sensor Android Application implements a research-grade mobile data col
 - **Thermal Camera Integration**: Real-time thermal imaging using Topdon TC001 cameras via USB-C OTG connectivity
 - **Shimmer3 GSR+ Integration**: Bluetooth communication with physiological sensors for galvanic skin response measurement
 - **Real-time Preview Streaming**: Live video preview transmission to PC controller for monitoring and coordination
-- **Socket-based Remote Control**: Network-based command interface for synchronized multi-device recording sessions
+- **Socket-based Remote Control**: Network-based command interface for synchronised multi-device recording sessions
 - **Hand Segmentation**: MediaPipe-based hand landmark detection for region-of-interest analysis
-- **Session Management**: complete data organization with automatic file management and metadata generation
+- **Session Management**: complete data organisation with automatic file management and metadata generation
 
 ### Research Applications
 
-The application is designed for research scenarios requiring synchronized multi-modal data collection:
+The application is designed for research scenarios requiring synchronised multi-modal data collection:
 
 - **Physiological Response Studies**: Contactless measurement validation against ground truth sensors [McDuff2014]
 - **Human-Computer Interaction Research**: Multi-perspective data collection for gesture and emotion analysis
 - **Medical Research**: Non-intrusive monitoring capabilities for clinical and ambulatory studies [Wilhelm2010]
-- **Computer Vision Research**: Synchronized RGB-thermal data collection for algorithm development
+- **Computer Vision Research**: Synchronised RGB-thermal data collection for algorithm development
 
 ## Architecture
 
@@ -277,10 +277,10 @@ graph LR
 - **Calibration Support**: Hand-based calibration and validation procedures
 
 #### Session Management
-complete data organization and metadata management:
+complete data organisation and metadata management:
 
 **Features:**
-- **Automatic File Organization**: Structured directory creation with session timestamps
+- **Automatic File Organisation**: Structured directory creation with session timestamps
 - **Metadata Generation**: complete JSON metadata including device information, settings, and timing data
 - **Data Validation**: Real-time integrity checking and corruption detection
 - **Recovery Mechanisms**: Automatic session recovery after interruptions
@@ -552,13 +552,13 @@ graph TB
 
 #### Research Workflow Integration
 
-The application integrates with research workflows through standardized APIs and data formats:
+The application integrates with research workflows through standardised APIs and data formats:
 
 1. **Experiment Design**: Configure recording parameters based on research requirements
 2. **Participant Setup**: Position devices and establish sensor connections
 3. **Baseline Recording**: Capture baseline data for normalization
 4. **Stimulus Presentation**: Coordinate with PC controller for stimulus timing
-5. **Data Collection**: Synchronized recording across all sensor modalities
+5. **Data Collection**: Synchronised recording across all sensor modalities
 6. **Quality Assessment**: Real-time validation of data quality and completeness
 7. **Data Export**: Structured export for analysis workflows
 
@@ -807,7 +807,7 @@ complete manual testing procedures for validation:
 #### Recording Session Test
 1. Configure all sensor modalities
 2. Establish PC connection
-3. Start synchronized recording
+3. Start synchronised recording
 4. Monitor real-time status
 5. Stop recording and verify data integrity
 6. Validate metadata completeness
@@ -815,7 +815,7 @@ complete manual testing procedures for validation:
 #### Multi-Device Test
 1. Setup multiple Android devices
 2. Establish network connections
-3. Coordinate synchronized recording
+3. Coordinate synchronised recording
 4. Verify temporal alignment
 5. Test network failure recovery
 
@@ -983,7 +983,7 @@ class SecureDataManager {
 
 #### Privacy Protection
 
-- **Data Minimization**: Collect only necessary data for research purposes
+- **Data Minimisation**: Collect only necessary data for research purposes
 - **Local Processing**: Sensitive processing performed on-device
 - **Anonymization**: Optional data anonymization before export
 - **Consent Management**: Integrated consent tracking and validation
@@ -1059,7 +1059,7 @@ Solution:
 
 **Issue**: Thermal camera not working
 ```
-Error: USB device not recognized
+Error: USB device not recognised
 Solution:
 1. Verify USB-C OTG cable connection
 2. Check USB permissions in application settings
@@ -1237,9 +1237,9 @@ abstract class RecordingModule {
 
 ---
 
-## License
+## Licence
 
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+This project is licenced under the MIT Licence - see the [LICENCE](../LICENCE) file for details.
 
 ## Acknowledgments
 

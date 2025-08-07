@@ -191,7 +191,7 @@ diverse stakeholder groups while ensuring technical feasibility, scientific vali
 success within realistic project
 constraints [CITE - Nuseibeh, B., & Easterbrook, S. (2000). Requirements engineering: a roadmap. Proceedings of the Conference on the Future of Software Engineering, 35-46].
 The sophisticated methodology recognizes that research software projects present unique and often unprecedented
-challenges compared to traditional commercial software development paradigms, requiring specialized approaches that
+challenges compared to traditional commercial software development paradigms, requiring specialised approaches that
 carefully balance scientific rigor with practical implementation considerations, stakeholder satisfaction, and long-term
 system
 maintainability [CITE - Segal, J., & Morris, C. (2008). Developing scientific software. IEEE Software, 25(4), 18-20].
@@ -209,7 +209,7 @@ disciplines [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (20
 ### 3.2.1 Stakeholder Analysis and Requirements Elicitation
 
 The foundational framework of the requirements engineering process rested on complete stakeholder analysis that
-systematically identified and characterized all parties with significant vested interests in the system's successful
+systematically identified and characterised all parties with significant vested interests in the system's successful
 development, deployment, and long-term
 operation [CITE - Freeman, R.E., Harrison, J.S., Wicks, A.C., Parmar, B.L., & De Colle, S. (2010). Stakeholder theory: The state of the art. Cambridge University Press].
 This extensive analysis extended far beyond simple user identification to examine the complex interdependent
@@ -226,7 +226,7 @@ feedback mechanisms that systematically captured both explicit requirements and 
 through traditional requirements elicitation approaches.
 
 The complete stakeholder analysis systematically identified five primary stakeholder groups, each bringing distinct
-perspectives, specialized requirements, and specific success criteria that would influence system design decisions and
+perspectives, specialised requirements, and specific success criteria that would influence system design decisions and
 operational procedures. Understanding these diverse perspectives and their complex interactions was absolutely crucial
 for developing balanced requirements that could satisfy competing needs while maintaining overall system coherence,
 technical feasibility, and scientific
@@ -261,7 +261,7 @@ while influencing participant recruitment success and research
 sustainability [CITE - Beauchamp, T.L., & Childress, J.F. (2001). Principles of biomedical ethics. Oxford University Press].
 
 The contactless nature of the measurement system directly addresses primary participant concerns about measurement
-discomfort, behavioral alteration, and privacy invasion that have historically limited participation rates and
+discomfort, behavioural alteration, and privacy invasion that have historically limited participation rates and
 compromised ecological validity in physiological research
 studies [CITE - Sieber, J.E. (1992). Planning ethically responsible research: A guide for students and internal review boards. Sage Publications].
 complete privacy protections, including data anonymization, encrypted storage, and transparent consent procedures,
@@ -275,8 +275,8 @@ reliability, operational efficiency, ease of use, and complete maintenance requi
 research productivity and data quality [CITE - Nielsen, J. (1994). Usability engineering. Morgan Kaufmann]. Their
 extensive input emphasized the critical importance of rapid setup procedures that minimis\1 experimental overhead,
 automated error detection and recovery systems that reduce operator burden, and complete troubleshooting
-capabilities that enable effective problem resolution without requiring specialized technical
-expertise [CITE - Karat, J. (1997). Evolving the scope of user-centered design. Communications of the ACM, 40(7), 33-38].
+capabilities that enable effective problem resolution without requiring specialised technical
+expertise [CITE - Karat, J. (1997). Evolving the scope of user-centred design. Communications of the ACM, 40(7), 33-38].
 
 The requirements analysis process revealed that operator efficiency and system reliability directly impact experimental
 throughput, data quality, and overall research productivity in ways that fundamentally affect research outcomes and
@@ -290,14 +290,14 @@ enables effective system operation by personnel with diverse technical backgroun
 requirements, format compatibility standards, and long-term data management needs that are crucial for enabling
 collaborative research and ensuring data longevity across diverse institutional
 contexts [CITE - Wilkinson, M.D., Dumontier, M., Aalbersberg, I.J., Appleton, G., Axton, M., Baak, A., ... & Mons, B. (2016). The FAIR Guiding Principles for scientific data management and stewardship. Scientific Data, 3(1), 1-9].
-Their complete requirements emphasized the critical importance of standardized data formats that ensure
+Their complete requirements emphasized the critical importance of standardised data formats that ensure
 interoperability with existing analysis toolchains, complete metadata generation that enables reproducible
 research, and robust compatibility with established data analysis platforms and statistical software packages commonly
 used in physiological
 research [CITE - Stodden, V., & Miguez, S. (2014). Best practices for computational science: Software infrastructure and environments for reproducible and extensible research. Journal of Open Research Software, 2(1), e21].
 
 The increasingly global and collaborative nature of contemporary scientific research highlighted specific requirements
-for enhanced data portability, cross-platform compatibility, and standardized export formats that enable seamless
+for enhanced data portability, cross-platform compatibility, and standardised export formats that enable seamless
 collaboration between research institutions, facilitate meta-analyses across multiple studies, and support long-term
 data preservation initiatives that are essential for scientific
 progress [CITE - Tenopir, C., Allard, S., Douglass, K., Aydinoglu, A.U., Wu, L., Read, E., ... & Frame, M. (2011). Data sharing by scientists: practices and perceptions. PLoS One, 6(6), e21101].
@@ -341,8 +341,8 @@ systematic validation and verification of requirements through triangulation acr
 validation
 methodologies [CITE - Maiden, N.A., & Rugg, G. (1996). ACRE: selecting methods for requirements acquisition. Software Engineering Journal, 11(3), 183-192].
 
-The elicitation strategy recognized that research software development presents unique challenges that require
-specialized approaches beyond those typically employed in commercial software development, including the need to balance
+The elicitation strategy recognised that research software development presents unique challenges that require
+specialised approaches beyond those typically employed in commercial software development, including the need to balance
 scientific rigor with practical constraints, accommodate diverse stakeholder expertise levels, and ensure long-term
 research validity and
 reproducibility [CITE - Carver, J.C. (2006). Report from the second international workshop on software engineering for high performance computing system applications. ACM SIGSOFT Software Engineering Notes, 31(2), 1-5].
@@ -370,7 +370,7 @@ the paramount importance of maintaining compatibility with existing research met
 protocols while enabling innovative research paradigms.
 
 **Structured Expert Interviews and complete Consultation Sessions**: Systematic structured interviews with twelve
-recognized domain experts spanning psychophysiology, computer vision, distributed systems engineering, research
+recognised domain experts spanning psychophysiology, computer vision, distributed systems engineering, research
 methodology, and clinical applications provided deep insights into both technical requirements and practical
 implementation constraints that are essential for successful system development and
 deployment [CITE - Fontana, A., & Frey, J.H. (2005). The interview: From neutral stance to political involvement. In The Sage handbook of qualitative research (pp. 695-727). Sage Publications].
@@ -447,7 +447,7 @@ fundamental behaviours, operations, and capabilities that are absolutely essenti
 GSR prediction research while maintaining the scientific rigor and measurement precision required for peer-reviewed
 publication and clinical application [CITE - Wiegers, K., & Beatty, J. (2013). Software requirements. Microsoft Press].
 
-The functional requirements are systematically organized into logical groupings that directly reflect the system's
+The functional requirements are systematically organised into logical groupings that directly reflect the system's
 sophisticated architectural components and complete operational workflows, ensuring clear traceability between
 stakeholder needs, system capabilities, and implementation
 approaches [CITE - Davis, A.M. (1993). Software requirements: objects, functions, and states. Prentice-Hall]. Each
@@ -459,8 +459,8 @@ The requirements engineering process employed systematic analysis methodologies 
 software development to ensure complete coverage of stakeholder needs while maintaining technical feasibility,
 scientific validity, and long-term system
 maintainability [CITE - Segal, J. (2007). Some problems of professional end user developers. Proceedings IEEE Symposium on Visual Languages and Human-Centric Computing, 111-118].
-The specialized approach recognizes that research software presents fundamentally unique challenges compared to
-traditional commercial applications, requiring specialized validation criteria, performance metrics, and success
+The specialised approach recognizes that research software presents fundamentally unique challenges compared to
+traditional commercial applications, requiring specialised validation criteria, performance metrics, and success
 measures that directly support scientific methodology, reproducible research outcomes, and peer review
 standards [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007). Software development environments for scientific and engineering software: A series of case studies. Proceedings of the 29th International Conference on Software Engineering, 550-559].
 
@@ -657,7 +657,7 @@ graph TB
 ### Core System Coordination Requirements
 
 The system coordination requirements define the fundamental capabilities necessary for managing multiple heterogeneous
-devices in a synchronized measurement environment while maintaining research-grade temporal precision and operational
+devices in a synchronised measurement environment while maintaining research-grade temporal precision and operational
 reliability across diverse experimental conditions [CITE - Mullender, S. (Ed.). (1993). Distributed systems. ACM Press].
 These requirements address the complex challenges of coordinating consumer-grade devices for scientific applications
 while ensuring measurement validity and experimental reproducibility.
@@ -674,7 +674,7 @@ simultaneously connected mobile devices, each equipped with high-resolution came
 while coordinating reference GSR sensor data collection through Bluetooth Low Energy
 protocols [CITE - Bluetooth SIG. (2019). Bluetooth Core Specification Version 5.1. Bluetooth Special Interest Group].
 The coordination system must provide automated device discovery, capability assessment, and configuration management
-that enables researchers to rapidly deploy measurement sessions without requiring specialized technical expertise or
+that enables researchers to rapidly deploy measurement sessions without requiring specialised technical expertise or
 extensive setup procedures.
 
 **Performance Requirements**: Device coordination must maintain temporal synchronisation within ±25 milliseconds across
@@ -692,7 +692,7 @@ essential for research-grade data collection [CITE - Lynch, N.A. (1996). Distrib
 precision under normal network conditions, and demonstration of automatic recovery from temporary connectivity
 interruptions without data loss or measurement artifacts.
 
-**Requirement Statement**: The system shall coordinate synchronized data collection from a minimum of four simultaneous
+**Requirement Statement**: The system shall coordinate synchronised data collection from a minimum of four simultaneous
 devices with automatic device discovery, connection management, and status monitoring capabilities.
 
 **Technical Rationale**: Multi-device coordination represents the foundational capability that distinguishes this system
@@ -985,12 +985,12 @@ quality assurance while supporting adaptive experimental protocols that respond 
 state [CITE - Real-time physiological signal processing]. The SNR requirement ensures adequate signal quality for
 reliable feature extraction while the latency specification supports real-time applications requiring immediate
 physiological assessment. The processing pipeline design incorporates advanced filtering and feature extraction
-techniques specifically optimized for contactless physiological measurement applications.
+techniques specifically optimised for contactless physiological measurement applications.
 
 **Processing Pipeline Components**:
 
 - Multi-modal sensor data fusion with temporal alignment verification
-- Adaptive filtering algorithms optimized for physiological signal characteristics
+- Adaptive filtering algorithms optimised for physiological signal characteristics
 - Computer vision processing for RGB-based physiological feature extraction
 - Thermal analysis algorithms for autonomic nervous system response detection
 - Statistical quality assessment with real-time validation and confidence metrics
@@ -1022,9 +1022,9 @@ accuracy with computational efficiency constraints imposed by real-time operatio
 
 **Implementation Dependencies**:
 
-- TensorFlow Lite or PyTorch Mobile for optimized mobile inference [CITE - Mobile machine learning frameworks]
+- TensorFlow Lite or PyTorch Mobile for optimised mobile inference [CITE - Mobile machine learning frameworks]
 - Model optimisation techniques for real-time performance on mobile platforms
-- Feature engineering pipelines optimized for multi-modal physiological data
+- Feature engineering pipelines optimised for multi-modal physiological data
 - Model validation and testing frameworks ensuring prediction reliability
 
 Each functional requirement includes detailed specifications that provide measurable criteria for validation and
@@ -1034,7 +1034,7 @@ technical dependencies between requirements and their relative importance for ac
 
 ### 3.3.4 User Interface and Session Management Requirements
 
-The core system functions represent the fundamental capabilities required for multi-device coordination and synchronized
+The core system functions represent the fundamental capabilities required for multi-device coordination and synchronised
 data collection. These requirements form the foundation upon which all other system capabilities are built and represent
 the minimum functionality required for basic system operation.
 
@@ -1094,7 +1094,7 @@ framework to ensure proper synchronisation with other data streams.
   of physiological events
 - **Colour Depth and Accuracy**: Support 8-bit colour depth minimum with preference for 10-bit when available, maintaining
   colour consistency across devices
-- **Multi-Device Coordination**: Enable simultaneous recording from multiple Android devices with synchronized timing
+- **Multi-Device Coordination**: Enable simultaneous recording from multiple Android devices with synchronised timing
   and coordinated session control
 - **Storage and Compression**: Implement efficient storage mechanisms that balance quality preservation with practical
   storage limitations
@@ -1122,7 +1122,7 @@ measurement with accuracy sufficient for physiological research applications.
 
 - **Temperature Measurement Accuracy**: Achieve ≤0.1°C measurement precision across the physiological temperature range
   relevant for human subjects
-- **Temporal Synchronisation**: Maintain ≥25 fps frame rate synchronized with RGB video capture to enable multi-modal
+- **Temporal Synchronisation**: Maintain ≥25 fps frame rate synchronised with RGB video capture to enable multi-modal
   analysis
 - **Physiological Temperature Range**: Operate effectively across 20-45°C range covering normal environmental and
   physiological temperature variations
@@ -1172,14 +1172,14 @@ operation and proper synchronisation with other data streams.
 
 **complete Requirement Description**: The system must provide sophisticated session management capabilities that
 support the complete lifecycle of research recording sessions from initial setup through final data archival. Session
-management encompasses pre-session configuration, real-time monitoring and control, and post-session data organization
+management encompasses pre-session configuration, real-time monitoring and control, and post-session data organisation
 and validation. This requirement recognizes that research applications require more complete data management than
 typical consumer applications, including detailed metadata generation, experimental parameter tracking, and
 complete audit trails.
 
 The session management system must balance ease of use with the complete control and documentation required for
 scientific research. The system must support various experimental paradigms while maintaining consistent data
-organization and enabling efficient post-session analysis workflows.
+organisation and enabling efficient post-session analysis workflows.
 
 **Detailed Technical Specifications**:
 
@@ -1187,7 +1187,7 @@ organization and enabling efficient post-session analysis workflows.
   duration, sampling rates, device configurations, and experimental metadata
 - **Real-Time Status Monitoring**: Provide complete real-time monitoring of all system components with immediate
   notification of issues or anomalies
-- **Automatic Data Organization**: Implement automatic file organization with standardized naming conventions and
+- **Automatic Data Organisation**: Implement automatic file organisation with standardised naming conventions and
   complete metadata generation
 - **Session Pause and Resume**: Support session pause and resume functionality without data loss or synchronisation
   issues
@@ -1250,7 +1250,7 @@ for scientific applications.
 The camera calibration requirement encompasses intrinsic parameter determination, stereo calibration for multi-camera
 setups, and ongoing calibration validation to ensure continued accuracy throughout extended research studies. The system
 must balance calibration accuracy with practical usability, providing automated calibration procedures that can be
-performed by research staff without specialized technical expertise.
+performed by research staff without specialised technical expertise.
 
 **Detailed Technical Specifications**:
 
@@ -1568,7 +1568,7 @@ capabilities.
 #### UC-001: Multi-Participant Research Session
 
 **Actor**: Research Scientist  
-**Goal**: Conduct synchronized recording session with multiple participants  
+**Goal**: Conduct synchronised recording session with multiple participants  
 **Preconditions**: System calibrated, participants briefed, devices connected
 
 **Main Flow**:
@@ -1576,10 +1576,10 @@ capabilities.
 1. Researcher configures session parameters (duration, sampling rates, participant count)
 2. System validates device connectivity and calibration status
 3. Participants are positioned with appropriate sensor placement
-4. Researcher initiates synchronized recording across all devices
+4. Researcher initiates synchronised recording across all devices
 5. System monitors real-time data quality and device status
 6. Researcher terminates session and reviews data quality metrics
-7. System exports data in standardized formats for analysis
+7. System exports data in standardised formats for analysis
 
 **Alternative Flows**:
 
@@ -1632,7 +1632,7 @@ capabilities.
 2. System validates data integrity and completeness
 3. System converts data to requested formats (CSV, JSON, HDF5)
 4. System generates metadata files with session information
-5. System exports data with appropriate file organization
+5. System exports data with appropriate file organisation
 6. Analyst validates export completeness and format compliance
 
 #### UC-011: System Maintenance and Diagnostics
@@ -1711,7 +1711,7 @@ The system architecture must accommodate growth in several dimensions:
 
 ### 3.7.2 Data Quality and Integrity Requirements
 
-- **Temporal Accuracy**: All timestamps synchronized within ±5ms
+- **Temporal Accuracy**: All timestamps synchronised within ±5ms
 - **Data Completeness**: ≥99% data availability for valid analysis
 - **Signal Quality**: SNR ≥20dB for physiological measurements
 - **Metadata Completeness**: 100% of required session metadata fields populated
@@ -1765,7 +1765,7 @@ each modification.
 
 ## Code Implementation References
 
-The requirements identified and analyzed in this chapter are implemented and validated through the following source code
+The requirements identified and analysed in this chapter are implemented and validated through the following source code
 components. Each referenced file provides detailed implementation that addresses specific requirement categories, with
 code snippets available in **Appendix F**.
 

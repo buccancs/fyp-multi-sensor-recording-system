@@ -10,7 +10,7 @@ The UI Architecture System defines and implements user interface frameworks that
 
 The architecture implements established HCI principles:
 
-- **Human-Computer Interaction Design** [Shneiderman2016]: User-centered design principles ensuring effective research software interfaces
+- **Human-Computer Interaction Design** [Shneiderman2016]: User-centred design principles ensuring effective research software interfaces
 - **Usability Engineering** [Nielsen1994]: Systematic usability evaluation and iterative design improvement methodologies  
 - **Accessibility Standards** [W3C2018]: WCAG 2.1 AA compliance ensuring inclusive interface design for diverse research environments
 - **Cross-Platform Design Systems** [Atomic2016]: Consistent design language implementation across heterogeneous platforms
@@ -22,7 +22,7 @@ Within the distributed PC master-controller architecture, the UI Architecture Sy
 **Primary Functions:**
 
 - **Cross-Platform Design System**: Consistent visual language and interaction patterns ensuring cohesive user experience across Android and desktop platforms
-- **Component Libraries**: Reusable UI components with standardized behaviour supporting efficient research software development
+- **Component Libraries**: Reusable UI components with standardised behaviour supporting efficient research software development
 - **Navigation Architecture**: Intuitive navigation patterns and state management facilitating complex multi-device coordination workflows
 - **Accessibility Framework**: WCAG 2.1 AA compliant interface design ensuring research software accessibility for diverse user populations
 - **Performance Optimisation**: Responsive interfaces with efficient resource usage supporting real-time multi-modal data monitoring
@@ -549,7 +549,7 @@ class StatusIndicator(QWidget):
 
 #### Python Desktop Navigation
 
-1. **Tab Interface**: Organized by workflow phases
+1. **Tab Interface**: Organised by workflow phases
     - Recording: Session controls and monitoring
     - Devices: Connection and device management
     - Calibration: Camera calibration workflows
@@ -572,7 +572,7 @@ class StatusIndicator(QWidget):
 1. **Primary Actions**: Prominent buttons with high contrast
 2. **Secondary Actions**: Less prominent but easily accessible
 3. **Status Information**: Clear indicators without cluttering interface
-4. **Content Organization**: Logical grouping with clear visual separation
+4. **Content Organisation**: Logical grouping with clear visual separation
 
 ## API Reference
 
