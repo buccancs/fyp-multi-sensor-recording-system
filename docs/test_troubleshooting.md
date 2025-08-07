@@ -149,8 +149,8 @@ python run_evaluation_suite.py --list-devices
 
 ### Documentation Resources
 - **[Unified Test Documentation](../UNIFIED_TEST_DOCUMENTATION.md)**: Complete test framework overview
-- **[Test Execution Guide](./TEST_EXECUTION_GUIDE.md)**: Step-by-step execution instructions
-- **[Architecture Documentation](./ARCHITECTURE.md)**: System design and components
+- **[Test Execution Guide](./test_execution_guide.md)**: Step-by-step execution instructions
+- **[Architecture Documentation](./architecture.md)**: System design and components
 
 ### Support Channels
 1. Check existing issues in project repository

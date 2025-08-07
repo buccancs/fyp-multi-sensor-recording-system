@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/buccancs/bucika_gsr/workflows/CI/badge.svg)](https://github.com/buccancs/bucika_gsr/actions)
 [![Test Coverage](https://img.shields.io/badge/test%20coverage-%3E95%25-brightgreen)](./evaluation_suite/)
-[![Research Ready](https://img.shields.io/badge/research%20ready-yes-success)](./docs/TEST_EXECUTION_GUIDE.md)
+[![Research Ready](https://img.shields.io/badge/research%20ready-yes-success)](./docs/test_execution_guide.md)
 
 A complete multi-sensor recording system designed for contactless GSR (Galvanic Skin Response) prediction research. This system integrates multiple data streams including thermal imaging, traditional cameras, and Shimmer GSR sensors to create synchronized multi-modal datasets for advanced physiological research.
 
@@ -232,9 +232,9 @@ bucika_gsr/
 │   ├── integration/          # Cross-component tests
 │   └── framework/            # Test execution framework
 ├── docs/                     # Documentation
-│   ├── TEST_EXECUTION_GUIDE.md
-│   ├── TEST_TROUBLESHOOTING.md
-│   └── ARCHITECTURE.md
+│   ├── test_execution_guide.md
+│   ├── test_troubleshooting.md
+│   └── architecture.md
 └── protocol/                 # Communication protocols
 ```
 
@@ -349,10 +349,10 @@ class PrivacyManager(context: Context, logger: Logger) {
 ## 📚 Documentation
 
 ### Quick References
-- **[Test Execution Guide](./docs/TEST_EXECUTION_GUIDE.md)**: complete testing procedures
-- **[Troubleshooting Guide](./docs/TEST_TROUBLESHOOTING.md)**: Solutions for common issues
+- **[Test Execution Guide](./docs/test_execution_guide.md)**: complete testing procedures
+- **[Troubleshooting Guide](./docs/test_troubleshooting.md)**: Solutions for common issues
 - **[API Documentation](./docs/api/)**: Detailed API reference
-- **[Architecture Overview](./docs/ARCHITECTURE.md)**: System design and layer separation
+- **[Architecture Overview](./docs/architecture.md)**: System design and layer separation
 - **[Cross-Cutting Concerns](./docs/CROSS_CUTTING_CONCERNS.md)**: Infrastructure utilities and patterns
 - **[Scaling Architecture](./docs/SCALING_ARCHITECTURE.md)**: Scaling beyond 8 devices
 
@@ -436,7 +436,7 @@ If you use this system in your research, please cite:
 
 ### Getting Help
 - **Documentation**: Check complete guides in `docs/` directory
-- **Testing Issues**: Review [troubleshooting guide](./docs/TEST_TROUBLESHOOTING.md)
+- **Testing Issues**: Review [troubleshooting guide](./docs/test_troubleshooting.md)
 - **Research Questions**: Consult research documentation and methodology guides
 - **Technical Support**: Open an issue with detailed error logs and system information
 
