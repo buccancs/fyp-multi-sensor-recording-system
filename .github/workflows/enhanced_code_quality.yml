@@ -169,39 +169,7 @@ jobs:
         
         # Extract complexity metrics from detekt report
         if [ -f "AndroidApp/build/reports/detekt/detekt.xml" ]; then
-          python3 -c "
-import xml.etree.ElementTree as ET
-import json
-import sys
-
-try:
-    tree = ET.parse('AndroidApp/build/reports/detekt/detekt.xml')
-    root = tree.getroot()
-    
-    complexity_issues = []
-    for error in root.findall('.//error'):
-        rule_id = error.get('source', '')
-        if 'Complex' in rule_id:
-            complexity_issues.append({
-                'file': error.get('filename', ''),
-                'line': error.get('line', ''),
-                'rule': rule_id,
-                'message': error.get('message', '')
-            })
-    
-    metrics = {
-        'total_complexity_issues': len(complexity_issues),
-        'complexity_violations': complexity_issues,
-        'threshold_compliant': len(complexity_issues) == 0
-    }
-    
-    with open('quality-reports/kotlin/complexity-metrics.json', 'w') as f:
-        json.dump(metrics, f, indent=2)
-        
-    print(f'Generated Kotlin complexity metrics: {len(complexity_issues)} issues found')
-except Exception as e:
-    print(f'Error generating complexity metrics: {e}', file=sys.stderr)
-"
+          python3 -c 'import xml.etree.ElementTree as ET, json, sys; tree = ET.parse("AndroidApp/build/reports/detekt/detekt.xml"); root = tree.getroot(); complexity_issues = [{"file": error.get("filename", ""), "line": error.get("line", ""), "rule": error.get("source", ""), "message": error.get("message", "")} for error in root.findall(".//error") if "Complex" in error.get("source", "")]; metrics = {"total_complexity_issues": len(complexity_issues), "complexity_violations": complexity_issues, "threshold_compliant": len(complexity_issues) == 0}; json.dump(metrics, open("quality-reports/kotlin/complexity-metrics.json", "w"), indent=2); print(f"Generated Kotlin complexity metrics: {len(complexity_issues)} issues found")' || echo "Error generating complexity metrics"
         echo "::endgroup::"
 
     - name: Upload Kotlin quality reports
