@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui.compose.screens
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -13,13 +12,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.multisensor.recording.ui.MainViewModelRefactored
 import com.multisensor.recording.ui.DevicesUiState
 import com.multisensor.recording.ui.DevicesViewModel
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DevicesScreen(
     viewModel: MainViewModelRefactored = hiltViewModel()
 ) {
-    // Simplified placeholder for devices screen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,13 +43,11 @@ fun DevicesScreen(
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalibrationScreen(
     viewModel: MainViewModelRefactored = hiltViewModel()
 ) {
-    // Simplified placeholder for calibration screen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -79,13 +74,11 @@ fun CalibrationScreen(
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilesScreen(
     viewModel: MainViewModelRefactored = hiltViewModel()
 ) {
-    // Simplified placeholder for files screen
     Column(
         modifier = Modifier
             .fillMaxSize()

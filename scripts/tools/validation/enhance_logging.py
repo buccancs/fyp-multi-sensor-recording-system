@@ -1,13 +1,9 @@
-#!/usr/bin/env python3
-
 import os
 import re
 import sys
 from pathlib import Path
 from typing import List, Dict, Tuple
-
 sys.path.insert(0, str(Path(__file__).parent / "PythonApp" / "src"))
-
 try:
     from utils.logging_config import get_logger
     logger = get_logger(__name__)
@@ -15,108 +11,81 @@ except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-
-
 class LoggingEnhancer:
-
     def __init__(self):
         self.project_root = Path(__file__).parent
         self.android_root = self.project_root / "AndroidApp"
         self.python_root = self.project_root / "PythonApp"
         self.enhancements_made = []
-
     def enhance_mainactivity_logging(self) -> bool:
         logger.info("Enhancing MainActivity with complete logging...")
-
         main_activity_path = self.android_root / "src/main/java/com/multisensor/recording/MainActivity.kt"
-
         if not main_activity_path.exists():
             logger.error(f"MainActivity not found at {main_activity_path}")
             return False
-
         try:
             with open(main_activity_path, 'r') as f:
                 content = f.read()
-
             if "AppLogger.logMethodEntry" in content and "AppLogger.logStateChange" in content:
                 logger.info("MainActivity already has complete logging")
                 return True
-
             enhancements = [
                 (
                     r'override fun onCreate\(savedInstanceState: Bundle\?\) \{',
                 ),
-
                 (
                     r'override fun onResume\(\) \{',
                 ),
-
                 (
                     r'override fun onPause\(\) \{',
                 ),
-
                 (
                     r'fun onPermissionResult\(',
                 ),
-
                 (
                     r'private fun updateRecordingState\(',
                 )
             ]
-
             original_content = content
-
             for pattern, replacement in enhancements:
                 if re.search(pattern, content):
                     content = re.sub(pattern, replacement, content, count=1)
                     self.enhancements_made.append(f"MainActivity: {pattern}")
-
             if content != original_content:
                 backup_path = main_activity_path.with_suffix('.kt.backup')
                 with open(backup_path, 'w') as f:
                     f.write(original_content)
-
                 with open(main_activity_path, 'w') as f:
                     f.write(content)
-
                 logger.info(f"Enhanced MainActivity with logging (backup: {backup_path})")
                 return True
             else:
                 logger.info("No MainActivity enhancements needed")
                 return True
-
         except Exception as e:
             logger.error(f"Failed to enhance MainActivity logging: {e}")
             return False
-
     def enhance_controller_logging(self) -> bool:
         logger.info("Enhancing controller classes with logging...")
-
         controllers_dir = self.android_root / "src/main/java/com/multisensor/recording/controllers"
-
         if not controllers_dir.exists():
             logger.warning(f"Controllers directory not found: {controllers_dir}")
             return True
-
         controller_files = list(controllers_dir.glob("*.kt"))
-
         for controller_file in controller_files:
             try:
                 with open(controller_file, 'r') as f:
                     content = f.read()
-
                 if "import com.multisensor.recording.util.AppLogger" not in content:
                     package_line = re.search(r'package .*\n', content)
                     if package_line:
                         insert_pos = package_line.end()
                         logging_import = "\nimport com.multisensor.recording.util.AppLogger\nimport com.multisensor.recording.util.logI\nimport com.multisensor.recording.util.logE\n"
                         content = content[:insert_pos] + logging_import + content[insert_pos:]
-
                 class_pattern = r'class (\w+Controller).*?\{'
                 class_match = re.search(class_pattern, content)
                 if class_match:
                     class_name = class_match.group(1)
-
                     init_pattern = r'init \{'
                     if re.search(init_pattern, content):
                         content = re.sub(
@@ -127,47 +96,35 @@ class LoggingEnhancer:
                             count=1
                         )
                         self.enhancements_made.append(f"{class_name}: Added init logging")
-
                 with open(controller_file, 'w') as f:
                     f.write(content)
-
                 logger.info(f"Enhanced {controller_file.name} with logging")
-
             except Exception as e:
                 logger.warning(f"Could not enhance {controller_file.name}: {e}")
-
         return True
-
     def enhance_python_components(self) -> bool:
         logger.info("Enhancing Python components with logging...")
-
         modules_to_enhance = [
             "src/session/session_manager.py",
             "src/calibration/calibration_manager.py",
             "src/network/device_server.py",
             "src/application.py"
         ]
-
         for module_path in modules_to_enhance:
             full_path = self.python_root / module_path
-
             if not full_path.exists():
                 logger.debug(f"Module not found (skipping): {module_path}")
                 continue
-
             try:
                 with open(full_path, 'r') as f:
                     content = f.read()
-
                 if "from utils.logging_config import get_logger" not in content:
                     imports_end = self._find_imports_end(content)
                     if imports_end:
                         logging_import = "\nfrom utils.logging_config import get_logger, log_function_entry, performance_timer\n"
                         content = content[:imports_end] + logging_import + content[imports_end:]
-
                 class_pattern = r'class (\w+).*?:'
                 classes = re.findall(class_pattern, content)
-
                 for class_name in classes:
                     init_pattern = f'def __init__\\(self.*?\\):\\s*\n'
                     init_match = re.search(init_pattern, content)
@@ -176,7 +133,6 @@ class LoggingEnhancer:
                         logger_init = f'        self.logger = get_logger(__name__)\n        self.logger.info(f"{class_name} initialized")\n'
                         content = content[:insert_pos] + logger_init + content[insert_pos:]
                         self.enhancements_made.append(f"{module_path}: Added logger to {class_name}")
-
                 performance_methods = ['start_recording', 'stop_recording', 'calibrate', 'process', 'handle_message']
                 for method in performance_methods:
                     method_pattern = f'def {method}\\('
@@ -187,21 +143,15 @@ class LoggingEnhancer:
                             content
                         )
                         self.enhancements_made.append(f"{module_path}: Added performance timer to {method}")
-
                 with open(full_path, 'w') as f:
                     f.write(content)
-
                 logger.info(f"Enhanced {module_path} with logging")
-
             except Exception as e:
                 logger.warning(f"Could not enhance {module_path}: {e}")
-
         return True
-
     def _find_imports_end(self, content: str) -> int:
         lines = content.split('\n')
         imports_end_line = 0
-
         for i, line in enumerate(lines):
             stripped = line.strip()
             if stripped.startswith('import ') or stripped.startswith('from '):

@@ -1,5 +1,4 @@
 import os
-
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (
     QApplication,
@@ -12,8 +11,6 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QSlider,
 )
-
-
 class StimulusControlPanel(QGroupBox):
     file_loaded = pyqtSignal(str)
     play_requested = pyqtSignal()
@@ -22,13 +19,11 @@ class StimulusControlPanel(QGroupBox):
     screen_changed = pyqtSignal(int)
     start_recording_play_requested = pyqtSignal()
     mark_event_requested = pyqtSignal()
-
     def __init__(self, parent=None):
         super().__init__("Stimulus Controls", parent)
         self.parent_window = parent
         self.current_file = None
         self.init_ui()
-
     def init_ui(self):
         stim_layout = QHBoxLayout(self)
         self.stim_file_path = QLineEdit()
@@ -71,7 +66,6 @@ class StimulusControlPanel(QGroupBox):
         self.populate_screen_combo()
         self.screen_combo.currentIndexChanged.connect(self.handle_screen_change)
         stim_layout.addWidget(self.screen_combo)
-
     def populate_screen_combo(self):
         self.screen_combo.clear()
         screens = QApplication.screens()
@@ -83,7 +77,6 @@ class StimulusControlPanel(QGroupBox):
             self.screen_combo.addItem(screen_info)
         if len(screens) > 1:
             self.screen_combo.setCurrentIndex(1)
-
     def browse_stimulus_file(self):
         fname, _ = QFileDialog.getOpenFileName(
             self,
@@ -93,7 +86,6 @@ class StimulusControlPanel(QGroupBox):
         )
         if fname:
             self.load_file(fname)
-
     def load_file(self, file_path):
         self.current_file = file_path
         self.stim_file_path.setText(file_path)
@@ -105,53 +97,41 @@ class StimulusControlPanel(QGroupBox):
             self.parent_window.statusBar().showMessage(
                 f"Loaded stimulus: {os.path.basename(file_path)}"
             )
-
     def handle_play(self):
         self.play_requested.emit()
         if self.parent_window and hasattr(self.parent_window, "statusBar"):
             self.parent_window.statusBar().showMessage("Play stimulus (simulation)")
-
     def handle_pause(self):
         self.pause_requested.emit()
         if self.parent_window and hasattr(self.parent_window, "statusBar"):
             self.parent_window.statusBar().showMessage("Pause stimulus (simulation)")
-
     def handle_seek(self, value):
         self.seek_requested.emit(value)
         if self.parent_window and hasattr(self.parent_window, "statusBar"):
             self.parent_window.statusBar().showMessage(f"Seek to {value}% (simulation)")
-
     def handle_screen_change(self, index):
         self.screen_changed.emit(index)
-
     def handle_start_recording_play(self):
         self.start_recording_play_requested.emit()
         if self.parent_window and hasattr(self.parent_window, "statusBar"):
             self.parent_window.statusBar().showMessage(
                 "Starting synchronized recording and stimulus playback..."
             )
-
     def handle_mark_event(self):
         self.mark_event_requested.emit()
         if self.parent_window and hasattr(self.parent_window, "statusBar"):
             self.parent_window.statusBar().showMessage("Event marker added")
-
     def get_current_file(self):
         return self.current_file
-
     def get_timeline_position(self):
         return self.timeline_slider.value()
-
     def set_timeline_position(self, position):
         self.timeline_slider.setValue(position)
-
     def get_selected_screen(self):
         return self.screen_combo.currentIndex()
-
     def set_selected_screen(self, index):
         if 0 <= index < self.screen_combo.count():
             self.screen_combo.setCurrentIndex(index)
-
     def enable_controls(self, enabled=True):
         self.browse_btn.setEnabled(enabled)
         self.play_btn.setEnabled(enabled and self.current_file is not None)
@@ -162,7 +142,6 @@ class StimulusControlPanel(QGroupBox):
             enabled and self.current_file is not None
         )
         self.mark_event_btn.setEnabled(False)
-
     def reset_controls(self):
         self.current_file = None
         self.stim_file_path.clear()
@@ -173,13 +152,11 @@ class StimulusControlPanel(QGroupBox):
         self.populate_screen_combo()
         self.start_recording_play_btn.setEnabled(False)
         self.mark_event_btn.setEnabled(False)
-
     def refresh_screens(self):
         current_selection = self.screen_combo.currentIndex()
         self.populate_screen_combo()
         if current_selection < self.screen_combo.count():
             self.screen_combo.setCurrentIndex(current_selection)
-
     def set_experiment_active(self, active: bool):
         if active:
             self.start_recording_play_btn.setEnabled(False)
@@ -189,7 +166,6 @@ class StimulusControlPanel(QGroupBox):
             self.start_recording_play_btn.setEnabled(self.current_file is not None)
             self.mark_event_btn.setEnabled(False)
             self.browse_btn.setEnabled(True)
-
     def update_timeline_from_position(self, position_ms: int, duration_ms: int):
         if duration_ms > 0:
             progress = int(position_ms / duration_ms * 100)

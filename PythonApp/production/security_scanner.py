@@ -11,17 +11,11 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
-
 import sys
 from pathlib import Path
-
-# Add the project root to the path for absolute imports
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
-
 from utils.logging_config import get_logger
-
-
 @dataclass
 class SecurityIssue:
     severity: str
@@ -32,8 +26,6 @@ class SecurityIssue:
     line_number: Optional[int] = None
     recommendation: str = ""
     cve_id: Optional[str] = None
-
-
 @dataclass
 class SecurityReport:
     timestamp: str
@@ -46,16 +38,12 @@ class SecurityReport:
     issues: List[SecurityIssue]
     scanned_files: int
     recommendations: List[str]
-
-
 class SecurityScanner:
-
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
         self.logger = get_logger(__name__)
         self.issues: List[SecurityIssue] = []
         self.scanned_files = 0
-
     async def run_complete_scan(self) -> SecurityReport:
         start_time = datetime.now()
         self.logger.info("Starting complete security assessment...")
@@ -73,7 +61,6 @@ class SecurityScanner:
         report = self._generate_report(duration)
         self._save_report(report)
         return report
-
     async def _scan_python_files(self):
         self.logger.info("Scanning Python files for security vulnerabilities...")
         python_files = list(self.project_root.rglob("*.py"))
@@ -84,7 +71,6 @@ class SecurityScanner:
                 continue
             self.scanned_files += 1
             await self._analyze_python_file(py_file)
-
     async def _analyze_python_file(self, file_path: Path):
         try:
             content = file_path.read_text(encoding="utf-8", errors="ignore")
@@ -96,7 +82,6 @@ class SecurityScanner:
                 await self._check_insecure_random(file_path, line_num, line)
         except Exception as e:
             self.logger.warning(f"Error analyzing Python file {file_path}: {e}")
-
     async def _check_dangerous_python_patterns(
         self, file_path: Path, line_num: int, line: str
     ):
@@ -122,7 +107,6 @@ class SecurityScanner:
                         recommendation="Review usage and implement proper input validation/sanitization",
                     )
                 )
-
     async def _check_hardcoded_secrets(self, file_path: Path, line_num: int, line: str):
         secret_patterns = [
             ("password\\s*=\\s*[\"\\'][^\"\\']{3,}[\"\\']", "Hardcoded password"),
@@ -152,7 +136,6 @@ class SecurityScanner:
                         recommendation="Move secrets to environment variables or secure configuration",
                     )
                 )
-
     async def _check_sql_injection(self, file_path: Path, line_num: int, line: str):
         sql_patterns = [
             ("execute\\s*\\([^)]*%[^)]*\\)", "String formatting in SQL"),
@@ -172,7 +155,6 @@ class SecurityScanner:
                         recommendation="Use parameterized queries or prepared statements",
                     )
                 )
-
     async def _check_insecure_random(self, file_path: Path, line_num: int, line: str):
         if re.search("random\\.random\\(\\)|random\\.randint\\(", line):
             if any(
@@ -190,7 +172,6 @@ class SecurityScanner:
                         recommendation="Use secrets module or os.urandom() for cryptographic purposes",
                     )
                 )
-
     async def _scan_kotlin_java_files(self):
         self.logger.info("Scanning Kotlin/Java files for security vulnerabilities...")
         android_files = list(self.project_root.rglob("*.kt")) + list(
@@ -201,7 +182,6 @@ class SecurityScanner:
                 continue
             self.scanned_files += 1
             await self._analyze_android_file(file_path)
-
     async def _analyze_android_file(self, file_path: Path):
         try:
             content = file_path.read_text(encoding="utf-8", errors="ignore")
@@ -212,7 +192,6 @@ class SecurityScanner:
                 await self._check_network_security_issues(file_path, line_num, line)
         except Exception as e:
             self.logger.warning(f"Error analyzing Android file {file_path}: {e}")
-
     async def _check_dangerous_android_patterns(
         self, file_path: Path, line_num: int, line: str
     ):
@@ -239,7 +218,6 @@ class SecurityScanner:
                         recommendation="Review and implement secure alternatives",
                     )
                 )
-
     async def _check_insecure_storage(self, file_path: Path, line_num: int, line: str):
         storage_patterns = [
             (
@@ -262,7 +240,6 @@ class SecurityScanner:
                         recommendation="Use private storage modes and encrypt sensitive data",
                     )
                 )
-
     async def _check_network_security_issues(
         self, file_path: Path, line_num: int, line: str
     ):
@@ -288,7 +265,6 @@ class SecurityScanner:
                         recommendation="Use HTTPS and proper certificate validation",
                     )
                 )
-
     async def _scan_configuration_files(self):
         self.logger.info("Scanning configuration files...")
         config_files = (
@@ -303,7 +279,6 @@ class SecurityScanner:
                 continue
             self.scanned_files += 1
             await self._analyze_config_file(config_file)
-
     async def _analyze_config_file(self, file_path: Path):
         try:
             content = file_path.read_text(encoding="utf-8", errors="ignore")
@@ -332,7 +307,6 @@ class SecurityScanner:
                     )
         except Exception as e:
             self.logger.warning(f"Error analyzing config file {file_path}: {e}")
-
     async def _scan_network_security(self):
         self.logger.info("Scanning network security configuration...")
         config_file = self.project_root / "protocol" / "config.json"
@@ -367,7 +341,6 @@ class SecurityScanner:
                     )
             except Exception as e:
                 self.logger.warning(f"Error analyzing network config: {e}")
-
     async def _scan_dependencies(self):
         self.logger.info("Scanning dependencies for vulnerabilities...")
         requirements_files = list(self.project_root.rglob("requirements*.txt"))
@@ -379,7 +352,6 @@ class SecurityScanner:
         gradle_files = list(self.project_root.rglob("build.gradle"))
         for gradle_file in gradle_files:
             await self._check_gradle_dependencies(gradle_file)
-
     async def _check_python_dependencies(self, requirements_file: Path):
         try:
             content = requirements_file.read_text()
@@ -398,10 +370,8 @@ class SecurityScanner:
                     )
         except Exception as e:
             self.logger.warning(f"Error checking Python dependencies: {e}")
-
     async def _check_conda_dependencies(self, env_file: Path):
         pass
-
     async def _check_gradle_dependencies(self, gradle_file: Path):
         try:
             content = gradle_file.read_text()
@@ -429,7 +399,6 @@ class SecurityScanner:
                     )
         except Exception as e:
             self.logger.warning(f"Error checking Gradle dependencies: {e}")
-
     async def _scan_file_permissions(self):
         self.logger.info("Scanning file permissions...")
         for file_path in self.project_root.rglob("*"):
@@ -450,7 +419,6 @@ class SecurityScanner:
                         )
                 except Exception:
                     pass
-
     async def _scan_for_secrets(self):
         self.logger.info("Scanning for exposed secrets...")
         secret_patterns = [
@@ -487,7 +455,6 @@ class SecurityScanner:
                             )
                 except Exception:
                     pass
-
     async def _scan_crypto_usage(self):
         self.logger.info("Scanning cryptographic implementations...")
         crypto_patterns = [
@@ -520,7 +487,6 @@ class SecurityScanner:
                         )
             except Exception:
                 pass
-
     async def _scan_android_security(self):
         self.logger.info("Scanning Android security configurations...")
         manifest_path = (
@@ -531,7 +497,6 @@ class SecurityScanner:
         proguard_files = list(self.project_root.rglob("proguard-rules.pro"))
         for proguard_file in proguard_files:
             await self._analyze_proguard_config(proguard_file)
-
     async def _analyze_android_manifest(self, manifest_path: Path):
         try:
             content = manifest_path.read_text()
@@ -559,7 +524,6 @@ class SecurityScanner:
                     )
         except Exception as e:
             self.logger.warning(f"Error analyzing Android manifest: {e}")
-
     async def _analyze_proguard_config(self, proguard_path: Path):
         try:
             content = proguard_path.read_text()
@@ -576,7 +540,6 @@ class SecurityScanner:
                 )
         except Exception as e:
             self.logger.warning(f"Error analyzing ProGuard config: {e}")
-
     def _generate_report(self, duration: float) -> SecurityReport:
         critical_count = len([i for i in self.issues if i.severity == "critical"])
         high_count = len([i for i in self.issues if i.severity == "high"])
@@ -595,7 +558,6 @@ class SecurityScanner:
             scanned_files=self.scanned_files,
             recommendations=recommendations,
         )
-
     def _generate_security_recommendations(self) -> List[str]:
         recommendations = []
         if any(i.category == "credentials" for i in self.issues):
@@ -623,7 +585,6 @@ class SecurityScanner:
                 "No major security issues detected. Continue following security best practices."
             )
         return recommendations
-
     def _save_report(self, report: SecurityReport):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_dir = self.project_root / "security_reports"
@@ -667,8 +628,6 @@ class SecurityScanner:
                 f.write(f"{i}. {rec}\n")
         self.logger.info(f"Security report saved to {json_file}")
         self.logger.info(f"Security summary saved to {txt_file}")
-
-
 async def main():
     project_root = Path(__file__).parent.parent.parent
     print("Starting Phase 4 Security Assessment...")
@@ -691,9 +650,6 @@ async def main():
     except Exception as e:
         print(f"Security scan failed: {e}")
         import traceback
-
         traceback.print_exc()
-
-
 if __name__ == "__main__":
     asyncio.run(main())

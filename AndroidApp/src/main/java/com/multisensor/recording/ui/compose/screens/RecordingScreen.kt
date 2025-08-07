@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui.compose.screens
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,7 +33,6 @@ import com.multisensor.recording.ui.theme.ConnectionGreen
 import com.multisensor.recording.ui.theme.DisconnectedRed
 import com.multisensor.recording.ui.theme.RecordingActive
 import com.multisensor.recording.ui.theme.RecordingInactive
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecordingScreen(
@@ -43,7 +41,6 @@ fun RecordingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
     Scaffold(
         floatingActionButton = {
             AnimatedRecordingButton(
@@ -67,7 +64,6 @@ fun RecordingScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Enhanced session status
             SessionStatusCard(
                 sessionStatus = when {
                     uiState.isRecording -> "Recording"
@@ -81,23 +77,18 @@ fun RecordingScreen(
                     "PC Connection" to if (uiState.isPcConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED
                 )
             )
-
-            // Quick thermal preview card with navigation to full preview
             ThermalPreviewCard(
                 thermalBitmap = uiState.currentThermalFrame,
                 isRecording = uiState.isRecording,
                 onNavigateToPreview = onNavigateToPreview
             )
-
-            // Color palette selector
             ColorPaletteSelector(
                 currentPalette = uiState.colorPalette,
-                onPaletteSelect = { /* TODO: Add to viewModel */ }
+                onPaletteSelect = {  }
             )
         }
     }
 }
-
 @Composable
 private fun ThermalPreviewCard(
     thermalBitmap: android.graphics.Bitmap?,
@@ -123,7 +114,6 @@ private fun ThermalPreviewCard(
                     contentScale = ContentScale.Crop
                 )
             } ?: run {
-                // Placeholder for thermal preview
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -151,8 +141,6 @@ private fun ThermalPreviewCard(
                     }
                 }
             }
-            
-            // Recording indicator overlay
             if (isRecording) {
                 Box(
                     modifier = Modifier
@@ -172,8 +160,6 @@ private fun ThermalPreviewCard(
                     )
                 }
             }
-            
-            // Navigation hint overlay
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -204,5 +190,3 @@ private fun ThermalPreviewCard(
         }
     }
 }
-
-
