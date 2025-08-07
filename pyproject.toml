@@ -36,7 +36,6 @@ dependencies = [
 
 [project.scripts]
 bucika-gsr = "PythonApp.main:main"
-bucika-gsr-demo = "PythonApp.demo_enhanced_ui:main"
 
 [project.optional-dependencies]
 dev = [
