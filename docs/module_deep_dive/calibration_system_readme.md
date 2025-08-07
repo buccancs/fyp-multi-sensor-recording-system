@@ -1155,7 +1155,7 @@ class CalibrationIntegrationTest:
 1. **Synchronisation Verification**:
    ```python
    # Test temporal alignment
-   sync_quality = test_camera_synchronization(camera1, camera2)
+   sync_quality = test_camera_synchronisation(camera1, camera2)
    if sync_quality.offset > 1.0:  # 1ms threshold
        print("Cameras may not be properly synchronized")
    ```

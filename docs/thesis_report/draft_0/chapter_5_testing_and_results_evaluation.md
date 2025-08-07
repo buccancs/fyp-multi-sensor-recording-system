@@ -1090,7 +1090,7 @@ class TestSynchronizationEngine:
         assert "precision" in result.error_message.lower()
     
     @pytest.mark.asyncio
-    async def test_partial_device_synchronization(self, sync_engine, mock_devices):
+    async def test_partial_device_synchronisation(self, sync_engine, mock_devices):
         """Test handling of partial synchronisation when some devices fail."""
         # Arrange
         reference_time = time.time()
@@ -1701,7 +1701,7 @@ class TestSystemPerformance:
 class TestNetworkPerformance:
     
     @pytest.mark.asyncio
-    async def test_network_throughput_optimization(self):
+    async def test_network_throughput_optimisation(self):
         """Test network throughput optimisation under various bandwidth conditions."""
         bandwidth_scenarios = [
             {'bandwidth': 10_000_000, 'expected_quality': 'adaptive_low'},

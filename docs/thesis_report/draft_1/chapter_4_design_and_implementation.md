@@ -118,7 +118,7 @@ the entire session. Instead, it attempts a recovery: for example, it may
 resend critical commands or pings a few times (with exponential backoff
 delays) before considering the device offline. If the device does come
 back online, it can rejoin the session -- the controller's device
-coordinator module can negotiate a resynchronization on-the-fly and
+coordinator module can negotiate a resynchronisation on-the-fly and
 continue the recording. This dynamic rejoining capability was built to
 improve resilience in scenarios like transient Wi-Fi drops or an Android
 app restart.

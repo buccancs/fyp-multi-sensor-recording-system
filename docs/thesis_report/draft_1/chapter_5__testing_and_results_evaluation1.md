@@ -425,7 +425,7 @@ For instance, in a 10-minute dual-recording test (phone + webcam), we
 inserted timestamp markers every minute (the system can log sync
 beacons). Comparing these markers, we found no accumulation of drift --
 the difference between device timestamps stayed under 1 ms throughout,
-courtesy of the periodic resynchronization mechanism in the system.
+courtesy of the periodic resynchronisation mechanism in the system.
 Initially, we had observed a slight drift (\~5--10 ms over 10 min) in a
 prototype; that was rectified by refining the synchronisation algorithm
 (discussed in Chapter 4). The integration tests after that change
