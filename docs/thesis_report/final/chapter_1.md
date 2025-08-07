@@ -276,9 +276,7 @@ research into predicting GSR from multiple sensor modalities. The
 outcome is a valuable tool and dataset for the community, marking a step
 toward more ubiquitous and contact-free physiological monitoring in the
 future.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=Galvanic%20skin%20response%20,conditions%20which%20recent%20studies%20have)
 [\[8\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=measures%20targeting%20a%20variety%20of,in%20affective%20research7%20%E2%80%93%2032)
 [\[9\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC8187483/#:~:text=compliments%20the%20traditional%20measures%20is,results%20in%20affective%20research%2031%E2%80%939)

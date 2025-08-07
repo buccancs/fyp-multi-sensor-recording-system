@@ -1025,9 +1025,7 @@ devices was guided by the aim to meet distinction-level project
 objectives: leveraging state-of-the-art yet realistic tools to push the
 boundaries of contactless stress detection in a scientifically rigorous
 manner.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC10894494/#:~:text=development%20and%20impact%20of%20emotion,between%20emotions%20and%20disease%20throughout)
 [\[4\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC10894494/#:~:text=of%20multiple%20modalities%2C%E2%80%9D%20and%20%E2%80%9Cclinical,between%20emotions%20and%20disease%20throughout)
 [\[5\]](https://pmc.ncbi.nlm.nih.gov/articles/PMC10894494/#:~:text=has%20facilitated%20remote%20emotion%20recognition,time%20emotion%20monitoring)

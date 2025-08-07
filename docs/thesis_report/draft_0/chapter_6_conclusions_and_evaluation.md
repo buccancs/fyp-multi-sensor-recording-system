@@ -35,9 +35,7 @@ practical impacts for the scientific community.
 - 6.4.2. [Application Domain Extensions](#642-application-domain-extensions)
 - 6.4.3. [Research Advancement Opportunities](#643-research-advancement-opportunities)
 - 6.4.4. [Open Source and Community Development](#644-open-source-and-community-development)
-
 ---
-
 ## 6.1 Achievements and Technical Contributions
 
 The Multi-Sensor Recording System project has achieved significant technical and scientific breakthroughs that advance
@@ -90,30 +88,35 @@ optimisation:
 The implementation of end-to-end security features transforms the system from a development prototype into a production-ready research platform capable of handling sensitive physiological data in compliance with privacy regulations:
 
 **Hardware-Backed Encryption Achievement:**
+
 - **AES-GCM encryption** with Android Keystore integration providing hardware-backed security for all sensitive data
 - **2.3 GB/s encryption throughput** on target hardware with <5% performance overhead for typical research files
 - **100% encryption compliance** across all data pathways with thorough test validation
 - **Cryptographic key management** with secure hardware-backed key generation and storage
 
 **TLS/SSL Communication Security:**
+
 - **End-to-end encrypted communication** replacing plain TCP with TLS/SSL protocols
 - **Certificate pinning implementation** providing protection against man-in-the-middle attacks
 - **TLS 1.3 and TLS 1.2 support** with strong cipher suite configuration
 - **Authentication framework** with cryptographically secure token generation and validation
 
 **GDPR Article 25 Compliance Achievement:**
+
 - **Privacy-by-design architecture** implementing complete consent management and data anonymization
 - **99.8% PII detection accuracy** across thorough test datasets with automatic sanitisation
 - **100% data subject rights implementation** including access, rectification, erasure, and portability
 - **Cryptographic file deletion** with multi-pass overwriting ensuring secure data destruction
 
 **Security Testing and Validation Excellence:**
+
 - **47 complete security test methods** achieving 100% critical security function coverage
 - **99.97% authentication success rate** for valid tokens with robust brute force resistance
 - **100% GDPR compliance testing** with complete privacy rights validation
 - **Automated security monitoring** with real-time assessment and continuous compliance verification
 
 **Security Performance Metrics:**
+
 - **Zero critical security vulnerabilities** achieved through systematic security remediation
 - **78% reduction in total vulnerabilities** from baseline assessment to current implementation
 - **100% false positive elimination** in security scanning with intelligent pattern recognition
@@ -306,6 +309,7 @@ development and maintenance.
 The project demonstrates exceptional validation success through thorough test infrastructure that provides definitive evidence of research-grade system quality. The consolidated test execution results validate all technical claims with quantitative evidence suitable for academic peer review.
 
 **Test Infrastructure Innovation**:
+
 - **Total Test Methods**: 240+ thorough test methods spanning all system components
 - **Overall Success Rate**: 99.5% across all platforms and testing categories
 - **Real Component Validation**: Complete elimination of artificial mocks for authentic testing
@@ -314,18 +318,21 @@ The project demonstrates exceptional validation success through thorough test in
 **Platform-Specific Validation Results**:
 
 *Python Desktop Application Testing*:
+
 - 151 test methods with 99.3% success rate (150/151 tests passed)
 - 7 thorough test modules covering all major system components
 - Graceful dependency handling with appropriate test skipping
 - Real component testing ensuring authentic system behaviour validation
 
 *Android Mobile Application Testing*:
+
 - Core Android functionality implemented with complete sensor integration
 - Complete coverage of UI components, sensors, network communication, and performance
 - Production-ready implementation quality validated through thorough testing
 - Platform-specific testing ensuring mobile application reliability
 
 *Integration Testing Excellence*:
+
 - 17 integration tests with 100% success rate (17/17 tests passed)
 - Sub-second execution time (1.6 seconds) demonstrating efficient validation
 - Multi-device coordination, network performance, and synchronisation precision validated
@@ -334,6 +341,7 @@ The project demonstrates exceptional validation success through thorough test in
 **Quality Assessment Evidence**:
 
 The test validation provides concrete evidence supporting all research claims:
+
 - ✅ **Research Readiness**: complete coverage validates academic-quality implementation
 - ✅ **Technical Excellence**: 99.5% success rate demonstrates exceptional system reliability
 - ✅ **Cross-Platform Support**: Both desktop and mobile platforms thoroughly validated
@@ -343,6 +351,7 @@ The test validation provides concrete evidence supporting all research claims:
 **Academic Standard Documentation**:
 
 The validation methodology represents significant innovation in research software testing:
+
 - Research-grade test reporting with complete metrics and execution logs
 - Evidence-based validation supporting all technical claims with measurable data
 - Consolidated test infrastructure providing permanent reference for thesis validation
@@ -732,9 +741,7 @@ demonstrate project value while identifying areas for continued improvement and 
 These future work directions provide a complete roadmap for continued system development while addressing current
 limitations and expanding capabilities for broader research applications. The prioritized development approach ensures
 sustainable progress while maintaining focus on core research objectives and community benefit.
-
 ---
-
 ## Summary and Final Remarks
 
 The Multi-Sensor Recording System project represents a significant achievement in research software development,
@@ -751,11 +758,11 @@ The project's primary achievements span three fundamental areas:
    synchronisation precision, and 99.5% thorough test success rate across 240+ test methods, demonstrating that research-grade reliability can be achieved
    using consumer hardware when supported by sophisticated software algorithms.
 
-2. **Research Innovation**: The contactless measurement paradigm enables new forms of scientific investigation while
+1. **Research Innovation**: The contactless measurement paradigm enables new forms of scientific investigation while
    reducing barriers to advanced research through cost-effective approaches that democratis\1 access to sophisticated
    measurement capabilities.
 
-3. **Community Impact**: The open-source architecture, complete documentation, and educational resources establish
+1. **Community Impact**: The open-source architecture, complete documentation, and educational resources establish
    a foundation for sustained community development and collaborative research that extends project impact beyond the
    immediate research team.
 
@@ -787,9 +794,7 @@ community benefit, the Multi-Sensor Recording System project delivers lasting va
 research advancement for years to come. The technical innovations, methodological contributions, and practical research
 capabilities provided by this system represent a significant advancement in research instrumentation and software
 engineering for research applications.
-
 ---
-
 ## Code Implementation References
 
 The conclusions and evaluations presented in this chapter are supported by evidence from key implementation components

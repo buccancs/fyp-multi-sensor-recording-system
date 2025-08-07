@@ -3,39 +3,39 @@
 ## Table of Contents
 
 1. [Testing Strategy Overview](#testing-strategy-overview)
-    -
-    1.1. [complete Testing Philosophy and Methodological Foundations](#complete-testing-philosophy-and-methodological-foundations)
-    -
+---
+   1.1. [complete Testing Philosophy and Methodological Foundations](#complete-testing-philosophy-and-methodological-foundations)
+---
     1.2. [Sophisticated Multi-Layered Testing Hierarchy with complete Coverage](#sophisticated-multi-layered-testing-hierarchy-with-complete-coverage)
     - 1.3. [Research-Specific Testing Methodology](#research-specific-testing-methodology)
     - 1.4. [Quantitative Testing Metrics and Standards](#quantitative-testing-metrics-and-standards)
-2. [Testing Framework Architecture](#testing-framework-architecture)
+1. [Testing Framework Architecture](#testing-framework-architecture)
     - 2.1. [complete Multi-Platform Testing Architecture](#complete-multi-platform-testing-architecture)
     - 2.2. [Advanced Test Data Management](#advanced-test-data-management)
     - 2.3. [Automated Test Environment Management](#automated-test-environment-management)
     - 2.4. [Test Environment Management](#test-environment-management)
-3. [Unit Testing Implementation](#unit-testing-implementation)
+2. [Unit Testing Implementation](#unit-testing-implementation)
     - 3.1. [Android Unit Testing](#android-unit-testing)
         - 3.1.1. [Camera Recording Tests](#camera-recording-tests)
         - 3.1.2. [Shimmer Integration Tests](#shimmer-integration-tests)
     - 3.2. [Python Unit Testing](#python-unit-testing)
         - 3.2.1. [Calibration System Tests](#calibration-system-tests)
         - 3.2.2. [Synchronisation Engine Tests](#synchronisation-engine-tests)
-4. [Integration Testing](#integration-testing)
+3. [Integration Testing](#integration-testing)
     - 4.1. [Cross-Platform Integration Testing](#cross-platform-integration-testing)
     - 4.2. [Network Communication Testing](#network-communication-testing)
-5. [System Testing and Validation](#system-testing-and-validation)
+4. [System Testing and Validation](#system-testing-and-validation)
     - 5.1. [End-to-End System Testing](#end-to-end-system-testing)
     - 5.2. [Data Quality Validation](#data-quality-validation)
-6. [Performance Testing and Benchmarking](#performance-testing-and-benchmarking)
+5. [Performance Testing and Benchmarking](#performance-testing-and-benchmarking)
     - 6.1. [Reliability and Long-Duration Testing](#reliability-and-long-duration-testing)
     - 6.2. [Research-Specific Quality Validation](#research-specific-quality-validation)
     - 6.3. [System Performance Benchmarking](#system-performance-benchmarking)
     - 6.4. [Network Performance Testing](#network-performance-testing)
-7. [Reliability and Stress Testing](#reliability-and-stress-testing)
+6. [Reliability and Stress Testing](#reliability-and-stress-testing)
     - 7.1. [Stress Testing Implementation](#stress-testing-implementation)
     - 7.2. [Error Recovery Testing](#error-recovery-testing)
-8. [Results Analysis and Evaluation](#results-analysis-and-evaluation)
+7. [Results Analysis and Evaluation](#results-analysis-and-evaluation)
     - 8.1. [Test Results Summary](#test-results-summary)
         - 8.1.1. [Coverage Metrics](#coverage-metrics)
         - 8.1.2. [Performance Benchmarks](#performance-benchmarks)
@@ -49,9 +49,7 @@
         - 8.4.3. [Minor Defects (5 resolved, 2 tracked)](#minor-defects-5-resolved-2-tracked)
         - 8.4.4. [Tracked Issues (Non-critical)](#tracked-issues-non-critical)
     - 8.5. [Testing Methodology Evaluation](#testing-methodology-evaluation)
-
 ---
-
 This complete chapter presents the systematic testing and validation framework employed to ensure the Multi-Sensor
 Recording System meets the rigorous quality standards required for scientific research applications. The testing
 methodology represents a sophisticated synthesis of software engineering testing principles, scientific experimental
@@ -336,7 +334,7 @@ graph LR
         I[Storage/Export<br/>98.2% coverage<br/>Excellent confidence]
         J[Quality Assessment<br/>92.5% coverage<br/>Good confidence]
     end
-    
+---
     style A fill:#4caf50
     style B fill:#8bc34a
     style C fill:#4caf50
@@ -489,9 +487,7 @@ operation.
 requirements analysis and comparison with existing research software standards. The criteria include both absolute
 thresholds and relative performance requirements that ensure the system meets or exceeds established benchmarks for
 research software quality.
-
 ---
-
 ## Testing Framework Architecture
 
 The testing framework architecture provides a unified, cross-platform approach to validation that accommodates the
@@ -520,58 +516,58 @@ graph TB
         MONITOR[Test Monitor<br/>Progress Tracking]
         REPORTER[Test Reporter<br/>Result Aggregation]
     end
-    
+---
     subgraph "Platform-Specific Testing Engines"
         ANDROID_ENGINE[Android Testing Engine<br/>Instrumentation and Unit Tests]
         PYTHON_ENGINE[Python Testing Engine<br/>Pytest Framework Integration]
         INTEGRATION_ENGINE[Integration Testing Engine<br/>Cross-Platform Coordination]
         HARDWARE_ENGINE[Hardware Testing Engine<br/>Sensor Validation Framework]
     end
-    
+---
     subgraph "Test Execution Environment"
         MOBILE_DEVICES[Mobile Device Test Farm<br/>Multiple Android Devices]
         DESKTOP_SYSTEMS[Desktop Test Systems<br/>Python Environment]
         SENSOR_HARDWARE[Sensor Test Rigs<br/>Controlled Hardware Environment]
         NETWORK_SIM[Network Simulator<br/>Controlled Networking Conditions]
     end
-    
+---
     subgraph "Data Collection and Analysis"
         METRICS_COLLECTOR[Metrics Collection Service<br/>Performance and Quality Data]
         LOG_AGGREGATOR[Log Aggregation System<br/>Multi-Platform Log Collection]
         ANALYSIS_ENGINE[Analysis Engine<br/>Statistical and Trend Analysis]
         VALIDATION_FRAMEWORK[Validation Framework<br/>Requirement Compliance Checking]
     end
-    
+---
     subgraph "Reporting and Documentation"
         DASHBOARD[Real-Time Dashboard<br/>Test Progress Visualisation]
         REPORTS[Automated Report Generation<br/>complete Test Documentation]
         TRENDS[Trend Analysis<br/>Quality Trend Tracking]
         ALERTS[Alert System<br/>Failure Notification]
     end
-    
+---
     COORDINATOR --> SCHEDULER
     SCHEDULER --> MONITOR
     MONITOR --> REPORTER
-    
+---
     COORDINATOR --> ANDROID_ENGINE
     COORDINATOR --> PYTHON_ENGINE
     COORDINATOR --> INTEGRATION_ENGINE
     COORDINATOR --> HARDWARE_ENGINE
-    
+---
     ANDROID_ENGINE --> MOBILE_DEVICES
     PYTHON_ENGINE --> DESKTOP_SYSTEMS
     INTEGRATION_ENGINE --> NETWORK_SIM
     HARDWARE_ENGINE --> SENSOR_HARDWARE
-    
+---
     MOBILE_DEVICES --> METRICS_COLLECTOR
     DESKTOP_SYSTEMS --> METRICS_COLLECTOR
     SENSOR_HARDWARE --> METRICS_COLLECTOR
     NETWORK_SIM --> METRICS_COLLECTOR
-    
+---
     METRICS_COLLECTOR --> LOG_AGGREGATOR
     LOG_AGGREGATOR --> ANALYSIS_ENGINE
     ANALYSIS_ENGINE --> VALIDATION_FRAMEWORK
-    
+---
     VALIDATION_FRAMEWORK --> DASHBOARD
     VALIDATION_FRAMEWORK --> REPORTS
     VALIDATION_FRAMEWORK --> TRENDS
@@ -687,37 +683,37 @@ graph TB
         REPORTER[Result Reporter]
         ANALYZER[Data Analyzer]
     end
-    
+---
     subgraph "Android Testing Framework"
         AUNIT[Android Unit Tests<br/>JUnit + Mockito]
         AINTEGRATION[Android Integration Tests<br/>Espresso + Robolectric]
         AINSTRUMENT[Instrumented Tests<br/>Device Testing]
     end
-    
+---
     subgraph "Python Testing Framework"
         PUNIT[Python Unit Tests<br/>pytest + mock]
         PINTEGRATION[Python Integration Tests<br/>pytest-asyncio]
         PSYSTEM[System Tests<br/>End-to-End Validation]
     end
-    
+---
     subgraph "Specialized Testing Tools"
         NETWORK[Network Simulation<br/>Latency & Packet Loss]
         LOAD[Load Testing<br/>Device Scaling]
         MONITOR[Resource Monitoring<br/>Performance Metrics]
     end
-    
+---
     COORDINATOR --> SCHEDULER
     SCHEDULER --> REPORTER
     REPORTER --> ANALYZER
-    
+---
     COORDINATOR --> AUNIT
     COORDINATOR --> AINTEGRATION
     COORDINATOR --> AINSTRUMENT
-    
+---
     COORDINATOR --> PUNIT
     COORDINATOR --> PINTEGRATION
     COORDINATOR --> PSYSTEM
-    
+---
     PSYSTEM --> NETWORK
     PSYSTEM --> LOAD
     PSYSTEM --> MONITOR
@@ -737,29 +733,29 @@ class TestEnvironmentManager:
             'performance': PerformanceTestEnvironment(),
             'stress': StressTestEnvironment()
         }
-        
+---
     async def setup_environment(self, test_type: str, config: TestConfig) -> TestEnvironment:
         """Setup test environment with appropriate configuration and resources."""
         environment = self.environments[test_type]
-        
+---
         try:
             # Configure test environment
             await environment.configure(config)
-            
+---
             # Initialise required resources
             await environment.initialize_resources()
-            
+---
             # Validate environment readiness
             validation_result = await environment.validate()
             if not validation_result.ready:
                 raise EnvironmentSetupException(validation_result.errors)
-            
+---
             return environment
-            
+---
         except Exception as e:
             await environment.cleanup()
             raise TestEnvironmentException(f"Environment setup failed: {str(e)}")
-    
+---
     async def cleanup_environment(self, environment: TestEnvironment):
         """Clean up test environment and release resources."""
         try:
@@ -768,9 +764,7 @@ class TestEnvironmentManager:
         except Exception as e:
             logger.warning(f"Environment cleanup warning: {str(e)}")
 ```
-
 ---
-
 ## Unit Testing Implementation
 
 ### Android Unit Testing
@@ -782,16 +776,16 @@ The Android application employs complete unit testing using JUnit 5 and Mockito 
 ```kotlin
 @ExtendWith(MockitoExtension::class)
 class CameraRecorderTest {
-    
+---
     @Mock
     private lateinit var cameraManager: CameraManager
-    
+---
     @Mock
     private lateinit var configValidator: CameraConfigValidator
-    
+---
     @InjectMocks
     private lateinit var cameraRecorder: CameraRecorder
-    
+---
     @Test
     fun `startRecording with valid configuration should succeed`() = runTest {
         // Arrange
@@ -800,22 +794,22 @@ class CameraRecorderTest {
             frameRate = 60,
             colorFormat = ColorFormat.YUV_420_888
         )
-        
+---
         `when`(configValidator.validate(validConfig)).thenReturn(ValidationResult.success())
         `when`(cameraManager.openCamera(any(), any(), any())).thenAnswer { invocation ->
             val callback = invocation.getArgument<CameraDevice.StateCallback>(1)
             callback.onOpened(mockCameraDevice)
         }
-        
+---
         // Act
         val result = cameraRecorder.startRecording(validConfig)
-        
+---
         // Assert
         assertTrue(result.isSuccess)
         verify(configValidator).validate(validConfig)
         verify(cameraManager).openCamera(any(), any(), any())
     }
-    
+---
     @Test
     fun `startRecording with invalid configuration should fail`() = runTest {
         // Arrange
@@ -824,34 +818,34 @@ class CameraRecorderTest {
             frameRate = -1,
             colorFormat = ColorFormat.UNKNOWN
         )
-        
+---
         val validationErrors = listOf("Invalid resolution", "Invalid frame rate")
         `when`(configValidator.validate(invalidConfig))
             .thenReturn(ValidationResult.failure(validationErrors))
-        
+---
         // Act
         val result = cameraRecorder.startRecording(invalidConfig)
-        
+---
         // Assert
         assertTrue(result.isFailure)
         assertEquals("Invalid configuration: $validationErrors", result.exceptionOrNull()?.message)
     }
-    
+---
     @Test
     fun `concurrent recording attempts should be handled gracefully`() = runTest {
         // Arrange
         val config = createValidCameraConfiguration()
-        
+---
         // Act
         val firstRecording = async { cameraRecorder.startRecording(config) }
         val secondRecording = async { cameraRecorder.startRecording(config) }
-        
+---
         val results = awaitAll(firstRecording, secondRecording)
-        
+---
         // Assert
         val successCount = results.count { it.isSuccess }
         val failureCount = results.count { it.isFailure }
-        
+---
         assertEquals(1, successCount, "Only one recording should succeed")
         assertEquals(1, failureCount, "Second recording should fail")
     }
@@ -863,26 +857,26 @@ class CameraRecorderTest {
 ```kotlin
 @ExtendWith(MockitoExtension::class)
 class ShimmerRecorderTest {
-    
+---
     @Mock
     private lateinit var bluetoothAdapter: BluetoothAdapter
-    
+---
     @Mock
     private lateinit var shimmerManager: ShimmerManager
-    
+---
     @InjectMocks
     private lateinit var shimmerRecorder: ShimmerRecorder
-    
+---
     @Test
     fun `device discovery should find available Shimmer devices`() = runTest {
         // Arrange
         val mockDevice1 = createMockBluetoothDevice("Shimmer_1234")
         val mockDevice2 = createMockBluetoothDevice("Shimmer_5678")
         val discoveredDevices = listOf(mockDevice1, mockDevice2)
-        
+---
         `when`(bluetoothAdapter.isEnabled).thenReturn(true)
         `when`(bluetoothAdapter.startDiscovery()).thenReturn(true)
-        
+---
         // Mock device discovery callback
         shimmerRecorder.setDiscoveryCallback { callback ->
             discoveredDevices.forEach { device ->
@@ -890,29 +884,29 @@ class ShimmerRecorderTest {
             }
             callback.onDiscoveryFinished()
         }
-        
+---
         // Act
         val result = shimmerRecorder.discoverDevices()
-        
+---
         // Assert
         assertTrue(result.isSuccess)
         assertEquals(2, result.getOrNull()?.size)
         verify(bluetoothAdapter).startDiscovery()
     }
-    
+---
     @Test
     fun `connection to Shimmer device should configure sensors correctly`() = runTest {
         // Arrange
         val mockDevice = createMockBluetoothDevice("Shimmer_1234")
         val mockShimmer = mock<Shimmer>()
-        
+---
         `when`(shimmerManager.createShimmer(mockDevice)).thenReturn(mockShimmer)
         `when`(mockShimmer.connect()).thenReturn(true)
         `when`(mockShimmer.configureSensors(any())).thenReturn(true)
-        
+---
         // Act
         val result = shimmerRecorder.connectToDevice(mockDevice)
-        
+---
         // Assert
         assertTrue(result.isSuccess)
         verify(mockShimmer).connect()
@@ -938,11 +932,11 @@ from src.calibration.calibration_manager import CalibrationManager
 from src.calibration.calibration_processor import CalibrationProcessor
 
 class TestCalibrationManager:
-    
+---
     @pytest.fixture
     def calibration_manager(self):
         return CalibrationManager()
-    
+---
     @pytest.fixture
     def sample_calibration_images(self):
         """Generate synthetic calibration images for testing."""
@@ -953,7 +947,7 @@ class TestCalibrationManager:
             image = self._add_chessboard_pattern(image)
             images.append(image)
         return images
-    
+---
     def test_camera_calibration_with_sufficient_images(self, calibration_manager, sample_calibration_images):
         """Test successful calibration with sufficient number of images."""
         # Arrange
@@ -962,20 +956,20 @@ class TestCalibrationManager:
             pattern_size=(9, 6),
             square_size=25.0
         )
-        
+---
         # Act
         result = calibration_manager.perform_camera_calibration(
             sample_calibration_images, 
             pattern_config
         )
-        
+---
         # Assert
         assert result.success
         assert result.intrinsic_matrix is not None
         assert result.distortion_coefficients is not None
         assert result.reprojection_error < 1.0  # Sub-pixel accuracy
         assert len(result.quality_metrics) > 0
-    
+---
     def test_calibration_with_insufficient_images(self, calibration_manager):
         """Test calibration failure with insufficient images."""
         # Arrange
@@ -985,17 +979,17 @@ class TestCalibrationManager:
             pattern_size=(9, 6),
             square_size=25.0
         )
-        
+---
         # Act
         result = calibration_manager.perform_camera_calibration(
             insufficient_images, 
             pattern_config
         )
-        
+---
         # Assert
         assert not result.success
         assert "insufficient" in result.error_message.lower()
-    
+---
     @patch('src.calibration.calibration_processor.cv2.findChessboardCorners')
     def test_pattern_detection_failure_handling(self, mock_find_corners, calibration_manager, sample_calibration_images):
         """Test handling of pattern detection failures."""
@@ -1006,17 +1000,17 @@ class TestCalibrationManager:
             pattern_size=(9, 6),
             square_size=25.0
         )
-        
+---
         # Act
         result = calibration_manager.perform_camera_calibration(
             sample_calibration_images, 
             pattern_config
         )
-        
+---
         # Assert
         assert not result.success
         assert "pattern detection" in result.error_message.lower()
-    
+---
     def _add_chessboard_pattern(self, image: np.ndarray) -> np.ndarray:
         """Add synthetic chessboard pattern to image for testing."""
         # Implementation of synthetic pattern generation
@@ -1027,11 +1021,11 @@ class TestCalibrationManager:
 
 ```python
 class TestSynchronizationEngine:
-    
+---
     @pytest.fixture
     def sync_engine(self):
         return SynchronizationEngine()
-    
+---
     @pytest.fixture
     def mock_devices(self):
         """Create mock devices for synchronisation testing."""
@@ -1042,59 +1036,59 @@ class TestSynchronizationEngine:
             device.send_sync_request = AsyncMock()
             devices.append(device)
         return devices
-    
+---
     @pytest.mark.asyncio
     async def test_device_synchronization_success(self, sync_engine, mock_devices):
         """Test successful device synchronisation within precision requirements."""
         # Arrange
         reference_time = time.time()
-        
+---
         for device in mock_devices:
             # Simulate low-latency response
             device.send_sync_request.return_value = SyncResponse(
                 device_timestamp=reference_time + random.uniform(-0.001, 0.001),
                 response_time=time.time() + 0.01  # 10ms RTT
             )
-        
+---
         # Act
         result = await sync_engine.synchronize_devices(mock_devices)
-        
+---
         # Assert
         assert result.success
         assert result.achieved_precision <= sync_engine.sync_precision
         assert len(result.device_synchronizations) == len(mock_devices)
-        
+---
         for device_sync in result.device_synchronizations:
             assert device_sync.success
             assert abs(device_sync.clock_offset) < 0.01  # Within 10ms
-    
+---
     @pytest.mark.asyncio
     async def test_synchronization_precision_failure(self, sync_engine, mock_devices):
         """Test synchronisation failure when precision requirements cannot be met."""
         # Arrange
         reference_time = time.time()
-        
+---
         # Simulate high-latency responses
         for device in mock_devices:
             device.send_sync_request.return_value = SyncResponse(
                 device_timestamp=reference_time + random.uniform(-0.1, 0.1),
                 response_time=time.time() + 0.5  # 500ms RTT
             )
-        
+---
         # Act
         result = await sync_engine.synchronize_devices(mock_devices)
-        
+---
         # Assert
         assert not result.success
         assert result.achieved_precision > sync_engine.sync_precision
         assert "precision" in result.error_message.lower()
-    
+---
     @pytest.mark.asyncio
     async def test_partial_device_synchronisation(self, sync_engine, mock_devices):
         """Test handling of partial synchronisation when some devices fail."""
         # Arrange
         reference_time = time.time()
-        
+---
         # Configure mixed success/failure responses
         mock_devices[0].send_sync_request.return_value = SyncResponse(
             device_timestamp=reference_time,
@@ -1106,18 +1100,16 @@ class TestSynchronizationEngine:
             response_time=time.time() + 0.015
         )
         mock_devices[3].send_sync_request.side_effect = ConnectionError("Network error")
-        
+---
         # Act
         result = await sync_engine.synchronize_devices(mock_devices)
-        
+---
         # Assert
         assert result.partial_success
         assert len(result.successful_devices) == 2
         assert len(result.failed_devices) == 2
 ```
-
 ---
-
 ## Integration Testing
 
 ### Cross-Platform Integration Testing
@@ -1127,7 +1119,7 @@ testing:
 
 ```python
 class TestCrossPlatformIntegration:
-    
+---
     @pytest.fixture
     async def test_session(self):
         """Setup complete test session with mock devices."""
@@ -1136,7 +1128,7 @@ class TestCrossPlatformIntegration:
         await session.start_mock_pc_controller()
         yield session
         await session.cleanup()
-    
+---
     @pytest.mark.asyncio
     async def test_complete_recording_session_workflow(self, test_session):
         """Test complete recording session from start to finish."""
@@ -1144,12 +1136,12 @@ class TestCrossPlatformIntegration:
         connection_result = await test_session.connect_all_devices()
         assert connection_result.success
         assert len(connection_result.connected_devices) == 2
-        
+---
         # Phase 2: System Synchronisation
         sync_result = await test_session.synchronize_devices()
         assert sync_result.success
         assert sync_result.achieved_precision <= 0.005  # 5ms precision
-        
+---
         # Phase 3: Recording Session Start
         session_config = SessionConfig(
             duration=30,  # 30 seconds
@@ -1158,51 +1150,51 @@ class TestCrossPlatformIntegration:
             thermal_enabled=True,
             gsr_enabled=True
         )
-        
+---
         start_result = await test_session.start_recording(session_config)
         assert start_result.success
-        
+---
         # Phase 4: Data Collection Monitoring
         await asyncio.sleep(5)  # Allow recording to progress
-        
+---
         status = await test_session.get_recording_status()
         assert status.recording_active
         assert len(status.device_statuses) == 2
         assert all(device.recording for device in status.device_statuses)
-        
+---
         # Phase 5: Session Termination
         stop_result = await test_session.stop_recording()
         assert stop_result.success
-        
+---
         # Phase 6: Data Validation
         data_validation = await test_session.validate_session_data()
         assert data_validation.all_files_present
         assert data_validation.temporal_consistency
         assert data_validation.data_integrity
-    
+---
     @pytest.mark.asyncio
     async def test_device_failure_recovery(self, test_session):
         """Test system behaviour when devices fail during recording."""
         # Start recording session
         session_config = SessionConfig(duration=60)
         await test_session.start_recording(session_config)
-        
+---
         # Simulate device failure after 10 seconds
         await asyncio.sleep(10)
         await test_session.simulate_device_failure("device_1")
-        
+---
         # Verify system continues with remaining devices
         await asyncio.sleep(5)
         status = await test_session.get_recording_status()
-        
+---
         assert status.recording_active
         assert len(status.active_devices) == 1
         assert "device_1" in status.failed_devices
-        
+---
         # Verify session can be completed successfully
         stop_result = await test_session.stop_recording()
         assert stop_result.success
-        
+---
         # Verify partial data is preserved
         data_validation = await test_session.validate_session_data()
         assert data_validation.partial_success
@@ -1214,17 +1206,17 @@ class TestCrossPlatformIntegration:
 
 ```python
 class TestNetworkCommunication:
-    
+---
     @pytest.mark.asyncio
     async def test_websocket_message_exchange(self):
         """Test WebSocket communication between PC and Android components."""
         # Setup mock WebSocket server and client
         server = MockWebSocketServer()
         client = MockWebSocketClient()
-        
+---
         await server.start()
         await client.connect(server.url)
-        
+---
         # Test control message exchange
         control_message = {
             'type': 'session_start',
@@ -1234,29 +1226,29 @@ class TestNetworkCommunication:
             },
             'message_id': 'test_001'
         }
-        
+---
         response = await client.send_message(control_message)
-        
+---
         assert response['status'] == 'success'
         assert response['message_id'] == 'test_001'
         assert 'session_id' in response
-        
+---
         await client.disconnect()
         await server.stop()
-    
+---
     @pytest.mark.asyncio
     async def test_network_latency_compensation(self):
         """Test system behaviour under various network latency conditions."""
         latency_scenarios = [10, 50, 100, 250, 500]  # milliseconds
-        
+---
         for latency_ms in latency_scenarios:
             with NetworkLatencySimulator(latency_ms):
                 # Perform synchronisation test
                 sync_engine = SynchronizationEngine()
                 devices = [MockDevice(f"device_{i}") for i in range(2)]
-                
+---
                 result = await sync_engine.synchronize_devices(devices)
-                
+---
                 if latency_ms <= 100:
                     assert result.success, f"Sync should succeed with {latency_ms}ms latency"
                 else:
@@ -1265,30 +1257,28 @@ class TestNetworkCommunication:
                         assert result.achieved_precision > sync_engine.sync_precision
                     else:
                         assert "precision" in result.error_message.lower()
-    
+---
     @pytest.mark.asyncio
     async def test_connection_recovery(self):
         """Test automatic connection recovery after network interruptions."""
         # Setup connection
         communication_handler = CommunicationHandler()
         device = MockDevice("test_device")
-        
+---
         connection_result = await communication_handler.connect_device(device)
         assert connection_result.success
-        
+---
         # Simulate network interruption
         await communication_handler.simulate_network_interruption(duration=5)
-        
+---
         # Verify automatic reconnection
         await asyncio.sleep(10)  # Allow time for reconnection attempts
-        
+---
         connection_status = await communication_handler.get_connection_status(device)
         assert connection_status.connected
         assert connection_status.reconnection_count > 0
 ```
-
 ---
-
 ## System Testing and Validation
 
 ### End-to-End System Testing
@@ -1297,33 +1287,33 @@ The system testing framework validates complete workflows under realistic condit
 
 ```python
 class TestCompleteSystemWorkflow:
-    
+---
     @pytest.fixture
     async def full_system_setup(self):
         """Setup complete system environment for end-to-end testing."""
         system = SystemTestHarness()
-        
+---
         # Initialise PC controller
         await system.start_pc_controller()
-        
+---
         # Setup mock Android devices
         await system.setup_android_simulators(count=4)
-        
+---
         # Configure network environment
         await system.configure_network(
             bandwidth=100_000_000,  # 100 Mbps
             latency=10,  # 10ms
             packet_loss=0.1  # 0.1%
         )
-        
+---
         yield system
         await system.cleanup()
-    
+---
     @pytest.mark.asyncio
     async def test_multi_participant_research_session(self, full_system_setup):
         """Test complete multi-participant research session."""
         system = full_system_setup
-        
+---
         # Configure research session
         research_config = ResearchSessionConfig(
             participant_count=4,
@@ -1339,56 +1329,56 @@ class TestCompleteSystemWorkflow:
                 min_signal_quality=20  # dB SNR
             )
         )
-        
+---
         # Phase 1: System Preparation
         prep_result = await system.prepare_research_session(research_config)
         assert prep_result.success
         assert len(prep_result.ready_devices) == 4
-        
+---
         # Phase 2: Calibration Verification
         calibration_status = await system.verify_calibration_status()
         assert calibration_status.all_devices_calibrated
         assert calibration_status.calibration_quality >= 0.8
-        
+---
         # Phase 3: Session Execution
         session_result = await system.execute_research_session(research_config)
         assert session_result.success
         assert session_result.data_quality.overall_score >= 0.85
-        
+---
         # Phase 4: Data Validation
         validation_result = await system.validate_collected_data()
         assert validation_result.temporal_consistency
         assert validation_result.data_completeness >= 0.99
         assert validation_result.signal_quality >= research_config.quality_requirements.min_signal_quality
-        
+---
         # Phase 5: Export Verification
         export_result = await system.export_session_data()
         assert export_result.success
         assert len(export_result.exported_files) > 0
         assert export_result.data_integrity_verified
-    
+---
     @pytest.mark.asyncio
     async def test_system_scalability(self, full_system_setup):
         """Test system performance with varying device counts."""
         system = full_system_setup
         device_counts = [2, 4, 6, 8]
         performance_results = []
-        
+---
         for device_count in device_counts:
             # Configure devices
             await system.configure_device_count(device_count)
-            
+---
             # Measure session startup time
             start_time = time.time()
             session_result = await system.start_recording_session()
             startup_time = time.time() - start_time
-            
+---
             # Measure recording performance
             performance_metrics = await system.measure_recording_performance(duration=30)
-            
+---
             # Stop session
             await system.stop_recording_session()
-            
+---
             performance_results.append({
                 'device_count': device_count,
                 'startup_time': startup_time,
@@ -1397,37 +1387,37 @@ class TestCompleteSystemWorkflow:
                 'network_throughput': performance_metrics.network_throughput,
                 'sync_precision': performance_metrics.sync_precision
             })
-        
+---
         # Validate scalability requirements
         for result in performance_results:
             assert result['startup_time'] < 10.0  # 10 second startup limit
             assert result['cpu_usage'] < 0.8  # 80% CPU limit
             assert result['memory_usage'] < 4_000_000_000  # 4GB memory limit
             assert result['sync_precision'] < 0.005  # 5ms sync precision
-        
+---
         # Verify linear scaling characteristics
         self._validate_linear_scaling(performance_results)
-    
+---
     def _validate_linear_scaling(self, results):
         """Validate that performance scales approximately linearly with device count."""
         cpu_scaling = []
         memory_scaling = []
-        
+---
         for i in range(1, len(results)):
             prev_result = results[i-1]
             curr_result = results[i]
-            
+---
             device_ratio = curr_result['device_count'] / prev_result['device_count']
             cpu_ratio = curr_result['cpu_usage'] / prev_result['cpu_usage']
             memory_ratio = curr_result['memory_usage'] / prev_result['memory_usage']
-            
+---
             cpu_scaling.append(cpu_ratio / device_ratio)
             memory_scaling.append(memory_ratio / device_ratio)
-        
+---
         # Scaling factor should be close to 1.0 for linear scaling
         avg_cpu_scaling = sum(cpu_scaling) / len(cpu_scaling)
         avg_memory_scaling = sum(memory_scaling) / len(memory_scaling)
-        
+---
         assert 0.8 <= avg_cpu_scaling <= 1.5, f"CPU scaling factor {avg_cpu_scaling} outside acceptable range"
         assert 0.8 <= avg_memory_scaling <= 1.5, f"Memory scaling factor {avg_memory_scaling} outside acceptable range"
 ```
@@ -1436,66 +1426,64 @@ class TestCompleteSystemWorkflow:
 
 ```python
 class TestDataQualityValidation:
-    
+---
     @pytest.mark.asyncio
     async def test_temporal_synchronization_accuracy(self):
         """Test temporal synchronisation accuracy across all data sources."""
         session = TestSession()
         await session.start_recording(duration=60)
-        
+---
         # Collect temporal data from all sources
         temporal_data = await session.extract_temporal_data()
-        
+---
         # Validate synchronisation accuracy
         sync_analysis = TemporalSynchronizationAnalyzer()
         sync_results = sync_analysis.analyse(temporal_data)
-        
+---
         assert sync_results.max_deviation < 0.005  # 5ms maximum deviation
         assert sync_results.mean_deviation < 0.002  # 2ms mean deviation
         assert sync_results.std_deviation < 0.001  # 1ms standard deviation
-        
+---
         # Validate timestamp consistency
         for source in temporal_data.sources:
             timestamps = temporal_data.get_timestamps(source)
             gaps = self._calculate_timestamp_gaps(timestamps)
-            
+---
             assert all(gap > 0 for gap in gaps), "No negative timestamp gaps"
             assert max(gaps) < 0.1, "No gaps larger than 100ms"
-    
+---
     @pytest.mark.asyncio
     async def test_signal_quality_assessment(self):
         """Test signal quality assessment across all sensor types."""
         session = TestSession()
         await session.start_recording(duration=120)
-        
+---
         # Extract signal data
         signal_data = await session.extract_signal_data()
-        
+---
         # Analyse RGB video quality
         rgb_quality = VideoQualityAnalyzer().analyse(signal_data.rgb_frames)
         assert rgb_quality.average_snr > 20  # dB
         assert rgb_quality.motion_blur_score < 0.3
         assert rgb_quality.exposure_consistency > 0.8
-        
+---
         # Analyse thermal data quality
         thermal_quality = ThermalQualityAnalyzer().analyse(signal_data.thermal_frames)
         assert thermal_quality.temperature_accuracy < 0.1  # °C
         assert thermal_quality.spatial_resolution >= 160  # pixels
         assert thermal_quality.temporal_stability > 0.9
-        
+---
         # Analyse GSR signal quality
         gsr_quality = GSRQualityAnalyzer().analyse(signal_data.gsr_samples)
         assert gsr_quality.signal_to_noise_ratio > 20  # dB
         assert gsr_quality.sampling_rate_consistency > 0.99
         assert gsr_quality.baseline_stability > 0.8
-    
+---
     def _calculate_timestamp_gaps(self, timestamps):
         """Calculate gaps between consecutive timestamps."""
         return [timestamps[i+1] - timestamps[i] for i in range(len(timestamps)-1)]
 ```
-
 ---
-
 ## Performance Testing and Benchmarking
 
 The complete performance testing and benchmarking initiative systematically evaluated system capabilities across
@@ -1612,7 +1600,7 @@ xychart-beta
 
 ```python
 class TestSystemPerformance:
-    
+---
     @pytest.mark.asyncio
     async def test_recording_session_performance(self):
         """Benchmark recording session performance under various conditions."""
@@ -1622,18 +1610,18 @@ class TestSystemPerformance:
             {'devices': 6, 'quality': 'UHD', 'duration': 600},
             {'devices': 8, 'quality': 'UHD', 'duration': 1800}
         ]
-        
+---
         performance_results = []
-        
+---
         for scenario in benchmark_scenarios:
             benchmark = PerformanceBenchmark()
-            
+---
             # Setup scenario
             await benchmark.configure_scenario(scenario)
-            
+---
             # Execute benchmark
             result = await benchmark.execute_recording_benchmark()
-            
+---
             performance_results.append({
                 'scenario': scenario,
                 'cpu_utilization': result.cpu_stats,
@@ -1642,37 +1630,37 @@ class TestSystemPerformance:
                 'storage_io': result.storage_stats,
                 'response_times': result.response_times
             })
-        
+---
         # Validate performance requirements
         for result in performance_results:
             assert result['cpu_utilization'].average < 0.8
             assert result['memory_usage'].peak < 4_000_000_000  # 4GB
             assert result['response_times'].session_start < 2.0  # 2 seconds
             assert result['response_times'].session_stop < 5.0  # 5 seconds
-    
+---
     @pytest.mark.asyncio
     async def test_concurrent_session_performance(self):
         """Test performance with multiple concurrent recording sessions."""
         concurrent_sessions = [1, 2, 3, 4]
         performance_metrics = []
-        
+---
         for session_count in concurrent_sessions:
             benchmark = ConcurrentSessionBenchmark()
-            
+---
             # Start multiple concurrent sessions
             sessions = []
             for i in range(session_count):
                 session = await benchmark.start_session(f"session_{i}")
                 sessions.append(session)
-            
+---
             # Measure system performance
             await asyncio.sleep(30)  # Allow steady state
             metrics = await benchmark.measure_system_performance()
-            
+---
             # Stop all sessions
             for session in sessions:
                 await benchmark.stop_session(session)
-            
+---
             performance_metrics.append({
                 'concurrent_sessions': session_count,
                 'total_cpu_usage': metrics.cpu_usage,
@@ -1680,11 +1668,11 @@ class TestSystemPerformance:
                 'network_bandwidth': metrics.network_usage,
                 'average_response_time': metrics.response_time
             })
-        
+---
         # Validate concurrent session limits
         max_sessions = self._find_performance_limit(performance_metrics)
         assert max_sessions >= 2, "System should support at least 2 concurrent sessions"
-    
+---
     def _find_performance_limit(self, metrics):
         """Find maximum number of sessions before performance degradation."""
         for metric in metrics:
@@ -1699,7 +1687,7 @@ class TestSystemPerformance:
 
 ```python
 class TestNetworkPerformance:
-    
+---
     @pytest.mark.asyncio
     async def test_network_throughput_optimisation(self):
         """Test network throughput optimisation under various bandwidth conditions."""
@@ -1709,37 +1697,37 @@ class TestNetworkPerformance:
             {'bandwidth': 100_000_000, 'expected_quality': 'uhd'},
             {'bandwidth': 1_000_000_000, 'expected_quality': 'uhd_uncompressed'}
         ]
-        
+---
         for scenario in bandwidth_scenarios:
             with NetworkBandwidthLimiter(scenario['bandwidth']):
                 # Start recording session
                 session = RecordingSession()
                 await session.start()
-                
+---
                 # Allow adaptation period
                 await asyncio.sleep(10)
-                
+---
                 # Measure actual throughput and quality
                 performance = await session.measure_performance()
-                
+---
                 # Validate adaptive behaviour
                 assert performance.network_utilization < 0.8 * scenario['bandwidth']
                 assert performance.quality_mode == scenario['expected_quality']
-                
+---
                 await session.stop()
-    
+---
     @pytest.mark.asyncio
     async def test_packet_loss_resilience(self):
         """Test system resilience to packet loss."""
         packet_loss_rates = [0.0, 0.1, 0.5, 1.0, 2.0, 5.0]  # Percentage
-        
+---
         for loss_rate in packet_loss_rates:
             with NetworkPacketLossSimulator(loss_rate):
                 session = RecordingSession()
-                
+---
                 try:
                     result = await session.execute_session(duration=60)
-                    
+---
                     if loss_rate <= 1.0:
                         assert result.success, f"Session should succeed with {loss_rate}% packet loss"
                         assert result.data_completeness > 0.95
@@ -1751,7 +1739,7 @@ class TestNetworkPerformance:
                         # High packet loss may cause session failure
                         if not result.success:
                             assert "network" in result.error_message.lower()
-                
+---
                 except Exception as e:
                     if loss_rate > 2.0:
                         # Expected failure with high packet loss
@@ -1759,65 +1747,63 @@ class TestNetworkPerformance:
                     else:
                         raise  # Unexpected failure
 ```
-
 ---
-
 ## Reliability and Stress Testing
 
 ### Stress Testing Implementation
 
 ```python
 class TestSystemStressLimits:
-    
+---
     @pytest.mark.asyncio
     async def test_extended_operation_stress(self):
         """Test system stability during extended operation periods."""
         test_duration = 8 * 3600  # 8 hours
         monitoring_interval = 300  # 5 minutes
-        
+---
         stress_test = ExtendedOperationStressTest()
-        
+---
         # Start stress test
         await stress_test.start_extended_session(duration=test_duration)
-        
+---
         # Monitor system health throughout the test
         health_reports = []
         start_time = time.time()
-        
+---
         while time.time() - start_time < test_duration:
             await asyncio.sleep(monitoring_interval)
-            
+---
             health_report = await stress_test.generate_health_report()
             health_reports.append(health_report)
-            
+---
             # Check for critical failures
             if health_report.critical_failures:
                 pytest.fail(f"Critical failure detected: {health_report.critical_failures}")
-        
+---
         # Stop stress test
         final_result = await stress_test.stop_and_analyze()
-        
+---
         # Validate extended operation requirements
         assert final_result.uptime_percentage > 0.995  # 99.5% uptime
         assert final_result.data_loss_percentage < 0.001  # <0.1% data loss
         assert final_result.memory_leak_detected == False
         assert final_result.performance_degradation < 0.1  # <10% degradation
-    
+---
     @pytest.mark.asyncio
     async def test_memory_stress_testing(self):
         """Test system behaviour under memory pressure."""
         memory_stress = MemoryStressTest()
-        
+---
         # Gradually increase memory pressure
         memory_pressure_levels = [0.5, 0.7, 0.8, 0.9, 0.95]
-        
+---
         for pressure_level in memory_pressure_levels:
             await memory_stress.apply_memory_pressure(pressure_level)
-            
+---
             # Start recording session under memory pressure
             session = RecordingSession()
             result = await session.execute_short_session(duration=60)
-            
+---
             if pressure_level <= 0.8:
                 assert result.success, f"Session should succeed with {pressure_level*100}% memory pressure"
             elif pressure_level <= 0.9:
@@ -1828,18 +1814,18 @@ class TestSystemStressLimits:
                 # High memory pressure may cause failures
                 if not result.success:
                     assert "memory" in result.error_message.lower()
-            
+---
             await memory_stress.release_memory_pressure()
-    
+---
     @pytest.mark.asyncio
     async def test_device_failure_cascade_prevention(self):
         """Test prevention of cascading failures when devices fail."""
         cascade_test = CascadeFailureTest()
-        
+---
         # Setup scenario with multiple devices
         await cascade_test.setup_devices(device_count=6)
         await cascade_test.start_recording_session()
-        
+---
         # Simulate progressive device failures
         failure_sequence = [
             {'time': 30, 'device': 'device_1', 'failure_type': 'network_disconnect'},
@@ -1847,16 +1833,16 @@ class TestSystemStressLimits:
             {'time': 90, 'device': 'device_3', 'failure_type': 'software_crash'},
             {'time': 120, 'device': 'device_4', 'failure_type': 'sensor_malfunction'}
         ]
-        
+---
         for failure in failure_sequence:
             await asyncio.sleep(failure['time'] - cascade_test.elapsed_time)
             await cascade_test.simulate_device_failure(failure['device'], failure['failure_type'])
-            
+---
             # Verify system continues operation
             status = await cascade_test.get_system_status()
             assert status.recording_active, f"System should continue after {failure['device']} failure"
             assert len(status.active_devices) >= 2, "At least 2 devices should remain active"
-        
+---
         # Complete session and validate data
         final_result = await cascade_test.complete_session()
         assert final_result.partial_success
@@ -1867,27 +1853,27 @@ class TestSystemStressLimits:
 
 ```python
 class TestErrorRecoveryMechanisms:
-    
+---
     @pytest.mark.asyncio
     async def test_automatic_reconnection_recovery(self):
         """Test automatic reconnection after network interruptions."""
         recovery_test = NetworkRecoveryTest()
-        
+---
         # Start recording session
         await recovery_test.start_recording_session()
-        
+---
         # Simulate network interruptions of varying durations
         interruption_durations = [1, 5, 10, 30, 60]  # seconds
-        
+---
         for duration in interruption_durations:
             # Simulate network interruption
             await recovery_test.simulate_network_interruption(duration)
-            
+---
             # Wait for recovery
             recovery_start = time.time()
             recovery_successful = await recovery_test.wait_for_recovery(timeout=120)
             recovery_time = time.time() - recovery_start
-            
+---
             if duration <= 30:
                 assert recovery_successful, f"Recovery should succeed after {duration}s interruption"
                 assert recovery_time < 60, f"Recovery should complete within 60s"
@@ -1898,38 +1884,38 @@ class TestErrorRecoveryMechanisms:
                     status = await recovery_test.get_system_status()
                     assert status.error_state_acknowledged
                     assert status.manual_intervention_required
-        
+---
         # Complete session
         await recovery_test.complete_session()
-    
+---
     @pytest.mark.asyncio
     async def test_data_corruption_recovery(self):
         """Test recovery from data corruption scenarios."""
         corruption_test = DataCorruptionRecoveryTest()
-        
+---
         corruption_scenarios = [
             {'type': 'file_header_corruption', 'severity': 'minor'},
             {'type': 'metadata_corruption', 'severity': 'moderate'},
             {'type': 'video_frame_corruption', 'severity': 'moderate'},
             {'type': 'sensor_data_corruption', 'severity': 'major'}
         ]
-        
+---
         for scenario in corruption_scenarios:
             # Start clean recording session
             session_id = await corruption_test.start_recording_session()
-            
+---
             # Allow some data collection
             await asyncio.sleep(30)
-            
+---
             # Inject corruption
             await corruption_test.inject_corruption(scenario)
-            
+---
             # Continue recording
             await asyncio.sleep(30)
-            
+---
             # Stop session and analyse recovery
             recovery_result = await corruption_test.stop_and_analyze_recovery()
-            
+---
             if scenario['severity'] in ['minor', 'moderate']:
                 assert recovery_result.data_recovery_successful
                 assert recovery_result.data_loss_percentage < 0.1
@@ -1938,9 +1924,7 @@ class TestErrorRecoveryMechanisms:
                 assert recovery_result.corruption_detected
                 assert recovery_result.affected_timespan_isolated
 ```
-
 ---
-
 ## Results Analysis and Evaluation
 
 ### Test Results Summary
@@ -1962,7 +1946,7 @@ scenarios:
 
 ```python
 class TestResultsAnalysis:
-    
+---
     def analyze_performance_results(self):
         """Analyse performance test results and generate detailed report."""
         results = {
@@ -1985,13 +1969,13 @@ class TestResultsAnalysis:
                 'synchronization_accuracy': 3.2  # milliseconds average deviation
             }
         }
-        
+---
         return self._generate_performance_report(results)
-    
+---
     def _generate_performance_report(self, results):
         """Generate detailed performance analysis report."""
         report = PerformanceReport()
-        
+---
         # Response time analysis
         response_times = results['response_times']
         for operation, metrics in response_times.items():
@@ -1999,7 +1983,7 @@ class TestResultsAnalysis:
                 report.add_success(f"{operation} response time meets requirements")
             else:
                 report.add_concern(f"{operation} response time exceeds target")
-        
+---
         # Resource utilisation analysis
         resources = results['resource_utilization']
         for resource, metrics in resources.items():
@@ -2010,18 +1994,18 @@ class TestResultsAnalysis:
                 report.add_warning(f"{resource} utilisation approaching limits")
             else:
                 report.add_critical(f"{resource} utilisation exceeds limits")
-        
+---
         # Reliability analysis
         reliability = results['reliability_metrics']
         if reliability['uptime_percentage'] >= 99.5:
             report.add_success("System availability meets requirements")
-        
+---
         if reliability['data_integrity'] >= 99.9:
             report.add_success("Data integrity exceeds requirements")
-        
+---
         if reliability['synchronization_accuracy'] <= 5.0:
             report.add_success("Synchronisation accuracy meets precision requirements")
-        
+---
         return report
 ```
 
@@ -2078,7 +2062,7 @@ def analyze_test_coverage():
             'resource_constraints': 88.0
         }
     }
-    
+---
     return coverage_analysis
 ```
 
@@ -2325,9 +2309,7 @@ Media, 2001.
 
 - `AndroidApp/validate_shimmer_integration.sh` - Hardware integration validation for production deployment (See Appendix
   F.140)
-
 ---
-
 ## Tables and Figures
 
 ### Table 5.1: complete Testing Results Summary
@@ -2390,19 +2372,19 @@ graph TD
         COMPONENT[Component Tests<br/>Isolated Function Verification<br/>342 test cases<br/>99.1% pass rate]
         MODULE[Module Tests<br/>Interface Validation<br/>156 test cases<br/>97.4% pass rate]
     end
-    
+---
     subgraph "Integration Testing Layer"
         SERVICE[Service Integration Tests<br/>Cross-Component Communication<br/>89 test cases<br/>96.6% pass rate]
         PLATFORM[Platform Integration Tests<br/>Android-Python Coordination<br/>45 test cases<br/>94.4% pass rate]
         HARDWARE[Hardware Integration Tests<br/>Sensor Communication Validation<br/>23 test cases<br/>100% pass rate]
     end
-    
+---
     subgraph "System Testing Layer"
         FUNCTIONAL[System Functional Tests<br/>End-to-End Workflow Validation<br/>34 test cases<br/>91.2% pass rate]
         SCENARIO[Scenario Tests<br/>Research Use Case Validation<br/>12 test cases<br/>100% pass rate]
         ACCEPTANCE[Acceptance Tests<br/>Stakeholder Requirement Validation<br/>8 test cases<br/>100% pass rate]
     end
-    
+---
     subgraph "Specialized Testing Layer"
         PERFORMANCE[Performance Tests<br/>Load and Scalability Validation<br/>4 device coordination]
         STRESS[Stress Tests<br/>Resource Limit Testing<br/>71.4% success rate]
@@ -2410,34 +2392,34 @@ graph TD
         SECURITY[Security Tests<br/>Data Protection Validation<br/>Integrity verification]
         USABILITY[Usability Tests<br/>User Experience Validation<br/>Cross-platform integration]
     end
-    
+---
     subgraph "Research-Specific Testing Layer"
         ACCURACY[Accuracy Tests<br/>Measurement Precision Validation<br/>Network resilience validated]
         SYNCHRONISATION[Synchronisation Tests<br/>Temporal Coordination Testing<br/>Multi-device synchronisation]
         SCIENTIFIC[Scientific Validation<br/>Research Methodology Verification<br/>Component documentation]
     end
-    
+---
     UNIT --> SERVICE
     COMPONENT --> SERVICE
     MODULE --> SERVICE
-    
+---
     SERVICE --> FUNCTIONAL
     PLATFORM --> FUNCTIONAL
     HARDWARE --> FUNCTIONAL
-    
+---
     FUNCTIONAL --> PERFORMANCE
     SCENARIO --> PERFORMANCE
     ACCEPTANCE --> PERFORMANCE
-    
+---
     PERFORMANCE --> ACCURACY
     STRESS --> ACCURACY
     RELIABILITY --> ACCURACY
     SECURITY --> ACCURACY
     USABILITY --> ACCURACY
-    
+---
     ACCURACY --> SYNCHRONISATION
     SYNCHRONISATION --> SCIENTIFIC
-    
+---
     style UNIT fill:#e8f5e8
     style COMPONENT fill:#e8f5e8
     style MODULE fill:#e8f5e8

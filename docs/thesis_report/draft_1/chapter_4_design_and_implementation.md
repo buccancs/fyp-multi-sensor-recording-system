@@ -263,6 +263,7 @@ The original monolithic `MainViewModel` (2035 lines) was refactored into `MainVi
 that coordinates four specialized components:
 
 **Architecture Components:**
+
 - **MainViewModelRefactored** (451 lines): Clean coordination layer using reactive StateFlow patterns
 - **RecordingSessionController** (218 lines): Handles all recording operations and session management
 - **DeviceConnectionManager** (389 lines): Manages device connections, scanning, and status monitoring  
@@ -270,6 +271,7 @@ that coordinates four specialized components:
 - **CalibrationManager** (441 lines): Manages calibration processes for all device types
 
 **Jetpack Compose UI Layer:**
+
 - **RecordingScreen**: Main interface with recording controls, device status indicators, and camera preview
 - **DevicesScreen**: Full device management interface with real-time scanning capabilities, connection/disconnection controls for PC, Shimmer, thermal camera, and network devices. Features complete status monitoring, device testing functionality, and connection diagnostics with progress indicators and detailed device information display
 - **CalibrationScreen**: Complete calibration workflow coordination with individual device calibration for cameras, thermal sensors, and Shimmer devices. Includes progress tracking with linear progress indicators, validation controls, system validation with error reporting, and calibration data management (save/load/export functionality)
@@ -279,6 +281,7 @@ that coordinates four specialized components:
 - **Material 3 Theme**: complete design system with dynamic theming and accessibility support
 
 **Benefits of Refactored Architecture:**
+
 1. **Maintainability**: Each component has a single, well-defined responsibility
 2. **Testability**: Controllers can be unit tested independently with proper dependency injection
 3. **Scalability**: New features can be added to specific controllers without affecting others
@@ -306,7 +309,7 @@ fun RecordingScreen(
     viewModel: MainViewModelRefactored = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+---
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -320,7 +323,7 @@ fun RecordingScreen(
             onStartRecording = { viewModel.startRecording() },
             onStopRecording = { viewModel.stopRecording() }
         )
-        
+---
         DeviceStatusCard()
         CameraPreviewCard()
     }
@@ -328,6 +331,7 @@ fun RecordingScreen(
 ```
 
 **Technical Specifications:**
+
 - **Compose BOM**: 2024.12.01 ensuring library compatibility
 - **Material 3**: Latest design system with dynamic theming
 - **Navigation Compose**: Type-safe navigation with state preservation
@@ -335,12 +339,14 @@ fun RecordingScreen(
 - **Kotlin Compose Compiler**: Version 2.0.20 for optimal performance
 
 **Performance Benefits for Research Applications:**
+
 - **Efficient Recomposition**: Only relevant UI components update when sensor data changes
 - **Reduced Memory Footprint**: Elimination of View inflation overhead critical during intensive recording
 - **Improved Responsiveness**: Direct StateFlow integration enhances real-time sensor data visualisation
 - **Type Safety**: Compile-time verification reduces runtime errors during critical recording sessions
 
 **Screen Implementations:**
+
 - **RecordingScreen**: Real-time recording controls with device status monitoring
 - **DevicesScreen**: Device discovery and connection management interface
 - **CalibrationScreen**: Calibration workflow with progress tracking and validation
@@ -367,14 +373,14 @@ When a "start recording" command is received (either from the user or
 remotely from the PC controller), the SessionManager performs a series
 of steps:
 
-1.  **Clock Synchronisation:** It first invokes the synchronisation
+1. **Clock Synchronisation:** It first invokes the synchronisation
     module (`syncManager.synchronizeWithMaster()`), which contacts the
     desktop controller to align the device's clock just before recording
     commences. This step guarantees that the timestamps for all data
     will correlate to the master timeline from the very start of the
     session.
 
-2.  **Parallel Sensor Startup:** The SessionManager then launches the
+1. **Parallel Sensor Startup:** The SessionManager then launches the
     camera, thermal, and GSR recording almost simultaneously using
     Kotlin coroutines for concurrency. Specifically, it calls each
     sensor's `startRecording()` method within separate asynchronous jobs
@@ -390,7 +396,7 @@ of steps:
     allowing the system to handle the issue (possibly retry or alert the
     user).
 
-3.  **Status Tracking:** Once running, the SessionManager keeps track of
+1. **Status Tracking:** Once running, the SessionManager keeps track of
     the recording state. It aggregates status updates (like "camera
     buffer full" or "GSR sensor battery low") through callbacks from
     each recorder and can propagate these to the UI or to the desktop
@@ -1530,6 +1536,7 @@ def calculate_session_integrity_hash(session_data: bytes) -> str:
 ```
 
 **Key Security Improvements:**
+
 - Migration from MD5 to SHA-256 for all file integrity verification
 - Secure random number generation for session identifiers
 - Cryptographically secure timestamp generation for synchronisation
@@ -1537,6 +1544,7 @@ def calculate_session_integrity_hash(session_data: bytes) -> str:
 ### 4.7.3 Privacy Protection Engineering
 
 Research participant privacy protection mechanisms include:
+
 - Automatic detection and flagging of personally identifiable information
 - Configurable data anonymization workflows
 - complete consent management integration capabilities
@@ -1551,7 +1559,7 @@ class ResearchSecurityMonitor:
     def __init__(self):
         self.scan_categories = ['code_security', 'configuration_security', 
                                'network_security', 'privacy_protection']
-    
+---
     async def perform_security_assessment(self) -> SecurityReport:
         """Execute complete security scan optimized for research environments"""
         results = await self._scan_all_categories()
@@ -1564,6 +1572,7 @@ class ResearchSecurityMonitor:
 ```
 
 **Security Achievement Metrics:**
+
 - 78% reduction in total security vulnerabilities (67 → 15 issues)
 - 100% elimination of critical security vulnerabilities
 - 95% reduction in false positive security alerts
@@ -1890,6 +1899,7 @@ MediaCodec** for efficient video encoding, offloading that work to the
 hardware encoder.
 
 **Jetpack Compose Technology Stack:**
+
 - **Compose BOM 2024.12.01**: Ensures compatibility across all Compose libraries
 - **Material 3**: Latest Material Design implementation with dynamic theming
 - **Navigation Compose 2.8.5**: Type-safe navigation with state preservation
@@ -2228,9 +2238,7 @@ we can quickly list all sessions and their key info via a DB query, and
 we know exactly where to find the corresponding raw data files for
 deeper analysis. It provides a clear, maintainable path for both running
 the system and doing subsequent analysis on the collected data.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=self.sync_precision%20%3D%200.005%20%20,5ms%20precision%20target)
 [\[2\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=with%20comprehensive%20quality%20assessment%20and,events%20in%20a%20distributed%20system)
 [\[3\]](file://file-W8pWDzh4KQfbwijFCJdftf#:~:text=graph%20TD%20subgraph%20,br%2F%3ETime%20References%5D%20end)
@@ -2308,11 +2316,13 @@ A critical component of the system implementation involves complete code quality
 The Python desktop controller underwent systematic exception handling refinement to eliminate problematic patterns:
 
 **Critical Issues Addressed:**
+
 - **Eliminated 7 bare `except:` clauses** that could catch `SystemExit` and `KeyboardInterrupt`, preventing proper application termination
 - **Replaced 8 debug print statements** with proper logging framework usage for professional debugging capabilities
 - **Enhanced error specificity** with targeted exception types for file operations, OpenCV errors, and network communications
 
 **Implementation Example:**
+
 ```python
 # Before: Problematic bare exception handling
 try:
@@ -2338,12 +2348,14 @@ except ValueError as e:
 The Android application required systematic replacement of over 590 broad exception handlers that were masking critical system exceptions and hampering debugging capabilities.
 
 **Scope of Improvements:**
+
 - **Core Recording Components** (RecordingService, CameraRecorder, ThermalRecorder, ShimmerRecorder): Fixed 45+ exception handlers
 - **Network Operations** (NetworkController, CommandProcessor, JsonSocketClient): Enhanced 25+ communication error handlers  
 - **UI Components** (MainActivity, MainViewModelRefactored, Specialized Controllers, Fragments): Improved 15+ user interface exception handlers
 - **Device Management** (ConnectionManager, DeviceStatusTracker): Enhanced 20+ device communication handlers
 
 **Critical Pattern Applied:**
+
 ```kotlin
 // Before: Problematic broad exception catching
 try {
@@ -2375,12 +2387,14 @@ try {
 ### 4.9.3 System Reliability and Maintainability Impact
 
 **Quantitative Improvements:**
+
 - **Python Desktop**: 100% elimination of problematic exception patterns
 - **Android Mobile**: 91% improvement in exception handler specificity (648 → 57 broad handlers)
 - **Error Diagnosis Time**: Reduced from 15-30 minutes to 2-5 minutes
 - **System Stability**: Mean Time Between Failures increased from 4.2 hours to 48+ hours
 
 **Cross-Platform Benefits:**
+
 - **Enhanced Debugging Capabilities**: Structured logging enables efficient troubleshooting
 - **Improved Error Recovery**: Specific exception types enable targeted recovery mechanisms  
 - **Professional Code Quality**: Industry-standard exception handling practices throughout
@@ -2395,12 +2409,14 @@ These complete code quality improvements establish a robust foundation for relia
 The Multi-Sensor Recording System implements a complete code quality framework that addresses fundamental software engineering challenges in distributed research instrumentation. Through systematic enhancement of 590+ exception handlers across Android and Python platforms, the system achieves significant improvements in reliability, debugging efficiency, and maintenance effectiveness.
 
 **Python Application Exception Handling Results:**
+
 - **7 problematic handlers replaced** with specific exception types
 - **100% preservation** of critical system exceptions (KeyboardInterrupt, SystemExit)
 - **91% improvement** in error handling specificity
 - **Enhanced logging framework** replacing debug print statements
 
 **Android Application Systematic Enhancement:**
+
 - **590+ exception handlers systematically improved** (84% completion rate)
 - **CancellationException preservation** maintaining coroutine integrity
 - **Specific exception categorisation**: SecurityException, IllegalStateException, IOException
@@ -2418,12 +2434,14 @@ The system implements sophisticated multi-layer exception handling that coordina
 ### 4.11.3 Quantified Reliability Improvements
 
 **complete Validation Results:**
+
 - **98.4% system reliability** under diverse failure conditions
 - **80% reduction in debugging time** through structured logging
 - **99.3% error recovery success rate** for handled exception conditions
 - **97.8% data integrity preservation** during failure scenarios
 
 **Professional Code Quality Standards:**
+
 - Industry-standard exception handling practices implemented throughout
 - complete observability through structured logging framework
 - Enhanced maintainability with specific error context preservation

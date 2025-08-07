@@ -23,23 +23,23 @@ the Multi-Sensor Recording System thesis project, combining theoretical analysis
 - 2.1 Emotion Analysis Applications
 - 2.2 Rationale for Contactless Physiological Measurement
 - 2.3 Definitions of "Stress" (Scientific vs. Colloquial)
-    - 2.3.1 Scientific Definitions of "Stress"
-    - 2.3.2 Colloquial and Operational Definitions
+  - 2.3.1 Scientific Definitions of "Stress"
+  - 2.3.2 Colloquial and Operational Definitions
 - 2.4 Cortisol vs. GSR as Stress Indicators
-    - 2.4.1 Cortisol as a Stress Biomarker
-    - 2.4.2 Galvanic Skin Response (Electrodermal Activity)
-    - 2.4.3 Comparative Analysis of Cortisol and GSR
+  - 2.4.1 Cortisol as a Stress Biomarker
+  - 2.4.2 Galvanic Skin Response (Electrodermal Activity)
+  - 2.4.3 Comparative Analysis of Cortisol and GSR
 - 2.5 GSR Physiology and Measurement Limitations
-    - 2.5.1 Principles of Electrodermal Activity
-    - 2.5.2 Limitations of GSR for Stress Detection
+  - 2.5.1 Principles of Electrodermal Activity
+  - 2.5.2 Limitations of GSR for Stress Detection
 - 2.6 Thermal Cues of Stress in Humans
-    - 2.6.1 Physiological Thermal Responses to Stress
-    - 2.6.2 Thermal Imaging in Stress and Emotion Research
+  - 2.6.1 Physiological Thermal Responses to Stress
+  - 2.6.2 Thermal Imaging in Stress and Emotion Research
 - 2.7 RGB vs. Thermal Imaging (Machine Learning Hypothesis)
 - 2.8 Sensor Device Selection Rationale
-    - 2.8.1 Shimmer3 GSR+ Sensor Selection
-    - 2.8.2 Topdon TC001 Thermal Camera Selection
-    - 2.8.3 Integration and Compatibility Considerations
+  - 2.8.1 Shimmer3 GSR+ Sensor Selection
+  - 2.8.2 Topdon TC001 Thermal Camera Selection
+  - 2.8.3 Integration and Compatibility Considerations
 
 ## 🎯 Key Contributions and Academic Foundations
 
@@ -134,9 +134,7 @@ The literature review provides foundation for:
 - **Clear, precise, and practical** writing style appropriate for computer science thesis
 - **Component-first documentation** approach with self-contained sections
 - **Architectural references** linking physiological principles to system implementation
-
 ---
-
 ## 🚀 Quick Access Links
 
 The technical and physiological foundations are comprehensively documented across both sections of this chapter. For
@@ -144,9 +142,7 @@ detailed comparison tables and architectural diagrams, see Appendix A.2.
 
 **Total Documentation:** ~50,000 words of complete academic analysis covering both technical and physiological
 foundations for the Multi-Sensor Recording System.
-
 ---
-
 ## Table of Contents
 
 **Part A: Technical Foundations and System Architecture**
@@ -156,16 +152,15 @@ foundations for the Multi-Sensor Recording System.
 - 1.1. [Research Problem Definition and Academic Significance](#research-problem-definition-and-academic-significance)
 - 1.2. [System Innovation and Technical Contributions](#system-innovation-and-technical-contributions)
 
-2. [Literature Survey and Related Work](#literature-survey-and-related-work)
+1. [Literature Survey and Related Work](#literature-survey-and-related-work)
 
-- 2.1. [Distributed Systems and Mobile Computing Research](#distributed-systems-and-mobile-computing-research)
--
+## - 2.1. [Distributed Systems and Mobile Computing Research](#distributed-systems-and-mobile-computing-research)
 2.2. [Contactless Physiological Measurement and Computer Vision](#contactless-physiological-measurement-and-computer-vision)
-- 2.3. [Thermal Imaging and Multi-Modal Sensor Integration](#thermal-imaging-and-multi-modal-sensor-integration)
--
+
+## - 2.3. [Thermal Imaging and Multi-Modal Sensor Integration](#thermal-imaging-and-multi-modal-sensor-integration)
 2.4. [Research Software Development and Validation Methodologies](#research-software-development-and-validation-methodologies)
 
-3. [Supporting Tools, Software, Libraries and Frameworks](#supporting-tools-software-libraries-and-frameworks)
+1. [Supporting Tools, Software, Libraries and Frameworks](#supporting-tools-software-libraries-and-frameworks)
 
 - 3.1. [Android Development Platform and Libraries](#android-development-platform-and-libraries)
 - 3.1.1. [Core Android Framework Components](#core-android-framework-components)
@@ -185,29 +180,27 @@ foundations for the Multi-Sensor Recording System.
 - 3.4.2. [Testing Framework and Quality Assurance](#testing-framework-and-quality-assurance)
 - 3.4.3. [Code Quality and Static Analysis Tools](#code-quality-and-static-analysis-tools)
 
-4. [Technology Choices and Justification](#technology-choices-and-justification)
+1. [Technology Choices and Justification](#technology-choices-and-justification)
 
 - 4.1. [Android Platform Selection and Alternatives Analysis](#android-platform-selection-and-alternatives-analysis)
 - 4.2. [Python Desktop Platform and Framework Justification](#python-desktop-platform-and-framework-justification)
 - 4.3. [Communication Protocol and Architecture Decisions](#communication-protocol-and-architecture-decisions)
 - 4.4. [Database and Storage Architecture Rationale](#database-and-storage-architecture-rationale)
 
-5. [Theoretical Foundations](#theoretical-foundations)
+1. [Theoretical Foundations](#theoretical-foundations)
 
 - 5.1. [Distributed Systems Theory and Temporal Coordination](#distributed-systems-theory-and-temporal-coordination)
 - 5.2. [Signal Processing Theory and Physiological Measurement](#signal-processing-theory-and-physiological-measurement)
 - 5.3. [Computer Vision and Image Processing Theory](#computer-vision-and-image-processing-theory)
 - 5.4. [Statistical Analysis and Validation Theory](#statistical-analysis-and-validation-theory)
 
-6. [Research Gaps and Opportunities](#research-gaps-and-opportunities)
-
--
+1. [Research Gaps and Opportunities](#research-gaps-and-opportunities)
+---
 6.1. [Technical Gaps in Existing Physiological Measurement Systems](#technical-gaps-in-existing-physiological-measurement-systems)
+
 - 6.2. [Methodological Gaps in Distributed Research Systems](#methodological-gaps-in-distributed-research-systems)
 - 6.3. [Research Opportunities and Future Directions](#research-opportunities-and-future-directions)
-
 ---
-
 This complete chapter provides detailed analysis of both the technical foundations and physiological foundations
 that informed the development of the Multi-Sensor Recording System. The chapter establishes the academic foundation
 through systematic review of distributed systems theory, physiological measurement research, computer vision
@@ -341,9 +334,7 @@ optimisation across multiple sensor modalities. Foundational work in distributed
 principles underlying the coordination approach, while these contributions establish new patterns for distributed
 research system design that are applicable to broader scientific instrumentation challenges requiring coordination of
 heterogeneous hardware platforms.
-
 ---
-
 ## Part B: Physiological Foundations and Stress Detection
 
 ## 2.1 Emotion Analysis Applications
@@ -882,9 +873,7 @@ documentation and responsive technical support ensures that research-specific re
 Long-term platform sustainability and research community adoption represent important considerations for research
 infrastructure investments. Both platforms have demonstrated sustained development and research community support that
 provides confidence in their continued availability and evolution to meet emerging research requirements.
-
 ---
-
 ## Literature Survey and Related Work
 
 The literature survey encompasses several interconnected research domains that inform the design and implementation of
@@ -990,9 +979,7 @@ principles of reproducible research in computational science establish documenta
 that ensure scientific reproducibility and enable independent verification of results. These principles directly inform
 the documentation standards and open-source development practices implemented in the Multi-Sensor Recording System to
 ensure community accessibility and scientific reproducibility.
-
 ---
-
 ## Supporting Tools, Software, Libraries and Frameworks
 
 The Multi-Sensor Recording System leverages a complete ecosystem of supporting tools, software libraries, and
@@ -1383,9 +1370,7 @@ The code quality framework includes complete linting with automated error detect
 with vulnerability assessment, and performance analysis with optimisation recommendations. The quality assurance
 integration maintains high code standards while supporting rapid development cycles essential for research software
 applications with evolving requirements.
-
 ---
-
 ## Technology Choices and Justification
 
 The technology selection process for the Multi-Sensor Recording System involved systematic evaluation of alternatives
@@ -1531,9 +1516,7 @@ querying capabilities while maintaining the simplicity essential for research so
 computing environments. The SQLite design provides excellent performance characteristics for research data volumes while
 supporting advanced features including full-text search, spatial indexing, and statistical functions that enhance
 research data analysis capabilities.
-
 ---
-
 ## Theoretical Foundations
 
 The Multi-Sensor Recording System draws upon extensive theoretical foundations from multiple scientific and engineering
@@ -1644,9 +1627,7 @@ validation of system performance against established benchmarks and research req
 performance degradation, identify systematic errors, and ensure consistent operation throughout research sessions. The
 statistical process control implementation includes control chart analysis, trend detection, and automated alert systems
 that maintain research quality while providing complete documentation for scientific validation.
-
 ---
-
 ## Research Gaps and Opportunities
 
 The complete literature analysis reveals several significant gaps in existing research and technology that the
@@ -1739,9 +1720,7 @@ The complete documentation standards and modular architecture design enable syst
 maintaining code quality and scientific validity standards essential for research applications. Future community
 initiatives could include collaborative testing frameworks, shared hardware characterisation databases, and standardized
 validation protocols that support scientific reproducibility and technology transfer across research institutions.
-
 ---
-
 ## Chapter Summary and Academic Foundation
 
 This complete literature review and technology foundation analysis establishes the theoretical and practical
@@ -1892,9 +1871,7 @@ code components. All referenced files include detailed code snippets in **Append
   validation (See Appendix F.42)
 - `PythonApp/production/security_scanner.py` - Security validation implementing academic cybersecurity frameworks (
   See Appendix F.43)
-
 ---
-
 ## Missing Items
 
 ### Missing Figures

@@ -13,14 +13,14 @@
 1.2. [Research Problem and Objectives](#12-research-problem-and-objectives)
 
 - Problem Context and Significance
-    - Current Limitations in Physiological Measurement Systems
-    - Technical Challenges in Multi-Device Coordination
-    - Research Methodology Constraints and Innovation Opportunities
+  - Current Limitations in Physiological Measurement Systems
+  - Technical Challenges in Multi-Device Coordination
+  - Research Methodology Constraints and Innovation Opportunities
 - Aim and Specific Objectives
-    - Primary Research Aim
-    - Technical Development Objectives
-    - Research Methodology Objectives
-    - Community Impact and Accessibility Objectives
+  - Primary Research Aim
+  - Technical Development Objectives
+  - Research Methodology Objectives
+  - Community Impact and Accessibility Objectives
 
 1.3. [Thesis Outline](#13-thesis-outline)
 
@@ -28,9 +28,7 @@
 - Research Scope and Boundaries
 - Academic Contributions and Innovation Framework
 - Methodology and Validation Approach
-
 ---
-
 ## 1.1 Motivation and Research Context
 
 The landscape of physiological measurement research has undergone significant transformation over the past decade,
@@ -254,9 +252,7 @@ These technical innovations demonstrate that research-grade reliability and accu
 consumer-grade hardware when supported by sophisticated software algorithms and validation procedures. This
 demonstration opens new possibilities for democratising access to advanced research capabilities while maintaining
 scientific validity and research quality standards.
-
 ---
-
 ## 1.2 Research Problem and Objectives
 
 ### Problem Context and Significance
@@ -542,9 +538,7 @@ by measurement methodology limitations. This enablement must support:
   applications across psychology, computer science, human-computer interaction, and public health
 - **Future Research Extension**: Establish modular architecture and complete documentation that enables future
   research teams to extend system capabilities and adapt for novel applications
-
 ---
-
 ## 1.3 Thesis Outline
 
 ### complete Thesis Organization
@@ -769,9 +763,7 @@ scientific rigor with practical implementation constraints while supporting comm
 development. The approach provides templates for future research software projects while demonstrating that academic
 research can achieve commercial-quality engineering practices without compromising scientific validity or research
 flexibility.
-
 ---
-
 ## Document Information
 
 **Title**: Chapter 1: Introduction - Multi-Sensor Recording System Thesis  
@@ -787,9 +779,7 @@ flexibility.
 
 **Keywords**: Multi-sensor systems, distributed architectures, physiological measurement, contactless sensing, research
 objectives, thesis introduction, academic research
-
 ---
-
 ## Usage Guidelines
 
 ### For Academic Review

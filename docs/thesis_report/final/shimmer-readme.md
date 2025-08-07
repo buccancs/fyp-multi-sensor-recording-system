@@ -837,9 +837,7 @@ development.
   `ObjectCluster`)[\[23\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L330-L339)[\[29\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L334-L343).
   Reviewing this code is recommended for practical understanding of the
   API usage.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](https://www.shimmersensing.com/product/shimmer3-gsr-unit/#:~:text=The%20Shimmer3%20GSR%2B%20,clip%20or%20optical%20pulse%20probe)
 [\[2\]](https://www.shimmersensing.com/product/shimmer3-gsr-unit/#:~:text=The%20Galvanic%20Skin%20Response%20Sensor,increasing%20skin%20conductance)
 [\[4\]](https://www.shimmersensing.com/product/shimmer3-gsr-unit/#:~:text=preamplification%20for%20one%20channel%20of,clip%20or%20optical%20pulse%20probe)
