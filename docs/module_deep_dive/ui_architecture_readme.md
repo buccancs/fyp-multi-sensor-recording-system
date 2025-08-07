@@ -511,14 +511,14 @@ class StatusIndicator(QWidget):
     
     def update_appearance(self):
         """Update visual appearance based on status"""
-        status_colors = {
+        status_colours = {
             "connected": "#4CAF50",
             "disconnected": "#F44336",
             "connecting": "#FF9800",
             "unknown": "#9E9E9E"
         }
         
-        colour = status_colors.get(self.status, "#9E9E9E")
+        colour = status_colours.get(self.status, "#9E9E9E")
         
         # Update icon
         pixmap = self.create_status_icon(colour)

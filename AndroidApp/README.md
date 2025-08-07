@@ -9,7 +9,7 @@ A sophisticated Android application for synchronised multi-sensor data collectio
 
 ## 🔧 Build Status: ✅ OPERATIONAL
 
-**Recent Fixes (commit 3ee81f2):**
+**Recent Fixes (commit afe5e04):**
 - ✅ All compilation errors resolved
 - ✅ Missing imports added: `CancellationException`, `IOException`
 - ✅ 8 core components updated and building successfully
@@ -1140,9 +1140,16 @@ suspend fun startRecording(config: RecordingConfig): Result<SessionInfo>
 #### Testing Requirements
 All contributions must include appropriate tests:
 
-- **Unit Tests**: Cover all new business logic
-- **Integration Tests**: Validate component interactions
+- **Unit Tests**: Cover all new business logic (SessionManagerTest, ViewModel recording state tests)
+- **Integration Tests**: Validate component interactions (EdgeCaseAndStressTest, ConnectionManagerComprehensiveTest)
+- **UI Tests**: Espresso tests for user interactions (MainActivityUITest)
 - **Documentation**: Update API documentation for public interfaces
+
+**Enhanced Testing Infrastructure (commit 6b4291b):**
+- **SessionManager Testing**: Complete lifecycle validation including session creation, finalisation, state transitions
+- **ViewModel Recording State Testing**: Comprehensive validation of isRecording flags, status text updates, state transitions
+- **Edge Case & Stress Testing**: Bluetooth connection drops, network interruptions, memory pressure scenarios
+- **UI/Instrumentation Testing**: Navigation flows, permission handling, record/stop button functionality
 
 #### Pull Request Process
 

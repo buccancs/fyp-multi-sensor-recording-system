@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Automated complexity threshold validation (functions <15 complexity per guidelines)
     - Security vulnerability scanning with bandit and safety tools
     - Quality dashboard generation with trend analysis and PR comments
-  - **Code Complexity Analysis Tool**: Created intelligent complexity analyzer (`scripts/analyze_complexity.py`)
+  - **Code Complexity Analysis Tool**: Created intelligent complexity analyser (`scripts/analyze_complexity.py`)
     - AST-based complexity calculation with cyclomatic complexity metrics
     - Automated documentation needs assessment for complex functions
     - Smart docstring generation for undocumented high-complexity code
