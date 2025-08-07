@@ -49,7 +49,7 @@ coverage of functional correctness verification, performance and
 reliability assessment under stress conditions, and integration quality
 evaluation across diverse hardware platforms, network configurations,
 and environmental conditions that characterize real-world deployment
-scenarios[\[1\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)[\[2\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94).
+scenarios.
 It incorporates lessons from traditional software testing while
 introducing novel approaches designed to meet the unique challenges of
 validating research-grade distributed systems that coordinate consumer
@@ -63,7 +63,7 @@ validating the complex, multi-dimensional interactions between hardware
 components, software systems, environmental factors, and human
 participants that characterize multi-sensor research systems in dynamic
 real-world
-contexts[\[3\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100).
+contexts.
 This philosophy emphasizes **empirical validation through realistic
 testing scenarios** that accurately replicate the conditions,
 challenges, and constraints of actual research applications across
@@ -73,7 +73,7 @@ The methodological foundation integrates principles from software
 engineering, experimental design, statistical analysis, and research
 methodology to create a validation framework that ensures both technical
 correctness and scientific
-validity[\[4\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L101-L109).
+validity.
 This interdisciplinary approach recognizes that research software
 testing must address not only traditional software quality attributes
 but also scientific methodology validation, experimental
@@ -86,7 +86,7 @@ research-specific quality attributes including measurement accuracy,
 temporal precision, data integrity, long-term reliability, and
 scientific reproducibility, which often have requirements far exceeding
 typical software quality
-standards[\[5\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L107-L115).
+standards.
 These stringent attributes necessitate specialized testing
 methodologies, precise measurement techniques, and statistical
 validation methods that provide confidence intervals, uncertainty
@@ -95,7 +95,7 @@ affecting research validity. Research-grade quality assurance extends
 beyond functional correctness to encompass validation of scientific
 methodology, experimental design principles, and reproducibility
 requirements that enable independent verification of research
-results[\[6\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L116-L120).
+results.
 The framework implements sophisticated statistical validation such as
 hypothesis testing and confidence interval analysis, ensuring that the
 system's performance is not only qualitatively acceptable but also
@@ -2649,57 +2649,3 @@ perform robustly in practice, enabling high-quality physiological data
 collection for advanced emotion analysis studies.
 
 ------------------------------------------------------------------------
-
-[\[1\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)
-[\[2\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94)
-[\[3\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100)
-[\[4\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L101-L109)
-[\[5\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L107-L115)
-[\[6\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L116-L120)
-[\[7\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L177-L185)
-[\[8\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L179-L187)
-[\[9\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L400-L408)
-[\[10\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L410-L419)
-[\[11\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L420-L429)
-[\[12\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L453-L461)
-[\[13\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L478-L486)
-[\[14\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L482-L490)
-[\[15\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L488-L496)
-[\[16\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L510-L519)
-[\[17\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L522-L529)
-[\[18\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L581-L589)
-[\[19\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L591-L600)
-[\[20\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L601-L609)
-[\[21\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L606-L614)
-[\[22\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L511-L519)
-[\[23\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L532-L540)
-[\[24\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L538-L546)
-[\[25\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L580-L589)
-[\[26\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L622-L630)
-[\[27\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L631-L639)
-[\[28\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L640-L648)
-[\[29\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L656-L664)
-[\[30\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L661-L670)
-[\[31\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L665-L673)
-[\[32\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L674-L682)
-[\[33\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1501-L1509)
-[\[34\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1969-L1977)
-[\[35\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1974-L1982)
-[\[36\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L1975-L1983)
-[\[37\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L62-L65)
-[\[38\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2056-L2064)
-[\[39\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2060-L2068)
-[\[40\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2069-L2073)
-[\[41\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2074-L2079)
-[\[42\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2089-L2097)
-[\[43\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2094-L2102)
-[\[44\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2099-L2107)
-[\[45\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2106-L2110)
-[\[46\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2109-L2117)
-[\[47\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2120-L2128)
-[\[48\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2125-L2132)
-[\[49\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2131-L2139)
-[\[50\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L2132-L2139)
-Chapter_5_Testing_and_Results_Evaluation.md
-
-<docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md>

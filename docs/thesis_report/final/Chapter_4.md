@@ -27,7 +27,7 @@ session[\[2\]](PythonApp/README.md#L70-L78).
 Each device buffers and locally stores data so that even if connectivity
 is lost momentarily, data collection can continue uninterrupted; once
 the connection is restored, the system can realign the data streams in
-time[\[3\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L162-L169).
+time.
 This fault-tolerant approach, combined with comprehensive logging on
 both mobile and PC sides, guarantees data integrity and consistency
 throughout a recording session.
@@ -122,12 +122,12 @@ the manufacturer's SDK. The integration was designed to enable
 camera. To use the thermal camera, the Android device serves as a USB
 host (via OTG), and the app interfaces with the camera through the SDK's
 APIs for device discovery, configuration, and frame
-retrieval[\[7\]](docs/thermal_camera_integration_readme.md#L22-L31).
+retrieval.
 When the thermal camera is connected, the app's `ThermalRecorder`
 component handles the entire lifecycle: it listens for USB attach
 events, requests permission from the Android USB system to access the
 device, and initializes the camera
-feed[\[8\]](docs/thermal_camera_integration_readme.md#L76-L84)[\[9\]](docs/thermal_camera_integration_readme.md#L88-L94).
+feed.
 The Topdon TC001 supports a sensor resolution of 256×192 pixels with a
 frame rate of 25 FPS, which the app configures as the default thermal
 video
@@ -357,7 +357,7 @@ robustness; the `ShimmerManager` on the PC can accept data from either
 direct Bluetooth or through the Android (which relays it). This
 multi-library support with fallback ensures that even if one pipeline
 has an issue, the data can still be collected via the
-other[\[30\]](docs/python_desktop_controller_readme.md#L145-L153).
+other.
 
 All these services feed into the **Infrastructure Layer** on the PC,
 which includes cross-cutting concerns like logging, synchronization, and
@@ -519,7 +519,7 @@ primary roles: it distributes the current master time to clients
 (devices) and coordinates simultaneous actions based on that time.
 Concretely, the PC launches a lightweight **NTP (Network Time Protocol)
 server** on a UDP port (default 8889) to which devices can query for
-time[\[42\]](docs/multi_device_synchronization_readme.md#L170-L178).
+time.
 The Android app, upon connecting, performs an initial clock sync
 handshake -- this can be a custom sync message or an NTP query -- to
 measure the offset between its local clock and the PC clock. Given the
@@ -528,7 +528,7 @@ milliseconds), this offset can be estimated with high precision using
 techniques akin to Cristian's algorithm or NTP's exchange (the system
 may send a timestamped sync message and get a response to calculate
 round-trip delay and clock
-offset)[\[43\]](docs/multi_device_synchronization_readme.md#L140-L149).
+offset).
 The `SynchronizationEngine` on the PC possibly refines this by periodic
 pings (e.g., every 5 seconds) to adjust for any drift during a long
 session[\[44\]](PythonApp/master_clock_synchronizer.py#L62-L71)[\[45\]](PythonApp/master_clock_synchronizer.py#L80-L88).
@@ -561,12 +561,12 @@ later correction. The synchronization engine might incorporate simple
 drift compensation -- for instance, if one phone tends to run its clock
 slightly faster, the system can predict and adjust timing gradually
 (rather than waiting for a large error to
-accumulate)[\[48\]](docs/multi_device_synchronization_readme.md#L30-L38)[\[49\]](docs/multi_device_synchronization_readme.md#L64-L67).
+accumulate).
 In this implementation, because the recording durations might be on the
 order of minutes to an hour, and modern devices have reasonably stable
 clocks, straightforward NTP-based periodic correction is sufficient to
 maintain sub-millisecond
-alignment[\[50\]](docs/multi_device_synchronization_readme.md#L29-L37).
+alignment.
 
 Finally, the communication protocol assists synchronization by carrying
 timing info in every message. The JSON messages often include
@@ -587,7 +587,7 @@ devices operate on a unified timeline. Together, these allow the system
 to achieve a high degree of temporal precision: tests have shown the
 system tolerates network latency variations from \~1 ms up to hundreds
 of milliseconds without losing
-synchronization[\[52\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L128-L136).
+synchronization.
 This is accomplished by designing for asynchronous, non-blocking
 communication and by decoupling the *command* from the *execution* time
 (i.e., schedule actions in the future on a shared clock). The result is
@@ -690,7 +690,7 @@ The desktop's **Data Processing components** then take over. A
 knowledge of the format -- for example, it knows how to read the thermal
 .raw file and extract frames and timestamps, or read the Shimmer CSV)
 and then perform multi-modal synchronization
-verification[\[54\]](docs/python_desktop_controller_readme.md#L158-L163).
+verification.
 Because all data streams were independently recorded, the system
 double-checks that the timelines align: it may, for instance, compare
 the timestamp of the first frame of the phone video with the master
@@ -709,7 +709,7 @@ time).
 Following synchronization, the pipeline can branch into different **data
 export and analysis preparation** tasks. A `DataExporter` component
 handles converting the data into formats needed for
-analysis[\[54\]](docs/python_desktop_controller_readme.md#L158-L163).
+analysis.
 Commonly, researchers might want all sensor data in a single file or
 database, or in a form that can be loaded into Python or MATLAB for
 analysis. The system might generate a unified CSV or HDF5 file that
@@ -790,7 +790,7 @@ adopted to address them:
   Android phone and a PC (and possibly other devices) agree on time
   within a few milliseconds is non-trivial, given differences in
   operating system scheduling and clock
-  stability[\[56\]](docs/multi_device_synchronization_readme.md#L50-L58).
+  stability.
   Our solution was to implement a **hybrid software NTP approach**. We
   ran a local NTP server on the PC and had the Android periodically sync
   to it, coupled with timestamped command protocols. By sending
@@ -803,7 +803,7 @@ adopted to address them:
   benefit is that each device could operate independently if needed (in
   case of connection loss) and still later align via the timestamps,
   which gave us robustness against network
-  issues[\[3\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L162-L169).
+  issues.
 
 - **Multi-Modal Data Integration and Volume:** Recording high-resolution
   video at 30 fps, thermal images at 25 fps, and GSR at 50 Hz
@@ -921,100 +921,3 @@ research objectives. Each solution reinforced the system's reliability
 and validated the chosen design principles in a real-world setting.
 
 ------------------------------------------------------------------------
-
-[\[1\]](AndroidApp/README.md#L8-L16)
-[\[4\]](AndroidApp/README.md#L82-L90)
-[\[5\]](AndroidApp/README.md#L88-L96)
-[\[6\]](AndroidApp/README.md#L50-L54)
-[\[13\]](AndroidApp/README.md#L146-L154)
-[\[14\]](AndroidApp/README.md#L160-L168)
-[\[53\]](AndroidApp/README.md#L112-L120)
-[\[55\]](AndroidApp/README.md#L140-L148)
-[\[57\]](AndroidApp/README.md#L94-L101)
-README.md
-
-<AndroidApp/README.md>
-
-[\[2\]](PythonApp/README.md#L70-L78)
-[\[27\]](PythonApp/README.md#L46-L54)
-[\[28\]](PythonApp/README.md#L82-L91)
-[\[29\]](PythonApp/README.md#L88-L96)
-[\[31\]](PythonApp/README.md#L94-L101)
-[\[32\]](PythonApp/README.md#L172-L180)
-[\[33\]](PythonApp/README.md#L175-L183)
-README.md
-
-<PythonApp/README.md>
-
-[\[3\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L162-L169)
-[\[52\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L128-L136)
-Chapter_4_Design_and_Implementation.md
-
-<docs/thesis_report/Chapter_4_Design_and_Implementation.md>
-
-[\[7\]](docs/thermal_camera_integration_readme.md#L22-L31)
-[\[8\]](docs/thermal_camera_integration_readme.md#L76-L84)
-[\[9\]](docs/thermal_camera_integration_readme.md#L88-L94)
-thermal_camera_integration_readme.md
-
-<docs/thermal_camera_integration_readme.md>
-
-[\[10\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L53-L61)
-[\[11\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L26-L34)
-[\[12\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L38-L41)
-ThermalRecorder.kt
-
-<AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt>
-
-[\[15\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L16-L24)
-[\[16\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L66-L73)
-[\[17\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L106-L114)
-[\[18\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L108-L116)
-[\[19\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L126-L134)
-[\[20\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L139-L147)
-[\[21\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L112-L120)
-[\[22\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L74-L82)
-[\[23\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L76-L84)
-[\[24\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L114-L122)
-[\[25\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L86-L95)
-[\[26\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L96-L104)
-ShimmerRecorder.kt
-
-<AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt>
-
-[\[30\]](docs/python_desktop_controller_readme.md#L145-L153)
-[\[54\]](docs/python_desktop_controller_readme.md#L158-L163)
-python_desktop_controller_readme.md
-
-<docs/python_desktop_controller_readme.md>
-
-[\[34\]](PythonApp/network/device_server.py#L124-L132)
-[\[35\]](PythonApp/network/device_server.py#L34-L43)
-[\[36\]](PythonApp/network/device_server.py#L93-L101)
-[\[37\]](PythonApp/network/device_server.py#L156-L165)
-[\[38\]](PythonApp/network/device_server.py#L176-L184)
-[\[39\]](PythonApp/network/device_server.py#L16-L24)
-[\[40\]](PythonApp/network/device_server.py#L96-L101)
-[\[41\]](PythonApp/network/device_server.py#L94-L101)
-[\[51\]](PythonApp/network/device_server.py#L48-L56)
-device_server.py
-
-<PythonApp/network/device_server.py>
-
-[\[42\]](docs/multi_device_synchronization_readme.md#L170-L178)
-[\[43\]](docs/multi_device_synchronization_readme.md#L140-L149)
-[\[48\]](docs/multi_device_synchronization_readme.md#L30-L38)
-[\[49\]](docs/multi_device_synchronization_readme.md#L64-L67)
-[\[50\]](docs/multi_device_synchronization_readme.md#L29-L37)
-[\[56\]](docs/multi_device_synchronization_readme.md#L50-L58)
-multi_device_synchronization_readme.md
-
-<docs/multi_device_synchronization_readme.md>
-
-[\[44\]](PythonApp/master_clock_synchronizer.py#L62-L71)
-[\[45\]](PythonApp/master_clock_synchronizer.py#L80-L88)
-[\[46\]](PythonApp/master_clock_synchronizer.py#L164-L173)
-[\[47\]](PythonApp/master_clock_synchronizer.py#L170-L178)
-master_clock_synchronizer.py
-
-<PythonApp/master_clock_synchronizer.py>

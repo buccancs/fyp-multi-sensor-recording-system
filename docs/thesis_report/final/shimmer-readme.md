@@ -134,7 +134,7 @@ needs to declare and request the appropriate permissions:
   and
   `<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />`
   to scan for and connect to Bluetooth
-  devices[\[13\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L98-L106).
+  devices.
   (If your app will *advertise* or host a GATT server, also add
   `BLUETOOTH_ADVERTISE`.) The `neverForLocation` flag on SCAN indicates
   you are not using Bluetooth scans to derive location information.
@@ -145,7 +145,7 @@ needs to declare and request the appropriate permissions:
   your Shimmer integration performs device scanning** (i.e., finding
   nearby unpaired Shimmer devices), you need to request
   `ACCESS_FINE_LOCATION` (or coarse) at
-  runtime[\[13\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L98-L106).
+  runtime.
   In Android 12+, if you use the new Bluetooth permissions, you
   technically declare that scans are not for location (via the flag
   above), but in practice you should still prompt the user to enable
@@ -161,7 +161,6 @@ needs to declare and request the appropriate permissions:
   prompt the user to enable it. Typically, you can use an
   `ACTION_REQUEST_ENABLE` intent to bring up the system dialog to turn
   on
-  Bluetooth[\[14\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L111-L119).
   This isn't a "permission" per se, but a necessary user action.
 
 - **Other Permissions:** Generally, no other special permissions are
@@ -177,7 +176,6 @@ check `checkSelfPermission` and if not granted, call
 `requestPermissions(...)` to ask the user. The Shimmer SDK's example app
 demonstrates this -- for instance, it checks for `BLUETOOTH_CONNECT` and
 location permission on startup and requests them if
-needed[\[13\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L98-L106).
 Ensure the user grants permissions *before* you attempt to scan or
 connect, or your calls will fail (and likely throw an exception or
 return no results).
@@ -269,7 +267,6 @@ streaming.
 device, the connection attempt may fail. It's often best to pair via
 Android Settings or a scan dialog first (see *Troubleshooting* below for
 pairing instructions). The Shimmer3 uses a default PIN code **1234** for
-pairing[\[20\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L114-L122)
 -- the SDK can initiate pairing if needed (it will prompt for the PIN).
 
 **3. Start streaming data:** Once connected (i.e., in an initialized
@@ -331,7 +328,6 @@ retrieve the device's timestamp with
 `cluster.getData(Configuration.Shimmer3.ObjectClusterSensorName.TIMESTAMP)`
 (or it might be labeled "Time Stamp"). This represents the Shimmer's
 internal clock for the
-sample[\[23\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L330-L339)[\[24\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L415-L424).
 If synchronizing with other data (like phone sensors or multiple
 Shimmers), you may use this along with system time -- see *Timestamping*
 below or Shimmer's guidance on synchronization.
@@ -362,10 +358,8 @@ each `Shimmer` to it, and use the manager's connect/start commands. The
 principle is similar but with more bookkeeping (ensuring each device has
 a unique handler or identifying the source of each message -- the
 ObjectCluster contains the device MAC, so you can differentiate
-samples[\[25\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L30-L35)).
 The **Shimmer API does support multi-streaming** (e.g., two Shimmer GSR+
 units at once) provided the Android device can handle the Bluetooth
-throughput[\[26\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L167-L176)[\[27\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L204-L210).
 
 ## Data Handling (GSR Data Format and Visualization)
 
@@ -418,10 +412,8 @@ example, write a header: `Time(ms), GSR_kOhm, PPG`. Then on each
 You could use the device's timestamp or the phone's
 System.currentTimeMillis(); each has pros/cons (device timestamp is
 monotonic from stream
-start[\[24\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L415-L424),
 while system time aligns with real-world clock). The Shimmer examples
 show writing CSV lines by extracting values from the
-ObjectCluster[\[23\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L330-L339)[\[29\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L334-L343).
 If streaming at 128 Hz, note that that is 128 lines per second; using a
 buffered writer or batching writes (e.g., write 128 lines at a time) is
 wise to avoid I/O overhead. Also consider the data volume: GSR is just
@@ -513,13 +505,11 @@ this:
 
 In our architecture, we designed a `ShimmerRecorder` class to
 encapsulate all Shimmer functionality (scanning, connecting, streaming,
-etc.)[\[31\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L14-L22)[\[32\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L24-L33).
 This class can be treated as a **module** in the app's logic. For
 example, the `ShimmerRecorder` might be injected into an Activity or a
 higher-level controller that orchestrates the various sensors during a
 recording session. When the user starts a session, the app calls methods
 on `ShimmerRecorder` like `connectDevices()` and
-`startRecording()`[\[33\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L39-L48)[\[34\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L44-L53).
 Internally, the ShimmerRecorder uses the SDK to manage the connection(s)
 and data. It might spin up threads or use coroutines to handle the
 incoming data stream, and it provides callbacks or LiveData updates with
@@ -590,11 +580,9 @@ the user.
 One helpful feature of the Shimmer SDK for integration is the
 **ShimmerBluetoothDialog** -- a built-in UI dialog that lists paired
 Shimmer devices and can scan for new
-ones[\[38\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L124-L132).
 We used this during setup: the user can press "Add GSR Device" which
 launches the ShimmerBluetoothDialog, selects the Shimmer3 from the list,
 and the dialog returns the MAC address to our
-app[\[39\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L130-L138).
 We then store that MAC (maybe in SharedPreferences or in the Session
 config) and use it for connecting. This simplifies device selection UX.
 In code, it's invoked via
@@ -638,7 +626,6 @@ are common issues and solutions when using the Shimmer3 GSR+ on Android:
   pair via Android Settings (Bluetooth menu) -- the Shimmer will appear
   as e.g. "Shimmer" or "Shimmer3". Select it, and when prompted for a
   PIN, enter **1234** (the default passcode for Shimmer3
-  GSR+)[\[20\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L114-L122).
   The device's LED will usually indicate pairing (consult Shimmer
   documentation for LED codes). If you try to connect in-app to an
   unpaired Shimmer, newer Android versions might block it or require
@@ -746,7 +733,6 @@ are common issues and solutions when using the Shimmer3 GSR+ on Android:
   or recording on a server), consider using Wi-Fi or USB tethering for
   the outbound link. Our setup used a custom TCP socket over Wi-Fi to
   send data lines to a
-  PC[\[44\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L349-L358)[\[45\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L371-L379).
   Trying to use the phone's Bluetooth for both connecting to Shimmer and
   sending data to PC can be problematic (the phone typically can only
   maintain one SPP connection at a time, and BLE + Classic
@@ -761,7 +747,6 @@ are common issues and solutions when using the Shimmer3 GSR+ on Android:
   first, then together. The Shimmer API supports multiple, but more
   devices = more bandwidth. The API's `ShimmerBluetoothManagerAndroid`
   is recommended to manage multiple connections in one
-  app[\[46\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L65-L73)[\[47\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L170-L178).
   If you see one device disconnect when the other connects, it could be
   a pairing issue or a collision -- it should not happen under normal
   conditions, but always verify each device has a unique MAC and you
@@ -783,7 +768,6 @@ are common issues and solutions when using the Shimmer3 GSR+ on Android:
   issues. For example, if you encounter an error like "socket might be
   closed" or similar exceptions, the FAQ suggests re-pairing or ensuring
   only one instance of `Shimmer` is using that MAC at a
-  time[\[48\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L194-L202)[\[49\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L174-L182).
   The Shimmer user community (forums, etc.) also has Q&A for common
   hurdles (like the StackOverflow question on integrating Shimmer which
   reiterates the need for SPP Bluetooth
@@ -819,7 +803,6 @@ development.
 - **Shimmer FAQ -- Bluetooth Details:** *Shimmer Wireless Sensor
   Networks FAQs* -- Shimmer's FAQ page with info on Bluetooth type (RN42
   module, PIN code) and API
-  availability[\[9\]](https://www.shimmersensing.com/support/wireless-sensor-networks-faqs/#:~:text=,Does%20Shimmer%20Use)[\[20\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L114-L122).
   Helpful for troubleshooting pairing and understanding the device's
   wireless interface.
 - **Shimmer Java/Android API Documentation:** *Shimmer Java/Android API
@@ -830,11 +813,8 @@ development.
 - **Example Code -- Shimmer Basic Example:** The Shimmer SDK includes an
   example app (`shimmerBasicExample`). Key sections of its
   `MainActivity.java` illustrate permission
-  requests[\[13\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L98-L106),
   device
-  scanning[\[38\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L124-L132),
   and data handling (retrieving GSR from
-  `ObjectCluster`)[\[23\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L330-L339)[\[29\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L334-L343).
   Reviewing this code is recommended for practical understanding of the
   API usage.
 
@@ -876,30 +856,8 @@ android_research.tex
 
 <https://github.com/buccancs/fyp-gsr-windows/blob/2d41c241dfeccbb9f5dc0b582255f8b67c8e0ec6/docs/android_research.tex>
 
-[\[13\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L98-L106)
-[\[14\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L111-L119)
-[\[20\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L114-L122)
-[\[23\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L330-L339)
-[\[24\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L415-L424)
-[\[25\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L30-L35)
-[\[26\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L167-L176)
-[\[27\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L204-L210)
-[\[29\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L334-L343)
-[\[31\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L14-L22)
-[\[32\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L24-L33)
-[\[33\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L39-L48)
-[\[34\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L44-L53)
-[\[38\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L124-L132)
-[\[39\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L130-L138)
-[\[44\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L349-L358)
-[\[45\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L371-L379)
-[\[46\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L65-L73)
-[\[47\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L170-L178)
-[\[48\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L194-L202)
-[\[49\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L174-L182)
 2_4_milestone.md
 
-<https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md>
 
 [\[15\]](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API/blob/563dd5b9bc88baf55d5ef479778f3dd017a7c9cb/ShimmerDriver/src/main/java/com/shimmerresearch/driver/Configuration.java#L32-L40)
 [\[28\]](https://github.com/ShimmerEngineering/Shimmer-Java-Android-API/blob/563dd5b9bc88baf55d5ef479778f3dd017a7c9cb/ShimmerDriver/src/main/java/com/shimmerresearch/driver/Configuration.java#L80-L88)
