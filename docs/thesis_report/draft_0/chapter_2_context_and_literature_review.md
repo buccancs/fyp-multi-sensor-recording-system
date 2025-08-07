@@ -327,7 +327,7 @@ architectural approach, while this demonstration opens new possibilities for dem
 capabilities while maintaining scientific validity and research quality standards that support peer-reviewed publication
 and academic validation.
 
-The architectural innovations include the development of hybrid coordination topologies that balance centralized control
+The architectural innovations include the development of hybrid coordination topologies that balance centralised control
 simplicity with distributed system resilience, advanced synchronisation algorithms that compensate for network latency
 and device timing variations, and complete quality management systems that provide real-time assessment and
 optimisation across multiple sensor modalities. Foundational work in distributed algorithms establishes the mathematical
@@ -411,7 +411,7 @@ emotional responses with high temporal resolution while providing spatial inform
 ### Technological Foundations for Contactless Measurement
 
 Recent advances in computer vision and signal processing have enabled sophisticated contactless measurement approaches
-that extract physiological information from subtle changes in facial coloration, texture, and thermal patterns. Research
+that extract physiological information from subtle changes in facial colouration, texture, and thermal patterns. Research
 by Verkruysse et al. (2008) established the theoretical foundation for camera-based photoplethysmography, demonstrating
 that standard video cameras can detect cardiac-related colour changes in facial regions.
 
@@ -431,7 +431,7 @@ exhaustion phases.
 
 Contemporary stress research has refined Selye's original model to distinguish between different types of stressors and
 stress responses. Lazarus and Folkman (1984) introduced the transactional model of stress, which emphasizes the role of
-cognitive appraisal in determining whether a situation is perceived as stressful. This model recognizes that stress is
+cognitive appraisal in determining whether a situation is perceived as stressful. This model recognises that stress is
 not solely determined by external stimuli but depends on the individual's assessment of both the threat and their
 ability to cope with it.
 
@@ -798,7 +798,7 @@ its use across diverse research applications including stress monitoring, activi
 
 The Shimmer3 platform offers several advantages that make it particularly suitable for multi-modal research
 applications. The wireless connectivity enables untethered monitoring that preserves naturalistic behaviour, while the
-compact form factor minimizes obtrusiveness and participant burden. The platform's open architecture and complete
+compact form factor minimises obtrusiveness and participant burden. The platform's open architecture and complete
 software development kit enable custom applications and integration with other research systems.
 
 Battery life considerations are critical for research applications requiring extended monitoring periods. The Shimmer3
@@ -1158,7 +1158,7 @@ practical implementation guidance, establishing a foundation for both rigorous s
 deployment in research environments.
 
 The controller implements a hybrid star-mesh coordination architecture that elegantly balances the simplicity of
-centralized coordination with the resilience characteristics of distributed systems. This architectural innovation
+centralised coordination with the resilience characteristics of distributed systems. This architectural innovation
 directly addresses the fundamental challenge of coordinating consumer-grade mobile devices for scientific applications
 while maintaining the precision and reliability standards required for rigorous research use.
 
@@ -1696,14 +1696,14 @@ measurement accuracy while reducing operator workload and training requirements.
 The modular architecture design enables systematic integration of machine learning capabilities while maintaining the
 reliability and validation requirements essential for research applications. Future developments could include deep
 learning algorithms for automated region of interest detection, predictive quality assessment based on environmental
-monitoring, and adaptive signal processing that optimizes measurement accuracy for individual participants and
+monitoring, and adaptive signal processing that optimises measurement accuracy for individual participants and
 experimental conditions.
 
 **Extended Sensor Integration and IoT Capabilities**: Future research opportunities include integration of additional
 sensor modalities including environmental monitoring, motion tracking, and physiological sensors that could provide
 complete context for physiological measurement while maintaining the temporal precision and data quality standards
 established in the current system. IoT integration could enable large-scale deployment across multiple research sites
-while providing centralized data management and analysis capabilities.
+while providing centralised data management and analysis capabilities.
 
 The distributed architecture provides foundation capabilities for IoT integration while maintaining the modularity and
 extensibility essential for accommodating diverse research requirements and evolving technology platforms. Future

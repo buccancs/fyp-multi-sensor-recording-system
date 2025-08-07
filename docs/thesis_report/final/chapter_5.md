@@ -74,14 +74,14 @@ engineering, experimental design, statistical analysis, and research
 methodology to create a validation framework that ensures both technical
 correctness and scientific
 validity[\[4\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L101-L109).
-This interdisciplinary approach recognizes that research software
+This interdisciplinary approach recognises that research software
 testing must address not only traditional software quality attributes
 but also scientific methodology validation, experimental
 reproducibility, and measurement accuracy requirements unique to
 research applications.
 
 **Research-Grade Quality Assurance with Statistical Validation:** The
-testing approach prioritizes quantitative validation of
+testing approach prioritises quantitative validation of
 research-specific quality attributes including measurement accuracy,
 temporal precision, data integrity, long-term reliability, and
 scientific reproducibility, which often have requirements far exceeding
@@ -282,7 +282,7 @@ focusing more on reliability and data accuracy than on superficial
 features or non-critical performance aspects.
 
 To this end, explicit **metrics and thresholds** were defined for each
-test category, as summarized in Table 5.1. These metrics provided clear
+test category, as summarised in Table 5.1. These metrics provided clear
 targets that the system needed to meet or exceed during testing:
 ---
   Testing         Coverage       Quality Metric Acceptance     Validation
@@ -366,7 +366,7 @@ The testing framework architecture provides a unified, cross-platform
 approach to validation that accommodates the challenges of testing a
 distributed system with heterogeneous components, while maintaining
 consistency and reliability across diverse testing scenarios. The
-framework design recognizes that multi-platform testing requires
+framework design recognises that multi-platform testing requires
 sophisticated coordination mechanisms to validate both individual
 platform functionality and cross-platform integration, and to aggregate
 results comprehensively.
@@ -374,7 +374,7 @@ results comprehensively.
 The architecture was informed by analysis of existing approaches for
 distributed system testing, combined with the specialised requirements
 of physiological measurement validation and research software quality
-assurance. The design prioritizes **reproducibility**, **scalability**,
+assurance. The design prioritises **reproducibility**, **scalability**,
 and **automation**, while remaining flexible to accommodate diverse
 research use cases and evolving requirements over the project's
 lifecycle.
@@ -384,7 +384,7 @@ lifecycle.
 The multi-platform testing architecture addresses the fundamental
 challenge of coordinating test execution across Android mobile devices,
 Python desktop applications, and embedded sensor hardware, all while
-maintaining tightly synchronised timing and centralized result
+maintaining tightly synchronised timing and centralised result
 collection. The architecture implements a sophisticated orchestration
 system to manage test execution, data collection, and result analysis
 across the entire system
@@ -454,13 +454,13 @@ topology[\[16\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#
         VALIDATION_FRAMEWORK --> TRENDS
         VALIDATION_FRAMEWORK --> ALERTS
 
-**Centralized Test Orchestration:** The **Test Coordinator** is the
+**Centralised Test Orchestration:** The **Test Coordinator** is the
 central brain of the testing system. It orchestrates complex
 multi-platform test scenarios, ensuring that tests on different devices
 and components start and stop in a coordinated fashion. It maintains
 fine-grained control over each test phase and can handle dynamic
 conditions (e.g., if one device is slow to respond, the coordinator can
-wait or retry). The scheduler optimizes the execution order of tests
+wait or retry). The scheduler optimises the execution order of tests
 based on resource availability and dependencies -- for example, it might
 run certain Android tests in parallel with Python tests if they don't
 interfere, or ensure that heavy load tests run when the system is
@@ -1094,7 +1094,7 @@ here, e.g., if `bluetoothAdapter.isEnabled` is false,
 The Python desktop controller application was tested using **pytest**,
 which provides powerful features for fixtures, parametrization, and
 async testing. Many components of the Python app are asynchronous (for
-example, waiting for network messages or sensor data), so we utilized
+example, waiting for network messages or sensor data), so we utilised
 `pytest-asyncio` to write async test functions. We also used the
 built-in `unittest.mock` library (via `patch`, `Mock`, `AsyncMock`,
 etc.) to isolate units.
@@ -1786,7 +1786,7 @@ collection system.
 
 We carried out a series of benchmark tests to characterise system
 performance, using both automated scripts and observation of system
-metrics. Table 5.2 summarizes several key performance results against
+metrics. Table 5.2 summarises several key performance results against
 their target values:
 
 **Table 5.2: Performance Testing Results Summary**
@@ -2046,7 +2046,7 @@ to be expanded or made even more bullet-proof.
 After executing the thorough test suite, we compiled the results to
 evaluate coverage, performance, and overall quality, and to verify all
 requirements (functional and non-functional) are satisfied. This section
-summarizes the test outcomes and provides an assessment of how the
+summarises the test outcomes and provides an assessment of how the
 system stands in terms of the thesis objectives.
 
 ### Test Results Summary
@@ -2419,7 +2419,7 @@ quantifying everything (timings, success rates), we have concrete
 evidence rather than just anecdotal assurance. - **Areas for
 Improvement:** One improvement would be further optimising automated
 test execution -- while we automated a lot, the "overall system"
-one-click test of everything is still being finalized (mostly due to
+one-click test of everything is still being finalised (mostly due to
 needing certain hardware or environment setups). We could invest in
 better CI/CD integration to run all tests in a controlled lab
 environment

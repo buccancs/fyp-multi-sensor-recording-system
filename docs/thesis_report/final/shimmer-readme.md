@@ -259,7 +259,7 @@ This will initiate a Bluetooth SPP connection in the background. The
 Shimmer's internal firmware will perform a handshake and initialisation
 sequence once the link is established. The `shimmerHandler` we provided
 will get a `MESSAGE_STATE_CHANGE` message when the connection state
-updates. Specifically, when fully connected and initialized, the state
+updates. Specifically, when fully connected and initialised, the state
 will change to `Shimmer.MSG_STATE_FULLY_INITIALIZED` (value
 3)[\[18\]](https://github.com/jhallard/BioSig-for-Android/blob/f803f22e485d453516b671cd3692c79a6c898858/src/com/shimmerresearch/driver/Shimmer.java#L18-L26)[\[19\]](https://github.com/jhallard/BioSig-for-Android/blob/f803f22e485d453516b671cd3692c79a6c898858/src/com/shimmerresearch/driver/Shimmer.java#L20-L28).
 You might wait for this state before allowing the user to start
@@ -272,7 +272,7 @@ pairing instructions). The Shimmer3 uses a default PIN code **1234** for
 pairing[\[20\]](https://github.com/buccancs/MultiSensorRecordingSystem/blob/e7e15df3246b702094047f21a03493ce1360a183/docs/2_4_milestone.md#L114-L122)
 -- the SDK can initiate pairing if needed (it will prompt for the PIN).
 
-**3. Start streaming data:** Once connected (i.e., in an initialized
+**3. Start streaming data:** Once connected (i.e., in an initialised
 state), you can instruct the Shimmer to begin streaming sensor data.
 This is done by calling:
 
@@ -289,7 +289,7 @@ measurement and a PPG measurement (and a timestamp, plus any other
 active channels). The handler's job is to extract the values and use
 them (e.g., update UI or save to file).
 
-**4. Extracting GSR data:** The Shimmer `ObjectCluster` organizes sensor
+**4. Extracting GSR data:** The Shimmer `ObjectCluster` organises sensor
 data by sensor name and data format. The SDK typically provides both raw
 and calibrated values. For GSR, the key sensor name is **"GSR"** for the
 calibrated skin resistance, and "GSR Raw" for the raw ADC reading. You

@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Quality Assurance Automation**: Enhanced CI/CD pipeline with complete quality monitoring
   - Parallel Python and Kotlin quality analysis jobs
-  - Centralized quality dashboard with cross-language metrics aggregation
+  - Centralised quality dashboard with cross-language metrics aggregation
   - Weekly automated quality analysis with trend reporting
   - PR comment integration with quality scores and recommendations
 

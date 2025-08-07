@@ -577,7 +577,7 @@ Bottom Panel: Technical infrastructure detail
 | **Firewall Rules**           | Block external internet, allow internal    | Research data protection               | Prevent unauthorized data exfiltration          |
 | **Network Time Protocol**    | Internal NTP server at 192.168.100.1       | Precise time synchronisation           | GPS-synchronised reference clock                |
 | **VPN Access**               | IPSec tunnel for remote administration     | Secure remote system access            | Multi-factor authentication required            |
-| **Monitoring and Logging**   | SNMP monitoring with syslog aggregation    | Network performance tracking           | Centralized log analysis and alerting           |
+| **Monitoring and Logging**   | SNMP monitoring with syslog aggregation    | Network performance tracking           | Centralised log analysis and alerting           |
 
 **Table A.2: Network Configuration Requirements**
 
@@ -1370,7 +1370,7 @@ class Application(QObject):
         self.json_server = None
         self.webcam_capture = None
         self._create_services()
-        self.logger.info("application initialized")
+        self.logger.info("application initialised")
 ---
     def _create_services(self):
         """Create backend services with dependency injection"""
@@ -1484,7 +1484,7 @@ class MultiSensorApplication : Application() {
 ---
     private fun initializeSystemMonitoring() {
         // Setup crash reporting and performance monitoring
-        logger.logD(TAG, "System monitoring initialized")
+        logger.logD(TAG, "System monitoring initialised")
     }
 ---
     companion object {
@@ -2312,7 +2312,7 @@ Topdon TC001 Thermal Camera Specifications:
 ```
 
 The selection rationale for this specific thermal camera model reflects extensive evaluation of available research-grade
-thermal imaging solutions. The decision prioritized measurement accuracy, integration compatibility, and
+thermal imaging solutions. The decision prioritised measurement accuracy, integration compatibility, and
 cost-effectiveness for research laboratory
 adoption [CITE - Thermal camera evaluation criteria for physiological research].
 
@@ -2371,7 +2371,7 @@ GSR Calibration Protocol:
 
 **WebSocket Communication Schema:**
 
-The communication protocol design prioritizes reliability and extensibility while maintaining real-time performance
+The communication protocol design prioritises reliability and extensibility while maintaining real-time performance
 requirements. The schema supports future protocol extensions without breaking backward compatibility.
 
 ```json
@@ -2815,7 +2815,7 @@ class Application(QObject):
 ---
         # Create backend services with dependency injection
         self._create_services()
-        self.logger.info("application initialized")
+        self.logger.info("application initialised")
 ---
     def _create_services(self):
         """Create backend services with dependency injection"""
@@ -3687,7 +3687,7 @@ connections exist.
 
 #### H.4.1 Academic Presentation Standards
 
-For academic submission, the following diagram categories should be prioritized:
+For academic submission, the following diagram categories should be prioritised:
 
 1. **Requirements Analysis Visualisations** (Chapter 3)
     - Traditional vs. contactless comparison for establishing research motivation

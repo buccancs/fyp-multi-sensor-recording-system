@@ -67,7 +67,7 @@ The user's feedback highlighted that our previous implementation lacked the comp
 
 | Feature | Official ShimmerBasicExample | **Our Shimmer Pro** | Advantage |
 |---------|------------------------------|-------------------|-----------|
-| Device Selection | Basic ShimmerBluetoothDialog | Enhanced custom dialog with filtering | ✅ **More intuitive** |
+| Device Selection | Basic ShimmerBluetoothDialog | Enhanced custom dialogue with filtering | ✅ **More intuitive** |
 | CRC Configuration | 3-option spinner | ✅ **Exact same functionality** | ✅ **100% compatible** |
 | Data Visualisation | Basic text output | **Professional real-time charts** | ✅ **Superior visualisation** |
 | UI Framework | Basic Android Views | **Material Design 3 components** | ✅ **Modern design** |

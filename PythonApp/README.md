@@ -46,7 +46,7 @@ The Multi-Sensor Desktop Controller implements a distributed coordination system
 
 - **Multi-Device Coordination**: Simultaneous control of multiple Android smartphones and USB webcams
 - **Real-time Monitoring**: Live status monitoring with device health indicators and preview streaming
-- **Recording Session Management**: Centralized start/stop control with automatic session metadata generation
+- **Recording Session Management**: Centralised start/stop control with automatic session metadata generation
 - **USB Webcam Integration**: DirectShow/V4L2 camera capture for stationary high-quality video recording
 - **Camera Calibration System**: OpenCV-based intrinsic and extrinsic camera parameter estimation
 - **Shimmer3 Integration**: Direct Bluetooth connectivity with physiological sensors
@@ -1061,7 +1061,7 @@ class CalibrationAPI:
     def validate_calibration(self, result: CalibrationResult) -> ValidationReport:
         """Validate calibration quality with complete metrics.
         
-        Analyzes reprojection error, pattern coverage, parameter stability,
+        Analyses reprojection error, pattern coverage, parameter stability,
         and provides recommendations for improvement.
         """
 ```

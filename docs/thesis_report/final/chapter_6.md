@@ -39,10 +39,10 @@ accomplishments and technical contributions of this project include:
   controller orchestrates the recording session (star topology) while
   each mobile device performs local data capture and preliminary
   processing (mesh of semi-autonomous nodes). This distributed
-  architecture balances centralized control with on-device computation,
+  architecture balances centralised control with on-device computation,
   providing both coordination and scalability. It is an innovative
   approach in the context of physiological monitoring systems, which
-  traditionally rely on either a single device or purely centralized
+  traditionally rely on either a single device or purely centralised
   data loggers. The project demonstrated that such a distributed
   approach can maintain strict synchronisation and reliability across
   devices, effectively expanding the scope of experiments (for example,
@@ -129,7 +129,7 @@ accomplishments and technical contributions of this project include:
   session management tools that automate file organisation and metadata
   generation for each recording session, saving researchers time in
   post-processing. This focus on user experience means the final
-  platform can be utilized by non-specialist users with relatively
+  platform can be utilised by non-specialist users with relatively
   minimal training. Informal evaluations and internal testing showed
   that new users were able to set up and run recording sessions
   successfully, indicating that the design meets its usability goals.
@@ -254,7 +254,7 @@ light of the project outcomes:
   theoretically be extended to more, limited mainly by network capacity
   and processing power. In terms of **ease-of-use**, the system meets
   the requirements: for instance, it provides visual feedback during
-  recording (live video previews, status messages) and organizes data
+  recording (live video previews, status messages) and organises data
   outputs in a clear way, which reduces user burden. **However, a few
   usability issues remain**, as discussed in the limitations (Section
   3). These include occasional instability in the user interface and
@@ -319,7 +319,7 @@ Notwithstanding its successes, this project has several **limitations
 and unresolved issues** that must be acknowledged. These limitations
 arise from the practical challenges encountered during development and
 areas where the implementation did not fully meet the ideal targets. The
-most significant known issues at the end of the study are summarized
+most significant known issues at the end of the study are summarised
 below:
 
 - **Unstable User Interface:** The system's user interface is still

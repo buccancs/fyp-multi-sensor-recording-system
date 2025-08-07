@@ -346,7 +346,7 @@ Another issue was an incorrect enum value in test code, which was
 corrected to match the
 implementation[\[45\]](evaluation_results/execution_logs.md#L72-L75).
 All such fixes are logged, showing the iterative process to reach full
-compliance (as summarized in the "All integration test failures
+compliance (as summarised in the "All integration test failures
 resolved"
 note[\[46\]](evaluation_results/execution_logs.md#L140-L146)).
 
@@ -369,7 +369,7 @@ statistical analyses performed on collected data.
 
 **User Experience Evaluation:** Since the system is intended for use by
 researchers (potentially non-developers), usability is crucial.
-Appendix E summarizes feedback from trial uses by researchers and
+Appendix E summarises feedback from trial uses by researchers and
 technicians. Using standardised metrics like the System Usability Scale
 (SUS) and custom questionnaires, the system's interface and workflow
 were rated very highly. In fact, user feedback indicated a near-perfect
@@ -505,7 +505,7 @@ enable contactless physiological monitoring.
 integrates heterogeneous devices (Android phones, thermal cameras,
 Shimmer GSR sensors) into one coordinated framework. The following code
 excerpt from the `ShimmerManager` class (Python controller) shows how an
-Android-integrated Shimmer sensor is initialized and
+Android-integrated Shimmer sensor is initialised and
 managed[\[55\]](PythonApp/shimmer_manager.py#L241-L249)[\[56\]](PythonApp/shimmer_manager.py#L250-L258):
 
 `python if self.enable_android_integration: logger.info("Initialising Android device integration...") self.android_device_manager = AndroidDeviceManager( server_port=self.android_server_port, logger=self.logger ) self.android_device_manager.add_data_callback(self._on_android_shimmer_data) self.android_device_manager.add_status_callback(self._on_android_device_status) if not self.android_device_manager.initialise(): logger.error("Failed to initialise Android device manager") if not PYSHIMMER_AVAILABLE: return False else: logger.warning("Continuing with direct connections only") self.enable_android_integration = False else: logger.info(f"Android device server listening on port {self.android_server_port}")`[\[57\]](PythonApp/shimmer_manager.py#L241-L258)

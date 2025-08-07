@@ -35,17 +35,17 @@ The repository might exist under a different name:
 
 ### 2. Repository Visibility
 - Private repository (not accessible via public search)
-- Organization repository under different owner
+- Organisation repository under different owner
 - Repository archived or deleted
 
 ### 3. Repository Location
-- Different GitHub organization or user account
+- Different GitHub organisation or user account
 - Alternative code hosting platform (GitLab, Bitbucket, etc.)
 - Internal or enterprise repository
 
 ## Alternative Analysis Approaches
 
-### 1. Analyze Found Repository
+### 1. Analyse Found Repository
 Examine `fyp-gsr-unified-buccancs` to determine if it contains thermal camera implementation:
 
 ```bash
@@ -88,7 +88,7 @@ Evaluate our implementation against:
 Compare our technical choices against:
 - Alternative thermal camera SDKs
 - Different architectural patterns
-- Performance optimization strategies
+- Performance optimisation strategies
 
 ## Repository Investigation: fyp-gsr-unified-buccancs
 
@@ -104,7 +104,7 @@ To determine if this repository contains thermal camera implementation:
 1. Examine repository contents and structure
 2. Look for thermal camera or Topdon-related code
 3. Check for Android application components
-4. Analyze documentation and README files
+4. Analyse documentation and README files
 
 ## Recommendations
 
@@ -127,7 +127,7 @@ To determine if this repository contains thermal camera implementation:
 
 ### 1. Repository Content Analysis
 If `fyp-gsr-unified-buccancs` contains relevant thermal camera implementation:
-- Download and analyze the codebase
+- Download and analyse the codebase
 - Apply our comparison framework
 - Identify similarities and differences
 - Document findings and recommendations
@@ -135,7 +135,7 @@ If `fyp-gsr-unified-buccancs` contains relevant thermal camera implementation:
 ### 2. Alternative Comparison Sources
 If no specific repository is found:
 - Compare against open-source thermal imaging projects
-- Analyze academic thermal camera implementations
+- Analyse academic thermal camera implementations
 - Reference industry standard practices and documentation
 
 ### 3. Stakeholder Communication

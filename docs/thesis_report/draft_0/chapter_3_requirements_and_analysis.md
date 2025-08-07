@@ -64,7 +64,7 @@ and operational foundation that guides all subsequent design and implementation 
 - 3.3. [Hardware Integration Requirements](#hardware-integration-requirements)
 - 3.4. [Detailed Functional Requirements Specifications](#detailed-functional-requirements-specifications)
 - 3.5. [Core System Coordination Requirements](#core-system-coordination-requirements)
-  - 3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
+  - 3.5.1. [FR-001: Multi-Device Coordination and Centralised Management](#fr-001-multi-device-coordination-and-centralised-management)
   - 3.5.2. [FR-002: Advanced Temporal Synchronisation and Precision Management](#fr-002-advanced-temporal-synchronisation-and-precision-management)
   - 3.5.3. [FR-003: complete Session Management and Lifecycle Control](#fr-003-complete-session-management-and-lifecycle-control)
 - 3.6. [Data Acquisition and Processing Requirements](#data-acquisition-and-processing-requirements)
@@ -190,7 +190,7 @@ rigorously structured multi-phase approach specifically designed to capture the 
 diverse stakeholder groups while ensuring technical feasibility, scientific validity, and practical implementation
 success within realistic project
 constraints [CITE - Nuseibeh, B., & Easterbrook, S. (2000). Requirements engineering: a roadmap. Proceedings of the Conference on the Future of Software Engineering, 35-46].
-The sophisticated methodology recognizes that research software projects present unique and often unprecedented
+The sophisticated methodology recognises that research software projects present unique and often unprecedented
 challenges compared to traditional commercial software development paradigms, requiring specialised approaches that
 carefully balance scientific rigor with practical implementation considerations, stakeholder satisfaction, and long-term
 system
@@ -426,7 +426,7 @@ identified requirements were technically achievable within realistic project con
 validity and research
 applicability [CITE - Boehm, B.W., & Bose, P. (1994). A collaborative spiral software process model based on Theory W. In Proceedings of the 3rd international conference on the software process (pp. 59-68)].
 This detailed analysis systematically identified critical trade-offs between ideal stakeholder requirements and
-practical implementation limitations, leading to carefully prioritized requirement sets that balanced scientific needs
+practical implementation limitations, leading to carefully prioritised requirement sets that balanced scientific needs
 with technical reality and resource
 constraints [CITE - Karlsson, J., & Ryan, K. (1997). A cost-value approach for prioritising requirements. IEEE Software, 14(5), 67-74].
 
@@ -459,7 +459,7 @@ The requirements engineering process employed systematic analysis methodologies 
 software development to ensure complete coverage of stakeholder needs while maintaining technical feasibility,
 scientific validity, and long-term system
 maintainability [CITE - Segal, J. (2007). Some problems of professional end user developers. Proceedings IEEE Symposium on Visual Languages and Human-Centric Computing, 111-118].
-The specialised approach recognizes that research software presents fundamentally unique challenges compared to
+The specialised approach recognises that research software presents fundamentally unique challenges compared to
 traditional commercial applications, requiring specialised validation criteria, performance metrics, and success
 measures that directly support scientific methodology, reproducible research outcomes, and peer review
 standards [CITE - Carver, J.C., Kendall, R.P., Squires, S.E., & Post, D.E. (2007). Software development environments for scientific and engineering software: A series of case studies. Proceedings of the 29th International Conference on Software Engineering, 550-559].
@@ -662,9 +662,9 @@ reliability across diverse experimental conditions [CITE - Mullender, S. (Ed.). 
 These requirements address the complex challenges of coordinating consumer-grade devices for scientific applications
 while ensuring measurement validity and experimental reproducibility.
 
-#### FR-001: Multi-Device Coordination and Centralized Management
+#### FR-001: Multi-Device Coordination and Centralised Management
 
-**Requirement Statement**: The system shall provide complete centralized coordination and management capabilities
+**Requirement Statement**: The system shall provide complete centralised coordination and management capabilities
 for multiple heterogeneous Android mobile devices, thermal imaging systems, and reference GSR sensors operating in a
 distributed measurement environment with research-grade precision and
 reliability [CITE - Tanenbaum, A.S., & Van Steen, M. (2016). Distributed systems: principles and paradigms. CreateSpace Independent Publishing Platform].
@@ -759,7 +759,7 @@ techniques specifically adapted for Android device coordination in research envi
 
 **Implementation Dependencies**:
 
-- Network Time Protocol (NTP) synchronisation services with customized implementation for mobile platforms
+- Network Time Protocol (NTP) synchronisation services with customised implementation for mobile platforms
 - High-resolution timestamp generation capabilities across heterogeneous Android platforms and API levels
 - Advanced latency measurement and compensation algorithms with real-time adaptation capabilities
 - Clock drift detection and correction mechanisms incorporating statistical analysis and predictive modelling
@@ -783,7 +783,7 @@ interruptions, or operator errors that could compromise months of research effor
 The session framework supports complex experimental protocols involving multiple phases, participant rotations, and
 diverse measurement configurations while maintaining operational simplicity for routine research
 applications [CITE - Wilson, G., et al. (2014). Best practices for scientific computing. PLoS Biology, 12(1), e1001745].
-The design recognizes that research sessions often extend over multiple hours and may involve dynamic reconfiguration as
+The design recognises that research sessions often extend over multiple hours and may involve dynamic reconfiguration as
 experimental conditions change or new participants join the study.
 
 **Performance Specifications**:
@@ -1048,7 +1048,7 @@ characteristics, and timing precision.
 
 The multi-device coordination requirement encompasses several complex sub-functions that must work together seamlessly.
 The system must maintain a real-time inventory of connected devices, monitor their health and operational status, and
-coordinate their activities through a centralized command structure. The coordination system must handle device addition
+coordinate their activities through a centralised command structure. The coordination system must handle device addition
 and removal during operation without disrupting ongoing recording sessions, providing the flexibility needed for dynamic
 research environments.
 
@@ -1058,7 +1058,7 @@ research environments.
   architecture designed to scale to 8 or more devices without fundamental modifications
 - **Temporal Synchronisation Accuracy**: Maintain synchronisation precision of ≤5ms across all devices, measured as the
   maximum time difference between corresponding data points from different devices
-- **Centralized Session Control**: Provide unified start/stop control that ensures all devices begin and end recording
+- **Centralised Session Control**: Provide unified start/stop control that ensures all devices begin and end recording
   within the synchronisation tolerance
 - **Graceful Failure Handling**: Continue operation when individual devices fail, maintaining session integrity while
   logging detailed failure information for post-session analysis
@@ -1075,7 +1075,7 @@ synchronisation accuracy across multiple session scenarios.
 
 **complete Requirement Description**: The system must capture high-resolution RGB video streams that provide
 sufficient quality and temporal resolution for detailed physiological analysis through computer vision techniques. This
-requirement recognizes that contactless physiological measurement depends critically on the ability to detect subtle
+requirement recognises that contactless physiological measurement depends critically on the ability to detect subtle
 visual changes that may indicate autonomic nervous system activation. The video acquisition system must balance quality
 requirements with practical constraints such as storage capacity, network bandwidth, and real-time processing
 capabilities.
@@ -1141,7 +1141,7 @@ accuracy meeting research standards.
 
 **complete Requirement Description**: The system must integrate traditional contact-based GSR sensors to provide
 ground truth measurements essential for machine learning model training, validation, and comparative analysis. This
-requirement recognizes that developing effective contactless prediction models requires high-quality reference data from
+requirement recognises that developing effective contactless prediction models requires high-quality reference data from
 established measurement techniques. The reference measurement system must maintain the highest possible data quality
 while integrating seamlessly with the contactless measurement modalities.
 
@@ -1173,7 +1173,7 @@ operation and proper synchronisation with other data streams.
 **complete Requirement Description**: The system must provide sophisticated session management capabilities that
 support the complete lifecycle of research recording sessions from initial setup through final data archival. Session
 management encompasses pre-session configuration, real-time monitoring and control, and post-session data organisation
-and validation. This requirement recognizes that research applications require more complete data management than
+and validation. This requirement recognises that research applications require more complete data management than
 typical consumer applications, including detailed metadata generation, experimental parameter tracking, and
 complete audit trails.
 
@@ -1311,7 +1311,7 @@ and maintainability that are critical for scientific software but may not be imm
 specifications alone. The non-functional requirements ensure that the system can operate effectively in demanding
 research environments while providing the reliability and quality needed for scientific applications.
 
-The non-functional requirements specification recognizes that research software faces unique challenges compared to
+The non-functional requirements specification recognises that research software faces unique challenges compared to
 typical commercial applications. Research applications often require extended operation periods, handle valuable and
 irreplaceable data, and must operate reliably in diverse environments with varying technical support availability. These
 constraints necessitate higher reliability and quality standards than might be acceptable in other application domains.
@@ -1401,7 +1401,7 @@ research studies while maintaining responsive operation for real-time feedback a
 #### NFR-001: System Throughput and Scalability
 
 **complete Requirement Description**: The system must demonstrate linear scalability in processing capability as
-additional devices are added to recording sessions. This requirement recognizes that research value increases
+additional devices are added to recording sessions. This requirement recognises that research value increases
 significantly with the ability to study multiple participants simultaneously, making scalability a critical factor for
 research utility. The throughput requirement must account for the cumulative data processing demands of multiple
 high-resolution video streams, thermal imaging data, and physiological sensor inputs while maintaining real-time

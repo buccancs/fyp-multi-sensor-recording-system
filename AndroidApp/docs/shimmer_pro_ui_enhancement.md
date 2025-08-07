@@ -144,6 +144,6 @@ This major UI upgrade transforms our basic Shimmer configuration tool into a pro
 
 ## Conclusion
 
-This major UI enhancement transforms the application from a basic configuration tool into a professional-grade Shimmer research platform. The addition of real-time charting, enhanced visual design, and comprehensive data export capabilities makes it comparable to commercial Shimmer software while maintaining the flexibility and customization options needed for research applications.
+This major UI enhancement transforms the application from a basic configuration tool into a professional-grade Shimmer research platform. The addition of real-time charting, enhanced visual design, and comprehensive data export capabilities makes it comparable to commercial Shimmer software while maintaining the flexibility and customisation options needed for research applications.
 
 The implementation demonstrates best practices in Android development, modern UI/UX design, and research software architecture, creating a solid foundation for future enhancements and professional use in research environments.

@@ -2,7 +2,7 @@
 
 ## 6.1 Project Achievement Assessment
 
-This chapter provides a detailed evaluation of the Multi-Sensor Recording System research project, systematically assessing the achievement of research objectives and analysing outcomes within the broader context of contactless physiological measurement research. The evaluation examines key deliverables and technical innovations, validates goal achievement against established criteria, and critically analyzes the system's performance relative to existing solutions in the field.
+This chapter provides a detailed evaluation of the Multi-Sensor Recording System research project, systematically assessing the achievement of research objectives and analysing outcomes within the broader context of contactless physiological measurement research. The evaluation examines key deliverables and technical innovations, validates goal achievement against established criteria, and critically analyses the system's performance relative to existing solutions in the field.
 
 ![Figure 6.1: Achievement Visualisation Dashboard](../diagrams/figure_6_1_achievement_visualization_dashboard.png)
 *Figure 6.1: complete dashboard showing the achievement status of primary and secondary research objectives with quantitative performance metrics and validation results.*
@@ -60,7 +60,7 @@ initial expectations. The final system provides a sophisticated platform
 that not only meets its ambitious original requirements but also
 establishes new benchmarks in areas such as data synchronisation
 precision, system scalability, and software quality. This section
-summarizes the project's deliverables and outcomes, and highlights the
+summarises the project's deliverables and outcomes, and highlights the
 key technical innovations realised.
 
 ### Key Deliverables and Outcomes
@@ -152,7 +152,7 @@ cutting-edge research requirements with practical engineering
 constraints:
 
 - **Distributed Multi-Device Architecture:** The system's architecture
-  is an innovative hybrid of centralized and distributed design. It
+  is an innovative hybrid of centralised and distributed design. It
   combines a central coordinating desktop application with multiple
   autonomous mobile sensing units. This **hybrid star--mesh topology**
   provides the simplicity of a central control (for session management
@@ -160,7 +160,7 @@ constraints:
   of each mobile device (for local data capture and preliminary
   processing). This architecture is novel in the context of
   physiological monitoring systems, which traditionally rely on either a
-  single dedicated device or purely centralized data loggers. The
+  single dedicated device or purely centralised data loggers. The
   project demonstrated that such a distributed approach can maintain
   strict temporal coordination and reliability. This innovation enables
   new experimental setups -- for instance, multiple participants or
@@ -261,7 +261,7 @@ particularly those related to secondary goals.
 
 ### Evaluation of Primary Goals
 
-The table below summarizes the three primary project goals and the
+The table below summarises the three primary project goals and the
 extent to which each was achieved:
 
 - **Goal 1: Reliable Multi-Device Synchronisation and Data Integration**
@@ -861,7 +861,7 @@ practice.
 synchronisation and timing, the validation was done with rigorous
 statistical techniques. Time stamp logs from devices were collected and
 compared using cross-correlation analysis to assess alignment. We also
-utilized an external high-precision time source (an atomic clock
+utilised an external high-precision time source (an atomic clock
 synchronised timestamping on each device via an NTP server) as a
 baseline to verify our internal sync. The results were analysed to
 compute confidence intervals for the synchronisation error. For example,
@@ -1042,7 +1042,7 @@ design as a starting template rather than starting from scratch.
 **Testing and Quality Assurance Best Practices:** Another significant
 software engineering contribution of this project is the complete
 approach to testing and quality assurance in a domain where this is not
-always prioritized. We employed unit testing on both the Android side
+always prioritised. We employed unit testing on both the Android side
 (using AndroidJUnit and Espresso for UI tests) and the Python side (with
 PyTest), achieving high code coverage. We also integrated continuous
 integration (CI) tools to run tests on each commit. While these
@@ -1146,7 +1146,7 @@ ideal targets or where trade-offs were made:
 - **Accuracy of Contactless GSR Estimation:** A core motivation of the
   project was to estimate GSR (stress levels) using RGB and thermal
   video. While the system successfully records these streams and
-  synchronizes them with ground-truth GSR, the actual *prediction
+  synchronises them with ground-truth GSR, the actual *prediction
   algorithm* for GSR from video is still rudimentary in the current
   implementation. Due to time constraints, only preliminary models were
   tested (e.g., simple correlations and a basic regression using thermal
@@ -1307,7 +1307,7 @@ deploying and using this system in real research or applied contexts:
   to ensure compliance, and some may be hesitant to use a tool that
   records video, given the sensitive nature of biometric data. These are
   not faults of the system per se, but external constraints that
-  influence how and where the system can be utilized. Essentially, **the
+  influence how and where the system can be utilised. Essentially, **the
   system lives at an intersection of technology and human subject
   research regulations**, and navigating that requires careful
   protocols.

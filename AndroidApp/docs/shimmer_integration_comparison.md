@@ -7,7 +7,7 @@
 | Feature | ShimmerBasicExample | Our Implementation | Status |
 |---------|-------------------|-------------------|---------|
 | **Device Discovery** | ShimmerBluetoothDialog | ShimmerDeviceSelectionDialog | ✅ Implemented |
-| **Device Connection** | Manual MAC input + pairing dialog | Dialog-based device selection | ✅ Enhanced |
+| **Device Connection** | Manual MAC input + pairing dialogue | Dialogue-based device selection | ✅ Enhanced |
 | **Connection Status** | Basic connected/disconnected | Detailed connection states | ✅ Enhanced |
 | **CRC Configuration** | 3-option spinner (Disable, 1-byte, 2-byte) | Same 3-option spinner | ✅ Implemented |
 | **Sensor Selection** | Checkboxes for GSR, PPG, Accel | Extended sensor checkboxes | ✅ Enhanced |
@@ -44,9 +44,9 @@
 Intent intent = new Intent(getApplicationContext(), ShimmerBluetoothDialog.class);
 startActivityForResult(intent, ShimmerBluetoothDialog.REQUEST_CONNECT_SHIMMER);
 
-// Our Implementation: Custom dialog with enhanced features
-val dialog = ShimmerDeviceSelectionDialog.newInstance()
-dialog.setDeviceSelectionListener(object : ShimmerDeviceSelectionDialog.DeviceSelectionListener {
+// Our Implementation: Custom dialogue with enhanced features
+val dialogue = ShimmerDeviceSelectionDialog.newInstance()
+dialogue.setDeviceSelectionListener(object : ShimmerDeviceSelectionDialog.DeviceSelectionListener {
     override fun onDeviceSelected(macAddress: String, deviceName: String) {
         viewModel.connectToSpecificDevice(macAddress, deviceName)
     }

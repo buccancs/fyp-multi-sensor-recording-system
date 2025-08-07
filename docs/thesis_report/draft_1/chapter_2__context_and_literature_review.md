@@ -99,13 +99,13 @@ The development of multi-sensor physiological monitoring systems requires robust
 
 Physiological research requires precise temporal coordination between sensor modalities to enable meaningful signal correlation and analysis. The challenge intensifies when integrating sensors with different sampling rates, data formats, and processing latencies across distributed computing platforms (Lamport, 1978).
 
-Modern distributed sensor systems employ various synchronisation strategies including Network Time Protocol (NTP) for coarse synchronisation and specialised timing protocols for microsecond-level precision. The implementation architecture for this research, primarily developed in `PythonApp/src/network/device_server.py`, utilizes JSON socket communication with embedded timestamps to maintain temporal coordination across Android mobile devices and desktop computing platforms.
+Modern distributed sensor systems employ various synchronisation strategies including Network Time Protocol (NTP) for coarse synchronisation and specialised timing protocols for microsecond-level precision. The implementation architecture for this research, primarily developed in `PythonApp/src/network/device_server.py`, utilises JSON socket communication with embedded timestamps to maintain temporal coordination across Android mobile devices and desktop computing platforms.
 
 ### Multi-Modal Data Fusion Architectures  
 
 Effective sensor fusion requires systematic integration of data streams with different characteristics, sampling rates, and noise profiles. The fusion architecture must accommodate real-time processing requirements while maintaining data quality and enabling offline analysis capabilities (Tanenbaum & Van Steen, 2016).
 
-The system architecture implements a centralized fusion approach where the desktop controller (`PythonApp/src/session/session_manager.py`) coordinates data streams from distributed sensors. This design pattern provides centralized control while enabling modular sensor integration and simplified temporal alignment across data modalities.
+The system architecture implements a centralised fusion approach where the desktop controller (`PythonApp/src/session/session_manager.py`) coordinates data streams from distributed sensors. This design pattern provides centralised control while enabling modular sensor integration and simplified temporal alignment across data modalities.
 
 ### Communication Protocols for Physiological Data
 
@@ -601,7 +601,7 @@ detecting acute stress from facial thermal
 imagery[\[50\]](https://arxiv.org/pdf/1908.10307#:~:text=match%20at%20L1393%20detection%20of,discomfort%20study%20used%20a%20non),
 though the authors noted that rigorous validation is needed to ensure
 such models generalise. Another research group (Cho et al.) developed an
-**end-to-end deep learning system** that analyzes the thermal patterns
+**end-to-end deep learning system** that analyses the thermal patterns
 of breathing on the nose and achieved about 84% accuracy in classifying
 stress vs. calm
 states[\[51\]](https://arxiv.org/pdf/1908.10307#:~:text=respiration,The).

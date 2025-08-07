@@ -11,7 +11,7 @@ This system addresses fundamental challenges in physiological computing research
 
 ### Architectural Principles
 
-The system follows a **distributed star-mesh topology** with PC master-controller coordination, implementing an **offline-first recording** approach that ensures data collection reliability in diverse research environments. Communication between components utilizes a standardised **JSON socket protocol** designed for real-time coordination while maintaining flexibility for heterogeneous device integration.
+The system follows a **distributed star-mesh topology** with PC master-controller coordination, implementing an **offline-first recording** approach that ensures data collection reliability in diverse research environments. Communication between components utilises a standardised **JSON socket protocol** designed for real-time coordination while maintaining flexibility for heterogeneous device integration.
 
 ## Complete System Architecture
 
@@ -154,7 +154,7 @@ The PC Master Controller serves as the central command and coordination hub, imp
 **Session Manager** (`PythonApp/session/`)
 - **Responsibility**: Complete recording session lifecycle management
 - **Features**: Multi-device coordination, session state management, data organisation
-- **Integration**: Coordinates with all system components through centralized state management
+- **Integration**: Coordinates with all system components through centralised state management
 - **Academic Foundation**: Implements established session management patterns [Wilson2014]
 
 **Network Server** (`PythonApp/network/`)
@@ -457,7 +457,7 @@ The system provides robust performance characteristics supporting demanding rese
 graph TB
     subgraph "Scalability Architecture (Current: 1-8 Devices)"
         subgraph "Single Controller Configuration"
-            PC[PC Master Controller<br/>Centralized Coordination]
+            PC[PC Master Controller<br/>Centralised Coordination]
             DEV1[Android Device 1<br/>Camera + Thermal + GSR]
             DEV2[Android Device 2<br/>Multi-Modal Recording]
             DEV8[Android Device 8<br/>Maximum Current Capacity]
@@ -696,7 +696,7 @@ graph LR
 - **Multi-threading**: Parallel processing across available CPU cores
 - **Async Processing**: Non-blocking I/O operations for responsive user experience
 - **Load Balancing**: Distribute processing load across system components
-- **Priority Scheduling**: Critical research tasks prioritized over background operations
+- **Priority Scheduling**: Critical research tasks prioritised over background operations
 
 ### Storage Optimisation
 - **Compression**: Lossless compression for non-critical data streams

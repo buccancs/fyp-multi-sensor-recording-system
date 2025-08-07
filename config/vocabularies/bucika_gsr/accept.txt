@@ -13,7 +13,7 @@ Logitech
 Shimmer
 
 # Academic and research terms
-synchronization
+synchronisation
 contactlessly
 multi-modal
 multi-sensor
@@ -74,9 +74,9 @@ dataset
 datasets
 preprocessing
 postprocessing
-synchronize
-synchronized
-synchronizing
+synchronise
+synchronised
+synchronising
 
 # Platform and environment terms
 Ubuntu

@@ -58,7 +58,7 @@ This paper presents the methodology, implementation details, performance evaluat
 
 The multisensor GSR data acquisition system employs a distributed architecture combining hardware sensors, mobile computing platforms, and data processing algorithms. The system architecture consists of three primary components: sensor nodes, communication infrastructure, and data processing units.
 
-Sensor nodes incorporate high-precision GSR measurement circuits with integrated Bluetooth communication modules. Each sensor node operates independently while maintaining synchronisation with the central data collection system. The communication infrastructure utilizes Bluetooth Low Energy (BLE) protocols to ensure reliable data transmission while minimising power consumption.
+Sensor nodes incorporate high-precision GSR measurement circuits with integrated Bluetooth communication modules. Each sensor node operates independently while maintaining synchronisation with the central data collection system. The communication infrastructure utilises Bluetooth Low Energy (BLE) protocols to ensure reliable data transmission while minimising power consumption.
 
 ### Hardware Configuration
 

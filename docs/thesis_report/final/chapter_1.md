@@ -249,7 +249,7 @@ evaluation:
   also noted to inform future improvements.
 
 - **Chapter 6 -- Conclusion and Future Work:** The final chapter
-  summarizes the contributions of the thesis and reflects on the extent
+  summarises the contributions of the thesis and reflects on the extent
   to which the objectives were achieved. The **achievements** of
   developing a working multi-modal physiological data collection
   platform are highlighted, and the significance of this platform for

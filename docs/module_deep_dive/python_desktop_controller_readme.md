@@ -23,7 +23,7 @@ The controller implementation addresses fundamental challenges in distributed ph
 
 ### System Role and Responsibilities
 
-The Python Desktop Controller encompasses complete orchestration capabilities designed for complex multi-modal research environments. Operating as the master coordinator in the established distributed star-mesh topology, it provides centralized control while maintaining the system's offline-first recording capability.
+The Python Desktop Controller encompasses complete orchestration capabilities designed for complex multi-modal research environments. Operating as the master coordinator in the established distributed star-mesh topology, it provides centralised control while maintaining the system's offline-first recording capability.
 
 **Primary Functions:**
 
@@ -32,7 +32,7 @@ The Python Desktop Controller encompasses complete orchestration capabilities de
 - **Experimental Protocol Management**: Sophisticated session management enabling complex experimental protocols with automated device configuration and temporal coordination
 - **Data Integration and Analysis**: complete data collection coordination with post-session analysis capabilities supporting research workflows
 
-**Architectural Decision Rationale**: The centralized control approach balances the need for coordinated multi-device operation with distributed resilience, following established patterns in scientific computing systems [Hey2009].
+**Architectural Decision Rationale**: The centralised control approach balances the need for coordinated multi-device operation with distributed resilience, following established patterns in scientific computing systems [Hey2009].
 
 ### Technology Stack
 
@@ -49,7 +49,7 @@ The Python Desktop Controller encompasses complete orchestration capabilities de
 
 - **Multi-Device Coordination**: Simultaneous control of multiple Android smartphones and USB webcams
 - **Real-time Monitoring**: Live status monitoring with device health indicators and preview streaming
-- **Recording Session Management**: Centralized start/stop control with automatic session metadata generation
+- **Recording Session Management**: Centralised start/stop control with automatic session metadata generation
 - **USB Webcam Integration**: DirectShow/V4L2 camera capture for stationary high-quality video recording
 - **Camera Calibration System**: OpenCV-based intrinsic and extrinsic camera parameter estimation
 - **Stimulus Presentation**: Integrated experimental stimulus controller for research applications
@@ -165,12 +165,12 @@ graph TB
 
 ### Navigation Architecture
 
-The Python application features a clean tabbed interface that organizes functionality according to research workflow
+The Python application features a clean tabbed interface that organises functionality according to research workflow
 phases:
 
 #### Tabbed Interface Structure
 
-- **Recording Tab**: Centralized recording controls with real-time preview and session management
+- **Recording Tab**: Centralised recording controls with real-time preview and session management
 - **Devices Tab**: complete device connection management with individual and global coordination
 - **Calibration Tab**: Streamlined calibration workflows with progress tracking and quality assessment
 - **Files Tab**: Data management functions, export capabilities, and integrated system logging

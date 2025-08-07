@@ -3,7 +3,7 @@ multisensor
 Bluetooth
 Android
 calibration
-synchronization
+synchronisation
 thermal
 biometric
 Shimmer

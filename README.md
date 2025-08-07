@@ -1,12 +1,12 @@
-# Vale: Your style, our editor [![Build status](https://ci.appveyor.com/api/projects/status/snk0oo6ih1nwuf6r?svg=true)](https://ci.appveyor.com/project/jdkato/vale) [![Go Report Card](https://img.shields.io/badge/%F0%9F%93%9D%20%20go%20report-A%2B-75C46B?color=00ACD7)](https://goreportcard.com/report/github.com/errata-ai/vale) [![GitHub All Releases](https://img.shields.io/github/downloads/errata-ai/vale/total?logo=GitHub&color=ff69b4)](https://github.com/errata-ai/vale/releases) [![Docker Pulls](https://img.shields.io/docker/pulls/jdkato/vale?color=orange&logo=docker&logoColor=white)](https://hub.docker.com/r/jdkato/vale) [![Chocolatey](https://img.shields.io/chocolatey/dt/vale?color=white&label=chocolatey&logo=chocolatey)](https://community.chocolatey.org/packages/vale) [![Homebrew](https://img.shields.io/homebrew/installs/dy/vale?color=yellow&label=homebrew&logo=homebrew)](https://formulae.brew.sh/formula/vale)
+# Vale: Your style, our editor [![Build status](https://ci.appveyor.com/api/projects/status/snk0oo6ih1nwuf6r?svg=true)](https://ci.appveyor.com/project/jdkato/vale) [![Go Report Card](https://img.shields.io/badge/%F0%9F%93%9D%20%20go%20report-A%2B-75C46B?colour=00ACD7)](https://goreportcard.com/report/github.com/errata-ai/vale) [![GitHub All Releases](https://img.shields.io/github/downloads/errata-ai/vale/total?logo=GitHub&colour=ff69b4)](https://github.com/errata-ai/vale/releases) [![Docker Pulls](https://img.shields.io/docker/pulls/jdkato/vale?colour=orange&logo=docker&logoColor=white)](https://hub.docker.com/r/jdkato/vale) [![Chocolatey](https://img.shields.io/chocolatey/dt/vale?colour=white&label=chocolatey&logo=chocolatey)](https://community.chocolatey.org/packages/vale) [![Homebrew](https://img.shields.io/homebrew/installs/dy/vale?colour=yellow&label=homebrew&logo=homebrew)](https://formulae.brew.sh/formula/vale)
 
 > Enjoying Vale? Please consider writing a user [testimonial][5].
 
-<p align="center">
+<p align="centre">
   <b>Vale</b> is a command-line tool that brings code-like linting to prose. It's <b><a href="#mag-at-a-glance-vale-vs-">fast</a></b>, <b>cross-platform</b> (Windows, macOS, and Linux), and <b>highly customizable</b>.
 </p>
 
-<div align="center">
+<div align="centre">
 <table>
 <thead>
 <tr>
@@ -24,18 +24,18 @@
 
 > Hi there! I'm [@jdkato](https://github.com/jdkato), the sole developer of Vale. If you'd like to help me dedicate more time to _developing_, _documenting_, and _supporting_ Vale, feel free to donate through [GitHub Sponsors](https://github.com/sponsors/jdkato) or [Open Collective](https://opencollective.com/vale). Any donation&mdash;big, small, one-time, or recurring&mdash;is greatly appreciated!
 
-### Organizations
+### Organisations
 
-<a href="https://opencollective.com/vale/organization/0/website"><img src="https://opencollective.com/vale/organization/0/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/1/website"><img src="https://opencollective.com/vale/organization/1/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/2/website"><img src="https://opencollective.com/vale/organization/2/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/3/website"><img src="https://opencollective.com/vale/organization/3/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/4/website"><img src="https://opencollective.com/vale/organization/4/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/5/website"><img src="https://opencollective.com/vale/organization/5/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/6/website"><img src="https://opencollective.com/vale/organization/6/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/7/website"><img src="https://opencollective.com/vale/organization/7/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/8/website"><img src="https://opencollective.com/vale/organization/8/avatar.svg?avatarHeight=100"></a>
-<a href="https://opencollective.com/vale/organization/9/website"><img src="https://opencollective.com/vale/organization/9/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/0/website"><img src="https://opencollective.com/vale/organisation/0/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/1/website"><img src="https://opencollective.com/vale/organisation/1/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/2/website"><img src="https://opencollective.com/vale/organisation/2/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/3/website"><img src="https://opencollective.com/vale/organisation/3/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/4/website"><img src="https://opencollective.com/vale/organisation/4/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/5/website"><img src="https://opencollective.com/vale/organisation/5/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/6/website"><img src="https://opencollective.com/vale/organisation/6/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/7/website"><img src="https://opencollective.com/vale/organisation/7/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/8/website"><img src="https://opencollective.com/vale/organisation/8/avatar.svg?avatarHeight=100"></a>
+<a href="https://opencollective.com/vale/organisation/9/website"><img src="https://opencollective.com/vale/organisation/9/avatar.svg?avatarHeight=100"></a>
 
 ### Other
 
