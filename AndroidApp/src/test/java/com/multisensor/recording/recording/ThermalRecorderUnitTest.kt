@@ -43,7 +43,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.initialize()
 
                 result shouldBe true
-                verify { mockLogger.debug(any<String>()) }
+                verify { mockLogger.info("Initializing ThermalRecorder") }
             }
         }
 
@@ -77,7 +77,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.startRecording(testSessionId)
 
                 result shouldBe false
-                verify { mockLogger.error("Cannot start recording: ThermalRecorder not initialized") }
+                verify { mockLogger.error("ThermalRecorder not initialized") }
             }
         }
 
@@ -89,7 +89,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.stopRecording()
 
                 result shouldBe true
-                verify { mockLogger.info("Thermal recording stopped") }
+                verify { mockLogger.info("Stopping thermal recording") }
             }
         }
 
@@ -98,7 +98,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
                 val result = thermalRecorder.stopRecording()
 
                 result shouldBe false
-                verify { mockLogger.warning("Stop recording called but not currently recording") }
+                verify { mockLogger.warning("No recording in progress") }
             }
         }
     }
