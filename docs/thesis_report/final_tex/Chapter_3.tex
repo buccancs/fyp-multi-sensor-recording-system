@@ -619,7 +619,7 @@ In Android-mediated mode, an Android phone pairs with the Shimmer (using
 the Shimmer Android API) and that phone's app becomes responsible for
 reading the GSR data; the phone then sends those sensor readings to the
 PC over the network (using JSON messages of type
-"sensor_data")\cite{DeviceServer}.
+"sensor\_data")\cite{DeviceServer}.
 The PC doesn't directly talk to the Shimmer in that case; it receives
 the data already parsed from the phone. The architecture allows both
 modes to operate simultaneously if needed (for example, two Shimmers
@@ -641,7 +641,7 @@ networking is abstracted behind a \texttt{JsonSocketServer} class with
 well-defined events (device_connected, status_received, etc.), and the
 GUI is kept separate in a Qt-based \texttt{MainWindow}. This separation
 enforces a \textbf{modular architecture} --- for example, one could develop an
-alternative web-based UI (and indeed, the code contains a \texttt{web_ui}
+alternative web-based UI (and indeed, the code contains a \texttt{web\_ui}
 module as an experimental interface) without needing to rewrite how
 sessions or networking work. The architecture also emphasizes thread
 separation for performance: the PC networking runs in a background
@@ -719,7 +719,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     clock). These status packets help update the UI and also carry
     implicit sync info. Additionally, if preview is enabled, the device
     captures a frame (say every 1 second), compresses it (e.g., JPEG),
-    Base64-encodes it, and sends a \texttt{preview_frame} message containing a
+    Base64-encodes it, and sends a \texttt{preview\_frame} message containing a
     small image
     string\cite{DriverStressThermal2020}.
     The PC receives this and emits a signal that the GUI uses to display
@@ -727,7 +727,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     is designed to be low-bandwidth (e.g., a thumbnail image rather than
     full-frame, to avoid bogging down the network). Meanwhile, if the
     Shimmer is streaming live via Android, those readings might also be
-    sent continuously in \texttt{sensor_data}
+    sent continuously in \texttt{sensor\_data}
     messages\cite{DeviceServer};
     however, in practice the PC may choose not to plot every point to
     avoid overload --- it could sample or aggregate before display.
@@ -747,7 +747,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     closing its files, initiates a \textbf{file transfer protocol} to send
     the recorded files to PC. The flow is:
 
-8.  Device sends a \texttt{file_info} message indicating it is about to send a
+8.  Device sends a \texttt{file\_info} message indicating it is about to send a
     file, including file name and
     size\cite{DeviceServer}\cite{DeviceServer}.
     For example, \texttt{"name": "rgb_video.mp4", "size": 50012345}.
@@ -756,7 +756,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     (\texttt{DeviceID_rgb_video.mp4}) and responds (implicitly via ack or
     readiness).
 
-10. Device then sends a series of \texttt{file_chunk} messages, each containing
+10. Device then sends a series of \texttt{file\_chunk} messages, each containing
     a segment of the file encoded (typically in
     Base64)\cite{DeviceServer}.
     The PC decodes each chunk and writes to the file
@@ -766,14 +766,14 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     received and can log
     progress\cite{DeviceServer}.
 
-11. When the device finishes sending, it sends \texttt{file_end} message with
+11. When the device finishes sending, it sends \texttt{file\_end} message with
     the file
     name\cite{DeviceServer}.
     PC then closes the file and compares the received byte count to the
     expected
     size\cite{DeviceServer}.
     If they match, PC logs success and sends back a confirmation
-    (\texttt{file_received} message with status
+    (\texttt{file\_received} message with status
     ok)\cite{DeviceServer}.
     If there's a mismatch, PC logs an error and could request a retry
     (in our code, it at least reports the error; a full retry mechanism
@@ -805,7 +805,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
     into the session folder (e.g., under a \texttt{processed/} subdirectory or
     by appending results next to original files). The data flow here is
     local on the PC --- using OpenCV or other libraries on the saved
-    files. The results are logged (the \texttt{post_processing} field in
+    files. The results are logged (the \texttt{post\_processing} field in
     session metadata is updated to true with a
     timestamp\cite{SessionManager}\cite{SessionManager}).
 
@@ -832,7 +832,7 @@ final data aggregation \[Placeholder\].} Here is the sequence:
   side\cite{SessionManagerKt},
   and the PC adds the device prefix upon receipt). Because each data
   file is timestamped or accompanied by timestamps internally, a
-  researcher can load, for instance, the \texttt{DeviceB_sensors.csv} and the
+  researcher can load, for instance, the \texttt{DeviceB\_sensors.csv} and the
   videos and align them using the timestamps. The data integrity checks
   ensure these files are complete and not corrupted.
 
@@ -920,7 +920,7 @@ include the device ID or name). - \textbf{Metadata and logs:} The system
 generates JSON and text files for metadata. The \textbf{session metadata}
 (JSON) contains structured information about the session: session ID,
 start/end times, list of devices, files names, and possibly environment
-info (like app versions). For instance, \texttt{session_metadata.json} might
+info (like app versions). For instance, \texttt{session\_metadata.json} might
 have an entry listing each device by ID and the files it
 produced\cite{SessionManager}\cite{SessionManager}.
 Additionally, a human-readable \textbf{session_info.txt} is generated on the
@@ -928,11 +928,11 @@ Android side listing the folder contents and
 status\cite{SessionManagerKt}\cite{Fowles1981}.
 This redundancy is intentional for clarity --- researchers can quickly
 read the text summary or use the JSON for programmatic processing. The
-PC and devices also maintain \textbf{log files} (e.g., \texttt{session_log.txt})
+PC and devices also maintain \textbf{log files} (e.g., \texttt{session\_log.txt})
 that record events and any errors with timestamps --- these are useful
 for debugging and audit trails. - \textbf{Event annotations:} As discussed,
 event markers are stored in a simple CSV file (e.g.,
-\texttt{stimulus_events.csv}). Each line has an event timestamp (in
+\texttt{stimulus\_events.csv}). Each line has an event timestamp (in
 milliseconds or a readable time format) and a label. This file is
 managed by the Session Manager (either on PC or device) whenever an
 event is
