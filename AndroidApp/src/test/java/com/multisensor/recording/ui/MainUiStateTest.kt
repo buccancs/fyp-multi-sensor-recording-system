@@ -14,7 +14,8 @@ class MainUiStateTest : BehaviorSpec({
                 isInitialized = true,
                 isRecording = false,
                 isLoadingRecording = false,
-                isPcConnected = true
+                isPcConnected = true,
+                isCameraConnected = true
             )
 
             then("should be able to start recording") {
@@ -67,7 +68,8 @@ class MainUiStateTest : BehaviorSpec({
                 isRecording = false,
                 isLoadingRecording = false,
                 isPcConnected = false,
-                showManualControls = true
+                showManualControls = true,
+                isCameraConnected = true
             )
 
             then("should be able to start recording with manual controls") {
@@ -179,7 +181,9 @@ class MainUiStateTest : BehaviorSpec({
             val state = MainUiState(
                 isInitialized = true,
                 isRecording = true,
-                errorMessage = null
+                errorMessage = null,
+                isPcConnected = true,
+                isCameraConnected = true
             )
 
             then("should return CONNECTED overall health when recording") {
@@ -193,7 +197,8 @@ class MainUiStateTest : BehaviorSpec({
                 isRecording = false,
                 errorMessage = null,
                 isPcConnected = true,
-                isShimmerConnected = true
+                isShimmerConnected = true,
+                isCameraConnected = true
             )
 
             then("should return CONNECTED overall health when ready") {

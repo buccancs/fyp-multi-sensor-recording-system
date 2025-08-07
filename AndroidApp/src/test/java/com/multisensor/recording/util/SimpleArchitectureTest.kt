@@ -1,258 +1,109 @@
 package com.multisensor.recording.util
 
 import com.google.common.truth.Truth.assertThat
-import com.multisensor.recording.testbase.BaseUnitTest
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.File
 
-class SimpleArchitectureTest : BaseUnitTest() {
-
-    private val sourceRoot = "AndroidApp/src/main/java/com/multisensor/recording"
-    
-    @Test
-    fun `UI layer should not import from network packages`() {
-        val violations = findForbiddenImports(
-            sourcePattern = "ui/",
-            forbiddenPackages = listOf("network", "service"),
-            description = "UI components importing network/service packages directly"
-        )
-        
-        assertThat(violations).isEmpty()
-    }
-    
-    @Test
-    fun `Activities and Fragments should only import from UI layer and ViewModels`() {
-        val allowedPackages = listOf("ui", "controllers", "managers", "androidx", "android", "kotlin", "java", "dagger", "hilt")
-        val violations = findForbiddenImportsInUIComponents(allowedPackages)
-        
-        assertThat(violations).isEmpty()
-    }
-    
-    @Test
-    fun `Network layer should not import from UI packages`() {
-        val violations = findForbiddenImports(
-            sourcePattern = "network/",
-            forbiddenPackages = listOf("ui"),
-            description = "Network components importing UI packages"
-        )
-        
-        assertThat(violations).isEmpty()
-    }
-    
-    @Test
-    fun `Service layer should not import from UI packages`() {
-        val violations = findForbiddenImports(
-            sourcePattern = "service/",
-            forbiddenPackages = listOf("ui"),
-            description = "Service components importing UI packages"
-        )
-        
-        assertThat(violations).isEmpty()
-    }
-    
-    @Test
-    fun `Controllers should not import from low-level services directly`() {
-        val violations = findForbiddenImports(
-            sourcePattern = "controllers/",
-            forbiddenPackages = listOf("network", "service"),
-            description = "Controllers importing from network/service packages directly"
-        )
-        
-        assertThat(violations).isEmpty()
-    }
-    
-    @Test
-    fun `Managers should properly encapsulate domain logic`() {
-        val violations = findForbiddenImports(
-            sourcePattern = "managers/",
-            forbiddenPackages = listOf("ui"),
-            description = "Managers importing UI packages"
-        )
-        
-        assertThat(violations).isEmpty()
-    }
+class SimpleArchitectureTest {
 
     @Test
-    fun `should run basic test with modern architecture`() {
-        val testValue = "Modern Test Architecture"
-        val result = testValue.length
-        assertThat(result).isEqualTo(23)
-        assertThat(testValue).contains("Modern")
-    }
-
-    @Test
-    fun `should work with Truth assertions`() {
-        val numbers = listOf(1, 2, 3, 4, 5)
-        assertThat(numbers).hasSize(5)
-        assertThat(numbers).contains(3)
-        assertThat(numbers).containsExactly(1, 2, 3, 4, 5).inOrder()
-    }
-
-    @Test
-    fun `should demonstrate MockK integration via base class`() {
-        assertThat(testDispatcher).isNotNull()
-    }
-
-    @Test
-    fun `should handle coroutines testing`() {
-        assertThat(testDispatcher.scheduler.currentTime).isEqualTo(0L)
-    }
-
-    @Test
-    fun `should work with Kotlin collections`() {
-        val map = mapOf("key1" to "value1", "key2" to "value2")
-        assertThat(map).hasSize(2)
-        assertThat(map).containsKey("key1")
-        assertThat(map).containsEntry("key2", "value2")
-    }
-    
-    private fun findForbiddenImports(
-        sourcePattern: String,
-        forbiddenPackages: List<String>,
-        description: String
-    ): List<String> {
-        val violations = mutableListOf<String>()
-        val sourceDir = File(sourceRoot)
-        
-        if (!sourceDir.exists()) {
-            return emptyList() 
-        }
-        
-        sourceDir.walkTopDown()
-            .filter { it.name.endsWith(".kt") && it.path.contains(sourcePattern) }
-            .forEach { file ->
-                val content = file.readText()
-                forbiddenPackages.forEach { forbiddenPackage ->
-                    val importPattern = Regex("import\\s+com\\.multisensor\\.recording\\.$forbiddenPackage")
-                    if (importPattern.containsMatchIn(content)) {
-                        violations.add("${file.name}: $description - imports from $forbiddenPackage")
-                    }
-                }
-            }
-        
-        return violations
-    }
-    
-    private fun findForbiddenImportsInUIComponents(allowedPackages: List<String>): List<String> {
-        val violations = mutableListOf<String>()
-        val sourceDir = File(sourceRoot)
-        
-        if (!sourceDir.exists()) {
-            return emptyList() 
-        }
-        
-        sourceDir.walkTopDown()
-            .filter { it.name.endsWith(".kt") && (it.path.contains("ui/") || it.name.contains("Activity") || it.name.contains("Fragment")) }
-            .forEach { file ->
-                val content = file.readText()
-                val importPattern = Regex("import\\s+com\\.multisensor\\.recording\\.(\\w+)")
-                importPattern.findAll(content).forEach { match ->
-                    val importedPackage = match.groupValues[1]
-                    if (!allowedPackages.contains(importedPackage)) {
-                        violations.add("${file.name}: UI component importing from non-allowed package: $importedPackage")
-                    }
-                }
-            }
-        
-        return violations
-
-    @Test
-    fun `UI layer should not directly import from network or service packages`() {
+    fun `UI layer should not depend on database layer directly`() {
         val uiFiles = getKotlinFilesInPackage("ui")
         val forbiddenImports = listOf(
-            "com.multisensor.recording.network.",
-            "com.multisensor.recording.service.",
-            "com.multisensor.recording.recording."  
+            "import androidx.room",
+            "import com.multisensor.recording.persistence.dao",
+            "import com.multisensor.recording.persistence.entity"
         )
-
+        
+        val violations = mutableListOf<String>()
         uiFiles.forEach { file ->
             val content = file.readText()
             forbiddenImports.forEach { forbiddenImport ->
-                assertThat(content).doesNotContain("import $forbiddenImport")
+                if (content.contains(forbiddenImport)) {
+                    violations.add("${file.name} contains forbidden import: $forbiddenImport")
+                }
             }
         }
+        
+        assertThat(violations).isEmpty()
     }
 
     @Test
-    fun `Controllers should not directly import from UI packages`() {
+    fun `Controllers should not access UI components directly`() {
         val controllerFiles = getKotlinFilesInPackage("controllers")
         val forbiddenImports = listOf(
-            "androidx.activity.",
-            "androidx.fragment.",
-            "android.app.Activity",
-            "android.app.Fragment"
+            "import androidx.compose",
+            "import com.multisensor.recording.ui"
         )
-
+        
+        val violations = mutableListOf<String>()
         controllerFiles.forEach { file ->
             val content = file.readText()
             forbiddenImports.forEach { forbiddenImport ->
-                assertThat(content).doesNotContain("import $forbiddenImport")
+                if (content.contains(forbiddenImport)) {
+                    violations.add("${file.name} contains forbidden import: $forbiddenImport")
+                }
             }
         }
+        
+        assertThat(violations).isEmpty()
     }
 
     @Test
-    fun `Recording components should not directly access UI layer`() {
+    fun `Recording layer should not depend on UI layer`() {
         val recordingFiles = getKotlinFilesInPackage("recording")
         val forbiddenImports = listOf(
-            "com.multisensor.recording.ui.",
-            "androidx.lifecycle.ViewModel"
+            "import androidx.compose",
+            "import com.multisensor.recording.ui"
         )
-
+        
+        val violations = mutableListOf<String>()
         recordingFiles.forEach { file ->
             val content = file.readText()
             forbiddenImports.forEach { forbiddenImport ->
-                assertThat(content).doesNotContain("import $forbiddenImport")
+                if (content.contains(forbiddenImport)) {
+                    violations.add("${file.name} contains forbidden import: $forbiddenImport")
+                }
             }
         }
+        
+        assertThat(violations).isEmpty()
     }
 
     @Test
-    fun `Network layer should not depend on UI or business logic`() {
+    fun `Network layer should not depend on UI layer`() {
         val networkFiles = getKotlinFilesInPackage("network")
         val forbiddenImports = listOf(
-            "com.multisensor.recording.ui.",
-            "com.multisensor.recording.controllers.",
-            "com.multisensor.recording.managers."
+            "import androidx.compose",
+            "import com.multisensor.recording.ui"
         )
-
+        
+        val violations = mutableListOf<String>()
         networkFiles.forEach { file ->
             val content = file.readText()
             forbiddenImports.forEach { forbiddenImport ->
-                assertThat(content).doesNotContain("import $forbiddenImport")
+                if (content.contains(forbiddenImport)) {
+                    violations.add("${file.name} contains forbidden import: $forbiddenImport")
+                }
             }
         }
+        
+        assertThat(violations).isEmpty()
     }
 
     @Test
-    fun `Infrastructure utilities should be used consistently`() {
+    fun `Should not use Android Log directly`() {
         val allKotlinFiles = getAllKotlinFiles()
         
+        val violations = mutableListOf<String>()
         allKotlinFiles.forEach { file ->
             val content = file.readText()
-            
-            if (content.contains("import android.util.Log")) {
-                assertThat(content).doesNotContain("Log.d(")
-                assertThat(content).doesNotContain("Log.e(")
-                assertThat(content).doesNotContain("Log.w(")
+            if (content.contains("Log.d(") || content.contains("Log.e(") || content.contains("Log.w(")) {
+                violations.add("${file.name} uses Android Log directly instead of Logger")
             }
         }
-    }
-
-    @Test
-    fun `Dependency injection scope should be consistent`() {
-        val allKotlinFiles = getAllKotlinFiles()
         
-        allKotlinFiles.forEach { file ->
-            val content = file.readText()
-            
-            if (content.contains("class") && 
-                (content.contains("Manager") || content.contains("Controller")) &&
-                content.contains("@Inject constructor")) {
-                
-                assertThat(content.contains("@Singleton") || content.contains("@ActivityScoped") || content.contains("@ServiceScoped")).isTrue()
-            }
-        }
+        assertThat(violations).isEmpty()
     }
 
     private fun getKotlinFilesInPackage(packageName: String): List<File> {

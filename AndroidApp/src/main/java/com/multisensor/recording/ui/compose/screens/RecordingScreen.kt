@@ -1,7 +1,10 @@
 package com.multisensor.recording.ui.compose.screens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -9,14 +12,24 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.multisensor.recording.recording.DeviceStatus
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModelRefactored
+import com.multisensor.recording.ui.components.AnimatedRecordingButton
+import com.multisensor.recording.ui.components.ColorPaletteSelector
+import com.multisensor.recording.ui.components.EnhancedThermalPreview
+import com.multisensor.recording.ui.components.SessionStatusCard
 import com.multisensor.recording.ui.theme.ConnectionGreen
 import com.multisensor.recording.ui.theme.DisconnectedRed
 import com.multisensor.recording.ui.theme.RecordingActive
@@ -25,246 +38,171 @@ import com.multisensor.recording.ui.theme.RecordingInactive
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecordingScreen(
+    onNavigateToPreview: () -> Unit = {},
     viewModel: MainViewModelRefactored = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        
-        RecordingControlsCard(
-            isRecording = uiState.isRecording,
-            sessionDuration = uiState.sessionDuration,
-            onStartRecording = { viewModel.startRecording() },
-            onStopRecording = { viewModel.stopRecording() }
-        )
+    Scaffold(
+        floatingActionButton = {
+            AnimatedRecordingButton(
+                isRecording = uiState.isRecording,
+                onClick = {
+                    if (uiState.isRecording) {
+                        viewModel.stopRecording()
+                    } else {
+                        viewModel.startRecording()
+                    }
+                },
+                enabled = uiState.canStartRecording || uiState.canStopRecording
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Enhanced session status
+            SessionStatusCard(
+                sessionStatus = when {
+                    uiState.isRecording -> "Recording"
+                    uiState.isInitialized -> "Ready"
+                    else -> "Initializing"
+                },
+                deviceConnections = mapOf(
+                    "Camera" to if (uiState.isCameraConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED,
+                    "Thermal" to if (uiState.isThermalConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED,
+                    "GSR" to if (uiState.isGsrConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED,
+                    "PC Connection" to if (uiState.isPcConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED
+                )
+            )
 
-        DeviceStatusCard()
+            // Quick thermal preview card with navigation to full preview
+            ThermalPreviewCard(
+                thermalBitmap = uiState.currentThermalFrame,
+                isRecording = uiState.isRecording,
+                onNavigateToPreview = onNavigateToPreview
+            )
 
-        CameraPreviewCard()
+            // Color palette selector
+            ColorPaletteSelector(
+                currentPalette = uiState.colorPalette,
+                onPaletteSelect = { /* TODO: Add to viewModel */ }
+            )
+        }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RecordingControlsCard(
+private fun ThermalPreviewCard(
+    thermalBitmap: android.graphics.Bitmap?,
     isRecording: Boolean,
-    sessionDuration: String,
-    onStartRecording: () -> Unit,
-    onStopRecording: () -> Unit
+    onNavigateToPreview: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .height(200.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        onClick = onNavigateToPreview
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Circle,
-                        contentDescription = "Recording Status",
-                        tint = if (isRecording) RecordingActive else RecordingInactive
-                    )
-                    Text(
-                        text = "Recording Controls",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-                
-                Text(
-                    text = if (isRecording) "Recording - $sessionDuration" else "Ready to Record",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (isRecording) RecordingActive else MaterialTheme.colorScheme.onSurfaceVariant
+        Box {
+            thermalBitmap?.let { bitmap ->
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = "Thermal Preview",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
                 )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Button(
-                    onClick = onStartRecording,
-                    enabled = !isRecording,
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (!isRecording) RecordingActive else MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.PlayArrow,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Start Recording")
-                }
-
-                OutlinedButton(
-                    onClick = onStopRecording,
-                    enabled = isRecording,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Stop,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Stop Recording")
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DeviceStatusCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Devices,
-                    contentDescription = "Device Status"
-                )
-                Text(
-                    text = "Device Status",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            DeviceStatusIndicator("Camera", true, Icons.Filled.Videocam)
-            DeviceStatusIndicator("Thermal", false, Icons.Filled.Thermostat)
-            DeviceStatusIndicator("GSR", false, Icons.Filled.Sensors)
-            DeviceStatusIndicator("PC Connection", false, Icons.Filled.Computer)
-        }
-    }
-}
-
-@Composable
-private fun DeviceStatusIndicator(
-    deviceName: String,
-    isConnected: Boolean,
-    icon: ImageVector
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = if (isConnected) ConnectionGreen else DisconnectedRed
-            )
-            Text(
-                text = deviceName,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-        
-        Text(
-            text = if (isConnected) "Connected" else "Disconnected",
-            style = MaterialTheme.typography.bodySmall,
-            color = if (isConnected) ConnectionGreen else DisconnectedRed
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CameraPreviewCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Camera,
-                    contentDescription = "Camera Preview"
-                )
-                Text(
-                    text = "Camera Preview",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Card(
-                    modifier = Modifier.fillMaxSize(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
+            } ?: run {
+                // Placeholder for thermal preview
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Videocam,
-                            contentDescription = "Camera Preview Placeholder",
-                            modifier = Modifier.size(48.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            imageVector = Icons.Default.Visibility,
+                            contentDescription = "View thermal preview",
+                            modifier = Modifier.size(32.dp),
+                            tint = MaterialTheme.colorScheme.primary
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Camera Preview\n(Coming Soon)",
+                            text = "Tap to View Thermal Preview",
                             style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
             }
+            
+            // Recording indicator overlay
+            if (isRecording) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
+                        .background(
+                            color = RecordingActive.copy(alpha = 0.9f),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "REC",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            
+            // Navigation hint overlay
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(8.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.OpenInFull,
+                        contentDescription = "View full screen",
+                        modifier = Modifier.size(12.dp),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Full View",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
         }
     }
 }
+
+

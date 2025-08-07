@@ -206,6 +206,7 @@ dependencies {
 
     testImplementation(libs.bundles.enhanced.unit.testing)
     testImplementation(libs.hilt.android.testing)
+    testImplementation("org.apache.commons:commons-math3:3.6.1")
     kspTest(libs.hilt.compiler)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))

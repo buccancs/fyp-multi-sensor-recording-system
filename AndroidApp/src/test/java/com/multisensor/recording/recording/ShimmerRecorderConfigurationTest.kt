@@ -33,7 +33,7 @@ class ShimmerRecorderConfigurationTest : FunSpec({
             val result = shimmerRecorder.initialize()
 
             result shouldBe true
-            verify { mockLogger.info(any()) }
+            verify { mockLogger.info("Initializing ShimmerRecorder (stub implementation)...") }
         }
     }
 
@@ -43,7 +43,7 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             devices shouldNotBe null
             devices.shouldBeInstanceOf<List<String>>()
-            verify { mockLogger.info(any()) }
+            verify { mockLogger.info("=== SHIMMER DEVICE DISCOVERY DIAGNOSTIC ===") }
         }
     }
 
@@ -53,8 +53,8 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.connectDevices(emptyDeviceList)
 
-            result shouldBe false
-            verify { mockLogger.warning(any()) }
+            result shouldBe false // No devices connected, should return false
+            verify { mockLogger.info("Connecting to 0 Shimmer devices...") }
         }
     }
 
@@ -64,8 +64,8 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.connectDevices(deviceAddresses)
 
-            result shouldNotBe null
-            verify { mockLogger.info(any()) }
+            result shouldBe false // Will fail since this is a stub implementation
+            verify { mockLogger.info("Attempting to connect to device: 00:11:22:33:44:55") }
         }
     }
 
@@ -82,8 +82,8 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.setEnabledChannels(deviceId, channels)
 
-            result shouldNotBe null
-            verify { mockLogger.info(any()) }
+            result shouldBe false // Device doesn't exist, should return false
+            verify { mockLogger.error("Device not found: $deviceId") }
         }
     }
 
@@ -105,8 +105,8 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.setEnabledChannels(deviceId, emptyChannels)
 
-            result shouldNotBe null
-            verify { mockLogger.info(any()) }
+            result shouldBe false // Device doesn't exist, should return false
+            verify { mockLogger.error("Device not found: $deviceId") }
         }
     }
 
@@ -114,8 +114,8 @@ class ShimmerRecorderConfigurationTest : FunSpec({
         runTest {
             val result = shimmerRecorder.startStreaming()
 
-            result shouldNotBe null
-            verify { mockLogger.info(any()) }
+            result shouldBe false // No connected devices, should return false
+            verify { mockLogger.info("Starting streaming for 0 devices...") }
         }
     }
 
@@ -123,8 +123,8 @@ class ShimmerRecorderConfigurationTest : FunSpec({
         runTest {
             val result = shimmerRecorder.stopStreaming()
 
-            result shouldNotBe null
-            verify { mockLogger.info(any()) }
+            result shouldBe false // No connected devices, should return false
+            verify { mockLogger.info("Stopping streaming for 0 devices...") }
         }
     }
 
@@ -147,8 +147,8 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.startRecording(sessionId)
 
-            result shouldNotBe null
-            verify { mockLogger.info(any()) }
+            result shouldBe false // Will fail since not initialized and connected
+            verify { mockLogger.error("ShimmerRecorder not initialized or connected") }
         }
     }
 
@@ -167,7 +167,7 @@ class ShimmerRecorderConfigurationTest : FunSpec({
         runTest {
             shimmerRecorder.stopRecording()
 
-            verify { mockLogger.info(any()) }
+            verify { mockLogger.info("Shimmer recording not in progress") }
         }
     }
 
@@ -189,9 +189,11 @@ class ShimmerRecorderConfigurationTest : FunSpec({
             val startResult = shimmerRecorder.startSDLogging()
             val stopResult = shimmerRecorder.stopSDLogging()
 
-            startResult shouldNotBe null
-            stopResult shouldNotBe null
-            verify(atLeast = 2) { mockLogger.info(any()) }
+            startResult shouldBe false // No shimmerBluetoothManager initialized
+            stopResult shouldBe false // No connected devices
+            verify { mockLogger.info("Starting SD logging on connected Shimmer devices") }
+            verify { mockLogger.info("Stopping SD logging on connected Shimmer devices") }
+            verify { mockLogger.error("ShimmerBluetoothManager not initialized") }
         }
     }
 
@@ -199,7 +201,7 @@ class ShimmerRecorderConfigurationTest : FunSpec({
         runTest {
             shimmerRecorder.cleanup()
 
-            verify { mockLogger.info(any()) }
+            verify { mockLogger.info("Starting complete ShimmerRecorder cleanup...") }
         }
     }
 
@@ -218,8 +220,8 @@ class ShimmerRecorderConfigurationTest : FunSpec({
 
             val result = shimmerRecorder.setEnabledChannels(deviceId, allChannels)
 
-            result shouldNotBe null
-            verify { mockLogger.info(any()) }
+            result shouldBe false // Device doesn't exist, should return false
+            verify { mockLogger.error("Device not found: $deviceId") }
         }
     }
 
