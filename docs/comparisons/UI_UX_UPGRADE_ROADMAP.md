@@ -446,7 +446,7 @@ fun AnimatedRecordingButton(
     )
     
     val colour by animateColorAsState(
-        targetValue = if (isRecording) Colour.Red else MaterialTheme.colorScheme.primary,
+        targetValue = if (isRecording) Color.Red else MaterialTheme.colorScheme.primary,
         animationSpec = BucikaThermalAnimations.smoothTransition
     )
     

@@ -33,7 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.Colour
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.multisensor.recording.util.ThermalColorPalette
@@ -54,7 +54,7 @@ fun EnhancedThermalPreview(
             .fillMaxWidth()
             .aspectRatio(4f / 3f),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
@@ -129,7 +129,7 @@ private fun TemperatureOverlay(
 ) {
     Card(
         modifier = modifier.padding(12.dp),
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
         )
     ) {
@@ -139,12 +139,12 @@ private fun TemperatureOverlay(
             Text(
                 text = "Max: ${temperatureRange.max.toInt()}°C",
                 style = MaterialTheme.typography.labelSmall,
-                colour = Colour.Red
+                colour = Color.Red
             )
             Text(
                 text = "Min: ${temperatureRange.min.toInt()}°C",
                 style = MaterialTheme.typography.labelSmall,
-                colour = Colour.Blue
+                colour = Color.Blue
             )
         }
     }
@@ -164,8 +164,8 @@ private fun RecordingIndicator(
     
     Card(
         modifier = modifier.padding(12.dp),
-        colours = CardDefaults.cardColors(
-            containerColor = Colour.Red.copy(alpha = alpha)
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Red.copy(alpha = alpha)
         )
     ) {
         Row(
@@ -175,13 +175,13 @@ private fun RecordingIndicator(
             Box(
                 modifier = Modifier
                     .size(8.dp)
-                    .background(Colour.White, shape = RoundedCornerShape(4.dp))
+                    .background(Color.White, shape = RoundedCornerShape(4.dp))
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = "REC",
                 style = MaterialTheme.typography.labelSmall,
-                colour = Colour.White
+                colour = Color.White
             )
         }
     }
@@ -194,7 +194,7 @@ private fun ColorPaletteIndicator(
 ) {
     Card(
         modifier = modifier.padding(12.dp),
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
         )
     ) {
@@ -226,7 +226,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Colour
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.multisensor.recording.util.ThermalColorPalette
 
@@ -274,7 +274,7 @@ private fun PalettePreviewCard(
     val borderColor = if (isSelected) {
         MaterialTheme.colorScheme.primary
     } else {
-        Colour.Transparent
+        Color.Transparent
     }
     
     Column(
@@ -327,7 +327,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Colour
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -347,7 +347,7 @@ fun AnimatedRecordingButton(
     
     // Colour transition
     val containerColor by animateColorAsState(
-        targetValue = if (isRecording) Colour.Red else MaterialTheme.colorScheme.primary,
+        targetValue = if (isRecording) Color.Red else MaterialTheme.colorScheme.primary,
         animationSpec = tween(300)
     )
     
@@ -384,7 +384,7 @@ fun AnimatedRecordingButton(
                 imageVector = if (recording) Icons.Default.Stop else Icons.Default.FiberManualRecord,
                 contentDescription = if (recording) "Stop Recording" else "Start Recording",
                 modifier = Modifier.size(32.dp),
-                tint = Colour.White
+                tint = Color.White
             )
         }
     }
@@ -411,7 +411,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Colour
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.multisensor.recording.recording.DeviceStatus
@@ -425,7 +425,7 @@ fun SessionStatusCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
@@ -476,17 +476,17 @@ private fun SessionStatusBadge(
     modifier: Modifier = Modifier
 ) {
     val (colour, icon) = when (status.lowercase()) {
-        "recording" -> Colour.Red to Icons.Default.FiberManualRecord
-        "connected" -> Colour.Green to Icons.Default.CheckCircle
-        "disconnected" -> Colour.Gray to Icons.Default.Cancel
-        else -> Colour.Orange to Icons.Default.Warning
+        "recording" -> Color.Red to Icons.Default.FiberManualRecord
+        "connected" -> Color.Green to Icons.Default.CheckCircle
+        "disconnected" -> Color.Gray to Icons.Default.Cancel
+        else -> Color.Orange to Icons.Default.Warning
     }
     
     val animatedColor by animateColorAsState(targetValue = colour)
     
     Card(
         modifier = modifier,
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = animatedColor.copy(alpha = 0.2f)
         )
     ) {
@@ -517,15 +517,15 @@ private fun DeviceStatusChip(
     modifier: Modifier = Modifier
 ) {
     val (statusColor, statusText) = when (status) {
-        DeviceStatus.CONNECTED -> Colour.Green to "Connected"
-        DeviceStatus.DISCONNECTED -> Colour.Red to "Disconnected"
-        DeviceStatus.CONNECTING -> Colour.Orange to "Connecting"
-        DeviceStatus.ERROR -> Colour.Red to "Error"
+        DeviceStatus.CONNECTED -> Color.Green to "Connected"
+        DeviceStatus.DISCONNECTED -> Color.Red to "Disconnected"
+        DeviceStatus.CONNECTING -> Color.Orange to "Connecting"
+        DeviceStatus.ERROR -> Color.Red to "Error"
     }
     
     Card(
         modifier = modifier,
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -641,9 +641,9 @@ enum class ThermalColorPalette(
     val displayName: String,
     val colours: List<Colour>
 ) {
-    IRON("Iron", listOf(Colour.Black, Colour.Red, Colour.Yellow, Colour.White)),
-    RAINBOW("Rainbow", listOf(Colour.Blue, Colour.Green, Colour.Yellow, Colour.Red)),
-    GRAYSCALE("Grayscale", listOf(Colour.Black, Colour.Gray, Colour.White))
+    IRON("Iron", listOf(Color.Black, Color.Red, Color.Yellow, Color.White)),
+    RAINBOW("Rainbow", listOf(Color.Blue, Color.Green, Color.Yellow, Color.Red)),
+    GRAYSCALE("Grayscale", listOf(Color.Black, Color.Gray, Color.White))
 }
 
 // In util/TemperatureRange.kt
