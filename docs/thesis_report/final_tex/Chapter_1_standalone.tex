@@ -1,0 +1,33 @@
+% Standalone wrapper for Chapter_1.tex
+% This file provides the minimal LaTeX structure needed to compile Chapter_1.tex as a standalone document
+% while maintaining compatibility with the main thesis document
+
+\documentclass[11pt,a4paper]{report}
+
+% Essential packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{setspace}
+
+% Page geometry and spacing
+\geometry{margin=2.5cm}
+\onehalfspacing
+
+\begin{document}
+
+% Include the actual chapter content
+\input{Chapter_1}
+
+% Bibliography (minimal for standalone)
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+\end{document}

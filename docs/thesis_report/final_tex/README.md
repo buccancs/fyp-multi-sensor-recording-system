@@ -61,6 +61,24 @@ To compile the full thesis:
 
 Or use: `latexmk -pdf thesis_example.tex` for automatic compilation.
 
+### Standalone Chapter Compilation
+
+For compiling individual chapters as standalone documents, use the provided standalone wrapper:
+
+**Chapter 1 (Introduction)**
+```bash
+pdflatex Chapter_1_standalone.tex
+bibtex Chapter_1_standalone
+pdflatex Chapter_1_standalone.tex
+pdflatex Chapter_1_standalone.tex
+```
+
+The `Chapter_1_standalone.tex` file provides the minimal LaTeX document structure needed to compile `Chapter_1.tex` independently while maintaining full compatibility with the main thesis document.
+
+**Important:** Individual chapter files (e.g., `Chapter_1.tex`) cannot be compiled directly as they contain only content and lack the necessary document structure. Always use either:
+- The main thesis documents (`thesis_example.tex` or `test_partial.tex`)
+- The standalone wrapper (`Chapter_1_standalone.tex`)
+
 ### Custom Document Usage
 
 For custom documents using these references:
