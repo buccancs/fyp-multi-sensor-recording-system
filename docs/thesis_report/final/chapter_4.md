@@ -919,9 +919,7 @@ robust system where all components work together smoothly despite the
 complexities involved, providing high-quality, synchronized data for the
 research objectives. Each solution reinforced the system's reliability
 and validated the chosen design principles in a real-world setting.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](AndroidApp/README.md#L8-L16)
 [\[4\]](AndroidApp/README.md#L82-L90)
 [\[5\]](AndroidApp/README.md#L88-L96)

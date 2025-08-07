@@ -1555,9 +1555,7 @@ the developed system and to demonstrate, in a traceable manner, that the
 engineering effort has been directed towards fulfilling the research
 aims of enabling advanced, contactless physiological data collection for
 the scientific community.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/README.md#L87-L95)
 [\[47\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/README.md#L90-L94)
 GitHub

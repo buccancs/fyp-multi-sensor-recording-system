@@ -2,8 +2,8 @@
 
 ## Table of Contents
 
-4. [Design and Implementation](#design-and-implementation)
-    -
+1. [Design and Implementation](#design-and-implementation)
+---
     4.1. [System Architecture Overview (PC–Android System Design)](#41-system-architecture-overview-pc-android-system-design)
         - 4.1.1. [Architectural Principles and Design Philosophy](#411-architectural-principles-and-design-philosophy)
         - 4.1.2. [Network Architecture and Communication Design](#412-network-architecture-and-communication-design)
@@ -43,7 +43,6 @@
         - 4.9.3. [System Reliability and Maintainability Impact](#493-system-reliability-and-maintainability-impact)
         - 4.9.4. [Error Recovery and Fault Tolerance Mechanisms](#494-error-recovery-and-fault-tolerance-mechanisms)
 ---
-
 This complete chapter presents the detailed design and implementation of the Multi-Sensor Recording System,
 demonstrating how established software engineering principles [Martin2008, Fowler2018] and distributed systems
 theory [Tanenbaum2016, Coulouris2011] have been systematically applied to create a novel contactless physiological
@@ -82,44 +81,44 @@ for each major component:
 **Core System Components:**
 
 - **Android Mobile Application**: complete sensor coordination and data collection platform
-    - Technical documentation: `../android_mobile_application_readme.md`
-    - Quick start guide: `../QUICK_START.md`
+  - Technical documentation: `../android_mobile_application_readme.md`
+  - Quick start guide: `../QUICK_START.md`
 
 - **Python Desktop Controller**: Central coordination hub for multi-device synchronisation
-    - Technical documentation: `../python_desktop_controller_readme.md`
-    - Quick start guide: `../QUICK_START.md`
+  - Technical documentation: `../python_desktop_controller_readme.md`
+  - Quick start guide: `../QUICK_START.md`
 
 - **Multi-Device Synchronisation Framework**: Coordination protocols for distributed operation
-    - Technical documentation: `../multi_device_synchronization_readme.md`
-    - Architecture overview: `../ARCHITECTURE_DIAGRAMS.md`
+  - Technical documentation: `../multi_device_synchronization_readme.md`
+  - Architecture overview: `../ARCHITECTURE_DIAGRAMS.md`
 
 - **Camera Recording System**: Video capture and processing pipeline
-    - See Android Mobile Application and thermal camera integration
-    - Technical documentation: `../thermal_camera_integration_readme.md`
+  - See Android Mobile Application and thermal camera integration
+  - Technical documentation: `../thermal_camera_integration_readme.md`
 
 - **Session Management**: Research workflow coordination and data organization
-    - Technical documentation: `../session_management_readme.md`
-    - Quick start guide: `../QUICK_START.md`
+  - Technical documentation: `../session_management_readme.md`
+  - Quick start guide: `../QUICK_START.md`
 
 - **Networking Protocol**: Cross-platform communication framework
-    - Technical documentation: `../networking_protocol_readme.md`
-    - Quick start guide: `../QUICK_START.md`
+  - Technical documentation: `../networking_protocol_readme.md`
+  - Quick start guide: `../QUICK_START.md`
 
 **Sensor Integration Components:**
 
 - **Shimmer3 GSR+ Integration**: Reference physiological measurement sensor
-    - Technical documentation: `../shimmer_integration_readme.md`
-    - Quick start guide: `../QUICK_START.md`
+  - Technical documentation: `../shimmer_integration_readme.md`
+  - Quick start guide: `../QUICK_START.md`
 
 - **TopDon TC001 Thermal Camera**: Thermal imaging integration
-    - Technical documentation: `../thermal_camera_integration_readme.md`
-    - Quick start guide: `../QUICK_START.md`
+  - Technical documentation: `../thermal_camera_integration_readme.md`
+  - Quick start guide: `../QUICK_START.md`
 
 **Supporting Infrastructure:**
 
 - **Testing and QA Framework**: complete validation system
-    - Technical documentation: `../testing_framework_readme.md`
-    - Quick start guide: `../QUICK_START.md`
+  - Technical documentation: `../testing_framework_readme.md`
+  - Quick start guide: `../QUICK_START.md`
 
 **Validated System Capabilities:**
 
@@ -262,67 +261,67 @@ graph TB
         CAL[Camera Calibration System<br/>Multi-Device Coordination]
         ML[Machine Learning Pipeline<br/>Real-Time Inference]
     end
-    
+---
     subgraph "Distributed Mobile Sensors"
         M1[Mobile Device 1<br/>Android Application]
         M2[Mobile Device 2<br/>Android Application]
         M3[Mobile Device N<br/>Android Application]
     end
-    
+---
     subgraph "Camera Systems"
         CAM1[USB Camera 1<br/>Logitech Brio 4K]
         CAM2[USB Camera 2<br/>Logitech Brio 4K]
     end
-    
+---
     subgraph "Thermal Imaging"
         THERM1[Thermal Camera 1<br/>TopDon TC001+]
         THERM2[Thermal Camera 2<br/>TopDon TC001+]
     end
-    
+---
     subgraph "Physiological Sensors"
         GSR1[Shimmer3 GSR+ 1<br/>Reference Physiological]
         GSR2[Shimmer3 GSR+ 2<br/>Reference Physiological]
     end
-    
+---
     subgraph "Data Processing Pipeline"
         VISION[Computer Vision Engine<br/>OpenCV + MediaPipe]
         THERMAL[Thermal Analysis<br/>Temperature Processing]
         SIGNAL[Signal Processing<br/>Physiological Analysis]
         FUSION[Multi-Modal Fusion<br/>Data Integration]
     end
-    
+---
     PC --- SYNC
     PC --- STORE
     PC --- CAL
     PC --- ML
-    
+---
     SYNC -.->|Network Time Protocol| M1
     SYNC -.->|Network Time Protocol| M2
     SYNC -.->|Network Time Protocol| M3
-    
+---
     PC -.->|JSON WebSocket| M1
     PC -.->|JSON WebSocket| M2
     PC -.->|JSON WebSocket| M3
-    
+---
     CAM1 --> PC
     CAM2 --> PC
-    
+---
     M1 --> THERM1
     M2 --> THERM2
-    
+---
     M1 --> GSR1
     M2 --> GSR2
-    
+---
     PC --> VISION
     THERM1 --> THERMAL
     THERM2 --> THERMAL
     GSR1 --> SIGNAL
     GSR2 --> SIGNAL
-    
+---
     VISION --> FUSION
     THERMAL --> FUSION
     SIGNAL --> FUSION
-    
+---
     FUSION --> STORE
 ```
 
@@ -335,60 +334,60 @@ flowchart TD
         THERMAL[Thermal Sensors] 
         GSR[GSR Sensors]
     end
-    
+---
     subgraph "Local Processing Layer"
         ANDROID[Android Processing]
         BUFFER[Local Buffering]
         COMPRESS[Data Compression]
         VALIDATE[Quality Validation]
     end
-    
+---
     subgraph "Network Communication Layer"
         PROTOCOL[WebSocket Protocol]
         ENCRYPT[Data Encryption]
         SYNC[Time Synchronisation]
         TRANSFER[Data Transfer]
     end
-    
+---
     subgraph "Central Processing Layer"
         RECEIVE[Data Reception]
         AGGREGATE[Data Aggregation]
         ANALYSIS[Real-time Analysis]
         STORAGE[Persistent Storage]
     end
-    
+---
     subgraph "Quality Assurance Layer"
         MONITOR[Quality Monitoring]
         ALERT[Alert System]
         RECOVERY[Error Recovery]
         REPORT[Status Reporting]
     end
-    
+---
     CAM --> ANDROID
     THERMAL --> ANDROID
     GSR --> ANDROID
-    
+---
     ANDROID --> BUFFER
     BUFFER --> COMPRESS
     COMPRESS --> VALIDATE
-    
+---
     VALIDATE --> PROTOCOL
     PROTOCOL --> ENCRYPT
     ENCRYPT --> SYNC
     SYNC --> TRANSFER
-    
+---
     TRANSFER --> RECEIVE
     RECEIVE --> AGGREGATE
     AGGREGATE --> ANALYSIS
     ANALYSIS --> STORAGE
-    
+---
     ANALYSIS --> MONITOR
     MONITOR --> ALERT
     ALERT --> RECOVERY
     RECOVERY --> REPORT
-    
+---
     REPORT -.-> ANDROID
-    
+---
     style CAM fill:#ffeb3b
     style THERMAL fill:#ff5722
     style GSR fill:#4caf50
@@ -448,31 +447,31 @@ graph TD
         NAV[Navigation Compose<br/>Screen Coordination]
         THEME[Material 3 Theme<br/>Design System]
     end
-    
+---
     subgraph "Domain Layer"
         UC[Use Cases<br/>Business Logic]
         REPO[Repository Interfaces<br/>Abstractions]
         ENTITY[Domain Entities<br/>Data Models]
     end
-    
+---
     subgraph "Data Layer"
         IMPL[Repository Implementations]
         API[Network API<br/>PC Communication]
         LOCAL[Local Storage<br/>Session Data]
         SENSOR[Sensor Managers<br/>Camera, Thermal, GSR]
     end
-    
+---
     UI --> VM
     VM --> UC
     UC --> REPO
     REPO --> ENTITY
     NAV --> UI
     THEME --> UI
-    
+---
     IMPL --> API
     IMPL --> LOCAL
     IMPL --> SENSOR
-    
+---
     REPO -.-> IMPL
 ```
 
@@ -505,10 +504,10 @@ The DevicesScreen implements complete device management capabilities with real-t
 @Composable
 fun DevicesScreen(viewModel: DevicesViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
-    
+---
     LazyColumn {
         item { DeviceOverviewCard(uiState, onRefresh = { viewModel.refreshAllDevices() }) }
-        
+---
         // Individual device cards with full functionality
         item { 
             DeviceCard(
@@ -525,6 +524,7 @@ fun DevicesScreen(viewModel: DevicesViewModel = hiltViewModel()) {
 ```
 
 Key Features:
+
 - **Real-time Status Monitoring**: Live updates of device connection states, battery levels, signal strength, and operational parameters
 - **Interactive Connection Management**: One-touch connection/disconnection controls with progress indicators and status feedback
 - **complete Device Testing**: Built-in diagnostic functions for validating device functionality and connection quality
@@ -538,10 +538,10 @@ The CalibrationScreen provides a sophisticated calibration management system wit
 @Composable
 fun CalibrationScreen(viewModel: CalibrationViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
-    
+---
     LazyColumn {
         item { CalibrationOverviewCard(uiState) }
-        
+---
         // Individual calibration components
         item {
             CalibrationItemCard(
@@ -556,6 +556,7 @@ fun CalibrationScreen(viewModel: CalibrationViewModel = hiltViewModel()) {
 ```
 
 Advanced Calibration Features:
+
 - **Multi-Device Calibration Support**: Independent calibration workflows for cameras, thermal sensors, and Shimmer devices
 - **Real-time Progress Tracking**: Linear progress indicators with percentage completion and estimated time remaining
 - **System Validation Integration**: complete validation with error reporting and quality assessment
@@ -569,18 +570,18 @@ The FilesScreen implements a complete file management interface designed specifi
 @Composable
 fun FilesScreen(viewModel: FileViewViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
-    
+---
     Column {
         FilesOverviewCard(
             sessionCount = uiState.sessions.size,
             totalStorage = uiState.totalStorageUsed
         )
-        
+---
         SearchTextField(
             value = uiState.searchQuery,
             onValueChange = { viewModel.onSearchQueryChanged(it) }
         )
-        
+---
         LazyColumn {
             items(uiState.filteredSessions) { session ->
                 SessionCard(
@@ -595,6 +596,7 @@ fun FilesScreen(viewModel: FileViewViewModel = hiltViewModel()) {
 ```
 
 Research-Oriented File Management Features:
+
 - **Session-Based Organization**: Hierarchical organization by recording sessions with metadata preservation
 - **Advanced Search Functionality**: Real-time search across session IDs, device types, and file metadata
 - **Storage Monitoring**: Visual storage usage indicators with warning thresholds and cleanup recommendations
@@ -611,7 +613,7 @@ The OnboardingActivity implements a modern multi-page onboarding experience that
 @Composable
 fun OnboardingFlow(onComplete: () -> Unit, onRequestPermissions: (List<String>) -> Unit) {
     val pagerState = rememberPagerState(pageCount = { 4 })
-    
+---
     HorizontalPager(state = pagerState) { page ->
         when (page) {
             0 -> WelcomePage()
@@ -624,6 +626,7 @@ fun OnboardingFlow(onComplete: () -> Unit, onRequestPermissions: (List<String>) 
 ```
 
 Onboarding Experience Components:
+
 - **Welcome and Feature Showcase**: Interactive introduction to multi-sensor recording capabilities with visual demonstrations
 - **Permission Management**: complete permission requests with detailed explanations for research context
 - **Setup Guidance**: Step-by-step configuration assistance with validation and troubleshooting support
@@ -639,12 +642,12 @@ The UI implementation leverages sophisticated state management patterns that ens
 @Composable
 fun RecordingScreen(viewModel: MainViewModelRefactored = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+---
     // Optimized recomposition with stable composition
     remember(uiState.isRecording) {
         // Update only recording-specific UI components
     }
-    
+---
     remember(uiState.deviceStates) {
         // Update only device status indicators
     }
@@ -652,6 +655,7 @@ fun RecordingScreen(viewModel: MainViewModelRefactored = hiltViewModel()) {
 ```
 
 Performance Optimisation Features:
+
 - **Selective Recomposition**: Minimal UI updates through strategic state partitioning and stable composition
 - **Memory Efficiency**: Optimized component lifecycle management with automatic resource cleanup
 - **Background Thread Integration**: Seamless integration with background sensor data processing without UI blocking
@@ -681,7 +685,7 @@ class MultiSensorCoordinator @Inject constructor(
     private val networkService: NetworkService
 ) {
     private val coordinatorScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    
+---
     suspend fun startCoordinatedRecording(sessionConfig: SessionConfiguration): Result<Unit> {
         return withContext(Dispatchers.Default) {
             try {
@@ -691,15 +695,15 @@ class MultiSensorCoordinator @Inject constructor(
                     async { thermalService.startRecording(sessionConfig.thermalConfig) },
                     async { shimmerService.startRecording(sessionConfig.shimmerConfig) }
                 )
-                
+---
                 // Start background monitoring
                 launch { monitorSystemPerformance() }
                 launch { manageDataFlow() }
                 launch { maintainNetworkSync() }
-                
+---
                 // Wait for all sensors to initialise
                 val results = sensorOperations.awaitAll()
-                
+---
                 if (results.all { it.isSuccess }) {
                     Result.success(Unit)
                 } else {
@@ -710,7 +714,7 @@ class MultiSensorCoordinator @Inject constructor(
             }
         }
     }
-    
+---
     private suspend fun monitorSystemPerformance() {
         while (coordinatorScope.isActive) {
             val performance = SystemPerformanceMonitor.getCurrentMetrics()
@@ -750,7 +754,7 @@ class PowerOptimizationManager @Inject constructor(
     suspend fun optimizePowerConsumption(): PowerOptimizationResult {
         val currentBatteryLevel = batteryMonitor.getCurrentLevel()
         val estimatedSessionDuration = calculateEstimatedDuration()
-        
+---
         return when {
             currentBatteryLevel < CRITICAL_BATTERY_THRESHOLD -> {
                 applyCriticalPowerMode()
@@ -766,17 +770,17 @@ class PowerOptimizationManager @Inject constructor(
             }
         }
     }
-    
+---
     private suspend fun applyCriticalPowerMode(): PowerOptimizationResult {
         // Reduce sensor sampling rates
         sensorManager.reduceSamplingRates(CRITICAL_MODE_REDUCTION)
-        
+---
         // Lower video quality settings
         performanceController.adjustVideoQuality(VideoQuality.POWER_SAVING)
-        
+---
         // Minimis\1 background processing
         performanceController.pauseNonEssentialOperations()
-        
+---
         return PowerOptimizationResult.criticalMode()
     }
 }
@@ -805,7 +809,7 @@ fun RecordingScreen(
     viewModel: MainViewModelRefactored = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+---
     // Efficient recomposition with state-driven UI
     Column(
         modifier = Modifier
@@ -821,7 +825,7 @@ fun RecordingScreen(
             onStartRecording = { viewModel.startRecording() },
             onStopRecording = { viewModel.stopRecording() }
         )
-        
+---
         DeviceStatusCard() // Stable components avoid unnecessary recomposition
         CameraPreviewCard()
     }
@@ -867,23 +871,23 @@ class CameraRecorder @Inject constructor(
     private var mediaRecorder: MediaRecorder? = null
     private var imageReader: ImageReader? = null
     private var captureSession: CameraCaptureSession? = null
-    
+---
     suspend fun startRecording(config: CameraConfiguration): Result<Unit> {
         return withContext(Dispatchers.Main) {
             try {
                 // Validate configuration parameters
                 configValidator.validate(config)
-                
+---
                 // Setup dual capture: video + RAW images
                 setupMediaRecorder(config)
                 setupImageReader(config)
-                
+---
                 // Create capture session with multiple targets
                 val surfaces = listOf(
                     mediaRecorder!!.surface,
                     imageReader!!.surface
                 )
-                
+---
                 cameraDevice.createCaptureSession(
                     surfaces,
                     object : CameraCaptureSession.StateCallback() {
@@ -897,14 +901,14 @@ class CameraRecorder @Inject constructor(
                     },
                     backgroundHandler
                 )
-                
+---
                 Result.success(Unit)
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
-    
+---
     private fun setupMediaRecorder(config: CameraConfiguration) {
         mediaRecorder = MediaRecorder().apply {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
@@ -917,7 +921,7 @@ class CameraRecorder @Inject constructor(
             prepare()
         }
     }
-    
+---
     private fun setupImageReader(config: CameraConfiguration) {
         imageReader = ImageReader.newInstance(
             config.imageWidth,
@@ -959,7 +963,7 @@ The Android application implements a complete dependency injection framework usi
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    
+---
     @Provides
     @Singleton
     fun provideSessionManager(
@@ -967,7 +971,7 @@ object AppModule {
         storageManager: StorageManager,
         securityManager: SecurityManager
     ): SessionManager = SessionManagerImpl(networkManager, storageManager, securityManager)
-    
+---
     @Provides
     @Singleton
     fun providePerformanceOptimizer(
@@ -979,7 +983,7 @@ object AppModule {
 @Module
 @InstallIn(SingletonComponent::class)
 object SecurityModule {
-    
+---
     @Provides
     @Singleton
     fun provideSecurityManager(
@@ -999,17 +1003,17 @@ class PowerManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val logger: Logger
 ) {
-    
+---
     private var powerSaveMode: PowerSaveMode = PowerSaveMode.NORMAL
     private var adaptiveFrameRateEnabled: Boolean = true
     private var backgroundProcessingOptimized: Boolean = false
-    
+---
     enum class PowerSaveMode {
         NORMAL,
         OPTIMIZED,
         AGGRESSIVE
     }
-    
+---
     fun startOptimization() {
         monitoringJob = scope.launch {
             while (isActive) {
@@ -1020,7 +1024,7 @@ class PowerManager @Inject constructor(
             }
         }
     }
-    
+---
     private suspend fun optimizePowerSettings() {
         when {
             currentBatteryLevel < 20 -> setPowerSaveMode(PowerSaveMode.AGGRESSIVE)
@@ -1034,7 +1038,7 @@ class NetworkOptimizer @Inject constructor(
     private val connectivityManager: ConnectivityManager,
     private val logger: Logger
 ) {
-    
+---
     fun optimizeNetworkUsage() {
         val networkInfo = connectivityManager.activeNetworkInfo
         when {
@@ -1059,10 +1063,10 @@ class AnalyticsManager @Inject constructor(
     private val context: Context,
     private val logger: Logger
 ) {
-    
+---
     private val metricsCollector = MetricsCollector()
     private val performanceAnalyzer = PerformanceAnalyzer()
-    
+---
     fun trackRecordingSession(sessionConfig: SessionConfiguration) {
         val sessionMetrics = SessionMetrics(
             sessionId = sessionConfig.sessionId,
@@ -1070,10 +1074,10 @@ class AnalyticsManager @Inject constructor(
             deviceCapabilities = getDeviceCapabilities(),
             networkConditions = getCurrentNetworkConditions()
         )
-        
+---
         metricsCollector.startCollection(sessionMetrics)
     }
-    
+---
     fun analyzeDataQuality(datastream: DataStream): QualityReport {
         return performanceAnalyzer.assessQuality(
             datastream = datastream,
@@ -1093,7 +1097,7 @@ class PrivacyManager @Inject constructor(
     private val encryptedFileManager: EncryptedFileManager,
     private val secureLogger: SecureLogger
 ) {
-    
+---
     fun enablePrivacyMode() {
         // Enable complete privacy protections
         encryptedFileManager.enableEncryption()
@@ -1101,7 +1105,7 @@ class PrivacyManager @Inject constructor(
         disableScreenCapture()
         enableDataAnonymization()
     }
-    
+---
     private fun enableDataAnonymization() {
         // Implement real-time data anonymization for sensitive research data
         anonymizationEngine.enableRealTimeProcessing()
@@ -1109,12 +1113,12 @@ class PrivacyManager @Inject constructor(
 }
 
 class SecurityUtils @Inject constructor() {
-    
+---
     fun validateDataIntegrity(data: ByteArray): Boolean {
         val checksum = calculateChecksum(data)
         return verifyDataIntegrity(data, checksum)
     }
-    
+---
     fun encryptSensitiveData(data: ByteArray, keyId: String): EncryptedData {
         return cryptographyManager.encryptWithKey(data, keyId)
     }
@@ -1160,36 +1164,36 @@ class ThermalRecorder @Inject constructor(
 ) {
     private var thermalDevice: TopdonDevice? = null
     private var frameProcessor: ThermalFrameProcessor? = null
-    
+---
     suspend fun connectDevice(): Result<TopdonDevice> {
         return withContext(Dispatchers.IO) {
             try {
                 val availableDevices = usbManager.deviceList.values
                     .filter { it.vendorId == TOPDON_VENDOR_ID }
-                
+---
                 if (availableDevices.isEmpty()) {
                     return@withContext Result.failure(
                         NoThermalDeviceException("No Topdon devices found")
                     )
                 }
-                
+---
                 val device = availableDevices.first()
                 val connection = usbManager.openDevice(device)
-                
+---
                 thermalDevice = TopdonDevice(device, connection).apply {
                     initialise()
                     setFrameCallback { frame ->
                         processFrame(frame)
                     }
                 }
-                
+---
                 Result.success(thermalDevice!!)
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
-    
+---
     private fun processFrame(frame: ThermalFrame) {
         frameProcessor?.process(frame) { processedFrame ->
             // Save frame data and update preview
@@ -1234,7 +1238,7 @@ class ShimmerRecorder @Inject constructor(
     private val shimmerManager: ShimmerManager
 ) {
     private var connectedShimmers: MutableMap<String, Shimmer> = mutableMapOf()
-    
+---
     suspend fun discoverAndConnect(): Result<List<Shimmer>> {
         return withContext(Dispatchers.IO) {
             try {
@@ -1242,17 +1246,17 @@ class ShimmerRecorder @Inject constructor(
                 val connectionResults = discoveredDevices.map { device ->
                     async { connectToShimmer(device) }
                 }.awaitAll()
-                
+---
                 val connectedDevices = connectionResults.mapNotNull { it.getOrNull() }
                 connectedShimmers.putAll(connectedDevices.associateBy { it.macAddress })
-                
+---
                 Result.success(connectedDevices)
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
-    
+---
     private suspend fun connectToShimmer(device: BluetoothDevice): Result<Shimmer> {
         return try {
             val shimmer = shimmerManager.createShimmer(device)
@@ -1266,14 +1270,14 @@ class ShimmerRecorder @Inject constructor(
             Result.failure(e)
         }
     }
-    
+---
     private fun processGSRData(data: ShimmerData) {
         // Process and validate GSR data
         val processedData = SignalProcessor.processGSRSignal(data)
-        
+---
         // Apply quality assessment
         val qualityMetrics = QualityAssessor.assessSignalQuality(processedData)
-        
+---
         // Store data with metadata
         DataManager.storeGSRData(processedData, qualityMetrics)
     }
@@ -1323,6 +1327,7 @@ The desktop application implements advanced distributed systems patterns while p
 **Multi-Interface Integration**: The desktop controller implements a sophisticated dual-interface architecture that seamlessly integrates traditional desktop GUI applications with modern web-based dashboards. This design enables both local operator control through the PyQt5 interface and remote monitoring capabilities through the web dashboard, providing flexibility for different research scenarios and operational requirements.
 
 **Native GUI Implementation** (`PythonApp/enhanced_main_with_web.py`):
+
 ```python
 class EnhancedMainWindow(QMainWindow):
     def __init__(self):
@@ -1332,7 +1337,7 @@ class EnhancedMainWindow(QMainWindow):
         self.session_manager = SessionManager()
         self.setup_enhanced_ui()
         self.setup_web_integration()
-        
+---
     def setup_web_integration(self):
         """Initialise web dashboard with native GUI integration"""
         from web_ui.web_dashboard import WebDashboardServer
@@ -1341,7 +1346,7 @@ class EnhancedMainWindow(QMainWindow):
             port=5000,
             controller=self
         )
-        
+---
     def start_web_server(self):
         """Start web dashboard server with integrated control"""
         if self.web_dashboard:
@@ -1374,7 +1379,7 @@ class WebDashboardServer:
             "pc_controller": {"status": "idle"}
         }
         self._setup_comprehensive_api()
-        
+---
     def _setup_comprehensive_api(self):
         """Setup complete API for session, device, and system management"""
         @self.app.route("/api/session/start", methods=["POST"])
@@ -1384,11 +1389,11 @@ class WebDashboardServer:
             if self.controller:
                 success = self.controller.start_recording_session(session_id)
                 return jsonify({"success": success, "session_id": session_id})
-                
+---
         @self.app.route("/api/devices")
         def get_devices():
             return jsonify(self.device_status)
-            
+---
         @self.socketio.on("connect")
         def handle_connect():
             emit("status_update", {
@@ -1426,12 +1431,12 @@ class PerformanceOptimizer:
             CPUOptimizationStrategy(),
             NetworkOptimizationStrategy()
         ]
-        
+---
     async def optimize_system_performance(self):
         """Real-time performance optimisation with adaptive strategies"""
         current_metrics = await self.collect_system_metrics()
         self.metrics_history.append(current_metrics)
-        
+---
         for strategy in self.optimization_strategies:
             if strategy.should_apply(current_metrics):
                 await strategy.apply_optimization(current_metrics)
@@ -1593,9 +1598,7 @@ The ecosystem design enables flexible sensor configuration for different researc
 consistent data formats and synchronisation across all sensing modalities. Sensor integration includes automatic
 detection and configuration capabilities that minimis\1 setup complexity and reduce the potential for configuration
 errors.
-
 ---
-
 ## Distributed System Design
 
 The complete distributed system design represents the sophisticated architectural core that enables precise
@@ -1879,9 +1882,7 @@ The system implements multiple layers of fault tolerance:
 2. **Device-Level Redundancy**: Continued operation with subset of devices when failures occur
 3. **Session-Level Recovery**: Session continuation after transient failures with data integrity preservation
 4. **Data-Level Protection**: complete checksums and validation at all data transfer points
-
 ---
-
 ## Android Application Architecture
 
 The Android application follows Clean Architecture principles with clear separation between presentation, domain, and
@@ -2105,9 +2106,7 @@ class ShimmerRecorder @Inject constructor(
     }
 }
 ```
-
 ---
-
 ## Desktop Controller Architecture
 
 The Python desktop controller serves as the central coordination hub, implementing sophisticated session management,
@@ -2405,9 +2404,7 @@ class CalibrationManager:
 
         return PatternDetectionResult.not_found()
 ```
-
 ---
-
 ## Communication and Networking Design
 
 ### Protocol Architecture
@@ -2577,9 +2574,7 @@ class DataStreamingService:
                 # Exponential backoff for error recovery
                 await asyncio.sleep(min(2 ** consecutive_errors, 30))
 ```
-
 ---
-
 ## 4.6 Security Architecture and Implementation
 
 The Multi-Sensor Recording System implements a complete security framework designed specifically for research environments while maintaining the flexibility and usability required for scientific applications [Anderson2020]. The security architecture balances rigorous data protection with practical research workflows, recognising that academic research environments have unique security requirements distinct from commercial applications [Denning2016].
@@ -2589,6 +2584,7 @@ The Multi-Sensor Recording System implements a complete security framework desig
 The Multi-Sensor Recording System implements a complete security framework designed specifically for research environments handling sensitive physiological data [Anderson2020]. The security architecture follows established security engineering principles while addressing the unique requirements of multi-sensor research platforms [Denning2016].
 
 #### Defense in Depth
+
 Multiple layers of security controls protect research data throughout the entire data lifecycle:
 
 - **Application Layer**: Hardware-backed encryption, secure token generation, and complete input validation
@@ -2597,6 +2593,7 @@ Multiple layers of security controls protect research data throughout the entire
 - **Privacy Layer**: GDPR-compliant consent management, automatic PII sanitisation, and data anonymization
 
 #### Hardware-Backed Security Foundation
+
 The system leverages Android Keystore for hardware-backed encryption:
 
 ```kotlin
@@ -2618,13 +2615,13 @@ class SecurityUtils(
             val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
             keyStore.load(null)
             val secretKey = keyStore.getKey(KEY_ALIAS, null) as SecretKey
-            
+---
             val cipher = Cipher.getInstance(AES_TRANSFORMATION)
             cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-            
+---
             val iv = cipher.iv
             val encryptedData = cipher.doFinal(data)
-            
+---
             EncryptedData(encryptedData, iv)
         } catch (e: Exception) {
             logger.error("Encryption failed", e)
@@ -2635,6 +2632,7 @@ class SecurityUtils(
 ```
 
 #### Zero-Trust Authentication Model
+
 All communications require cryptographically secure authentication:
 
 ```kotlin
@@ -2652,7 +2650,9 @@ private fun validateAuthToken(token: String): Boolean {
 ```
 
 #### Research Data Protection
+
 Specialized controls for sensitive physiological data:
+
 - Hardware-backed AES-GCM encryption for all stored research data
 - Cryptographic file wiping ensuring secure deletion
 - Session-based data isolation with automatic encrypted cleanup
@@ -2663,6 +2663,7 @@ Specialized controls for sensitive physiological data:
 The system implements complete GDPR-compliant privacy management with end-to-end encryption for all sensitive research data [GDPR2018].
 
 #### Hardware-Backed Encryption for Data at Rest
+
 The `EncryptedFileManager` provides transparent encryption for all sensitive files:
 
 ```kotlin
@@ -2706,6 +2707,7 @@ class EncryptedFileManager @Inject constructor(
 ```
 
 #### GDPR-Compliant Privacy Management
+
 The `PrivacyManager` implements complete consent tracking and data anonymization:
 
 ```kotlin
@@ -2723,7 +2725,7 @@ class PrivacyManager @Inject constructor(
                 .putString(KEY_PARTICIPANT_ID, participantId ?: generateAnonymousId())
                 .putString(KEY_STUDY_ID, studyId)
                 .apply()
-            
+---
             logger.info("Privacy consent recorded successfully")
             true
         } catch (e: Exception) {
@@ -2734,19 +2736,20 @@ class PrivacyManager @Inject constructor(
 
     fun anonymizeMetadata(metadata: Map<String, Any>): Map<String, Any> {
         val anonymizedMetadata = metadata.toMutableMap()
-        
+---
         SENSITIVE_METADATA_KEYS.forEach { key ->
             if (anonymizedMetadata.containsKey(key)) {
                 anonymizedMetadata[key] = "[ANONYMIZED]"
             }
         }
-        
+---
         return anonymizedMetadata
     }
 }
 ```
 
 #### Secure Logging with PII Protection
+
 The `SecureLogger` automatically sanitizes sensitive information from logs:
 
 ```kotlin
@@ -2777,7 +2780,9 @@ class SecureLogger @Inject constructor(
 ```
 
 #### Data Retention and Deletion Policies
+
 Automated data lifecycle management ensures compliance:
+
 - Configurable retention periods (default: 365 days)
 - Automatic deletion recommendations based on study completion
 - Cryptographic file wiping for secure data destruction
@@ -2788,6 +2793,7 @@ Automated data lifecycle management ensures compliance:
 The system implements end-to-end TLS/SSL encryption for all network communications, transforming from development-oriented plain TCP to production-ready secure channels [Rescorla2018].
 
 #### TLS/SSL Encrypted Communication
+
 The `SecureJsonSocketClient` replaces plain TCP sockets with encrypted communication:
 
 ```kotlin
@@ -2803,7 +2809,7 @@ class SecureJsonSocketClient @Inject constructor(
         try {
             val sslContext = securityUtils.createSecureSSLContext()
             val socketFactory = sslContext?.socketFactory ?: SSLSocketFactory.getDefault()
-            
+---
             sslSocket = socketFactory.createSocket() as SSLSocket
             sslSocket?.apply {
                 enabledProtocols = arrayOf("TLSv1.3", "TLSv1.2")
@@ -2812,14 +2818,14 @@ class SecureJsonSocketClient @Inject constructor(
                     "TLS_CHACHA20_POLY1305_SHA256",
                     "TLS_AES_128_GCM_SHA256"
                 )
-                
+---
                 connect(InetSocketAddress(ip, port), CONNECTION_TIMEOUT_MS)
                 startHandshake()
-                
+---
                 inputStream = BufferedInputStream(getInputStream())
                 outputStream = BufferedOutputStream(getOutputStream())
             }
-            
+---
             isConnected = true
             logger.info("Secure SSL connection established")
             true
@@ -2834,7 +2840,7 @@ class SecureJsonSocketClient @Inject constructor(
             logger.warn("Invalid authentication token rejected")
             return
         }
-        
+---
         val authMessage = JsonMessage(
             action = "authenticate",
             data = JSONObject().put("token", token)
@@ -2845,6 +2851,7 @@ class SecureJsonSocketClient @Inject constructor(
 ```
 
 #### Certificate Pinning and Validation
+
 Production deployments implement certificate pinning for enhanced security:
 
 ```kotlin
@@ -2865,7 +2872,7 @@ private fun createPinnedTrustManager(): X509TrustManager {
         override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
             val serverCert = chain[0]
             val serverFingerprint = calculateCertificateFingerprint(serverCert)
-            
+---
             if (!PINNED_CERTIFICATES.contains("sha256/$serverFingerprint")) {
                 throw Exception("Certificate pinning validation failed")
             }
@@ -2875,6 +2882,7 @@ private fun createPinnedTrustManager(): X509TrustManager {
 ```
 
 #### Authentication and Authorization Framework
+
 complete authentication system with token validation:
 
 ```kotlin
@@ -2882,13 +2890,13 @@ private fun validateAuthToken(token: String): Boolean {
     if (token.isEmpty() || token.length < AUTH_TOKEN_LENGTH) {
         return false
     }
-    
+---
     val entropy = calculateTokenEntropy(token)
     if (entropy < MINIMUM_TOKEN_ENTROPY) {
         logger.warn("Authentication token rejected: insufficient entropy")
         return false
     }
-    
+---
     return true
 }
 
@@ -2897,7 +2905,7 @@ private fun calculateTokenEntropy(token: String): Double {
     token.forEach { char ->
         charFrequency[char] = charFrequency.getOrDefault(char, 0) + 1
     }
-    
+---
     return charFrequency.values.sumOf { freq ->
         val probability = freq.toDouble() / token.length
         -probability * kotlin.math.log2(probability)
@@ -2906,6 +2914,7 @@ private fun calculateTokenEntropy(token: String): Double {
 ```
 
 #### Secure Configuration Management
+
 Production security configuration with environment-specific settings:
 
 ```json
@@ -2928,6 +2937,7 @@ Production security configuration with environment-specific settings:
   }
 }
 ```
+
 ```
 
 ### 4.6.4 Security Monitoring and Audit Framework
@@ -2945,12 +2955,12 @@ class SecurityUtilsTest {
     fun testEncryptionDecryption() {
         val testData = "Sensitive research data".toByteArray()
         val encryptedData = securityUtils.encryptData(testData)
-        
+---
         assertNotNull("Encryption should succeed", encryptedData)
         assertNotEquals("Encrypted data should differ from original", 
                        testData.contentToString(), 
                        encryptedData?.data?.contentToString())
-        
+---
         val decryptedData = securityUtils.decryptData(encryptedData!!)
         assertEquals("Decryption should restore original data",
                     testData.contentToString(),
@@ -2961,7 +2971,7 @@ class SecurityUtilsTest {
     fun testAuthTokenGeneration() {
         val token1 = securityUtils.generateAuthToken()
         val token2 = securityUtils.generateAuthToken()
-        
+---
         assertTrue("Token should meet minimum length", token1.length >= 32)
         assertNotEquals("Tokens should be unique", token1, token2)
         assertTrue("Token should pass validation", securityUtils.validateAuthToken(token1))
@@ -2971,7 +2981,7 @@ class SecurityUtilsTest {
     fun testSecureFileDeletion() {
         val testFile = File(context.filesDir, "test_secure_delete.tmp")
         testFile.writeText("Sensitive content")
-        
+---
         assertTrue("File should exist initially", testFile.exists())
         assertTrue("Secure deletion should succeed", 
                   encryptedFileManager.secureDeleteFile(testFile))
@@ -2981,6 +2991,7 @@ class SecurityUtilsTest {
 ```
 
 #### Privacy Compliance Testing and Validation
+
 complete GDPR compliance verification:
 
 ```kotlin
@@ -2988,19 +2999,19 @@ complete GDPR compliance verification:
 fun testPrivacyConsentManagement() {
     val participantId = "PARTICIPANT_001"
     val studyId = "GSR_STUDY_2024"
-    
+---
     assertTrue("Consent recording should succeed",
               privacyManager.recordConsent(participantId, studyId))
-    
+---
     assertTrue("Consent should be verified",
               privacyManager.hasValidConsent())
-    
+---
     val metadata = mapOf(
         "participant_name" to "John Doe",
         "email" to "john@example.com",
         "session_data" to "research_measurements"
     )
-    
+---
     val anonymized = privacyManager.anonymizeMetadata(metadata)
     assertEquals("PII should be anonymized", "[ANONYMIZED]", anonymized["participant_name"])
     assertEquals("PII should be anonymized", "[ANONYMIZED]", anonymized["email"])
@@ -3009,6 +3020,7 @@ fun testPrivacyConsentManagement() {
 ```
 
 #### Security Audit and Compliance Reporting
+
 Automated security assessment with detailed reporting:
 
 ```kotlin
@@ -3034,31 +3046,37 @@ class SecurityAuditReport {
 ```
 
 #### Security Performance Metrics and Achievements
+
 Quantitative security assessment results:
 
 **Encryption Performance:**
+
 - AES-GCM encryption throughput: 2.3 GB/s on target hardware
 - Hardware-backed key generation: <50ms average latency
 - File encryption overhead: <5% for typical research files
 
 **Authentication Security:**
+
 - Token entropy validation: 100% compliance with minimum 4.0 bits/character
 - Authentication success rate: 99.97% for valid tokens
 - Brute force resistance: >2^128 computational complexity
 
 **Privacy Compliance Metrics:**
+
 - GDPR Article 25 compliance: 100% through privacy-by-design architecture
 - PII detection accuracy: 99.8% across thorough test datasets
 - Data anonymization coverage: 100% for identified sensitive fields
 - Consent management completeness: 100% with audit trail generation
 
 **Security Testing Coverage:**
+
 - Total security test methods: 47 across Android and Python platforms
 - Critical security functions coverage: 100%
 - Security regression testing: Automated with CI/CD integration
 - Penetration testing scenarios: 15 attack vectors validated
 
 #### Security Framework Implementation
+
 Real-time security capabilities through integrated components:
 
 ```kotlin
@@ -3080,6 +3098,7 @@ class SecurityUtils(
 ```
 
 The complete security implementation transforms the Multi-Sensor Recording System from a development prototype into a production-ready research platform capable of handling sensitive physiological data while maintaining full compliance with privacy regulations and research security standards.
+
 ```
 
 #### Security Compliance Framework
@@ -3101,9 +3120,7 @@ The complete security framework implementation achieved significant improvements
 | **Documentation Coverage** | 15% | 95% | 80% increase |
 
 The security architecture successfully balances research usability requirements with complete data protection, establishing a robust foundation for sensitive physiological data collection and analysis in academic research environments.
-
 ---
-
 ## 4.7 Data Processing Pipeline
 
 ### 4.7.1 Real-Time Processing Architecture
@@ -3240,9 +3257,7 @@ class SessionSynchronizer:
             attempts=sync_attempts
         )
 ```
-
 ---
-
 ## 4.8 Implementation Challenges and Solutions
 
 ### 4.8.1 Multi-Platform Compatibility
@@ -3320,7 +3335,7 @@ class AdaptiveSecurityManager:
     def __init__(self, environment_type: str = "research_lab"):
         self.security_level = self._determine_security_level(environment_type)
         self.protection_layers = self._configure_protection_layers()
-    
+---
     def _configure_protection_layers(self) -> Dict[str, bool]:
         """Configure security layers based on deployment environment"""
         if self.security_level == "research_lab":
@@ -3356,14 +3371,12 @@ def _check_for_secrets(self, line: str, file_path: Path) -> bool:
                        "multisensor/recording", "com/multisensor"]
     ):
         return False  # Skip legitimate code patterns
-    
+---
     return self._apply_security_patterns(line)
 ```
 
 **Results**: Achieved 78% reduction in total security issues (67 → 15) with 100% elimination of critical vulnerabilities while maintaining research workflow efficiency.
-
 ---
-
 ## Technology Stack and Design Decisions
 
 ### Android Technology Choices
@@ -3371,6 +3384,7 @@ def _check_for_secrets(self, line: str, file_path: Path) -> bool:
 **Kotlin with Jetpack Compose and Camera2 API**: Modern Android development stack combining Kotlin's type safety with Jetpack Compose's declarative UI framework and Camera2 API for professional-grade camera control. The Compose BOM (2024.12.01) ensures consistent versioning across all Compose libraries, while Material 3 provides modern design system implementation with dynamic theming support.
 
 **Jetpack Compose Architecture**: Declarative UI toolkit that revolutionizes Android UI development by eliminating the need for XML layouts and complex View hierarchies. The implementation includes:
+
 - **Compose BOM 2024.12.01**: Ensures compatibility across all Compose libraries
 - **Material 3 Components**: Latest Material Design implementation with dynamic colours
 - **Navigation Compose**: Type-safe navigation with state preservation and deep linking
@@ -3411,7 +3425,6 @@ operations.
 | **Real-Time Processing**     | Provides immediate feedback for research applications           | Higher resource requirements                     |
 
 ---
-
 ## complete Android Application Feature Implementation
 
 The Android Mobile Application represents a sophisticated distributed mobile data collection node that implements
@@ -3845,17 +3858,15 @@ class UIController {
     }
 }
 ```
-
 ---
-
 ## complete Python Desktop Controller Implementation
 
 The Python Desktop Controller serves as the sophisticated central command and control hub that orchestrates device
 coordination, data aggregation, real-time monitoring, and complete post-session analysis across the entire
 multi-sensor network [CITE - Van Rossum, G., & Drake Jr, F.L. (2009). Python 3 reference manual]. The desktop
 application implements advanced distributed systems patterns specifically adapted for research applications while
-providing complete user interfaces including both native PyQt5 GUI components and a web-based dashboard 
-interface (implemented in `PythonApp/web_ui/`) for remote monitoring and control, along with automated quality 
+providing complete user interfaces including both native PyQt5 GUI components and a web-based dashboard
+interface (implemented in `PythonApp/web_ui/`) for remote monitoring and control, along with automated quality
 assurance procedures.
 
 ### Advanced Application Architecture and Dependency Injection
@@ -4261,9 +4272,7 @@ class StimulusController:
         except ExperimentExecutionException as e:
             return ExperimentResult.error(f"Experiment execution failed: {e}")
 ```
-
 ---
-
 ## Advanced Data Processing Pipeline and Quality Management
 
 The data processing pipeline implements sophisticated algorithms for real-time multi-modal data processing with
@@ -4355,9 +4364,7 @@ class DataProcessingPipeline:
         except ProcessingException as e:
             return ProcessingResult.error(f"Data processing failed: {e}")
 ```
-
 ---
-
 ## Advanced Testing and Quality Assurance Framework
 
 The testing framework implements a complete multi-layered testing strategy specifically designed for research
@@ -4495,9 +4502,7 @@ efficiency [CITE - Jain, R. (1990). The art of computer systems performance anal
 - **Comparative Analysis**: Performance comparison with established benchmarks and research software standards
 - **Optimisation Validation**: Systematic validation of optimisation strategies with quantitative assessment and quality
   verification
-
 ---
-
 ## Advanced Multi-Device Synchronisation Implementation
 
 The multi-device synchronisation system implements sophisticated algorithms that achieve research-grade temporal
@@ -4576,9 +4581,7 @@ class MultiDeviceSynchronizationSystem:
         except SynchronizationException as e:
             return SynchronizationResult.error(f"Synchronisation failed: {e}")
 ```
-
 ---
-
 ## Advanced Session Management and Data Organization
 
 The session management system implements complete research session lifecycle management with sophisticated data
@@ -4632,9 +4635,7 @@ assurance [CITE - Joint Committee for Guides in Metrology. (2008). Evaluation of
 - **Export Format Optimisation**: Multiple export formats optimized for research analysis tools and statistical software
 - **Backup and Recovery Systems**: Automated backup procedures with data redundancy and recovery capabilities
 - **Archive Management**: Long-term data archival with compression optimisation and retrieval capabilities
-
 ---
-
 ## Advanced Computer Vision and Physiological Analysis
 
 The computer vision system implements sophisticated algorithms specifically designed for contactless physiological
@@ -4781,7 +4782,7 @@ with detailed code snippets provided in **Appendix F**.
   Appendix F.85)
 - `PythonApp/calibration/calibration_manager.py` - Advanced calibration system with quality assessment and
   validation (See Appendix F.86)
-- `PythonApp/performance_optimizer.py` - System performance monitoring and optimisation with adaptive resource 
+- `PythonApp/performance_optimizer.py` - System performance monitoring and optimisation with adaptive resource
   management (See Appendix F.86.1)
 - `PythonApp/shimmer_manager.py` - GSR sensor management with protocol abstraction and error handling (See Appendix
   F.87)
@@ -4887,21 +4888,21 @@ graph TD
         P3[Error Recovery Mechanisms]
         P4[System State Preservation]
     end
-    
+---
     subgraph "Android Mobile Application"
         A1[590+ Exception Handlers Fixed]
         A2[Coroutine Cancellation Preservation]
         A3[Permission-Aware Error Handling]
         A4[Device State Recovery]
     end
-    
+---
     subgraph "Cross-Platform Quality Improvements"
         Q1[Enhanced Debugging Capabilities]
         Q2[Professional Error Reporting]
         Q3[System Reliability Enhancement]
         Q4[Maintainability Improvements]
     end
-    
+---
     P1 --> Q1
     P2 --> Q2
     P3 --> Q4
@@ -4941,6 +4942,7 @@ except ValueError as e:
 ```
 
 **Key Python Application Improvements:**
+
 - **Eliminated 7 bare `except:` clauses** that could catch `SystemExit` and `KeyboardInterrupt`
 - **Replaced 8 debug print statements** with proper logging framework usage
 - **Enhanced error context** with specific exception types for file operations and OpenCV errors
@@ -4986,17 +4988,17 @@ try {
    - Enhanced device initialisation error specificity
    - Improved session management error handling
 
-2. **Network Operations** (`NetworkController.kt`, `CommandProcessor.kt`, `JsonSocketClient.kt`):
+1. **Network Operations** (`NetworkController.kt`, `CommandProcessor.kt`, `JsonSocketClient.kt`):
    - Fixed 25+ exception handlers in communication systems
    - Added connection-specific error handling
    - Enhanced network recovery mechanisms
 
-3. **UI Components** (`MainActivity.kt`, `MainViewModelRefactored.kt`, UI Fragments):
+1. **UI Components** (`MainActivity.kt`, `MainViewModelRefactored.kt`, UI Fragments):
    - Fixed 15+ exception handlers in user interface operations
    - Improved state management error handling
    - Enhanced user feedback mechanisms
 
-4. **Device Management** (`ConnectionManager.kt`, `DeviceStatusTracker.kt`, Bluetooth components):
+1. **Device Management** (`ConnectionManager.kt`, `DeviceStatusTracker.kt`, Bluetooth components):
    - Fixed 20+ exception handlers in device communication
    - Enhanced device discovery error handling
    - Improved connection recovery capabilities
@@ -5007,11 +5009,13 @@ The system implements complete logging frameworks across both platforms to enhan
 operational observability:
 
 **Python Desktop Application Logging:**
+
 - **Structured logging** with configurable levels (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 - **Contextual information** in error messages for efficient troubleshooting
 - **Performance monitoring** integration with log analysis capabilities
 
 **Android Application Logging:**
+
 - **Android Log framework** integration with proper tag categorisation
 - **Crash reporting** mechanisms for production debugging
 - **Performance profiling** integration for optimisation identification
@@ -5033,12 +5037,14 @@ maintainability:
 | **Debugging Efficiency**          | Manual debugging        | Structured logs        | Professional      | ✅ Enhanced      |
 
 **Reliability Improvements:**
+
 - **Enhanced Error Diagnosis**: Specific exception types enable precise identification of failure causes
 - **Improved System Stability**: Proper exception handling prevents cascading failures
 - **Better Resource Management**: Appropriate cleanup in error scenarios prevents resource leaks
 - **Preserved Cancellation Semantics**: Proper handling of `CancellationException` in Android coroutines
 
 **Maintainability Enhancements:**
+
 - **Consistent Error Handling Patterns**: Standardized approaches across the codebase
 - **Enhanced Code Readability**: Clear error handling logic improves code comprehension
 - **Simplified Debugging**: Structured logging reduces time to identify and resolve issues
@@ -5050,16 +5056,19 @@ The system implements sophisticated error recovery mechanisms that enable gracef
 from transient failures:
 
 **Network Communication Recovery:**
+
 - **Automatic reconnection** with exponential backoff for network failures
 - **Command retry mechanisms** with configurable timeout intervals
 - **Fallback communication modes** when primary channels fail
 
 **Device Management Recovery:**
+
 - **Automatic device rediscovery** when connections are lost
 - **Session state recovery** from persistent storage
 - **Graceful sensor initialisation** with fallback configurations
 
 **Data Integrity Protection:**
+
 - **Transactional recording operations** with rollback capabilities
 - **Checksum validation** for data transfer integrity
 - **Automatic corruption detection** and recovery procedures
@@ -5094,7 +5103,7 @@ Edition." Addison-Wesley, 1986.
 Centre for Environmental Structure, 2001.
 
 [Android2023] Google LLC. "Android Developers Documentation - Architecture
-Components." https://developer.android.com/topic/architecture, 2023.
+Components." <https://developer.android.com/topic/architecture>, 2023.
 
 [Booch2007] Booch, G., Rumbaugh, J., & Jacobson, I. "Unified Modelling Language User Guide, 2nd Edition." Addison-Wesley
 Professional, 2007.
@@ -5134,7 +5143,7 @@ Systems." IEEE Standard 1471-2000, 2000.
 [Jackson2001] Jackson, M. "Problem Frames: Analysing and Structuring Software Development Problems." Addison-Wesley,
 2001.
 
-[Kotlin2023] JetBrains. "Kotlin Programming Language Documentation." https://kotlinlang.org/docs/, 2023.
+[Kotlin2023] JetBrains. "Kotlin Programming Language Documentation." <https://kotlinlang.org/docs/>, 2023.
 
 [Kruchten1995] Kruchten, P. "The 4+1 View Model of Architecture." IEEE Software, 12(6), 42-50, 1995.
 
@@ -5151,7 +5160,7 @@ Press, 2004.
 [Parnas1972] Parnas, D. L. "On the criteria to be used in decomposing systems into modules." Communications of the ACM,
 15(12), 1053-1058, 1972.
 
-[Python2023] Python Software Foundation. "Python 3.11 Documentation." https://docs.python.org/3/, 2023.
+[Python2023] Python Software Foundation. "Python 3.11 Documentation." <https://docs.python.org/3/>, 2023.
 
 [Rozanski2011] Rozanski, N., & Woods, E. "Software Systems Architecture: Working with Stakeholders Using Viewpoints and
 Perspectives, 2nd Edition." Addison-Wesley Professional, 2011.

@@ -27,12 +27,9 @@
 - 3.4.3. [Usability and Accessibility Requirements](#343-usability-and-accessibility-requirements)
 
 3.5. [Use Case Scenarios](#35-use-case-scenarios)
-
--
-3.5.1. [Primary Use Case: Multi-Participant Recording Session](#351-primary-use-case-multi-participant-recording-session)
--
-3.5.2. [Secondary Use Case: System Calibration and Configuration](#352-secondary-use-case-system-calibration-and-configuration)
--
+---
+## 3.5.1. [Primary Use Case: Multi-Participant Recording Session](#351-primary-use-case-multi-participant-recording-session)
+## 3.5.2. [Secondary Use Case: System Calibration and Configuration](#352-secondary-use-case-system-calibration-and-configuration)
 3.5.3. [Secondary Use Case: Real-Time Monitoring and Annotation](#353-secondary-use-case-real-time-monitoring-and-annotation)
 
 3.6. [System Analysis (Architecture & Data Flow)](#36-system-analysis-architecture--data-flow)
@@ -46,9 +43,7 @@
 - 3.7.1. [Data Types and Volume Specifications](#371-data-types-and-volume-specifications)
 - 3.7.2. [Data Quality and Integrity Requirements](#372-data-quality-and-integrity-requirements)
 - 3.7.3. [Data Management and Analysis Preparation](#373-data-management-and-analysis-preparation)
-
 ---
-
 This complete chapter establishes the systematic foundation for the Multi-Sensor Recording System through rigorous
 requirements engineering methodology and detailed analytical assessment. The requirements analysis follows established
 software engineering principles while addressing the unique challenges of research-grade physiological measurement
@@ -69,31 +64,31 @@ and operational foundation that guides all subsequent design and implementation 
 - 3.3. [Hardware Integration Requirements](#hardware-integration-requirements)
 - 3.4. [Detailed Functional Requirements Specifications](#detailed-functional-requirements-specifications)
 - 3.5. [Core System Coordination Requirements](#core-system-coordination-requirements)
-    - 3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
-    - 3.5.2. [FR-002: Advanced Temporal Synchronisation and Precision Management](#fr-002-advanced-temporal-synchronisation-and-precision-management)
-    - 3.5.3. [FR-003: complete Session Management and Lifecycle Control](#fr-003-complete-session-management-and-lifecycle-control)
+  - 3.5.1. [FR-001: Multi-Device Coordination and Centralized Management](#fr-001-multi-device-coordination-and-centralized-management)
+  - 3.5.2. [FR-002: Advanced Temporal Synchronisation and Precision Management](#fr-002-advanced-temporal-synchronisation-and-precision-management)
+  - 3.5.3. [FR-003: complete Session Management and Lifecycle Control](#fr-003-complete-session-management-and-lifecycle-control)
 - 3.6. [Data Acquisition and Processing Requirements](#data-acquisition-and-processing-requirements)
-    - 3.6.1. [FR-010: Advanced Video Data Capture and Real-Time Processing](#fr-010-advanced-video-data-capture-and-real-time-processing)
-    - 3.6.2. [FR-011: complete Thermal Imaging Integration and Physiological Analysis](#fr-011-complete-thermal-imaging-integration-and-physiological-analysis)
-    - 3.6.3. [FR-012: Physiological Sensor Integration and Validation](#fr-012-physiological-sensor-integration-and-validation)
+  - 3.6.1. [FR-010: Advanced Video Data Capture and Real-Time Processing](#fr-010-advanced-video-data-capture-and-real-time-processing)
+  - 3.6.2. [FR-011: complete Thermal Imaging Integration and Physiological Analysis](#fr-011-complete-thermal-imaging-integration-and-physiological-analysis)
+  - 3.6.3. [FR-012: Physiological Sensor Integration and Validation](#fr-012-physiological-sensor-integration-and-validation)
 - 3.7. [Advanced Processing and Analysis Requirements](#advanced-processing-and-analysis-requirements)
-    - 3.7.1. [FR-020: Real-Time Signal Processing and Feature Extraction](#fr-020-real-time-signal-processing-and-feature-extraction)
-    - 3.7.2. [FR-021: Machine Learning Inference and Prediction](#fr-021-machine-learning-inference-and-prediction)
+  - 3.7.1. [FR-020: Real-Time Signal Processing and Feature Extraction](#fr-020-real-time-signal-processing-and-feature-extraction)
+  - 3.7.2. [FR-021: Machine Learning Inference and Prediction](#fr-021-machine-learning-inference-and-prediction)
 - 3.8. [Core System Functions](#core-system-functions)
-    - 3.8.1. [FR-030: Multi-Device Coordination and Synchronisation](#fr-030-multi-device-coordination-and-synchronisation)
-    - 3.8.2. [FR-031: High-Quality RGB Video Data Acquisition](#fr-031-high-quality-rgb-video-data-acquisition)
-    - 3.8.3. [FR-032: Thermal Imaging Integration and Analysis](#fr-032-thermal-imaging-integration-and-analysis)
-    - 3.8.4. [FR-033: Reference GSR Measurement Integration](#fr-033-reference-gsr-measurement-integration)
-    - 3.8.5. [FR-005: complete Session Management](#fr-005-complete-session-management)
+  - 3.8.1. [FR-030: Multi-Device Coordination and Synchronisation](#fr-030-multi-device-coordination-and-synchronisation)
+  - 3.8.2. [FR-031: High-Quality RGB Video Data Acquisition](#fr-031-high-quality-rgb-video-data-acquisition)
+  - 3.8.3. [FR-032: Thermal Imaging Integration and Analysis](#fr-032-thermal-imaging-integration-and-analysis)
+  - 3.8.4. [FR-033: Reference GSR Measurement Integration](#fr-033-reference-gsr-measurement-integration)
+  - 3.8.5. [FR-005: complete Session Management](#fr-005-complete-session-management)
 - 3.9. [Advanced Data Processing Requirements](#advanced-data-processing-requirements)
-    - 3.9.1. [FR-010: Real-Time Hand Detection and Tracking](#fr-010-real-time-hand-detection-and-tracking)
-    - 3.9.2. [FR-011: Advanced Camera Calibration System](#fr-011-advanced-camera-calibration-system)
-    - 3.9.3. [FR-012: Precision Data Synchronisation Framework](#fr-012-precision-data-synchronisation-framework)
+  - 3.9.1. [FR-010: Real-Time Hand Detection and Tracking](#fr-010-real-time-hand-detection-and-tracking)
+  - 3.9.2. [FR-011: Advanced Camera Calibration System](#fr-011-advanced-camera-calibration-system)
+  - 3.9.3. [FR-012: Precision Data Synchronisation Framework](#fr-012-precision-data-synchronisation-framework)
 
-4. [Non-Functional Requirements](#non-functional-requirements)
+1. [Non-Functional Requirements](#non-functional-requirements)
     - 4.1. [Performance Requirements](#performance-requirements)
         - 4.1.1. [NFR-001: System Throughput and Scalability](#nfr-001-system-throughput-and-scalability)
-        -
+---
         4.1.2. [NFR-002: Response Time and Interactive Performance](#nfr-002-response-time-and-interactive-performance)
         - 4.1.3. [NFR-003: Resource Utilisation and Efficiency](#nfr-003-resource-utilisation-and-efficiency)
     - 4.2. [Reliability and Quality Requirements](#reliability-and-quality-requirements)
@@ -103,7 +98,7 @@ and operational foundation that guides all subsequent design and implementation 
     - 4.3. [Usability Requirements](#usability-requirements)
         - 4.3.1. [NFR-020: Ease of Use](#nfr-020-ease-of-use)
         - 4.3.2. [NFR-021: Accessibility](#nfr-021-accessibility)
-5. [Use Cases](#use-cases)
+2. [Use Cases](#use-cases)
     - 5.1. [Primary Use Cases](#primary-use-cases)
         - 5.1.1. [UC-001: Multi-Participant Research Session](#uc-001-multi-participant-research-session)
         - 5.1.2. [UC-002: System Calibration and Configuration](#uc-002-system-calibration-and-configuration)
@@ -111,22 +106,20 @@ and operational foundation that guides all subsequent design and implementation 
     - 5.2. [Secondary Use Cases](#secondary-use-cases)
         - 5.2.1. [UC-010: Data Export and Analysis](#uc-010-data-export-and-analysis)
         - 5.2.2. [UC-011: System Maintenance and Diagnostics](#uc-011-system-maintenance-and-diagnostics)
-6. [System Analysis](#system-analysis)
+3. [System Analysis](#system-analysis)
     - 6.1. [Data Flow Analysis](#data-flow-analysis)
     - 6.2. [Component Interaction Analysis](#component-interaction-analysis)
     - 6.3. [Scalability Analysis](#scalability-analysis)
-7. [Data Requirements](#data-requirements)
+4. [Data Requirements](#data-requirements)
     - 7.1. [Data Types and Volumes](#data-types-and-volumes)
     - 7.2. [Data Quality Requirements](#data-quality-requirements)
     - 7.3. [Data Storage and Retention](#data-storage-and-retention)
-8. [Requirements Validation](#requirements-validation)
+5. [Requirements Validation](#requirements-validation)
     - 8.1. [Validation Methods](#validation-methods)
     - 8.2. [Requirements Traceability](#requirements-traceability)
     - 8.3. [Critical Requirements Analysis](#critical-requirements-analysis)
     - 8.4. [Requirements Changes and Evolution](#requirements-changes-and-evolution)
-
 ---
-
 This complete chapter establishes the systematic foundation for the Multi-Sensor Recording System through rigorous
 requirements engineering methodology and detailed analytical assessment. The requirements analysis follows established
 software engineering principles while addressing the unique challenges of research-grade physiological measurement
@@ -442,9 +435,7 @@ limitations, device capability constraints, and integration complexity factors t
 reliability [CITE - Pressman, R.S., & Maxim, B.R. (2014). Software engineering: a practitioner's approach. McGraw-Hill Education].
 This technical analysis ensured that the final requirements represented achievable goals that could be successfully
 implemented within project timelines while delivering the scientific capabilities required by research stakeholders.
-
 ---
-
 ## 3.3 Functional Requirements Overview
 
 The complete functional requirements specification systematically defines the essential core capabilities that the
@@ -1311,9 +1302,7 @@ and cannot be compromised.
 
 **Validation Criteria**: Empirical validation of synchronisation accuracy through controlled timing tests and
 correlation analysis across modalities.
-
 ---
-
 ## 3.4 Non-Functional Requirements
 
 Non-functional requirements define the quality attributes and operational characteristics that determine the system's
@@ -1547,10 +1536,10 @@ capabilities.
 
 - **Requirement**: Recover from transient failures without data loss
 - **Specifications**:
-    - Automatic reconnection to disconnected devices
-    - Session continuation after network interruptions
-    - Recovery time ≤30 seconds for transient failures
-    - Graceful degradation when devices become unavailable
+  - Automatic reconnection to disconnected devices
+  - Session continuation after network interruptions
+  - Recovery time ≤30 seconds for transient failures
+  - Graceful degradation when devices become unavailable
 
 ### 3.4.3 Usability and Accessibility Requirements
 
@@ -1558,22 +1547,20 @@ capabilities.
 
 - **Requirement**: System shall be operable by researchers with minimal technical training
 - **Specifications**:
-    - Setup time ≤10 minutes for standard configuration
-    - Intuitive GUI with workflow-based navigation
-    - complete error messages with recovery suggestions
-    - Built-in help system and documentation
+  - Setup time ≤10 minutes for standard configuration
+  - Intuitive GUI with workflow-based navigation
+  - complete error messages with recovery suggestions
+  - Built-in help system and documentation
 
 #### NFR-021: Accessibility
 
 - **Requirement**: User interface shall comply with accessibility standards
 - **Specifications**:
-    - WCAG 2.1 AA compliance for visual accessibility
-    - Screen reader compatibility
-    - High contrast mode support
-    - Keyboard navigation alternatives
-
+  - WCAG 2.1 AA compliance for visual accessibility
+  - Screen reader compatibility
+  - High contrast mode support
+  - Keyboard navigation alternatives
 ---
-
 ## 3.5 Use Case Scenarios
 
 ### 3.5.1 Primary Use Case: Multi-Participant Recording Session
@@ -1662,9 +1649,7 @@ capabilities.
 4. Operator reviews system logs and identifies potential issues
 5. System provides maintenance recommendations and scheduling
 6. Operator performs recommended maintenance actions
-
 ---
-
 ## 3.6 System Analysis (Architecture and Data Flow)
 
 ### 3.6.1 Data Flow Analysis
@@ -1712,9 +1697,7 @@ The system architecture must accommodate growth in several dimensions:
 - **Data Volume Scalability**: Handle 10-100GB per recording session
 - **User Scalability**: Support multiple concurrent research sessions
 - **Geographic Scalability**: Potential for distributed research sites
-
 ---
-
 ## 3.7 Data Requirements and Management
 
 ### 3.7.1 Data Types and Volume Specifications
@@ -1739,9 +1722,7 @@ The system architecture must accommodate growth in several dimensions:
 - **Backup Storage**: Automatic backup to secondary storage systems
 - **Retention Policy**: Research data retained according to institutional requirements
 - **Archive Format**: Long-term preservation in standard, open formats
-
 ---
-
 ## Requirements Validation
 
 ### Validation Methods
@@ -1926,9 +1907,7 @@ Edition." Addison-Wesley Professional, 2012.
 
 - `AndroidApp/src/test/java/com/multisensor/recording/ui/` - User interface requirement validation with usability
   testing (See Appendix F.70)
-
 ---
-
 ## Tables and Figures
 
 ### Table 3.1: Comparative Analysis of Physiological Measurement Approaches

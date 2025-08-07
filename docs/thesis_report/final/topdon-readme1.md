@@ -185,22 +185,22 @@ Once the SDK is integrated and permissions are in place, you can
 initialise and connect to the TC001 camera in your app. The basic
 workflow is:
 
-1.  **Initialise the USB monitor and listeners.** The SDK provides a
+1. **Initialise the USB monitor and listeners.** The SDK provides a
     `USBMonitor` class that monitors USB device connections. You attach
     an `OnDeviceConnectListener` to handle events: device attached,
     device permission granted, device connected, disconnected, etc.
 
-2.  **Request permission and open the camera.** When the camera is
+1. **Request permission and open the camera.** When the camera is
     attached and permission is granted, create a `UVCCamera` instance
     using the SDK's builder, open it with the USB control block, and
     initialise the infrared command interface (`IRCMD`) for thermal
     data.
 
-3.  **Start streaming frames.** Set a frame callback to receive image
+1. **Start streaming frames.** Set a frame callback to receive image
     frames, then start the camera preview. As frames come in, you can
     process the thermal image and/or temperature data.
 
-4.  **Close the camera on disconnect.** Properly stop streaming and
+1. **Close the camera on disconnect.** Properly stop streaming and
     release resources if the camera is detached.
 
 Below is a **sample code snippet** illustrating the initialisation and
@@ -781,9 +781,7 @@ high-quality thermal data for your thesis work.
   thread)[\[44\]](https://community.topdon.com/detail?id=352&type=1#:~:text=Developing%20a%20Flutter%20App%20with,resources%20that%20would%20help).
   Guidance on SDK usage, known issues, and user experiences integrating
   the camera in custom applications.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=%E2%80%A2%20Equipped%20with%20an%20ultra,circuit%20boards%20and%20other%20electronics)
 [\[5\]](https://www.topdon.us/products/tc001?srsltid=AfmBOoocBj_-_hydfJjYl-1Yj8ADMJTtQyVLOHU9jP_SnN8s51-kisBU#:~:text=Optimized%20Temperature%20Range%20%26%20Accuracy)
 TC001 (Android Devices) -- TOPDON USA

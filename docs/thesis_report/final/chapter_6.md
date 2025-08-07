@@ -612,9 +612,7 @@ a starting point for ongoing innovation and research using that system.
 The expectation is that future efforts, building on this foundation,
 will fully realise the vision of robust contactless physiological
 monitoring and validate its benefits in real-world applications.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](docs/thesis_report/draft/Chapter_6__Conclusions_and_Evaluation1.md#L91-L100)
 Chapter_6\_\_Conclusions_and_Evaluation1.md
 

@@ -974,11 +974,10 @@ targets set for the project:
 
 For an overview, **Table 5.1** presents some key performance metrics
 from our evaluation:
-
-  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
   **Performance     **Target/Requirement**   **Achieved Result**                                                                                                                                                             **Meets
   Metric**                                                                                                                                                                                                                   Requirement**
-  ----------------- ------------------------ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----------------
+---
   Multi-device sync \< 1 ms                  \~0.2 ms avg (0.8 ms max)                                                                                                                                                       ✔ Yes (within
   error                                                                                                                                                                                                                      target)
 
@@ -992,18 +991,17 @@ from our evaluation:
   (30 min)                                   auto-recovered)[\[39\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_05_test_network_resilience_output.txt#L70-L73)   significant loss)
 
   System continuous 2+ hours no crash        4+ hours tested, no issues                                                                                                                                                      ✔ Yes (stable)
-  run                                                                                                                                                                                                                        
+  run
 
   Network tolerance Moderate latency/loss    500 ms / 5% loss handled                                                                                                                                                        ✔ Yes (with
                                                                                                                                                                                                                              retries)
 
   Memory usage      No critical leak         No leak observed (stable)                                                                                                                                                       ✔ Yes
-  growth                                                                                                                                                                                                                     
+  growth
 
-  CPU utilisation   Within capacity          \~50% device, \~5% PC                                                                                                                                                           ✔ Yes
-  (device/PC)                                                                                                                                                                                                                
-  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+CPU utilisation   Within capacity          \~50% device, \~5% PC                                                                                                                                                           ✔ Yes
+  (device/PC)
+---
 Table 5.1: Summary of selected performance evaluation metrics compared
 to targets.
 
@@ -1075,10 +1073,9 @@ rigorous testing means we can be confident in its behaviour. Table 5.2
 provides an overview mapping the main requirements to the tests and
 outcomes (a condensed view of the full traceability matrix we maintained
 during the project):
-
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
   **Requirement**           **Test(s) Performed**   **Outcome**
-  ------------------------- ----------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
   FR-001: Multi-Device      Integration test of PC  **Pass:** All devices controlled together (no misses)
   Coordination              start/stop on devices;  
                             System end-to-end test  
@@ -1087,39 +1084,38 @@ during the project):
   \<1ms                     (multiple trials)       error[\[48\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/11_Master_Clock_Synchronizer_Comprehensive.md#L1259-L1267)[\[49\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/11_Master_Clock_Synchronizer_Comprehensive.md#L1270-L1278)
 
   FR-003: Session           Session start/stop,     **Pass:** Sessions handled correctly; extra session blocked[\[50\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_04_test_enhanced_stress_testing_output.txt#L34-L42)
-  Management                concurrent session test 
+  Management                concurrent session test
 
   FR-004: GSR Integration   Shimmer unit tests;     **Pass:** Sensor connected and streamed 100% data
                             30-min data continuity  
-                            test                    
+                            test
 
   FR-005: User Interface &  User-operated system    **Pass:** Interface responsive and tasks completed by users
-  Control                   test; UI automation     
-                            (Espresso)              
+  Control                   test; UI automation
+                            (Espresso)
 
   NFR-001/003: Performance  Video frame count test; **Pass:** 4K30 video stable; resource use within limits
-  (throughput/efficiency)   CPU/mem profiling       
+  (throughput/efficiency)   CPU/mem profiling
 
   NFR-002: Response Time    Network latency test;   **Pass:** \<1s user-visible latency in all actions
-                            user action timing      
+                            user action timing
 
   NFR-010:                  1-hour run test;        **Pass:** No crashes; auto-recovery successful
-  Availability/Uptime       reconnection test       
+  Availability/Uptime       reconnection test
 
   NFR-011: Data Integrity   Data file verification  **Pass:** No corruption, all data accounted for
-                            after sessions          
+                            after sessions
 
   NFR-012: Fault Recovery   Simulated sensor        **Pass:** System recovered from faults, logged events
-                            failure; network drop   
-                            test                    
+                            failure; network drop
+                            test
 
   NFR-020: Usability        User testing sessions;  **Pass:** Users could operate system, UI elements behaved consistently
-                            UI consistency check    
+                            UI consistency check
 
-  NFR-021: Accessibility    (Not heavily            *N/A:* Basic considerations met (readable fonts, etc.)
+NFR-021: Accessibility    (Not heavily            *N/A:* Basic considerations met (readable fonts, etc.)
                             applicable; simple UI)  
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+---
 Table 5.2: Requirements validation summary with corresponding tests and
 outcomes.
 
@@ -1339,9 +1335,7 @@ accepted with documentation. The next chapter will discuss overall
 conclusions, including how the project's outcomes stand in the context
 of the initial goals and what future work could build on this solid,
 tested foundation.
-
-------------------------------------------------------------------------
-
+---
 [\[1\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/08_Testing_QA_Framework_Comprehensive.md#L20-L29)
 [\[2\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/08_Testing_QA_Framework_Comprehensive.md#L43-L52)
 08_Testing_QA_Framework_Comprehensive.md
@@ -1487,6 +1481,7 @@ complete stress testing validation demonstrates exceptional system robustness un
 | **Overall Reliability** | **Multi-dimensional assessment** | **98.4% system reliability** | **97% composite confidence** | **Professional research quality** |
 
 **Key Validation Achievements:**
+
 - **80% reduction in debugging time** through structured logging implementation
 - **91% improvement in exception handling specificity** across all platforms
 - **35% overall performance improvement** in error handling and recovery
