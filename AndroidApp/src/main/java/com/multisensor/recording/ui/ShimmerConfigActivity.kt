@@ -2,6 +2,7 @@ package com.multisensor.recording.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.google.android.material.chip.Chip
+import com.google.android.material.tabs.TabLayout
 import com.multisensor.recording.R
 import com.multisensor.recording.recording.DeviceConfiguration.SensorChannel
 import com.multisensor.recording.util.Logger
@@ -24,8 +32,13 @@ import javax.inject.Inject
 class ShimmerConfigActivity : AppCompatActivity() {
     private val viewModel: ShimmerConfigViewModel by viewModels()
 
-    private lateinit var deviceStatusText: TextView
+    // UI Components - Enhanced
+    private lateinit var deviceStatusIcon: ImageView
+    private lateinit var connectionStatusChip: Chip
     private lateinit var batteryLevelText: TextView
+    private lateinit var batteryProgressBar: ProgressBar
+    private lateinit var signalStrengthText: TextView
+    private lateinit var signalProgressBar: ProgressBar
     private lateinit var samplingRateSpinner: Spinner
     private lateinit var sensorCheckboxes: Map<SensorChannel, CheckBox>
     private lateinit var connectButton: Button
@@ -37,14 +50,36 @@ class ShimmerConfigActivity : AppCompatActivity() {
     private lateinit var configurationPresetSpinner: Spinner
     private lateinit var realTimeDataText: TextView
     private lateinit var progressBar: ProgressBar
+    private lateinit var progressText: TextView
     private lateinit var selectDeviceButton: Button
     private lateinit var crcSpinner: Spinner
     private lateinit var deviceInfoText: TextView
     private lateinit var gsrRangeSpinner: Spinner
     private lateinit var accelRangeSpinner: Spinner
+    
+    // Chart components - NEW
+    private lateinit var dataVisualizationCard: View
+    private lateinit var chartTabLayout: TabLayout
+    private lateinit var gsrChart: LineChart
+    private lateinit var ppgChart: LineChart
+    private lateinit var accelChart: LineChart
+    private lateinit var gyroChart: LineChart
+    private lateinit var packetsReceivedText: TextView
+    private lateinit var recordingDurationText: TextView
+    private lateinit var dataRateText: TextView
+    private lateinit var recordingStatusChip: Chip
+    private lateinit var exportDataButton: Button
 
     @Inject
     lateinit var logger: Logger
+
+    // Chart data storage
+    private val gsrData = mutableListOf<Entry>()
+    private val ppgData = mutableListOf<Entry>()
+    private val accelData = mutableListOf<Entry>()
+    private val gyroData = mutableListOf<Entry>()
+    private var chartEntryCount = 0
+    private val maxChartEntries = 500 // Keep last 500 entries for performance
 
     private val bluetoothPermissions =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -74,10 +109,11 @@ class ShimmerConfigActivity : AppCompatActivity() {
         setupClickListeners()
         setupSpinners()
         setupSensorCheckboxes()
+        setupCharts()
         observeViewModelState()
         checkBluetoothPermissions()
 
-        logger.info("ShimmerConfigActivity created")
+        logger.info("Enhanced ShimmerConfigActivity created with real-time charts")
     }
 
     override fun onDestroy() {
@@ -86,8 +122,29 @@ class ShimmerConfigActivity : AppCompatActivity() {
     }
 
     private fun initializeViews() {
-        deviceStatusText = findViewById(R.id.device_status_text)
+        // Enhanced device status components
+        deviceStatusIcon = findViewById(R.id.device_status_icon)
+        connectionStatusChip = findViewById(R.id.connection_status_chip)
         batteryLevelText = findViewById(R.id.battery_level_text)
+        batteryProgressBar = findViewById(R.id.battery_progress_bar)
+        signalStrengthText = findViewById(R.id.signal_strength_text)
+        signalProgressBar = findViewById(R.id.signal_progress_bar)
+        deviceInfoText = findViewById(R.id.device_info_text)
+        
+        // Chart and visualization components
+        dataVisualizationCard = findViewById(R.id.data_visualization_card)
+        chartTabLayout = findViewById(R.id.chart_tab_layout)
+        gsrChart = findViewById(R.id.gsr_chart)
+        ppgChart = findViewById(R.id.ppg_chart)
+        accelChart = findViewById(R.id.accel_chart)
+        gyroChart = findViewById(R.id.gyro_chart)
+        packetsReceivedText = findViewById(R.id.packets_received_text)
+        recordingDurationText = findViewById(R.id.recording_duration_text)
+        dataRateText = findViewById(R.id.data_rate_text)
+        recordingStatusChip = findViewById(R.id.recording_status_chip)
+        exportDataButton = findViewById(R.id.export_data_button)
+        
+        // Original components
         samplingRateSpinner = findViewById(R.id.sampling_rate_spinner)
         connectButton = findViewById(R.id.connect_button)
         disconnectButton = findViewById(R.id.disconnect_button)
@@ -98,9 +155,9 @@ class ShimmerConfigActivity : AppCompatActivity() {
         configurationPresetSpinner = findViewById(R.id.configuration_preset_spinner)
         realTimeDataText = findViewById(R.id.real_time_data_text)
         progressBar = findViewById(R.id.progress_bar)
+        progressText = findViewById(R.id.progress_text)
         selectDeviceButton = findViewById(R.id.select_device_button)
         crcSpinner = findViewById(R.id.crc_spinner)
-        deviceInfoText = findViewById(R.id.device_info_text)
         gsrRangeSpinner = findViewById(R.id.gsr_range_spinner)
         accelRangeSpinner = findViewById(R.id.accel_range_spinner)
 
@@ -114,18 +171,27 @@ class ShimmerConfigActivity : AppCompatActivity() {
                 SensorChannel.ECG to findViewById(R.id.checkbox_ecg),
                 SensorChannel.EMG to findViewById(R.id.checkbox_emg),
             )
-
     }
 
     private fun setupClickListeners() {
         connectButton.setOnClickListener { viewModel.connectToDevice() }
         disconnectButton.setOnClickListener { viewModel.disconnectFromDevice() }
         scanButton.setOnClickListener { viewModel.scanForDevices() }
-        startStreamingButton.setOnClickListener { viewModel.startStreaming() }
-        stopStreamingButton.setOnClickListener { viewModel.stopStreaming() }
+        startStreamingButton.setOnClickListener { 
+            viewModel.startStreaming()
+            dataVisualizationCard.visibility = View.VISIBLE
+        }
+        stopStreamingButton.setOnClickListener { 
+            viewModel.stopStreaming()
+        }
         
         selectDeviceButton.setOnClickListener { 
             showDeviceSelectionDialog()
+        }
+
+        exportDataButton.setOnClickListener {
+            // TODO: Implement data export functionality
+            Toast.makeText(this, "Export functionality coming soon", Toast.LENGTH_SHORT).show()
         }
 
         deviceListView.setOnItemClickListener { _, _, position, _ ->
@@ -141,6 +207,90 @@ class ShimmerConfigActivity : AppCompatActivity() {
                 viewModel.updateSensorConfiguration(enabledSensors)
             }
         }
+        
+        // Setup chart tab selection
+        chartTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> showChart(gsrChart)
+                    1 -> showChart(ppgChart)
+                    2 -> showChart(accelChart)
+                    3 -> showChart(gyroChart)
+                }
+            }
+            
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+    
+    private fun showChart(chartToShow: LineChart) {
+        gsrChart.visibility = View.GONE
+        ppgChart.visibility = View.GONE
+        accelChart.visibility = View.GONE
+        gyroChart.visibility = View.GONE
+        chartToShow.visibility = View.VISIBLE
+    }
+
+    private fun setupCharts() {
+        // Setup chart tabs
+        chartTabLayout.addTab(chartTabLayout.newTab().setText("GSR"))
+        chartTabLayout.addTab(chartTabLayout.newTab().setText("PPG"))
+        chartTabLayout.addTab(chartTabLayout.newTab().setText("Accel"))
+        chartTabLayout.addTab(chartTabLayout.newTab().setText("Gyro"))
+        
+        // Configure each chart
+        configureChart(gsrChart, "GSR (µS)", Color.rgb(63, 81, 181))
+        configureChart(ppgChart, "PPG", Color.rgb(233, 30, 99))
+        configureChart(accelChart, "Accelerometer (g)", Color.rgb(76, 175, 80))
+        configureChart(gyroChart, "Gyroscope (°/s)", Color.rgb(255, 152, 0))
+        
+        // Show GSR chart by default
+        showChart(gsrChart)
+    }
+    
+    private fun configureChart(chart: LineChart, label: String, color: Int) {
+        chart.apply {
+            description.isEnabled = false
+            setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(true)
+            setPinchZoom(true)
+            setDrawGridBackground(false)
+            
+            // Configure X axis
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                setDrawGridLines(false)
+                granularity = 1f
+                isGranularityEnabled = true
+            }
+            
+            // Configure Y axes
+            axisLeft.apply {
+                setDrawGridLines(true)
+                gridColor = Color.LTGRAY
+                gridLineWidth = 0.5f
+            }
+            axisRight.isEnabled = false
+            
+            // Configure legend
+            legend.isEnabled = true
+            
+            // Initialize with empty data
+            val dataSet = LineDataSet(mutableListOf(), label).apply {
+                this.color = color
+                setCircleColor(color)
+                lineWidth = 2f
+                circleRadius = 3f
+                setDrawCircleHole(false)
+                valueTextSize = 0f // Hide value labels
+                setDrawFilled(false)
+            }
+            
+            data = LineData(dataSet)
+            invalidate()
+        }
     }
 
     private fun observeViewModelState() {
@@ -154,17 +304,26 @@ class ShimmerConfigActivity : AppCompatActivity() {
     }
 
     private fun render(state: ShimmerConfigUiState) {
+        // Update connection controls
         connectButton.isEnabled = state.canConnectToDevice
         disconnectButton.isEnabled = state.canDisconnectDevice
         startStreamingButton.isEnabled = state.canStartRecording
         stopStreamingButton.isEnabled = state.canStopRecording
         scanButton.isEnabled = state.canStartScan
 
+        // Update progress indicators
         progressBar.visibility = if (state.isScanning || state.isLoadingConnection) View.VISIBLE else View.GONE
+        progressText.visibility = if (state.isScanning || state.isLoadingConnection) View.VISIBLE else View.GONE
+        progressText.text = when {
+            state.isScanning -> "Scanning for devices..."
+            state.isLoadingConnection -> "Connecting to device..."
+            else -> ""
+        }
 
-        deviceStatusText.text = "Status: ${state.connectionStatus}"
-        batteryLevelText.text = if (state.batteryLevel >= 0) "Battery: ${state.batteryLevel}%" else "Battery: Unknown"
-
+        // Update enhanced device status
+        updateDeviceStatus(state)
+        
+        // Update device list
         val deviceNames = state.availableDevices.map { "${it.name} (${it.macAddress})" }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, deviceNames)
         deviceListView.adapter = adapter
@@ -173,57 +332,165 @@ class ShimmerConfigActivity : AppCompatActivity() {
             deviceListView.setItemChecked(state.selectedDeviceIndex, true)
         }
 
+        // Update sensor controls
         sensorCheckboxes.values.forEach { checkbox ->
             checkbox.isEnabled = state.isDeviceConnected && !state.isConfiguring
         }
         
-        // Enable range spinners when device is connected
+        // Update range spinners
         gsrRangeSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
         accelRangeSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
 
-        if (state.isRecording && state.dataPacketsReceived > 0) {
-            val duration = state.recordingDuration / 1000
-            realTimeDataText.text =
-                "Recording: ${duration}s\nPackets: ${state.dataPacketsReceived}\nSignal: ${state.signalStrength} dBm"
-        } else if (state.isDeviceConnected) {
-            realTimeDataText.text =
-                "Connected\nBattery: ${if (state.batteryLevel >= 0) "${state.batteryLevel}%" else "Unknown"}\nSignal: ${state.signalStrength} dBm"
-        } else {
-            realTimeDataText.text = "No device connected"
+        // Update CRC spinner state
+        crcSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
+        if (state.isDeviceConnected && state.firmwareVersion.isNotEmpty()) {
+            val firmwareVersionCode = state.firmwareVersion.split(".").firstOrNull()?.toIntOrNull() ?: 0
+            crcSpinner.isEnabled = firmwareVersionCode >= 8
         }
+        
+        // Update configuration sections visibility
+        findViewById<View>(R.id.configuration_section)?.visibility =
+            if (state.showConfigurationPanel) View.VISIBLE else View.GONE
+        findViewById<View>(R.id.streaming_section)?.visibility =
+            if (state.showRecordingControls) View.VISIBLE else View.GONE
+            
+        // Update data visualization
+        updateDataVisualization(state)
 
+        // Handle error messages
         state.errorMessage?.let { message ->
             if (state.showErrorDialog) {
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()
                 viewModel.onErrorMessageShown()
             }
         }
-
-        findViewById<View>(R.id.configuration_section)?.visibility =
-            if (state.showConfigurationPanel) View.VISIBLE else View.GONE
-        findViewById<View>(R.id.streaming_section)?.visibility =
-            if (state.showRecordingControls) View.VISIBLE else View.GONE
-            
-        // Update CRC spinner state based on connection
-        crcSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
-        if (state.isDeviceConnected && state.firmwareVersion.isNotEmpty()) {
-            // Enable CRC configuration for firmware version 8 and above (like ShimmerBasicExample)
-            val firmwareVersionCode = state.firmwareVersion.split(".").firstOrNull()?.toIntOrNull() ?: 0
-            crcSpinner.isEnabled = firmwareVersionCode >= 8
+    }
+    
+    private fun updateDeviceStatus(state: ShimmerConfigUiState) {
+        // Update connection status chip
+        when {
+            state.isDeviceConnected -> {
+                connectionStatusChip.text = "Connected"
+                connectionStatusChip.setChipBackgroundColorResource(R.color.success_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.success_color))
+            }
+            state.isLoadingConnection -> {
+                connectionStatusChip.text = "Connecting..."
+                connectionStatusChip.setChipBackgroundColorResource(R.color.warning_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.warning_color))
+            }
+            else -> {
+                connectionStatusChip.text = "Disconnected"
+                connectionStatusChip.setChipBackgroundColorResource(R.color.error_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.error_color))
+            }
         }
         
-        // Update device info display
+        // Update battery status
+        if (state.batteryLevel >= 0) {
+            batteryLevelText.text = "${state.batteryLevel}%"
+            batteryProgressBar.progress = state.batteryLevel
+            batteryProgressBar.progressTintList = ContextCompat.getColorStateList(
+                this,
+                when {
+                    state.batteryLevel > 50 -> R.color.success_color
+                    state.batteryLevel > 20 -> R.color.warning_color
+                    else -> R.color.error_color
+                }
+            )
+        } else {
+            batteryLevelText.text = "--"
+            batteryProgressBar.progress = 0
+        }
+        
+        // Update signal strength
+        val signalStrength = state.signalStrength
+        if (signalStrength != 0) {
+            signalStrengthText.text = "${signalStrength}dBm"
+            // Convert dBm to percentage (rough approximation)
+            val signalPercent = when {
+                signalStrength > -50 -> 100
+                signalStrength > -60 -> 80
+                signalStrength > -70 -> 60
+                signalStrength > -80 -> 40
+                signalStrength > -90 -> 20
+                else -> 0
+            }
+            signalProgressBar.progress = signalPercent
+            signalProgressBar.progressTintList = ContextCompat.getColorStateList(
+                this,
+                when {
+                    signalPercent > 60 -> R.color.success_color
+                    signalPercent > 30 -> R.color.warning_color
+                    else -> R.color.error_color
+                }
+            )
+        } else {
+            signalStrengthText.text = "--"
+            signalProgressBar.progress = 0
+        }
+        
+        // Update device info
         if (state.isDeviceConnected) {
             deviceInfoText.text = buildString {
-                append("Device Info:\n")
-                append("Firmware: ${state.firmwareVersion}\n")
-                append("Hardware: ${state.hardwareVersion}\n")
-                append("MAC: ${state.selectedDevice?.macAddress ?: "Unknown"}\n")
-                append("Battery: ${state.batteryLevel}%")
+                append("Device Information:\n")
+                append("• Firmware: ${state.firmwareVersion}\n")
+                append("• Hardware: ${state.hardwareVersion}\n")
+                append("• MAC: ${state.selectedDevice?.macAddress ?: "Unknown"}\n")
+                append("• Battery: ${state.batteryLevel}%\n")
+                append("• Signal: ${state.signalStrength}dBm")
             }
         } else {
-            deviceInfoText.text = "No device connected"
+            deviceInfoText.text = "No device connected\n\nPlease connect a Shimmer device to view detailed information."
         }
+    }
+    
+    private fun updateDataVisualization(state: ShimmerConfigUiState) {
+        // Show/hide data visualization card
+        dataVisualizationCard.visibility = if (state.isRecording) View.VISIBLE else View.GONE
+        
+        // Update recording status
+        recordingStatusChip.text = if (state.isRecording) "Recording" else "Stopped"
+        recordingStatusChip.setChipBackgroundColorResource(
+            if (state.isRecording) R.color.success_color else R.color.error_color
+        )
+        
+        // Update statistics
+        packetsReceivedText.text = state.dataPacketsReceived.toString()
+        
+        val duration = state.recordingDuration / 1000
+        val minutes = duration / 60
+        val seconds = duration % 60
+        recordingDurationText.text = String.format("%02d:%02d", minutes, seconds)
+        
+        val dataRate = if (duration > 0) state.dataPacketsReceived.toDouble() / duration else 0.0
+        dataRateText.text = String.format("%.1f", dataRate)
+        
+        // Update session info
+        if (state.isRecording && state.dataPacketsReceived > 0) {
+            realTimeDataText.text = buildString {
+                append("Active Recording Session\n")
+                append("Duration: ${String.format("%02d:%02d", minutes, seconds)}\n")
+                append("Packets: ${state.dataPacketsReceived}\n")
+                append("Rate: ${String.format("%.1f", dataRate)} Hz\n")
+                append("Signal: ${state.signalStrength} dBm\n")
+                append("Battery: ${state.batteryLevel}%")
+            }
+        } else if (state.isDeviceConnected) {
+            realTimeDataText.text = buildString {
+                append("Device Ready\n")
+                append("Status: Connected\n")
+                append("Battery: ${if (state.batteryLevel >= 0) "${state.batteryLevel}%" else "Unknown"}\n")
+                append("Signal: ${state.signalStrength} dBm\n")
+                append("Firmware: ${state.firmwareVersion}")
+            }
+        } else {
+            realTimeDataText.text = "No active session\n\nConnect a device and start recording to view real-time data."
+        }
+        
+        // TODO: Update charts with real sensor data when available
+        // This would involve parsing actual sensor data from the Shimmer device
+        // and updating the chart data points in real-time
     }
 
     private fun setupSpinners() {

@@ -187,6 +187,9 @@ dependencies {
 
     implementation(libs.bundles.networking)
     
+    // Charting library for real-time data visualization
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    
     // Security dependencies - Updated from alpha to stable versions
     // Addresses Low Priority recommendation: "Evaluate alpha/beta dependency risk"
     implementation("androidx.security:security-crypto:1.1.0-alpha06")  // Restored higher version for MasterKey support
