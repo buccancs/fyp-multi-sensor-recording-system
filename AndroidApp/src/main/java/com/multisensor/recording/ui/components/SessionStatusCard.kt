@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui.components
-
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -20,11 +19,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.multisensor.recording.recording.DeviceStatus
-
-/**
- * Beautiful session status card with elegant device connection displays
- * Provides real-time status updates with smooth animations
- */
 @Composable
 fun SessionStatusCard(
     sessionStatus: String,
@@ -42,7 +36,6 @@ fun SessionStatusCard(
             modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Session Status Header
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -65,11 +58,8 @@ fun SessionStatusCard(
                         fontWeight = FontWeight.SemiBold
                     )
                 }
-                
                 SessionStatusBadge(status = sessionStatus)
             }
-            
-            // Device Status Grid
             if (deviceConnections.isNotEmpty()) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -79,7 +69,6 @@ fun SessionStatusCard(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Medium
                     )
-                    
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
@@ -95,7 +84,6 @@ fun SessionStatusCard(
         }
     }
 }
-
 @Composable
 private fun SessionStatusBadge(
     status: String,
@@ -109,13 +97,11 @@ private fun SessionStatusBadge(
         "error" -> Color(0xFFE53E3E) to Icons.Default.Error
         else -> Color(0xFFED8936) to Icons.Default.Warning
     }
-    
     val animatedColor by animateColorAsState(
         targetValue = color,
         animationSpec = tween(300),
         label = "StatusColor"
     )
-    
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -143,7 +129,6 @@ private fun SessionStatusBadge(
         }
     }
 }
-
 @Composable
 private fun DeviceStatusChip(
     deviceName: String,
@@ -156,13 +141,11 @@ private fun DeviceStatusChip(
         DeviceStatus.CONNECTING -> Color(0xFFED8936) to Icons.Default.Sync
         DeviceStatus.ERROR -> Color(0xFFE53E3E) to Icons.Default.Error
     }
-    
     val animatedColor by animateColorAsState(
         targetValue = statusColor,
         animationSpec = tween(300),
         label = "DeviceColor"
     )
-    
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -175,7 +158,6 @@ private fun DeviceStatusChip(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Device icon and name
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -192,8 +174,6 @@ private fun DeviceStatusChip(
                     fontWeight = FontWeight.Medium
                 )
             }
-            
-            // Status indicator
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -216,7 +196,6 @@ private fun DeviceStatusChip(
         }
     }
 }
-
 @Composable
 private fun getDeviceIcon(deviceName: String): ImageVector {
     return when (deviceName.lowercase()) {

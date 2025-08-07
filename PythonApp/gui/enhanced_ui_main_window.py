@@ -1,7 +1,6 @@
 import os
 import time
 from datetime import datetime
-
 from PyQt5.QtCore import QSize, Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QColor, QFont, QIcon, QPainter, QPalette, QPixmap
 from PyQt5.QtWidgets import (
@@ -30,7 +29,6 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 try:
     from .device_panel import DeviceStatusPanel
 except ImportError:
@@ -49,16 +47,11 @@ except ImportError:
     SessionManager = None
 try:
     from utils.logging_config import get_logger
-
     logger = get_logger(__name__)
 except ImportError:
     import logging
-
     logger = logging.getLogger(__name__)
-
-
 class ModernButton(QPushButton):
-
     def __init__(self, text="", icon_path=None, primary=False, parent=None):
         super().__init__(text, parent)
         self.primary = primary
@@ -69,7 +62,6 @@ class ModernButton(QPushButton):
             self.setIcon(QIcon(icon_path))
             self.setIconSize(QSize(16, 16))
         self.update_style()
-
     def update_style(self):
         if self.primary:
             self.setStyleSheet(
@@ -77,15 +69,11 @@ class ModernButton(QPushButton):
         else:
             self.setStyleSheet(
             )
-
-
 class StatusIndicator(QWidget):
-
     def __init__(self, status="disconnected", parent=None):
         super().__init__(parent)
         self.status = status
         self.setFixedSize(12, 12)
-
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
@@ -99,26 +87,19 @@ class StatusIndicator(QWidget):
         painter.setBrush(color)
         painter.setPen(Qt.NoPen)
         painter.drawEllipse(0, 0, 12, 12)
-
     def set_status(self, status):
         self.status = status
         self.update()
-
-
 class ModernGroupBox(QGroupBox):
-
     def __init__(self, title="", parent=None):
         super().__init__(title, parent)
         self.setFont(QFont("Segoe UI", 9, QFont.Bold))
         self.setStyleSheet(
         )
-
-
 class EnhancedMainWindow(QMainWindow):
     device_connected = pyqtSignal(str)
     recording_started = pyqtSignal()
     recording_stopped = pyqtSignal()
-
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Multi-Sensor Recording System - Enhanced Interface")
@@ -130,11 +111,9 @@ class EnhancedMainWindow(QMainWindow):
         self.setup_ui()
         self.setup_connections()
         logger.info("Enhanced Main Window initialized")
-
     def setup_styling(self):
         self.setStyleSheet(
         )
-
     def setup_ui(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -152,7 +131,6 @@ class EnhancedMainWindow(QMainWindow):
         main_splitter.setSizes([350, 700, 350])
         self.create_menu_bar()
         self.create_status_bar()
-
     def create_device_panel(self):
         panel = ModernGroupBox("Device Management")
         layout = QVBoxLayout(panel)
@@ -206,7 +184,6 @@ class EnhancedMainWindow(QMainWindow):
         layout.addWidget(calibration_group)
         layout.addStretch()
         return panel
-
     def create_stimulus_panel(self):
         panel = ModernGroupBox("Stimulus Presentation and Preview")
         layout = QVBoxLayout(panel)
@@ -256,7 +233,6 @@ class EnhancedMainWindow(QMainWindow):
         controls_layout.addLayout(progress_layout)
         layout.addWidget(controls_group)
         return panel
-
     def create_control_panel(self):
         widget = QWidget()
         layout = QVBoxLayout(widget)
@@ -314,7 +290,6 @@ class EnhancedMainWindow(QMainWindow):
         layout.addWidget(logs_group)
         layout.addStretch()
         return widget
-
     def create_menu_bar(self):
         menubar = self.menuBar()
         file_menu = menubar.addMenu("File")
@@ -336,27 +311,20 @@ class EnhancedMainWindow(QMainWindow):
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
         tools_menu = menubar.addMenu("Tools")
-        
         scan_devices_action = QAction("Scan for Devices", self)
         scan_devices_action.triggered.connect(self.scan_for_devices)
         tools_menu.addAction(scan_devices_action)
-        
         refresh_devices_action = QAction("Refresh Device Status", self)
         refresh_devices_action.triggered.connect(self.refresh_device_status)
         tools_menu.addAction(refresh_devices_action)
-        
         tools_menu.addSeparator()
-        
         browse_files_action = QAction("Browse Recording Files...", self)
         browse_files_action.triggered.connect(self.browse_recording_files)
         tools_menu.addAction(browse_files_action)
-        
         open_data_folder_action = QAction("Open Data Folder", self)
         open_data_folder_action.triggered.connect(self.open_data_folder)
         tools_menu.addAction(open_data_folder_action)
-        
         tools_menu.addSeparator()
-        
         device_settings = QAction("Device Settings...", self)
         device_settings.triggered.connect(self.show_device_settings)
         tools_menu.addAction(device_settings)
@@ -373,42 +341,35 @@ class EnhancedMainWindow(QMainWindow):
         user_guide = QAction("User Guide", self)
         user_guide.triggered.connect(self.show_user_guide)
         help_menu.addAction(user_guide)
-
     def create_status_bar(self):
         status = self.statusBar()
         status.showMessage("Multi-Sensor Recording System - Ready")
         self.connection_status = QLabel("Disconnected")
         self.connection_status.setStyleSheet("color: #d13438; font-weight: bold;")
         status.addPermanentWidget(self.connection_status)
-
     def setup_connections(self):
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.update_monitoring)
         self.update_timer.start(1000)
-
     def toggle_device_connection(self, device_name):
         current_status = self.device_indicators[device_name].status
         new_status = "disconnected" if current_status == "connected" else "connected"
         self.device_indicators[device_name].set_status(new_status)
         self.log_message(f"Device {device_name} {new_status}")
-
     def connect_all_devices(self):
         for device_name, indicator in self.device_indicators.items():
             indicator.set_status("connected")
         self.log_message("All devices connected")
         self.connection_status.setText("Connected")
         self.connection_status.setStyleSheet("color: #107c10; font-weight: bold;")
-
     def disconnect_all_devices(self):
         for device_name, indicator in self.device_indicators.items():
             indicator.set_status("disconnected")
         self.log_message("All devices disconnected")
         self.connection_status.setText("Disconnected")
         self.connection_status.setStyleSheet("color: #d13438; font-weight: bold;")
-
     def start_calibration(self):
         self.log_message("Starting calibration process...")
-
     def load_stimulus_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self,
@@ -420,20 +381,16 @@ class EnhancedMainWindow(QMainWindow):
             self.current_file_label.setText(f"Loaded: {os.path.basename(file_path)}")
             self.play_btn.setEnabled(True)
             self.log_message(f"Loaded stimulus file: {os.path.basename(file_path)}")
-
     def play_stimulus(self):
         self.pause_btn.setEnabled(True)
         self.stop_btn.setEnabled(True)
         self.log_message("Stimulus playback started")
-
     def pause_stimulus(self):
         self.log_message("Stimulus playback paused")
-
     def stop_stimulus(self):
         self.pause_btn.setEnabled(False)
         self.stop_btn.setEnabled(False)
         self.log_message("Stimulus playback stopped")
-
     def start_recording(self):
         self.recording_active = True
         self.start_recording_btn.setEnabled(False)
@@ -442,17 +399,14 @@ class EnhancedMainWindow(QMainWindow):
             f"Recording Session {datetime.now().strftime('%H:%M:%S')}"
         )
         self.log_message("Recording session started")
-
     def stop_recording(self):
         self.recording_active = False
         self.start_recording_btn.setEnabled(True)
         self.stop_recording_btn.setEnabled(False)
         self.session_label.setText("No active session")
         self.log_message("Recording session stopped")
-
     def update_monitoring(self):
         import random
-
         self.cpu_progress.setValue(random.randint(20, 60))
         self.memory_progress.setValue(random.randint(30, 70))
         if self.recording_active:
@@ -465,155 +419,118 @@ class EnhancedMainWindow(QMainWindow):
             seconds = duration % 60
             self.duration_label.setText(f"{hours:02d}:{minutes:02d}:{seconds:02d}")
             self.size_label.setText(f"{duration * 0.5:.1f} MB")
-
     def log_message(self, message):
         timestamp = datetime.now().strftime("[%H:%M:%S]")
         self.log_text.append(f"{timestamp} {message}")
-
     def new_session(self):
         self.log_message("Creating new session...")
-
     def open_session(self):
         self.log_message("Opening session dialog...")
-
     def save_session(self):
         self.log_message("Saving current session...")
-
     def show_device_settings(self):
         QMessageBox.information(
             self, "Device Settings", "Device settings dialog would open here."
         )
-
     def show_calibration_wizard(self):
         QMessageBox.information(
             self, "Calibration Wizard", "Calibration wizard would open here."
         )
-
     def show_data_analysis(self):
         QMessageBox.information(
             self, "Data Analysis", "Data analysis tools would open here."
         )
-
     def show_about(self):
         QMessageBox.about(
             self,
             "About",
         )
-
     def show_user_guide(self):
         QMessageBox.information(self, "User Guide", "User guide would open here.")
-
     def scan_for_devices(self):
         try:
             self.log_message("Scanning for devices...")
-            
             discovered_devices = []
-            
-            
             import time
             time.sleep(1)
-            
             discovered_devices = [
                 {"name": "USB Webcam", "type": "camera", "status": "available"},
                 {"name": "Shimmer GSR Sensor", "type": "gsr", "status": "available"},
                 {"name": "Android Device", "type": "android", "status": "connected"}
             ]
-            
             device_list = "\n".join([f"- {d['name']} ({d['type']}): {d['status']}" 
                                    for d in discovered_devices])
-            
             QMessageBox.information(
                 self, 
                 "Device Scan Complete", 
                 f"Found {len(discovered_devices)} devices:\n\n{device_list}"
             )
-            
             self.log_message(f"Device scan completed: {len(discovered_devices)} devices found")
-            
         except Exception as e:
             self.log_message(f"Error scanning for devices: {e}")
             QMessageBox.critical(self, "Error", f"Failed to scan for devices:\n{str(e)}")
-
     def refresh_device_status(self):
         try:
             self.log_message("Refreshing device status...")
-            
-            
             QMessageBox.information(
                 self, 
                 "Status Refreshed", 
                 "Device status has been refreshed.\n\nAll connected devices are reporting normal operation."
             )
-            
             self.log_message("Device status refresh completed")
-            
         except Exception as e:
             self.log_message(f"Error refreshing device status: {e}")
             QMessageBox.critical(self, "Error", f"Failed to refresh device status:\n{str(e)}")
-
     def browse_recording_files(self):
         try:
             import os
             from PyQt5.QtWidgets import QFileDialog
-            
             self.log_message("Opening file browser for recording files...")
-            
             recordings_dir = os.path.expanduser("~/recordings")
             if not os.path.exists(recordings_dir):
                 recordings_dir = os.path.expanduser("~")
-            
             files, _ = QFileDialog.getOpenFileNames(
                 self,
                 "Browse Recording Files",
                 recordings_dir,
                 "All Files (*.*);;Video Files (*.mp4 *.avi *.mov);;Data Files (*.json *.csv *.txt);;Image Files (*.jpg *.png *.bmp)"
             )
-            
             if files:
                 file_list = "\n".join([os.path.basename(f) for f in files[:5]])
                 if len(files) > 5:
                     file_list += f"\n... and {len(files) - 5} more files"
-                
                 QMessageBox.information(
                     self, 
                     "Files Selected", 
                     f"Selected {len(files)} file(s):\n\n{file_list}"
                 )
-                
                 self.log_message(f"Selected {len(files)} files from file browser")
             else:
                 self.log_message("File browser cancelled")
-                
         except Exception as e:
             self.log_message(f"Error opening file browser: {e}")
             QMessageBox.critical(self, "Error", f"Failed to open file browser:\n{str(e)}")
-
     def open_data_folder(self):
         try:
             import os
             import subprocess
             import platform
-            
             self.log_message("Opening data folder...")
-            
             data_dirs = [
                 os.path.expanduser("~/recordings"),
                 os.path.join(os.getcwd(), "recordings"),
                 os.path.join(os.getcwd(), "data"),
                 os.path.expanduser("~/Documents/recordings")
             ]
-            
             target_dir = None
             for dir_path in data_dirs:
                 if os.path.exists(dir_path):
                     target_dir = dir_path
                     break
-            
             if target_dir is None:
                 target_dir = os.path.expanduser("~/recordings")
                 os.makedirs(target_dir, exist_ok=True)
                 self.log_message(f"Created recordings directory: {target_dir}")
-                
             system = platform.system()
             if system == "Windows":
                 os.startfile(target_dir)
@@ -621,15 +538,12 @@ class EnhancedMainWindow(QMainWindow):
                 subprocess.run(["open", target_dir])
             else:
                 subprocess.run(["xdg-open", target_dir])
-                
             self.log_message(f"Opened data folder: {target_dir}")
-            
             QMessageBox.information(
                 self, 
                 "Data Folder Opened", 
                 f"Opened recordings folder:\n{target_dir}"
             )
-            
         except Exception as e:
             self.log_message(f"Error opening data folder: {e}")
             QMessageBox.information(
@@ -637,11 +551,8 @@ class EnhancedMainWindow(QMainWindow):
                 "Data Folder", 
                 f"Data folder location:\n{target_dir if 'target_dir' in locals() else 'Not found'}\n\nNote: Could not open automatically: {str(e)}"
             )
-
-
 def main():
     import sys
-
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
@@ -653,7 +564,5 @@ def main():
     screenshot.save(screenshot_path)
     print(f"Enhanced UI screenshot saved to: {screenshot_path}")
     return True
-
-
 if __name__ == "__main__":
     main()

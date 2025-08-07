@@ -1,5 +1,4 @@
 package com.multisensor.recording
-
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -37,44 +36,33 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainFragmentsBinding
     private lateinit var viewModel: MainViewModelRefactored
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var sharedPreferences: SharedPreferences
-
     @Inject
     lateinit var logger: Logger
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-
         if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
             return
         }
-
         enableEdgeToEdge()
-
         val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true) 
-
         if (useComposeUI) {
             initializeComposeUI()
         } else {
             initializeFragmentUI()
         }
     }
-
     private fun initializeComposeUI() {
         try {
             viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
-            
             setContent {
                 MultiSensorTheme {
                     Surface(
@@ -85,9 +73,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
             logger.info("MainActivity initialized with Compose UI")
-
         } catch (e: SecurityException) {
             logger.error("Permission error during MainActivity Compose initialization: ${e.message}", e)
             showErrorDialog("Permission Error", "Application requires additional permissions: ${e.message}")
@@ -99,20 +85,15 @@ class MainActivity : AppCompatActivity() {
             showErrorDialog("Initialization Error", "Failed to initialize the application: ${e.message}")
         }
     }
-
     private fun initializeFragmentUI() {
         binding = ActivityMainFragmentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         try {
             viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
-
             setupNavigation()
             setupUI()
             observeViewModel()
-
             logger.info("MainActivity initialized with fragment architecture")
-
         } catch (e: SecurityException) {
             logger.error("Permission error during MainActivity initialization: ${e.message}", e)
             showErrorDialog("Permission Error", "Application requires additional permissions: ${e.message}")
@@ -124,14 +105,11 @@ class MainActivity : AppCompatActivity() {
             showErrorDialog("Initialization Error", "Failed to initialize the application: ${e.message}")
         }
     }
-
     private fun setupNavigation() {
         setSupportActionBar(binding.toolbar)
         try {
-
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             val navController = navHostFragment.navController
-
             appBarConfiguration = AppBarConfiguration(
                 setOf(
                     R.id.nav_recording, R.id.nav_devices,
@@ -139,13 +117,9 @@ class MainActivity : AppCompatActivity() {
                 ),
                 binding.drawerLayout
             )
-
             setupActionBarWithNavController(navController, appBarConfiguration)
-
             binding.navView.setupWithNavController(navController)
-
             binding.bottomNavigation.setupWithNavController(navController)
-
             binding.navView.setNavigationItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.nav_settings -> {
@@ -153,16 +127,12 @@ class MainActivity : AppCompatActivity() {
                         binding.drawerLayout.closeDrawers()
                         true
                     }
-
                     R.id.nav_network_config, 
                     R.id.nav_shimmer_settings,
                     R.id.nav_shimmer_visualization,
                     R.id.nav_diagnostics, 
                     R.id.nav_about -> {
-
                         binding.drawerLayout.closeDrawers()
-                        
-                        // Handle specific navigation for new Shimmer activities
                         when (menuItem.itemId) {
                             R.id.nav_shimmer_settings -> {
                                 startActivity(Intent(this, ShimmerSettingsActivity::class.java))
@@ -184,9 +154,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
             logger.info("Navigation setup completed successfully")
-
         } catch (e: SecurityException) {
             logger.error("Permission error during navigation setup: ${e.message}", e)
             showErrorDialog("Permission Error", "Failed to setup navigation permissions: ${e.message}")
@@ -198,9 +166,7 @@ class MainActivity : AppCompatActivity() {
             showErrorDialog("Navigation Error", "Failed to setup navigation: ${e.message}")
         }
     }
-
     private fun setupUI() {
-
         val menu = binding.navView.menu
         menu.findItem(R.id.nav_network_config)?.isEnabled = false
         menu.findItem(R.id.nav_shimmer_settings)?.isEnabled = true
@@ -208,7 +174,6 @@ class MainActivity : AppCompatActivity() {
         menu.findItem(R.id.nav_diagnostics)?.isEnabled = false
         menu.findItem(R.id.nav_about)?.isEnabled = false
     }
-
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -218,23 +183,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun updateUI(state: MainUiState) {
         binding.toolbar.title = when {
             state.isRecording -> "Recording - ${state.sessionDuration}"
             state.isCalibrating -> "Calibrating..."
             else -> "Multi-Sensor Recording"
         }
-
         requestedOrientation = if (state.isRecording) {
             ActivityInfo.SCREEN_ORIENTATION_LOCKED
         } else {
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
-
     override fun onSupportNavigateUp(): Boolean {
-        
         val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true)
         return if (!useComposeUI) {
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -244,7 +205,6 @@ class MainActivity : AppCompatActivity() {
             super.onSupportNavigateUp()
         }
     }
-
     private fun showErrorDialog(title: String, message: String) {
         AlertDialog.Builder(this)
             .setTitle(title)
@@ -252,7 +212,6 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .show()
     }
-
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

@@ -5,28 +5,21 @@ Extended test cases for the performance optimization features including
 endurance testing, graceful degradation, hardware acceleration, and 
 device-specific optimization capabilities.
 """
-
 import asyncio
 import logging
 import time
 from typing import Dict, Any, List
 import sys
 from pathlib import Path
-
-# Add parent directory to path for imports
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent
 sys.path.insert(0, str(src_dir))
-
 from evaluation_suite.framework.test_framework import TestSuite, TestResult
 from PythonApp.performance_optimizer import PerformanceManager, OptimizationConfig
 from PythonApp.production.endurance_test_suite import EnduranceTestSuite, EnduranceTestConfig
 from PythonApp.production.device_capability_detector import DeviceCapabilityDetector
-
-
 class PerformanceOptimizationTestSuite(TestSuite):
     """complete performance optimization testing"""
-    
     def __init__(self):
         super().__init__(
             name="performance_optimization",
@@ -34,12 +27,9 @@ class PerformanceOptimizationTestSuite(TestSuite):
             description="Performance optimization and endurance testing capabilities"
         )
         self.logger = logging.getLogger(__name__)
-    
     async def run_all_tests(self) -> List[TestResult]:
         """Run all performance optimization tests"""
         results = []
-        
-        # Define tests to run
         test_methods = [
             ("test_graceful_degradation", "Graceful degradation mechanisms"),
             ("test_hardware_acceleration", "Hardware acceleration detection"),
@@ -50,7 +40,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
             ("test_adaptive_quality_control", "Adaptive quality control"),
             ("test_performance_degradation_alerts", "Performance degradation alerts")
         ]
-        
         for test_method, description in test_methods:
             self.logger.info(f"Running {test_method}: {description}")
             try:
@@ -63,9 +52,7 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message=str(e),
                     duration=0.0
                 ))
-        
         return results
-    
     async def test_graceful_degradation(self) -> TestResult:
         """Test graceful degradation mechanisms"""
         try:
@@ -74,7 +61,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 frame_drop_cpu_threshold=70.0,
                 frame_drop_memory_threshold=80.0
             )
-            
             manager = PerformanceManager()
             if not manager.initialize(config):
                 return TestResult(
@@ -83,14 +69,9 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message="Failed to initialize performance manager",
                     duration=0.0
                 )
-            
             start_time = time.time()
             manager.start()
-            
-            # Let it run for a few seconds to collect metrics
             await asyncio.sleep(3)
-            
-            # Test degradation manager
             degradation_mgr = manager.get_degradation_manager()
             if not degradation_mgr:
                 manager.stop()
@@ -100,27 +81,17 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message="Degradation manager not available",
                     duration=time.time() - start_time
                 )
-            
-            # Test frame drop decision with high load simulation
             should_drop_normal = degradation_mgr.should_drop_frame(50.0, 60.0)
             should_drop_high = degradation_mgr.should_drop_frame(90.0, 95.0)
-            
-            # Test quality reduction
             should_reduce_normal = degradation_mgr.should_reduce_quality(50.0, 60.0)
             should_reduce_high = degradation_mgr.should_reduce_quality(85.0, 85.0)
-            
-            # Get degradation status
             status = degradation_mgr.get_degradation_status()
-            
             manager.stop()
-            
-            # Validate results
             success = (
                 not should_drop_normal and should_drop_high and
                 not should_reduce_normal and should_reduce_high and
                 "state" in status and "frame_drop_rate" in status
             )
-            
             return TestResult(
                 test_name="test_graceful_degradation",
                 success=success,
@@ -134,7 +105,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     "degradation_status": status
                 }
             )
-            
         except Exception as e:
             return TestResult(
                 test_name="test_graceful_degradation",
@@ -142,15 +112,12 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 error_message=str(e),
                 duration=time.time() - start_time if 'start_time' in locals() else 0.0
             )
-    
     async def test_hardware_acceleration(self) -> TestResult:
         """Test hardware acceleration detection and capabilities"""
         try:
             start_time = time.time()
-            
             config = OptimizationConfig(enable_hardware_acceleration=True)
             manager = PerformanceManager()
-            
             if not manager.initialize(config):
                 return TestResult(
                     test_name="test_hardware_acceleration",
@@ -158,11 +125,8 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message="Failed to initialize performance manager",
                     duration=time.time() - start_time
                 )
-            
             manager.start()
             await asyncio.sleep(2)
-            
-            # Get hardware capabilities
             hardware_mgr = manager.get_hardware_manager()
             if not hardware_mgr:
                 manager.stop()
@@ -172,11 +136,8 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message="Hardware manager not available",
                     duration=time.time() - start_time
                 )
-            
             capabilities = hardware_mgr.get_capabilities_report()
             optimal_device = hardware_mgr.get_optimal_processing_device()
-            
-            # Test video writer creation (should not fail)
             try:
                 video_writer = hardware_mgr.create_optimized_video_writer(
                     "/tmp/test_video.mp4", 30.0, (640, 480))
@@ -185,17 +146,13 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     video_writer.release()
             except:
                 video_writer_created = False
-            
             manager.stop()
-            
-            # Validate results
             success = (
                 "acceleration_enabled" in capabilities and
                 "capabilities" in capabilities and
                 optimal_device in ["cpu", "cuda", "opencl", "opencv_gpu"] and
                 video_writer_created
             )
-            
             return TestResult(
                 test_name="test_hardware_acceleration",
                 success=success,
@@ -206,7 +163,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 },
                 duration=time.time() - start_time
             )
-            
         except Exception as e:
             return TestResult(
                 test_name="test_hardware_acceleration",
@@ -214,15 +170,12 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 error_message=str(e),
                 duration=time.time() - start_time if 'start_time' in locals() else 0.0
             )
-    
     async def test_profiling_integration(self) -> TestResult:
         """Test performance profiling integration"""
         try:
             start_time = time.time()
-            
             config = OptimizationConfig(enable_profiling_integration=True)
             manager = PerformanceManager()
-            
             if not manager.initialize(config):
                 return TestResult(
                     test_name="test_profiling_integration",
@@ -230,35 +183,22 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message="Failed to initialize performance manager",
                     duration=time.time() - start_time
                 )
-            
             manager.start()
             await asyncio.sleep(1)
-            
-            # Test profiling start/stop
             profiling_started = manager.start_profiling("cprofile")
-            
             if profiling_started:
-                # Simulate some work
                 await asyncio.sleep(1)
-                
-                # Stop profiling
                 results = manager.stop_profiling("cprofile", save_results=False)
                 profiling_stopped = results is not None
             else:
                 profiling_stopped = False
-            
-            # Get profiling status
             profiling_mgr = manager.get_profiling_manager()
             status = profiling_mgr.get_profiling_status() if profiling_mgr else {}
-            
             manager.stop()
-            
-            # Validate results
             success = (
                 "available_profilers" in status and
                 isinstance(status["available_profilers"], list)
             )
-            
             return TestResult(
                 test_name="test_profiling_integration",
                 success=success,
@@ -269,7 +209,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 },
                 duration=time.time() - start_time
             )
-            
         except Exception as e:
             return TestResult(
                 test_name="test_profiling_integration",
@@ -277,24 +216,14 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 error_message=str(e),
                 duration=time.time() - start_time if 'start_time' in locals() else 0.0
             )
-    
     async def test_device_capability_detection(self) -> TestResult:
         """Test device capability detection"""
         try:
             start_time = time.time()
-            
             detector = DeviceCapabilityDetector()
-            
-            # Detect capabilities
             capabilities = detector.detect_capabilities()
-            
-            # Generate performance profile
             profile = detector.generate_performance_profile()
-            
-            # Get recommendations
             recommendations = detector.get_optimization_recommendations()
-            
-            # Validate results
             success = (
                 capabilities.platform_name and
                 capabilities.cpu_cores_logical > 0 and
@@ -303,7 +232,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 profile.device_tier == capabilities.overall_performance_tier and
                 isinstance(recommendations, list)
             )
-            
             return TestResult(
                 test_name="test_device_capability_detection",
                 success=success,
@@ -319,7 +247,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 },
                 duration=time.time() - start_time
             )
-            
         except Exception as e:
             return TestResult(
                 test_name="test_device_capability_detection",
@@ -327,31 +254,25 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 error_message=str(e),
                 duration=time.time() - start_time if 'start_time' in locals() else 0.0
             )
-    
     async def test_endurance_monitoring(self) -> TestResult:
         """Test short endurance monitoring (1 minute)"""
         try:
             start_time = time.time()
-            
             config = EnduranceTestConfig(
-                target_duration_hours=1.0 / 60.0,  # 1 minute
+                target_duration_hours=1.0 / 60.0,
                 monitoring_interval_seconds=5.0,
                 enable_simulated_workload=True,
                 workload_intensity="low",
                 save_detailed_logs=False
             )
-            
             suite = EnduranceTestSuite(config, "/tmp/endurance_test")
             result = await suite.run_endurance_test()
-            
-            # Validate results
             success = (
                 "test_summary" in result and
                 "memory_analysis" in result and
                 "performance_analysis" in result and
                 result["test_summary"]["samples_collected"] > 0
             )
-            
             return TestResult(
                 test_name="test_endurance_monitoring",
                 success=success,
@@ -364,7 +285,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 },
                 duration=time.time() - start_time
             )
-            
         except Exception as e:
             return TestResult(
                 test_name="test_endurance_monitoring",
@@ -372,15 +292,12 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 error_message=str(e),
                 duration=time.time() - start_time if 'start_time' in locals() else 0.0
             )
-    
     async def test_memory_leak_detection(self) -> TestResult:
         """Test memory leak detection capabilities"""
         try:
             start_time = time.time()
-            
             config = OptimizationConfig(enable_memory_optimization=True)
             manager = PerformanceManager()
-            
             if not manager.initialize(config):
                 return TestResult(
                     test_name="test_memory_leak_detection",
@@ -388,25 +305,15 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message="Failed to initialize performance manager",
                     duration=time.time() - start_time
                 )
-            
             manager.start()
-            
-            # Simulate memory usage for a few seconds
             memory_blocks = []
             for i in range(5):
                 await asyncio.sleep(1)
-                # Allocate some memory
-                block = bytearray(1024 * 1024)  # 1MB
+                block = bytearray(1024 * 1024)
                 memory_blocks.append(block)
-            
-            # Get memory optimization results
             optimization_result = manager.optimize_now()
-            
-            # Check if memory optimization was performed
             memory_optimized = "memory" in optimization_result
-            
             manager.stop()
-            
             return TestResult(
                 test_name="test_memory_leak_detection",
                 success=memory_optimized,
@@ -416,7 +323,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 },
                 duration=time.time() - start_time
             )
-            
         except Exception as e:
             return TestResult(
                 test_name="test_memory_leak_detection",
@@ -424,15 +330,12 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 error_message=str(e),
                 duration=time.time() - start_time if 'start_time' in locals() else 0.0
             )
-    
     async def test_adaptive_quality_control(self) -> TestResult:
         """Test adaptive quality control mechanisms"""
         try:
             start_time = time.time()
-            
             config = OptimizationConfig(enable_network_optimization=True)
             manager = PerformanceManager()
-            
             if not manager.initialize(config):
                 return TestResult(
                     test_name="test_adaptive_quality_control",
@@ -440,26 +343,18 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message="Failed to initialize performance manager",
                     duration=time.time() - start_time
                 )
-            
             manager.start()
             await asyncio.sleep(2)
-            
-            # Get recommended quality settings
             quality_settings = manager.get_recommended_quality_settings()
-            
-            # Test optimization
             optimization_result = manager.optimize_now()
             network_optimized = "network" in optimization_result
-            
             manager.stop()
-            
             success = (
                 quality_settings and
                 "resolution" in quality_settings and
                 "fps" in quality_settings and
                 network_optimized
             )
-            
             return TestResult(
                 test_name="test_adaptive_quality_control",
                 success=success,
@@ -469,7 +364,6 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 },
                 duration=time.time() - start_time
             )
-            
         except Exception as e:
             return TestResult(
                 test_name="test_adaptive_quality_control",
@@ -477,27 +371,22 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 error_message=str(e),
                 duration=time.time() - start_time if 'start_time' in locals() else 0.0
             )
-    
     async def test_performance_degradation_alerts(self) -> TestResult:
         """Test performance degradation alert system"""
         try:
             start_time = time.time()
-            
             alerts_received = []
-            
             def alert_callback(violation_type: str, metrics):
                 alerts_received.append({
                     "type": violation_type,
                     "cpu_percent": metrics.cpu_percent,
                     "memory_mb": metrics.memory_mb
                 })
-            
             config = OptimizationConfig(
-                max_cpu_percent=50.0,  # Low threshold to trigger alerts
-                max_memory_mb=100.0,   # Low threshold to trigger alerts
-                alert_threshold_violations=1  # Trigger immediately
+                max_cpu_percent=50.0,
+                max_memory_mb=100.0,
+                alert_threshold_violations=1
             )
-            
             manager = PerformanceManager()
             if not manager.initialize(config):
                 return TestResult(
@@ -506,31 +395,21 @@ class PerformanceOptimizationTestSuite(TestSuite):
                     error_message="Failed to initialize performance manager",
                     duration=time.time() - start_time
                 )
-            
-            # Add alert callback
             if manager.monitor:
                 manager.monitor.add_alert_callback(alert_callback)
-            
             manager.start()
-            
-            # Wait for monitoring to detect violations
             await asyncio.sleep(5)
-            
             manager.stop()
-            
-            # Check if alerts were generated
             success = len(alerts_received) > 0
-            
             return TestResult(
                 test_name="test_performance_degradation_alerts",
                 success=success,
                 details={
                     "alerts_received": len(alerts_received),
-                    "alert_details": alerts_received[:3]  # First 3 alerts
+                    "alert_details": alerts_received[:3]
                 },
                 duration=time.time() - start_time
             )
-            
         except Exception as e:
             return TestResult(
                 test_name="test_performance_degradation_alerts",
@@ -538,24 +417,18 @@ class PerformanceOptimizationTestSuite(TestSuite):
                 error_message=str(e),
                 duration=time.time() - start_time if 'start_time' in locals() else 0.0
             )
-
-
 if __name__ == "__main__":
     import asyncio
-    
     async def run_tests():
         suite = PerformanceOptimizationTestSuite()
         results = await suite.run_all_tests()
-        
         print(f"\nPerformance Optimization Test Results:")
         print(f"Tests run: {len(results)}")
         passed = sum(1 for r in results if r.success)
         print(f"Passed: {passed}/{len(results)} ({passed/len(results)*100:.1f}%)")
-        
         for result in results:
             status = "✓" if result.success else "✗"
             print(f"  {status} {result.test_name}: {result.duration:.2f}s")
             if not result.success:
                 print(f"    Error: {result.error_message}")
-    
     asyncio.run(run_tests())
