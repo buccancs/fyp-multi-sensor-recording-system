@@ -5,7 +5,7 @@
 The validation methodology for the Multi-Sensor Recording System employs a systematic, multi-layered testing framework specifically designed to ensure research-grade reliability and precision for physiological data acquisition. Unlike conventional software applications, this system requires coordinated multi-device data capture with stringent accuracy requirements including precise temporal synchronisation, zero data loss tolerance, and validated measurement precision—critical factors where any failure could compromise experimental validity.
 
 ![Figure 5.1: Multi-Layered Testing Architecture](../diagrams/figure_5_1_multi_layered_testing_architecture.png)
-*Figure 5.1: complete testing framework showing the hierarchical validation approach from unit testing through system integration to experimental validation.*
+*Figure 5.1: testing framework showing the hierarchical validation approach from unit testing through system integration to experimental validation.*
 
 The testing philosophy integrates established software engineering practices with specialised validation methods for scientific instrumentation, balancing full coverage with practical implementation constraints while prioritising critical system components and behaviours that directly impact research outcomes.
 
@@ -15,7 +15,7 @@ The implementation employs a multi-level testing hierarchy that systematically v
 
 Integration testing validates interactions between system components, including verification of communication protocols between Android applications and desktop controllers, sensor interface coordination, and data synchronisation mechanisms. The testing framework, documented in `scripts/integration_tests.py`, specifically validates the JSON socket communication protocol defined in `protocol/communication_protocol.json`.
 
-System-level testing exercises the complete multi-sensor platform in end-to-end scenarios that replicate realistic usage conditions, ensuring that all functional requirements are satisfied during integrated operation. This hierarchical approach ensures early detection of implementation issues while providing thorough validation of the final system under realistic operational conditions.
+System-level testing exercises the multi-sensor platform in end-to-end scenarios that replicate realistic usage conditions, ensuring that all functional requirements are satisfied during integrated operation. This hierarchical approach ensures early detection of implementation issues while providing thorough validation of the final system under realistic operational conditions.
 
 ### Research-Specific Validation Metrics
 
@@ -1425,7 +1425,7 @@ test_05_test_network_resilience_output.txt
 
 ## 5.5 Reliability Evaluation and Code Quality Assessment
 
-### 5.5.1 complete Exception Handling Validation
+### 5.5.1 Exception Handling Validation
 
 The Multi-Sensor Recording System demonstrates exceptional reliability through systematic code quality improvements that address fundamental software engineering challenges in distributed research instrumentation. This detailed evaluation establishes quantitative evidence for improved error handling specificity and enhanced system robustness under diverse failure conditions.
 

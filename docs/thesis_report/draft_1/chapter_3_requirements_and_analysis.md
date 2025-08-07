@@ -721,7 +721,7 @@ modules for each major function, from `MasterClockSynchronizer`
 will address non-functional requirements, which are just as crucial for
 a research-grade system.
 
-### 3.3.5 Advanced System Integration Requirements
+### 3.3.5 System Integration Requirements
 
 The current implementation has evolved to include sophisticated advanced features that enhance the core functionality
 described in the previous sections. These requirements reflect the actual system capabilities as implemented in
@@ -741,7 +741,7 @@ and remote control capabilities that maintain synchronisation precision with the
 **Validation Criteria**: Web interface accessibility from multiple browsers simultaneously, real-time status updates
 with <1 second latency, and complete functional parity with desktop interface for all core recording operations.
 
-#### FR-035: Advanced Performance Optimisation Framework
+#### FR-035: Performance Optimisation Framework
 
 **Requirement Statement**: The system shall implement complete performance optimisation capabilities that dynamically
 adapt resource utilisation, frame rates, and processing load based on real-time system performance metrics and
@@ -769,7 +769,7 @@ lifecycles, and configuration-driven component selection for diverse research sc
 **Validation Criteria**: Runtime component substitution for testing scenarios, configuration-driven feature enablement,
 and complete unit test coverage >90% enabled by dependency injection architecture.
 
-#### FR-037: Advanced Calibration Quality Assessment System
+#### FR-037: Calibration Quality Assessment System
 
 **Requirement Statement**: The system shall provide sophisticated calibration quality assessment capabilities that
 automatically evaluate calibration accuracy, detect calibration degradation, and provide real-time feedback for

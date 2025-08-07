@@ -20,7 +20,7 @@ The research project successfully delivered a validated multi-sensor platform fo
 - Functional multi-device Android-PC platform with synchronised data acquisition capabilities
 - Thermal imaging integration for contactless GSR estimation implemented in `PythonApp/src/webcam/webcam_capture.py`
 - Distributed sensor fusion algorithms with millisecond-precision timing coordination
-- complete validation framework demonstrating correlation coefficients exceeding 0.8 with reference GSR measurements
+- validation framework demonstrating correlation coefficients exceeding 0.8 with reference GSR measurements
 - Open-source research platform with modular architecture supporting community extension and replication
 
 **Research Methodology Contributions:**
@@ -28,7 +28,7 @@ The research project successfully delivered a validated multi-sensor platform fo
 - Novel contactless GSR measurement methodology utilising thermal imaging analysis
 - Validated experimental protocols for multi-modal physiological sensor comparison
 - Systematic evaluation framework for contactless physiological measurement systems
-- complete documentation supporting reproducible research implementation
+- documentation supporting reproducible research implementation
 
 ### Technical Innovation Achievements
 
@@ -56,7 +56,7 @@ between the theoretical goals of non-intrusive stress measurement and
 the practical challenges of implementing a reliable, synchronised
 multi-sensor platform. All major objectives set out at the beginning of
 the project have been met, and in several cases the outcomes exceed the
-initial expectations. The final system provides a sophisticated platform
+initial expectations. The final system provides a platform
 that not only meets its ambitious original requirements but also
 establishes new benchmarks in areas such as data synchronisation
 precision, system scalability, and software quality. This section
@@ -344,7 +344,7 @@ system's capabilities were extended in ways not originally anticipated.
 Key secondary achievements and notable outcomes are outlined below:
 
 - **Enhanced Calibration System:** *Outcome:* **Exceeded Expectations.**
-  A sophisticated calibration toolkit was developed for the system's
+  A calibration toolkit was developed for the system's
   cameras and sensors. For example, an automated camera calibration
   procedure uses a checkerboard to calculate intrinsic parameters and
   align the RGB and thermal camera frames with sub-pixel accuracy. This
@@ -403,7 +403,7 @@ Key secondary achievements and notable outcomes are outlined below:
   confusing). These improvements, while not explicitly required, enhance
   the system's practical value.
 
-- **complete Testing Framework:** *Outcome:* **Exceeded
+- **Testing Framework:** *Outcome:* **Exceeded
   Expectations.** Ensuring software quality was a necessity, but the
   project's approach to testing became a secondary objective of its own.
   A full testing and continuous integration framework was implemented,
@@ -683,7 +683,7 @@ trade-offs: commercial systems may still outperform in specialised
 use-cases or offer professional support, and simpler academic tools
 might be easier to deploy for very specific tasks. Nonetheless, this
 project's system strikes a compelling balance, delivering a unique and
-complete solution that can significantly advance how stress and
+solution that can significantly advance how stress and
 emotion research is conducted. It effectively demonstrates that with
 modern consumer technology and solid engineering, we can achieve
 laboratory-grade results -- an outcome that both validates the project's
