@@ -33,9 +33,13 @@
                     android:icon="@drawable/ic_network"
                     android:title="Network Config"/>
             <item
-                    android:id="@+id/nav_shimmer_config"
-                    android:icon="@drawable/ic_shimmer"
-                    android:title="Shimmer Config"/>
+                    android:id="@+id/nav_shimmer_settings"
+                    android:icon="@drawable/ic_settings"
+                    android:title="Shimmer Settings"/>
+            <item
+                    android:id="@+id/nav_shimmer_visualization"
+                    android:icon="@drawable/ic_chart"
+                    android:title="Shimmer Visualization"/>
         </menu>
     </item>
 

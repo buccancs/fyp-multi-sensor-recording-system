@@ -28,6 +28,8 @@ import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModelRefactored
 import com.multisensor.recording.ui.OnboardingActivity
 import com.multisensor.recording.ui.SettingsActivity
+import com.multisensor.recording.ui.ShimmerSettingsActivity
+import com.multisensor.recording.ui.ShimmerVisualizationActivity
 import com.multisensor.recording.ui.compose.navigation.MainComposeNavigation
 import com.multisensor.recording.ui.theme.MultiSensorTheme
 import com.multisensor.recording.util.Logger
@@ -153,12 +155,25 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     R.id.nav_network_config, 
-                    R.id.nav_shimmer_config, 
+                    R.id.nav_shimmer_settings,
+                    R.id.nav_shimmer_visualization,
                     R.id.nav_diagnostics, 
                     R.id.nav_about -> {
 
                         binding.drawerLayout.closeDrawers()
-                        false
+                        
+                        // Handle specific navigation for new Shimmer activities
+                        when (menuItem.itemId) {
+                            R.id.nav_shimmer_settings -> {
+                                startActivity(Intent(this, ShimmerSettingsActivity::class.java))
+                                true
+                            }
+                            R.id.nav_shimmer_visualization -> {
+                                startActivity(Intent(this, ShimmerVisualizationActivity::class.java))
+                                true
+                            }
+                            else -> false
+                        }
                     }
                     else -> {
                         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -188,7 +203,8 @@ class MainActivity : AppCompatActivity() {
 
         val menu = binding.navView.menu
         menu.findItem(R.id.nav_network_config)?.isEnabled = false
-        menu.findItem(R.id.nav_shimmer_config)?.isEnabled = false
+        menu.findItem(R.id.nav_shimmer_settings)?.isEnabled = true
+        menu.findItem(R.id.nav_shimmer_visualization)?.isEnabled = true
         menu.findItem(R.id.nav_diagnostics)?.isEnabled = false
         menu.findItem(R.id.nav_about)?.isEnabled = false
     }
