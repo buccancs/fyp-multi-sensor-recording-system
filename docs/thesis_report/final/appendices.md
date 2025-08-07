@@ -477,8 +477,7 @@ video). It uses a Fourier transform (Welch's method) to find the
 dominant frequency corresponding to heart
 rate[\[54\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L72-L80):
 
-\`\`\`python
-
+```python
 # Inside PhysiologicalSignal.get_heart_rate_estimate()
 
 freqs, psd = scipy.signal.welch( self.signal_data,

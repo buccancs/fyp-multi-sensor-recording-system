@@ -2137,7 +2137,7 @@ table). The combined **pass rate was \~99.5%**, meaning the system is
 nearly error-free across all tested aspects. No critical defects
 remained open by the end of the testing phase.
 
-#### Coverage Metrics
+### Coverage Metrics
 
 To ensure we tested everything important, we measured code coverage and
 requirement coverage. On the code side, the aggregate coverage metrics
@@ -2192,7 +2192,7 @@ validated as we could capture GSR at 512 Hz with negligible data loss
 covered start/stop and lifecycle with all edge cases (pauses, resumes,
 multiple sessions sequentially).
 
-#### Performance Benchmarks
+### Performance Benchmarks
 
 We have already discussed many performance results. In summary: -
 **Response Times:** The average session start time on the PC was \~1.23
@@ -2227,12 +2227,12 @@ All these benchmarks confirm that the system can perform in real-time
 and handle the data volumes and speeds required for emotion analysis
 experiments, even with some margin for expansion or additional sensors.
 
-#### Quality Assessment Results
+### Quality Assessment Results
 
 Having tested all aspects, we revisit the project's requirements to
 ensure each is fulfilled:
 
-##### Functional Requirements Validation
+#### Functional Requirements Validation
 
 All critical functional requirements were successfully validated through
 tests. For reference, here are a few key functional requirements and
@@ -2265,7 +2265,7 @@ their status:
 statements can be made for each, with test cases covering all
 functionalities from data export to user interface controls.)*
 
-##### Non-Functional Requirements Assessment
+#### Non-Functional Requirements Assessment
 
 The non-functional requirements (NFRs) --- covering performance,
 reliability, usability, etc. --- were likewise assessed:
@@ -2317,7 +2317,7 @@ loss in worst-case network conditions, which we consider acceptable. We
 could confidently claim the system achieves **research-grade
 performance**.
 
-##### Test Coverage Analysis
+#### Test Coverage Analysis
 
 Our test suite provides full coverage across different
 dimensions: - **Functional coverage:** All core features (100%) were
@@ -2356,7 +2356,7 @@ lurking bugs or unverified parts of the system that could surprise us
 later. Any gaps identified were deliberate (and documented as not
 critical or slated for future work).
 
-##### Defect Analysis
+#### Defect Analysis
 
 Throughout testing, various defects were identified and resolved. We
 categorise them here for completeness:

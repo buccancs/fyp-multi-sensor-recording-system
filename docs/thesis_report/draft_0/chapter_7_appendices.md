@@ -142,6 +142,7 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 | **SQLite + JSON**      | PostgreSQL, MongoDB     | Local storage simplicity                     | Fast local queries            | Low complexity         |
 | **OpenCV Integration** | Custom image processing | Mature computer vision library               | Optimized algorithms          | Medium complexity      |
 | **Bluetooth LE**       | WiFi Direct, USB        | Low power, standardized protocol             | Power efficient               | Medium complexity      |
+
 ---
 ## Appendix B: Testing and Evaluation Results
 
@@ -275,6 +276,7 @@ The Multi-Sensor Recording System is organized into self-contained components, e
 | **Task Success**      | >95%     | 97.8% ± 2.1%    | n=200       | 98%          |
 | **Error Recovery**    | <5 min   | 3.2 ± 1.8 min   | n=45        | 89%          |
 | **User Satisfaction** | >85%     | 91.2% ± 4.3%    | n=75        | 91%          |
+
 ---
 ## Appendix C: User Manual
 
@@ -976,7 +978,7 @@ python -m pytest PythonApp/
 | 4                    | Configure session parameters and participant info | 3 minutes                         | Complete participant consent and setup forms  |
 | 5                    | Perform synchronisation test                      | 1 minute                          | Temporal offset within ±25ms tolerance        |
 | 6                    | Execute pre-recording quality check               | 2 minutes                         | All quality indicators show green status      |
-| **Total Setup Time** | **≤12 minutes**                                   | **Research-ready state achieved** |
+| **Total Setup Time** | **≤12 minutes**                                   | **Research-ready state achieved** | **All checks passed** |
 
 **Figure B.2: Device Setup Workflow**
 
@@ -1962,6 +1964,7 @@ maintained |
 | **MATLAB .mat**     | MATLAB/Octave analysis                | Medium     | MATLAB ecosystem     | Medium          |
 | **HDF5**            | Large dataset analysis (Python, R)    | Compressed | Scientific computing | Slow            |
 | **Custom Research** | Specialized analysis pipelines        | Variable   | Project-specific     | Variable        |
+
 ---
 ## Appendix C: Supporting Documentation and Data
 
@@ -2002,7 +2005,11 @@ xychart-beta
 | **Emotion Recognition Validation** | 15 minutes                  | 1 participant     | High-res RGB + Thermal | Computer vision research   |
 | **Group Dynamics Study**           | 60 minutes                  | 4-12 participants | Distributed sensing    | Organizational research    |
 | **Longitudinal Monitoring**        | Multiple sessions           | 1-2 participants  | All modalities         | Clinical research          |
- adb logcat                         | grep "MultiSensorRecording"
+
+**Debug Command:**
+
+```bash
+adb logcat | grep "MultiSensorRecording"
 
 ```
 

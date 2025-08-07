@@ -144,3 +144,8 @@ vale.tar.gz
 *.fdb_latexmk
 *.fls
 *.synctex.gz
+
+# Node.js dependencies for markdownlint
+node_modules/
+package-lock.json
+package.json
