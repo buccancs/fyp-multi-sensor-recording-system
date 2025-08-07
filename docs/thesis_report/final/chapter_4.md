@@ -11,7 +11,7 @@ master--slave paradigm in which the Python desktop application
 orchestrates one or more Android sensor nodes, achieving precise
 synchronised operation across all
 devices[\[1\]](AndroidApp/README.md#L8-L16)[\[2\]](PythonApp/README.md#L70-L78).
-The design balances device autonomy with centralized control: each
+The design balances device autonomy with centralised control: each
 Android device can operate independently for local sensor management and
 data logging, yet all devices participate in coordinated sessions
 managed by the desktop controller for unified timing and control.
@@ -54,7 +54,7 @@ external devices. It is developed in Kotlin and structured using a clear
 (Model--View--ViewModel) design, where a thin UI layer
 (Activities/Fragments and ViewModels) interacts with a robust **business
 logic layer** of managers and controllers, which in turn utilise
-lower-level sensor interfacing components. This design maximizes
+lower-level sensor interfacing components. This design maximises
 modularity and maintainability, allowing each sensor modality to be
 managed independently while ensuring all subsystems remain synchronised.
 Key architectural components include a `SessionManager` for coordinating
@@ -75,7 +75,7 @@ of Android's asynchronous capabilities (threads, Handler, and
 coroutines) to handle high data rates and multiple sensors in parallel,
 ensuring that operations like writing to storage or processing sensor
 inputs do not block the user interface. Dependency injection (via Hilt)
-is utilized to manage the complexity of cross-cutting concerns like
+is utilised to manage the complexity of cross-cutting concerns like
 logging and configuration, further decoupling components.
 
 Importantly, the Android application is built to facilitate **precise
@@ -83,7 +83,7 @@ time alignment** of multi-modal data at the point of capture. All sensor
 readings and frames are timestamped using a common reference (system
 clock or a synchronised clock source) as they are recorded. For example,
 when a recording session begins under remote command, the app
-initializes each sensor nearly simultaneously and tags the data with
+initialises each sensor nearly simultaneously and tags the data with
 timestamps that can later be correlated across devices. The Android app
 also includes on-device preprocessing features -- for instance, a **hand
 region segmentation** module uses MediaPipe to detect hand landmarks in
@@ -126,7 +126,7 @@ retrieval[\[7\]](docs/thermal_camera_integration_readme.md#L22-L31).
 When the thermal camera is connected, the app's `ThermalRecorder`
 component handles the entire lifecycle: it listens for USB attach
 events, requests permission from the Android USB system to access the
-device, and initializes the camera
+device, and initialises the camera
 feed[\[8\]](docs/thermal_camera_integration_readme.md#L76-L84)[\[9\]](docs/thermal_camera_integration_readme.md#L88-L94).
 The Topdon TC001 supports a sensor resolution of 256×192 pixels with a
 frame rate of 25 FPS, which the app configures as the default thermal
@@ -184,7 +184,7 @@ occur behind the scenes, preserving a seamless user experience.
 *(Figure 4.3: Thermal camera integration flow. This figure illustrates
 how the Android app interfaces with the Topdon TC001 thermal camera via
 USB. When the camera is plugged in, the app's USB listener requests
-permission from the Android OS and initializes the Topdon SDK. During a
+permission from the Android OS and initialises the Topdon SDK. During a
 recording session, the app continuously pulls thermal frames from the
 camera at \~25 Hz. Each frame is time-stamped and written to local
 storage as part of a thermal data file, and simultaneously a scaled
@@ -277,7 +277,7 @@ means this component can start and stop recording in tandem with other
 sensors under the control of the central session manager. When a session
 begins, the app (upon receiving the command from PC) will initialise the
 Bluetooth link, start the data stream, and begin logging GSR. When the
-session ends, it closes the connection and finalizes the CSV file. The
+session ends, it closes the connection and finalises the CSV file. The
 data recorded provides a ground-truth physiological timeline (skin
 conductance changes over time) that can be later correlated with the
 subject's visual and thermal data to draw insights about stress or
@@ -395,7 +395,7 @@ still synchronised (drift monitoring) and can even warn if, say, an
 Android device's clock starts diverging or if data throughput from a
 device is lagging. When the user stops the session, the controller
 issues a synchronised stop command to all devices and awaits
-confirmation that each has safely finalized its data. It then collates
+confirmation that each has safely finalised its data. It then collates
 metadata about the session (e.g., file names from each device, any
 timing offsets, calibration info) and can present a summary or save a
 session manifest.

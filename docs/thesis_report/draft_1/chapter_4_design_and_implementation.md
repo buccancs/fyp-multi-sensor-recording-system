@@ -15,12 +15,12 @@ autonomously for local data capture yet adheres to commands and timing
 signals from the desktop controller, achieving a **master-coordinator
 pattern** in the system design. This architecture balances **distributed
 autonomy** (each device can function and buffer data on its own) with
-**centralized coordination** (a single controller aligns timelines and
+**centralised coordination** (a single controller aligns timelines and
 manages the experiment), which is crucial for maintaining research-grade
 synchronisation and data integrity across devices.
 
 **Overall Architectural Design Philosophy:** The system's architecture
-prioritizes **temporal precision, data integrity, security, and fault tolerance**
+prioritises **temporal precision, data integrity, security, and fault tolerance**
 over ancillary concerns like user interface complexity. This philosophy
 stems from the project's research context -- precise timing, secure data handling,
 and reliable data capture are paramount requirements (as identified in Chapter 3).
@@ -42,7 +42,7 @@ continue recording locally if the network connection drops, then
 seamlessly reintegrate that data when connectivity is restored. This
 distributed resilience ensures **graceful degradation** -- a temporary
 network glitch will not compromise an entire session. The overall design
-philosophy can be summarized as *"Always collect valid data, even under
+philosophy can be summarised as *"Always collect valid data, even under
 suboptimal conditions, and synchronise everything for a unified
 dataset."* In alignment with this, the system architecture employs
 modular components for each major function (sensing, synchronisation,
@@ -291,7 +291,7 @@ that coordinates four specialised components:
 
 The refactored architecture demonstrates proper MVVM implementation suitable for a Master's thesis
 on multi-sensor recording systems, with clear separation between data collection, device management,
-and user interface concerns. The application now utilizes modern Jetpack Compose declarative UI
+and user interface concerns. The application now utilises modern Jetpack Compose declarative UI
 instead of the original Fragment-based approach, ensuring consistent architecture throughout the application.
 
 ### 4.3.0.1 Jetpack Compose UI Architecture
@@ -418,7 +418,7 @@ delays on the main thread. The SessionManager also encapsulates error
 handling for the entire session lifecycle. For instance, if during
 recording one sensor fails or disconnects, the SessionManager can decide
 to either halt the session or mark that sensor as inactive while others
-continue, depending on severity. This kind of logic centralization in
+continue, depending on severity. This kind of logic centralisation in
 the Recording Management component makes the system's behaviour
 predictable and easier to maintain.
 
@@ -579,7 +579,7 @@ Topdon TC001's specs (thermal sensitivity around 50 mK and calibrated
 accuracy of ±2 °C) offer research-grade
 data[\[10\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/new_documentation/README_topdon_tc001.md#L2-L5).
 The integration approach -- using the vendor SDK and real-time
-processing -- maximizes the utility of that data by making it available
+processing -- maximises the utility of that data by making it available
 for synchronisation and analysis within the same system as the other
 sensors.
 
@@ -720,7 +720,7 @@ ensures that all connected Android devices (and any PC-local sensors)
 operate in unison to record a session according to the experiment plan.
 The `SessionManager` class on the desktop takes a central role similar
 to its Android counterpart, but at a higher level: it issues commands to
-devices, synchronizes their clocks, monitors their status, and handles
+devices, synchronises their clocks, monitors their status, and handles
 data collation.
 
 When a user initiates a recording session via the GUI, the Session
@@ -810,7 +810,7 @@ multi-device sync, simultaneous recording, error handling, etc., is
 implemented here as a concrete mechanism. For example, the requirement
 that *"the system shall coordinate start/stop of all sensors together"*
 is realised by the broadcast start/stop commands and aggregation of
-their results, as described above. The benefit of centralizing this
+their results, as described above. The benefit of centralising this
 logic in the Session Manager is that it yields a single point of truth
 for the session status -- the GUI, the network layer, and other services
 all consult the Session Manager to know what's happening in the
@@ -1195,7 +1195,7 @@ the average processing/display time per frame and the arrival rate; if a
 backlog is building, it instructs the sender to reduce frame rate or
 quality (for example, by sending a control message to lower the preview
 resolution or increase JPEG compression). Conversely, if the connection
-is strong and PC is under-utilized, it could request higher quality.
+is strong and PC is under-utilised, it could request higher quality.
 This is analogous to adaptive streaming in video conferencing
 applications. Practically, during testing on a typical Wi-Fi network,
 streaming a 720p preview at 10--15 FPS and 50% JPEG quality proved
@@ -1639,14 +1639,14 @@ and recording, and the desktop side uses asyncio + PyQt's event loop
 integration. We put a lot of attention on the **timing** of
 interactions. For example, Android's lifecycle means it might not be
 ready to accept a command immediately at startup (if the Activity isn't
-fully initialized). To handle this, the app sends a "READY" message to
-the PC when it's fully initialized, and only then will the PC send
+fully initialised). To handle this, the app sends a "READY" message to
+the PC when it's fully initialised, and only then will the PC send
 session commands. This kind of handshake was critical for multi-platform
 timing issues.
 
 Another aspect was UI/UX consistency where relevant. Though the UIs are
 separate (mobile app vs. desktop app), we wanted a coherent workflow.
-The solution was to centralize certain logic in the PC and keep the
+The solution was to centralise certain logic in the PC and keep the
 Android UI minimal. For example, the participant/session metadata entry
 is all done on the PC, which then sends that info to the Android for
 labelling files. This avoids needing a full-fledged form interface on
@@ -1934,7 +1934,7 @@ app.
 
 For the thermal camera, we integrated the **Topdon TC001 SDK**, which
 provided the necessary APIs to read thermal frames from the device. We
-also utilized Android's USB host libraries to communicate with the
+also utilised Android's USB host libraries to communicate with the
 camera. This was essentially the only viable route since the camera is a
 specialised hardware.
 

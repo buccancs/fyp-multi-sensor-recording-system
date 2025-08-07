@@ -12,7 +12,7 @@ This document provides a detailed comparison between two Topdon thermal camera i
 |--------|--------------------------------|----------------------------------------|
 | **User Experience** | System integration focused | **Beautiful standalone app with excellent UI** |
 | **Preview Quality** | Functional preview | **Beautiful, smooth thermal preview** |
-| **File Management** | Session-based organization | **Elegant file browser with intuitive navigation** |
+| **File Management** | Session-based organisation | **Elegant file browser with intuitive navigation** |
 | **Settings Interface** | Technical configuration | **Comprehensive settings page with user-friendly design** |
 | **Implementation Maturity** | Production-ready | Fully functional with polished user experience |
 | **SDK Integration** | Full Topdon SDK v1.3.7 | Basic USB/UVC only |
@@ -21,7 +21,7 @@ This document provides a detailed comparison between two Topdon thermal camera i
 | **Error Handling** | Comprehensive (590+ handlers) | Basic try-catch |
 | **Data Processing** | Full thermal + image pipeline | Simulation/fallback mode |
 | **Recording Capabilities** | 4 recording modes | CSV metadata only |
-| **Performance** | Production-optimized | Development/testing |
+| **Performance** | Production-optimised | Development/testing |
 
 ## Detailed Technical Comparison
 
@@ -37,7 +37,7 @@ This document provides a detailed comparison between two Topdon thermal camera i
 #### Target Implementation  
 **Focus**: Standalone thermal camera application with excellent user experience
 - **Beautiful, Polished UI**: Professional visual design with intuitive layout
-- **High-Quality Preview**: Smooth, responsive thermal visualization with excellent user feedback
+- **High-Quality Preview**: Smooth, responsive thermal visualisation with excellent user feedback
 - **Elegant File Browser**: Well-designed file management with easy navigation and preview capabilities
 - **Comprehensive Settings Page**: Full-featured configuration interface with user-friendly options
 - **Excellent User Experience**: Responsive interactions, clear visual feedback, and intuitive workflows
@@ -46,8 +46,8 @@ This document provides a detailed comparison between two Topdon thermal camera i
 - Superior visual design language and consistent interface elements
 - Smooth, real-time thermal preview with excellent performance
 - Intuitive file management system for easy access to recorded data
-- Well-organized settings with clear options and immediate feedback
-- Professional app experience optimized for thermal camera usage
+- Well-organised settings with clear options and immediate feedback
+- Professional app experience optimised for thermal camera usage
 
 ### 2. Architecture and Design Patterns
 
@@ -103,7 +103,7 @@ ircmd = ircmdBuilder
 - **Complete SDK Usage**: Full Topdon SDK v1.3.7 integration
 - **Multiple Device Support**: 8 different product IDs supported
 - **Advanced Processing**: IRCMD for thermal data processing
-- **Hardware Abstraction**: Full SDK feature utilization
+- **Hardware Abstraction**: Full SDK feature utilisation
 
 #### Target Implementation
 ```kotlin
@@ -144,7 +144,7 @@ private fun onFrameReceived(frameData: ByteArray, timestamp: Long) {
 **Capabilities:**
 - **Dual-Mode Processing**: Separate image and temperature data
 - **Parallel Pipelines**: Recording and preview processed separately
-- **Optimized Memory**: Direct array copying for performance
+- **Optimised Memory**: Direct array copying for performance
 - **SDK-Based Processing**: Leverages Topdon SDK for data interpretation
 
 #### Target Implementation
@@ -205,7 +205,7 @@ activity.runOnUiThread {
 - **UI Thread Dependency**: Processing tied to main thread
 - **Simple State**: Basic boolean flags for state management
 - **Callback Pattern**: Event-driven updates
-- **Development Focus**: Optimized for testing rather than performance
+- **Development Focus**: Optimised for testing rather than performance
 
 ### 5. Error Handling and Resilience
 
@@ -241,13 +241,13 @@ fun startRecording(sessionId: String): Boolean = try {
 ```kotlin
 private fun initializeThermalCamera(ctrlBlock: USBMonitor.UsbControlBlock) {
     try {
-        // Basic initialization
+        // Basic initialisation
         val result = uvcCamera?.openUVCCamera(ctrlBlock)
         if (result != null && result >= 0) {
             thermalCameraConnected = true
         }
     } catch (e: Exception) {
-        Log.e(TAG, "Error initializing thermal camera", e)
+        Log.e(TAG, "Error initialising thermal camera", e)
         // Fall back to simulation mode
         thermalCameraConnected = true
         thermalCallback?.onConnectionStateChanged(true, "Thermal Camera (Simulation Mode)")
@@ -370,7 +370,7 @@ private fun isTopdonDevice(device: UsbDevice): Boolean {
 1. **Production Readiness**
    - Comprehensive error handling with 590+ exception handlers
    - Professional dependency injection and architecture patterns
-   - Multi-threaded performance optimization
+   - Multi-threaded performance optimisation
    - Complete SDK integration with all features
 
 2. **Feature Completeness**
@@ -383,7 +383,7 @@ private fun isTopdonDevice(device: UsbDevice): Boolean {
    - 98.4% system reliability under various conditions
    - Extensive testing infrastructure and validation
    - Professional logging and debugging capabilities
-   - Resource management and memory optimization
+   - Resource management and memory optimisation
 
 ### Target Implementation Advantages
 
@@ -396,7 +396,7 @@ private fun isTopdonDevice(device: UsbDevice): Boolean {
 
 2. **UI/UX Excellence**
    - Professional visual design language and consistent user interface
-   - Smooth preview experience with real-time thermal visualization
+   - Smooth preview experience with real-time thermal visualisation
    - Intuitive file management and browsing capabilities
    - Easy-to-use settings configuration with clear options
    - Responsive and engaging user interactions

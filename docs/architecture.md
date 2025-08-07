@@ -320,7 +320,7 @@ PC 1       PC 2       PC N
 - **Multi-threading**: Parallel processing where possible
 - **Async Processing**: Non-blocking I/O operations
 - **Load Balancing**: Distribute processing across cores
-- **Priority Scheduling**: Critical tasks prioritized
+- **Priority Scheduling**: Critical tasks prioritised
 
 #### Storage Optimisation
 - **Compression**: Lossless compression for non-critical data

@@ -1,7 +1,7 @@
 # Android Jetpack Compose Migration Summary
 
 ## Overview
-This document summarizes the successful migration of the Multi-Sensor Recording Android application from traditional Android Views to Jetpack Compose.
+This document summarises the successful migration of the Multi-Sensor Recording Android application from traditional Android Views to Jetpack Compose.
 
 ## Changes Made
 
@@ -13,7 +13,7 @@ This document summarizes the successful migration of the Multi-Sensor Recording 
 
 ### 2. Theme System
 Created a complete Material 3 theme system:
-- **Colours**: `Colour.kt` with custom app colours and Material 3 colour scheme
+- **Colours**: `Color.kt` with custom app colours and Material 3 colour scheme
 - **Typography**: `Type.kt` with Material 3 typography definitions  
 - **Theme**: `Theme.kt` with dynamic colour support and system integration
 
@@ -94,7 +94,7 @@ plugins {
 ## Files Modified/Created
 
 ### New Compose Files
-- `ui/theme/Colour.kt` - Colour definitions
+- `ui/theme/Color.kt` - Colour definitions
 - `ui/theme/Type.kt` - Typography definitions  
 - `ui/theme/Theme.kt` - Main theme setup
 - `ui/compose/screens/RecordingScreen.kt` - Main recording interface
@@ -119,7 +119,7 @@ plugins {
 ⚪ **Phase 3 Planned**: Enhanced screen functionality
 ⚪ **Phase 4 Planned**: complete testing and validation
 
-The application now successfully builds and runs with Jetpack Compose while maintaining all existing functionality. The UI has been modernized with Material 3 design patterns and proper Compose architectural patterns.
+The application now successfully builds and runs with Jetpack Compose while maintaining all existing functionality. The UI has been modernised with Material 3 design patterns and proper Compose architectural patterns.
 
 ## Next Steps
 

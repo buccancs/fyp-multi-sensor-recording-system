@@ -137,7 +137,7 @@ devices and research-grade precision.
 The architectural design philosophy emerges from several key insights gained through extensive analysis of existing
 physiological measurement systems, complete study of distributed systems principles, and systematic investigation
 of the specific requirements and constraints inherent in contactless measurement
-research [CITE - Lamport, L. (2001). Paxos made simple. ACM SIGACT News, 32(4), 18-25]. The design recognizes that
+research [CITE - Lamport, L. (2001). Paxos made simple. ACM SIGACT News, 32(4), 18-25]. The design recognises that
 research applications have fundamentally different characteristics from typical consumer or enterprise software
 applications, requiring specialised approaches that prioritise data quality, temporal precision, measurement accuracy,
 and operational reliability over factors such as user interface sophistication, feature richness, or commercial market
@@ -148,8 +148,8 @@ and implementation approaches, ensuring consistency and coherence across the ent
 evolution and enhancement as research requirements
 advance [CITE - Bass, L., Clements, P., & Kazman, R. (2012). Software architecture in practice. Addison-Wesley Professional].
 
-**Distributed Autonomy with Intelligent Centralized Coordination**: The architecture implements a sophisticated and
-carefully balanced approach between device autonomy and centralized control that enables both horizontal scalability and
+**Distributed Autonomy with Intelligent Centralised Coordination**: The architecture implements a sophisticated and
+carefully balanced approach between device autonomy and centralised control that enables both horizontal scalability and
 operational reliability while maintaining the precise coordination necessary for multi-modal physiological
 analysis [CITE - Fischer, M.J., Lynch, N.A., & Paterson, M.S. (1985). Impossibility of distributed consensus with one faulty process. Journal of the ACM, 32(2), 374-382].
 Each mobile device operates as an independent and fully capable data collection agent with complete responsibility for
@@ -198,7 +198,7 @@ conditions [CITE - Jalote, P. (1994). Fault tolerance in distributed systems. Pr
 monitors component health across all subsystems and automatically adjusts operational parameters to maintain optimal
 performance while providing complete logging for post-session analysis, troubleshooting, and system optimisation.
 
-When graceful degradation becomes necessary due to component failures or resource constraints, the system prioritizes
+When graceful degradation becomes necessary due to component failures or resource constraints, the system prioritises
 maintenance of core measurement functionality while providing complete logging and documentation for post-session
 analysis and research
 interpretation [CITE - Lee, P.A., & Anderson, T. (1990). Fault tolerance: principles and practice. Springer Science & Business Media].
@@ -210,12 +210,12 @@ systematic performance optimisation strategies and scalability mechanisms that a
 real-time multi-modal processing while maintaining scalability for future research applications that may require
 additional sensors, participants, or analytical
 capabilities [CITE - Bondi, A.B. (2000). Characteristics of scalability and their impact on performance. Proceedings of the 2nd International Workshop on Software and Performance, 195-203].
-The design recognizes that physiological measurement applications require sustained high-performance operation over
+The design recognises that physiological measurement applications require sustained high-performance operation over
 extended periods, often spanning several hours of continuous data collection, necessitating careful resource management
 and intelligent computational load distribution across available hardware resources.
 
 Performance optimisation manifests through several interconnected architectural decisions including intelligent
-computational load distribution across available hardware resources that maximizes utilisation while preventing
+computational load distribution across available hardware resources that maximises utilisation while preventing
 bottlenecks, adaptive quality management systems that dynamically adjust processing complexity based on real-time system
 capacity assessment, and efficient data flow patterns that minimis\1 computational overhead while maintaining
 research-grade data quality and temporal
@@ -224,7 +224,7 @@ The scalability design enables seamless addition of processing capacity through 
 fundamental architectural modifications or system redesign.
 
 The system topology reflects the sophisticated hybrid star-mesh pattern that provides both the operational simplicity of
-centralized coordination and the resilience and flexibility of distributed
+centralised coordination and the resilience and flexibility of distributed
 operation [CITE - Peterson, L.L., & Davie, B.S. (2011). Computer networks: a systems approach. Morgan Kaufmann]. The
 topology supports dynamic reconfiguration during operation, enabling researchers to add or remove devices based on
 evolving experimental requirements without disrupting ongoing data collection from other participants or compromising
@@ -731,7 +731,7 @@ class MultiSensorCoordinator @Inject constructor(
 
 - **Adaptive Resource Management**: Dynamic allocation of computational resources based on real-time system performance
   assessment and battery level monitoring
-- **Background Processing Optimisation**: Intelligent task scheduling that prioritizes critical data collection
+- **Background Processing Optimisation**: Intelligent task scheduling that prioritises critical data collection
   operations while maintaining responsive user interface
 - **Memory Management**: complete memory optimisation with automatic garbage collection tuning and resource cleanup
   procedures
@@ -837,7 +837,7 @@ fun RecordingScreen(
 - **Efficient Recomposition**: Compose's smart recomposition system ensures only affected UI components update when state changes, reducing CPU overhead during real-time sensor data updates
 - **Declarative State Management**: Direct integration with `StateFlow` and `LiveData` eliminates complex UI update coordination, improving responsiveness during high-frequency sensor data processing
 - **Memory Efficiency**: Elimination of View inflation and XML parsing reduces memory footprint, particularly beneficial during intensive multi-sensor recording sessions
-- **Reduced Thread Switching**: Compose's integration with Kotlin Coroutines minimizes context switching between UI and background threads during sensor data visualisation
+- **Reduced Thread Switching**: Compose's integration with Kotlin Coroutines minimises context switching between UI and background threads during sensor data visualisation
 - **Material 3 Optimisation**: Built-in performance optimisations in Material 3 components, including efficient ripple effects and dynamic colour calculations
 
 **Architectural Advantages for Research Applications:**
@@ -1570,7 +1570,7 @@ architectural modifications or complex reconfiguration procedures. Each mobile d
 network through standardised protocols and interfaces, while the central coordination hub dynamically adapts to
 accommodate varying device counts and configurations.
 
-**Centralized Coordination Hub Architecture**: The central coordination hub represents the system's brain, responsible
+**Centralised Coordination Hub Architecture**: The central coordination hub represents the system's brain, responsible
 for session management, synchronisation coordination, and complete data integration. The hub architecture
 implements a layered design that separates coordination concerns from data processing tasks, enabling independent
 optimisation and scaling of different functional areas.
@@ -1645,10 +1645,10 @@ significant adaptations, extensions, and innovations beyond these established ap
 encountered in traditional distributed computing applications.
 
 **Innovative Hybrid Coordination Model with Adaptive Capabilities**: The system implements a sophisticated and novel
-hybrid coordination model that strategically combines beneficial aspects of both centralized and decentralized
+hybrid coordination model that strategically combines beneficial aspects of both centralised and decentralized
 distributed system architectures while mitigating the inherent limitations and vulnerabilities of each
 approach [CITE - Mullender, S. (Ed.). (1993). Distributed systems. ACM Press]. The hybrid approach enables the system to
-achieve the operational precision, simplicity of management, and deterministic behaviour characteristics of centralized
+achieve the operational precision, simplicity of management, and deterministic behaviour characteristics of centralised
 coordination while simultaneously maintaining the resilience, scalability characteristics, and fault tolerance
 properties of decentralized systems that are essential for robust operation in research environments.
 
@@ -1660,7 +1660,7 @@ The hybrid model enables graceful degradation under adverse conditions while mai
 optimal conditions are available.
 
 The hybrid coordination model manifests through an sophisticated master-coordinator pattern where the central PC
-controller provides complete session coordination, precise synchronisation services, and centralized data
+controller provides complete session coordination, precise synchronisation services, and centralised data
 integration while mobile devices maintain complete autonomous operation capability, independent data collection
 functionality, and local decision-making
 authority [CITE - Lamport, L. (2001). Paxos made simple. ACM SIGACT News, 32(4), 18-25]. This architectural design
@@ -1695,7 +1695,7 @@ operational constraints of different mobile platforms while maintaining the temp
 physiological research applications.
 
 The intelligent drift compensation system continuously monitors timing characteristics across all connected devices,
-analyzes historical performance patterns, and applies sophisticated predictive corrections that maintain synchronisation
+analyses historical performance patterns, and applies sophisticated predictive corrections that maintain synchronisation
 accuracy even during extended periods of limited network connectivity or challenging environmental
 conditions [CITE - Elson, J., & Estrin, D. (2001). Time synchronisation for wireless sensor networks. Proceedings 15th International Parallel and Distributed Processing Symposium, 1965-1970].
 This capability is absolutely essential for extended recording sessions where cumulative timing drift could
@@ -1786,7 +1786,7 @@ provides resilience against network connectivity issues while maintaining the re
 physiological measurement applications.
 
 Mobile agents implement local decision-making capabilities that enable continued operation during coordination
-interruptions while maintaining compatibility with centralized session management. The agent architecture includes
+interruptions while maintaining compatibility with centralised session management. The agent architecture includes
 complete data buffering, local storage management, and quality assessment capabilities that ensure data integrity
 regardless of network conditions.
 
@@ -1828,7 +1828,7 @@ periods requiring special attention during analysis.
 
 ### Fault Tolerance and Recovery Mechanisms
 
-The fault tolerance design recognizes that research applications cannot tolerate data loss or extended downtime,
+The fault tolerance design recognises that research applications cannot tolerate data loss or extended downtime,
 requiring complete mechanisms that ensure continued operation despite component failures or environmental
 challenges. The fault tolerance architecture implements multiple layers of protection including proactive failure
 detection, automatic recovery mechanisms, and graceful degradation strategies.
@@ -1848,7 +1848,7 @@ normal operation after temporary failures without requiring manual intervention.
 device reconnection after network interruptions, session state restoration after temporary coordinator failures, and
 data synchronisation after communication gaps.
 
-The recovery implementation prioritizes data integrity over operational continuity, ensuring that no data is lost or
+The recovery implementation prioritises data integrity over operational continuity, ensuring that no data is lost or
 corrupted during recovery operations even if this requires temporary operation suspension. Recovery mechanisms include
 thorough validation procedures that verify system integrity before resuming normal operation.
 
@@ -1961,7 +1961,7 @@ class SessionManager @Inject constructor(
 
 #### Camera Recording Implementation
 
-The camera system utilizes the Camera2 API for professional-grade video capture with simultaneous RAW image capture:
+The camera system utilises the Camera2 API for professional-grade video capture with simultaneous RAW image capture:
 
 ```kotlin
 class CameraRecorder @Inject constructor(
@@ -3420,7 +3420,7 @@ operations.
 | Decision                     | Rationale                                                       | Trade-offs                                       |
 |------------------------------|-----------------------------------------------------------------|--------------------------------------------------|
 | **Distributed Architecture** | Leverages mobile device capabilities, reduces network bandwidth | Increased complexity, synchronisation challenges |
-| **Hybrid Protocol Stack**    | Optimizes different data types with appropriate protocols       | Multiple protocol maintenance overhead           |
+| **Hybrid Protocol Stack**    | Optimises different data types with appropriate protocols       | Multiple protocol maintenance overhead           |
 | **Component-Based Design**   | Enables parallel development and thorough testing          | Increased abstraction layers                     |
 | **Real-Time Processing**     | Provides immediate feedback for research applications           | Higher resource requirements                     |
 
@@ -3477,7 +3477,7 @@ recording [CITE - Google Android Developers. (2024). Camera2 API Reference]:
 - **Motion Detection**: Advanced motion analysis with optical flow calculation for participant movement tracking and
   measurement quality assessment
 
-The camera implementation includes sophisticated resource management that optimizes performance while maintaining
+The camera implementation includes sophisticated resource management that optimises performance while maintaining
 battery efficiency essential for extended research sessions:
 
 ```kotlin
@@ -3807,7 +3807,7 @@ monitoring [CITE - Google Material Design. (2024). Material Design Guidelines]:
 
 **Enhanced Main Activity Coordinator:**
 
-- **Centralized State Management**: complete application state coordination with reactive UI updates and consistent
+- **Centralised State Management**: complete application state coordination with reactive UI updates and consistent
   data flow management
 - **Workflow Optimisation**: Streamlined research workflows with guided procedures and automatic quality validation
 - **Dynamic Theming**: Adaptive visual design with accessibility compliance and customizable appearance for diverse
@@ -3883,7 +3883,7 @@ components [CITE - Martin, R.C. (2008). Clean code: a handbook of agile software
   management, and configuration injection
 - **Service Health Monitoring**: Continuous monitoring of service health with automatic recovery and complete error
   reporting
-- **Configuration Management**: Centralized configuration with environment-specific settings and runtime parameter
+- **Configuration Management**: Centralised configuration with environment-specific settings and runtime parameter
   adjustment
 - **Graceful Degradation**: Systematic service degradation with fallback capabilities and complete user
   notification

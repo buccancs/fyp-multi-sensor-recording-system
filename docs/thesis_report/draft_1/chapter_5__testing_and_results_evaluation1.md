@@ -103,7 +103,7 @@ with one command and gather all results in one place.
 
 Coordinating tests across PC and Android required some special
 infrastructure. On the Android side, we used **AndroidJUnitRunner** for
-unit tests and small integration tests on the device. We also utilized
+unit tests and small integration tests on the device. We also utilised
 **Espresso** for UI tests to simulate user interactions in the Android
 app's
 interface[\[5\]](file://file-GQyTfzpDhpSPp4WrrxzNty#:~:text=,double%20creation%20and%20behaviour%20verification).
@@ -191,7 +191,7 @@ in isolation, on both the Android application side and the desktop
 controller side. In total, we wrote dozens of unit test cases, aiming
 for broad coverage of the codebase's core logic. The unit tests were run
 frequently during development (with each code commit) to catch
-regressions early. We utilized mocking frameworks to simulate
+regressions early. We utilised mocking frameworks to simulate
 interactions with hardware or external dependencies, so that unit tests
 could run in a fast, deterministic manner.
 
@@ -319,7 +319,7 @@ SessionManager and calls its `create_session()` method, expecting a new
 session ID to be returned and the session to be tracked
 internally[\[25\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_unit_core.py#L37-L46).
 Another test instantiates the network server (which uses SessionManager)
-and verifies that it initializes correctly and links to the
+and verifies that it initialises correctly and links to the
 SessionManager[\[26\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/tests/test_unit_core.py#L52-L60).
 These tests ensure the core application can start up and manage
 sessions, which is fundamental to meeting requirements (like FR-003:
@@ -441,7 +441,7 @@ all sides. Our automated test simulation verified the message sequence
 (PC sends "stop", devices acknowledge and finalise data, PC gathers
 final status). In a manual test, we physically observed that stopping a
 session through the desktop GUI caused the phone to stop recording
-within about a second and that all data was indeed finalized (video file
+within about a second and that all data was indeed finalised (video file
 closed, no corruption, sensor log saved). The system also produced a
 combined session log on the PC, listing all files and any issues; in our
 test, it showed all devices finished successfully. This confirms the
@@ -611,7 +611,7 @@ in Chapter 4), confirming that data was flowing.
 
 After 5 minutes, we hit "Stop" on the desktop. The command propagated
 and the phone stopped recording (the app showed a "Saving\..." message
-briefly as it finalized the files). The system then presented a summary
+briefly as it finalised the files). The system then presented a summary
 on the desktop (the session completed, files saved with names, etc.).
 
 We then validated the **outputs** of the session: - On the Android
@@ -813,7 +813,7 @@ resources: - On the Android device, we used Android's developer tools to
 log CPU temperature, CPU usage, and memory. The device got warm (as
 expected when using the camera for so long) but did not overheat or shut
 down. The CPU usage hovered around 30-50% on the main core (for video
-encoding) and the temperature leveled out around 40°C (warm but within
+encoding) and the temperature levelled out around 40°C (warm but within
 safe limits). Memory usage of the app on Android started around 150 MB
 and grew to about 250 MB after an hour, then stabilized (it appears some
 caching might have occurred, but no continuous leak -- memory did not
@@ -873,7 +873,7 @@ This correlates with our observation that no memory leaks exist --
 memory usage peaks and then the garbage collector (or resource cleanup)
 kicks in, which we also saw in long runs. There was also a **CPU stress
 test** as part of that, which kept the system busy; the logs indicated
-the CPU was utilized (though interestingly our measured average CPU in
+the CPU was utilised (though interestingly our measured average CPU in
 that artificial test was only 0.1% -- likely the way it was measured, as
 real usage in actual scenarios was
 higher)[\[47\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_04_test_enhanced_stress_testing_output.txt#L26-L29).
@@ -1139,7 +1139,7 @@ primary focus of our test cases:
 
 - **Functional Requirements:** Each FR was mapped to one or more tests
   (as partially illustrated in Table 5.2). For example, FR-001
-  (coordinated centralized management) was demonstrated by integration
+  (coordinated centralised management) was demonstrated by integration
   tests that showed the PC can control all devices simultaneously.
   FR-002 (temporal precision) was perhaps one of the most rigorously
   tested aspects, with both code-level tests (ensuring the sync

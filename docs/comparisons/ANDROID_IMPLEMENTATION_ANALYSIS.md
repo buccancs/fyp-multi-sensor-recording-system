@@ -8,11 +8,11 @@ This document provides a detailed analysis of the Android application implementa
 
 ### 1. Overall Application Structure
 
-#### Module Organization
+#### Module Organisation
 ```
 AndroidApp/
 ├── src/main/java/com/multisensor/recording/
-│   ├── controllers/           # Specialized business logic controllers
+│   ├── controllers/           # Specialised business logic controllers
 │   ├── managers/             # Device and system managers
 │   ├── recording/            # Core recording components
 │   ├── calibration/          # Camera calibration
@@ -81,7 +81,7 @@ private val frameCounter = AtomicLong(0)
 **Concurrency Control:**
 - **Atomic Operations**: Thread-safe state management
 - **Immutable State**: Clear state transitions
-- **Synchronized Access**: Protected critical sections
+- **Synchronised Access**: Protected critical sections
 
 ### 3. USB Device Management
 
@@ -139,10 +139,10 @@ private fun onFrameReceived(frameData: ByteArray, timestamp: Long) {
 **Pipeline Features:**
 - **Data Separation**: Image and temperature data split
 - **Parallel Processing**: Recording and preview handled separately
-- **Performance Optimization**: Direct memory copy operations
+- **Performance Optimisation**: Direct memory copy operations
 - **Frame Counting**: Statistics tracking
 
-#### Color Palette Implementation
+#### Colour Palette Implementation
 ```kotlin
 private fun applyIronColorPalette(normalizedTemp: Int): Int {
     val temp = normalizedTemp.coerceIn(0, 255)
@@ -157,7 +157,7 @@ private fun applyIronColorPalette(normalizedTemp: Int): Int {
             g = 0
             b = 0
         }
-        // ... additional color mapping logic
+        // ... additional colour mapping logic
     }
     
     return (0xFF shl 24) or (r shl 16) or (g shl 8) or b
@@ -184,10 +184,10 @@ logger.info(thermalSettings.getConfigSummary())
 
 ### 6. Error Handling and Resilience
 
-#### Exception Categorization
+#### Exception Categorisation
 ```kotlin
-fun initialize(): Boolean = try {
-    // Initialization logic
+fun initialise(): Boolean = try {
+    // Initialisation logic
     true
 } catch (e: CancellationException) {
     throw e  // Preserve coroutine cancellation
@@ -222,7 +222,7 @@ fun startRecording(sessionId: String): Boolean {
     val sessionFilePaths = sessionManager.getSessionFilePaths()
     val sessionDir = sessionFilePaths?.sessionFolder ?: return false
     
-    // File organization and thermal data storage
+    // File organisation and thermal data storage
     val thermalDataDir = sessionFilePaths.thermalDataFolder
     val thermalFileName = "thermal_${sessionId}_${config.dataFormat}.dat"
     
@@ -231,8 +231,8 @@ fun startRecording(sessionId: String): Boolean {
 ```
 
 **Integration Features:**
-- **Session Coordination**: Synchronized with PC controller
-- **File Organization**: Structured data storage
+- **Session Coordination**: Synchronised with PC controller
+- **File Organisation**: Structured data storage
 - **Multi-device Support**: Scalable architecture
 - **Protocol Compliance**: JSON communication protocol
 
@@ -246,17 +246,17 @@ private val temperatureSrc = ByteArray(THERMAL_WIDTH * THERMAL_HEIGHT * BYTES_PE
 private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 ```
 
-**Optimization Strategies:**
+**Optimisation Strategies:**
 - **Pre-allocated Buffers**: Reduced memory allocation overhead
 - **Queue-based Processing**: Efficient frame handling
-- **Thread Separation**: Minimized blocking operations
+- **Thread Separation**: Minimised blocking operations
 - **Resource Pooling**: Reused objects and data structures
 
 #### Performance Metrics
 - **Frame Rate**: Up to 25 FPS thermal capture
 - **Resolution**: 256x192 thermal resolution
-- **Latency**: <1ms synchronization accuracy
-- **Memory Usage**: Optimized for extended recording sessions
+- **Latency**: <1ms synchronisation accuracy
+- **Memory Usage**: Optimised for extended recording sessions
 
 ## Android App Implementation Strengths
 
@@ -267,7 +267,7 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 - **Thread Safety**: Comprehensive concurrency handling
 
 ### 2. Thermal Integration Excellence
-- **Complete SDK Integration**: Full Topdon SDK utilization
+- **Complete SDK Integration**: Full Topdon SDK utilisation
 - **Multi-threading**: Optimal performance through parallel processing
 - **Error Resilience**: Robust error handling and recovery
 - **Configuration Management**: Flexible and extensible settings system
@@ -276,7 +276,7 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 - **Multi-sensor Coordination**: Seamless integration with other sensors
 - **PC Communication**: Real-time protocol compliance
 - **Session Management**: Professional session handling
-- **Data Organization**: Structured file management
+- **Data Organisation**: Structured file management
 
 ### 4. Production Readiness
 - **Exception Handling**: 590+ enhanced exception handlers
@@ -294,20 +294,20 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 - [ ] **User Experience Flow**: App workflow, user journey, and interaction patterns
 - [ ] **Visual Polish**: UI component styling, animations, and visual feedback
 
-#### 2. Preview and Visualization
+#### 2. Preview and Visualisation
 - [ ] **Thermal Preview Quality**: Rendering performance, visual clarity, and responsiveness
-- [ ] **Color Palette Options**: Available color schemes and visualization modes
+- [ ] **Colour Palette Options**: Available colour schemes and visualisation modes
 - [ ] **Real-time Performance**: Frame rate, latency, and smooth user interactions
-- [ ] **User Controls**: Preview controls, zoom, color adjustment interfaces
+- [ ] **User Controls**: Preview controls, zoom, colour adjustment interfaces
 
 #### 3. File Management Interface
 - [ ] **File Browser Design**: Navigation, file listing, and preview capabilities
-- [ ] **File Organization**: Directory structure presentation and file categorization
+- [ ] **File Organisation**: Directory structure presentation and file categorisation
 - [ ] **User Interactions**: File selection, sharing, deletion, and management actions
 - [ ] **Preview Integration**: Thumbnail generation and quick preview features
 
 #### 4. Settings and Configuration
-- [ ] **Settings Interface**: Configuration UI design and organization
+- [ ] **Settings Interface**: Configuration UI design and organisation
 - [ ] **User Experience**: Setting discovery, configuration ease, and help systems
 - [ ] **Validation Feedback**: Real-time validation and user guidance
 - [ ] **Configuration Persistence**: Settings save/load and user preference management
@@ -315,7 +315,7 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 ### Architecture Comparison Points
 
 #### 1. App Structure
-- [ ] **Activity/Fragment Organization**: Single vs multi-activity approach
+- [ ] **Activity/Fragment Organisation**: Single vs multi-activity approach
 - [ ] **Navigation**: Navigation component vs manual navigation
 - [ ] **Dependency Injection**: Hilt vs Dagger vs manual injection
 - [ ] **Architecture Pattern**: MVVM vs MVP vs other patterns
@@ -323,8 +323,8 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 #### 2. Thermal Camera Implementation
 - [ ] **SDK Integration**: Direct SDK usage vs wrapper classes
 - [ ] **Threading Model**: Single thread vs multi-thread approaches
-- [ ] **State Management**: Atomic operations vs synchronization primitives
-- [ ] **Memory Management**: Buffer reuse strategies and optimization
+- [ ] **State Management**: Atomic operations vs synchronisation primitives
+- [ ] **Memory Management**: Buffer reuse strategies and optimisation
 
 #### 3. USB Device Handling
 - [ ] **Permission Flow**: User experience and permission handling
@@ -334,7 +334,7 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 
 #### 4. Data Processing
 - [ ] **Frame Pipeline**: Processing architecture differences
-- [ ] **Color Palettes**: Visualization options and quality
+- [ ] **Colour Palettes**: Visualisation options and quality
 - [ ] **Data Formats**: Recording format support and flexibility
 - [ ] **Performance**: Frame rate and latency characteristics
 
@@ -342,13 +342,13 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 - [ ] **System Architecture**: Standalone vs distributed integration
 - [ ] **Communication**: Protocol and messaging approaches
 - [ ] **Session Management**: Coordination with external systems
-- [ ] **File Organization**: Data storage and management strategies
+- [ ] **File Organisation**: Data storage and management strategies
 
 ## Recommendations for Implementation Enhancement
 
-### 1. Performance Optimization
+### 1. Performance Optimisation
 - Evaluate memory usage patterns during extended recordings
-- Optimize USB bandwidth for multi-device scenarios
+- Optimise USB bandwidth for multi-device scenarios
 - Implement frame rate adaptation based on system load
 
 ### 2. Feature Enhancement
@@ -360,7 +360,7 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 - Evaluate UI/UX design patterns and user experience quality
 - Assess preview functionality, file management, and settings interfaces
 - Compare visual design language and user interaction patterns
-- Analyze user workflow efficiency and interface intuitiveness
+- Analyse user workflow efficiency and interface intuitiveness
 
 ### 4. User Interface Enhancement
 - Study excellent UI/UX patterns from well-designed thermal camera applications
@@ -378,7 +378,7 @@ private val frameQueue = ConcurrentLinkedQueue<ThermalFrame>()
 The bucika_gsr Android implementation demonstrates professional-grade software engineering with:
 
 - **Clean Architecture**: Well-structured MVVM with proper separation of concerns
-- **Robust Thermal Integration**: Comprehensive Topdon SDK utilization with optimal performance
+- **Robust Thermal Integration**: Comprehensive Topdon SDK utilisation with optimal performance
 - **Production Quality**: Extensive error handling, logging, and testing infrastructure
 - **System Integration**: Seamless multi-sensor coordination and PC communication
 

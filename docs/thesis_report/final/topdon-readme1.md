@@ -467,7 +467,7 @@ on actual visible
 contours[\[4\]](https://www.topdon.us/products/tc001-plus?srsltid=AfmBOopq9mBNdV3ePkER8GhdlqhIks5h2xZMwObi-3oz_QF-meRQeAhV#:~:text=Dual%20Lens%20to%20Unveil%20the,Unseen).
 In our context, if focusing on physiological data, one might not need
 the visible-light overlay, but it can help identify anatomical features
-(the SDK sample synchronizes RGB and thermal frames to locate facial
+(the SDK sample synchronises RGB and thermal frames to locate facial
 landmarks in thermal
 images[\[36\]](https://www.mdpi.com/1424-8220/22/3/976#:~:text=Thermal%20imaging%20unobtrusively%20monitors%20skin,18)[\[37\]](https://www.mdpi.com/1424-8220/22/3/976#:~:text=We%20used%20thermal%20imaging%20to,e)).
 
@@ -621,7 +621,7 @@ some common issues. Here are troubleshooting tips and solutions:
   disable it after a period. Also verify your `device_filter.xml`
   includes the camera's Vendor ID and Product ID so that Android knows
   your app can handle this USB device. (If the official Topdon app
-  recognizes the camera but yours doesn't, it's likely a filter or
+  recognises the camera but yours doesn't, it's likely a filter or
   permission issue.) Use Android's `UsbManager.getDeviceList()` to see
   if the camera appears at all. If not, the issue may be hardware (try a
   different cable or ensure the USB-C connector is fully inserted -- the

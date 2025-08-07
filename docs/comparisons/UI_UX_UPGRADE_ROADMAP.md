@@ -12,14 +12,14 @@ This roadmap provides practical, actionable steps to upgrade the bucika_gsr Andr
 ```kotlin
 // New: Enhanced theme and design tokens
 object BucikaThermalTheme {
-    // Color palette inspired by IRCamera excellence
-    val PrimaryThermal = Color(0xFF2196F3)      // Professional blue
-    val SecondaryThermal = Color(0xFF03DAC6)    // Accent teal
-    val BackgroundPrimary = Color(0xFF121212)   // Dark background
-    val SurfaceElevated = Color(0xFF1E1E1E)     // Elevated surfaces
-    val ThermalGradient = listOf(               // Beautiful thermal colors
-        Color(0xFF000080), Color(0xFF0000FF), Color(0xFF00FFFF),
-        Color(0xFF00FF00), Color(0xFFFFFF00), Color(0xFFFF0000)
+    // Colour palette inspired by IRCamera excellence
+    val PrimaryThermal = Colour(0xFF2196F3)      // Professional blue
+    val SecondaryThermal = Colour(0xFF03DAC6)    // Accent teal
+    val BackgroundPrimary = Colour(0xFF121212)   // Dark background
+    val SurfaceElevated = Colour(0xFF1E1E1E)     // Elevated surfaces
+    val ThermalGradient = listOf(               // Beautiful thermal colours
+        Colour(0xFF000080), Colour(0xFF0000FF), Colour(0xFF00FFFF),
+        Colour(0xFF00FF00), Colour(0xFFFFFF00), Colour(0xFFFF0000)
     )
 }
 ```
@@ -68,7 +68,7 @@ fun EnhancedThermalPreview(
             .fillMaxWidth()
             .aspectRatio(4f / 3f),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(
+        colours = CardDefaults.cardColors(
             containerColor = BucikaThermalTheme.SurfaceElevated
         )
     ) {
@@ -119,7 +119,7 @@ fun ThermalPreviewControls(
         modifier = modifier.padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Color palette selector
+        // Colour palette selector
         item {
             ColorPaletteSelector(
                 currentPalette = colorPalette,
@@ -238,12 +238,12 @@ fun ThermalFileCard(
                 Text(
                     text = file.formattedDate,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    colour = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = file.formattedSize,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    colour = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -336,7 +336,7 @@ fun SettingsSection(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    colour = MaterialTheme.colorScheme.primary
                 )
             }
             content()
@@ -353,8 +353,8 @@ fun ThermalColorPaletteSetting(
     onPaletteChange: (ThermalColorPalette) -> Unit
 ) {
     SettingItem(
-        title = "Color Palette",
-        description = "Choose thermal visualization colors"
+        title = "Colour Palette",
+        description = "Choose thermal visualisation colours"
     ) {
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -445,7 +445,7 @@ fun AnimatedRecordingButton(
         animationSpec = BucikaThermalAnimations.smoothTransition
     )
     
-    val color by animateColorAsState(
+    val colour by animateColorAsState(
         targetValue = if (isRecording) Color.Red else MaterialTheme.colorScheme.primary,
         animationSpec = BucikaThermalAnimations.smoothTransition
     )
@@ -453,7 +453,7 @@ fun AnimatedRecordingButton(
     FloatingActionButton(
         onClick = onClick,
         modifier = modifier.scale(scale),
-        containerColor = color
+        containerColor = colour
     ) {
         AnimatedContent(
             targetState = isRecording,
@@ -543,7 +543,7 @@ fun EnhancedMainScreen(
 }
 ```
 
-### 3.2 Performance Optimizations
+### 3.2 Performance Optimisations
 
 #### Smooth Rendering Pipeline
 ```kotlin
@@ -577,8 +577,8 @@ class EnhancedThermalRenderer @Inject constructor(
     private suspend fun processFrameForDisplay(
         frame: ThermalFrame
     ): Bitmap = withContext(Dispatchers.Default) {
-        // Apply color palette and temperature mapping
-        // Optimize for smooth 30fps display
+        // Apply colour palette and temperature mapping
+        // Optimise for smooth 30fps display
         frame.toBitmap(
             colorPalette = currentColorPalette,
             temperatureRange = currentTemperatureRange,
@@ -688,7 +688,7 @@ class UIPerformanceMonitor @Inject constructor() {
 
 ### High Priority (Immediate Impact)
 1. **Enhanced Thermal Preview** - Most visible improvement
-2. **Beautiful Color Palette** - Immediate visual enhancement  
+2. **Beautiful Colour Palette** - Immediate visual enhancement  
 3. **Smooth Recording Button** - Core interaction improvement
 4. **Basic File Browser** - Essential functionality upgrade
 
@@ -701,7 +701,7 @@ class UIPerformanceMonitor @Inject constructor() {
 ### Low Priority (Nice to Have)
 1. **Advanced Animations** - Extra polish
 2. **Gesture Controls** - Advanced interactions
-3. **Themes Support** - Customization options
+3. **Themes Support** - Customisation options
 4. **Accessibility Features** - Inclusive design
 
 ## Success Metrics
@@ -747,7 +747,7 @@ class UIPerformanceMonitor @Inject constructor() {
 
 ### Week 5-6: Polish
 - Advanced animations
-- Performance optimization
+- Performance optimisation
 - Testing and refinement
 
 ### Week 7-8: Deployment

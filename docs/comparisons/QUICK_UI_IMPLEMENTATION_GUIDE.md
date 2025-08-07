@@ -75,10 +75,10 @@ fun EnhancedThermalPreview(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            color = MaterialTheme.colorScheme.surface,
+                            colour = MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(12.dp)
                         ),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Centre
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
@@ -91,7 +91,7 @@ fun EnhancedThermalPreview(
                         Text(
                             text = "No thermal data",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            colour = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -113,7 +113,7 @@ fun EnhancedThermalPreview(
                 RecordingIndicator()
             }
             
-            // Color palette indicator
+            // Colour palette indicator
             ColorPaletteIndicator(
                 palette = colorPalette,
                 modifier = Modifier.align(Alignment.BottomStart)
@@ -139,12 +139,12 @@ private fun TemperatureOverlay(
             Text(
                 text = "Max: ${temperatureRange.max.toInt()}°C",
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.Red
+                colour = Color.Red
             )
             Text(
                 text = "Min: ${temperatureRange.min.toInt()}°C",
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.Blue
+                colour = Color.Blue
             )
         }
     }
@@ -181,7 +181,7 @@ private fun RecordingIndicator(
             Text(
                 text = "REC",
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.White
+                colour = Color.White
             )
         }
     }
@@ -207,7 +207,7 @@ private fun ColorPaletteIndicator(
 }
 ```
 
-#### 2. Enhanced Color Palette Selector
+#### 2. Enhanced Colour Palette Selector
 Create `AndroidApp/src/main/java/com/multisensor/recording/ui/components/ColorPaletteSelector.kt`:
 
 ```kotlin
@@ -244,7 +244,7 @@ fun ColorPaletteSelector(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Color Palette",
+                text = "Colour Palette",
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
@@ -289,7 +289,7 @@ private fun PalettePreviewCard(
                 .clip(RoundedCornerShape(8.dp))
                 .border(2.dp, borderColor, RoundedCornerShape(8.dp))
                 .background(
-                    brush = Brush.horizontalGradient(palette.colors),
+                    brush = Brush.horizontalGradient(palette.colours),
                     shape = RoundedCornerShape(8.dp)
                 )
         )
@@ -299,7 +299,7 @@ private fun PalettePreviewCard(
         Text(
             text = palette.displayName,
             style = MaterialTheme.typography.labelSmall,
-            color = if (isSelected) {
+            colour = if (isSelected) {
                 MaterialTheme.colorScheme.primary
             } else {
                 MaterialTheme.colorScheme.onSurfaceVariant
@@ -345,7 +345,7 @@ fun AnimatedRecordingButton(
         )
     )
     
-    // Color transition
+    // Colour transition
     val containerColor by animateColorAsState(
         targetValue = if (isRecording) Color.Red else MaterialTheme.colorScheme.primary,
         animationSpec = tween(300)
@@ -441,7 +441,7 @@ fun SessionStatusCard(
                 Text(
                     text = "Session Status",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    colour = MaterialTheme.colorScheme.primary
                 )
                 
                 SessionStatusBadge(status = sessionStatus)
@@ -475,14 +475,14 @@ private fun SessionStatusBadge(
     status: String,
     modifier: Modifier = Modifier
 ) {
-    val (color, icon) = when (status.lowercase()) {
+    val (colour, icon) = when (status.lowercase()) {
         "recording" -> Color.Red to Icons.Default.FiberManualRecord
         "connected" -> Color.Green to Icons.Default.CheckCircle
         "disconnected" -> Color.Gray to Icons.Default.Cancel
         else -> Color.Orange to Icons.Default.Warning
     }
     
-    val animatedColor by animateColorAsState(targetValue = color)
+    val animatedColor by animateColorAsState(targetValue = colour)
     
     Card(
         modifier = modifier,
@@ -504,7 +504,7 @@ private fun SessionStatusBadge(
             Text(
                 text = status,
                 style = MaterialTheme.typography.labelMedium,
-                color = animatedColor
+                colour = animatedColor
             )
         }
     }
@@ -541,7 +541,7 @@ private fun DeviceStatusChip(
                     modifier = Modifier
                         .size(8.dp)
                         .background(
-                            color = statusColor,
+                            colour = statusColor,
                             shape = CircleShape
                         )
                 )
@@ -555,7 +555,7 @@ private fun DeviceStatusChip(
             Text(
                 text = statusText,
                 style = MaterialTheme.typography.labelSmall,
-                color = statusColor
+                colour = statusColor
             )
         }
     }
@@ -610,7 +610,7 @@ fun MainScreen() {
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             
-            // Add color palette selector
+            // Add colour palette selector
             ColorPaletteSelector(
                 currentPalette = uiState.colorPalette,
                 onPaletteSelect = viewModel::updateColorPalette,
@@ -639,7 +639,7 @@ Create utility classes for the new components:
 // In util/ThermalColorPalette.kt
 enum class ThermalColorPalette(
     val displayName: String,
-    val colors: List<Color>
+    val colours: List<Colour>
 ) {
     IRON("Iron", listOf(Color.Black, Color.Red, Color.Yellow, Color.White)),
     RAINBOW("Rainbow", listOf(Color.Blue, Color.Green, Color.Yellow, Color.Red)),
@@ -660,7 +660,7 @@ After implementing these quick wins, you'll have:
 1. **Professional thermal preview** with smooth animations and overlays
 2. **Beautiful recording button** with satisfying animations
 3. **Elegant status displays** showing connection and session information
-4. **Smooth color palette selection** for thermal visualization
+4. **Smooth colour palette selection** for thermal visualisation
 
 These changes will provide **immediate visual impact** and move your app significantly closer to the IRCamera app's excellent UI/UX quality while maintaining all your technical robustness.
 

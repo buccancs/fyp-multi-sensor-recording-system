@@ -2,7 +2,7 @@
 
 ## 3.1 Introduction
 
-This chapter establishes complete requirements and system specifications for the Multi-Sensor Recording System for Contactless GSR Prediction Research, providing the analytical foundation that guides architectural design and implementation decisions. The chapter systematically examines the problem context within current physiological measurement paradigms, analyzes stakeholder requirements, and derives detailed functional and non-functional system specifications.
+This chapter establishes complete requirements and system specifications for the Multi-Sensor Recording System for Contactless GSR Prediction Research, providing the analytical foundation that guides architectural design and implementation decisions. The chapter systematically examines the problem context within current physiological measurement paradigms, analyses stakeholder requirements, and derives detailed functional and non-functional system specifications.
 
 ![Figure 3.1: Complete Data Flow Architecture](../diagrams/05_complete_data_flow_architecture.png)
 *Figure 3.1: Overview of the complete data flow architecture showing the integration between contactless sensors, traditional validation sensors, and data processing systems.*
@@ -233,7 +233,7 @@ requirements.
 To organise and analyse the gathered requirements, a structured
 framework was used. Given the dual nature of this project (as both a
 software system and a research instrument), requirements were
-categorized into groups and given identifiers for clarity. The project
+categorised into groups and given identifiers for clarity. The project
 adopts a hierarchical labelling scheme for requirements: **Functional
 Requirements (FR)** and **Non-Functional Requirements (NFR)**, further
 broken into sub-groups. This mirrors best practices in requirements
@@ -321,7 +321,7 @@ A cornerstone of this project is the ability to coordinate multiple
 devices (smartphones, sensors, and a PC) in one recording session. The
 system must treat several distributed components as part of one unified
 recorder. The requirements in this category ensure that **multiple
-devices can connect and operate together under centralized control**,
+devices can connect and operate together under centralised control**,
 and that their activities are tightly synchronised in time.
 
 **Device Coordination:** At minimum, the system is required to handle
@@ -336,7 +336,7 @@ should automatically begin recording in concert. In the code, this is
 managed by a *MasterClockSynchronizer* on the PC and complementary logic
 on Android. The PC acts as a master and sends start/stop commands to
 each device. The *MasterClockSynchronizer* module implements a
-centralized clock and coordination manager, ensuring all devices follow
+centralised clock and coordination manager, ensuring all devices follow
 the master
 timeline[\[9\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/master_clock_synchronizer.py#L2-L10)[\[10\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/master_clock_synchronizer.py#L99-L108).
 This design fulfills the requirement of unified multi-device control
@@ -344,7 +344,7 @@ This design fulfills the requirement of unified multi-device control
 
     # Excerpt from MasterClockSynchronizer (PC side)
     """ Master Clock Synchronisation Manager for Multi-Device Recording
-    This module implements a centralized synchronisation system where the PC acts as the 
+    This module implements a centralised synchronisation system where the PC acts as the 
     master clock for all connected devices... ensuring frame-level synchronisation across 
     all recording devices. """【30†L1-L9】
 
@@ -401,7 +401,7 @@ In summary, the multi-device coordination and sync requirements ensure
 the system acts as a **distributed but unified recorder**, with all
 parts operating on a common clock and under central control. The
 project's codebase strongly reflects these needs: for instance, the
-`MasterClockSynchronizer` module not only synchronizes time but also
+`MasterClockSynchronizer` module not only synchronises time but also
 tracks which devices are recording, and can issue a stop to all if one
 encounters an error -- preventing drift or data
 misalignment[\[13\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/master_clock_synchronizer.py#L74-L83)[\[14\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/PythonApp/src/master_clock_synchronizer.py#L119-L127).
@@ -453,8 +453,8 @@ Thermal imaging provides data on temperature changes, which correlate
 with blood flow and perspiration. The integration entails detecting the
 USB thermal camera, configuring it, and streaming its data. The Android
 code includes a `UsbDeviceManager` and corresponding controllers to
-handle USB devices. Specifically, it recognizes the VID/PID (Vendor
-ID/Product ID) of supported Topdon cameras and initializes
+handle USB devices. Specifically, it recognises the VID/PID (Vendor
+ID/Product ID) of supported Topdon cameras and initialises
 them[\[16\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/managers/UsbDeviceManager.kt#L28-L36)[\[17\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/AndroidApp/src/main/java/com/multisensor/recording/managers/UsbDeviceManager.kt#L99-L101).
 The snippet below from the code confirms support for the Topdon device:
 
@@ -470,7 +470,7 @@ The snippet below from the code confirms support for the Topdon device:
     }【24†L98-L100】
 
 This ensures that when a supported thermal camera is attached to the
-phone, the system automatically recognizes it and starts the thermal
+phone, the system automatically recognises it and starts the thermal
 feed. The requirement is considered met when the thermal video is
 recorded in sync with the RGB video. In practice, thermal cameras have
 lower frame rates (often 8--15 fps) and resolution than RGB cameras, so

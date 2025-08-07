@@ -121,7 +121,7 @@ The system implements a hierarchical master-slave synchronisation model:
 
 - **Primary Time Source**: Windows PC with stable crystal oscillator
 - **NTP Server**: Local network time distribution at microsecond precision
-- **Command Coordination**: Centralized session management and device control
+- **Command Coordination**: Centralised session management and device control
 - **Quality Assessment**: Continuous monitoring of synchronisation precision
 
 #### Slave Level (Connected Devices)

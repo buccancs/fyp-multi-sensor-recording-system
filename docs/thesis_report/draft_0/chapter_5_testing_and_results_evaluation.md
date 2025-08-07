@@ -66,7 +66,7 @@ readiness for demanding research applications.
 The thorough testing strategy for the Multi-Sensor Recording System represents a systematic, rigorous, and
 scientifically-grounded approach to validation that addresses the complex challenges of verifying research-grade
 software quality while accommodating the unprecedented complexity of distributed multi-modal data collection systems
-operating across heterogeneous platforms and diverse research environments. The testing strategy recognizes that
+operating across heterogeneous platforms and diverse research environments. The testing strategy recognises that
 research software applications require significantly higher reliability standards, measurement precision, and
 operational consistency than typical commercial applications, as system failures or measurement inaccuracies can result
 in irreplaceable loss of experimental data and fundamental compromise of scientific validity.
@@ -98,11 +98,11 @@ scientific disciplines and experimental paradigms.
 
 The complete methodological foundation incorporates principles from software engineering, experimental design,
 statistical analysis, and research methodology to create a validation framework that ensures both technical correctness
-and scientific validity [Juristo2001]. This interdisciplinary approach recognizes that research software testing must
+and scientific validity [Juristo2001]. This interdisciplinary approach recognises that research software testing must
 address not only traditional software quality attributes but also scientific methodology validation, experimental
 reproducibility, and measurement accuracy requirements that are unique to research applications.
 
-**Research-Grade Quality Assurance with Statistical Validation**: The thorough testing approach prioritizes
+**Research-Grade Quality Assurance with Statistical Validation**: The thorough testing approach prioritises
 systematic validation of research-specific quality attributes including measurement accuracy, temporal precision, data
 integrity, long-term reliability, and scientific reproducibility that often have quantitative requirements significantly
 exceeding typical software quality
@@ -124,7 +124,7 @@ multi-dimensional coverage approach that ensures systematic validation across fu
 characteristics, environmental conditions, usage scenarios, and participant demographics that reflect the diverse
 contexts where the system will be deployed for research
 applications [CITE - Ammann, P., & Offutt, J. (2016). Introduction to software testing. Cambridge University Press].
-This full coverage philosophy recognizes that research applications frequently encounter edge cases, unusual
+This full coverage philosophy recognises that research applications frequently encounter edge cases, unusual
 operational conditions, and unexpected interaction patterns that may not be apparent during normal development testing
 or controlled laboratory validation.
 
@@ -145,7 +145,7 @@ Continuous validation includes automated regression testing, real-time performan
 and predictive quality assessment that enables proactive identification of quality degradation before it affects ongoing
 research applications or compromises scientific validity.
 
-The sophisticated continuous validation approach recognizes that research systems often undergo systematic modification
+The sophisticated continuous validation approach recognises that research systems often undergo systematic modification
 and extension throughout their operational lifetime as research requirements evolve, new experimental paradigms emerge,
 and technological capabilities
 advance [CITE - Lehman, M.M. (1980). Programs, life cycles, and laws of software evolution. Proceedings of the IEEE, 68(9), 1060-1076].
@@ -154,7 +154,7 @@ remains unaffected by changes and that system performance characteristics are ma
 ongoing research applications.
 
 **complete Real-World Validation Emphasis with Ecological Validity**: The testing strategy systematically
-prioritizes validation under realistic conditions that accurately replicate the challenges, constraints, and operational
+prioritises validation under realistic conditions that accurately replicate the challenges, constraints, and operational
 complexities encountered in actual research environments across diverse scientific disciplines and experimental
 contexts [CITE - Shadish, W.R., Cook, T.D., & Campbell, D.T. (2002). Experimental and quasi-experimental designs for generalized causal inference. Houghton Mifflin].
 This systematic emphasis on real-world validation includes thorough testing with diverse participant populations
@@ -354,7 +354,7 @@ system components.
 
 Foundation testing employs complete unit testing methodologies with emphasis on boundary condition testing, error
 handling validation, and algorithmic correctness
-verification [CITE - Unit testing best practices for scientific software]. The testing framework utilizes property-based
+verification [CITE - Unit testing best practices for scientific software]. The testing framework utilises property-based
 testing approaches that automatically generate test cases exploring the full input space of critical algorithms,
 particularly those involved in signal processing and synchronisation calculations.
 
@@ -392,7 +392,7 @@ throughout all system operations.
 ### Research-Specific Testing Methodology
 
 The research-specific testing methodology addresses the unique validation requirements of scientific instrumentation
-software while ensuring compliance with established research methodology standards. This methodology recognizes that
+software while ensuring compliance with established research methodology standards. This methodology recognises that
 research software must satisfy both technical quality requirements and scientific validity criteria.
 
 **Statistical Validation Framework**: The testing methodology implements complete statistical validation approaches
@@ -461,7 +461,7 @@ testing under extreme conditions, and security assessment using research-specifi
 
 The testing framework establishes quantitative metrics and acceptance criteria that provide objective assessment of
 system quality while enabling comparison with established benchmarks and research software standards. The metrics
-framework recognizes that research applications require different quality standards than commercial software, often
+framework recognises that research applications require different quality standards than commercial software, often
 emphasizing reliability and accuracy over features such as user interface sophistication or performance optimisation.
 
 | Testing Category        | Coverage Target            | Quality Metric            | Acceptance Criteria                           | Validation Method                               |
@@ -492,13 +492,13 @@ research software quality.
 
 The testing framework architecture provides a unified, cross-platform approach to validation that accommodates the
 unique challenges of testing distributed systems with heterogeneous components while maintaining consistency and
-reliability across diverse testing scenarios. The framework design recognizes that multi-platform testing requires
+reliability across diverse testing scenarios. The framework design recognises that multi-platform testing requires
 sophisticated coordination mechanisms that can validate both individual platform functionality and cross-platform
 integration while providing complete result aggregation and analysis capabilities.
 
 The framework architecture emerged from analysis of existing testing approaches for distributed systems, combined with
 specialised requirements for physiological measurement validation and research software quality assurance. The design
-prioritizes reproducibility, scalability, and automation while providing the flexibility needed to accommodate diverse
+prioritises reproducibility, scalability, and automation while providing the flexibility needed to accommodate diverse
 research applications and evolving system requirements.
 
 ### complete Multi-Platform Testing Architecture
@@ -574,7 +574,7 @@ graph TB
     VALIDATION_FRAMEWORK --> ALERTS
 ```
 
-**Centralized Test Orchestration System**: The test orchestration layer provides centralized management of complex
+**Centralised Test Orchestration System**: The test orchestration layer provides centralised management of complex
 multi-platform test scenarios while maintaining fine-grained control over individual test execution phases. The
 orchestration system implements sophisticated scheduling algorithms that optimise test execution order based on resource
 availability, dependency relationships, and parallel execution opportunities.
@@ -667,7 +667,7 @@ Version control integration ensures that all testing artifacts including test co
 procedures are maintained under version control with complete change tracking. The system provides automated
 rollback capabilities that enable rapid recovery from configuration issues or software defects.
 
-**Resource Optimisation and Scheduling**: The framework implements intelligent resource scheduling that optimizes
+**Resource Optimisation and Scheduling**: The framework implements intelligent resource scheduling that optimises
 utilisation of testing resources while minimising test execution time and ensuring full coverage. Scheduling
 includes parallel test execution optimisation, resource conflict resolution, and priority-based scheduling that
 accommodates both routine testing and urgent validation requirements.
@@ -1438,7 +1438,7 @@ class TestDataQualityValidation:
 ---
         # Validate synchronisation accuracy
         sync_analysis = TemporalSynchronizationAnalyzer()
-        sync_results = sync_analysis.analyse(temporal_data)
+        sync_results = sync_analysis.analyze(temporal_data)
 ---
         assert sync_results.max_deviation < 0.005  # 5ms maximum deviation
         assert sync_results.mean_deviation < 0.002  # 2ms mean deviation
@@ -1462,19 +1462,19 @@ class TestDataQualityValidation:
         signal_data = await session.extract_signal_data()
 ---
         # Analyse RGB video quality
-        rgb_quality = VideoQualityAnalyzer().analyse(signal_data.rgb_frames)
+        rgb_quality = VideoQualityAnalyzer().analyze(signal_data.rgb_frames)
         assert rgb_quality.average_snr > 20  # dB
         assert rgb_quality.motion_blur_score < 0.3
         assert rgb_quality.exposure_consistency > 0.8
 ---
         # Analyse thermal data quality
-        thermal_quality = ThermalQualityAnalyzer().analyse(signal_data.thermal_frames)
+        thermal_quality = ThermalQualityAnalyzer().analyze(signal_data.thermal_frames)
         assert thermal_quality.temperature_accuracy < 0.1  # °C
         assert thermal_quality.spatial_resolution >= 160  # pixels
         assert thermal_quality.temporal_stability > 0.9
 ---
         # Analyse GSR signal quality
-        gsr_quality = GSRQualityAnalyzer().analyse(signal_data.gsr_samples)
+        gsr_quality = GSRQualityAnalyzer().analyze(signal_data.gsr_samples)
         assert gsr_quality.signal_to_noise_ratio > 20  # dB
         assert gsr_quality.sampling_rate_consistency > 0.99
         assert gsr_quality.baseline_stability > 0.8

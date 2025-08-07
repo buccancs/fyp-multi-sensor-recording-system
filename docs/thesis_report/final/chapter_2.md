@@ -85,7 +85,7 @@ blood flow or temperature -- without any attachments on the body. This
 **unobtrusiveness** reduces the burden on participants and makes
 long-term stress tracking more acceptable and scalable.
 
-Given these benefits, our platform prioritizes contactless modalities
+Given these benefits, our platform prioritises contactless modalities
 alongside traditional sensors. By integrating a thermal camera and
 optionally the device's own RGB camera, we obtain physiological data
 (like heat patterns or heart-rate-related signals) without additional
@@ -389,7 +389,7 @@ in future models. Importantly, they are **contactless** and
 non-invasive, aligning with our rationale (Section 2.2) to make the data
 collection as natural as possible. Thermal imaging thereby provides a
 bridge between purely internal signals (like GSR or cortisol) and
-external observations -- it visualizes the autonomic changes on the
+external observations -- it visualises the autonomic changes on the
 surface of the skin, giving our multimodal dataset another dimension of
 ground truth for stress that can be leveraged by machine learning
 algorithms.

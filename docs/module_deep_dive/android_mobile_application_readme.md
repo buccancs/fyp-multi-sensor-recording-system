@@ -74,7 +74,7 @@ Android Application (Refactored Architecture)
 - Implements automatic reconnection and fault tolerance using exponential backoff strategies [Stevens1994]
 - Coordinates multi-device synchronisation protocols as defined in the JSON socket protocol specification
 
-**Implementation Rationale**: Centralized connection management ensures consistent network behaviour and simplifies debugging of distributed system interactions [Tanenbaum2006].
+**Implementation Rationale**: Centralised connection management ensures consistent network behaviour and simplifies debugging of distributed system interactions [Tanenbaum2006].
 
 #### FileTransferManager (448 lines)
 **Data transfer and file operations**

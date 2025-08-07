@@ -227,7 +227,7 @@ distributed system coordination, real-time data processing, and cross-platform a
 immediate practical benefits for research applications.
 
 **Hybrid Coordination Architecture**: The system implements a novel hybrid star-mesh topology that combines the
-operational simplicity of centralized coordination with the resilience and scalability benefits of distributed
+operational simplicity of centralised coordination with the resilience and scalability benefits of distributed
 processing. This architectural innovation addresses the fundamental challenge of coordinating consumer-grade devices for
 scientific applications while maintaining the precision required for research use.
 
@@ -437,7 +437,7 @@ system that:
 
 **Objective 1: Advanced Distributed System Architecture Development**
 
-Develop and validate a hybrid coordination architecture that combines centralized control simplicity with distributed
+Develop and validate a hybrid coordination architecture that combines centralised control simplicity with distributed
 processing resilience, enabling reliable coordination of heterogeneous consumer-grade devices for scientific
 applications. This architecture must achieve:
 
@@ -672,7 +672,7 @@ theoretical understanding while providing immediate practical benefits for the r
 
 **1. Distributed Systems Architecture Innovation**
 
-- Novel hybrid star-mesh topology that combines centralized coordination simplicity with distributed processing
+- Novel hybrid star-mesh topology that combines centralised coordination simplicity with distributed processing
   resilience
 - Advanced synchronisation algorithms achieving microsecond precision across heterogeneous wireless devices
 - Fault tolerance mechanisms specifically designed for research applications where data loss is unacceptable

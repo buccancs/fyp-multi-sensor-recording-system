@@ -103,7 +103,7 @@ research workflow.
 ---
   ID                      Functional Requirement Description                                                                                                                                                                                                                                                                                                                                                 Priority
 ---
-  FR-01                   **Centralized Multi-Device Coordination:** The system shall provide a PC-based master controller application that can connect to and manage multiple remote recording devices (Android smartphones). This enables one operator to initiate and control recording sessions across all devices from a single interface.                                                              H
+  FR-01                   **Centralised Multi-Device Coordination:** The system shall provide a PC-based master controller application that can connect to and manage multiple remote recording devices (Android smartphones). This enables one operator to initiate and control recording sessions across all devices from a single interface.                                                              H
 
   FR-02                   **User Interface for Session Control:** The PC master controller shall offer an intuitive graphical user interface (GUI) for configuring sessions, displaying device status, and controlling recordings (start/stop). The GUI should show connected device indicators and allow the user to easily monitor the recording process in real time.                                     H
 
@@ -120,15 +120,15 @@ research workflow.
                           sensor[\[2\]](PythonApp/shimmer_manager.py#L138-L145). All connected GSR sensors should be managed concurrently, and their data samples (GSR conductivity, plus other channels like PPG or accelerometer) timestamped and synchronised with the session timeline.
 
   FR-07                   **Session Management and Metadata:** The system shall allow the user to create a new *recording session* and automatically assign it a unique Session ID. During a session, the controller will maintain metadata including session start time, configured duration (if applicable), and the list of active devices/sensors. Upon session start, each device and sensor is         H
-                          registered in the session metadata, and upon stop, the session is finalized with end time and duration
+                          registered in the session metadata, and upon stop, the session is finalised with end time and duration
                           recorded[\[3\]](PythonApp/session/session_manager.py#L74-L81)[\[4\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L334-L342). A session metadata file (e.g. JSON or
                           text) shall be saved, summarising the session details for future reference.
 
   FR-08                   **Local Data Storage (Offline-First):** All recording devices shall store their captured data **locally on-device** during the session to avoid reliance on continuous network streaming. Video streams are saved as files on the smartphones (and any PC-local video source) and GSR data is logged (e.g. to CSV) on the PC or device collecting it. Each data file is            H
-                          timestamped or contains timestamps internally. This *offline-first* design ensures no data loss in case of network disruption and maximizes reliability of recording.
+                          timestamped or contains timestamps internally. This *offline-first* design ensures no data loss in case of network disruption and maximises reliability of recording.
 
   FR-09                   **Data Aggregation and Transfer:** After a recording session is stopped, the system shall support automatic aggregation of the distributed data. The PC controller will instruct each Android device to **transfer the recorded files** (video and any other data) to the PC over the network. The files are transmitted in chunks with verification -- the PC confirms the file   M
-                          sizes and integrity on receipt[\[5\]](PythonApp/network/device_server.py#L355-L364). All files from the session are collected into the PC's session folder for centralized storage. (In the event automatic transfer fails or is unavailable, the system permits manual retrieval as a
+                          sizes and integrity on receipt[\[5\]](PythonApp/network/device_server.py#L355-L364). All files from the session are collected into the PC's session folder for centralised storage. (In the event automatic transfer fails or is unavailable, the system permits manual retrieval as a
                           fallback.)
 
   FR-10                   **Real-Time Status Monitoring:** The PC interface shall display real-time status updates from each connected device, including indicators such as recording state (recording/idle), battery level, storage space, and connectivity health[\[6\]](PythonApp/network/device_server.py#L26-L34). M
@@ -183,7 +183,7 @@ these functional goals.
 In addition to the explicit features and behaviours, the system must
 fulfill several **Non-Functional Requirements (NFR)** that define
 qualities such as performance, reliability, and usability. Table 3.2
-summarizes the key non-functional requirements for the multi-sensor
+summarises the key non-functional requirements for the multi-sensor
 recording system, again with unique IDs and priority levels. These
 requirements ensure the system not only *works*, but works effectively
 and robustly in the contexts it will be used (research labs, possibly
@@ -356,8 +356,8 @@ involving physiological monitoring. The steps are as follows:
 1. **Stop Session:** Once the desired recording duration or
     experimental task is completed, the researcher clicks "Stop Session"
     on the PC. The controller sends a **stop command** to all devices.
-    Each Android device stops recording: it finalizes the video file
-    (closing the file safely) and similarly finalizes any sensor data
+    Each Android device stops recording: it finalises the video file
+    (closing the file safely) and similarly finalises any sensor data
     file. The devices then each report back a final status (e.g., "Saved
     300s of video, file size 500 MB"). At this point, the PC invokes the
     data aggregation process (FR-09): it requests each device to
@@ -378,7 +378,7 @@ involving physiological monitoring. The steps are as follows:
     researcher can then proceed to analyse the data offline.
 
 1. **Post-conditions:** The outcome of this use case is that **all
-    relevant multi-modal data has been recorded and centralized**. The
+    relevant multi-modal data has been recorded and centralised**. The
     session folder on the PC now contains subfolders or files for each
     device: e.g., video files from each camera, thermal data, GSR CSV,
     plus a session log and metadata. The researcher has a complete,
@@ -544,7 +544,7 @@ controller and the Android devices.
 
 ## 3.6 System Analysis (Architecture & Data Flow)
 
-This section analyzes the overall architecture of the multi-sensor
+This section analyses the overall architecture of the multi-sensor
 recording system and describes the flow of data through the system's
 components. The design follows a **distributed client-server
 architecture** with the PC as the central server (or coordinator) and
@@ -554,7 +554,7 @@ sensor data handling, and data storage. The analysis here shows how the
 chosen architecture meets the requirements (both functional and
 non-functional) and how data moves from capture to storage in a
 synchronised way. Key architectural elements and their interactions are
-summarized in *Figure 3.2* and the data flow is illustrated in *Figure
+summarised in *Figure 3.2* and the data flow is illustrated in *Figure
 3.3*.
 
 ***Figure 3.2: High-level system architecture, showing the PC Master
@@ -605,8 +605,8 @@ Recording Controller uses Android's Camera2 API for video and the
 Shimmer SDK for sensor data if a Shimmer is connected to the phone.
 Crucially, the Android app does not make autonomous decisions -- it acts
 on commands from the PC or on a local user action (which is rare in this
-use case). This separation ensures that **control logic is centralized**
-on the PC, fulfilling the requirement of FR-01 (centralized multi-device
+use case). This separation ensures that **control logic is centralised**
+on the PC, fulfilling the requirement of FR-01 (centralised multi-device
 coordination).
 
 The **Shimmer GSR Sensors** integration is architected flexibly. The
@@ -960,7 +960,7 @@ course typically has ample disk space.
 
 To manage this, each recording session's data is isolated in its own
 directory (both on the device during capture and on the PC after
-aggregation). This not only organizes the data but makes it easier to
+aggregation). This not only organises the data but makes it easier to
 move or archive entire sessions. If a user needs to free space, they can
 archive older session folders to an external drive. The naming
 convention with session timestamps (e.g., `session_YYYYMMDD_HHMMSS`)

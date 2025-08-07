@@ -60,7 +60,7 @@ private val usbPermissionReceiver = object : BroadcastReceiver() {
     }
 }
 
-// Device detection and initialization
+// Device detection and initialisation
 private fun isSupportedThermalCamera(device: UsbDevice): Boolean {
     return device.vendorId == 0x0BDA && SUPPORTED_PRODUCT_IDS.contains(device.productId)
 }
@@ -83,11 +83,11 @@ private fun onFrameReceived(frameData: ByteArray, timestamp: Long) {
 }
 ```
 
-###### Color Palette Processing
+###### Colour Palette Processing
 ```kotlin
 private fun applyIronColorPalette(normalizedTemp: Int): Int {
-    // Iron color palette implementation
-    // Maps temperature values to RGB colors for visualization
+    // Iron colour palette implementation
+    // Maps temperature values to RGB colours for visualisation
 }
 ```
 
@@ -107,9 +107,9 @@ private fun applyIronColorPalette(normalizedTemp: Int): Int {
 #### Integration with Multi-Sensor System
 
 ##### Session Management
-- Synchronized with other sensors (Shimmer GSR, RGB cameras)
+- Synchronised with other sensors (Shimmer GSR, RGB cameras)
 - Integrated with PC controller via JSON protocol
-- Session-based file organization
+- Session-based file organisation
 
 ##### Calibration Support
 ```kotlin
@@ -126,13 +126,13 @@ suspend fun captureCalibrationImage(outputPath: String): Boolean {
 - **Runtime Configuration**: Dynamic setting changes
 - **Export/Import**: Configuration serialization
 
-#### Performance Optimizations
+#### Performance Optimisations
 - **Threading**: Separate threads for capture, processing, and file I/O
 - **Memory Management**: Reusable byte arrays, efficient bitmap handling
-- **Bandwidth Control**: USB bandwidth optimization (`setDefaultBandwidth(1.0f)`)
+- **Bandwidth Control**: USB bandwidth optimisation (`setDefaultBandwidth(1.0f)`)
 
 #### Error Handling and Resilience
-- **Exception Categorization**: Specific exception types (SecurityException, IOException, etc.)
+- **Exception Categorisation**: Specific exception types (SecurityException, IOException, etc.)
 - **Device Disconnection**: Graceful handling of USB device removal
 - **Recovery Mechanisms**: Automatic restart on frame errors
 
@@ -146,7 +146,7 @@ suspend fun captureCalibrationImage(outputPath: String): Boolean {
 
 #### Testing Infrastructure
 - **Hardware Tests**: `ThermalRecorderHardwareTest.kt`
-- **Integration Tests**: Cross-sensor synchronization validation
+- **Integration Tests**: Cross-sensor synchronisation validation
 - **Unit Tests**: Component-level testing
 
 ## Comparison Framework for @buccancs/IRCamera
@@ -180,7 +180,7 @@ suspend fun captureCalibrationImage(outputPath: String): Boolean {
 #### 5. Integration Capabilities
 - [ ] **Multi-Sensor**: Integration with other sensor types
 - [ ] **System Architecture**: Standalone vs distributed system design
-- [ ] **Data Synchronization**: Timestamp accuracy and coordination
+- [ ] **Data Synchronisation**: Timestamp accuracy and coordination
 - [ ] **File Formats**: Data storage and export capabilities
 
 #### 6. Development and Maintenance
@@ -197,7 +197,7 @@ suspend fun captureCalibrationImage(outputPath: String): Boolean {
 - Multi-threaded architecture for optimal performance
 
 ### 2. Research-Grade Features
-- Precise timestamp synchronization (<1ms accuracy)
+- Precise timestamp synchronisation (<1ms accuracy)
 - Multiple recording modes for different research needs
 - Calibration support for multi-modal analysis
 
@@ -213,10 +213,10 @@ suspend fun captureCalibrationImage(outputPath: String): Boolean {
 
 ## Potential Areas for Enhancement
 
-### 1. SDK Optimization
+### 1. SDK Optimisation
 - Evaluate latest Topdon SDK versions for new features
-- Optimize bandwidth usage for multiple concurrent devices
-- Enhanced color palette options
+- Optimise bandwidth usage for multiple concurrent devices
+- Enhanced colour palette options
 
 ### 2. Advanced Processing
 - Real-time temperature analysis algorithms
@@ -233,7 +233,7 @@ suspend fun captureCalibrationImage(outputPath: String): Boolean {
 ### 1. Establish Baseline Metrics
 - Frame rate performance under various conditions
 - Memory usage patterns during extended recording
-- USB bandwidth utilization efficiency
+- USB bandwidth utilisation efficiency
 
 ### 2. Feature Parity Analysis
 - Create feature matrix comparing both implementations
@@ -254,12 +254,12 @@ suspend fun captureCalibrationImage(outputPath: String): Boolean {
 
 Our bucika_gsr implementation represents a comprehensive, production-ready thermal camera integration with extensive documentation, robust error handling, and seamless multi-sensor system integration. The modular architecture and research-grade features make it well-suited for scientific applications requiring precise thermal data collection.
 
-To complete this comparison, the @buccancs/IRCamera repository needs to be identified and analyzed using the framework provided above. This will enable a detailed technical comparison and identification of best practices from both implementations.
+To complete this comparison, the @buccancs/IRCamera repository needs to be identified and analysed using the framework provided above. This will enable a detailed technical comparison and identification of best practices from both implementations.
 
 ---
 
 **Next Steps:**
 1. Locate and access the @buccancs/IRCamera repository
-2. Apply this comparison framework to analyze both implementations
+2. Apply this comparison framework to analyse both implementations
 3. Provide specific recommendations based on identified differences
 4. Consider potential integration of beneficial features from both approaches

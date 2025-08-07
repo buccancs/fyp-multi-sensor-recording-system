@@ -51,7 +51,7 @@ contribute to computer science knowledge and distributed systems research.
 #### Hybrid Star-Mesh Coordination Architecture
 
 The development of a novel hybrid coordination architecture represents a fundamental advancement in distributed system
-design for research applications. This architecture successfully combines the operational simplicity of centralized
+design for research applications. This architecture successfully combines the operational simplicity of centralised
 coordination with the resilience and scalability advantages of distributed processing, achieving:
 
 - **99.7% system availability** exceeding the 99.5% requirement through complete fault tolerance mechanisms
@@ -487,7 +487,7 @@ usability but may require technical expertise for advanced applications.
 
 #### Research Protocol Constraints
 
-**Experimental Design Limitations**: The system design prioritizes controlled measurement conditions over naturalistic
+**Experimental Design Limitations**: The system design prioritises controlled measurement conditions over naturalistic
 observation, potentially limiting ecological validity for some research applications. Participant mobility is
 constrained by device placement and network connectivity requirements.
 
@@ -739,7 +739,7 @@ including publication tracking, adoption metrics, and community contribution ass
 demonstrate project value while identifying areas for continued improvement and development.
 
 These future work directions provide a complete roadmap for continued system development while addressing current
-limitations and expanding capabilities for broader research applications. The prioritized development approach ensures
+limitations and expanding capabilities for broader research applications. The prioritised development approach ensures
 sustainable progress while maintaining focus on core research objectives and community benefit.
 ---
 ## Summary and Final Remarks
