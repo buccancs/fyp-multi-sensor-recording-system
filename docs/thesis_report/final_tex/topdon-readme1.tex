@@ -1,832 +1,566 @@
 \chapter{Topdon TC001/TC001 Plus Android SDK --- README}
 
-\section{Overview}
+ \section{Overview}
 
-\textbf{Topdon TC001 and TC001 Plus} are portable infrared thermal cameras
-that attach to Android devices (via USB Type-C) to transform a
-smartphone or tablet into a high-tech thermal
-imager\cite{Boucsein2012}.
-They capture heat radiation as images, allowing non-contact temperature
-measurement across a scene. The TC001 series features a 256×192 IR
-sensor resolution, producing clear thermal images and detecting
-temperature differences as small as
-0.1 °C\cite{AppleHealthWatch2019}\cite{SamsungHealth2020}.
-The TC001 Plus model includes a dual-lens system (an IR sensor plus a
-visible-light camera) enabling image fusion for sharper detail and
-contours in the thermal
-image\cite{Fowles1981}\cite{SamsungHealth2020}.
-Both cameras support a wide temperature detection range from about
-\textbf{-20 °C to 550 °C} (≈ -4 °F to
-1022 °F)\cite{Healey2005}\cite{Picard2001},
-making them suitable for various applications --- from industrial
-inspections to biomedical and physiological sensing.
+ \textbf{Topdon TC001 and TC001 Plus}
+ are portable infrared thermal cameras that attach to Android devices (via USB Type-C) to transform a smartphone or tablet into a high-tech thermal imager.
 
-In \textbf{physiological sensing}, infrared thermography provides a
-noninvasive, contact-free way to monitor subtle temperature changes on
-the
-body\cite{DriverStressThermal2020}\cite{GSRFacialThermal2021}.
-Many physiological signals manifest as thermal patterns: for example,
-breathing rate can be measured by the cyclical temperature changes near
-the nostrils, heart pulse by tiny thermal pulsations, and stress-induced
-blood flow changes by temperature shifts in facial
-regions\cite{StressDefinitionHH}.
-Indeed, thermal imaging has been used in psychophysiology to observe
-stress responses --- e.g. a drop in nose tip temperature under acute
-stress or increased forehead temperature from
-vasodilation\cite{CortisolStressIndicator2020}.
-With the Topdon TC001 cameras, researchers can capture such thermal
-phenomena in real time, alongside other biosignals, for multimodal
-analysis of human physiological states.
+They capture heat radiation as images, allowing non-contact temperature measurement across a scene.
+
+The TC001 series features a 256×192 IR sensor resolution, producing clear thermal images and detecting temperature differences as small as 0.1 °C.
+
+The TC001 Plus model includes a dual-lens system (an IR sensor plus a visible-light camera) enabling image fusion for sharper detail and contours in the thermal image.
+
+Both cameras support a wide temperature detection range from about \textbf{-20 °C to 550 °C}
+ (≈ -4 °F to 1022 °F), making them suitable for various applications --- from industrial inspections to biomedical and physiological sensing.
+
+In \textbf{physiological sensing}
+, infrared thermography provides a noninvasive, contact-free way to monitor subtle temperature changes on the body.
+
+Many physiological signals manifest as thermal patterns: for example, breathing rate can be measured by the cyclical temperature changes near the nostrils, heart pulse by tiny thermal pulsations, and stress-induced blood flow changes by temperature shifts in facial regions.
+
+Indeed, thermal imaging has been used in psychophysiology to observe stress responses --- e.g. a drop in nose tip temperature under acute stress or increased forehead temperature from vasodilation.
+
+With the Topdon TC001 cameras, researchers can capture such thermal phenomena in real time, alongside other biosignals, for multimodal analysis of human physiological states.
 
 \section{Project Scope}
 
-This SDK/API provides an interface for Android developers to integrate
-the Topdon TC001/TC001 Plus camera into their applications. Its primary
-purpose is to facilitate \textbf{image acquisition, device configuration, and
-data streaming} from the thermal camera on Android. Using the SDK, an
-app can connect to the camera (via Android's USB host interface), start
-the thermal video feed, and retrieve \textbf{thermal frames} (infrared images
-and temperature data) in real time. The API exposes methods to configure
-camera parameters --- for example, selecting color palettes (pseudo-color
-schemes for the thermal image), adjusting image orientation, switching
-between high- and low-gain modes, triggering calibrations (shutter
-correction), and choosing the \textbf{data output mode} (e.g. image only,
-temperature only, or both interleaved). Under the hood, the SDK handles
-the low-level USB Video Class (UVC) protocol and infrared sensor
-commands, so developers can work with high-level objects (like a
-\texttt{UVCCamera} and frame callback) rather than raw USB transfers.
+This SDK/API provides an interface for Android developers to integrate the Topdon TC001/TC001 Plus camera into their applications.
 
-By using this SDK, developers can \textbf{stream thermal imagery} into their
-apps for visualization or analysis, obtain per-pixel temperature
-readings, and synchronously capture frames at up to 25 Hz (depending on
-device)\cite{SamsungHealth2020}.
-The SDK is designed to support \textbf{both} the TC001 and TC001 Plus models,
-abstracting their dual-lens or single-lens differences. For instance,
-when a TC001 Plus is connected, the SDK can fetch the simultaneous
-visual and IR streams for fusion, whereas for TC001 it handles the
-single thermal stream. Overall, the project enables Android applications
-to utilize the TC001 series cameras for tasks such as real-time thermal
-monitoring, recording thermal videos, measuring temperature at points or
-regions of interest, and integrating thermal data with other sensor
-modalities.
+Its primary purpose is to facilitate \textbf{image acquisition, device configuration, and data streaming}
+ from the thermal camera on Android.
+
+Using the SDK, an app can connect to the camera (via Android's USB host interface), start the thermal video feed, and retrieve \textbf{thermal frames}
+ (infrared images and temperature data) in real time.
+
+The API exposes methods to configure camera parameters --- for example, selecting color palettes (pseudo-color schemes for the thermal image), adjusting image orientation, switching between high- and low-gain modes, triggering calibrations (shutter correction), and choosing the \textbf{data output mode}
+ (e.g. image only, temperature only, or both interleaved).
+
+Under the hood, the SDK handles the low-level USB Video Class (UVC) protocol and infrared sensor commands, so developers can work with high-level objects (like a \texttt{UVCCamera} and frame callback) rather than raw USB transfers.
+
+By using this SDK, developers can \textbf{stream thermal imagery}
+ into their apps for visualization or analysis, obtain per-pixel temperature readings, and synchronously capture frames at up to 25 Hz (depending on device).
+
+The SDK is designed to support \textbf{both}
+ the TC001 and TC001 Plus models, abstracting their dual-lens or single-lens differences.
+
+For instance, when a TC001 Plus is connected, the SDK can fetch the simultaneous visual and IR streams for fusion, whereas for TC001 it handles the single thermal stream.
+
+Overall, the project enables Android applications to utilize the TC001 series cameras for tasks such as real-time thermal monitoring, recording thermal videos, measuring temperature at points or regions of interest, and integrating thermal data with other sensor modalities.
 
 \section{Installation}
 
-To integrate the Topdon TC001 SDK into an Android project, begin by
-obtaining the SDK package. Topdon provides an Android SDK (e.g. as a
-\texttt{.zip} archive) containing the library binaries and sample
-code\cite{WHOStressDefinition}.
-This typically includes a precompiled AAR library (or JAR with native
-\texttt{.so} files) and documentation. Import the SDK library into your Android
-Studio project by copying the AAR into your app module's \texttt{libs} folder
-and adding it as a dependency in your Gradle build file. For example, in
-\texttt{app/build.gradle}:
+To integrate the Topdon TC001 SDK into an Android project, begin by obtaining the SDK package.
 
-    dependencies {
-        implementation fileTree(dir: "libs", include: ["\textit{.aar"])
-        // ... other dependencies ...
-    }
+Topdon provides an Android SDK (e.g. as a \texttt{.zip} archive) containing the library binaries and sample code.
 
-Make sure to enable support for the USB host API in your app's manifest
-(the Topdon camera uses Android's USB host mode). In the app
-\texttt{AndroidManifest.xml}, declare the USB host feature:
+This typically includes a precompiled AAR library (or JAR with native \texttt{.so} files) and documentation.
 
-    <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
+Import the SDK library into your Android Studio project by copying the AAR into your app module's \texttt{libs} folder and adding it as a dependency in your Gradle build file.
 
-Also add an intent filter and metadata so that Android can recognize the
-camera and grant permissions. For example, inside your launch Activity:
+For example, in \texttt{app/build.gradle}: dependencies { implementation fileTree(dir: "libs", include: ["\textit{.aar"]) // ... other dependencies ... }
 
-    <intent-filter>
-        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-    </intent-filter>
-    <meta-data 
-        android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-        android:resource="@xml/device_filter" />
+Make sure to enable support for the USB host API in your app's manifest (the Topdon camera uses Android's USB host mode).
 
-Here, \texttt{@xml/device_filter} is a resource file (placed in \texttt{res/xml/})
-specifying the USB Vendor ID and Product ID of the TC001 camera, so that
-the system can identify and associate the device with your app. (The SDK
-sample provides such a \texttt{device_filter.xml} for Topdon/Infisense
-devices.)
+In the app \texttt{AndroidManifest.xml}, declare the USB host feature: <uses-feature android:name="android.hardware.usb.host" android:required="true"/> Also add an intent filter and metadata so that Android can recognize the camera and grant permissions.
 
-After adding the library and manifest entries, \textbf{synchronize Gradle} to
-ensure the SDK is included. The SDK may include native components, so
-you should build your project to confirm that the .so libraries are
-packaged correctly. No additional installation steps (like special
-drivers) are needed on the Android device; the SDK leverages the
-standard Android USB API. It's also recommended to use a device running
-Android 7.0 or above for full compatibility with the UVC library.
+For example, inside your launch Activity: <intent-filter> <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" /> </intent-filter> <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" android:resource="@xml/device_filter" /> Here, \texttt{@xml/device_filter} is a resource file (placed in \texttt{res/xml/}) specifying the USB Vendor ID and Product ID of the TC001 camera, so that the system can identify and associate the device with your app. (The SDK sample provides such a \texttt{device_filter.xml} for Topdon/Infisense devices.) After adding the library and manifest entries, \textbf{synchronize Gradle}
+ to ensure the SDK is included.
 
-\textbf{Note:} The SDK's sample code contains two utility classes,
-\texttt{Usbcontorl} and \texttt{Usbjni}, which are used for low-level USB power
-management on certain devices. These must retain their package name
-(\texttt{android.yt.jni}) if
-used\cite{CortisolStressIndicator2020}.
-In most cases, you won't need to modify these; just ensure they are
-included if your project structure doesn't already include them. (They
-handle loading a native library for USB hub control, used only on
-specific hardware; standard Android phones typically do not require this
-step.)
+The SDK may include native components, so you should build your project to confirm that the .so libraries are packaged correctly.
 
-\section{Permissions}
+No additional installation steps (like special drivers) are needed on the Android device; the SDK leverages the standard Android USB API.
 
-Using the TC001 camera on Android requires a few permissions and
-configurations:
+It's also recommended to use a device running Android 7.0 or above for full compatibility with the UVC library.
 
-\begin{itemize}
-\item \textbf{USB Permissions:} The camera communicates via USB, so your app must
-  request permission to access the USB device. The Android system will
-  prompt the user with a dialog such as "Allow this app to access the
-  USB device?". The SDK (via \texttt{USBMonitor}) handles this by calling
-  \texttt{UsbManager.requestPermission()} when the device is attached. Ensure
-  your manifest includes the USB device intent filter as shown above and
-  that your app logic requests/grants permission. (There is }no\textit{
-  specific \texttt{<uses-permission>} string for USB host; it's enabled by the
-  uses-feature tag and user consent dialog.)
+\textbf{Note:}
 
-\item \textbf{Camera Permission:} Even though the TC001 is an external camera,
-  the system may treat it as a camera source. It is advisable to declare
-  the camera permission in your manifest and request it on devices
-  running Android 6.0+ for completeness. For example:
-  \texttt{<uses-permission android:name="android.permission.CAMERA" />}\cite{ElectrodermalActivityWiki}.
+The SDK's sample code contains two utility classes, \texttt{Usbcontorl} and \texttt{Usbjni}, which are used for low-level USB power management on certain devices.
 
-\item \textbf{Storage Permissions (optional):} If your application will save
-  thermal images or videos to device storage, include read/write storage
-  permissions. The SDK sample app requests:
+These must retain their package name (\texttt{android.yt.jni}) if used.
 
-\item \texttt{WRITE_EXTERNAL_STORAGE} and \texttt{READ_EXTERNAL_STORAGE} (for saving
-  images/video)\cite{DeviceServer}.
-  On Android 10+, you might use scoped storage or the MediaStore
-  instead, but for broad access, include these permissions. (Also note
-  the sample's use of \texttt{MANAGE_EXTERNAL_STORAGE} for legacy storage
-  support\cite{GSRPPGMachineLearning2024},
-  though this may not be needed in a scoped storage environment.)
+In most cases, you won't need to modify these; just ensure they are included if your project structure doesn't already include them. (They handle loading a native library for USB hub control, used only on specific hardware; standard Android phones typically do not require this step.) \section{Permissions}
 
-\item \texttt{android.permission.WAKE_LOCK} to keep the CPU awake during capture
-  (prevents the device from sleeping during a long
-  recording)\cite{SimulatorValidityPhysiological2025}
-  --- this is optional, but can be useful if your app records data with
-  the screen off.
+Using the TC001 camera on Android requires a few permissions and configurations: \begin{itemize}
+ 
+\item \textbf{USB Permissions:}
+
+The camera communicates via USB, so your app must request permission to access the USB device.
+
+The Android system will prompt the user with a dialog such as "Allow this app to access the USB device?".
+
+The SDK (via \texttt{USBMonitor}) handles this by calling \texttt{UsbManager.requestPermission} when the device is attached.
+
+Ensure your manifest includes the USB device intent filter as shown above and that your app logic requests/grants permission. (There is }no\textit{ specific \texttt{<uses-permission>} string for USB host; it's enabled by the uses-feature tag and user consent dialog.) 
+\item \textbf{Camera Permission:}
+
+Even though the TC001 is an external camera, the system may treat it as a camera source.
+
+It is advisable to declare the camera permission in your manifest and request it on devices running Android 6.0+ for completeness.
+
+For example: \texttt{<uses-permission android:name="android.permission.CAMERA" />}.
+
+\item \textbf{Storage Permissions (optional):}
+
+If your application will save thermal images or videos to device storage, include read/write storage permissions.
+
+The SDK sample app requests: 
+\item \texttt{WRITE_EXTERNAL_STORAGE} and \texttt{READ_EXTERNAL_STORAGE} (for saving images/video; see implementation details in Appendix~F).
+
+On Android 10+, you might use scoped storage or the MediaStore instead, but for broad access, include these permissions. (Also note the sample's use of \texttt{MANAGE_EXTERNAL_STORAGE} for legacy storage support, though this may not be needed in a scoped storage environment.) 
+\item \texttt{android.permission.WAKE_LOCK} to keep the CPU awake during capture (prevents the device from sleeping during a long recording) --- this is optional, but can be useful if your app records data with the screen off.
 
 \end{itemize}
-In summary, add the following to your AndroidManifest.xml under the
-\texttt{<manifest>} node:
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+In summary, add the following to your AndroidManifest.xml under the \texttt{<manifest>} node: <uses-permission android:name="android.permission.CAMERA"/> <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> And ensure the USB host feature is declared as mentioned.
 
-And ensure the USB host feature is declared as mentioned. The user will
-need to confirm the USB permission each time the camera is connected
-(unless your app is pre-installed as a system app), so be prepared to
-handle the permission grant flow.
+The user will need to confirm the USB permission each time the camera is connected (unless your app is pre-installed as a system app), so be prepared to handle the permission grant flow.
 
 \section{Getting Started}
 
-Once the SDK is integrated and permissions are in place, you can
-initialize and connect to the TC001 camera in your app. The basic
-workflow is:
+Once the SDK is integrated and permissions are in place, you can initialize and connect to the TC001 camera in your app.
 
-1.  \textbf{Initialize the USB monitor and listeners.} The SDK provides a
-    \texttt{USBMonitor} class that monitors USB device connections. You attach
-    an \texttt{OnDeviceConnectListener} to handle events: device attached,
-    device permission granted, device connected, disconnected, etc.
+The basic workflow is: 1.
 
-2.  \textbf{Request permission and open the camera.} When the camera is
-    attached and permission is granted, create a \texttt{UVCCamera} instance
-    using the SDK's builder, open it with the USB control block, and
-    initialize the infrared command interface (\texttt{IRCMD}) for thermal
-    data.
+\textbf{Initialize the USB monitor and listeners.}
 
-3.  \textbf{Start streaming frames.} Set a frame callback to receive image
-    frames, then start the camera preview. As frames come in, you can
-    process the thermal image and/or temperature data.
+The SDK provides a \texttt{USBMonitor} class that monitors USB device connections.
 
-4.  \textbf{Close the camera on disconnect.} Properly stop streaming and
-    release resources if the camera is detached.
+You attach an \texttt{OnDeviceConnectListener} to handle events: device attached, device permission granted, device connected, disconnected, etc. 2.
 
-Below is a \textbf{sample code snippet} illustrating the initialization and
-frame capture process in Java:
+\textbf{Request permission and open the camera.}
 
-    import android.hardware.usb.UsbDevice;
-    import com.infisense.iruvc.usb.USBMonitor;
-    import com.infisense.iruvc.uvc.UVCCamera;
-    import com.infisense.iruvc.uvc.UVCType;
-    import com.infisense.iruvc.uvc.ConnectCallback;
-    import com.infisense.iruvc.ircmd.IRCMD;
-    import com.infisense.iruvc.ircmd.IRCMDType;
-    import com.infisense.iruvc.utils.CommonParams;
-    import com.infisense.iruvc.utils.IFrameCallback;
-    import com.infisense.iruvc.uvc.ConcreateUVCBuilder;
-    import com.infisense.iruvc.ircmd.ConcreteIRCMDBuilder;
+When the camera is attached and permission is granted, create a \texttt{UVCCamera} instance using the SDK's builder, open it with the USB control block, and initialize the infrared command interface (\texttt{IRCMD}) for thermal data. 3.
 
-    // ... inside an Activity or Service:
+\textbf{Start streaming frames.}
 
-    USBMonitor usbMonitor = new USBMonitor(getApplicationContext(), new USBMonitor.OnDeviceConnectListener() {
-        @Override 
-        public void onAttach(UsbDevice device) {
-            // Called when a USB device (camera) is attached
-            usbMonitor.requestPermission(device);  // request user permission
-        }
-        @Override 
-        public void onGranted(UsbDevice device, boolean granted) {
-            // Called after user grants/denies permission (not used here, we wait for onConnect)
-        }
-        @Override 
-        public void onConnect(UsbDevice device, USBMonitor.UsbControlBlock ctrlBlock, boolean createNew) {
-            if (!createNew) return;
-            // Permission granted and new device connection:
-            // 1. Initialize the UVC camera object
-            ConcreateUVCBuilder uvcBuilder = new ConcreateUVCBuilder();
-            UVCCamera uvcCamera = uvcBuilder
-                    .setUVCType(UVCType.USB_UVC)      // using a USB UVC device
-                    .build();
-            int result = uvcCamera.openUVCCamera(ctrlBlock);  // open the camera
-            if (result != 0) {
-                // handle error (result codes defined in UVCResult)
-                return;
-            }
-            // 2. Initialize infrared command interface (IRCMD) for thermal data
-            IRCMD irCmd = new ConcreteIRCMDBuilder()
-                    .setIrcmdType(IRCMDType.USB_IR_256_384)   // using 256x384 IR module (for TC001)
-                    .setIdCamera(uvcCamera.getNativePtr())   // link to the opened camera
-                    .build();
-            // 3. Prepare a frame callback to handle incoming frames
-            uvcCamera.setFrameCallback(new IFrameCallback() {
-                @Override
-                public void onFrame(byte[] frameData) {
-                    // This method is called on every frame (on a background thread)
-                    // frameData contains the thermal image data (and temperature data, if enabled)
-                    // TODO: process the frame (convert to Bitmap, extract temperatures, etc.)
-                }
-            });
-            // 4. Start the camera preview stream
-            uvcCamera.onStartPreview();
-            irCmd.startPreview(CommonParams.PreviewPathChannel.PREVIEW_PATH0,
-                               CommonParams.StartPreviewSource.SOURCE_SENSOR,
-                               15,  // desired FPS (e.g. 15)
-                               CommonParams.StartPreviewMode.VOC_DVP_MODE,
-                               CommonParams.DataFlowMode.IMAGE_AND_TEMP_OUTPUT);
-            // Now frames will begin streaming to the IFrameCallback.
-        }
-        @Override 
-        public void onDisconnect(UsbDevice device, USBMonitor.UsbControlBlock ctrlBlock) {
-            // The device was disconnected (this is called before onDettach)
-            // We can stop the preview if needed here.
-        }
-        @Override 
-        public void onDettach(UsbDevice device) {
-            // The device was physically detached from USB
-            // Cleanup: release camera resources
-            // (In this example, the UVCCamera object would be a member variable to close here)
-        }
-        @Override 
-        public void onCancel(UsbDevice device) {
-            // Permission dialog canceled
-        }
-    });
+Set a frame callback to receive image frames, then start the camera preview.
 
-    // Register the USBMonitor to start listening for events
-    usbMonitor.register();
-    // (Don’t forget to unregister in onPause/onDestroy to avoid leaks)
+As frames come in, you can process the thermal image and/or temperature data. 4.
 
-In the above code:
+\textbf{Close the camera on disconnect.}
 
-\begin{itemize}
-\item We create a \texttt{USBMonitor} with an \texttt{OnDeviceConnectListener}. In
-  \texttt{onAttach}, we immediately request permission for the device. When
-  permission is granted, \texttt{onConnect} is invoked with a \texttt{UsbControlBlock}
-  that we use to open the camera.
-\item A \texttt{UVCCamera} is built via \texttt{ConcreateUVCBuilder} (the SDK's builder
-  for UVC-compliant cameras) and opened. We then build an \texttt{IRCMD} object
-  via \texttt{ConcreteIRCMDBuilder} --- this represents the infrared command
-  interface, which handles thermal sensor configuration and commands. We
-  specify \texttt{IRCMDType.USB_IR_256_384} assuming a 256×192 sensor with
-  image+temperature (256×384 output
-  frame)\cite{GSRGuideIMotions}\cite{ElectrodermalActivityWiki}.
-  (The SDK may have different \texttt{IRCMDType} enums if other sensor
-  resolutions or dual-camera modes are supported.)
-\item We set an \texttt{IFrameCallback} on the camera. The SDK will invoke
-  \texttt{onFrame(byte[] frameData)} for each incoming frame. At this point,
-  the camera isn't streaming yet, so no frames come until we start
-  preview.
-\item Finally, we call \texttt{uvcCamera.onStartPreview()} and then use
-  \texttt{irCmd.startPreview(...)} to begin the infrared data
-  stream\cite{ElectrodermalActivityWiki}\cite{ElectrodermalActivityWiki}.
-  We pass parameters specifying the source (sensor), target frame rate,
-  mode (here using VOC_DVP_MODE, a default mode for infrared output),
-  and the data flow mode. In this example,
-  \texttt{CommonParams.DataFlowMode.IMAGE_AND_TEMP_OUTPUT} is used, which means
-  each frame will contain both the thermal image and temperature data
-  interleaved\cite{ElectrodermalActivityWiki}.
-  After this call, the camera is actively streaming, and our \texttt{onFrame}
-  callback will start receiving data.
+Properly stop streaming and release resources if the camera is detached.
+
+Below is a \textbf{sample code snippet}
+ illustrating the initialization and frame capture process in Java: import android.hardware.usb.UsbDevice; import com.infisense.iruvc.usb.USBMonitor; import com.infisense.iruvc.uvc.UVCCamera; import com.infisense.iruvc.uvc.UVCType; import com.infisense.iruvc.uvc.ConnectCallback; import com.infisense.iruvc.ircmd.IRCMD; import com.infisense.iruvc.ircmd.IRCMDType; import com.infisense.iruvc.utils.CommonParams; import com.infisense.iruvc.utils.IFrameCallback; import com.infisense.iruvc.uvc.ConcreateUVCBuilder; import com.infisense.iruvc.ircmd.ConcreteIRCMDBuilder; // ... inside an Activity or Service: USBMonitor usbMonitor = new USBMonitor(getApplicationContext, new USBMonitor.OnDeviceConnectListener { @Override public void onAttach(UsbDevice device) { // Called when a USB device (camera) is attached usbMonitor.requestPermission(device); // request user permission } @Override public void onGranted(UsbDevice device, boolean granted) { // Called after user grants/denies permission (not used here, we wait for onConnect) } @Override public void onConnect(UsbDevice device, USBMonitor.UsbControlBlock ctrlBlock, boolean createNew) { if (!createNew) return; // Permission granted and new device connection: // 1.
+
+Initialize the UVC camera object ConcreateUVCBuilder uvcBuilder = new ConcreateUVCBuilder; UVCCamera uvcCamera = uvcBuilder .setUVCType(UVCType.USB_UVC) // using a USB UVC device .build; int result = uvcCamera.openUVCCamera(ctrlBlock); // open the camera if (result != 0) { // handle error (result codes defined in UVCResult) return; } // 2.
+
+Initialize infrared command interface (IRCMD) for thermal data IRCMD irCmd = new ConcreteIRCMDBuilder.setIrcmdType(IRCMDType.USB_IR_256_384) // using 256x384 IR module (for TC001) .setIdCamera(uvcCamera.getNativePtr) // link to the opened camera .build; // 3.
+
+Prepare a frame callback to handle incoming frames uvcCamera.setFrameCallback(new IFrameCallback { @Override public void onFrame(byte[] frameData) { // This method is called on every frame (on a background thread) // frameData contains the thermal image data (and temperature data, if enabled) // TODO: process the frame (convert to Bitmap, extract temperatures, etc.) } }); // 4.
+
+Start the camera preview stream uvcCamera.onStartPreview; irCmd.startPreview(CommonParams.PreviewPathChannel.PREVIEW_PATH0, CommonParams.StartPreviewSource.SOURCE_SENSOR, 15, // desired FPS (e.g. 15) CommonParams.StartPreviewMode.VOC_DVP_MODE, CommonParams.DataFlowMode.IMAGE_AND_TEMP_OUTPUT); // Now frames will begin streaming to the IFrameCallback. } @Override public void onDisconnect(UsbDevice device, USBMonitor.UsbControlBlock ctrlBlock) { // The device was disconnected (this is called before onDettach) // We can stop the preview if needed here. } @Override public void onDettach(UsbDevice device) { // The device was physically detached from USB // Cleanup: release camera resources // (In this example, the UVCCamera object would be a member variable to close here) } @Override public void onCancel(UsbDevice device) { // Permission dialog canceled } }); // Register the USBMonitor to start listening for events usbMonitor.register; // (Don’t forget to unregister in onPause/onDestroy to avoid leaks) In the above code: \begin{itemize}
+ 
+\item We create a \texttt{USBMonitor} with an \texttt{OnDeviceConnectListener}.
+
+In \texttt{onAttach}, we immediately request permission for the device.
+
+When permission is granted, \texttt{onConnect} is invoked with a \texttt{UsbControlBlock} that we use to open the camera.
+
+\item A \texttt{UVCCamera} is built via \texttt{ConcreateUVCBuilder} (the SDK's builder for UVC-compliant cameras) and opened.
+
+We then build an \texttt{IRCMD} object via \texttt{ConcreteIRCMDBuilder} --- this represents the infrared command interface, which handles thermal sensor configuration and commands.
+
+We specify \texttt{IRCMDType.USB_IR_256_384} assuming a 256×192 sensor with image+temperature (256×384 output frame). (The SDK may have different \texttt{IRCMDType} enums if other sensor resolutions or dual-camera modes are supported.) 
+\item We set an \texttt{IFrameCallback} on the camera.
+
+The SDK will invoke \texttt{onFrame(byte[] frameData)} for each incoming frame.
+
+At this point, the camera isn't streaming yet, so no frames come until we start preview.
+
+\item Finally, we call \texttt{uvcCamera.onStartPreview} and then use \texttt{irCmd.startPreview(...)} to begin the infrared data stream.
+
+We pass parameters specifying the source (sensor), target frame rate, mode (here using VOC_DVP_MODE, a default mode for infrared output), and the data flow mode.
+
+In this example, \texttt{CommonParams.DataFlowMode.IMAGE_AND_TEMP_OUTPUT} is used, which means each frame will contain both the thermal image and temperature data interleaved.
+
+After this call, the camera is actively streaming, and our \texttt{onFrame} callback will start receiving data.
 
 \end{itemize}
-\textbf{Note:} All USBMonitor callbacks (onAttach, onConnect, etc.) run on a
-background
-thread\cite{ElectrodermalActivityWiki}.
-This means the \texttt{onFrame} callback is also on a background thread, so you
-should handle thread synchronization if updating UI elements with the
-thermal image. In a real app, you might use a handler or runOnUiThread
-to display the image, or process frames in a dedicated worker thread (as
-the SDK sample does with an \texttt{ImageThread} for image conversion).
 
-This basic initialization can be adapted. For example, if you only need
-the temperature data without the image, you could use
-\texttt{DataFlowMode.TEMP_OUTPUT} when starting preview. Or if you only need
-the thermal image (for visualization), use \texttt{IMAGE_OUTPUT}. The SDK also
-provides intermediate modes (like raw sensor outputs for noise reduction
-etc.), but those are advanced usage.
+ \textbf{Note:}
 
-Once frames are streaming, you can use the SDK's image processing
-utilities or Android's imaging APIs to convert and display the data ---
-described next.
+All USBMonitor callbacks (onAttach, onConnect, etc.) run on a background thread.
+
+This means the \texttt{onFrame} callback is also on a background thread, so you should handle thread synchronization if updating UI elements with the thermal image.
+
+In a real app, you might use a handler or runOnUiThread to display the image, or process frames in a dedicated worker thread (as the SDK sample does with an \texttt{ImageThread} for image conversion).
+
+This basic initialization can be adapted.
+
+For example, if you only need the temperature data without the image, you could use \texttt{DataFlowMode.TEMP_OUTPUT} when starting preview.
+
+Or if you only need the thermal image (for visualization), use \texttt{IMAGE_OUTPUT}.
+
+The SDK also provides intermediate modes (like raw sensor outputs for noise reduction etc.), but those are advanced usage.
+
+Once frames are streaming, you can use the SDK's image processing utilities or Android's imaging APIs to convert and display the data --- described next.
 
 \section{Data Handling}
 
-\textbf{Frame Format:} The TC001 outputs thermal frames in a YUV format
-(specifically YUYV 4:2:2) by default for the infrared
-image\cite{ContactlessStressThermal2022}.
-When using \textbf{IMAGE_AND_TEMP_OUTPUT} mode (as in the example above),
-each frame delivered to \texttt{onFrame(byte[])} contains two parts: - The
-first half of the byte array is the infrared image data (thermal image)
-in YUV422 format. - The second half of the byte array is the per-pixel
-temperature data, also in a 16-bit format (Y16).
+ \textbf{Frame Format:}
 
-For the TC001's 256×192 resolution: if both image and temperature are
-enabled, the frame is effectively 256×384 in dimension (the two 256×192
-images stacked). In memory this translates to a byte array length of
-\texttt{256 } 384 \textit{ 2 = 196608} bytes, since YUV422 uses 2 bytes per pixel on
-average. The \textbf{first 98,304 bytes} correspond to a 256×192 YUV image,
-and the \textbf{next 98,304 bytes} correspond to a 256×192 array of
-temperature
-values\cite{ContactlessStressThermal2022}\cite{DriverStressThermal2020}.
-The SDK documentation confirms that "the frame array's front half is IR
-data, the latter half is temperature data" for image+temperature
-mode\cite{DriverStressThermal2020}\cite{DriverStressThermal2020}.
-If you use image-only or temp-only modes, the frame will be half that
-size, containing just the single dataset.
+The TC001 outputs thermal frames in a YUV format (specifically YUYV 4:2:2) by default for the infrared image.
 
-\textbf{Converting the Image:} To display the thermal image, you need to
-convert the YUYV data to a viewable format (e.g., ARGB8888). The SDK
-includes a \texttt{LibIRProcess} utility with methods like
-\texttt{convertYuyvMapToARGBPseudocolor(...)} and
-\texttt{convertArrayYuv422ToARGB(...)}\cite{ContactlessStressThermal2022}.
-In the provided sample, the raw YUV is converted to an ARGB bitmap as
-follows (pseudo-code):
+When using \textbf{IMAGE_AND_TEMP_OUTPUT}
+ mode (as in the example above), each frame delivered to \texttt{onFrame(byte[])} contains two parts: - The first half of the byte array is the infrared image data (thermal image) in YUV422 format. - The second half of the byte array is the per-pixel temperature data, also in a 16-bit format (Y16).
 
-    // Assume imageBytes is the first half of frameData containing YUV422 data
-    int pixelCount = imageWidth } imageHeight;  // 256\textit{192
-    int[] argbPixels = new int[pixelCount];
-    if (pseudocolorMode != null) {
-        // Apply a false-color palette to the grayscale thermal image
-        LibIRProcess.convertYuyvMapToARGBPseudocolor(imageBytes, (long)pixelCount,
-                                                    pseudocolorMode, argbPixels);
-    } else {
-        // Convert YUV422 to grayscale ARGB
-        LibIRProcess.convertYuv422ToARGB(imageBytes, pixelCount, argbPixels);
-    }
-    // If the image is rotated (camera orientation), rotate accordingly:
-    if (needRotate90) {
-        LibIRProcess.ImageRes_t res = new LibIRProcess.ImageRes_t();
-        res.height = (char)imageWidth;
-        res.width  = (char)imageHeight;
-        // Rotate right by 90 degrees
-        LibIRProcess.rotateRight90(argbPixels, res, CommonParams.IRPROCSRCFMTType.IRPROC_SRC_FMT_ARGB8888, argbPixels);
-    }
-    // Now argbPixels contains the image in ARGB format; create a Bitmap to display:
-    Bitmap thermalBitmap = Bitmap.createBitmap(argbPixels, imageWidth, imageHeight, Bitmap.Config.ARGB_8888);
+For the TC001's 256×192 resolution: if both image and temperature are enabled, the frame is effectively 256×384 in dimension (the two 256×192 images stacked).
 
-This process is essentially what the SDK's sample \texttt{ImageThread} does:
-YUV -\> ARGB -\> rotate -\>
-Bitmap\cite{ContactlessStressThermal2022}\cite{ContactlessStressThermal2022}.
-You can then draw this Bitmap on an \texttt{ImageView} or a custom view
-(\texttt{CameraView} in the sample) to show the live thermal image. The SDK
-supports multiple \textbf{pseudo-color palettes} (ironbow, rainbow,
-grayscale, etc.), approximately 10 palettes including "white hot",
-"black hot", "medical" and
-others\cite{InstantStressSmartphone2019}.
-By selecting a palette (e.g., \texttt{CommonParams.PseudoColorType}), you can
-have the conversion routine apply that coloring to the image, enhancing
-contrast for visualization.
+In memory this translates to a byte array length of \texttt{256 } 384 \textit{ 2 = 196608} bytes, since YUV422 uses 2 bytes per pixel on average.
 
-\textbf{Temperature Data:} The temperature values for each pixel are provided
-in the second half of the frame (if using combined mode, or as the whole
-frame in temp-only mode). These are 16-bit raw data values that
-correspond to temperatures in either Kelvin or Celsius with a scaling
-factor. According to the SDK, in \textbf{Y16 format each unit corresponds to
-1/64 of a degree} (for 16-bit
-data)\cite{InstantStressSmartphone2019}.
-In other words, to convert a raw 16-bit value to an absolute
-temperature:
+The \textbf{first 98,304 bytes}
+ correspond to a 256×192 YUV image, and the \textbf{next 98,304 bytes}
+ correspond to a 256×192 array of temperature values.
 
-\begin{itemize}
-\item If using the default scale (for TC001 high-gain mode), \textbf{divide the
-  raw value by 64} to get temperature in Kelvin, then subtract 273.15
-  to convert to °C. For example, a raw value of 30000 would be 30000/64
-  = 468.75 K, which is 195.6 °C.
-\item If the camera or mode uses 14-bit data (scale 16, e.g. low-gain mode
-  or IR fusion mode), divide by 16
-  instead\cite{InstantStressSmartphone2019}.
-  The SDK's \texttt{LibIRTemp} class handles these conversions internally by
-  setting the scale depending on mode (64 for Y16, 16 for
-  Y14)\cite{InstantStressSmartphone2019}.
+The SDK documentation confirms that "the frame array's front half is IR data, the latter half is temperature data" for image+temperature mode.
+
+If you use image-only or temp-only modes, the frame will be half that size, containing just the single dataset.
+
+\textbf{Converting the Image:}
+
+To display the thermal image, you need to convert the YUYV data to a viewable format (e.g., ARGB8888).
+
+The SDK includes a \texttt{LibIRProcess} utility with methods like \texttt{convertYuyvMapToARGBPseudocolor(...)} and \texttt{convertArrayYuv422ToARGB(...)}.
+
+In the provided sample, the raw YUV is converted to an ARGB bitmap as follows (pseudo-code): // Assume imageBytes is the first half of frameData containing YUV422 data int pixelCount = imageWidth } imageHeight; // 256\textit{192 int[] argbPixels = new int[pixelCount]; if (pseudocolorMode != null) { // Apply a false-color palette to the grayscale thermal image LibIRProcess.convertYuyvMapToARGBPseudocolor(imageBytes, (long)pixelCount, pseudocolorMode, argbPixels); } else { // Convert YUV422 to grayscale ARGB LibIRProcess.convertYuv422ToARGB(imageBytes, pixelCount, argbPixels); } // If the image is rotated (camera orientation), rotate accordingly: if (needRotate90) { LibIRProcess.ImageRes_t res = new LibIRProcess.ImageRes_t; res.height = (char)imageWidth; res.width = (char)imageHeight; // Rotate right by 90 degrees LibIRProcess.rotateRight90(argbPixels, res, CommonParams.IRPROCSRCFMTType.IRPROC_SRC_FMT_ARGB8888, argbPixels); } // Now argbPixels contains the image in ARGB format; create a Bitmap to display: Bitmap thermalBitmap = Bitmap.createBitmap(argbPixels, imageWidth, imageHeight, Bitmap.Config.ARGB_8888); This process is essentially what the SDK's sample \texttt{ImageThread} does: YUV -\> ARGB -\> rotate -\> Bitmap.
+
+You can then draw this Bitmap on an \texttt{ImageView} or a custom view (\texttt{CameraView} in the sample) to show the live thermal image.
+
+The SDK supports multiple \textbf{pseudo-color palettes}
+ (ironbow, rainbow, grayscale, etc.), approximately 10 palettes including "white hot", "black hot", "medical" and others.
+
+By selecting a palette (e.g., \texttt{CommonParams.PseudoColorType}), you can have the conversion routine apply that coloring to the image, enhancing contrast for visualization.
+
+\textbf{Temperature Data:}
+
+The temperature values for each pixel are provided in the second half of the frame (if using combined mode, or as the whole frame in temp-only mode).
+
+These are 16-bit raw data values that correspond to temperatures in either Kelvin or Celsius with a scaling factor.
+
+According to the SDK, in \textbf{Y16 format each unit corresponds to 1/64 of a degree}
+ (for 16-bit data).
+
+In other words, to convert a raw 16-bit value to an absolute temperature: \begin{itemize}
+ 
+\item If using the default scale (for TC001 high-gain mode), \textbf{divide the raw value by 64}
+ to get temperature in Kelvin, then subtract 273.15 to convert to °C.
+
+For example, a raw value of 30000 would be 30000/64 = 468.75 K, which is 195.6 °C.
+
+\item If the camera or mode uses 14-bit data (scale 16, e.g. low-gain mode or IR fusion mode), divide by 16 instead.
+
+The SDK's \texttt{LibIRTemp} class handles these conversions internally by setting the scale depending on mode (64 for Y16, 16 for Y14).
 
 \end{itemize}
-Typically, you won't manually convert every pixel unless needed. A
-common approach is to use provided methods to find min/max or get
-specific points. The \texttt{LibIRTemp} class can be used to \textbf{extract
-temperature metrics} from the byte array. For instance, you can
-instantiate \texttt{LibIRTemp} with the image width/height and then call
-methods to sample temperatures:
 
-    LibIRTemp irTempUtil = new LibIRTemp(imageWidth, imageHeight);
-    irTempUtil.setTempData(temperatureByteArray);
-    LibIRTemp.TemperatureSampleResult result = irTempUtil.getTemperatureOfRect(new Rect(0,0, imageWidth-1, imageHeight-1));
-    float minC = result.minTemperature;  // minimum temperature in °C in the image
-    Point minLoc = result.minTemperaturePixel;  // location of min temp
-    float maxC = result.maxTemperature;
+Typically, you won't manually convert every pixel unless needed.
 
-The SDK can compute statistics like max, min, and average temperature
-over regions (rectangles, lines, or
-points)\cite{InstantStressSmartphone2019}\cite{GSRPPGMachineLearning2024}.
-The sample's \texttt{TemperatureView} uses these methods to display values for
-user-selected points/areas on the image (up to 3 points, lines, or
-rectangles) --- for example, it draws the hottest and coldest point in a
-region with their temperature
-values\cite{GSRPPGMachineLearning2024}\cite{GSRPPGMachineLearning2024}.
-Using these utilities ensures the proper calibration and scale is
-applied (the SDK accounts for the camera's calibration data and any
-offset). The \textbf{accuracy} of the temperature readings is stated as ±2 °C
-or ±2% (whichever is greater) for the TC001
-series\cite{TopdonTC001}\cite{DeviceServer},
-and the noise-equivalent temperature difference (NETD) is \<40 mK,
-meaning very small temperature differences (\~0.04 °C) are
-distinguishable\cite{AppleHealthWatch2019}.
+A common approach is to use provided methods to find min/max or get specific points.
 
-When visualizing the temperature data, you might overlay it as numeric
-values or a separate "temperature map". The TC001 Plus, with its visual
-camera, allows blending the thermal data with an RGB image --- the SDK
-can provide an aligned visual image so you can overlay temperature info
-on actual visible
-contours\cite{Fowles1981}.
-In our context, if focusing on physiological data, one might not need
-the visible-light overlay, but it can help identify anatomical features
-(the SDK sample synchronizes RGB and thermal frames to locate facial
-landmarks in thermal
-images\cite{MainViewModel}\cite{MainViewModel}).
+The \texttt{LibIRTemp} class can be used to \textbf{extract temperature metrics}
+ from the byte array.
 
-\textbf{Thermal Range and Units:} As mentioned, the device can measure
-roughly -20 °C to 550 °C in two gain
-modes\cite{Healey2005}.
-The camera will automatically switch between \textbf{high gain} (for lower
-temperatures, finer resolution) and \textbf{low gain} (for higher
-temperatures, extended range). The SDK provides callbacks
-(AutoGainSwitch) if one enables them, but by default this is handled
-internally. The raw values and scaling differ slightly in low-gain mode
-(14-bit data); the \texttt{LibIRTemp.setScale(16)} call in the sample is doing
-exactly that when IRISP (the dual-gain fusion mode) is
-on\cite{InstantStressSmartphone2019}.
-For most physiological use-cases (human body temperatures \~30---40 °C),
-the camera will be in high-gain mode for better sensitivity.
+For instance, you can instantiate \texttt{LibIRTemp} with the image width/height and then call methods to sample temperatures: LibIRTemp irTempUtil = new LibIRTemp(imageWidth, imageHeight); irTempUtil.setTempData(temperatureByteArray); LibIRTemp.TemperatureSampleResult result = irTempUtil.getTemperatureOfRect(new Rect(0,0, imageWidth-1, imageHeight-1)); float minC = result.minTemperature; // minimum temperature in °C in the image Point minLoc = result.minTemperaturePixel; // location of min temp float maxC = result.maxTemperature; The SDK can compute statistics like max, min, and average temperature over regions (rectangles, lines, or points).
 
-In summary, handling data from the SDK involves splitting the frame into
-image vs. temperature, converting the image for display (using provided
-conversion functions and applying pseudo-colors if desired), and
-converting temperature data to meaningful values (using the scale or the
-\texttt{LibIRTemp} helpers). The provided sample code and SDK documentation
-have detailed examples of these steps, ensuring you can both \textbf{see} the
-thermal scene and \textbf{measure} temperatures at points of interest.
+The sample's \texttt{TemperatureView} uses these methods to display values for user-selected points/areas on the image (up to 3 points, lines, or rectangles) --- for example, it draws the hottest and coldest point in a region with their temperature values.
 
-\section{Integration with \texttt{bucika_gsr}}
+Using these utilities ensures the proper calibration and scale is applied (the SDK accounts for the camera's calibration data and any offset).
 
-The \texttt{bucika_gsr} Android app is a multi-modal data collection tool,
-combining galvanic skin response (GSR) with other sensors. Integrating
-the Topdon TC001 camera into this app allows \textbf{thermal data} to become
-another channel in its physiological monitoring architecture. In
-practice, the integration involves initializing and running the TC001's
-thermal stream in parallel with GSR recording, and synchronizing the
-data streams (by timestamps or sampling rate) so that thermal features
-can be correlated with electrodermal activity.
+The \textbf{accuracy}
+ of the temperature readings is stated as ±2 °C or ±2% (whichever is greater) for the TC001 series(see implementation details in Appendix~F), and the noise-equivalent temperature difference (NETD) is \<40 mK, meaning very small temperature differences (\~0.04 °C) are distinguishable.
 
-\textbf{Architecture Fit:} In a typical setup, the app might have a
-background service or manager handling sensor data acquisition. The
-TC001 integration would add a \textbf{Thermal Sensor Module} to this system.
-For example, when a recording session starts, the app would:
+When visualizing the temperature data, you might overlay it as numeric values or a separate "temperature map".
 
-\begin{itemize}
-\item Power and connect to the TC001 camera (using the SDK as outlined in
-  }Getting Started\textit{). This could be done in the same service that reads
-  GSR, or in a dedicated thread, as long as lifecycle is managed
-  (start/stop with the session).
+The TC001 Plus, with its visual camera, allows blending the thermal data with an RGB image --- the SDK can provide an aligned visual image so you can overlay temperature info on actual visible contours.
 
-\item Begin streaming thermal frames. You may choose to store the raw
-  thermal video or to compute specific metrics in real-time. In a
-  GSR-focused experiment, one might extract features like }facial
-  temperature averages\textit{, }nose tip temperature over time\textit{, or }rate of
-  change of temperature\textit{ to indicate stress
-  responses\cite{StressDefinitionHH}.
-  These features can be computed on each frame or every few frames and
-  then logged alongside GSR data.
+In our context, if focusing on physiological data, one might not need the visible-light overlay, but it can help identify anatomical features (the SDK sample synchronizes RGB and thermal frames to locate facial landmarks in thermal images(following the MVVM architectural pattern; following the MVVM architectural pattern)).
 
-\item Ensure that each thermal sample or frame is timestamped (using the
-  same clock or reference as the GSR data timestamps). Given GSR is
-  often sampled at, say, 10---100 Hz and the thermal camera at up to
-  25 Hz, you might down-sample or interpolate as needed. The sample
-  research system described by Gioia }et al.\textit{ synchronized 5 Hz RGB
-  frames with 25 Hz thermal frames for
-  analysis\cite{MainViewModel},
-  so a similar strategy can be applied: for instance, record thermal
-  data at its native rate and later align it to GSR's timeline via
-  timestamps.
+\textbf{Thermal Range and Units:}
 
-\item \textbf{Data Fusion:} The GSR signal primarily reflects sympathetic nervous
-  system arousal (sweat gland activity), whereas the thermal camera can
-  capture peripheral blood flow changes and other heat-related
-  signals\cite{DriverStressThermal2020}\cite{StressDefinitionHH}.
-  In \texttt{bucika_gsr}, the thermal stream could be used to enrich
-  interpretation of GSR events. For example, a spike in GSR (indicating
-  stress or startle) might be accompanied by a drop in facial skin
-  temperature (due to stress-related
-  vasoconstriction)\cite{CortisolStressIndicator2020}.
-  By integrating the two, the app could detect such patterns more
-  reliably. The app's data model would store thermal features alongside
-  GSR, allowing later analysis (e.g. plotting nose temperature and GSR
-  on the same time axis to see the temporal relationship).
+As mentioned, the device can measure roughly -20 °C to 550 °C in two gain modes.
 
-\item \textbf{Real-Time Display:} If \texttt{bucika_gsr} has a user interface showing
-  live signals (such as a graph of GSR over time), the thermal camera
-  integration might also include a live thermal view or thermal metrics
-  display. For instance, one could show the live thermal image in a
-  window, or simply display the current temperature of a particular
-  region (like forehead or hand) in real-time. The TC001 Plus's dual
-  lens can assist in aiming the camera at the subject's face or skin
-  area using the visible light aid. In code, once the camera is
-  streaming, you can overlay markers on the thermal image (as the
-  TemperatureView does) to indicate where temperature is being sampled
-  for the app's purposes (e.g., the forehead region's average
-  temperature).
+The camera will automatically switch between \textbf{high gain}
+ (for lower temperatures, finer resolution) and \textbf{low gain}
+ (for higher temperatures, extended range).
+
+The SDK provides callbacks (AutoGainSwitch) if one enables them, but by default this is handled internally.
+
+The raw values and scaling differ slightly in low-gain mode (14-bit data); the \texttt{LibIRTemp.setScale(16)} call in the sample is doing exactly that when IRISP (the dual-gain fusion mode) is on.
+
+For most physiological use-cases (human body temperatures \~30---40 °C), the camera will be in high-gain mode for better sensitivity.
+
+In summary, handling data from the SDK involves splitting the frame into image vs. temperature, converting the image for display (using provided conversion functions and applying pseudo-colors if desired), and converting temperature data to meaningful values (using the scale or the \texttt{LibIRTemp} helpers).
+
+The provided sample code and SDK documentation have detailed examples of these steps, ensuring you can both \textbf{see}
+ the thermal scene and \textbf{measure}
+ temperatures at points of interest.
+
+\section{Integration with \texttt{bucika_gsr}
+}
+
+The \texttt{bucika_gsr}
+
+Android app is a multi-modal data collection tool, combining galvanic skin response (GSR) with other sensors.
+
+Integrating the Topdon TC001 camera into this app allows \textbf{thermal data}
+ to become another channel in its physiological monitoring architecture.
+
+In practice, the integration involves initializing and running the TC001's thermal stream in parallel with GSR recording, and synchronizing the data streams (by timestamps or sampling rate) so that thermal features can be correlated with electrodermal activity.
+
+\textbf{Architecture Fit:}
+
+In a typical setup, the app might have a background service or manager handling sensor data acquisition.
+
+The TC001 integration would add a \textbf{Thermal Sensor Module}
+ to this system.
+
+For example, when a recording session starts, the app would: \begin{itemize}
+ 
+\item Power and connect to the TC001 camera (using the SDK as outlined in }Getting Started\textit{).
+
+This could be done in the same service that reads GSR, or in a dedicated thread, as long as lifecycle is managed (start/stop with the session).
+
+\item Begin streaming thermal frames.
+
+You may choose to store the raw thermal video or to compute specific metrics in real-time.
+
+In a GSR-focused experiment, one might extract features like }facial temperature averages\textit{, }nose tip temperature over time\textit{, or }rate of change of temperature\textit{ to indicate stress responses.
+
+These features can be computed on each frame or every few frames and then logged alongside GSR data.
+
+\item Ensure that each thermal sample or frame is timestamped (using the same clock or reference as the GSR data timestamps).
+
+Given GSR is often sampled at, say, 10---100 Hz and the thermal camera at up to 25 Hz, you might down-sample or interpolate as needed.
+
+The sample research system described by Gioia }et al.\textit{ synchronized 5 Hz RGB frames with 25 Hz thermal frames for analysis(following the MVVM architectural pattern), so a similar strategy can be applied: for instance, record thermal data at its native rate and later align it to GSR's timeline via timestamps.
+
+\item \textbf{Data Fusion:}
+
+The GSR signal primarily reflects sympathetic nervous system arousal (sweat gland activity), whereas the thermal camera can capture peripheral blood flow changes and other heat-related signals.
+
+In \texttt{bucika_gsr}, the thermal stream could be used to enrich interpretation of GSR events.
+
+For example, a spike in GSR (indicating stress or startle) might be accompanied by a drop in facial skin temperature (due to stress-related vasoconstriction).
+
+By integrating the two, the app could detect such patterns more reliably.
+
+The app's data model would store thermal features alongside GSR, allowing later analysis (e.g. plotting nose temperature and GSR on the same time axis to see the temporal relationship).
+
+\item \textbf{Real-Time Display:}
+
+If \texttt{bucika_gsr} has a user interface showing live signals (such as a graph of GSR over time), the thermal camera integration might also include a live thermal view or thermal metrics display.
+
+For instance, one could show the live thermal image in a window, or simply display the current temperature of a particular region (like forehead or hand) in real-time.
+
+The TC001 Plus's dual lens can assist in aiming the camera at the subject's face or skin area using the visible light aid.
+
+In code, once the camera is streaming, you can overlay markers on the thermal image (as the TemperatureView does) to indicate where temperature is being sampled for the app's purposes (e.g., the forehead region's average temperature).
 
 \end{itemize}
-From a software integration standpoint, adding the TC001 likely means
-managing the \textbf{lifecycle} within the app: initializing the camera when
-needed, handling user permissions (the app might prompt the user to
-connect/allow the camera at start of a session), and gracefully stopping
-the camera when the session ends or app pauses. This involves calling
-\texttt{usbMonitor.register()} on start and \texttt{usbMonitor.unregister()} on stop,
-and releasing the camera (\texttt{uvcCamera.close()} etc.) to free the USB
-interface. The \texttt{bucika_gsr} app should also account for cases where the
-camera is not available or the user denies permission, by falling back
-or notifying the user.
 
-In terms of \textbf{multimodal data architecture}, the thermal stream will
-produce a high volume of data (frame bytes or extracted features), so
-consider the data handling pipeline: you might not want to log every
-pixel's temperature for long sessions due to storage and processing
-load. Instead, the integration can focus on \textbf{key features} relevant to
-the research questions. Common choices in research are: maximum facial
-temperature, temperature at the tip of the nose, or at the inner canthus
-of the eyes (as indicators of
-stress/fear)\cite{CortisolStressIndicator2020},
-or overall average skin temperature as an indicator of thermal comfort.
-The SDK makes it easy to compute these in real-time (using
-\texttt{LibIRTemp.getTemperatureOfPoint()} or small regions). Those values (a
-few numbers per second) can then be time-stamped and recorded alongside
-GSR and perhaps other signals (heart rate, etc.) in the app's data file.
+From a software integration standpoint, adding the TC001 likely means managing the \textbf{lifecycle}
+ within the app: initializing the camera when needed, handling user permissions (the app might prompt the user to connect/allow the camera at start of a session), and gracefully stopping the camera when the session ends or app pauses.
 
-By integrating the Topdon SDK with \texttt{bucika_gsr}, the app effectively
-becomes a \textbf{multisensor platform}, capturing both electrodermal
-activity and thermal physiology. This enables richer analysis such as
-correlating sudden GSR increases (sweat release) with subsequent changes
-in peripheral skin temperature, or detecting respiration rate from the
-thermal signal to see how it correlates with stress-induced GSR
-fluctuations\cite{MainViewModel}\cite{StressDefinitionHH}.
-Such integration opens the door to more robust and contactless stress or
-emotion monitoring: GSR requires skin contact electrodes, whereas
-thermal is contact-free --- combining them can validate findings and
-provide backup measurements if one signal is lost or
-noisy\cite{DeviceServer}\cite{MainViewModel}.
+This involves calling \texttt{usbMonitor.register} on start and \texttt{usbMonitor.unregister} on stop, and releasing the camera (\texttt{uvcCamera.close} etc.) to free the USB interface.
 
-In summary, within the \texttt{bucika_gsr} app, the Topdon camera's role is to
-provide a \textbf{thermal imaging stream} that complements the GSR data. The
-integration involves technical steps (initializing the camera via the
-SDK, managing data flow) and conceptual steps (deciding which thermal
-features to extract and log). Once implemented, the app can record
-synchronized thermal and GSR data for each session, offering a more
-comprehensive view of the user's physiological responses than either
-modality alone.
+The \texttt{bucika_gsr} app should also account for cases where the camera is not available or the user denies permission, by falling back or notifying the user.
+
+In terms of \textbf{multimodal data architecture}
+, the thermal stream will produce a high volume of data (frame bytes or extracted features), so consider the data handling pipeline: you might not want to log every pixel's temperature for long sessions due to storage and processing load.
+
+Instead, the integration can focus on \textbf{key features}
+ relevant to the research questions.
+
+Common choices in research are: maximum facial temperature, temperature at the tip of the nose, or at the inner canthus of the eyes (as indicators of stress/fear), or overall average skin temperature as an indicator of thermal comfort.
+
+The SDK makes it easy to compute these in real-time (using \texttt{LibIRTemp.getTemperatureOfPoint} or small regions).
+
+Those values (a few numbers per second) can then be time-stamped and recorded alongside GSR and perhaps other signals (heart rate, etc.) in the app's data file.
+
+By integrating the Topdon SDK with \texttt{bucika_gsr}, the app effectively becomes a \textbf{multisensor platform}
+, capturing both electrodermal activity and thermal physiology.
+
+This enables richer analysis such as correlating sudden GSR increases (sweat release) with subsequent changes in peripheral skin temperature, or detecting respiration rate from the thermal signal to see how it correlates with stress-induced GSR fluctuations(following the MVVM architectural pattern).
+
+Such integration opens the door to more robust and contactless stress or emotion monitoring: GSR requires skin contact electrodes, whereas thermal is contact-free --- combining them can validate findings and provide backup measurements if one signal is lost or noisy(see implementation details in Appendix~F; following the MVVM architectural pattern).
+
+In summary, within the \texttt{bucika_gsr} app, the Topdon camera's role is to provide a \textbf{thermal imaging stream}
+ that complements the GSR data.
+
+The integration involves technical steps (initializing the camera via the SDK, managing data flow) and conceptual steps (deciding which thermal features to extract and log).
+
+Once implemented, the app can record synchronized thermal and GSR data for each session, offering a more comprehensive view of the user's physiological responses than either modality alone.
 
 \section{Troubleshooting}
 
-When working with the TC001/TC001 Plus on Android, you may encounter
-some common issues. Here are troubleshooting tips and solutions:
+When working with the TC001/TC001 Plus on Android, you may encounter some common issues.
 
-\begin{itemize}
-\item \textbf{Device Not Detected by the App:} If plugging in the camera does
-  nothing, ensure that your phone supports \textbf{USB OTG (On-The-Go)} and
-  that the USB host feature is declared in the app manifest. Some phones
-  require enabling OTG in settings or have power-saving modes that
-  disable it after a period. Also verify your \texttt{device_filter.xml}
-  includes the camera's Vendor ID and Product ID so that Android knows
-  your app can handle this USB device. (If the official Topdon app
-  recognizes the camera but yours doesn't, it's likely a filter or
-  permission issue.) Use Android's \texttt{UsbManager.getDeviceList()} to see
-  if the camera appears at all. If not, the issue may be hardware (try a
-  different cable or ensure the USB-C connector is fully inserted --- the
-  camera should firmly attach, and on some devices you might need to
-  flip the connector if it's orientation-specific).
+Here are troubleshooting tips and solutions: \begin{itemize}
+ 
+\item \textbf{Device Not Detected by the App:}
 
-\item \textbf{Permission Denied or No Prompt:} If you never see the "Allow
-  access" dialog, it could be because another app (or a system service)
-  has claimed the USB interface. Make sure no other app (including the
-  default Topdon app or other camera apps) is running and auto-opening
-  the device. Also confirm your intent filter is correct. In some cases,
-  you might need to manually call
-  \texttt{UsbManager.requestPermission(device, pendingIntent)} if the
-  USBMonitor approach is not triggering. The SDK's \texttt{USBMonitor} will
-  broadcast an intent with action \texttt{USBMonitor.ACTION_USB_PERMISSION} ---
-  ensure your activity is registered to receive it (the SDK's sample
-  takes care of this internally).
+If plugging in the camera does nothing, ensure that your phone supports \textbf{USB OTG (On-The-Go)}
+ and that the USB host feature is declared in the app manifest.
 
-\item \textbf{Frame Freezes or No Image Output:} If the camera connects but you
-  only see a black screen or one static frame, it could be a \textbf{bandwidth
-  or mode issue}. The SDK allows adjusting USB bandwidth:
-  \texttt{uvcCamera.setDefaultBandwidth(1.0f)} is used in the sample to request
-  maximum
-  bandwidth\cite{DeviceServer}.
-  Some Android devices have limited USB bandwidth for external cameras.
-  Try setting a lower bandwidth factor (closer to 0) if frames aren't
-  coming through, or reduce the frame rate parameter in \texttt{startPreview()}
-  (e.g., try 9 or 10 fps to see if that stabilizes output). Also, ensure
-  that the data flow mode you request is supported by the camera: TC001
-  should support the combined mode by default, but if you accidentally
-  use a mode not supported (e.g., a higher resolution or a dual-camera
-  mode on a single-camera device), it may not output. Use
-  \texttt{uvcCamera.getSupportedSizeList()} to log what resolutions and modes
-  the camera
-  provides\cite{DeviceServer}.
+Some phones require enabling OTG in settings or have power-saving modes that disable it after a period.
 
-\item \textbf{Heat or Calibration Issues:} The camera has an internal shutter
-  that periodically calibrates the sensor (you might hear a soft }click\textit{
-  every so often). During those moments (which typically last a fraction
-  of a second), the image may pause or show a uniform field. This is
-  normal --- the camera is self-correcting for drift. If you find the
-  calibration happening too often or at inconvenient times, you can
-  manually trigger it at a known safe moment using
-  \texttt{ircmd.updateOOCOrB(CommonParams.UpdateOOCOrBType.B_UPDATE)} (which
-  forces a \textbf{B shutter calibration}). Conversely, if the image over
-  time develops offset (e.g., appears warmer or cooler than reality), a
-  manual shutter trigger can help. Also note that the \textbf{TC001 Plus} has
-  a known behavior of }self-heating\textit{: after a minute or so, the device's
-  body warms up, which can slightly raise the reported temperature in
-  parts of the image (e.g., edges) due to its own
-  heat\cite{WebcamCapture}.
-  To mitigate this, allow the camera to warm up for a minute before
-  recording critical data, and keep the lens cover open to let the
-  shutter calibrate. Using the camera in a stable ambient environment
-  yields best results.
+Also verify your \texttt{device_filter.xml} includes the camera's Vendor ID and Product ID so that Android knows your app can handle this USB device. (If the official Topdon app recognizes the camera but yours doesn't, it's likely a filter or permission issue.) Use Android's \texttt{UsbManager.getDeviceList} to see if the camera appears at all.
 
-\item \textbf{USB Connection Stability:} If the camera frequently disconnects or
-  frames stop, it could be a power issue --- the camera draws power from
-  the phone. Ensure the phone is sufficiently charged and not in a
-  low-power mode. Some users use a Y-cable to supply external power if
-  needed, but for TC001 this is rarely required as power draw is modest
-  (\~0.5 W). However, avoid having multiple high-power USB devices at
-  once. Additionally, use the short OTG adapter that comes with the
-  camera (or a high-quality cable) --- long or poor-quality cables can
-  cause voltage drop or data errors. If you detect \textbf{frame errors} or
-  the SDK flags a bad frame (the sample checks the last byte of the
-  frame for a bad-frame
-  flag\cite{WebcamCapture}),
-  it will attempt a sensor restart. Occasional bad frames can occur; the
-  SDK handles them by restarting the stream if necessary.
+If not, the issue may be hardware (try a different cable or ensure the USB-C connector is fully inserted --- the camera should firmly attach, and on some devices you might need to flip the connector if it's orientation-specific).
 
-\item \textbf{Performance and Threading:} Processing every frame (especially at
-  25 Hz) can be CPU-intensive, particularly converting to bitmaps or
-  running heavy computations. If the UI is lagging or frames are being
-  dropped, ensure that the frame handling is off the main thread. The
-  example above posts minimal work in the callback. The SDK sample uses
-  a separate \texttt{ImageThread} for converting and drawing the image so that
-  the USB thread isn't backed
-  up\cite{ContactlessStressThermal2022}\cite{ContactlessStressThermal2022}.
-  You should adopt a similar strategy: do the image conversion and any
-  heavy analysis (e.g., running face detection on the thermal image) in
-  a worker thread. This will prevent the frame queue from overflowing
-  (which would manifest as increasing latency or stuttering).
+\item \textbf{Permission Denied or No Prompt:}
 
-\item \textbf{App Integration Issues:} If integrating into an existing app like
-  \texttt{bucika_gsr}, watch out for \textbf{Android lifecycle} mismatches. For
-  example, if the USB camera is streaming and the user rotates the
-  screen (causing Activity restart), you should close and reopen the
-  camera properly to avoid resource leaks or crashes. A good practice is
-  to handle the camera in a foreground service that isn't tied to the
-  Activity lifecycle (especially if you need to continue recording with
-  the screen off). Alternatively, manage it in Activity but stop
-  onPause. Also be mindful of permission persistence: the user's USB
-  permission is typically remembered only until the device is detached.
-  If your app exits and the camera is still plugged, the next launch
-  will require permission again.
+If you never see the "Allow access" dialog, it could be because another app (or a system service) has claimed the USB interface.
 
-\item \textbf{Error Codes and Debugging:} The SDK's \texttt{ResultCode} enum provides
-  codes for failures (e.g., \texttt{SUCCESS = 0}, others for various errors).
-  If \texttt{uvcCamera.openUVCCamera(ctrlBlock)} or \texttt{irCmd.startPreview()}
-  returns non-zero, log or inspect those. Common errors might be related
-  to device busy or invalid parameters. Ensure you are using the correct
-  \texttt{IRCMDType} for your device model --- for TC001/Plus it's usually
-  \texttt{USB_IR_256_384} as shown (the Plus might use the same, since the IR
-  sensor resolution is 256×192; "512×384 super-resolution" mentioned in
-  marketing refers to upscaling/fusion, not an actual sensor pixel
-  count). If you choose a wrong type, the SDK might fail to initialize
-  the IR command interface.
+Make sure no other app (including the default Topdon app or other camera apps) is running and auto-opening the device.
 
-\item \textbf{Image Orientation and Alignment:} The camera's default orientation
-  might not match your app's view. If you see the image rotated by 90°
-  or mirrored, use the SDK's \texttt{rotate()} or mirror settings. The \texttt{IRUVC}
-  helper class in the sample, for instance, has a \texttt{setRotate(true)}
-  option which rotates the image 90°
-  right\cite{ShimmerManager}.
-  You can also manually rotate the Bitmap before displaying. For
-  alignment (especially for TC001 Plus fusion of visual and IR), ensure
-  you use the provided alignment method from the SDK so that the thermal
-  and visible images overlap correctly. If the visible image is not
-  needed, you can ignore it; but if you do use it (say, to locate a
-  face), remember the IR and RGB frames might have slight time offsets
-  --- syncing them can be done by timestamp or by using the provided
-  frame callback that perhaps delivers both in one call (depending on
-  SDK capabilities).
+Also confirm your intent filter is correct.
+
+In some cases, you might need to manually call \texttt{UsbManager.requestPermission(device, pendingIntent)} if the USBMonitor approach is not triggering.
+
+The SDK's \texttt{USBMonitor} will broadcast an intent with action \texttt{USBMonitor.ACTION_USB_PERMISSION} --- ensure your activity is registered to receive it (the SDK's sample takes care of this internally).
+
+\item \textbf{Frame Freezes or No Image Output:}
+
+If the camera connects but you only see a black screen or one static frame, it could be a \textbf{bandwidth or mode issue}
+.
+
+The SDK allows adjusting USB bandwidth: \texttt{uvcCamera.setDefaultBandwidth(1.0f)} is used in the sample to request maximum bandwidth(see implementation details in Appendix~F).
+
+Some Android devices have limited USB bandwidth for external cameras.
+
+Try setting a lower bandwidth factor (closer to 0) if frames aren't coming through, or reduce the frame rate parameter in \texttt{startPreview} (e.g., try 9 or 10 fps to see if that stabilizes output).
+
+Also, ensure that the data flow mode you request is supported by the camera: TC001 should support the combined mode by default, but if you accidentally use a mode not supported (e.g., a higher resolution or a dual-camera mode on a single-camera device), it may not output.
+
+Use \texttt{uvcCamera.getSupportedSizeList} to log what resolutions and modes the camera provides(see implementation details in Appendix~F).
+
+\item \textbf{Heat or Calibration Issues:}
+
+The camera has an internal shutter that periodically calibrates the sensor (you might hear a soft }click\textit{ every so often).
+
+During those moments (which typically last a fraction of a second), the image may pause or show a uniform field.
+
+This is normal --- the camera is self-correcting for drift.
+
+If you find the calibration happening too often or at inconvenient times, you can manually trigger it at a known safe moment using \texttt{ircmd.updateOOCOrB(CommonParams.UpdateOOCOrBType.B_UPDATE)} (which forces a \textbf{B shutter calibration}
+).
+
+Conversely, if the image over time develops offset (e.g., appears warmer or cooler than reality), a manual shutter trigger can help.
+
+Also note that the \textbf{TC001 Plus}
+ has a known behavior of }self-heating\textit{: after a minute or so, the device's body warms up, which can slightly raise the reported temperature in parts of the image (e.g., edges) due to its own heat(as detailed in the camera capture module).
+
+To mitigate this, allow the camera to warm up for a minute before recording critical data, and keep the lens cover open to let the shutter calibrate.
+
+Using the camera in a stable ambient environment yields best results.
+
+\item \textbf{USB Connection Stability:}
+
+If the camera frequently disconnects or frames stop, it could be a power issue --- the camera draws power from the phone.
+
+Ensure the phone is sufficiently charged and not in a low-power mode.
+
+Some users use a Y-cable to supply external power if needed, but for TC001 this is rarely required as power draw is modest (\~0.5 W).
+
+However, avoid having multiple high-power USB devices at once.
+
+Additionally, use the short OTG adapter that comes with the camera (or a high-quality cable) --- long or poor-quality cables can cause voltage drop or data errors.
+
+If you detect \textbf{frame errors}
+ or the SDK flags a bad frame (the sample checks the last byte of the frame for a bad-frame flag(as detailed in the camera capture module)), it will attempt a sensor restart.
+
+Occasional bad frames can occur; the SDK handles them by restarting the stream if necessary.
+
+\item \textbf{Performance and Threading:}
+
+Processing every frame (especially at 25 Hz) can be CPU-intensive, particularly converting to bitmaps or running heavy computations.
+
+If the UI is lagging or frames are being dropped, ensure that the frame handling is off the main thread.
+
+The example above posts minimal work in the callback.
+
+The SDK sample uses a separate \texttt{ImageThread} for converting and drawing the image so that the USB thread isn't backed up.
+
+You should adopt a similar strategy: do the image conversion and any heavy analysis (e.g., running face detection on the thermal image) in a worker thread.
+
+This will prevent the frame queue from overflowing (which would manifest as increasing latency or stuttering).
+
+\item \textbf{App Integration Issues:}
+
+If integrating into an existing app like \texttt{bucika_gsr}, watch out for \textbf{Android lifecycle}
+ mismatches.
+
+For example, if the USB camera is streaming and the user rotates the screen (causing Activity restart), you should close and reopen the camera properly to avoid resource leaks or crashes.
+
+A good practice is to handle the camera in a foreground service that isn't tied to the Activity lifecycle (especially if you need to continue recording with the screen off).
+
+Alternatively, manage it in Activity but stop onPause.
+
+Also be mindful of permission persistence: the user's USB permission is typically remembered only until the device is detached.
+
+If your app exits and the camera is still plugged, the next launch will require permission again.
+
+\item \textbf{Error Codes and Debugging:}
+
+The SDK's \texttt{ResultCode} enum provides codes for failures (e.g., \texttt{SUCCESS = 0}, others for various errors).
+
+If \texttt{uvcCamera.openUVCCamera(ctrlBlock)} or \texttt{irCmd.startPreview} returns non-zero, log or inspect those.
+
+Common errors might be related to device busy or invalid parameters.
+
+Ensure you are using the correct \texttt{IRCMDType} for your device model --- for TC001/Plus it's usually \texttt{USB_IR_256_384} as shown (the Plus might use the same, since the IR sensor resolution is 256×192; "512×384 super-resolution" mentioned in marketing refers to upscaling/fusion, not an actual sensor pixel count).
+
+If you choose a wrong type, the SDK might fail to initialize the IR command interface.
+
+\item \textbf{Image Orientation and Alignment:}
+
+The camera's default orientation might not match your app's view.
+
+If you see the image rotated by 90° or mirrored, use the SDK's \texttt{rotate} or mirror settings.
+
+The \texttt{IRUVC} helper class in the sample, for instance, has a \texttt{setRotate(true)} option which rotates the image 90° right(as implemented in the Shimmer management component).
+
+You can also manually rotate the Bitmap before displaying.
+
+For alignment (especially for TC001 Plus fusion of visual and IR), ensure you use the provided alignment method from the SDK so that the thermal and visible images overlap correctly.
+
+If the visible image is not needed, you can ignore it; but if you do use it (say, to locate a face), remember the IR and RGB frames might have slight time offsets --- syncing them can be done by timestamp or by using the provided frame callback that perhaps delivers both in one call (depending on SDK capabilities).
 
 \end{itemize}
-If problems persist, consult the official Topdon SDK documentation (a
-PDF is provided in the SDK package) and the community forums. The
-\textbf{Topdon community} site has Q&As --- for example, guidance for using
-the camera in custom
-apps\cite{ShimmerRecorder}
---- and the official FAQ addresses issues like "camera not recognized by
-phone" (often solved by ensuring the phone has OTG support or using the
-correct
-app)\cite{ShimmerRecorder}.
-By systematically addressing the above points, you should be able to
-reliably use the TC001/TC001 Plus in your Android project and collect
-high-quality thermal data for your thesis work.
+
+If problems persist, consult the official Topdon SDK documentation (a PDF is provided in the SDK package) and the community forums.
+
+The \textbf{Topdon community}
+ site has Q&As --- for example, guidance for using the camera in custom apps(Shimmer recording implementation) --- and the official FAQ addresses issues like "camera not recognized by phone" (often solved by ensuring the phone has OTG support or using the correct app; Shimmer recording implementation).
+
+By systematically addressing the above points, you should be able to reliably use the TC001/TC001 Plus in your Android project and collect high-quality thermal data for your thesis work.
 
 \section{References}
 
-\begin{itemize}
-\item Topdon TC001 Product Page --- }Thermal Imaging Camera for Android
-  Devices, 256×192 Resolution, -4 °F to 1022 °F
-  range\textit{\cite{Boucsein2012}\cite{Healey2005}.
-\item Topdon TC001 Plus Specifications --- }Dual-Lens 256×192 IR Camera,
-  25 Hz frame rate, image fusion, ±2 °C
-  accuracy\textit{\cite{DeviceServer}\cite{DeviceServer}.
-\item \textbf{Topdon Technology Thermal SDK (v1.3.7) --- Android Development
-  Document}, Nov 2023. (Includes API reference and sample code for
-  image acquisition, pseudocolor, and temperature
-  extraction).\cite{ContactlessStressThermal2022}\cite{DeviceServer}
-\item Gioia, F. }et al.\textit{ (2022). \textbf{"Towards a Contactless Stress
-  Classification Using Thermal Imaging."} }Sensors, 22\textit{(3), 976.\}
-  (Discusses the use of thermal imaging alongside ECG, GSR (EDA), and
-  respiration for stress
-  detection)\cite{DriverStressThermal2020}\cite{StressDefinitionHH}.
-\item Topdon Community Forum --- \textbf{Developing Android Apps with TC001} (Q&A
-  thread)\cite{ShimmerRecorder}.
-  Guidance on SDK usage, known issues, and user experiences integrating
-  the camera in custom applications.
+ \begin{itemize}
+ 
+\item Topdon TC001 Product Page --- }Thermal Imaging Camera for Android Devices, 256×192 Resolution, -4 °F to 1022 °F range\textit{.
+
+\item Topdon TC001 Plus Specifications --- }Dual-Lens 256×192 IR Camera, 25 Hz frame rate, image fusion, ±2 °C accuracy\textit{(see implementation details in Appendix~F; see implementation details in Appendix~F).
+
+\item \textbf{Topdon Technology Thermal SDK (v1.3.7) --- Android Development Document}
+, Nov 2023. (Includes API reference and sample code for image acquisition, pseudocolor, and temperature extraction).(see implementation details in Appendix~F) 
+\item Gioia, F. }et al.\textit{ (2022).
+
+\textbf{"Towards a Contactless Stress Classification Using Thermal Imaging."}
+}Sensors, 22\textit{(3), 976.\} (Discusses the use of thermal imaging alongside ECG, GSR (EDA), and respiration for stress detection).
+
+\item Topdon Community Forum --- \textbf{Developing Android Apps with TC001}
+ (Q&A thread; Shimmer recording implementation).
+
+Guidance on SDK usage, known issues, and user experiences integrating the camera in custom applications.
 
 \end{itemize}
 
-TC001 (Android Devices) --- TOPDON USA
-
-
-TC001 Plus (Android Devices) --- TOPDON USA
-
-
-Towards a Contactless Stress Classification Using Thermal Imaging
-
-
-GitHub - TopdonTechnology/Thermal: Thermal SDK Document
-
-
-Usbcontorl.java
-
-
-AndroidManifest.xml
-
-
-IRUVC.java
-
-
-
-TemperatureView.java
-
-
-Topdon TC001 Plus self heating gradient : r/Thermal - Reddit
-
-
-ImageOrTempDisplayActivity.java
-
-
-Developing a Flutter App with Topdon TC001 Thermal Camera \...
-
+ TC001 (Android Devices) --- TOPDON USA TC001 Plus (Android Devices) --- TOPDON USA Towards a Contactless Stress Classification Using Thermal Imaging GitHub - TopdonTechnology/Thermal: Thermal SDK Document Usbcontorl.java AndroidManifest.xml IRUVC.java TemperatureView.java Topdon TC001 Plus self heating gradient : r/Thermal - Reddit ImageOrTempDisplayActivity.java Developing a Flutter App with Topdon TC001 Thermal Camera \...
 
 Topdon TC001 Camera Special Commands · Issue #16 - GitHub
