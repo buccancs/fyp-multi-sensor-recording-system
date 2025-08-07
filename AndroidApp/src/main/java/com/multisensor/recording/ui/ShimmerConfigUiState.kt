@@ -13,6 +13,8 @@ data class ShimmerConfigUiState(
     val batteryLevel: Int = -1,
     val signalStrength: Int = -1,
     val firmwareVersion: String = "",
+    val hardwareVersion: String = "",
+    val crcMode: Int = 0, // 0=disabled, 1=1-byte, 2=2-byte
 
     val isScanning: Boolean = false,
     val availableDevices: List<ShimmerDeviceItem> = emptyList(),

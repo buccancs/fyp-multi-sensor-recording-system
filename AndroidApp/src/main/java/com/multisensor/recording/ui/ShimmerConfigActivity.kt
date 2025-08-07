@@ -37,6 +37,9 @@ class ShimmerConfigActivity : AppCompatActivity() {
     private lateinit var configurationPresetSpinner: Spinner
     private lateinit var realTimeDataText: TextView
     private lateinit var progressBar: ProgressBar
+    private lateinit var selectDeviceButton: Button
+    private lateinit var crcSpinner: Spinner
+    private lateinit var deviceInfoText: TextView
 
     @Inject
     lateinit var logger: Logger
@@ -93,6 +96,9 @@ class ShimmerConfigActivity : AppCompatActivity() {
         configurationPresetSpinner = findViewById(R.id.configuration_preset_spinner)
         realTimeDataText = findViewById(R.id.real_time_data_text)
         progressBar = findViewById(R.id.progress_bar)
+        selectDeviceButton = findViewById(R.id.select_device_button)
+        crcSpinner = findViewById(R.id.crc_spinner)
+        deviceInfoText = findViewById(R.id.device_info_text)
 
         sensorCheckboxes =
             mapOf(
@@ -113,6 +119,10 @@ class ShimmerConfigActivity : AppCompatActivity() {
         scanButton.setOnClickListener { viewModel.scanForDevices() }
         startStreamingButton.setOnClickListener { viewModel.startStreaming() }
         stopStreamingButton.setOnClickListener { viewModel.stopStreaming() }
+        
+        selectDeviceButton.setOnClickListener { 
+            showDeviceSelectionDialog()
+        }
 
         deviceListView.setOnItemClickListener { _, _, position, _ ->
             val state = viewModel.uiState.value
@@ -185,6 +195,27 @@ class ShimmerConfigActivity : AppCompatActivity() {
             if (state.showConfigurationPanel) View.VISIBLE else View.GONE
         findViewById<View>(R.id.streaming_section)?.visibility =
             if (state.showRecordingControls) View.VISIBLE else View.GONE
+            
+        // Update CRC spinner state based on connection
+        crcSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
+        if (state.isDeviceConnected && state.firmwareVersion.isNotEmpty()) {
+            // Enable CRC configuration for firmware version 8 and above (like ShimmerBasicExample)
+            val firmwareVersionCode = state.firmwareVersion.split(".").firstOrNull()?.toIntOrNull() ?: 0
+            crcSpinner.isEnabled = firmwareVersionCode >= 8
+        }
+        
+        // Update device info display
+        if (state.isDeviceConnected) {
+            deviceInfoText.text = buildString {
+                append("Device Info:\n")
+                append("Firmware: ${state.firmwareVersion}\n")
+                append("Hardware: ${state.hardwareVersion}\n")
+                append("MAC: ${state.selectedDevice?.macAddress ?: "Unknown"}\n")
+                append("Battery: ${state.batteryLevel}%")
+            }
+        } else {
+            deviceInfoText.text = "No device connected"
+        }
     }
 
     private fun setupSpinners() {
@@ -230,6 +261,23 @@ class ShimmerConfigActivity : AppCompatActivity() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+            
+        // Setup CRC spinner similar to ShimmerBasicExample
+        val crcOptions = arrayOf("Disable CRC", "Enable 1-byte CRC", "Enable 2-byte CRC")
+        val crcAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, crcOptions)
+        crcAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        crcSpinner.adapter = crcAdapter
+        crcSpinner.isEnabled = false // Disabled until device is connected
+        
+        crcSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (crcSpinner.isEnabled) {
+                    viewModel.updateCrcConfiguration(position)
+                }
+            }
+            
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     private fun setupSensorCheckboxes() {
@@ -282,6 +330,21 @@ class ShimmerConfigActivity : AppCompatActivity() {
 
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+    
+    private fun showDeviceSelectionDialog() {
+        val dialog = ShimmerDeviceSelectionDialog.newInstance()
+        dialog.setDeviceSelectionListener(object : ShimmerDeviceSelectionDialog.DeviceSelectionListener {
+            override fun onDeviceSelected(macAddress: String, deviceName: String) {
+                logger.info("Device selected: $deviceName ($macAddress)")
+                viewModel.connectToSpecificDevice(macAddress, deviceName)
+            }
+            
+            override fun onSelectionCancelled() {
+                logger.info("Device selection cancelled")
+            }
+        })
+        dialog.show(supportFragmentManager, "device_selection")
     }
 }
 

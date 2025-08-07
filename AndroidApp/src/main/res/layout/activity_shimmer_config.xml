@@ -91,6 +91,17 @@
                                 android:textAppearance="?attr/textAppearanceBodyMedium"/>
 
                     </LinearLayout>
+                    
+                    <TextView
+                            android:id="@+id/device_info_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No device connected"
+                            android:textSize="12sp"
+                            android:background="?attr/colorSurfaceVariant"
+                            android:padding="8dp"
+                            android:fontFamily="monospace"
+                            android:layout_marginTop="8dp" />
 
                 </LinearLayout>
 
@@ -124,6 +135,15 @@
                             android:text="Scan for Devices"
                             app:icon="@drawable/ic_bluetooth_connected"
                             style="@style/Widget.Material3.Button"/>
+                            
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/select_device_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:text="Select Device"
+                            app:icon="@drawable/ic_connect"
+                            style="@style/Widget.Material3.Button.OutlinedButton"/>
 
                     <ListView
                             android:id="@+id/device_list_view"
@@ -197,6 +217,27 @@
                         <Spinner
                                 android:id="@+id/sampling_rate_spinner"
                                 android:layout_width="120dp"
+                                android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+                    
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="CRC Mode:"
+                                android:textAppearance="?attr/textAppearanceBodyMedium"
+                                android:gravity="center_vertical"/>
+
+                        <Spinner
+                                android:id="@+id/crc_spinner"
+                                android:layout_width="140dp"
                                 android:layout_height="wrap_content"/>
 
                     </LinearLayout>
