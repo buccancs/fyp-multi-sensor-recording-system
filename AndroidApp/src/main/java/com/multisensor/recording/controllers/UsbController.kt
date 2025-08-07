@@ -671,7 +671,7 @@ class UsbController @Inject constructor(
         val selectionResult = getOptimizedDeviceSelection()
 
         return buildString {
-            append("Comprehensive USB Controller System Analysis\n")
+            append("complete USB Controller System Analysis\n")
             append("═══════════════════════════════════════════════\n\n")
 
             append("MULTI-DEVICE STATUS:\n")

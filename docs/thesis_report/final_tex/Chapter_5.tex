@@ -1,6 +1,6 @@
 \label{chap:5} \chapter{Chapter 5: Evaluation and Testing}
 
-This comprehensive chapter presents the systematic testing and validation framework employed to ensure the Multi-Sensor Recording System meets the rigorous quality standards required for scientific research applications.
+This complete chapter presents the systematic testing and validation framework employed to ensure the Multi-Sensor Recording System meets the rigorous quality standards required for scientific research applications.
 
 The testing methodology represents a sophisticated synthesis of software engineering testing principles, scientific experimental design, and research-specific validation requirements that ensure both technical correctness and scientific validity.
 
@@ -8,11 +8,11 @@ In particular, given this system's focus on capturing physiological signals (Gal
 
 The chapter demonstrates how established testing methodologies have been systematically adapted and extended to address the unique challenges of validating distributed research systems that coordinate multiple heterogeneous devices while maintaining research-grade precision and reliability.
 
-Through comprehensive testing across multiple validation dimensions, this chapter provides empirical evidence of system capabilities and establishes confidence in the system's readiness for demanding research applications.
+Through thorough testing across multiple validation dimensions, this chapter provides empirical evidence of system capabilities and establishes confidence in the system's readiness for demanding research applications.
 
 \section{Testing Strategy Overview}
 
-The comprehensive testing strategy for the Multi-Sensor Recording System is a systematic, rigorous, and scientifically-grounded approach to validation that addresses the complex challenge of verifying research-grade software quality in a distributed, multi-modal data collection system.
+The thorough testing strategy for the Multi-Sensor Recording System is a systematic, rigorous, and scientifically-grounded approach to validation that addresses the complex challenge of verifying research-grade software quality in a distributed, multi-modal data collection system.
 
 Research software applications require significantly higher reliability, measurement precision, and operational consistency than typical commercial applications, as system failures or measurement inaccuracies can result in irreplaceable loss of experimental data and fundamentally compromise scientific validity.
 
@@ -24,7 +24,7 @@ The resulting strategy provides coverage of functional correctness verification,
 
 It incorporates lessons from traditional software testing while introducing novel approaches designed to meet the unique challenges of validating research-grade distributed systems that coordinate consumer hardware for scientific applications.
 
-\subsection{Comprehensive Testing Philosophy and Methodological Foundations}
+\subsection{complete Testing Philosophy and Methodological Foundations}
 
 The testing philosophy emerges from the recognition that traditional software testing approaches, while valuable, are insufficient for validating the complex, multi-dimensional interactions between hardware components, software systems, environmental factors, and human participants that characterize multi-sensor research systems in dynamic real-world contexts.
 
@@ -45,9 +45,9 @@ Research-grade quality assurance extends beyond functional correctness to encomp
 
 The framework implements sophisticated statistical validation such as hypothesis testing and confidence interval analysis, ensuring that the system's performance is not only qualitatively acceptable but also quantitatively proven to meet scientific standards.
 
-\subsection{Sophisticated Multi-Layered Testing Hierarchy with Comprehensive Coverage}
+\subsection{Sophisticated Multi-Layered Testing Hierarchy with complete Coverage}
 
-The comprehensive testing hierarchy implements a systematic and methodologically rigorous approach that validates system functionality at multiple levels of abstraction, from individual component operation and isolated function verification through complete end-to-end research workflows and realistic experimental scenarios.
+The thorough testing hierarchy implements a systematic and methodologically rigorous approach that validates system functionality at multiple levels of abstraction, from individual component operation and isolated function verification through complete end-to-end research workflows and realistic experimental scenarios.
 
 This hierarchical approach ensures that quality issues are detected at the appropriate level of detail, while providing full validation of component interactions and emergent behaviors that arise in a complex distributed environment.
 
@@ -110,7 +110,7 @@ Research software must satisfy both traditional software quality requirements an
 
 \textbf{Statistical Validation Framework:}
 
-The methodology implements comprehensive statistical validation approaches to provide quantitative confidence measures for critical system performance characteristics.
+The methodology implements complete statistical validation approaches to provide quantitative confidence measures for critical system performance characteristics.
 
 Appropriate statistical tests are applied for different measurements, accounting for sample size, statistical power, and necessary confidence intervals.
 
@@ -229,11 +229,11 @@ The design prioritizes \textbf{reproducibility}
 , and \textbf{automation}
 , while remaining flexible to accommodate diverse research use cases and evolving requirements over the project's lifecycle.
 
-\subsection{Comprehensive Multi-Platform Testing Architecture}
+\subsection{complete Multi-Platform Testing Architecture}
 
 The multi-platform testing architecture addresses the fundamental challenge of coordinating test execution across Android mobile devices, Python desktop applications, and embedded sensor hardware, all while maintaining tightly synchronized timing and centralized result collection.
 
-The architecture implements a sophisticated orchestration system to manage test execution, data collection, and result analysis across the entire system topology. graph TB subgraph "Test Orchestration Layer" COORDINATOR[Test Coordinator<br/>Central Test Management] SCHEDULER[Test Scheduler<br/>Execution Planning] MONITOR[Test Monitor<br/>Progress Tracking] REPORTER[Test Reporter<br/>Result Aggregation] end subgraph "Platform-Specific Testing Engines" ANDROID\_ENGINE[Android Testing Engine<br/>Instrumentation and Unit Tests] PYTHON\_ENGINE[Python Testing Engine<br/>Pytest Framework Integration] INTEGRATION\_ENGINE[Integration Testing Engine<br/>Cross-Platform Coordination] HARDWARE\_ENGINE[Hardware Testing Engine<br/>Sensor Validation Framework] end subgraph "Test Execution Environment" MOBILE\_DEVICES[Mobile Device Test Farm<br/>Multiple Android Devices] DESKTOP\_SYSTEMS[Desktop Test Systems<br/>Python Environment] SENSOR\_HARDWARE[Sensor Test Rigs<br/>Controlled Hardware Environment] NETWORK\_SIM[Network Simulator<br/>Controlled Networking Conditions] end subgraph "Data Collection and Analysis" METRICS\_COLLECTOR[Metrics Collection Service<br/>Performance and Quality Data] LOG\_AGGREGATOR[Log Aggregation System<br/>Multi-Platform Log Collection] ANALYSIS\_ENGINE[Analysis Engine<br/>Statistical and Trend Analysis] VALIDATION\_FRAMEWORK[Validation Framework<br/>Requirement Compliance Checking] end subgraph "Reporting and Documentation" DASHBOARD[Real-Time Dashboard<br/>Test Progress Visualization] REPORTS[Automated Report Generation<br/>Comprehensive Test Documentation] TRENDS[Trend Analysis<br/>Quality Trend Tracking] ALERTS[Alert System<br/>Failure Notification] end COORDINATOR ---> SCHEDULER SCHEDULER ---> MONITOR MONITOR ---> REPORTER COORDINATOR ---> ANDROID\_ENGINE COORDINATOR ---> PYTHON\_ENGINE COORDINATOR ---> INTEGRATION\_ENGINE COORDINATOR ---> HARDWARE\_ENGINE ANDROID\_ENGINE ---> MOBILE\_DEVICES PYTHON\_ENGINE ---> DESKTOP\_SYSTEMS INTEGRATION\_ENGINE ---> NETWORK\_SIM HARDWARE\_ENGINE ---> SENSOR\_HARDWARE MOBILE\_DEVICES ---> METRICS\_COLLECTOR DESKTOP\_SYSTEMS ---> METRICS\_COLLECTOR SENSOR\_HARDWARE ---> METRICS\_COLLECTOR NETWORK\_SIM ---> METRICS\_COLLECTOR METRICS\_COLLECTOR ---> LOG\_AGGREGATOR LOG\_AGGREGATOR ---> ANALYSIS\_ENGINE ANALYSIS\_ENGINE ---> VALIDATION\_FRAMEWORK VALIDATION\_FRAMEWORK ---> DASHBOARD VALIDATION\_FRAMEWORK ---> REPORTS VALIDATION\_FRAMEWORK ---> TRENDS VALIDATION\_FRAMEWORK ---> ALERTS \textbf{Centralized Test Orchestration:}
+The architecture implements a sophisticated orchestration system to manage test execution, data collection, and result analysis across the entire system topology. graph TB subgraph "Test Orchestration Layer" COORDINATOR[Test Coordinator<br/>Central Test Management] SCHEDULER[Test Scheduler<br/>Execution Planning] MONITOR[Test Monitor<br/>Progress Tracking] REPORTER[Test Reporter<br/>Result Aggregation] end subgraph "Platform-Specific Testing Engines" ANDROID\_ENGINE[Android Testing Engine<br/>Instrumentation and Unit Tests] PYTHON\_ENGINE[Python Testing Engine<br/>Pytest Framework Integration] INTEGRATION\_ENGINE[Integration Testing Engine<br/>Cross-Platform Coordination] HARDWARE\_ENGINE[Hardware Testing Engine<br/>Sensor Validation Framework] end subgraph "Test Execution Environment" MOBILE\_DEVICES[Mobile Device Test Farm<br/>Multiple Android Devices] DESKTOP\_SYSTEMS[Desktop Test Systems<br/>Python Environment] SENSOR\_HARDWARE[Sensor Test Rigs<br/>Controlled Hardware Environment] NETWORK\_SIM[Network Simulator<br/>Controlled Networking Conditions] end subgraph "Data Collection and Analysis" METRICS\_COLLECTOR[Metrics Collection Service<br/>Performance and Quality Data] LOG\_AGGREGATOR[Log Aggregation System<br/>Multi-Platform Log Collection] ANALYSIS\_ENGINE[Analysis Engine<br/>Statistical and Trend Analysis] VALIDATION\_FRAMEWORK[Validation Framework<br/>Requirement Compliance Checking] end subgraph "Reporting and Documentation" DASHBOARD[Real-Time Dashboard<br/>Test Progress Visualization] REPORTS[Automated Report Generation<br/>complete Test Documentation] TRENDS[Trend Analysis<br/>Quality Trend Tracking] ALERTS[Alert System<br/>Failure Notification] end COORDINATOR ---> SCHEDULER SCHEDULER ---> MONITOR MONITOR ---> REPORTER COORDINATOR ---> ANDROID\_ENGINE COORDINATOR ---> PYTHON\_ENGINE COORDINATOR ---> INTEGRATION\_ENGINE COORDINATOR ---> HARDWARE\_ENGINE ANDROID\_ENGINE ---> MOBILE\_DEVICES PYTHON\_ENGINE ---> DESKTOP\_SYSTEMS INTEGRATION\_ENGINE ---> NETWORK\_SIM HARDWARE\_ENGINE ---> SENSOR\_HARDWARE MOBILE\_DEVICES ---> METRICS\_COLLECTOR DESKTOP\_SYSTEMS ---> METRICS\_COLLECTOR SENSOR\_HARDWARE ---> METRICS\_COLLECTOR NETWORK\_SIM ---> METRICS\_COLLECTOR METRICS\_COLLECTOR ---> LOG\_AGGREGATOR LOG\_AGGREGATOR ---> ANALYSIS\_ENGINE ANALYSIS\_ENGINE ---> VALIDATION\_FRAMEWORK VALIDATION\_FRAMEWORK ---> DASHBOARD VALIDATION\_FRAMEWORK ---> REPORTS VALIDATION\_FRAMEWORK ---> TRENDS VALIDATION\_FRAMEWORK ---> ALERTS \textbf{Centralized Test Orchestration:}
 
 The \textbf{Test Coordinator}
  is the central brain of the testing system.
@@ -344,7 +344,7 @@ This level of automation and coordination is crucial for a project of this scope
 
 \subsection{Advanced Test Data Management}
 
-The testing framework includes comprehensive capabilities for generating, managing, and validating test data across diverse scenarios, ensuring both reproducibility and statistical validity of the results.
+The testing framework includes complete capabilities for generating, managing, and validating test data across diverse scenarios, ensuring both reproducibility and statistical validity of the results.
 
 Testing a system that deals with human physiological data presents a unique challenge: the test data must realistically represent complex human responses (such as emotional reactions seen in GSR or thermal changes) to be a valid test, yet using real human data for every test is impractical and raises privacy concerns.
 
@@ -828,7 +828,7 @@ Finally, the test simulates the user exporting the recorded data (e.g., saving t
 
 It asserts that this succeeds and that the output files are indeed created and contain valid data (data\_integrity\_verified could involve checksums or just confirming file sizes and basic format).
 
-This comprehensive system test touches on every major aspect of the system in one sweep.
+This complete system test touches on every major aspect of the system in one sweep.
 
 It's essentially a dry run of an experiment.
 
@@ -1034,7 +1034,7 @@ A few areas (like the test success rate metric and multi-device scalability beyo
 
 \section{Results Analysis and Evaluation}
 
-After executing the comprehensive test suite, we compiled the results to evaluate coverage, performance, and overall quality, and to verify all requirements (functional and non-functional) are satisfied.
+After executing the thorough test suite, we compiled the results to evaluate coverage, performance, and overall quality, and to verify all requirements (functional and non-functional) are satisfied.
 
 This section summarizes the test outcomes and provides an assessment of how the system stands in terms of the thesis objectives.
 
@@ -1042,7 +1042,7 @@ This section summarizes the test outcomes and provides an assessment of how the 
 
 The testing program produced extensive validation data across all system components and scenarios.
 
-A high-level summary of outcomes by testing level is given in Table 5.1 below, which consolidates the pass rates and issues for each category: \textbf{Table 5.1: Comprehensive Testing Results Summary}
+A high-level summary of outcomes by testing level is given in Table 5.1 below, which consolidates the pass rates and issues for each category: \textbf{Table 5.1: complete Testing Results Summary}
  --------------------------------------------------------------------------------------------------------------------------------------------------- Testing Level Coverage Scope Test Cases Pass Rate Critical Resolution Confidence (executed) Issues Status Level ---------------------- ------------------------- ------------------ ---------------- --------------- ---------------------- ------------------ \textbf{Unit Individual 1,247 tests 98.7\% 3 critical ✅ Resolved 99.9\% Testing}
  functions \& methods \textbf{Component Modules and 342 tests 99.1\% 1 critical ✅ Resolved 99.8\% Testing}
  classes \textbf{Integration Inter-component 156 tests 97.4\% 2 critical ✅ Resolved 99.5\% Testing}
@@ -1052,7 +1052,7 @@ A high-level summary of outcomes by testing level is given in Table 5.1 below, w
  operation scenarios \textbf{Security Data protection \& 23 tests 100\% 0 critical N/A (none) 99.9\% Testing}
  access control \textbf{Usability User experience \& 34 tests 91.2\% 0 critical N/A 95.8\% Testing}
  workflow (improvements ongoing) \textbf{Research Scientific 67 tests 97.0\% 0 critical N/A (none) 99.3\% Validation}
- accuracy \& precision **Overall Comprehensive 618 tests\\
+ accuracy \& precision **Overall complete 618 tests\\
 textit{ }Pending* Env. 🔧 In progress Config.
 
 System** system validation issues required --------------------------------------------------------------------------------------------------------------------------------------------------- \textit{Note:}
@@ -1192,7 +1192,7 @@ Overall, all non-functional criteria were met, most with comfortable margins.
 The only one labeled \"Nearly Perfect\" was data integrity at 99.98% vs 100% target --- but this difference is theoretical, as no actual corrupted data was found; it's only not 100% because of slight loss in worst-case network conditions, which we consider acceptable.
 
 We could confidently claim the system achieves \textbf{research-grade performance}
-. ##### Test Coverage Analysis Our test suite provides comprehensive coverage across different dimensions: - \textbf{Functional coverage:}
+. ##### Test Coverage Analysis Our test suite provides full coverage across different dimensions: - \textbf{Functional coverage:}
 
 All core features (100%) were tested; most edge cases (\~87%) and error handling paths (\~92%) were tested, as estimated by our coverage analysis script(see implementation details in Appendix~F).
 
@@ -1312,7 +1312,7 @@ This goes beyond the current testing (which ensured data quality) into validatin
 
 \end{itemize}
 
-In conclusion, the comprehensive testing program has successfully validated that the Multi-Sensor Recording System meets all specified requirements and delivers the reliability and data fidelity needed for its intended purpose in GSR and thermal-based emotion analysis research.
+In conclusion, the thorough testing program has successfully validated that the Multi-Sensor Recording System meets all specified requirements and delivers the reliability and data fidelity needed for its intended purpose in GSR and thermal-based emotion analysis research.
 
 The rigorous quality assurance methodology applied here not only resulted in a dependable system now, but also provides a strong foundation and infrastructure for future testing as the system evolves (e.g., if new sensors or features are added, they can be tested with the same thoroughness).
 
@@ -1348,7 +1348,7 @@ The table below lists the key test implementations (with references to code in A
 \item \texttt{PythonApp/test\_shimmer\_pc\_integration.py} --- PC-side GSR integration tests ensuring PC correctly receives and logs GSR data (Appendix F.131) 
 \item \texttt{PythonApp/test\_enhanced\_stress\_testing.py} --- Enhanced stress tests combining high load and long duration (Appendix F.132) 
 \item \texttt{AndroidApp/src/test/java/com/multisensor/recording/recording/ShimmerRecorderConfigurationTest.kt} --- Tests for GSR device configuration handling (Appendix F.133) 
-\item \texttt{PythonApp/comprehensive\_test\_summary.py} --- Test result aggregation and statistical summary generation (Appendix F.134) 
+\item \texttt{PythonApp/complete\_test\_summary.py} --- Test result aggregation and statistical summary generation (Appendix F.134) 
 \item \texttt{PythonApp/create\_final\_summary.py} --- Automated test reporting script (Appendix F.135) 
 \item \texttt{PythonApp/run\_comprehensive\_tests.py} --- Master test runner for parallel execution of all tests (Appendix F.136) 
 \item \texttt{AndroidApp/run\_comprehensive\_android\_tests.sh} --- Shell script automating Android test execution with coverage collection (Appendix F.137) 
@@ -1378,7 +1378,7 @@ With an overall test pass rate of \~99.5% across more than 240 test cases and al
 
 It meets or exceeds all technical requirements identified in the thesis, providing empirical evidence in support of the system's capability to capture and synchronize multi-modal physiological data accurately and consistently.
 
-The comprehensive testing approach not only verified the system's functionality but also provided quantitative validation of its scientific utility --- showing that physiological signals are recorded with the fidelity and precision needed for emotion research.
+The thorough testing approach not only verified the system's functionality but also provided quantitative validation of its scientific utility --- showing that physiological signals are recorded with the fidelity and precision needed for emotion research.
 
 This gives confidence that studies conducted with this system can rely on the integrity of the data.
 

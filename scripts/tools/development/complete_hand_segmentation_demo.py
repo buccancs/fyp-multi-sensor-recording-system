@@ -204,7 +204,7 @@ def show_integration_benefits():
         ("🧠 ML Ready", "Cropped datasets perfect for neural network training"),
         ("⚡ Performance", "Non-blocking processing maintains smooth camera operation"),
         ("🔄 Flexibility", "Both real-time and post-processing options available"),
-        ("📊 Analytics", "Comprehensive statistics and metadata for analysis"),
+        ("📊 Analytics", "complete statistics and metadata for analysis"),
         ("🌐 Compatibility", "Cross-platform support for complete workflows"),
         ("🎯 Accuracy", "Multiple algorithms (Android color-based + Python ML-based)"),
     ]

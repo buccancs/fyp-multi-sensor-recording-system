@@ -83,7 +83,7 @@ accomplishments and technical contributions of this project include:
   increases researchers' confidence in the recordings and reduces the
   risk of unnoticed data corruption.
 
-- **Advanced Calibration Procedures:** A comprehensive **calibration
+- **Advanced Calibration Procedures:** A complete **calibration
   module** was developed to support the accurate fusion of data from
   different sensors. Using established computer vision techniques, the
   system performs **intrinsic camera calibration** and **RGB--thermal

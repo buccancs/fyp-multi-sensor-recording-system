@@ -2,12 +2,12 @@
 
 ## 3.1 Introduction
 
-This chapter establishes comprehensive requirements and system specifications for the Multi-Sensor Recording System for Contactless GSR Prediction Research, providing the analytical foundation that guides architectural design and implementation decisions. The chapter systematically examines the problem context within current physiological measurement paradigms, analyzes stakeholder requirements, and derives detailed functional and non-functional system specifications.
+This chapter establishes complete requirements and system specifications for the Multi-Sensor Recording System for Contactless GSR Prediction Research, providing the analytical foundation that guides architectural design and implementation decisions. The chapter systematically examines the problem context within current physiological measurement paradigms, analyzes stakeholder requirements, and derives detailed functional and non-functional system specifications.
 
 ![Figure 3.1: Complete Data Flow Architecture](../diagrams/05_complete_data_flow_architecture.png)
 *Figure 3.1: Overview of the complete data flow architecture showing the integration between contactless sensors, traditional validation sensors, and data processing systems.*
 
-The requirements engineering methodology employed follows established software engineering practices adapted for research-focused system development (Brooks, 1995). The approach integrates stakeholder input from the psychophysiological research community, technical constraints from hardware and software platforms, and scientific requirements derived from the literature review to ensure comprehensive requirement coverage.
+The requirements engineering methodology employed follows established software engineering practices adapted for research-focused system development (Brooks, 1995). The approach integrates stakeholder input from the psychophysiological research community, technical constraints from hardware and software platforms, and scientific requirements derived from the literature review to ensure complete requirement coverage.
 
 The analysis progresses from problem identification through stakeholder analysis to detailed requirement specification, culminating in validation scenarios that demonstrate requirement satisfaction. This systematic approach ensures that derived requirements align with both scientific objectives and practical implementation feasibility while maintaining traceability to research goals.
 
@@ -22,7 +22,7 @@ Current physiological monitoring methodologies predominantly rely on contact-bas
 
 Contact-based GSR measurement requires participants to wear electrodes that physically contact the skin surface, typically with conductive gel application for optimal signal quality. Wire connections tether participants to recording equipment, restricting natural movement patterns and potentially causing physical discomfort during extended measurement sessions. These experimental constraints can directly influence participant behavior, creating measurement artifacts that confound the emotional and stress responses being investigated (Boucsein, 2012).
 
-Additionally, traditional single-modality approaches focus exclusively on electrical GSR signals, failing to leverage complementary physiological indicators that multi-modal measurement systems could provide. This limitation restricts the comprehensive understanding of physiological responses that contemporary affective computing research requires.
+Additionally, traditional single-modality approaches focus exclusively on electrical GSR signals, failing to leverage complementary physiological indicators that multi-modal measurement systems could provide. This limitation restricts the complete understanding of physiological responses that contemporary affective computing research requires.
 
 ### Emerging Contactless Measurement Opportunities
 
@@ -215,7 +215,7 @@ for data security and privacy if the system records identifiable video
 of participants -- this introduced additional non-functional
 requirements around data encryption and access control.
 
-In summary, the requirements elicitation was comprehensive: it combined
+In summary, the requirements elicitation was complete: it combined
 *stakeholder interviews*, *expert consultations*, *literature research*,
 and *prototype evaluations*. This approach ensured the requirements set
 is well-grounded, balanced across different needs, and feasible. The
@@ -285,7 +285,7 @@ requirements are addressed in the solution and that all implemented
 features have a basis in the requirements.
 
 An excerpt of the requirements framework is illustrated in the
-repository's documentation, where the **"Comprehensive Requirements
+repository's documentation, where the **"complete Requirements
 Architecture"** lists the major requirement
 series[\[6\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_3_Requirements_and_Analysis.md#L344-L354)[\[7\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_3_Requirements_and_Analysis.md#L358-L366).
 For example, it delineates an **FR-001 series** for core coordination
@@ -621,7 +621,7 @@ features to manage recording sessions conveniently and offer a user
 interface that is usable by researchers who may not be engineers.
 
 **Session Management:** A requirement (FR-003) is that the system
-implements comprehensive **session management**. This means it should
+implements complete **session management**. This means it should
 treat a recording session as an entity with a start, stop, and
 associated metadata. The user (researcher) should be able to initiate a
 new session, perhaps providing an identifier or notes, and then start
@@ -730,12 +730,12 @@ original functional specification that emerged during development and testing ph
 
 #### FR-034: Web-Based Interface Integration
 
-**Requirement Statement**: The desktop controller application shall provide comprehensive web-based interface capabilities
+**Requirement Statement**: The desktop controller application shall provide complete web-based interface capabilities
 that enable remote access, monitoring, and control of recording sessions through standard web browsers while maintaining
 full security and performance parity with native desktop interfaces.
 
 **Technical Implementation**: The web interface is implemented through `PythonApp/enhanced_main_with_web.py` and the
-comprehensive `PythonApp/web_ui/` module system, providing real-time session monitoring, device status visualization,
+complete `PythonApp/web_ui/` module system, providing real-time session monitoring, device status visualization,
 and remote control capabilities that maintain synchronization precision with the native desktop application.
 
 **Validation Criteria**: Web interface accessibility from multiple browsers simultaneously, real-time status updates
@@ -743,7 +743,7 @@ with <1 second latency, and complete functional parity with desktop interface fo
 
 #### FR-035: Advanced Performance Optimization Framework
 
-**Requirement Statement**: The system shall implement comprehensive performance optimization capabilities that dynamically
+**Requirement Statement**: The system shall implement complete performance optimization capabilities that dynamically
 adapt resource utilization, frame rates, and processing load based on real-time system performance metrics and
 available computational resources across all connected devices.
 
@@ -758,7 +758,7 @@ reducing bandwidth usage by >25% without quality degradation.
 
 #### FR-036: Enterprise-Grade Dependency Injection Architecture
 
-**Requirement Statement**: The Android application shall implement comprehensive dependency injection architecture
+**Requirement Statement**: The Android application shall implement complete dependency injection architecture
 that provides modular component management, testability enhancement, and runtime configuration flexibility for
 research-specific customizations and experimental protocol variations.
 
@@ -767,7 +767,7 @@ research-specific customizations and experimental protocol variations.
 lifecycles, and configuration-driven component selection for diverse research scenarios.
 
 **Validation Criteria**: Runtime component substitution for testing scenarios, configuration-driven feature enablement,
-and comprehensive unit test coverage >90% enabled by dependency injection architecture.
+and complete unit test coverage >90% enabled by dependency injection architecture.
 
 #### FR-037: Advanced Calibration Quality Assessment System
 
@@ -775,7 +775,7 @@ and comprehensive unit test coverage >90% enabled by dependency injection archit
 automatically evaluate calibration accuracy, detect calibration degradation, and provide real-time feedback for
 optimal measurement precision throughout extended recording sessions.
 
-**Technical Implementation**: Advanced calibration system implemented through `PythonApp/calibration/` comprehensive
+**Technical Implementation**: Advanced calibration system implemented through `PythonApp/calibration/` complete
 module system and `AndroidApp/src/main/java/com/multisensor/recording/calibration/CalibrationQualityAssessment.kt`
 providing automated quality metrics, drift detection, and precision validation algorithms.
 
@@ -794,7 +794,7 @@ and coordinated with `AndroidApp/src/main/java/com/multisensor/recording/calibra
 NTP-based time synchronization, automatic drift compensation, and real-time synchronization quality assessment.
 
 **Validation Criteria**: Synchronization precision <1 millisecond across all devices, automatic drift correction
-maintaining precision over 8+ hour sessions, and comprehensive synchronization quality metrics with real-time
+maintaining precision over 8+ hour sessions, and complete synchronization quality metrics with real-time
 monitoring and alerting capabilities.
 
 ## 3.4 Non-Functional Requirements
@@ -1495,7 +1495,7 @@ Through a rigorous requirements engineering process, involving
 stakeholders and literature, we derived both **functional requirements**
 -- such as multi-device coordination (FR-001), precise temporal
 synchronization (FR-002), integrated video/thermal/GSR capture
-(FR-010/011/012), real-time processing (FR-020/021), and comprehensive
+(FR-010/011/012), real-time processing (FR-020/021), and complete
 session management (FR-003) -- and **non-functional requirements** --
 including high performance (NFR-001 series with support for many devices
 and low latency), high reliability (99%+ uptime, data integrity checks),

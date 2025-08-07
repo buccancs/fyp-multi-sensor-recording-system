@@ -29,7 +29,7 @@ class DependencySecurityScanner:
         }
     
     def scan_all_dependencies(self) -> Dict:
-        self.logger.info("🔍 Starting comprehensive dependency security scan...")
+        self.logger.info("🔍 Starting complete dependency security scan...")
         
         try:
             self.scan_python_dependencies()

@@ -19,7 +19,7 @@ ImportError: No module named 'PyQt5'
 # Install required dependencies
 pip install -e ".[dev]"
 
-# For comprehensive testing
+# For thorough testing
 pip install -e ".[dev,shimmer,calibration,android]"
 ```
 

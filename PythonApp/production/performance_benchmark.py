@@ -104,7 +104,7 @@ class PerformanceBenchmarkSuite:
         )
 
     async def run_all_benchmarks(self) -> Dict[str, Any]:
-        self.logger.info("Starting comprehensive performance benchmark suite")
+        self.logger.info("Starting complete performance benchmark suite")
         await self._benchmark_memory_allocation()
         await self._benchmark_cpu_intensive_task()
         await self._benchmark_file_io()

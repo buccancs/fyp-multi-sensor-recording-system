@@ -40,7 +40,7 @@ Thermal imaging technology offers a particularly promising approach for contactl
 
 High-resolution infrared imaging can capture stress-induced temperature variations, such as temperature decreases at the nasal tip caused by sympathetic vasoconstriction during autonomic stress responses. These thermal signatures provide contactless indicators that can be monitored continuously without participant awareness or behavioral interference.
 
-Research by Cho et al. has demonstrated mobile thermal imaging applications for stress assessment, showing that nasal skin temperature typically decreases under mental stress conditions, often by approximately 0.5°C on average during acute stress episodes. Thermal imaging systems can additionally detect increased heat signatures around perspiration-active regions, providing complementary physiological indicators for comprehensive stress assessment.
+Research by Cho et al. has demonstrated mobile thermal imaging applications for stress assessment, showing that nasal skin temperature typically decreases under mental stress conditions, often by approximately 0.5°C on average during acute stress episodes. Thermal imaging systems can additionally detect increased heat signatures around perspiration-active regions, providing complementary physiological indicators for complete stress assessment.
 periorbital region (above the eyes) associated with blushing or
 emotional arousal, and rapid breathing patterns via temperature changes
 near the
@@ -882,7 +882,7 @@ inputs for a photoplethysmography (PPG) sensor, enabling collection of
 heart rate and blood volume pulse, and it has a 3-axis accelerometer,
 gyroscope, and magnetometer on
 board[\[58\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/SHIMMER3_GSR_PLUS_COMPREHENSIVE_GUIDE.md#L73-L80).
-In other words, the Shimmer3 acts as a comprehensive physiological
+In other words, the Shimmer3 acts as a complete physiological
 monitor: it can simultaneously record GSR, pulse (for heart rate), and
 motion data. This suits the project's broader goal of multi-sensor
 integration, as the Shimmer3 could provide ground-truth heart rate to
@@ -900,7 +900,7 @@ This wireless operation is essential for a wearable, multi-sensor system
 -- participants can move freely without being tethered, and we avoid
 data loss thanks to the Shimmer's robust BLE implementation (which
 includes reconnection and buffering
-features)[\[60\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=communication%20foundation%20for%20Shimmer3%20GSR%2B,comprehensive%20error%20handling%2C%20and%20adaptive).
+features)[\[60\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=communication%20foundation%20for%20Shimmer3%20GSR%2B,complete%20error%20handling%2C%20and%20adaptive).
 The Shimmer3 comes with an open SDK and has a well-documented API, which
 we leveraged in the software. In fact, the platform is widely used in
 the research community, meaning it comes with validated algorithms and
@@ -1155,7 +1155,7 @@ Validation
 
 [\[52\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=The%20Topdon%20TC001%20and%20TC001,wave%20infrared%20%28LWIR%29%20detection)
 [\[56\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=alongside%20complementary%20physiological%20signals%20including,for%20different%20skin%20conductance%20conditions)
-[\[60\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=communication%20foundation%20for%20Shimmer3%20GSR%2B,comprehensive%20error%20handling%2C%20and%20adaptive)
+[\[60\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=communication%20foundation%20for%20Shimmer3%20GSR%2B,complete%20error%20handling%2C%20and%20adaptive)
 [\[61\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=The%20Shimmer%20integration%20includes%20automatic,across%20devices%20and%20experimental%20sessions)
 [\[66\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=The%20SDK%20architecture%20provides%20comprehensive,device%20communication%20on%20mobile%20platforms)
 [\[67\]](file://file-HgtSHxzRNfN49kqjAKY9aa#:~:text=The%20thermal%20camera%20integration%20includes,temperature%20measurement%20that%20enable%20sophisticated)

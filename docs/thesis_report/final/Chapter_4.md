@@ -28,7 +28,7 @@ Each device buffers and locally stores data so that even if connectivity
 is lost momentarily, data collection can continue uninterrupted; once
 the connection is restored, the system can realign the data streams in
 time[\[3\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L162-L169).
-This fault-tolerant approach, combined with comprehensive logging on
+This fault-tolerant approach, combined with complete logging on
 both mobile and PC sides, guarantees data integrity and consistency
 throughout a recording session.
 
@@ -47,7 +47,7 @@ timekeeping across the system.*
 
 ## 4.2 Android Application Design and Sensor Integration
 
-The **Android application** is a comprehensive sensor data collection
+The **Android application** is a complete sensor data collection
 platform that integrates the phone's native sensors (e.g. camera) with
 external devices. It is developed in Kotlin and structured using a clear
 **layered architecture** to separate concerns. The app follows an MVVM
@@ -581,7 +581,7 @@ had a small error, each piece of data can be re-aligned precisely in
 post-processing using interpolation or offset adjustment.
 
 In summary, the **PC--Android communication** is realized via a reliable
-JSON/TCP socket protocol, enabling comprehensive remote control and live
+JSON/TCP socket protocol, enabling complete remote control and live
 data streaming, while the **synchronization mechanism** ensures all
 devices operate on a unified timeline. Together, these allow the system
 to achieve a high degree of temporal precision: tests have shown the

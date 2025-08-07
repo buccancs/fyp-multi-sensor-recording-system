@@ -360,7 +360,7 @@ class EnduranceTestRunner:
         current_time = time.time()
         elapsed_hours = (current_time - self.start_time.timestamp()) / 3600
         
-        system_status = self.system_monitor.get_comprehensive_status()
+        system_status = self.system_monitor.get_complete_status()
         
         process = psutil.Process()
         memory_info = process.memory_info()

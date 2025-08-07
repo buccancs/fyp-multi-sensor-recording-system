@@ -603,8 +603,8 @@ class PhysiologicalSignalExtractor:
             return {}
 
 
-def create_comprehensive_pipeline(camera_indices: List[int] = [0, 1]) -> Dict:
-    logger.info("Creating comprehensive CV preprocessing pipeline")
+def create_complete_pipeline(camera_indices: List[int] = [0, 1]) -> Dict:
+    logger.info("Creating complete CV preprocessing pipeline")
     roi_detector = AdvancedROIDetector(
         method=ROIDetectionMethod.DNN_FACE,
         tracking_enabled=True,
@@ -627,5 +627,5 @@ def create_comprehensive_pipeline(camera_indices: List[int] = [0, 1]) -> Dict:
 
 
 if __name__ == "__main__":
-    pipeline = create_comprehensive_pipeline()
+    pipeline = create_complete_pipeline()
     logger.info(f"Pipeline components: {list(pipeline.keys())}")

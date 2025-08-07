@@ -197,7 +197,7 @@ jobs:
         with:
           python-version: '3.11'
           
-      - name: Generate comprehensive summary
+      - name: Generate detailed summary
         run: |
           echo "📊 Generating dependency health summary..."
           

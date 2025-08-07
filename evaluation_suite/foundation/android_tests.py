@@ -1,7 +1,7 @@
 """
 Foundation Testing Layer - Android Component Tests
 
-Implements comprehensive integration testing for Android application components
+Implements complete integration testing for Android application components
 including camera recording, thermal camera integration, and Shimmer GSR sensor testing.
 Tests actual implementation code where possible.
 """
@@ -573,7 +573,7 @@ class ThermalCameraTest(AndroidComponentTest):
     """Test thermal camera integration"""
     
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
-        """Execute comprehensive thermal camera test"""
+        """Execute complete thermal camera test"""
         result = TestResult(
             test_name=self.name,
             test_type=TestType.UNIT_ANDROID,
@@ -1133,5 +1133,5 @@ def create_android_foundation_suite() -> TestSuite:
     )
     suite.add_test(session_test)
     
-    logger.info("Created Android foundation suite with comprehensive real component tests")
+    logger.info("Created Android foundation suite with complete real component tests")
     return suite

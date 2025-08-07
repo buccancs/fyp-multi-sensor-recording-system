@@ -25,7 +25,7 @@ from PythonApp.production.device_capability_detector import DeviceCapabilityDete
 
 
 class PerformanceOptimizationTestSuite(TestSuite):
-    """Comprehensive performance optimization testing"""
+    """complete performance optimization testing"""
     
     def __init__(self):
         super().__init__(

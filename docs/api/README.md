@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains comprehensive API documentation for the Multi-Sensor Recording System.
+This directory contains complete API documentation for the Multi-Sensor Recording System.
 
 ## Components
 

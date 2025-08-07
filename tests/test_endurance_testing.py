@@ -110,7 +110,7 @@ class TestEnduranceTestRunner:
     async def test_metrics_collection(self):
         runner = EnduranceTestRunner(self.config)
         
-        with patch.object(runner.system_monitor, 'get_comprehensive_status') as mock_status:
+        with patch.object(runner.system_monitor, 'get_complete_status') as mock_status:
             mock_status.return_value = {
                 "memory": {"available": 1024 * 1024 * 1024},
                 "cpu": {"frequency_current": 2400, "load_average": [0.5, 0.6, 0.7]},
@@ -137,7 +137,7 @@ class TestEnduranceTestRunner:
         
         runner = EnduranceTestRunner(config)
         
-        with patch.object(runner.system_monitor, 'get_comprehensive_status') as mock_status:
+        with patch.object(runner.system_monitor, 'get_complete_status') as mock_status:
             mock_status.return_value = {
                 "memory": {"available": 1024 * 1024 * 1024},
                 "cpu": {"frequency_current": 2400, "load_average": [0.5, 0.6, 0.7]},
@@ -229,7 +229,7 @@ async def test_graceful_shutdown_handling():
             
         shutdown_task = asyncio.create_task(trigger_shutdown())
         
-        with patch.object(runner.system_monitor, 'get_comprehensive_status') as mock_status:
+        with patch.object(runner.system_monitor, 'get_complete_status') as mock_status:
             mock_status.return_value = {
                 "memory": {"available": 1024 * 1024 * 1024},
                 "cpu": {"frequency_current": 2400, "load_average": [0.5, 0.6, 0.7]},

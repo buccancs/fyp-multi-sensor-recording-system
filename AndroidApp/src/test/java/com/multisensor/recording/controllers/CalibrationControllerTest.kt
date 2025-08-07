@@ -649,7 +649,7 @@ class CalibrationControllerTest {
 
     @Test
     fun testComprehensiveCalibrationReport() = runTest {
-        println("[DEBUG_LOG] Testing comprehensive calibration report generation")
+        println("[DEBUG_LOG] Testing complete calibration report generation")
 
         repeat(5) { i ->
             val mockResult = CalibrationCaptureManager.CalibrationCaptureResult(
@@ -699,7 +699,7 @@ class CalibrationControllerTest {
             }"
         )
         println("[DEBUG_LOG] Trend: ${report.qualityTrend}, Recommendations: ${report.systemRecommendations.size}")
-        println("[DEBUG_LOG] Comprehensive calibration report test passed")
+        println("[DEBUG_LOG] complete calibration report test passed")
     }
 
     @Test

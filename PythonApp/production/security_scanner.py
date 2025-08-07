@@ -49,9 +49,9 @@ class SecurityScanner:
         self.issues: List[SecurityIssue] = []
         self.scanned_files = 0
 
-    async def run_comprehensive_scan(self) -> SecurityReport:
+    async def run_complete_scan(self) -> SecurityReport:
         start_time = datetime.now()
-        self.logger.info("Starting comprehensive security assessment...")
+        self.logger.info("Starting complete security assessment...")
         await self._scan_python_files()
         await self._scan_kotlin_java_files()
         await self._scan_configuration_files()
@@ -667,7 +667,7 @@ async def main():
     print("Starting Phase 4 Security Assessment...")
     scanner = SecurityScanner(str(project_root))
     try:
-        report = await scanner.run_comprehensive_scan()
+        report = await scanner.run_complete_scan()
         print(f"\nSecurity scan completed!")
         print(f"Files scanned: {report.scanned_files}")
         print(f"Total issues found: {report.total_issues}")

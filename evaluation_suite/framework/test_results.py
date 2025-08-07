@@ -44,7 +44,7 @@ class PerformanceMetrics:
 
 @dataclass
 class TestResult:
-    """Individual test result with comprehensive metrics"""
+    """Individual test result with complete metrics"""
     test_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     test_name: str = ""
     test_type: TestType = TestType.UNIT_ANDROID
@@ -228,7 +228,7 @@ class TestResults:
                 ) / total_weight
     
     def get_summary_report(self) -> Dict[str, Any]:
-        """Generate comprehensive summary report"""
+        """Generate detailed summary report"""
         return {
             "execution_id": self.execution_id,
             "execution_time": {

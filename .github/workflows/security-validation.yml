@@ -94,7 +94,7 @@ jobs:
         # Run Bandit security linter
         bandit -r PythonApp/ -f json -o bandit-report.json || true
         
-        # Run our comprehensive security scanner
+        # Run our complete security scanner
         python PythonApp/production/security_scanner.py || true
         
         # Check for high-severity issues
@@ -198,7 +198,7 @@ jobs:
       run: |
         echo "📊 Generating security summary..."
         
-        # Create comprehensive security report
+        # Create complete security report
         cat > security-summary.md << EOF
         # Security Validation Summary
         

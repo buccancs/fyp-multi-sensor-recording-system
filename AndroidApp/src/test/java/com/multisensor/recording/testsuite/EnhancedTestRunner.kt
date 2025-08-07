@@ -276,7 +276,7 @@ class EnhancedTestRunner : RunListener() {
         }
 
         reportFile.writeText(htmlReport)
-        println("📄 Comprehensive HTML report generated: ${reportFile.absolutePath}")
+        println("📄 complete HTML report generated: ${reportFile.absolutePath}")
     }
 
     private fun printTestSummary(totalExecutionTime: Long) {
@@ -399,7 +399,7 @@ object AndroidTestSuiteRunner {
         println("\n🔧 Enhanced Features:")
         println("   • Performance monitoring and benchmarking")
         println("   • Memory usage tracking and analysis")
-        println("   • Comprehensive HTML and JSON reporting")
+        println("   • complete HTML and JSON reporting")
         println("   • Stress test coordination")
         println("   • Test categorization and analytics")
 

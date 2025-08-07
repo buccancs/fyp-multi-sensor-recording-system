@@ -1951,7 +1951,7 @@ constructor(
 
     suspend fun cleanup() = withContext(Dispatchers.IO) {
         try {
-            logger.info("Starting comprehensive ShimmerRecorder cleanup...")
+            logger.info("Starting complete ShimmerRecorder cleanup...")
 
             if (isRecording.get()) {
                 stopRecording()

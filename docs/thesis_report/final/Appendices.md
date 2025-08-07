@@ -68,7 +68,7 @@ ensure the system can be easily maintained and
 extended[\[12\]](docs/thesis_report/Chapter_7_Appendices.md#L139-L147).
 The modular architecture allows swapping or upgrading components (e.g.
 integrating a new sensor) with minimal impact on the rest of the system.
-Comprehensive component documentation (in the project's `docs/`
+complete component documentation (in the project's `docs/`
 directory) assists developers in troubleshooting and extending the
 system[\[13\]](docs/thesis_report/Chapter_7_Appendices.md#L52-L59).
 Overall, Appendix A serves as a technical blueprint for setting up the
@@ -272,7 +272,7 @@ transparently documented for review or replication.
 
 ## Appendix D: Test Reports -- Detailed Test Results and Validation Reports
 
-Appendix D presents the comprehensive **testing and validation results**
+Appendix D presents the complete **testing and validation results**
 for the system. It details the testing methodology, covers different
 test levels, and reports outcomes that demonstrate the system's
 reliability and performance against requirements.

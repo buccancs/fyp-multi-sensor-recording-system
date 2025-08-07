@@ -1277,7 +1277,7 @@ class CalibrationController @Inject constructor(
 
         val avgQuality = getAverageQualityScore()
         when {
-            avgQuality < 0.6f -> recommendations.add("System quality below acceptable threshold - comprehensive recalibration recommended")
+            avgQuality < 0.6f -> recommendations.add("System quality below acceptable threshold - complete recalibration recommended")
             avgQuality < 0.8f -> recommendations.add("Consider upgrading to higher-precision calibration pattern")
             else -> recommendations.add("System performing optimally - maintain current calibration schedule")
         }

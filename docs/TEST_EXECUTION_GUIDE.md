@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides comprehensive instructions for executing the Multi-Sensor Recording System's test suite.
+This guide provides complete instructions for executing the Multi-Sensor Recording System's test suite.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ This guide provides comprehensive instructions for executing the Multi-Sensor Re
 # Install with development dependencies
 pip install -e ".[dev]"
 
-# For comprehensive testing with all components
+# For thorough testing with all components
 pip install -e ".[dev,shimmer,calibration,android]"
 ```
 
@@ -58,8 +58,8 @@ python run_evaluation_suite.py --report
 ## Test Categories
 
 ### Foundation Tests
-- **Android Foundation**: 5 comprehensive tests validating core Android components
-- **PC Foundation**: 6 comprehensive tests validating PC controller components
+- **Android Foundation**: 5 complete tests validating core Android components
+- **PC Foundation**: 6 complete tests validating PC controller components
 
 ### Integration Tests
 - **Multi-Device Coordination**: Cross-component communication and synchronization

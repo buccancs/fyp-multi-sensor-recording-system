@@ -135,7 +135,7 @@ class DeviceStatusTracker(
 
     fun startMonitoring() {
         if (isMonitoring.compareAndSet(false, true)) {
-            logger.info("Starting comprehensive device status monitoring")
+            logger.info("Starting complete device status monitoring")
 
             monitoringScope.launch {
                 while (isMonitoring.get()) {

@@ -444,7 +444,7 @@ class Phase1Validator:
                 'status': 'IMPLEMENTED' if 'controller_integration' in self.validation_results.get('architectural_assessment', {}) else 'PENDING'
             },
             'logging_infrastructure': {
-                'status': 'COMPREHENSIVE' if 'logging_infrastructure' in self.validation_results['tests_passed'] else 'INCOMPLETE'
+                'status': 'complete' if 'logging_infrastructure' in self.validation_results['tests_passed'] else 'INCOMPLETE'
             },
             'performance_monitoring': {
                 'status': 'FUNCTIONAL' if 'performance_monitoring' in self.validation_results['tests_passed'] else 'MISSING'

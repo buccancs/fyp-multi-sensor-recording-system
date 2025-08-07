@@ -214,7 +214,7 @@ class SessionInfoTest : BaseUnitTest() {
     }
 
     @Test
-    fun `getSummary should return comprehensive session information`() {
+    fun `getSummary should return complete session information`() {
         val sessionInfo = SessionInfoTestFactory.createCompletedSession()
 
         val summary = sessionInfo.getSummary()

@@ -83,7 +83,7 @@ class ComprehensiveCameraAccessTest {
 
         Thread.sleep(1000)
 
-        println("[DEBUG_LOG] Comprehensive camera test setup complete")
+        println("[DEBUG_LOG] complete camera test setup complete")
     }
 
     @After
@@ -99,7 +99,7 @@ class ComprehensiveCameraAccessTest {
                     activityScenario.close()
                 }
 
-                println("[DEBUG_LOG] Comprehensive test cleanup completed")
+                println("[DEBUG_LOG] complete test cleanup completed")
             } catch (e: Exception) {
                 println("[DEBUG_LOG] Cleanup error: ${e.message}")
             }
@@ -107,7 +107,7 @@ class ComprehensiveCameraAccessTest {
 
     @Test
     fun test1_comprehensivePermissionVerification() {
-        println("[DEBUG_LOG] Starting comprehensive permission verification...")
+        println("[DEBUG_LOG] Starting complete permission verification...")
 
         val requiredPermissions =
             listOf(

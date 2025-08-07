@@ -1,7 +1,7 @@
 """
 Foundation Testing Layer - PC Component Tests
 
-Implements comprehensive integration testing for Python desktop application components
+Implements complete integration testing for Python desktop application components
 including calibration system, synchronization engine, and GUI components.
 Tests actual implementation code rather than mocks.
 """
@@ -1066,12 +1066,12 @@ class SynchronizationEngineTest(PCComponentTest):
 
 
 def create_pc_foundation_suite() -> TestSuite:
-    """Create the PC foundation testing suite with comprehensive real component tests"""
+    """Create the PC foundation testing suite with complete real component tests"""
     
     suite = TestSuite(
         name="pc_foundation_real",
         category=TestCategory.FOUNDATION,
-        description="Comprehensive real PC component integration tests"
+        description="complete real PC component integration tests"
     )
     
     # Add real calibration system tests
@@ -1122,5 +1122,5 @@ def create_pc_foundation_suite() -> TestSuite:
     )
     suite.add_test(sync_test)
     
-    logger.info("Created PC foundation suite with comprehensive real component tests")
+    logger.info("Created PC foundation suite with complete real component tests")
     return suite

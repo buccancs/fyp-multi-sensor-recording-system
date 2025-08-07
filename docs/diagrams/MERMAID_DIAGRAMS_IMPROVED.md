@@ -1002,7 +1002,7 @@ graph TB
 
 ## Data Export Workflow
 
-Comprehensive flowchart showing the complete data export and analysis preparation workflow.
+complete flowchart showing the complete data export and analysis preparation workflow.
 
 ```mermaid
 flowchart TD
@@ -1130,7 +1130,7 @@ flowchart TD
 
 ## Layer Architecture
 
-Comprehensive multi-layer system architecture showing the complete architectural stack from hardware to application
+complete multi-layer system architecture showing the complete architectural stack from hardware to application
 layers.
 
 ```mermaid
@@ -1718,7 +1718,7 @@ graph TB
 
 ## Software Installation Flow
 
-Comprehensive flowchart showing the complete software installation and configuration process.
+complete flowchart showing the complete software installation and configuration process.
 
 ```mermaid
 flowchart TD

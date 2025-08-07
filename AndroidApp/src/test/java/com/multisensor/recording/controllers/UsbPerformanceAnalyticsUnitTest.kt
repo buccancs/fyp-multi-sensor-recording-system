@@ -91,7 +91,7 @@ class UsbPerformanceAnalyticsUnitTest {
     }
 
     @Test
-    fun `should generate comprehensive performance report`() {
+    fun `should generate complete performance report`() {
         val eventTypes = UsbPerformanceAnalytics.PerformanceEventType.values()
         val deviceKeys = listOf("device_1", "device_2", "device_3")
 

@@ -84,7 +84,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="A comprehensive data collection system for multi-sensor research applications, featuring synchronized recording of camera, thermal, and physiological sensor data."
+                            android:text="A complete data collection system for multi-sensor research applications, featuring synchronized recording of camera, thermal, and physiological sensor data."
                             android:textAppearance="?attr/textAppearanceBodyMedium"/>
 
                     <LinearLayout
