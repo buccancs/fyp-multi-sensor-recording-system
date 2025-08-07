@@ -49,6 +49,14 @@
             overflow-y: auto;
             border: 1px solid #dee2e6;
             border-radius: 8px;
+            /* default list view */
+        }
+
+        .file-browser.grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            padding: 10px;
         }
 
         .file-item {
@@ -58,6 +66,16 @@
             transition: background-color 0.2s;
             display: flex;
             align-items: center;
+        }
+
+        .file-browser.grid-view .file-item {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #f8f9fa;
+            border-radius: 8px;
+            position: relative;
+            padding: 15px;
         }
 
         .file-item:hover {
@@ -75,12 +93,35 @@
             margin-right: 10px;
         }
 
+        .file-browser.grid-view .file-icon {
+            margin-right: 0;
+            margin-bottom: 10px;
+            width: auto;
+            font-size: 2em;
+        }
+
         .file-details {
             flex-grow: 1;
         }
 
+        .file-browser.grid-view .file-details {
+            width: 100%;
+        }
+
+        .file-browser.grid-view .file-size,
+        .file-browser.grid-view .file-date {
+            display: none;
+        }
+
         .file-actions {
             margin-left: auto;
+        }
+
+        .file-browser.grid-view .file-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            margin-left: 0;
         }
 
         .breadcrumb-nav {
@@ -461,6 +502,7 @@
 
     function displayFiles(files) {
         const fileBrowser = document.getElementById('fileBrowser');
+        fileBrowser.classList.toggle('grid-view', isGridView);
 
         if (files.length === 0) {
             fileBrowser.innerHTML = '<div class="text-center text-muted p-4"><i class="fas fa-folder-open fa-2x mb-2"></i><p>No files found</p></div>';
@@ -477,6 +519,23 @@
         fileBrowser.innerHTML = files.map(file => {
             const isSelected = selectedFiles.includes(file.path);
             const icon = getFileIcon(file);
+
+            if (isGridView) {
+                return `
+                <div class="file-item ${isSelected ? 'selected' : ''}" onclick="selectFile('${file.path}')" oncontextmenu="showContextMenu(event, '${file.path}')">
+                    <div class="file-actions">
+                        <input type="checkbox" class="form-check-input" ${isSelected ? 'checked' : ''}
+                               onchange="toggleFileSelection('${file.path}')" onclick="event.stopPropagation()">
+                    </div>
+                    <div class="file-icon">
+                        <i class="${icon} fa-2x"></i>
+                    </div>
+                    <div class="file-details">
+                        <div class="fw-medium text-truncate">${file.name}</div>
+                    </div>
+                </div>
+                `;
+            }
 
             return `
                 <div class="file-item ${isSelected ? 'selected' : ''}" onclick="selectFile('${file.path}')" oncontextmenu="showContextMenu(event, '${file.path}')">
@@ -689,7 +748,7 @@
         isGridView = !isGridView;
         const icon = document.getElementById('viewToggleIcon');
         icon.className = isGridView ? 'fas fa-list' : 'fas fa-th';
-        // TODO: Implement grid view layout
+        displayFiles(currentFiles);
     }
 
     function updateBreadcrumb(path) {
