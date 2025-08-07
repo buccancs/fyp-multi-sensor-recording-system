@@ -4,7 +4,6 @@ import sys
 import time
 from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Optional
-
 from PyQt5.QtCore import QRect, Qt, QTimer, QUrl
 from PyQt5.QtGui import QColor, QFont, QPalette, QPixmap
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
@@ -17,8 +16,6 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
-
 @dataclass
 class MonitorInfo:
     monitor_id: int
@@ -26,8 +23,6 @@ class MonitorInfo:
     geometry: QRect
     is_primary: bool = False
     dpi: float = 96.0
-
-
 @dataclass
 class StimulusConfig:
     stimulus_type: str = "video"
@@ -41,8 +36,6 @@ class StimulusConfig:
     text_content: Optional[str] = None
     font_size: int = 48
     synchronization_markers: List[int] = field(default_factory=list)
-
-
 @dataclass
 class StimulusEvent:
     event_type: str
@@ -50,10 +43,7 @@ class StimulusEvent:
     monitor_id: int
     stimulus_config: StimulusConfig
     duration_actual_ms: Optional[float] = None
-
-
 class StimulusWindow(QMainWindow):
-
     def __init__(self, monitor_info: MonitorInfo, config: StimulusConfig):
         super().__init__()
         self.monitor_info = monitor_info
@@ -62,7 +52,6 @@ class StimulusWindow(QMainWindow):
         self.video_widget: Optional[QVideoWidget] = None
         self.setup_window()
         self.setup_content()
-
     def setup_window(self):
         self.setWindowTitle("Stimulus Presentation")
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
@@ -72,7 +61,6 @@ class StimulusWindow(QMainWindow):
         self.setPalette(palette)
         if self.config.fullscreen:
             self.showFullScreen()
-
     def setup_content(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -86,7 +74,6 @@ class StimulusWindow(QMainWindow):
             self.setup_text_content(layout)
         elif self.config.stimulus_type == "pattern":
             self.setup_pattern_content(layout)
-
     def setup_video_content(self, layout):
         self.video_widget = QVideoWidget()
         self.media_player = QMediaPlayer()
@@ -95,7 +82,6 @@ class StimulusWindow(QMainWindow):
             media_content = QMediaContent(QUrl.fromLocalFile(self.config.content_path))
             self.media_player.setMedia(media_content)
         layout.addWidget(self.video_widget)
-
     def setup_image_content(self, layout):
         label = QLabel()
         if os.path.exists(self.config.content_path):
@@ -108,7 +94,6 @@ class StimulusWindow(QMainWindow):
             label.setPixmap(scaled_pixmap)
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
-
     def setup_text_content(self, layout):
         label = QLabel(self.config.text_content or "Stimulus Text")
         label.setAlignment(Qt.AlignCenter)
@@ -117,7 +102,6 @@ class StimulusWindow(QMainWindow):
         label.setFont(font)
         label.setStyleSheet("color: white;")
         layout.addWidget(label)
-
     def setup_pattern_content(self, layout):
         label = QLabel("● TEST PATTERN ●")
         label.setAlignment(Qt.AlignCenter)
@@ -127,7 +111,6 @@ class StimulusWindow(QMainWindow):
         label.setFont(font)
         label.setStyleSheet("color: white;")
         layout.addWidget(label)
-
     def start_presentation(self):
         if self.media_player and self.config.stimulus_type == "video":
             if self.config.audio_enabled:
@@ -135,14 +118,10 @@ class StimulusWindow(QMainWindow):
             else:
                 self.media_player.setMuted(True)
             self.media_player.play()
-
     def stop_presentation(self):
         if self.media_player:
             self.media_player.stop()
-
-
 class StimulusManager:
-
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(__name__)
         self.is_initialized = False
@@ -155,7 +134,6 @@ class StimulusManager:
         self.high_precision_timer.setSingleShot(True)
         self.synchronization_offset_ms = 0.0
         self.logger.info("StimulusManager initialized")
-
     def initialize(self) -> bool:
         try:
             self.logger.info("Initializing StimulusManager...")
@@ -186,27 +164,22 @@ class StimulusManager:
         except Exception as e:
             self.logger.error(f"Failed to initialize StimulusManager: {e}")
             return False
-
     def get_monitor_count(self) -> int:
         return len(self.available_monitors)
-
     def get_monitor_info(self, monitor_id: int) -> Optional[MonitorInfo]:
         if 0 <= monitor_id < len(self.available_monitors):
             return self.available_monitors[monitor_id]
         return None
-
     def get_primary_monitor_id(self) -> int:
         for monitor in self.available_monitors:
             if monitor.is_primary:
                 return monitor.monitor_id
         return 0
-
     def get_secondary_monitor_id(self) -> Optional[int]:
         for monitor in self.available_monitors:
             if not monitor.is_primary:
                 return monitor.monitor_id
         return None
-
     def present_stimulus(self, config: StimulusConfig) -> bool:
         try:
             if not self.is_initialized:
@@ -250,7 +223,6 @@ class StimulusManager:
         except Exception as e:
             self.logger.error(f"Error presenting stimulus: {e}")
             return False
-
     def stop_stimulus(self, monitor_id: int) -> bool:
         try:
             if monitor_id in self.stimulus_windows:
@@ -262,7 +234,6 @@ class StimulusManager:
         except Exception as e:
             self.logger.error(f"Error stopping stimulus: {e}")
             return False
-
     def stop_all_stimuli(self) -> None:
         try:
             monitor_ids = list(self.stimulus_windows.keys())
@@ -270,7 +241,6 @@ class StimulusManager:
                 self.stop_stimulus(monitor_id)
         except Exception as e:
             self.logger.error(f"Error stopping all stimuli: {e}")
-
     def present_synchronized_stimuli(self, configs: List[StimulusConfig]) -> bool:
         try:
             if not configs:
@@ -308,13 +278,10 @@ class StimulusManager:
         except Exception as e:
             self.logger.error(f"Error presenting synchronized stimuli: {e}")
             return False
-
     def add_event_callback(self, callback: Callable[[StimulusEvent], None]) -> None:
         self.event_callbacks.append(callback)
-
     def get_presentation_history(self) -> List[StimulusEvent]:
         return self.presentation_history.copy()
-
     def _stop_stimulus_presentation(self, monitor_id: int, start_time: float) -> None:
         try:
             if monitor_id in self.stimulus_windows:
@@ -345,7 +312,6 @@ class StimulusManager:
                 )
         except Exception as e:
             self.logger.error(f"Error stopping stimulus presentation: {e}")
-
     def cleanup(self) -> None:
         try:
             self.logger.info("Cleaning up StimulusManager...")
@@ -359,8 +325,6 @@ class StimulusManager:
             self.logger.info("StimulusManager cleanup completed")
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     manager = StimulusManager()

@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui
-
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -25,12 +24,9 @@ import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @AndroidEntryPoint
 class ShimmerVisualizationActivity : AppCompatActivity() {
     private val viewModel: ShimmerConfigViewModel by viewModels()
-
-    // UI Components for visualization
     private lateinit var deviceStatusIcon: ImageView
     private lateinit var connectionStatusChip: Chip
     private lateinit var batteryLevelText: TextView
@@ -38,8 +34,6 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
     private lateinit var signalStrengthText: TextView
     private lateinit var signalProgressBar: ProgressBar
     private lateinit var deviceInfoText: TextView
-    
-    // Chart components
     private lateinit var dataVisualizationCard: View
     private lateinit var chartTabLayout: TabLayout
     private lateinit var gsrChart: LineChart
@@ -51,36 +45,27 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
     private lateinit var dataRateText: TextView
     private lateinit var recordingStatusChip: Chip
     private lateinit var exportDataButton: Button
-    
-    // Recording controls
     private lateinit var startStreamingButton: Button
     private lateinit var stopStreamingButton: Button
     private lateinit var realTimeDataText: TextView
-
     @Inject
     lateinit var logger: Logger
-
-    // Chart data storage
     private val gsrData = mutableListOf<Entry>()
     private val ppgData = mutableListOf<Entry>()
     private val accelData = mutableListOf<Entry>()
     private val gyroData = mutableListOf<Entry>()
     private var chartEntryCount = 0
-    private val maxChartEntries = 500 // Keep last 500 entries for performance
-
+    private val maxChartEntries = 500
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shimmer_visualization)
-        
         setupToolbar()
         initializeViews()
         setupClickListeners()
         setupCharts()
         observeViewModelState()
-
         logger.info("ShimmerVisualizationActivity created")
     }
-
     private fun setupToolbar() {
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.apply {
@@ -88,12 +73,10 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
     }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_shimmer_visualization, menu)
         return true
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -107,9 +90,7 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
     private fun initializeViews() {
-        // Device status components
         deviceStatusIcon = findViewById(R.id.device_status_icon)
         connectionStatusChip = findViewById(R.id.connection_status_chip)
         batteryLevelText = findViewById(R.id.battery_level_text)
@@ -117,8 +98,6 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
         signalStrengthText = findViewById(R.id.signal_strength_text)
         signalProgressBar = findViewById(R.id.signal_progress_bar)
         deviceInfoText = findViewById(R.id.device_info_text)
-        
-        // Chart and visualization components
         dataVisualizationCard = findViewById(R.id.data_visualization_card)
         chartTabLayout = findViewById(R.id.chart_tab_layout)
         gsrChart = findViewById(R.id.gsr_chart)
@@ -130,13 +109,10 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
         dataRateText = findViewById(R.id.data_rate_text)
         recordingStatusChip = findViewById(R.id.recording_status_chip)
         exportDataButton = findViewById(R.id.export_data_button)
-        
-        // Recording controls
         startStreamingButton = findViewById(R.id.start_streaming_button)
         stopStreamingButton = findViewById(R.id.stop_streaming_button)
         realTimeDataText = findViewById(R.id.real_time_data_text)
     }
-
     private fun setupClickListeners() {
         startStreamingButton.setOnClickListener { 
             viewModel.startStreaming()
@@ -145,13 +121,9 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
         stopStreamingButton.setOnClickListener { 
             viewModel.stopStreaming()
         }
-
         exportDataButton.setOnClickListener {
-            // TODO: Implement data export functionality
             Toast.makeText(this, "Export functionality coming soon", Toast.LENGTH_SHORT).show()
         }
-        
-        // Setup chart tab selection
         chartTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
@@ -161,12 +133,10 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
                     3 -> showChart(gyroChart)
                 }
             }
-            
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
     }
-    
     private fun showChart(chartToShow: LineChart) {
         gsrChart.visibility = View.GONE
         ppgChart.visibility = View.GONE
@@ -174,24 +144,17 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
         gyroChart.visibility = View.GONE
         chartToShow.visibility = View.VISIBLE
     }
-
     private fun setupCharts() {
-        // Setup chart tabs
         chartTabLayout.addTab(chartTabLayout.newTab().setText("GSR"))
         chartTabLayout.addTab(chartTabLayout.newTab().setText("PPG"))
         chartTabLayout.addTab(chartTabLayout.newTab().setText("Accel"))
         chartTabLayout.addTab(chartTabLayout.newTab().setText("Gyro"))
-        
-        // Configure each chart
         configureChart(gsrChart, "GSR (µS)", Color.rgb(63, 81, 181))
         configureChart(ppgChart, "PPG", Color.rgb(233, 30, 99))
         configureChart(accelChart, "Accelerometer (g)", Color.rgb(76, 175, 80))
         configureChart(gyroChart, "Gyroscope (°/s)", Color.rgb(255, 152, 0))
-        
-        // Show GSR chart by default
         showChart(gsrChart)
     }
-    
     private fun configureChart(chart: LineChart, label: String, color: Int) {
         chart.apply {
             description.isEnabled = false
@@ -200,42 +163,32 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
             setScaleEnabled(true)
             setPinchZoom(true)
             setDrawGridBackground(false)
-            
-            // Configure X axis
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 setDrawGridLines(false)
                 granularity = 1f
                 isGranularityEnabled = true
             }
-            
-            // Configure Y axes
             axisLeft.apply {
                 setDrawGridLines(true)
                 gridColor = Color.LTGRAY
                 gridLineWidth = 0.5f
             }
             axisRight.isEnabled = false
-            
-            // Configure legend
             legend.isEnabled = true
-            
-            // Initialize with empty data
             val dataSet = LineDataSet(mutableListOf(), label).apply {
                 this.color = color
                 setCircleColor(color)
                 lineWidth = 2f
                 circleRadius = 3f
                 setDrawCircleHole(false)
-                valueTextSize = 0f // Hide value labels
+                valueTextSize = 0f
                 setDrawFilled(false)
             }
-            
             data = LineData(dataSet)
             invalidate()
         }
     }
-
     private fun observeViewModelState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -245,19 +198,11 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun render(state: ShimmerConfigUiState) {
-        // Update recording controls
         startStreamingButton.isEnabled = state.canStartRecording
         stopStreamingButton.isEnabled = state.canStopRecording
-
-        // Update device status
         updateDeviceStatus(state)
-        
-        // Update data visualization
         updateDataVisualization(state)
-
-        // Handle error messages
         state.errorMessage?.let { message ->
             if (state.showErrorDialog) {
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()
@@ -265,9 +210,7 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
             }
         }
     }
-    
     private fun updateDeviceStatus(state: ShimmerConfigUiState) {
-        // Update connection status chip
         when {
             state.isDeviceConnected -> {
                 connectionStatusChip.text = "Connected"
@@ -285,8 +228,6 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
                 deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.error_color))
             }
         }
-        
-        // Update battery status
         if (state.batteryLevel >= 0) {
             batteryLevelText.text = "${state.batteryLevel}%"
             batteryProgressBar.progress = state.batteryLevel
@@ -302,12 +243,9 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
             batteryLevelText.text = "--"
             batteryProgressBar.progress = 0
         }
-        
-        // Update signal strength
         val signalStrength = state.signalStrength
         if (signalStrength != 0) {
             signalStrengthText.text = "${signalStrength}dBm"
-            // Convert dBm to percentage (rough approximation)
             val signalPercent = when {
                 signalStrength > -50 -> 100
                 signalStrength > -60 -> 80
@@ -329,8 +267,6 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
             signalStrengthText.text = "--"
             signalProgressBar.progress = 0
         }
-        
-        // Update device info
         if (state.isDeviceConnected) {
             deviceInfoText.text = buildString {
                 append("Device Information:\n")
@@ -344,29 +280,19 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
             deviceInfoText.text = "No device connected\n\nPlease configure and connect a Shimmer device in Settings to view real-time data."
         }
     }
-    
     private fun updateDataVisualization(state: ShimmerConfigUiState) {
-        // Show/hide data visualization card
         dataVisualizationCard.visibility = if (state.isRecording) View.VISIBLE else View.GONE
-        
-        // Update recording status
         recordingStatusChip.text = if (state.isRecording) "Recording" else "Stopped"
         recordingStatusChip.setChipBackgroundColorResource(
             if (state.isRecording) R.color.success_color else R.color.error_color
         )
-        
-        // Update statistics
         packetsReceivedText.text = state.dataPacketsReceived.toString()
-        
         val duration = state.recordingDuration / 1000
         val minutes = duration / 60
         val seconds = duration % 60
         recordingDurationText.text = String.format("%02d:%02d", minutes, seconds)
-        
         val dataRate = if (duration > 0) state.dataPacketsReceived.toDouble() / duration else 0.0
         dataRateText.text = String.format("%.1f", dataRate)
-        
-        // Update session info
         if (state.isRecording && state.dataPacketsReceived > 0) {
             realTimeDataText.text = buildString {
                 append("Active Recording Session\n")
@@ -387,9 +313,5 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
         } else {
             realTimeDataText.text = "No active session\n\nConnect a device and start recording to view real-time data."
         }
-        
-        // TODO: Update charts with real sensor data when available
-        // This would involve parsing actual sensor data from the Shimmer device
-        // and updating the chart data points in real-time
     }
 }

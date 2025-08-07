@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui.compose.screens
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,11 +17,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.multisensor.recording.ui.MainViewModelRefactored
 import com.multisensor.recording.ui.components.ColorPaletteSelector
 import com.multisensor.recording.ui.components.EnhancedThermalPreview
-
-/**
- * Dedicated thermal preview screen with full-screen thermal view
- * Provides beautiful, immersive thermal visualization experience
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThermalPreviewScreen(
@@ -31,7 +25,6 @@ fun ThermalPreviewScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -61,26 +54,21 @@ fun ThermalPreviewScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Full-screen enhanced thermal preview
             EnhancedThermalPreview(
                 thermalBitmap = uiState.currentThermalFrame,
                 isRecording = uiState.isRecording,
                 temperatureRange = uiState.temperatureRange,
                 colorPalette = uiState.colorPalette,
-                onPaletteChange = { /* TODO: Add to viewModel */ },
-                onTemperatureRangeChange = { /* TODO: Add to viewModel */ },
+                onPaletteChange = {  },
+                onTemperatureRangeChange = {  },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f) // Take most of the screen space
+                    .weight(1f)
             )
-
-            // Color palette selector at bottom
             ColorPaletteSelector(
                 currentPalette = uiState.colorPalette,
-                onPaletteSelect = { /* TODO: Add to viewModel */ }
+                onPaletteSelect = {  }
             )
-
-            // Temperature range info card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
