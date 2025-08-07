@@ -377,7 +377,7 @@ In the provided sample, the raw YUV is converted to an ARGB bitmap as
 follows (pseudo-code):
 
     // Assume imageBytes is the first half of frameData containing YUV422 data
-    int pixelCount = imageWidth } imageHeight;  // 256\textit{192
+    int pixelCount = imageWidth * imageHeight;  // 256*192
     int[] argbPixels = new int[pixelCount];
     if (pseudocolorMode != null) {
         // Apply a false-color palette to the grayscale thermal image

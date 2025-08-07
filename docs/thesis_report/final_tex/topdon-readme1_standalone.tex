@@ -1,0 +1,29 @@
+% Standalone wrapper for topdon-readme1.tex
+\documentclass[11pt,a4paper]{report}
+
+% Essential packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{setspace}
+
+% Page geometry and spacing
+\geometry{margin=1in}
+\onehalfspacing
+
+\begin{document}
+
+\input{topdon-readme1}
+
+% Bibliography (minimal for standalone)
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+\end{document}

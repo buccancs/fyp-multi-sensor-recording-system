@@ -51,9 +51,9 @@ module)\cite{StressDefinitionHH}
 for wireless data, so the SDK manages a classic Bluetooth SPP
 connection. In recent revisions (Shimmer3 R), \textbf{Bluetooth Low Energy
 (BLE)} is also
-supported\cite{CortisolStressIndicator2020}【12†L388-L396\textbf{,
+supported\cite{CortisolStressIndicator2020}, 
 but the API abstracts these details. Overall, the scope of the SDK is to
-provide a} reliable, real-time link\\textit{\} between Shimmer3 hardware and
+provide a reliable, real-time link between Shimmer3 hardware and
 Android software, enabling researchers to integrate GSR/EDA signals into
 mobile apps for data logging, biofeedback, or synchronized multimodal
 experiments.
@@ -120,8 +120,8 @@ your app hits the 64K method limit (the Shimmer library is fairly
 large).
 
 Once installed, you can reference the Shimmer classes (in the package
-\texttt{com.shimmerresearch.\textit{}) in your app code. The SDK comes with example
-modules (e.g., }shimmerBasicExample\textit{) --- reviewing those can help ensure
+\texttt{com.shimmerresearch.*} in your app code. The SDK comes with example
+modules (e.g., \textit{shimmerBasicExample}) --- reviewing those can help ensure
 you included everything correctly.
 
 \section{Permissions}
@@ -140,7 +140,7 @@ needs to declare and request the appropriate permissions:
   \texttt{<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />}
   to scan for and connect to Bluetooth
   devices\cite{ElectrodermalActivityWiki}.
-  (If your app will }advertise\textit{ or host a GATT server, also add
+  (If your app will \textit{advertise} or host a GATT server, also add
   \texttt{BLUETOOTH_ADVERTISE}.) The \texttt{neverForLocation} flag on SCAN indicates
   you are not using Bluetooth scans to derive location information.
 
@@ -184,7 +184,7 @@ check \texttt{checkSelfPermission} and if not granted, call
 demonstrates this --- for instance, it checks for \texttt{BLUETOOTH_CONNECT} and
 location permission on startup and requests them if
 needed\cite{ElectrodermalActivityWiki}.
-Ensure the user grants permissions }before\textit{ you attempt to scan or
+Ensure the user grants permissions \textit{before} you attempt to scan or
 connect, or your calls will fail (and likely throw an exception or
 return no results).
 
@@ -273,7 +273,7 @@ streaming.
 
 \textbf{Note:} If your Shimmer device is not yet \textbf{paired} with the Android
 device, the connection attempt may fail. It's often best to pair via
-Android Settings or a scan dialog first (see }Troubleshooting\textit{ below for
+Android Settings or a scan dialog first (see \textit{Troubleshooting} below for
 pairing instructions). The Shimmer3 uses a default PIN code \textbf{1234} for
 pairing\cite{ElectrodermalActivityWiki}
 --- the SDK can initiate pairing if needed (it will prompt for the PIN).
@@ -322,8 +322,8 @@ GSR measurement. We then filtered for the calibrated value ("CAL"). The
 the raw ADC reading to resistance in
 kΩ\cite{ElectrodermalActivityWiki}.
 For example, if the raw reading is converted using the calibration
-factors }p1\textit{ and }p2\textit{, the formula is
-\texttt{GSR_kOhms = (1 / (p1}raw + p2)) \textit{ 1000}\cite{ElectrodermalActivityWiki},
+factors p1 and p2, the formula is
+\texttt{GSR\_kOhms = (1 / (p1*raw + p2)) * 1000}\cite{ElectrodermalActivityWiki},
 yielding a result in kilo-ohms. Thus, \texttt{gsrValue} above would be, say,
 "432.5" meaning 432.5 kΩ skin resistance at that moment. Higher
 conductance (sweatier skin) corresponds to lower resistance. If you
