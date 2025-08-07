@@ -61,6 +61,39 @@ To compile the full thesis:
 
 Or use: `latexmk -pdf thesis_example.tex` for automatic compilation.
 
+### Standalone Chapter Compilation
+
+For compiling individual chapters as standalone documents, use the provided standalone wrappers. All standalone files use 11pt font size and 1-inch margins:
+
+**Available Standalone Chapters:**
+- `Chapter_0_standalone.tex` - Abstract
+- `Chapter_1_standalone.tex` - Introduction  
+- `Chapter_2_standalone.tex` - Multi-Modal Physiological Data Collection Platform
+- `Chapter_3_standalone.tex` - [Chapter 3]
+- `Chapter_4_standalone.tex` - [Chapter 4]
+- `Chapter_5_standalone.tex` - [Chapter 5]
+- `Chapter_6_standalone.tex` - Conclusions and Evaluation
+
+**Compilation Example (for any chapter):**
+```bash
+pdflatex Chapter_X_standalone.tex
+bibtex Chapter_X_standalone
+pdflatex Chapter_X_standalone.tex
+pdflatex Chapter_X_standalone.tex
+```
+
+Each standalone file provides the minimal LaTeX document structure needed to compile the corresponding chapter independently while maintaining full compatibility with the main thesis document.
+
+**Document Structure:**
+- Document class: `report` with 11pt font
+- Page margins: 1 inch on all sides
+- Line spacing: 1.5 (one and a half spacing)
+- Bibliography support with IEEE style
+
+**Important:** Individual chapter files (e.g., `Chapter_1.tex`) cannot be compiled directly as they contain only content and lack the necessary document structure. Always use either:
+- The main thesis documents (`thesis_example.tex` or `test_partial.tex`)
+- The appropriate standalone wrapper (`Chapter_X_standalone.tex`)
+
 ### Custom Document Usage
 
 For custom documents using these references:
