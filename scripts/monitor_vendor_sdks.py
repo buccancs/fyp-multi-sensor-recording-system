@@ -283,8 +283,38 @@ def main():
         description="Monitor vendor SDK versions and health",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-"""
 Examples:
   python scripts/monitor_vendor_sdks.py
   python scripts/monitor_vendor_sdks.py --check-updates
   python scripts/monitor_vendor_sdks.py --generate-report
+"""
+    )
+    
+    parser.add_argument('--check-updates', action='store_true',
+                        help='Check for SDK updates online')
+    parser.add_argument('--generate-report', action='store_true',
+                        help='Generate detailed health report')
+    
+    args = parser.parse_args()
+    
+    try:
+        monitor = VendorSDKMonitor()
+        
+        if args.check_updates:
+            monitor.check_for_updates()
+        
+        if args.generate_report:
+            monitor.generate_health_report()
+        
+        # Always run basic monitoring
+        monitor.monitor_all_sdks()
+        
+        logger.info("Vendor SDK monitoring completed successfully")
+        
+    except Exception as e:
+        logger.error(f"Vendor SDK monitoring failed: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

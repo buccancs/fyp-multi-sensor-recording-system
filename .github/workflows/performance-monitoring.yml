@@ -28,7 +28,16 @@ jobs:
     
     - name: Run performance tests
       run: |
-        pytest evaluation_suite/performance/ -v --benchmark-only --benchmark-json=benchmark.json || true
+        # Create benchmark output directory
+        mkdir -p performance_reports
+        
+        # Run performance tests if they exist
+        if [ -d "evaluation_suite/performance/" ]; then
+          pytest evaluation_suite/performance/ -v --benchmark-only --benchmark-json=benchmark.json || echo "::warning::Some performance tests failed"
+        else
+          echo "::warning::Performance test directory not found, creating placeholder"
+          echo '{"benchmarks": [], "datetime": "'$(date -u +"%Y-%m-%dT%H:%M:%S")'", "version": "1.0.0"}' > benchmark.json
+        fi
     
     - name: Upload performance results
       uses: actions/upload-artifact@v4
