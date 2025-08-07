@@ -7,7 +7,7 @@ on:
     branches: [ main, master, develop ]
 
 env:
-  PYTHON_VERSION_DEFAULT: '3.9'
+  PYTHON_VERSION_DEFAULT: '3.10'
   JAVA_VERSION: '17'
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10']
     
     steps:
     - name: Checkout code
