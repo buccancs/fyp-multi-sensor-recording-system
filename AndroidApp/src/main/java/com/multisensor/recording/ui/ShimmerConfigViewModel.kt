@@ -589,4 +589,80 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
+
+    fun getAvailablePresets(): List<String> {
+        return listOf("Default", "High Performance", "Low Power", "Custom")
+    }
+
+    fun connectToSpecificDevice(macAddress: String, deviceName: String) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoadingConnection = true,
+                    connectionStatus = "Connecting...",
+                    errorMessage = null
+                )
+            }
+            try {
+                val connected = shimmerRecorder.connectDevices(listOf(macAddress))
+                if (connected) {
+                    val deviceItem = ShimmerDeviceItem(
+                        name = deviceName,
+                        macAddress = macAddress,
+                        rssi = -50,
+                        isConnectable = true,
+                        isConnected = true,
+                        connectionStatus = "Connected"
+                    )
+                    _uiState.update {
+                        it.copy(
+                            isDeviceConnected = true,
+                            isLoadingConnection = false,
+                            connectionStatus = "Connected",
+                            deviceName = deviceName,
+                            deviceMacAddress = macAddress,
+                            connectedDevices = listOf(deviceItem),
+                            selectedDeviceIndex = 0,
+                            showConfigurationPanel = true,
+                            showRecordingControls = true,
+                            firmwareVersion = "1.0.0", // Placeholder
+                            hardwareVersion = "3.0", // Placeholder
+                            batteryLevel = 85 // Placeholder
+                        )
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            isLoadingConnection = false,
+                            connectionStatus = "Connection failed",
+                            errorMessage = "Failed to connect to $deviceName",
+                            showErrorDialog = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Error connecting to specific device", e)
+                _uiState.update {
+                    it.copy(
+                        isLoadingConnection = false,
+                        connectionStatus = "Connection error",
+                        errorMessage = "Connection error: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+            }
+        }
+    }
+
+    fun onDeviceSelected(position: Int) {
+        val availableDevices = _uiState.value.availableDevices
+        if (position >= 0 && position < availableDevices.size) {
+            _uiState.update {
+                it.copy(
+                    selectedScanDeviceIndex = position
+                )
+            }
+            logger.info("Selected device: ${availableDevices[position].name}")
+        }
+    }
 }
