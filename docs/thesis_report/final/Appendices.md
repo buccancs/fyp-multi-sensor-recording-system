@@ -545,3 +545,17 @@ structure, which are referenced in earlier appendices for those seeking
 more in-depth understanding of the codebase.
 
 ------------------------------------------------------------------------
+
+**References by File:**
+
+**docs/QUICK_START.md:**
+[Multiple references](docs/QUICK_START.md)
+
+**docs/README.md:**
+[Multiple references](docs/README.md)
+
+**docs/thesis_report/Chapter_7_Appendices.md:**
+[Multiple references](docs/thesis_report/Chapter_7_Appendices.md)
+
+**evaluation_results/execution_logs.md:**
+[Multiple references](evaluation_results/execution_logs.md)

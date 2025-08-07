@@ -49,7 +49,7 @@ coverage of functional correctness verification, performance and
 reliability assessment under stress conditions, and integration quality
 evaluation across diverse hardware platforms, network configurations,
 and environmental conditions that characterize real-world deployment
-scenarios.
+scenarios[\[1\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L76-L84)[\[2\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L86-L94).
 It incorporates lessons from traditional software testing while
 introducing novel approaches designed to meet the unique challenges of
 validating research-grade distributed systems that coordinate consumer
@@ -63,7 +63,7 @@ validating the complex, multi-dimensional interactions between hardware
 components, software systems, environmental factors, and human
 participants that characterize multi-sensor research systems in dynamic
 real-world
-contexts.
+contexts[\[3\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L92-L100).
 This philosophy emphasizes **empirical validation through realistic
 testing scenarios** that accurately replicate the conditions,
 challenges, and constraints of actual research applications across
@@ -73,7 +73,7 @@ The methodological foundation integrates principles from software
 engineering, experimental design, statistical analysis, and research
 methodology to create a validation framework that ensures both technical
 correctness and scientific
-validity.
+validity[\[4\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L101-L109).
 This interdisciplinary approach recognizes that research software
 testing must address not only traditional software quality attributes
 but also scientific methodology validation, experimental
@@ -86,7 +86,7 @@ research-specific quality attributes including measurement accuracy,
 temporal precision, data integrity, long-term reliability, and
 scientific reproducibility, which often have requirements far exceeding
 typical software quality
-standards.
+standards[\[5\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L107-L115).
 These stringent attributes necessitate specialized testing
 methodologies, precise measurement techniques, and statistical
 validation methods that provide confidence intervals, uncertainty
@@ -95,7 +95,7 @@ affecting research validity. Research-grade quality assurance extends
 beyond functional correctness to encompass validation of scientific
 methodology, experimental design principles, and reproducibility
 requirements that enable independent verification of research
-results.
+results[\[6\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L116-L120).
 The framework implements sophisticated statistical validation such as
 hypothesis testing and confidence interval analysis, ensuring that the
 system's performance is not only qualitatively acceptable but also
@@ -2649,3 +2649,8 @@ perform robustly in practice, enabling high-quality physiological data
 collection for advanced emotion analysis studies.
 
 ------------------------------------------------------------------------
+
+**References:**
+
+**docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md:**
+[Multiple references](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md)
