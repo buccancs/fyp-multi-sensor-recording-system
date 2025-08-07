@@ -12,7 +12,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from ..utils.logging_config import get_logger
+import sys
+from pathlib import Path
+
+# Add the project root to the path for absolute imports
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
+from utils.logging_config import get_logger
 
 
 @dataclass

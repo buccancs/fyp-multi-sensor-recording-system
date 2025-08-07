@@ -8,7 +8,7 @@ from unittest.mock import Mock, patch
 
 import sys
 current_dir = Path(__file__).parent
-sys.path.insert(0, str(current_dir.parent / "production"))
+sys.path.insert(0, str(current_dir.parent / "PythonApp" / "production"))
 
 from endurance_testing import (
     EnduranceTestConfig,

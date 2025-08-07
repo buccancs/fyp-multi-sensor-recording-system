@@ -433,9 +433,7 @@ def create_dependabot_config(project_root: str) -> bool:
 def create_ci_security_workflow(project_root: str) -> bool:
     logger = get_logger(__name__)
     
-    workflow_content = """
-"""
-name: Security Dependency Scan
+    workflow_content = """name: Security Dependency Scan
 
 on:
   push:
@@ -453,7 +451,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9'
     
@@ -472,25 +470,25 @@ jobs:
       run: |
         bandit -r PythonApp/ -f json || true
     
-    - name: Set up JDK for Android
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    
-    - name: Run dependency security scan
-      run: |
-        python -c "
-        import sys
-        sys.path.insert(0, 'PythonApp')
-        from production.dependency_scanner import DependencySecurityScanner
-        scanner = DependencySecurityScanner()
-        scanner.scan_all_dependencies()
-        "
-    
     - name: Upload security reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: security-reports
         path: security_reports/
+"""
+    
+    try:
+        workflow_file = Path(project_root) / ".github" / "workflows" / "security-dependency-scan.yml"
+        workflow_file.parent.mkdir(parents=True, exist_ok=True)
+        workflow_file.write_text(workflow_content)
+        logger.info(f"Created security workflow: {workflow_file}")
+        return True
+    except Exception as e:
+        logger.error(f"Error creating security workflow: {e}")
+        return False
+
+
+if __name__ == "__main__":
+    scanner = DependencySecurityScanner()
+    scanner.scan_all_dependencies()

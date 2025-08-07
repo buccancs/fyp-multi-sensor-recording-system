@@ -23,12 +23,12 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     
     - name: Cache pip dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml', '**/test-requirements.txt') }}
@@ -72,7 +72,7 @@ jobs:
     
     - name: Upload coverage to Codecov
       if: matrix.python-version == env.PYTHON_VERSION_DEFAULT
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         file: ./coverage.xml
         flags: python
@@ -87,13 +87,13 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: ${{ env.JAVA_VERSION }}
         distribution: 'temurin'
     
     - name: Cache Gradle dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.gradle/caches
@@ -124,14 +124,14 @@ jobs:
       run: ./gradlew jacocoTestReport --continue || echo "::warning::Coverage report generation failed"
     
     - name: Upload Android coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         file: ./AndroidApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
         flags: android
         name: android-coverage
 
     - name: Upload Android build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: android-build-reports
@@ -150,7 +150,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Set up Python ${{ env.PYTHON_VERSION_DEFAULT }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION_DEFAULT }}
     
@@ -178,7 +178,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Set up Python ${{ env.PYTHON_VERSION_DEFAULT }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION_DEFAULT }}
     
@@ -197,7 +197,7 @@ jobs:
         safety check --json --output safety-report.json || true
     
     - name: Upload security reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: security-reports
