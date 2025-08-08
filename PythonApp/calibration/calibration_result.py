@@ -289,7 +289,7 @@ class CalibrationResult:
 
 
 if __name__ == "__main__":
-    print("[DEBUG_LOG] Testing CalibrationResult...")
+    logger.info("Testing CalibrationResult...")
     result = CalibrationResult("test_device")
     result.rgb_camera_matrix = np.array(
         [[800, 0, 320], [0, 800, 240], [0, 0, 1]], dtype=np.float32
@@ -310,12 +310,12 @@ if __name__ == "__main__":
     result.stereo_rms_error = 1.2
     result.calibration_timestamp = datetime.now().isoformat()
     result.quality_assessment = {"quality_score": "GOOD"}
-    print(f"Is valid: {result.is_valid()}")
-    print(f"Summary: {result.get_calibration_summary()}")
+    logger.info(f"Is valid: {result.is_valid()}")
+    logger.info(f"Summary: {result.get_calibration_summary()}")
     test_file = "test_calibration.json"
     if result.save_to_file(test_file):
         loaded_result = CalibrationResult.load_from_file(test_file)
         if loaded_result:
-            print(f"Loaded result: {loaded_result}")
-            print(f"Validation: {loaded_result.validate_integrity()}")
-    print("[DEBUG_LOG] CalibrationResult test completed")
+            logger.info(f"Loaded result: {loaded_result}")
+            logger.info(f"Validation: {loaded_result.validate_integrity()}")
+    logger.info("CalibrationResult test completed")
