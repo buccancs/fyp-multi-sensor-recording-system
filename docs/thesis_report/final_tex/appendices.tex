@@ -558,9 +558,7 @@ This appendix provides key excerpts from the source code to illustrate how criti
 aspects of the system are implemented.
 
 The following listings highlight the synchronization mechanism, data processing
-pipeline, and sensor integration logic, with inline commentary: \textbf{1.
-
-Synchronization (Master Clock Coordination):}
+pipeline, and sensor integration logic, with inline commentary: \textbf{1. Synchronization (Master Clock Coordination):}
 
 The code below is from the \texttt{MasterClockSynchronizer} class in the Python
 controller.
@@ -570,45 +568,74 @@ background thread to continually monitor sync status.
 
 This ensures all connected devices share a common clock reference.
 
-If either server fails to start, it handles the error gracefully(see implementation
-details in Appendix~F; see implementation details in Appendix~F): \texttt{python try:
-logger.info("Starting master clock synchronization system...") if not
-self.ntp_server.start: logger.error("Failed to start NTP server") return False if not
-self.pc_server.start: logger.error("Failed to start PC server") self.ntp_server.stop
-return False self.is_running = True self.master_start_time = time.time
-self.sync_thread = threading.Thread( target=self._sync_monitoring_loop,
-name="SyncMonitor" ) self.sync_thread.daemon = True self.sync_thread.start
-logger.info("Master clock synchronization system started successfully")}(see
-implementation details in Appendix~F) In this snippet, after starting the NTP and PC
-servers, the system spawns a thread (\texttt{SyncMonitor}) that continuously checks
-and maintains synchronization.
+If either server fails to start, it handles the error gracefully:
+
+\begin{lstlisting}[language=Python]
+try:
+    self.logger.info("Starting master clock synchronization system...")
+    if not self.ntp_server.start():
+        self.logger.error("Failed to start NTP server")
+        return False
+    if not self.pc_server.start():
+        self.logger.error("Failed to start PC server")
+        self.ntp_server.stop()
+        return False
+    self.is_running = True
+    self.master_start_time = time.time()
+    self.sync_thread = threading.Thread(
+        target=self._sync_monitoring_loop, name="SyncMonitor"
+    )
+    self.sync_thread.daemon = True
+    self.sync_thread.start()
+    self.logger.info("Master clock synchronization system started successfully")
+    return True
+except Exception as e:
+    self.logger.error(f"Failed to start synchronization system: {e}")
+    return False
+\end{lstlisting}
+
+In this snippet, after starting the NTP and PC servers, the system spawns a thread 
+(\texttt{SyncMonitor}) that continuously checks and maintains synchronization.
 
 Each Android device periodically syncs with the PC's NTP server, and the PC
 broadcasts timing commands.
 
 When a recording session starts, the \texttt{MasterClockSynchronizer} sends a
-\textbf{start command with a master timestamp}
- to all devices, ensuring they begin recording at the same synchronized moment(see
- implementation details in Appendix~F).
+\textbf{start command with a master timestamp} to all devices, ensuring they begin 
+recording at the same synchronized moment.
 
 This design achieves tightly coupled timing across devices, which is crucial for data
 alignment.
 
-\textbf{2.
-
-Data Pipeline (Physiological Signal Processing):}
+\textbf{2. Data Pipeline (Physiological Signal Processing):}
 
 The system processes multi-modal sensor data in real-time.
 
 Below is an excerpt from the data pipeline module
-(\texttt{cv_preprocessing_pipeline.py}) that computes heart rate from an optical
+(\texttt{cv\_preprocessing\_pipeline.py}) that computes heart rate from an optical
 blood volume pulse signal (e.g.  from face video).
 
 It uses a Fourier transform (Welch's method) to find the dominant frequency
-corresponding to heart rate(see implementation details in Appendix~F): \(see
-implementation details in Appendix~F) This code takes a segment of the physiological
-signal (for example, an rPPG waveform extracted from the video) and computes its
-power spectral density.
+corresponding to heart rate:
+
+\begin{lstlisting}[language=Python]
+# Inside PhysiologicalSignal.get_heart_rate_estimate()
+freqs, psd = scipy.signal.welch(
+    self.signal_data,
+    fs=self.sampling_rate,
+    nperseg=min(512, len(self.signal_data) // 4),
+)
+hr_mask = (freqs >= freq_range[0]) & (freqs <= freq_range[1])
+hr_freqs = freqs[hr_mask]
+hr_psd = psd[hr_mask]
+if len(hr_psd) > 0:
+    peak_freq = hr_freqs[np.argmax(hr_psd)]
+    heart_rate_bpm = peak_freq * 60.0
+    return heart_rate_bpm
+\end{lstlisting}
+
+This code takes a segment of the physiological signal (for example, an rPPG waveform 
+extracted from the video) and computes its power spectral density.
 
 It then identifies the peak frequency within a plausible heart rate range (0.7---4.0
 Hz, i.e.  42---240 bpm) and converts it to beats per minute.
@@ -625,28 +652,40 @@ along with raw data for later analysis.
 This code excerpt exemplifies the kind of real-time analysis the system performs on
 sensor data to enable contactless physiological monitoring.
 
-\textbf{3.
-
-Integration (Sensor and Device Integration Logic):}
+\textbf{3. Integration (Sensor and Device Integration Logic):}
 
 The system integrates heterogeneous devices (Android phones, thermal cameras, Shimmer
 GSR sensors) into one coordinated framework.
 
 The following code excerpt from the \texttt{ShimmerManager} class (Python controller)
-shows how an Android-integrated Shimmer sensor is initialized and managed(see
-implementation details in Appendix~F; see implementation details in Appendix~F):
-\texttt{python if self.enable_android_integration: logger.info("Initializing Android
-device integration...") self.android_device_manager = AndroidDeviceManager(
-server_port=self.android_server_port, logger=self.logger )
-self.android_device_manager.add_data_callback(self._on_android_shimmer_data)
-self.android_device_manager.add_status_callback(self._on_android_device_status) if
-not self.android_device_manager.initialize: logger.error("Failed to initialize
-Android device manager") if not PYSHIMMER_AVAILABLE: return False else:
-logger.warning("Continuing with direct connections only")
-self.enable_android_integration = False else: logger.info(f"Android device server
-listening on port {self.android_server_port}")}(see implementation details in
-Appendix~F) This snippet demonstrates how the system handles sensor integration in a
-flexible way.
+shows how an Android-integrated Shimmer sensor is initialized and managed:
+
+\begin{lstlisting}[language=Python]
+if self.enable_android_integration:
+    self.logger.info("Initializing Android device integration...")
+    self.android_device_manager = AndroidDeviceManager(
+        server_port=self.android_server_port, logger=self.logger
+    )
+    self.android_device_manager.add_data_callback(
+        self._on_android_shimmer_data
+    )
+    self.android_device_manager.add_status_callback(
+        self._on_android_device_status
+    )
+    if not self.android_device_manager.initialize():
+        self.logger.error("Failed to initialize Android device manager")
+        if not PYSHIMMER_AVAILABLE:
+            return False
+        else:
+            self.logger.warning("Continuing with direct connections only")
+            self.enable_android_integration = False
+    else:
+        self.logger.info(
+            f"Android device server listening on port {self.android_server_port}"
+        )
+\end{lstlisting}
+
+This snippet demonstrates how the system handles sensor integration in a flexible way.
 
 If Android-based integration is enabled, it spins up an \texttt{AndroidDeviceManager}
 (which listens on a port for Android devices' connections).
@@ -657,19 +696,88 @@ side (e.g., the Shimmer sensor data that the phone relays).
 When initializing, if the Android channel fails (for instance, if the phone app isn't
 responding), the code falls back: if a direct USB/Bluetooth method
 (\texttt{PyShimmer}) is available, it will use that instead (or otherwise run in
-simulation mode; see implementation details in Appendix~F).
+simulation mode).
 
-In essence, the integration code supports }multiple operational modes*: direct
-PC-to-sensor connection, Android-mediated wireless connection, or a hybrid of
-both(see session management implementation).
+In essence, the integration code supports \textit{multiple operational modes}: direct
+PC-to-sensor connection, Android-mediated wireless connection, or a hybrid of both.
 
 The system can discover devices via Bluetooth or via the Android app, and will
-coordinate data streaming from whichever path is active(see session management
-implementation; see session management implementation).
+coordinate data streaming from whichever path is active.
 
 Additional code (not shown here) in the \texttt{ShimmerManager} handles the live data
 stream, timestamp synchronization of sensor samples, and error recovery (reconnecting
-a sensor if the link is lost; see session management implementation).
+a sensor if the link is lost).
+
+\textbf{4. Android Shimmer Recording Implementation:}
+
+The Android application provides robust sensor recording capabilities through the 
+\texttt{ShimmerRecorder} class. This code excerpt shows the class structure and 
+initialization of the recording system:
+
+\begin{lstlisting}[language=Java]
+@Singleton
+class ShimmerRecorder
+@Inject
+constructor(
+    @ApplicationContext private val context: Context,
+    private val sessionManager: SessionManager,
+    private val logger: Logger,
+) {
+    private val isRecording = AtomicBoolean(false)
+    private val isInitialized = AtomicBoolean(false)
+    private val isConnected = AtomicBoolean(false)
+    private var currentSessionInfo: SessionInfo? = null
+    private var currentSessionId: String? = null
+    private var sessionStartTime: Long = 0L
+
+    private var bluetoothAdapter: BluetoothAdapter? = null
+    private var bluetoothManager: BluetoothManager? = null
+
+    private var samplingRate: Double = DEFAULT_SAMPLING_RATE
+    private var sampleCount: Long = 0L
+    private var dataWriter: FileWriter? = null
+
+    private val connectedDevices = ConcurrentHashMap<String, ShimmerDevice>()
+    private val deviceConfigurations = ConcurrentHashMap<String, DeviceConfiguration>()
+    private val dataQueues = ConcurrentHashMap<String, ConcurrentLinkedQueue<SensorSample>>()
+\end{lstlisting}
+
+The Android implementation uses dependency injection (Dagger Hilt) and atomic operations 
+to ensure thread-safe recording operations. It maintains concurrent data structures for 
+managing multiple Shimmer devices simultaneously and provides real-time data streaming 
+capabilities.
+
+\textbf{5. Android Connection Management:}
+
+The connection management system on Android handles device discovery, connection 
+reliability, and automatic reconnection:
+
+\begin{lstlisting}[language=Java]
+data class ConnectionPolicy(
+    val maxRetryAttempts: Int = 5,
+    val initialRetryDelay: Long = 2000L,
+    val maxRetryDelay: Long = 30000L,
+    val exponentialBackoff: Boolean = true,
+    val enableAutoReconnect: Boolean = true,
+    val healthCheckInterval: Long = 10000L,
+    val connectionTimeout: Long = 30000L,
+    val enableConnectionPersistence: Boolean = true
+)
+
+data class ConnectionHealth(
+    val deviceId: String,
+    val isHealthy: Boolean,
+    val lastSuccessfulConnection: Long,
+    val consecutiveFailures: Int,
+    val averageConnectionTime: Long,
+    val packetLossRate: Double,
+    val signalStrength: Int
+)
+\end{lstlisting}
+
+The connection management system implements sophisticated retry policies with exponential 
+backoff, continuous health monitoring, and detailed connection metrics tracking. This 
+ensures reliable device connectivity even in challenging wireless environments.
 
 Through these code excerpts, Appendix F illustrates the implementation of the
 system's key features.

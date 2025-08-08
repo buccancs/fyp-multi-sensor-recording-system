@@ -454,9 +454,31 @@ starts an NTP time server and the PC server (for network messages) and
 launches a background thread to continually monitor sync status. This
 ensures all connected devices share a common clock reference. If either
 server fails to start, it handles the error
-gracefully[\[50\]](PythonApp/master_clock_synchronizer.py#L86-L94)[\[51\]](PythonApp/master_clock_synchronizer.py#L95-L102):
+gracefully[\[50\]](PythonApp/master_clock_synchronizer.py#L86-L94)[\[51\]](PythonApp/master_clock_synchronizer.py#L95-L106):
 
-`python try: logger.info("Starting master clock synchronisation system...") if not self.ntp_server.start(): logger.error("Failed to start NTP server") return False if not self.pc_server.start(): logger.error("Failed to start PC server") self.ntp_server.stop() return False self.is_running = True self.master_start_time = time.time() self.sync_thread = threading.Thread( target=self._sync_monitoring_loop, name="SyncMonitor" ) self.sync_thread.daemon = True self.sync_thread.start() logger.info("Master clock synchronisation system started successfully")`[\[52\]](PythonApp/master_clock_synchronizer.py#L86-L102)
+```python
+try:
+    self.logger.info("Starting master clock synchronization system...")
+    if not self.ntp_server.start():
+        self.logger.error("Failed to start NTP server")
+        return False
+    if not self.pc_server.start():
+        self.logger.error("Failed to start PC server")
+        self.ntp_server.stop()
+        return False
+    self.is_running = True
+    self.master_start_time = time.time()
+    self.sync_thread = threading.Thread(
+        target=self._sync_monitoring_loop, name="SyncMonitor"
+    )
+    self.sync_thread.daemon = True
+    self.sync_thread.start()
+    self.logger.info("Master clock synchronization system started successfully")
+    return True
+except Exception as e:
+    self.logger.error(f"Failed to start synchronization system: {e}")
+    return False
+```
 
 In this snippet, after starting the NTP and PC servers, the system
 spawns a thread (`SyncMonitor`) that continuously checks and maintains
@@ -465,7 +487,7 @@ NTP server, and the PC broadcasts timing commands. When a recording
 session starts, the `MasterClockSynchronizer` sends a **start command
 with a master timestamp** to all devices, ensuring they begin recording
 at the same synchronised
-moment[\[53\]](PythonApp/master_clock_synchronizer.py#L164-L172).
+moment[\[52\]](PythonApp/master_clock_synchronizer.py#L161-L172).
 This design achieves tightly coupled timing across devices, which is
 crucial for data alignment.
 
@@ -475,18 +497,23 @@ the data pipeline module (`cv_preprocessing_pipeline.py`) that computes
 heart rate from an optical blood volume pulse signal (e.g. from face
 video). It uses a Fourier transform (Welch's method) to find the
 dominant frequency corresponding to heart
-rate[\[54\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L72-L80):
+rate[\[53\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L73-L84):
 
 ```python
 # Inside PhysiologicalSignal.get_heart_rate_estimate()
-
-freqs, psd = scipy.signal.welch( self.signal_data,
-fs=self.sampling_rate, nperseg=min(512, len(self.signal_data) // 4), )
-hr_mask = (freqs \>= freq_range\[0\]) & (freqs \<= freq_range\[1\])
-hr_freqs = freqs\[hr_mask\] hr_psd = psd\[hr_mask\] if len(hr_psd) \> 0:
-peak_freq = hr_freqs\[np.argmax(hr_psd)\] heart_rate_bpm = peak_freq \*
-60.0 return heart_rate_bpm
-\`\`\`[\[54\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L72-L80)
+freqs, psd = scipy.signal.welch(
+    self.signal_data,
+    fs=self.sampling_rate,
+    nperseg=min(512, len(self.signal_data) // 4),
+)
+hr_mask = (freqs >= freq_range[0]) & (freqs <= freq_range[1])
+hr_freqs = freqs[hr_mask]
+hr_psd = psd[hr_mask]
+if len(hr_psd) > 0:
+    peak_freq = hr_freqs[np.argmax(hr_psd)]
+    heart_rate_bpm = peak_freq * 60.0
+    return heart_rate_bpm
+```
 
 This code takes a segment of the physiological signal (for example, an
 rPPG waveform extracted from the video) and computes its power spectral
@@ -506,9 +533,32 @@ integrates heterogeneous devices (Android phones, thermal cameras,
 Shimmer GSR sensors) into one coordinated framework. The following code
 excerpt from the `ShimmerManager` class (Python controller) shows how an
 Android-integrated Shimmer sensor is initialised and
-managed[\[55\]](PythonApp/shimmer_manager.py#L241-L249)[\[56\]](PythonApp/shimmer_manager.py#L250-L258):
+managed[\[54\]](PythonApp/shimmer_manager.py#L211-L232):
 
-`python if self.enable_android_integration: logger.info("Initialising Android device integration...") self.android_device_manager = AndroidDeviceManager( server_port=self.android_server_port, logger=self.logger ) self.android_device_manager.add_data_callback(self._on_android_shimmer_data) self.android_device_manager.add_status_callback(self._on_android_device_status) if not self.android_device_manager.initialise(): logger.error("Failed to initialise Android device manager") if not PYSHIMMER_AVAILABLE: return False else: logger.warning("Continuing with direct connections only") self.enable_android_integration = False else: logger.info(f"Android device server listening on port {self.android_server_port}")`[\[57\]](PythonApp/shimmer_manager.py#L241-L258)
+```python
+if self.enable_android_integration:
+    self.logger.info("Initializing Android device integration...")
+    self.android_device_manager = AndroidDeviceManager(
+        server_port=self.android_server_port, logger=self.logger
+    )
+    self.android_device_manager.add_data_callback(
+        self._on_android_shimmer_data
+    )
+    self.android_device_manager.add_status_callback(
+        self._on_android_device_status
+    )
+    if not self.android_device_manager.initialize():
+        self.logger.error("Failed to initialize Android device manager")
+        if not PYSHIMMER_AVAILABLE:
+            return False
+        else:
+            self.logger.warning("Continuing with direct connections only")
+            self.enable_android_integration = False
+    else:
+        self.logger.info(
+            f"Android device server listening on port {self.android_server_port}"
+        )
+```
 
 This snippet demonstrates how the system handles sensor integration in a
 flexible way. If Android-based integration is enabled, it spins up an
@@ -519,19 +569,85 @@ phone relays). When initialising, if the Android channel fails (for
 instance, if the phone app isn't responding), the code falls back: if a
 direct USB/Bluetooth method (`PyShimmer`) is available, it will use that
 instead (or otherwise run in simulation
-mode)[\[56\]](PythonApp/shimmer_manager.py#L250-L258).
+mode)[\[55\]](PythonApp/shimmer_manager.py#L222-L228).
 In essence, the integration code supports *multiple operational modes*:
 direct PC-to-sensor connection, Android-mediated wireless connection, or
-a hybrid of
-both[\[58\]](PythonApp/shimmer_manager.py#L134-L143).
+a hybrid of both[\[56\]](PythonApp/shimmer_manager.py#L241-L270).
 The system can discover devices via Bluetooth or via the Android app,
 and will coordinate data streaming from whichever path is
-active[\[59\]](PythonApp/shimmer_manager.py#L269-L278)[\[60\]](PythonApp/shimmer_manager.py#L280-L289).
-Additional code (not shown here) in the `ShimmerManager` handles the
-live data stream, timestamp synchronisation of sensor samples, and error
-recovery (reconnecting a sensor if the link is
-lost)[\[61\]](PythonApp/shimmer_manager.py#L145-L151).
+active. Additional code handles the live data stream, timestamp 
+synchronisation of sensor samples, and error recovery (reconnecting a 
+sensor if the link is lost).
 
+**4. Android Shimmer Recording Implementation:** The Android application
+provides robust sensor recording capabilities through the `ShimmerRecorder`
+class. This code excerpt shows the class structure and initialization of
+the recording system[\[57\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L40-L80):
+
+```kotlin
+@Singleton
+class ShimmerRecorder
+@Inject
+constructor(
+    @ApplicationContext private val context: Context,
+    private val sessionManager: SessionManager,
+    private val logger: Logger,
+) {
+    private val isRecording = AtomicBoolean(false)
+    private val isInitialized = AtomicBoolean(false)
+    private val isConnected = AtomicBoolean(false)
+    private var currentSessionInfo: SessionInfo? = null
+    private var currentSessionId: String? = null
+    private var sessionStartTime: Long = 0L
+
+    private var bluetoothAdapter: BluetoothAdapter? = null
+    private var bluetoothManager: BluetoothManager? = null
+
+    private var samplingRate: Double = DEFAULT_SAMPLING_RATE
+    private var sampleCount: Long = 0L
+    private var dataWriter: FileWriter? = null
+
+    private val connectedDevices = ConcurrentHashMap<String, ShimmerDevice>()
+    private val deviceConfigurations = ConcurrentHashMap<String, DeviceConfiguration>()
+    private val dataQueues = ConcurrentHashMap<String, ConcurrentLinkedQueue<SensorSample>>()
+```
+
+The Android implementation uses dependency injection (Dagger Hilt) and 
+atomic operations to ensure thread-safe recording operations. It maintains
+concurrent data structures for managing multiple Shimmer devices 
+simultaneously and provides real-time data streaming capabilities.
+
+**5. Android Connection Management:** The connection management system
+on Android handles device discovery, connection reliability, and automatic
+reconnection[\[58\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt#L14-L50):
+
+```kotlin
+data class ConnectionPolicy(
+    val maxRetryAttempts: Int = 5,
+    val initialRetryDelay: Long = 2000L,
+    val maxRetryDelay: Long = 30000L,
+    val exponentialBackoff: Boolean = true,
+    val enableAutoReconnect: Boolean = true,
+    val healthCheckInterval: Long = 10000L,
+    val connectionTimeout: Long = 30000L,
+    val enableConnectionPersistence: Boolean = true
+)
+
+data class ConnectionHealth(
+    val deviceId: String,
+    val isHealthy: Boolean,
+    val lastSuccessfulConnection: Long,
+    val consecutiveFailures: Int,
+    val averageConnectionTime: Long,
+    val packetLossRate: Double,
+    val signalStrength: Int
+)
+```
+
+The connection management system implements sophisticated retry policies
+with exponential backoff, continuous health monitoring, and detailed
+connection metrics tracking. This ensures reliable device connectivity
+even in challenging wireless environments.
 Through these code excerpts, Appendix F illustrates the implementation
 of the system's key features. The synchronisation code shows how strict
 timing is achieved programmatically; the data pipeline code reveals the
