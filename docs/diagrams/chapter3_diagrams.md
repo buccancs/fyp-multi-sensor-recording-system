@@ -278,6 +278,86 @@ sequenceDiagram
     PC->>PC: Session Complete with Recovery Log
 ```
 
+## Figure 3.6 – Data-Flow Pipeline
+
+```mermaid
+graph TD
+    subgraph "Data Capture Layer"
+        GSR[GSR Sensors<br/>128Hz Sampling<br/>Shimmer3 Bluetooth]
+        RGB[RGB Camera<br/>1920x1080@30fps<br/>H.264 Encoding]
+        THERMAL[Thermal Camera<br/>320x240@15fps<br/>FLIR Lepton]
+        IMU[IMU Sensors<br/>Accelerometer<br/>Gyroscope]
+        AUDIO[Audio Recording<br/>44.1kHz PCM<br/>Microphone]
+    end
+    
+    subgraph "Timestamping Layer"
+        TS_GSR[GSR Timestamp<br/>PC Master Clock<br/>Sub-ms Precision]
+        TS_VIDEO[Video Timestamp<br/>Frame-level sync<br/>NTP Aligned]
+        TS_THERMAL[Thermal Timestamp<br/>Per-frame metadata<br/>Clock Aligned]
+        TS_IMU[IMU Timestamp<br/>Sample-level sync<br/>Interpolated]
+        TS_AUDIO[Audio Timestamp<br/>Sample-accurate<br/>44.1kHz aligned]
+    end
+    
+    subgraph "Buffering & Processing"
+        BUF_GSR[Ring Buffer<br/>10s Capacity<br/>Thread-Safe Queue]
+        BUF_VIDEO[Video Buffer<br/>H.264 Encoder<br/>1GB Chunks]
+        BUF_THERMAL[Thermal Buffer<br/>Raw Frame Data<br/>Compression]
+        BUF_IMU[IMU Buffer<br/>Circular Queue<br/>Low Latency]
+        BUF_AUDIO[Audio Buffer<br/>PCM Samples<br/>Real-time]
+    end
+    
+    subgraph "Storage & Transfer"
+        CSV_GSR[GSR CSV Files<br/>session_gsr.csv<br/>PC Local Storage]
+        MP4_VIDEO[Video MP4<br/>device_video.mp4<br/>Android Storage]
+        THERMAL_FILES[Thermal Images<br/>frame_####.png<br/>Android Storage]
+        IMU_CSV[IMU CSV<br/>device_imu.csv<br/>Android Storage]
+        AUDIO_WAV[Audio WAV<br/>session_audio.wav<br/>Android Storage]
+    end
+    
+    subgraph "Aggregation Layer"
+        SESSION_META[Session Metadata<br/>session.json<br/>File Registry]
+        FILE_TRANSFER[File Transfer<br/>TLS Encrypted<br/>Retry Logic]
+        DATA_VALIDATION[Integrity Check<br/>MD5 Hashes<br/>Completeness]
+    end
+    
+    %% Data Flow Connections
+    GSR --> TS_GSR --> BUF_GSR --> CSV_GSR
+    RGB --> TS_VIDEO --> BUF_VIDEO --> MP4_VIDEO
+    THERMAL --> TS_THERMAL --> BUF_THERMAL --> THERMAL_FILES
+    IMU --> TS_IMU --> BUF_IMU --> IMU_CSV
+    AUDIO --> TS_AUDIO --> BUF_AUDIO --> AUDIO_WAV
+    
+    %% Aggregation Flow
+    CSV_GSR --> SESSION_META
+    MP4_VIDEO --> FILE_TRANSFER --> SESSION_META
+    THERMAL_FILES --> FILE_TRANSFER --> SESSION_META
+    IMU_CSV --> FILE_TRANSFER --> SESSION_META
+    AUDIO_WAV --> FILE_TRANSFER --> SESSION_META
+    
+    %% Validation
+    SESSION_META --> DATA_VALIDATION
+    FILE_TRANSFER --> DATA_VALIDATION
+    
+    %% Security Annotations
+    FILE_TRANSFER -.->|TLS 1.3<br/>AES-256| DATA_VALIDATION
+    DATA_VALIDATION -.->|MD5 + SHA256<br/>Checksums| SESSION_META
+    
+    %% Styling
+    style GSR fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
+    style RGB fill:#e3f2fd,stroke:#1976d2,stroke-width:3px  
+    style THERMAL fill:#fff3e0,stroke:#f57c00,stroke-width:3px
+    style SESSION_META fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style DATA_VALIDATION fill:#ffebee,stroke:#c62828,stroke-width:3px
+    
+    classDef timestampNode fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+    classDef bufferNode fill:#f9fbe7,stroke:#689f38,stroke-width:2px
+    classDef storageNode fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+    
+    class TS_GSR,TS_VIDEO,TS_THERMAL,TS_IMU,TS_AUDIO timestampNode
+    class BUF_GSR,BUF_VIDEO,BUF_THERMAL,BUF_IMU,BUF_AUDIO bufferNode
+    class CSV_GSR,MP4_VIDEO,THERMAL_FILES,IMU_CSV,AUDIO_WAV storageNode
+```
+
 ## Figure 3.7 – Timing Diagram (Clock Offset Over Time)
 
 ```mermaid
