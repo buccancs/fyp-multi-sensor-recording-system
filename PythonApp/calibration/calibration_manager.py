@@ -69,7 +69,7 @@ class CalibrationManager:
         session_file = session_folder / "session_info.json"
         with open(session_file, "w") as f:
             json.dump(self.current_session, f, indent=2)
-        print(f"[DEBUG_LOG] Calibration session started: {session_name}")
+        logger.debug(f" Calibration session started: {session_name}")
         return self.current_session
 
     def capture_calibration_frame(self, device_server) -> Dict[str, Any]:
@@ -92,7 +92,7 @@ class CalibrationManager:
                 "pattern_size": self.chessboard_size,
             }
             device_count = device_server.broadcast_command(capture_command)
-            print(
+            logger.info(
                 f"[DEBUG_LOG] Sent calibration capture command to {device_count} devices"
             )
             for device_id in self.current_session["device_ids"]:
@@ -132,7 +132,7 @@ class CalibrationManager:
         thermal_path = device_folder / f"thermal_{frame_num:03d}.png"
         cv2.imwrite(str(rgb_path), rgb_image)
         cv2.imwrite(str(thermal_path), thermal_image)
-        print(f"[DEBUG_LOG] Simulated capture for {device_id}: frame {frame_num}")
+        logger.debug(f" Simulated capture for {device_id}: frame {frame_num}")
         return True
 
     def can_compute_calibration(self, device_id: str = None) -> Dict[str, bool]:
@@ -160,7 +160,7 @@ class CalibrationManager:
         }
         for dev_id in devices_to_calibrate:
             try:
-                print(f"[DEBUG_LOG] Computing calibration for device {dev_id}")
+                logger.debug(f" Computing calibration for device {dev_id}")
                 if not self.can_compute_calibration(dev_id)[dev_id]:
                     computation_results["device_results"][dev_id] = {
                         "success": False,
@@ -195,7 +195,7 @@ class CalibrationManager:
                     "success": False,
                     "message": f"Calibration error: {str(e)}",
                 }
-                print(f"[DEBUG_LOG] Calibration error for {dev_id}: {e}")
+                logger.debug(f" Calibration error for {dev_id}: {e}")
         all_successful = all(
             result.get("success", False)
             for result in computation_results["device_results"].values()
@@ -226,9 +226,9 @@ class CalibrationManager:
                 rgb_image_points.append(rgb_corners)
                 thermal_image_points.append(thermal_corners)
                 valid_object_points.append(object_points)
-                print(f"[DEBUG_LOG] Pattern detected in frame {i} for both cameras")
+                logger.debug(f" Pattern detected in frame {i} for both cameras")
             else:
-                print(f"[DEBUG_LOG] Pattern detection failed in frame {i}")
+                logger.debug(f" Pattern detection failed in frame {i}")
         
         return valid_object_points, rgb_image_points, thermal_image_points
 
@@ -247,7 +247,7 @@ class CalibrationManager:
             result.rgb_camera_matrix = rgb_camera_matrix
             result.rgb_distortion_coeffs = rgb_dist_coeffs
             result.rgb_rms_error = rgb_ret
-            print(f"[DEBUG_LOG] RGB camera calibrated with RMS error: {rgb_ret:.3f}")
+            logger.debug(f" RGB camera calibrated with RMS error: {rgb_ret:.3f}")
             rgb_calibrated = True
         
         thermal_image_size = thermal_images[0].shape[1], thermal_images[0].shape[0]
@@ -262,7 +262,7 @@ class CalibrationManager:
             result.thermal_camera_matrix = thermal_camera_matrix
             result.thermal_distortion_coeffs = thermal_dist_coeffs
             result.thermal_rms_error = thermal_ret
-            print(f"[DEBUG_LOG] Thermal camera calibrated with RMS error: {thermal_ret:.3f}")
+            logger.debug(f" Thermal camera calibrated with RMS error: {thermal_ret:.3f}")
             thermal_calibrated = True
         
         return rgb_calibrated, thermal_calibrated
@@ -285,7 +285,7 @@ class CalibrationManager:
             result.essential_matrix = E
             result.fundamental_matrix = F
             result.stereo_rms_error = stereo_ret
-            print(f"[DEBUG_LOG] Stereo calibration completed with RMS error: {stereo_ret:.3f}")
+            logger.debug(f" Stereo calibration completed with RMS error: {stereo_ret:.3f}")
             result.homography_matrix = self.processor.compute_homography(
                 thermal_image_points[0], rgb_image_points[0]
             )
@@ -296,7 +296,7 @@ class CalibrationManager:
         rgb_images: List[np.ndarray],
         thermal_images: List[np.ndarray],
     ) -> CalibrationResult:
-        print(f"[DEBUG_LOG] Computing calibration for device {device_id}")
+        logger.debug(f" Computing calibration for device {device_id}")
         result = CalibrationResult(device_id)
         
         valid_object_points, rgb_image_points, thermal_image_points = (
@@ -304,7 +304,7 @@ class CalibrationManager:
         )
         
         if len(valid_object_points) < self.min_images:
-            print(f"[DEBUG_LOG] Insufficient valid frames: {len(valid_object_points)}/{self.min_images}")
+            logger.debug(f" Insufficient valid frames: {len(valid_object_points)}/{self.min_images}")
             return result
         
         rgb_calibrated, thermal_calibrated = self._calibrate_individual_cameras(
@@ -354,7 +354,7 @@ class CalibrationManager:
         session_folder = Path(self.current_session["session_folder"])
         calibration_file = session_folder / f"calibration_{device_id}.json"
         result.save_to_file(str(calibration_file))
-        print(f"[DEBUG_LOG] Calibration result saved: {calibration_file}")
+        logger.debug(f" Calibration result saved: {calibration_file}")
 
     def get_calibration_result(self, device_id: str) -> Optional[CalibrationResult]:
         return self.calibration_results.get(device_id)
@@ -364,10 +364,10 @@ class CalibrationManager:
             result = CalibrationResult.load_from_file(calibration_file)
             if result:
                 self.calibration_results[device_id] = result
-                print(f"[DEBUG_LOG] Calibration result loaded for {device_id}")
+                logger.debug(f" Calibration result loaded for {device_id}")
                 return True
         except Exception as e:
-            print(f"[DEBUG_LOG] Failed to load calibration for {device_id}: {e}")
+            logger.debug(f" Failed to load calibration for {device_id}: {e}")
         return False
 
     def apply_thermal_overlay(
@@ -390,7 +390,7 @@ class CalibrationManager:
             overlay = cv2.addWeighted(rgb_image, 1.0 - alpha, thermal_colored, alpha, 0)
             return overlay
         except Exception as e:
-            print(f"[DEBUG_LOG] Overlay error for {device_id}: {e}")
+            logger.debug(f" Overlay error for {device_id}: {e}")
             return None
 
     def end_calibration_session(self) -> Dict[str, Any]:
@@ -417,7 +417,7 @@ class CalibrationManager:
         self.captured_images.clear()
         self.capture_count.clear()
         self.is_capturing = False
-        print(f"[DEBUG_LOG] Calibration session ended: {session_summary}")
+        logger.debug(f" Calibration session ended: {session_summary}")
         return session_summary
 
     def get_session_status(self) -> Dict[str, Any]:
@@ -471,17 +471,17 @@ class CalibrationManager:
 
 
 if __name__ == "__main__":
-    print("[DEBUG_LOG] Testing CalibrationManager...")
+    logger.debug(" Testing CalibrationManager...")
     manager = CalibrationManager("test_calibration")
     session = manager.start_calibration_session(
         ["device_1", "device_2"], "test_session"
     )
-    print(f"Started session: {session['session_name']}")
+    logger.info(f"Started session: {session['session_name']}")
     for i in range(12):
         results = manager.capture_calibration_frame(None)
-        print(f"Capture {i + 1}: {results['total_frames']}")
+        logger.info(f"Capture {i + 1}: {results['total_frames']}")
     calibration_results = manager.compute_calibration()
-    print(f"Calibration results: {calibration_results}")
+    logger.info(f"Calibration results: {calibration_results}")
     summary = manager.end_calibration_session()
-    print(f"Session ended: {summary}")
-    print("[DEBUG_LOG] CalibrationManager test completed")
+    logger.info(f"Session ended: {summary}")
+    logger.debug(" CalibrationManager test completed")

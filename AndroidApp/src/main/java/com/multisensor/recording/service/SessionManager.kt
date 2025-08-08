@@ -1,8 +1,8 @@
 package com.multisensor.recording.service
 
 import android.content.Context
-import android.os.Environment
 import com.multisensor.recording.persistence.*
+import com.multisensor.recording.service.util.FileStructureManager
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -15,6 +15,13 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * SessionManager handles the lifecycle and coordination of recording sessions.
+ * 
+ * This manager focuses on session state management, coordination between components,
+ * and business logic while delegating file structure operations to FileStructureManager.
+ * It maintains the current session state and provides APIs for session control.
+ */
 @Singleton
 class SessionManager
 @Inject
@@ -24,21 +31,14 @@ constructor(
     private val thermalSettings: ThermalCameraSettings,
     private val sessionStateDao: SessionStateDao,
     private val crashRecoveryManager: CrashRecoveryManager,
+    private val fileStructureManager: FileStructureManager,
 ) {
     private var currentSession: RecordingSession? = null
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault())
 
     companion object {
-        private const val BASE_FOLDER_NAME = "MultiSensorRecording"
         private const val SESSION_INFO_FILE = "session_info.txt"
         private const val SESSION_CONFIG_FILE = "session_config.json"
-        private const val RGB_VIDEO_FILE = "rgb_video.mp4"
-        private const val THERMAL_VIDEO_FILE = "thermal_video.mp4"
-        private const val THERMAL_DATA_FOLDER = "thermal_data"
-        private const val RAW_FRAMES_FOLDER = "raw_frames"
-        private const val SHIMMER_DATA_FILE = "shimmer_data.csv"
-        private const val LOG_FILE = "session_log.txt"
-        private const val CALIBRATION_FOLDER = "calibration"
     }
 
     data class RecordingSession(
@@ -64,14 +64,7 @@ constructor(
 
                 logger.info("Creating new session: $sessionId")
 
-                val baseFolder = getBaseRecordingFolder()
-                val sessionFolder = File(baseFolder, sessionId)
-
-                if (!sessionFolder.exists() && !sessionFolder.mkdirs()) {
-                    throw Exception("Failed to create session folder: ${sessionFolder.absolutePath}")
-                }
-
-                createSessionSubfolders(sessionFolder)
+                val sessionFolder = fileStructureManager.createSessionFolder(sessionId)
 
                 val session =
                     RecordingSession(
@@ -92,7 +85,6 @@ constructor(
                 sessionStateDao.insertSessionState(sessionState)
 
                 writeSessionInfo(session)
-
                 writeSessionConfig(session)
 
                 logger.info("Session created successfully: $sessionId at ${sessionFolder.absolutePath}")
@@ -126,16 +118,8 @@ constructor(
             try {
                 logger.info("Adding stimulus event to session ${session.sessionId}: type=$eventType, timestamp=$timestamp")
 
-                val stimulusFile = File(session.sessionFolder, "stimulus_events.csv")
-                val isNewFile = !stimulusFile.exists()
-
-                stimulusFile.appendText(
-                    if (isNewFile) {
-                        "timestamp_ms,event_type,session_time_ms\n$timestamp,$eventType,${timestamp - session.startTime}\n"
-                    } else {
-                        "$timestamp,$eventType,${timestamp - session.startTime}\n"
-                    }
-                )
+                val stimulusFile = fileStructureManager.createStimulusEventsFile(session.sessionFolder)
+                stimulusFile.appendText("$timestamp,$eventType,${timestamp - session.startTime}\n")
 
                 logger.info("Stimulus event recorded in: ${stimulusFile.absolutePath}")
             } catch (e: CancellationException) {
@@ -149,7 +133,7 @@ constructor(
             } catch (e: RuntimeException) {
                 logger.error("Runtime error adding stimulus event: ${e.message}", e)
             }
-        }
+        } ?: logger.warning("Cannot add stimulus event: no active session")
     }
 
     suspend fun finalizeCurrentSession() =
@@ -252,67 +236,11 @@ constructor(
         }
     }
 
-    fun getSessionFilePaths(): SessionFilePaths? =
+    fun getSessionFilePaths(): FileStructureManager.SessionFilePaths? =
         currentSession?.let { session ->
-            SessionFilePaths(
-                sessionFolder = session.sessionFolder,
-                rgbVideoFile = File(session.sessionFolder, RGB_VIDEO_FILE),
-                thermalVideoFile = File(session.sessionFolder, THERMAL_VIDEO_FILE),
-                thermalDataFolder = File(session.sessionFolder, THERMAL_DATA_FOLDER),
-                rawFramesFolder = File(session.sessionFolder, RAW_FRAMES_FOLDER),
-                shimmerDataFile = File(session.sessionFolder, SHIMMER_DATA_FILE),
-                logFile = File(session.sessionFolder, LOG_FILE),
-                calibrationFolder = File(session.sessionFolder, CALIBRATION_FOLDER),
-                sessionConfigFile = File(session.sessionFolder, SESSION_CONFIG_FILE),
-            )
+            fileStructureManager.getSessionFilePaths(session.sessionFolder)
         }
 
-    data class SessionFilePaths(
-        val sessionFolder: File,
-        val rgbVideoFile: File,
-        val thermalVideoFile: File,
-        val thermalDataFolder: File,
-        val rawFramesFolder: File,
-        val shimmerDataFile: File,
-        val logFile: File,
-        val calibrationFolder: File,
-        val sessionConfigFile: File,
-    )
-
-    private fun getBaseRecordingFolder(): File {
-        val baseDir =
-            if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-                File(Environment.getExternalStorageDirectory(), BASE_FOLDER_NAME)
-            } else {
-                File(context.filesDir, BASE_FOLDER_NAME)
-            }
-
-        if (!baseDir.exists() && !baseDir.mkdirs()) {
-            logger.warning("Failed to create base recording folder, using app internal storage")
-            return File(context.filesDir, BASE_FOLDER_NAME).apply {
-                mkdirs()
-            }
-        }
-
-        return baseDir
-    }
-
-    private fun createSessionSubfolders(sessionFolder: File) {
-        val rawFramesFolder = File(sessionFolder, RAW_FRAMES_FOLDER)
-        if (!rawFramesFolder.exists() && !rawFramesFolder.mkdirs()) {
-            logger.warning("Failed to create raw frames folder: ${rawFramesFolder.absolutePath}")
-        }
-
-        val thermalDataFolder = File(sessionFolder, THERMAL_DATA_FOLDER)
-        if (!thermalDataFolder.exists() && !thermalDataFolder.mkdirs()) {
-            logger.warning("Failed to create thermal data folder: ${thermalDataFolder.absolutePath}")
-        }
-
-        val calibrationFolder = File(sessionFolder, CALIBRATION_FOLDER)
-        if (!calibrationFolder.exists() && !calibrationFolder.mkdirs()) {
-            logger.warning("Failed to create calibration folder: ${calibrationFolder.absolutePath}")
-        }
-    }
 
     private fun writeSessionInfo(session: RecordingSession) {
         try {
@@ -332,14 +260,14 @@ constructor(
                     appendLine("Created: ${Date()}")
                     appendLine("")
                     appendLine("=== Folder Structure ===")
-                    appendLine("RGB Video: $RGB_VIDEO_FILE")
-                    appendLine("Thermal Video: $THERMAL_VIDEO_FILE")
-                    appendLine("Thermal Data: $THERMAL_DATA_FOLDER/")
-                    appendLine("Raw Frames: $RAW_FRAMES_FOLDER/")
-                    appendLine("Shimmer Data: $SHIMMER_DATA_FILE")
-                    appendLine("Calibration: $CALIBRATION_FOLDER/")
+                    appendLine("RGB Video: rgb_video.mp4")
+                    appendLine("Thermal Video: thermal_video.mp4")
+                    appendLine("Thermal Data: thermal_data/")
+                    appendLine("Raw Frames: raw_frames/")
+                    appendLine("Shimmer Data: shimmer_data.csv")
+                    appendLine("Calibration: calibration/")
                     appendLine("Session Config: $SESSION_CONFIG_FILE")
-                    appendLine("Log File: $LOG_FILE")
+                    appendLine("Log File: session_log.txt")
                 }
 
             infoFile.writeText(info)
@@ -371,13 +299,13 @@ constructor(
                 appendLine("    \"data_format\": \"${thermalConfig.dataFormat}\"")
                 appendLine("  },")
                 appendLine("  \"folder_structure\": {")
-                appendLine("    \"rgb_video\": \"$RGB_VIDEO_FILE\",")
-                appendLine("    \"thermal_video\": \"$THERMAL_VIDEO_FILE\",")
-                appendLine("    \"thermal_data_folder\": \"$THERMAL_DATA_FOLDER\",")
-                appendLine("    \"raw_frames_folder\": \"$RAW_FRAMES_FOLDER\",")
-                appendLine("    \"shimmer_data\": \"$SHIMMER_DATA_FILE\",")
-                appendLine("    \"calibration_folder\": \"$CALIBRATION_FOLDER\",")
-                appendLine("    \"log_file\": \"$LOG_FILE\"")
+                appendLine("    \"rgb_video\": \"rgb_video.mp4\",")
+                appendLine("    \"thermal_video\": \"thermal_video.mp4\",")
+                appendLine("    \"thermal_data_folder\": \"thermal_data\",")
+                appendLine("    \"raw_frames_folder\": \"raw_frames\",")
+                appendLine("    \"shimmer_data\": \"shimmer_data.csv\",")
+                appendLine("    \"calibration_folder\": \"calibration\",")
+                appendLine("    \"log_file\": \"session_log.txt\"")
                 appendLine("  }")
                 appendLine("}")
             }
@@ -392,18 +320,7 @@ constructor(
     private fun logSessionSummary(session: RecordingSession) {
         try {
             val duration = session.endTime?.let { it - session.startTime } ?: 0
-            val filePaths =
-                SessionFilePaths(
-                    sessionFolder = session.sessionFolder,
-                    rgbVideoFile = File(session.sessionFolder, RGB_VIDEO_FILE),
-                    thermalVideoFile = File(session.sessionFolder, THERMAL_VIDEO_FILE),
-                    thermalDataFolder = File(session.sessionFolder, THERMAL_DATA_FOLDER),
-                    rawFramesFolder = File(session.sessionFolder, RAW_FRAMES_FOLDER),
-                    shimmerDataFile = File(session.sessionFolder, SHIMMER_DATA_FILE),
-                    logFile = File(session.sessionFolder, LOG_FILE),
-                    calibrationFolder = File(session.sessionFolder, CALIBRATION_FOLDER),
-                    sessionConfigFile = File(session.sessionFolder, SESSION_CONFIG_FILE),
-                )
+            val filePaths = fileStructureManager.getSessionFilePaths(session.sessionFolder)
 
             logger.info("Session Summary:")
             logger.info("  Session ID: ${session.sessionId}")
@@ -498,14 +415,11 @@ constructor(
                 }
             }
 
-            val rgbVideoFile = File(sessionFolder, RGB_VIDEO_FILE)
-            val thermalVideoFile = File(sessionFolder, THERMAL_VIDEO_FILE)
-            val rawFramesFolder = File(sessionFolder, RAW_FRAMES_FOLDER)
-            val shimmerDataFile = File(sessionFolder, SHIMMER_DATA_FILE)
+            val filePaths = fileStructureManager.getSessionFilePaths(sessionFolder)
 
-            val videoEnabled = rgbVideoFile.exists() && rgbVideoFile.length() > 0
-            val thermalEnabled = thermalVideoFile.exists() && thermalVideoFile.length() > 0
-            val rawEnabled = rawFramesFolder.exists() && (rawFramesFolder.listFiles()?.isNotEmpty() == true)
+            val videoEnabled = filePaths.rgbVideoFile.exists() && filePaths.rgbVideoFile.length() > 0
+            val thermalEnabled = filePaths.thermalVideoFile.exists() && filePaths.thermalVideoFile.length() > 0
+            val rawEnabled = filePaths.rawFramesFolder.exists() && (filePaths.rawFramesFolder.listFiles()?.isNotEmpty() == true)
 
             val sessionInfo =
                 com.multisensor.recording.recording.SessionInfo(
@@ -515,8 +429,8 @@ constructor(
                     thermalEnabled = thermalEnabled,
                     startTime = startTime,
                     endTime = if (endTime > 0) endTime else System.currentTimeMillis(),
-                    videoFilePath = if (videoEnabled) rgbVideoFile.absolutePath else null,
-                    thermalFilePath = if (thermalEnabled) thermalVideoFile.absolutePath else null,
+                    videoFilePath = if (videoEnabled) filePaths.rgbVideoFile.absolutePath else null,
+                    thermalFilePath = if (thermalEnabled) filePaths.thermalVideoFile.absolutePath else null,
                     errorOccurred = errorOccurred,
                     errorMessage = errorMessage,
                 )
@@ -549,35 +463,8 @@ constructor(
     suspend fun deleteAllSessions(): Boolean =
         withContext(Dispatchers.IO) {
             return@withContext try {
-                val baseFolder = getBaseRecordingFolder()
-
-                if (!baseFolder.exists()) {
-                    logger.info("Base recording folder does not exist, nothing to delete")
-                    return@withContext true
-                }
-
-                var deletedCount = 0
-                var failedCount = 0
-
-                baseFolder.listFiles()?.forEach { sessionFolder ->
-                    if (sessionFolder.isDirectory && sessionFolder.name.startsWith("session_")) {
-                        try {
-                            if (deleteSessionFolder(sessionFolder)) {
-                                deletedCount++
-                                logger.info("Deleted session folder: ${sessionFolder.name}")
-                            } else {
-                                failedCount++
-                                logger.warning("Failed to delete session folder: ${sessionFolder.name}")
-                            }
-                        } catch (e: Exception) {
-                            failedCount++
-                            logger.error("Error deleting session folder: ${sessionFolder.name}", e)
-                        }
-                    }
-                }
-
+                val (deletedCount, failedCount) = fileStructureManager.deleteAllSessionFolders()
                 logger.info("Session deletion complete - Deleted: $deletedCount, Failed: $failedCount")
-
                 deletedCount > 0 && failedCount == 0
             } catch (e: Exception) {
                 logger.error("Failed to delete all sessions", e)
@@ -585,21 +472,5 @@ constructor(
             }
         }
 
-    private fun deleteSessionFolder(folder: File): Boolean =
-        try {
-            if (folder.isDirectory) {
-                folder.listFiles()?.forEach { file ->
-                    if (file.isDirectory) {
-                        deleteSessionFolder(file)
-                    } else {
-                        file.delete()
-                    }
-                }
-            }
-            folder.delete()
-        } catch (e: Exception) {
-            logger.error("Failed to delete folder: ${folder.absolutePath}", e)
-            false
-        }
 }
 

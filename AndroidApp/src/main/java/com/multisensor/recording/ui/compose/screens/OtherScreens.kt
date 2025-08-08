@@ -9,13 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.multisensor.recording.ui.MainViewModelRefactored
+import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.DevicesUiState
 import com.multisensor.recording.ui.DevicesViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DevicesScreen(
-    viewModel: MainViewModelRefactored = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier
@@ -46,7 +46,7 @@ fun DevicesScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalibrationScreen(
-    viewModel: MainViewModelRefactored = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier
@@ -77,7 +77,7 @@ fun CalibrationScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilesScreen(
-    viewModel: MainViewModelRefactored = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier

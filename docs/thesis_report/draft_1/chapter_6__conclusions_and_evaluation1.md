@@ -148,7 +148,7 @@ full.
 Beyond meeting the basic objectives, the project introduced several
 technical innovations that distinguish it from conventional solutions in
 this domain. These innovations emerged from the need to reconcile
-cutting-edge research requirements with practical engineering
+contemporary research requirements with practical engineering
 constraints:
 
 - **Distributed Multi-Device Architecture:** The system's architecture
@@ -660,7 +660,7 @@ a unified system for stress research. In terms of community adoption, by
 open-sourcing our entire codebase and providing detailed documentation,
 we aimed to set a foundation that others can build upon. The initial
 feedback from peers who reviewed the code or tried early releases was
-that the system is impressively feature-complete and could serve as a
+that the system is notably feature-complete and could serve as a
 reference architecture for similar projects. One must note that
 open-source projects' success also depends on ease of use and
 maintenance; our system, while powerful, does have more moving parts
@@ -1364,7 +1364,7 @@ robustness:
   record data but also give live estimates of stress level. In the short
   term, this can be done as a software update, because the
   infrastructure is all in place for capturing and syncing data. We
-  anticipate that trying a few state-of-the-art algorithms from the
+  anticipate that trying a few current algorithms from the
   literature on physiological signal estimation (possibly fine-tuned for
   our scenario) could significantly improve the accuracy of contactless
   GSR readings, thereby achieving the project's primary scientific aim

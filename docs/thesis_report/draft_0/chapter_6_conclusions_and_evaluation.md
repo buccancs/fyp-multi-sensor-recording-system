@@ -75,7 +75,7 @@ algorithms that achieve microsecond-level precision across heterogeneous wireles
 
 #### Real-Time Processing Pipeline Innovation
 
-The real-time processing system demonstrates exceptional technical innovation in computational efficiency and algorithm
+The real-time processing system demonstrates notable technical innovation in computational efficiency and algorithm
 optimisation:
 
 - **MediaPipe hand detection** achieving sub-100ms processing latency with >95% detection accuracy
@@ -175,7 +175,7 @@ enabling new research paradigms.
 The system achieves research-grade capabilities while maintaining cost-effectiveness that makes advanced measurement
 accessible:
 
-- **75% cost reduction** compared to equivalent commercial research instrumentation while providing superior flexibility
+- **75% cost reduction** compared to equivalent commercial research instrumentation while providing better flexibility
 - **Consumer hardware utilisation** demonstrating that research-grade capabilities can be achieved using accessible
   technology
 - **Resource efficiency** operating within modest computational and network requirements compatible with typical
@@ -306,7 +306,7 @@ development and maintenance.
 
 ### 6.2.4 complete Test Validation Achievement
 
-The project demonstrates exceptional validation success through thorough test infrastructure that provides definitive evidence of research-grade system quality. The consolidated test execution results validate all technical claims with quantitative evidence suitable for academic peer review.
+The project demonstrates notable validation success through thorough test infrastructure that provides definitive evidence of research-grade system quality. The consolidated test execution results validate all technical claims with quantitative evidence suitable for academic peer review.
 
 **Test Infrastructure Innovation**:
 
@@ -343,7 +343,7 @@ The project demonstrates exceptional validation success through thorough test in
 The test validation provides concrete evidence supporting all research claims:
 
 - ✅ **Research Readiness**: complete coverage validates academic-quality implementation
-- ✅ **Technical Excellence**: 99.5% success rate demonstrates exceptional system reliability
+- ✅ **Technical Quality**: 99.5% success rate demonstrates suitable system reliability
 - ✅ **Cross-Platform Support**: Both desktop and mobile platforms thoroughly validated
 - ✅ **Error Recovery**: complete fault tolerance mechanisms confirmed through testing
 - ✅ **Performance Validation**: All performance claims supported by quantitative test evidence
@@ -754,7 +754,7 @@ objectives but has exceeded them in multiple critical areas.
 
 The project's primary achievements span three fundamental areas:
 
-1. **Technical Excellence**: The system achieves exceptional performance metrics including 99.7% availability, ±3.2ms
+1. **Technical Quality**: The system achieves suitable performance metrics including 99.7% availability, ±3.2ms
    synchronisation precision, and 99.5% thorough test success rate across 240+ test methods, demonstrating that research-grade reliability can be achieved
    using consumer hardware when supported by sophisticated software algorithms.
 
