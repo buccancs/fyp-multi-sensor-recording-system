@@ -428,9 +428,4 @@ constructor(
     }
 }
 
-// Data class for session information
-data class SessionInfo(
-    val sessionId: String,
-    val startTime: Long,
-    val outputDirectory: File
-)
+// SessionInfo is now defined in SessionInfo.kt - removed duplicate

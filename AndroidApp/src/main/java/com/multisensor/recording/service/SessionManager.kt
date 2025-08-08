@@ -339,6 +339,8 @@ constructor(
         }
     }
 
+    fun getBaseRecordingFolder(): File = fileStructureManager.getBaseRecordingFolder()
+
     fun getAvailableStorageSpace(): Long =
         try {
             val baseFolder = getBaseRecordingFolder()
@@ -363,8 +365,8 @@ constructor(
                     return@withContext emptyList()
                 }
 
-                baseFolder.listFiles()?.forEach { sessionFolder ->
-                    if (sessionFolder.isDirectory && sessionFolder.name.startsWith("session_")) {
+                baseFolder.listFiles()?.forEach { sessionFolder: File ->
+                    if (sessionFolder.isDirectory() && sessionFolder.name.startsWith("session_")) {
                         try {
                             val sessionInfo = reconstructSessionInfo(sessionFolder)
                             if (sessionInfo != null) {

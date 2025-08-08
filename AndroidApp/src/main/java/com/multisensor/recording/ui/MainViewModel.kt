@@ -383,4 +383,88 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    // Shimmer device methods for ShimmerController compatibility
+    fun connectShimmerDevice(
+        address: String, 
+        name: String, 
+        connectionType: com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid.BT_TYPE,
+        callback: (Boolean) -> Unit
+    ) {
+        viewModelScope.launch {
+            val result = deviceManager.connectShimmerDevice(address, name, connectionType)
+            callback(result.isSuccess)
+        }
+    }
+
+    fun configureShimmerSensors(deviceId: String, sensorChannels: Set<String>, callback: (Boolean) -> Unit) {
+        // TODO: Implement Shimmer sensor configuration
+        callback(true) // Stub implementation
+    }
+
+    fun setShimmerSamplingRate(deviceId: String, samplingRate: Double, callback: (Boolean) -> Unit) {
+        // TODO: Implement Shimmer sampling rate configuration
+        callback(true) // Stub implementation
+    }
+
+    fun setShimmerGSRRange(deviceId: String, gsrRange: Int, callback: (Boolean) -> Unit) {
+        // TODO: Implement Shimmer GSR range configuration
+        callback(true) // Stub implementation
+    }
+
+    fun getShimmerDeviceInfo(deviceId: String, callback: (Any?) -> Unit) {
+        // TODO: Implement Shimmer device info retrieval
+        val stubInfo = object {
+            fun getDisplaySummary() = "Shimmer Device Info - Stub Implementation"
+        }
+        callback(stubInfo) // Stub implementation
+    }
+
+    fun getShimmerDataQuality(deviceId: String, callback: (Any?) -> Unit) {
+        // TODO: Implement Shimmer data quality retrieval
+        val stubQuality = object {
+            fun getDisplaySummary() = "Data Quality: Good - Stub Implementation"
+        }
+        callback(stubQuality) // Stub implementation
+    }
+
+    fun disconnectShimmerDevice(deviceId: String, callback: (Boolean) -> Unit) {
+        // TODO: Implement Shimmer device disconnection
+        callback(true) // Stub implementation
+    }
+
+    fun getFirstConnectedShimmerDevice(): Any? {
+        // TODO: Implement first connected Shimmer device retrieval
+        return object {
+            fun isStreaming() = false
+            fun isSDLogging() = false
+        } // Stub implementation
+    }
+
+    fun getShimmerBluetoothManager(): Any? {
+        // TODO: Implement Shimmer Bluetooth manager retrieval
+        return object {
+            // Stub Bluetooth manager
+        } // Stub implementation
+    }
+
+    fun isAnyShimmerDeviceStreaming(): Boolean {
+        // TODO: Implement Shimmer streaming check
+        return false // Stub implementation
+    }
+
+    fun isAnyShimmerDeviceSDLogging(): Boolean {
+        // TODO: Implement Shimmer SD logging check
+        return false // Stub implementation
+    }
+
+    fun startShimmerSDLogging(callback: (Boolean) -> Unit) {
+        // TODO: Implement Shimmer SD logging start
+        callback(true) // Stub implementation
+    }
+
+    fun stopShimmerSDLogging(callback: (Boolean) -> Unit) {
+        // TODO: Implement Shimmer SD logging stop
+        callback(true) // Stub implementation
+    }
+
 }
