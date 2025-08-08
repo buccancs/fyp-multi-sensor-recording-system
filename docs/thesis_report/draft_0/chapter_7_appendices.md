@@ -1348,6 +1348,8 @@ sections. Complete source code is available in the project repository.*
 
 ### G.1 Core Application Architecture - PythonApp/application.py
 
+**File Reference:** [\[G.1\]](PythonApp/application.py#L1-L50)
+
 ```python
 """Application class for multi-sensor recording system with dependency injection"""
 
@@ -1416,6 +1418,8 @@ class EnhancedApplication:
 ```
 
 ### G.3 Android Main Activity - AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt
+
+**File Reference:** [\[G.3\]](AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt#L1-L50)
 
 ```kotlin
 /**
@@ -3700,6 +3704,145 @@ For academic submission, the following diagram categories should be prioritised:
 1. **Achievement Visualisation** (Chapter 6)
     - Goal achievement timeline for research contribution demonstration
     - Performance excellence metrics for academic impact assessment
+
+### G.200 Master Clock Synchronization System - PythonApp/master_clock_synchronizer.py
+
+**File Reference:** [\[G.200\]](PythonApp/master_clock_synchronizer.py#L85-L106)
+
+```python
+def start(self) -> bool:
+    try:
+        self.logger.info("Starting master clock synchronization system...")
+        if not self.ntp_server.start():
+            self.logger.error("Failed to start NTP server")
+            return False
+        if not self.pc_server.start():
+            self.logger.error("Failed to start PC server")
+            self.ntp_server.stop()
+            return False
+        self.is_running = True
+        self.master_start_time = time.time()
+        self.sync_thread = threading.Thread(
+            target=self._sync_monitoring_loop, name="SyncMonitor"
+        )
+        self.sync_thread.daemon = True
+        self.sync_thread.start()
+        self.logger.info("Master clock synchronization system started successfully")
+        return True
+    except Exception as e:
+        self.logger.error(f"Failed to start synchronization system: {e}")
+        return False
+```
+
+### G.201 Shimmer Device Management - PythonApp/shimmer_manager.py
+
+**File Reference:** [\[G.201\]](PythonApp/shimmer_manager.py#L211-L232)
+
+```python
+if self.enable_android_integration:
+    self.logger.info("Initializing Android device integration...")
+    self.android_device_manager = AndroidDeviceManager(
+        server_port=self.android_server_port, logger=self.logger
+    )
+    self.android_device_manager.add_data_callback(
+        self._on_android_shimmer_data
+    )
+    self.android_device_manager.add_status_callback(
+        self._on_android_device_status
+    )
+    if not self.android_device_manager.initialize():
+        self.logger.error("Failed to initialize Android device manager")
+        if not PYSHIMMER_AVAILABLE:
+            return False
+        else:
+            self.logger.warning("Continuing with direct connections only")
+            self.enable_android_integration = False
+    else:
+        self.logger.info(
+            f"Android device server listening on port {self.android_server_port}"
+        )
+```
+
+### G.202 Android Shimmer Recording - AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt
+
+**File Reference:** [\[G.202\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L40-L80)
+
+```kotlin
+@Singleton
+class ShimmerRecorder
+@Inject
+constructor(
+    @ApplicationContext private val context: Context,
+    private val sessionManager: SessionManager,
+    private val logger: Logger,
+) {
+    private val isRecording = AtomicBoolean(false)
+    private val isInitialized = AtomicBoolean(false)
+    private val isConnected = AtomicBoolean(false)
+    private var currentSessionInfo: SessionInfo? = null
+    private var currentSessionId: String? = null
+    private var sessionStartTime: Long = 0L
+
+    private var bluetoothAdapter: BluetoothAdapter? = null
+    private var bluetoothManager: BluetoothManager? = null
+
+    private var samplingRate: Double = DEFAULT_SAMPLING_RATE
+    private var sampleCount: Long = 0L
+    private var dataWriter: FileWriter? = null
+
+    private val connectedDevices = ConcurrentHashMap<String, ShimmerDevice>()
+    private val deviceConfigurations = ConcurrentHashMap<String, DeviceConfiguration>()
+    private val dataQueues = ConcurrentHashMap<String, ConcurrentLinkedQueue<SensorSample>>()
+```
+
+### G.203 Android Connection Management - AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt
+
+**File Reference:** [\[G.203\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ConnectionManager.kt#L14-L50)
+
+```kotlin
+data class ConnectionPolicy(
+    val maxRetryAttempts: Int = 5,
+    val initialRetryDelay: Long = 2000L,
+    val maxRetryDelay: Long = 30000L,
+    val exponentialBackoff: Boolean = true,
+    val enableAutoReconnect: Boolean = true,
+    val healthCheckInterval: Long = 10000L,
+    val connectionTimeout: Long = 30000L,
+    val enableConnectionPersistence: Boolean = true
+)
+
+data class ConnectionHealth(
+    val deviceId: String,
+    val isHealthy: Boolean,
+    val lastSuccessfulConnection: Long,
+    val consecutiveFailures: Int,
+    val averageConnectionTime: Long,
+    val packetLossRate: Double,
+    val signalStrength: Int
+)
+```
+
+### G.204 Data Pipeline Processing - PythonApp/webcam/cv_preprocessing_pipeline.py
+
+**File Reference:** [\[G.204\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L73-L84)
+
+```python
+# Inside PhysiologicalSignal.get_heart_rate_estimate()
+freqs, psd = scipy.signal.welch(
+    self.signal_data,
+    fs=self.sampling_rate,
+    nperseg=min(512, len(self.signal_data) // 4),
+)
+hr_mask = (freqs >= freq_range[0]) & (freqs <= freq_range[1])
+hr_freqs = freqs[hr_mask]
+hr_psd = psd[hr_mask]
+if len(hr_psd) > 0:
+    peak_freq = hr_freqs[np.argmax(hr_psd)]
+    heart_rate_bpm = peak_freq * 60.0
+    return heart_rate_bpm
+```
+
+---
 
 #### H.4.2 Repository Organisation Recommendations
 
