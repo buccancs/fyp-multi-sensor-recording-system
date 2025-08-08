@@ -443,9 +443,10 @@ collection with ease of use and scientific integrity.
 
 ## Appendix F: Code Listings -- Selected Code Excerpts (Synchronisation, Data Pipeline, Integration)
 
-This appendix provides key excerpts from the source code to illustrate
-how critical aspects of the system are implemented. The following
-listings highlight the synchronisation mechanism, data processing
+**Code Reference Guide:** This appendix provides key excerpts from the source code to illustrate
+how critical aspects of the system are implemented. All code references use the format
+[\[Ref\]](FilePath#LineRange) to link to specific implementations in the repository.
+The following listings highlight the synchronisation mechanism, data processing
 pipeline, and sensor integration logic, with inline commentary:
 
 **1. Synchronisation (Master Clock Coordination):** The code below is
