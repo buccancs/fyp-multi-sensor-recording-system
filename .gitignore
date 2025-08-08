@@ -149,3 +149,6 @@ vale.tar.gz
 node_modules/
 package-lock.json
 package.json
+
+# Backup files
+*_backup.md

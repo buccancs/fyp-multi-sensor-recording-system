@@ -2,886 +2,1017 @@
 
 ## 4.1 System Architecture Overview (PC--Android System Design)
 
-The system is designed in a client--server architecture with a **central
-PC controller** coordinating multiple **Android capture devices**. The
-PC application serves as the master controller, discovering and
-connecting to each Android device over a local network. Each Android
-device runs a capture app responsible for recording sensor data and
-video, while the PC provides a unified interface to start/stop
-recordings and aggregate data. **Figure 4.1** illustrates this
-architecture: the PC communicates with each Android smartphone via Wi-Fi
-using a custom TCP/IP protocol, sending control commands and receiving
-live telemetry (video previews, sensor readings). The Android devices
-operate largely autonomously during capture -- each uses its own
-high-precision clock to timestamp data locally -- but all devices are
-synchronized to the PC's timeline through network time alignment. This
-design allows **multiple phones** to record simultaneously under one
-session, with the PC as the authoritative time base. The PC can also
-integrate **local hardware** (e.g. a webcam and GSR sensor connected
-directly) alongside the Android data. All captured modalities (video
-streams, audio, thermal data, GSR signals) are temporally aligned and
-later consolidated on the PC. The result is a distributed recording
-system in which heterogeneous data sources behave like a single
-synchronized apparatus. *Figure 4.1 should depict the overall system
-architecture, showing the PC controller, multiple Android devices, and
-the data flow between them (commands going out to devices, and
-streams/acknowledgments coming back).*
+The **Multi-Sensor Recording System** is implemented as a distributed
+architecture consisting of an Android mobile application and a
+Python-based desktop controller. The Android device functions as a
+sensor node responsible for data capture, while the PC acts as a central
+coordinator or hub. This **PC--Android system design** follows a
+master--slave paradigm in which the Python desktop application
+orchestrates one or more Android sensor nodes, achieving precise
+synchronised operation across all
+devices[\[1\]](AndroidApp/README.md#L8-L16)[\[2\]](PythonApp/README.md#L70-L78).
+The design balances device autonomy with centralised control: each
+Android device can operate independently for local sensor management and
+data logging, yet all devices participate in coordinated sessions
+managed by the desktop controller for unified timing and control.
+
+The architecture emphasizes **temporal synchronisation, reliability, and
+modularity**. A custom network communication layer links the mobile and
+desktop components, enabling command-and-control messages, status
+updates, and data previews over a Wi-Fi or LAN connection. The system
+employs event-driven communication patterns with robust error handling
+and recovery, ensuring that transient network issues or device glitches
+do not compromise the entire
+session[\[2\]](PythonApp/README.md#L70-L78).
+Each device buffers and locally stores data so that even if connectivity
+is lost momentarily, data collection can continue uninterrupted; once
+the connection is restored, the system can realign the data streams in
+time[\[3\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L162-L169).
+This fault-tolerant approach, combined with complete logging on
+both mobile and PC sides, guarantees data integrity and consistency
+throughout a recording session.
+
+*Figure 4.1: System architecture overview of the multi-sensor recording
+system. This diagram depicts the central* *desktop controller* *(PC)
+communicating with one or more* *Android devices* *over a network. Each
+Android device interfaces with onboard and external sensors (cameras,
+thermal sensor, GSR sensor) and handles local data acquisition and
+storage. The desktop controller provides a GUI for the user and runs
+coordination services (network server, synchronisation engine, data
+manager), sending control commands to the Android app and receiving live
+status and preview data. The design shows a* *hybrid star topology: the
+PC is the hub coordinating distributed mobile nodes, enabling
+synchronised start/stop triggers, real-time monitoring, and unified
+timekeeping across the system.*
 
 ## 4.2 Android Application Design and Sensor Integration
 
-On the Android side, the application is structured to handle
-**multi-modal data capture** in a coordinated fashion. At its core is a
-`RecordingController` class that manages all hardware components and
-recording tasks. This controller prepares each subsystem -- cameras (RGB
-and thermal), physiological sensors (GSR/PPG), microphone, etc. -- and
-triggers them in sync. When a recording session starts, the controller
-initializes a new session directory and then concurrently starts each
-enabled sensor/camera capture with nanosecond-precision
-timestamps[\[1\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L36-L45)[\[2\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L51-L59).
-Each modality's data is written to device storage in real time. The
-design relies on Android's modern libraries for robust performance:
-**CameraX** is used for efficient video and image capture, and the
-**Nordic BLE** library for reliable Bluetooth Low Energy communication
-with sensors. Crucially, all sensor readings and frames are timestamped
-using a monotonic clock source to ensure internal consistency. The app
-architecture cleanly separates concerns -- for example, camera handling
-is in a `RgbCameraManager`, thermal imaging in a `TopdonThermalCamera`
-module, and GSR sensing in a `ShimmerGsrSensor` class -- each exposing a
-common interface for the controller to start/stop streams. This modular
-design makes it easy to enable/disable features based on device
-capabilities (e.g. if a phone has no thermal camera attached, that
-module remains inactive). It also simplifies synchronization logic,
-since the controller can treat each data source uniformly (start all,
-stop all) and trust each to timestamp its output. The following
-subsections detail the integration of the **Topdon thermal camera** and
-**Shimmer GSR sensor** in the Android app.
+The **Android application** is a complete sensor data collection
+platform that integrates the phone's native sensors (e.g. camera) with
+external devices. It is developed in Kotlin and structured using a clear
+**layered architecture** to separate concerns. The app follows an MVVM
+(Model--View--ViewModel) design, where a thin UI layer
+(Activities/Fragments and ViewModels) interacts with a robust **business
+logic layer** of managers and controllers, which in turn utilise
+lower-level sensor interfacing components. This design maximises
+modularity and maintainability, allowing each sensor modality to be
+managed independently while ensuring all subsystems remain synchronised.
+Key architectural components include a `SessionManager` for coordinating
+recording sessions, a `DeviceManager` for handling attached sensor
+devices, and a `ConnectionManager` for managing the network link to the
+PC
+controller[\[4\]](AndroidApp/README.md#L82-L90).
+The data acquisition layer comprises specialised recorder classes for
+each modality -- e.g. a `CameraRecorder` for the phone's RGB camera, a
+`ThermalRecorder` for the USB thermal camera, and a `ShimmerRecorder`
+for the GSR sensor -- each encapsulating the details of interfacing with
+that sensor
+hardware[\[5\]](AndroidApp/README.md#L88-L96).
+These recorders feed sensor data into the session management framework
+and ultimately into local storage, while also forwarding preview data
+through the network layer for remote monitoring. The app makes heavy use
+of Android's asynchronous capabilities (threads, Handler, and
+coroutines) to handle high data rates and multiple sensors in parallel,
+ensuring that operations like writing to storage or processing sensor
+inputs do not block the user interface. Dependency injection (via Hilt)
+is utilised to manage the complexity of cross-cutting concerns like
+logging and configuration, further decoupling components.
+
+Importantly, the Android application is built to facilitate **precise
+time alignment** of multi-modal data at the point of capture. All sensor
+readings and frames are timestamped using a common reference (system
+clock or a synchronised clock source) as they are recorded. For example,
+when a recording session begins under remote command, the app
+initialises each sensor nearly simultaneously and tags the data with
+timestamps that can later be correlated across devices. The Android app
+also includes on-device preprocessing features -- for instance, a **hand
+region segmentation** module uses MediaPipe to detect hand landmarks in
+the camera frame in
+real-time[\[6\]](AndroidApp/README.md#L50-L54).
+This can aid in focusing analysis on specific regions of interest (such
+as the subject's hand or face in the thermal imagery) without requiring
+external post-processing. The overall Android design thus serves as a
+flexible yet controlled data collection node that seamlessly integrates
+heterogeneous sensors under a unified workflow.
+
+*(Figure 4.2: Layered design of the Android application. The figure
+outlines the app's architecture with four layers: a* *presentation
+layer* *(UI and ViewModels for user interaction and state), a* *business
+logic layer* *(managers like SessionManager, DeviceManager, and
+ConnectionManager coordinating recording and devices), a* *data
+acquisition layer* *(sensor-specific recorder modules for camera,
+thermal, and GSR, as well as processing components like hand
+segmentation), and an* *infrastructure layer* *(network communication
+client, local storage handlers, and performance monitors). Arrows
+illustrate the flow: user actions in the UI invoke ViewModel updates,
+which delegate to managers that control the sensor recorders. The
+recorders produce data that is stored locally and also sent through the
+network layer to the PC. This diagram highlights modular separation:
+each sensor integration is implemented in its own module, all
+orchestrated by the central session manager.)*
 
 ### 4.2.1 Thermal Camera Integration (Topdon)
 
-Integrating the **Topdon TC001** thermal camera on Android required
-using USB host mode and a UVC (USB Video Class) library. The app
-utilizes the open-source **Serenegiant USB Camera** library (UVCCamera)
-to interface with the device. A dedicated class `TopdonThermalCamera`
-implements the `ThermalCamera` interface and encapsulates all thermal
-camera functionality. When the camera is physically connected via USB-C,
-an **Android USB monitor** detects the device. The `TopdonThermalCamera`
-registers a `USBMonitor.OnDeviceConnectListener` to handle attachment
-events. On a successful connection, it opens the UVC device and
-configures it to a desired frame size and mode before starting the video
-stream[\[3\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L84-L92).
-By default, the camera is set to its **native thermal resolution**
-(256×192 pixels) and begins previewing immediately on a background
-thread.
+One of the distinguishing features of the system is its **thermal
+imaging capability**, achieved by integrating a Topdon TC001 thermal
+camera with the Android device. The Topdon thermal camera is a USB-C
+accessory providing infrared imaging, and it is supported in the app via
+the manufacturer's SDK. The integration was designed to enable
+**real-time thermal video capture** alongside the phone's regular
+camera. To use the thermal camera, the Android device serves as a USB
+host (via OTG), and the app interfaces with the camera through the SDK's
+APIs for device discovery, configuration, and frame
+retrieval[\[7\]](docs/thermal_camera_integration_readme.md#L22-L31).
+When the thermal camera is connected, the app's `ThermalRecorder`
+component handles the entire lifecycle: it listens for USB attach
+events, requests permission from the Android USB system to access the
+device, and initialises the camera
+feed[\[8\]](docs/thermal_camera_integration_readme.md#L76-L84)[\[9\]](docs/thermal_camera_integration_readme.md#L88-L94).
+The Topdon TC001 supports a sensor resolution of 256×192 pixels with a
+frame rate of 25 FPS, which the app configures as the default thermal
+video
+mode[\[10\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L53-L61).
+These parameters (resolution, frame rate, calibration settings) can be
+adjusted via a `ThermalCameraSettings` configuration to trade off image
+detail vs. performance, but by default the system uses the full
+available resolution and a frame rate that matches typical thermal
+camera capabilities.
 
-For each incoming thermal frame, the library provides a framebuffer in
-ByteBuffer format. The implementation registers a frame callback to
-retrieve this data stream. In the callback, the code reads the raw
-temperature data from the ByteBuffer as an array of 16-bit or 32-bit
-values (depending on the camera's output format). In this system, the
-Topdon camera delivers a full temperature matrix for each frame -- the
-code treats it as an array of floats representing per-pixel temperature
-readings[\[4\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L54-L62).
-The `TopdonThermalCamera` writes each frame's data to a CSV file: each
-row corresponds to one frame, beginning with a high-resolution timestamp
-(in nanoseconds), followed by the temperature values of all 49,152
-pixels (256×192) in that
-frame[\[4\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L54-L62).
-This exhaustive logging yields a large but information-rich dataset,
-essentially a thermal video recorded as numeric data per frame. To
-manage performance, the thermal capture runs in its own thread context
-(inside the UVCCamera library's callback) so that writing to disk does
-not block the main UI or other sensors. The system foregoes any heavy
-processing on these frames in real-time; it simply dumps the raw
-temperature grid to file and uses a lightweight callback to notify the
-controller after each frame is saved. In the `RecordingController`, a
-lambda hook is provided to receive a reference when a new thermal frame
-file is saved, which is used to mark events (for synchronization or
-debugging) via a Lab Streaming Layer
-marker[\[5\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L28-L32).
-*Figure 4.2 should show the thermal camera integration flow --- the
-Topdon device connected to the phone via USB, the data path through the
-UVCCamera library, and the logging of frame data to storage.*
+Captured thermal frames consist of both a thermal image (usually
+represented as a colour or grayscale thermogram) and underlying
+temperature data for each pixel. The `ThermalRecorder` obtains each
+frame from the SDK callback in a background thread to avoid stalling the
+UI. Each frame is timestamped with a high-resolution timestamp
+(synchronised to the system clock or a master clock) and placed into a
+queue for processing and storage. The app writes the raw thermal data
+stream to a file in real-time during recording -- typically this is a
+proprietary binary format that includes a header (with metadata like
+resolution, frame rate, and possibly calibration parameters) followed by
+a sequence of frames, each prefixed with its
+timestamp[\[11\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L26-L34)[\[12\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L38-L41).
+This raw log allows precise post-hoc analysis of temperature values. In
+parallel, the app can generate visible thermal images (e.g., JPEG
+frames) from the raw data for quick preview or user feedback. The
+`ThermalRecorder` optionally provides a downsampled live preview feed:
+it converts incoming thermal frames to a viewable image (applying a
+colormap and scaling) and streams these preview frames over the network
+to the desktop
+controller[\[13\]](AndroidApp/README.md#L146-L154)[\[14\]](AndroidApp/README.md#L160-L168).
+This gives the researcher immediate visual feedback of the thermal
+camera's view, which is invaluable for ensuring the sensor is aimed
+correctly and functioning during a session.
 
-Because the Topdon camera operates over USB, the app also handles
-permission requests and device registration. The `TopdonThermalCamera`
-calls `usbMonitor.register()` during app start to begin listening for
-devices[\[6\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L28-L36),
-and unregisters on app pause to release resources. If the device is
-present, the user is prompted to grant the app access. Once granted, the
-`TopdonThermalCamera.open()` method uses the USBMonitor to obtain a
-control block and create a `UVCCamera`
-instance[\[7\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L80-L88).
-The camera is then configured and flagged as *connected*. At that point,
-if a preview display surface is available (e.g., a small on-screen
-preview window in the app), it can be attached via
-`startPreview(surface)` to render the thermal feed
-live[\[8\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L36-L44).
-Previewing is optional for headless operation; whether or not preview is
-shown, frames are being captured and logged. Stopping the thermal camera
-involves stopping the preview (if any), disabling the frame callback,
-closing the file writer, and destroying the UVC camera
-instance[\[9\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L66-L74)[\[10\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L76-L84).
-This orderly shutdown ensures the USB device is released for future
-sessions. Overall, the Topdon integration provides **frame-synchronized
-thermal imaging**, with each frame's precise capture time recorded -- a
-cornerstone for later aligning thermal data with RGB video and
-physiological signals.
+Integrating the Topdon camera posed several challenges which were
+addressed in design. First, USB power and bandwidth management on the
+mobile device had to be considered -- the app monitors device
+attach/detach events and gracefully handles unexpected disconnects (for
+example, if the camera is unplugged mid-session, the system logs a
+warning and the recorder stops, but other sensors continue unaffected).
+Additionally, to maintain synchronisation with other data, the thermal
+frames are timestamped in the same epoch as the phone's video frames and
+GSR samples; this enables the **thermal data to be temporally aligned**
+with the RGB video and physiological signals during analysis. The result
+is a tightly coupled thermal imaging module that extends the Android
+phone's sensing capabilities with minimal latency. **Thermal camera
+integration is fully incorporated into the session workflow** -- the
+user can toggle thermal recording on or off for a session, and if
+enabled, the system will automatically initialise the Topdon device and
+begin capturing when the session starts (under PC command), then
+finalise and close the device when the session ends. All these steps
+occur behind the scenes, preserving a seamless user experience.
+
+*(Figure 4.3: Thermal camera integration flow. This figure illustrates
+how the Android app interfaces with the Topdon TC001 thermal camera via
+USB. When the camera is plugged in, the app's USB listener requests
+permission from the Android OS and initialises the Topdon SDK. During a
+recording session, the app continuously pulls thermal frames from the
+camera at \~25 Hz. Each frame is time-stamped and written to local
+storage as part of a thermal data file, and simultaneously a scaled
+preview image is sent over the network to the PC for real-time
+monitoring. The diagram also highlights the coordination required: the
+PC's "start recording" command triggers the camera initialisation
+(opening the USB device and starting capture) almost concurrently with
+other sensors, ensuring the thermal stream is synchronised with the
+overall session timeline.)*
 
 ### 4.2.2 GSR Sensor Integration (Shimmer)
 
-The Android app connects to a **Shimmer3 GSR+ sensor** to record
-Galvanic Skin Response (GSR) and photoplethysmography (PPG) data.
-Integration is done via **Bluetooth Low Energy (BLE)**. The
-`ShimmerGsrSensor` class extends Nordic's `BleManager` to handle the GSR
-sensor's BLE protocol. The Shimmer3 GSR+ device advertises a custom GATT
-service (proprietary to Shimmer) which the app accesses using known
-UUIDs. In the code, the service and characteristic UUIDs for the
-Shimmer's BLE interface are defined as
-constants[\[11\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L16-L24).
-The Shimmer uses a communication scheme akin to a UART-over-BLE: one
-characteristic (TX) is used to send commands to the sensor, and another
-(RX) is used by the sensor to send continuous data notifications to the
-app. The app's `ShimmerGsrSensor` knows the specific byte commands to
-control streaming -- for this sensor, sending `0x07` starts the live
-data stream and `0x20` stops
-it[\[11\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L16-L24)[\[12\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L52-L60).
+In addition to imaging, the system incorporates a **physiological
+sensor** -- specifically, a Shimmer3 GSR+ device -- to record galvanic
+skin response (electrodermal activity), and optionally other signals
+like photoplethysmogram (PPG) and motion from the Shimmer's on-board
+sensors. The Shimmer3 GSR+ is a research-grade wearable sensor that
+connects via Bluetooth. The Android application's `ShimmerRecorder`
+module manages the **Bluetooth communication** and data logging for this
+device. On application startup or when the user chooses to connect a
+Shimmer sensor, the app scans for available Bluetooth devices and pairs
+with the Shimmer (using its default PIN and name if needed). The
+integration leverages the Shimmer Android SDK provided by Shimmer
+Research, which offers an API (`ShimmerBluetoothManagerAndroid` and
+related classes) to handle the low-level Bluetooth link and streaming of
+sensor
+data[\[15\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L16-L24)[\[16\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L66-L73).
+Once connected, the app configures the Shimmer device to enable the
+desired sensor channels and sampling rate. By default, the system
+activates the GSR channel (skin conductance) on the Shimmer, as well as
+the PPG channel and basic kinematic channels (accelerometer axes) for
+context, using a sampling rate of 51.2 Hz for physiological
+signals[\[17\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L106-L114).
+The GSR range is set to an appropriate setting (e.g. ±4 µS range) to
+capture typical skin conductance
+levels[\[18\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L108-L116).
+These defaults can be adjusted through the app's settings interface if
+needed.
 
-When a Shimmer sensor is enabled in the app's configuration, the
-`RecordingController` will create a `ShimmerGsrSensor` instance at
-startup and keep it
-ready[\[13\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L26-L34)[\[5\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L28-L32).
-Upon beginning a recording session, if GSR recording is turned on, the
-controller invokes `physiologicalSensor.startStreaming(...)` with a file
-writer for
-output[\[14\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L39-L47).
-Internally, this triggers the BLE manager to connect (if not already
-connected) and then write the **Start Streaming** command (0x07) to the
-sensor's TX
-characteristic[\[12\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L52-L60).
-The Shimmer device responds by sending a stream of notifications
-(typically at 128 Hz) on the RX characteristic, each containing the
-latest GSR and PPG readings. The `ShimmerGsrSensor` sets up a
-notification callback in its GATT callback's `initialize()` method to
-handle incoming data
-packets[\[15\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L69-L77).
-As data arrives, the `onShimmerDataReceived()` function parses the byte
-payload according to Shimmer's data
-protocol[\[16\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L84-L92).
-The first byte acts as an identifier (0x00 indicates standard data
-packet), and subsequent bytes contain the sensor readings. In each
-8-byte packet, there are two bytes for PPG and two bytes for GSR, among
-other info. The app reconstructs the 16-bit raw values for PPG and GSR
-from the byte
-sequence[\[17\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L86-L94).
-The GSR reading includes a range indicator encoded in the top bits,
-because the Shimmer3 employs multiple gain ranges for skin conductance.
-The implementation extracts the range and applies the appropriate
-conversion formula to derive the resistance, then inverts it to get
-conductance (microsiemens). This conversion is done exactly as per
-Shimmer's guidelines: for example, if the range bit indicates 40.2kΩ
-resistor, the formula used is *GSR (µS) = (1 / R)*1000, where R is
-computed from the 14-bit ADC value using that
-resistor\*[\[18\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L94-L101).
-Similar piecewise formulas are used for the other ranges (287kΩ, 1MΩ,
-3.3MΩ)[\[18\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L94-L101).
-After conversion, each data point consists of a timestamp, a GSR value
-(in µS), and a raw PPG value.
+Data from the Shimmer sensor arrives as a stream of packets, each
+containing a set of measurements (GSR, PPG, etc.) with a timestamp from
+the Shimmer's internal clock. The `ShimmerRecorder` runs a dedicated
+handler thread that listens for incoming data packets via the Shimmer
+SDK's callback
+system[\[19\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L126-L134)[\[20\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L139-L147).
+As each packet is received, the app immediately records a corresponding
+system timestamp and then parses the sensor values. The data is buffered
+and written to a CSV text file in real-time, which serves as the session
+log for physiological data. A single line in this CSV file might
+include: a timestamp (in milliseconds) from the phone's perspective, the
+original device timestamp from the Shimmer (for reference or
+redundancy), the GSR conductance value (in microsiemens), PPG readings
+(raw or processed), acceleration values, and the sensor's battery
+level[\[21\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L112-L120).
+For example, the header used in the CSV clearly enumerates these fields:
+*Timestamp_ms, DeviceTime_ms, SystemTime_ms, GSR_Conductance_uS,
+PPG_A13, Accel_X_g, ... Battery_Percentage*,
+etc.[\[21\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L112-L120).
+By storing both the device-reported time and the system time on
+reception, the system can later assess any clock drift or transmission
+delay and correct for it in analysis.
 
-Every GSR/PPG sample is immediately written to a CSV file by the app.
-The `ShimmerGsrSensor` maintains a file writer stream; on starting, it
-writes a header line (`timestamp_ns, GSR_uS, PPG_raw`) and then appends
-each new sample as a new
-line[\[12\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L52-L60)[\[19\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L103-L111).
-The timestamp is pulled from the app's
-`TimeManager.getCurrentTimestampNanos()` to ensure consistency with how
-other modalities are
-timed[\[17\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L86-L94).
-In addition to logging to file, the app feeds the live data into an
-in-memory stream for sync with video: the `RecordingController` provides
-a callback to `startStreaming()` that pushes each sample into a local
-**Lab Streaming Layer (LSL)** outlet named
-`"Android_GSR"`[\[14\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L39-L47).
-This allows GSR data to be shared or monitored in real time (e.g.,
-plotted on the phone or streamed to PC) without interrupting the file
-recording. The BLE manager handles the connection in a background
-thread, so incoming notifications do not block the UI. If the BLE
-connection drops or has an error, the Nordic library's built-in retry
-mechanism attempts reconnection up to 3 times with a short
-delay[\[20\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L39-L45).
-The app also provides graceful shutdown: when recording stops, it sends
-the stop command (0x20) to halt
-streaming[\[21\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L61-L65),
-and closes the file writer. This ensures the CSV is properly finalized.
-Overall, the Shimmer integration brings in high-resolution physiological
-data synchronized with video. *Figure 4.3 should depict the Shimmer GSR
-integration, showing the Android device connected to the Shimmer sensor
-via BLE, and the data flow from the sensor to the app (BLE packets being
-converted to meaningful GSR/PPG values and logged to storage).*
+Similar to the thermal module, the Shimmer integration includes a **live
+data streaming** capability for monitoring. The `ShimmerRecorder` can
+forward sampled data (e.g., the latest GSR value) over the network
+socket to the desktop in real-time (the code maintains an optional
+socket connection for sensor streaming on a specified
+port)[\[22\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L74-L82)[\[23\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L76-L84).
+On the desktop side, these incoming samples could be displayed as a live
+graph or used to trigger alerts if, say, a physiological threshold is
+exceeded during the experiment. However, the primary storage of GSR data
+is on the Android device, ensuring no data loss if the network is
+lagging. The system also has built-in safeguards: if the Bluetooth
+connection to the Shimmer drops during recording, the app will attempt
+to reconnect up to a few times (with short delays)
+automatically[\[24\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L114-L122).
+All reconnection attempts and any data gaps are logged. In practice,
+maintaining a stable Bluetooth link was a known challenge due to
+interference and mobile OS power management, so the implementation uses
+Android's modern Bluetooth APIs (with runtime permission handling for
+Android 12+ where coarse and fine location permissions are required to
+scan/connect)[\[25\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L86-L95)[\[26\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L96-L104).
+By handling both the legacy and new permission models, the app ensures
+compatibility across a range of Android OS versions.
+
+Overall, the **Shimmer GSR integration** extends the Android app with
+the capability to capture high-quality physiological signals in sync
+with video and thermal data. The modular design of the `ShimmerRecorder`
+means this component can start and stop recording in tandem with other
+sensors under the control of the central session manager. When a session
+begins, the app (upon receiving the command from PC) will initialise the
+Bluetooth link, start the data stream, and begin logging GSR. When the
+session ends, it closes the connection and finalises the CSV file. The
+data recorded provides a ground-truth physiological timeline (skin
+conductance changes over time) that can be later correlated with the
+subject's visual and thermal data to draw insights about stress or
+arousal.
+
+*(Figure 4.4: GSR sensor (Shimmer3) integration. The figure shows the
+Shimmer GSR+ device wirelessly connected to the Android smartphone via
+Bluetooth. In a recording session, the Android app subscribes to the
+Shimmer's data stream, receiving packets that contain GSR and PPG
+readings. These data packets are timestamped and logged on the phone.
+The figure highlights the flow from* *sensor electrodes on the subject,
+through the Shimmer device's analogue front-end (measuring skin
+conductance), transmitted over Bluetooth to the phone, and then into the
+app's data recording pipeline. Any loss of connection triggers the app's
+reconnection logic, ensuring continuity of data. A small real-time graph
+icon on the PC side suggests that as data is recorded, key values (like
+GSR level) are also sent to the desktop for live display.*)
 
 ## 4.3 Desktop Controller Design and Functionality
 
-The desktop controller is a **cross-platform application** (tested on
-Windows, Linux, macOS) built with Qt for the GUI (PyQt6/PySide6) and
-Python 3 for logic, augmented by performance-critical C++ components.
-Its design follows a **modular MVC-like pattern**: the UI is separated
-into tabs corresponding to major functionalities (e.g., device
-management/dashboard, live monitoring, playback/annotation, settings).
-When the controller starts, it initializes a main window with a tabbed
-interface[\[22\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L112-L120).
-The primary **Dashboard tab** provides an overview of connected devices
-and local sensors. For example, it can display live video feeds and GSR
-plots in a grid layout -- the code sets up a QLabel for a video preview
-and a pyqtgraph PlotWidget for GSR on the
-dashboard[\[23\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L140-L149).
-A **Logs tab** captures real-time system messages (status updates,
-errors) for
-debugging[\[24\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L114-L122)[\[25\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L144-L148).
-Another tab for **Playback & Annotation** is prepared to allow review of
-recorded
-sessions[\[26\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L116-L124).
-Each tab's UI elements are created and managed in an organized way
-(using Qt layouts), making the interface flexible and scalable to
-multiple devices.
+The **desktop controller** is a Python application with a rich graphical
+user interface that serves as the command centre for the entire
+multi-sensor system. It is built using the PyQt5 framework for the GUI,
+combined with a suite of backend services and managers that handle
+device communication, data management, and synchronisation.
+Architecturally, the desktop application is divided into layers and
+components that mirror many responsibilities of the Android app, but at
+a higher coordination level. A **Presentation Layer** includes the main
+window and various UI panels (tabs) that the researcher interacts with:
+for example, a *Devices* tab to manage connected devices, a *Recording*
+tab to start/stop sessions and view live previews, a *Calibration* tab
+for camera calibration procedures, and a *Files/Analysis* tab for
+reviewing recorded data. This UI is designed to be intuitive, providing
+real-time feedback on system status (device connection state, battery
+levels, recording progress,
+etc.)[\[27\]](PythonApp/README.md#L46-L54).
 
-Under the hood, the PC controller employs several background threads and
-helpers to manage networking and data processing without freezing the
-GUI. A dedicated **WorkerThread** (a QThread subclass) is responsible
-for all communication with Android
-devices[\[27\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L32-L40).
-When the user initiates a connection to a device, this worker thread
-opens a TCP socket to the Android's IP and
-port[\[28\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L53-L61).
-The thread then runs an event loop receiving JSON messages from the
-device. It parses incoming messages and emits Qt signals to the main
-thread for handling UI updates. For instance, if a connected Android
-phone sends a preview frame update, the worker decodes the
-base64-encoded image bytes to a QImage and emits a `newPreviewFrame`
-signal carrying the image and device
-identifier[\[29\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L64-L72).
-The main GUI thread connects this signal to a slot that displays the
-frame in the dashboard (e.g., updating the corresponding QLabel's
-pixmap). The worker also handles command responses: every command sent
-to a device includes a unique ID, and the device's reply includes an
-`ack_id` with status info. When the worker sees a response, it checks
-the type. A `"capabilities_data"` status, for example, contains the list
-of cameras the device has -- the worker emits `camerasReceived` with
-that list so the UI can populate camera
-options[\[30\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L74-L81).
-This asynchronous message-passing design keeps the GUI responsive and
-allows the PC to manage multiple devices simultaneously by spawning
-separate threads (or tasks) per connection. The application uses
-**Zeroconf (mDNS)** to simplify device discovery: on startup, the PC
-browses for services of type `_gsr-controller._tcp` on the local
-network. Each Android device advertises itself with that service type
-and a name like "GSR Android Device
-\[Model\]"[\[31\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/network/NsdHelper.kt#L34-L41).
-The PC can thus list available devices and their addresses
-automatically, eliminating manual IP entry.
+Beneath the UI, the **Application Layer** of the desktop controller
+contains core logic components. The central piece is often called the
+`Application Controller` or `Session Manager` on the PC side -- this
+orchestrates the overall workflow of a recording session (responding to
+user inputs from the UI, coordinating timing, and updating UI status).
+Complementing it are specialised managers such as a `DeviceManager` (to
+keep track of all connected Android devices and other sensors like USB
+webcams), a `CalibrationManager` (for handling multi-camera calibration
+routines using OpenCV), and possibly a `StimulusController` if the
+system supports presenting stimuli (like images or sounds) to the
+subject during the
+experiment[\[28\]](PythonApp/README.md#L82-L91).
+Each of these components encapsulates a distinct piece of functionality,
+following a clear separation of concerns. For instance, the
+`DeviceManager` handles discovery of devices and maintaining connection
+info, but delegates the actual communication to a lower-level network
+service; the `CalibrationManager` encapsulates the procedures for
+capturing calibration images from cameras and computing calibration
+parameters without cluttering the main application logic.
 
-A standout feature of the PC controller is its **native C++ backend**
-for time-sensitive hardware interaction. This is implemented as a Python
-extension module (built via PyBind11) named `native_backend`. It
-provides classes `NativeWebcam` and `NativeShimmer` which run in
-background threads and feed data to the Python layer with minimal
-latency[\[32\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L126-L135).
-The controller instantiates these at startup: for example,
-`NativeWebcam(0)` opens the local webcam (device 0) and begins capturing
-frames in a
-loop[\[33\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L126-L134),
-and `NativeShimmer("COM3")` connects to a Shimmer GSR device via a
-serial port (in this case COM3 on
-Windows)[\[33\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L126-L134).
-These native objects are started immediately and run independently of
-the Python GIL, pushing data into thread-safe queues. The GUI uses a
-QTimer tick (every \~16 ms) to periodically retrieve the latest data
-from the native
-threads[\[34\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L132-L140)[\[35\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L150-L159).
-On each tick, it pulls a frame from the webcam class (as a NumPy array)
-and updates the corresponding video
-label[\[36\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L150-L158).
-Similarly, it polls the Shimmer class for new GSR samples and updates
-the live
-plot[\[37\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L154-L159).
-The use of a C++ backend drastically improved performance: the webcam
-thread captures at a fixed \~60 FPS by sleeping \~16ms per
-iteration[\[38\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L80-L88),
-and yields frames without significant buffering, while the Shimmer
-thread reads sensor bytes as fast as they arrive (128 Hz) with precise
-timing. Both use lock-free queues to decouple production and consumption
-of
-data[\[39\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L22-L31)[\[40\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L94-L101).
-The C++ code directly converts camera frames to a shared memory buffer
-that is exposed to Python as a NumPy array without
-copying[\[41\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L66-L74),
-and similarly packages GSR readings into Python
-tuples[\[42\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L193-L201)[\[43\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L200-L208).
-This design minimizes overhead and latency/jitter -- an imperative for
-synchronizing local PC data with remote device data.
+At the next level, the desktop app includes a set of **Service Layer**
+or backend components that handle specific types of I/O and processing.
+Notable among these are the **Network Service**, which implements the
+socket server that listens for connections from Android devices, the
+**Webcam Service** for controlling any USB cameras attached to the PC
+(if the study uses external webcams in addition to phone cameras), the
+**Shimmer Service** for direct PC-to-Shimmer connectivity, and a **File
+Service** for managing data storage on the PC
+side[\[29\]](PythonApp/README.md#L88-L96).
+The presence of both an Android Shimmer integration and a PC Shimmer
+service is intentional -- the system is flexible to support different
+configurations. In scenarios where an Android phone is used by a
+subject, that phone might handle the Shimmer data as described in
+Section 4.2.2. However, the desktop application is also capable of
+directly connecting to Shimmer sensors via a Bluetooth dongle if needed
+(for example, in a lab setting where the PC is in range of the Shimmer,
+the researcher might choose to let the PC record GSR data directly). The
+design thus provides **multi-path integration** for sensors to improve
+robustness; the `ShimmerManager` on the PC can accept data from either
+direct Bluetooth or through the Android (which relays it). This
+multi-library support with fallback ensures that even if one pipeline
+has an issue, the data can still be collected via the
+other[\[30\]](docs/python_desktop_controller_readme.md#L145-L153).
 
-Beyond live monitoring, the desktop app includes tools for
-**post-session analysis**. The **Playback & Annotation** tab (Figure
-4.4) is designed to load the recorded video files (RGB and thermal)
-along with sensor data and allow the user to replay the session in a
-synchronized fashion. Internally, the controller uses libraries like
-*PyAV* (wrapping FFmpeg) to read video files and *pyqtgraph* for
-plotting time-series data like GSR. The user can seek through the
-timeline; the app will display the video frame at that time and the
-corresponding point on the GSR plot, maintaining alignment via
-timestamps. Annotation functionality enables adding notes at specific
-times -- these could be saved in a sidecar file or embedded in a
-metadata structure for the session. Another part of the PC software is
-the **Calibration utility**, which helps calibrate cameras after
-recordings. Using OpenCV, it can detect calibration patterns
-(chessboards or ChArUco markers) in the raw RGB frames to calculate each
-camera's intrinsic parameters, and if multiple cameras (e.g. a phone's
-RGB and thermal, or phone and PC webcam) observed the same pattern, it
-can compute extrinsic calibration between them. The results (camera
-matrices, distortion coefficients, transformation matrices) are saved
-for use in data analysis, ensuring that researchers can accurately map
-thermal and RGB imagery. Finally, a **Data Export** feature allows
-converting a session's dataset into formats like MATLAB `.mat` files or
-HDF5. This is done by reading the CSVs and video files from the session,
-packaging the data (often downsampled or compressed as needed) into a
-single file per session for convenient distribution or analysis. In
-summary, the desktop controller is both the live "mission control"
-during data acquisition and a post-processing suite, all implemented in
-a cohesive application. *Figure 4.4 should show the PC controller's GUI
-layout -- for instance, a screenshot or schematic with the Dashboard tab
-displaying live video thumbnails and GSR plots, and perhaps the Playback
-tab with a video player and timeline chart.*
+All these services feed into the **Infrastructure Layer** on the PC,
+which includes cross-cutting concerns like logging, synchronisation, and
+error
+handling[\[31\]](PythonApp/README.md#L94-L101).
+A dedicated **Synchronisation Engine** runs on the desktop to maintain
+the master clock and align time across devices (details in Section 4.4).
+A global **Logging system** records events from all parts of the
+application (e.g., device connect/disconnect, commands sent, errors,
+etc.) for debugging and audit
+purposes[\[31\]](PythonApp/README.md#L94-L101).
+An **Error Handler** and a **Performance Monitor** track the health of
+the system, issuing warnings or recovering from failures (for example,
+if a device disconnects unexpectedly, the UI will show an alert and the
+system will attempt reconnection or gracefully disable that device for
+the
+session)[\[31\]](PythonApp/README.md#L94-L101).
 
-## 4.4 Communication Protocol and Synchronization Mechanism
+From a **functionality** perspective, the desktop controller provides
+the researcher with a one-stop interface to **manage multi-device
+recording sessions**. Using the UI, the user can configure an experiment
+session (select which devices/sensors are active, set participant or
+session metadata, etc.), then initiate a synchronised start. When the
+user hits \"Start\", the controller sends out start commands to all
+connected Android devices (and starts any local recordings like webcams
+or Shimmer) nearly
+simultaneously[\[32\]](PythonApp/README.md#L172-L180)[\[33\]](PythonApp/README.md#L175-L183).
+During recording, the PC displays live previews -- for instance, a
+thumbnail video feed from each Android's camera, as well as numeric
+readouts or simple plots of sensor data like GSR -- giving confidence
+that all modalities are functioning. It also updates status indicators
+(battery levels of phones, available storage, current timestamp offsets,
+etc.) in real time. The PC periodically checks that all devices are
+still synchronised (drift monitoring) and can even warn if, say, an
+Android device's clock starts diverging or if data throughput from a
+device is lagging. When the user stops the session, the controller
+issues a synchronised stop command to all devices and awaits
+confirmation that each has safely finalised its data. It then collates
+metadata about the session (e.g., file names from each device, any
+timing offsets, calibration info) and can present a summary or save a
+session manifest.
 
-A custom **communication protocol** connects the PC controller with each
-Android device, built on TCP/IP sockets with JSON message payloads.
-After the PC discovers an Android device (via Zeroconf), it initiates a
-TCP connection to the device's advertised port. The Android app runs a
-lightweight TCP server to accept this connection. All commands from PC
-to Android are sent as JSON objects with a schema like:
-`{"id": <command_id>, "command": "<action>", "params": { ... }}`[\[44\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L89-L97).
-The device, upon receiving a command, executes the requested action and
-then replies with a JSON response containing the original `id` (as
-`ack_id`) and a status or result. For example, the first command the PC
-sends is `"query_capabilities"`, which asks the phone to report its
-hardware
-capabilities[\[28\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L53-L61).
-The Android app responds with a message like
-`{"ack_id": 1, "status": "capabilities_data", "capabilities": { ... }}`
-including details such as available cameras (with their identifiers,
-resolutions, and frame
-rates)[\[30\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L74-L81).
-This exchange allows the PC to dynamically adjust to each device -- for
-instance, listing the camera options or knowing if the thermal sensor is
-present. Another command might be `"start_recording"`, which instructs
-the Android to begin a new recording session. The phone will then
-initiate all its sensors (cameras, etc.) and reply with an
-acknowledgment (`"status": "ok"`) once recording has successfully
-started. Similarly, a `"stop_recording"` command stops all captures and
-finalizes files.
+Additionally, the desktop application includes utility features: a
+**camera calibration tool** (leveraging OpenCV -- the researcher can
+collect images of a chessboard pattern from the different cameras to
+calculate calibration and alignment between, say, a phone's RGB camera
+and the thermal camera), and a **stimulus presentation module** which
+can display images or play audio on a connected screen as part of a
+study protocol. These are implemented as part of the UI and controlled
+through the same session manager to ensure any stimuli are timestamped
+and synchronised with the sensor data.
 
-In addition to explicit commands, the protocol supports **continuous
-data streaming** for live previews. While a session is idle or
-recording, the Android app periodically sends `"preview_frame"` messages
-containing a downsampled frame from the camera preview encoded as a
-base64 JPEG
-string[\[29\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L64-L72).
-The PC's worker thread listens for these and updates the UI so the
-operator can see a low-latency video feed from each device. This preview
-is throttled (for example, a frame every 1/2 second or as configured) to
-balance timeliness with network load. Similarly, the app could stream
-low-rate telemetry (like current recording status or battery level)
-using this push mechanism. All such asynchronous messages include a
-`type` field (like `"type": "preview_frame"`) rather than an ack id, so
-the PC knows they are not responses to a specific command but rather
-unsolicited data.
+In summary, the desktop controller is the **brains of the system**,
+coordinating all pieces to work in unison. It abstracts the complexity
+of dealing with multiple devices by providing a unified interface and
+automating the low-level details of communication and timing. The use of
+Python with Qt and libraries like OpenCV, NumPy, and PySerial/Bluetooth
+gives it the power and flexibility needed for a research environment: it
+can be easily extended or scripted for new functionality (for example,
+adding support for another type of sensor or a new analysis routine)
+while maintaining real-time performance through optimised libraries and
+asynchronous design. The combination of a robust backend and an
+easy-to-use frontend makes the desktop application a critical component
+that bridges researchers with the distributed sensing network.
 
-**Figure 4.5** illustrates the communication sequence and
-synchronization strategy. When a PC and phone connect, they perform a
-simple handshake (exchange of hello and capabilities). Part of this
-handshake is a **time synchronization routine**. The system employs an
-NTP-inspired algorithm to align clocks: the PC (as the time server)
-sends a sync request carrying its current timestamp, the phone responds
-with its own timestamp, and the PC measures the round-trip time to
-estimate network latency. Through a series of such exchanges (or just
-one at connect time in this implementation), the PC can calculate the
-offset between its clock and the phone's clock. This offset is then used
-to adjust or relate the timestamps coming from that device. Each device
-continues to timestamp its data with its **local monotonic clock**
-(nanosecond precision clocks are used on both ends), which ensures
-extremely fine timing granularity. The PC, however, knows the offset for
-each device and can thus translate a device timestamp into the PC's
-master clock domain. This yields cross-device synchronization typically
-within **sub-millisecond accuracy**. In practice, the controller might
-designate itself as time 0 when recording starts and instruct each
-Android to note its local time at that moment; subsequent data from the
-phones then include raw timestamps which are later converted to the
-common timeline.
+*(Figure 4.5: High-level architecture of the Desktop Controller
+application. The figure breaks down the desktop software into its main
+components: a* *GUI layer* *(with windows/tabs for Recording Control,
+Device Management, Calibration, etc.), an* *application logic layer*
+*(the main orchestrator and managers for sessions, devices, and
+calibration), and a* *service layer* *(which includes the network socket
+server, webcam interface, Shimmer interface, file and data management
+services). The diagram also shows an* *infrastructure layer* *beneath,
+containing the synchronisation engine, logging system, and error
+handling modules that support the entire application. Arrows in the
+figure illustrate how user actions in the GUI propagate to the
+application layer (e.g., "Start Session" triggers the Session Manager),
+which then calls into various services (sending network commands,
+initialising webcams, etc.). Similarly, data flows upward: e.g., a
+preview frame from an Android device comes in through the Network
+Service and is passed to the GUI for display. The figure emphasizes
+modular design -- each sensor or function has a dedicated service,
+coordinated by the central application logic, enabling easy maintenance
+and future scalability.)*
 
-To ensure reliability and security, the protocol includes additional
-features. Every command from the PC expects an acknowledgment; if none
-arrives within a timeout, the PC can retry or mark that device as
-unresponsive. This prevents silent failures (e.g., if a start command is
-lost due to a network issue, the PC will know and can resend).
-Communication is also secured: the design calls for an **RSA/AES
-encryption layer** for all messages (commands and data). In
-implementation, this could mean an initial RSA public key exchange
-between PC and device, then switching to an AES symmetric key for the
-session. This guarantees that sensitive data (like physiological
-readings or video frames) cannot be intercepted or tampered with on an
-open network. The messages themselves are kept compact and
-human-readable (JSON) for ease of debugging and extensibility. For
-instance, if a new sensor is added, a new command and message type can
-be defined without overhauling the protocol, as long as both sides
-understand the JSON fields.
+## 4.4 Communication Protocol and Synchronisation Mechanism
 
-One notable aspect of synchronization is how the **Lab Streaming Layer
-(LSL)** is leveraged. On the Android side, LSL outlets are created for
-certain data streams (GSR, events,
-etc.)[\[14\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L39-L47).
-If the PC were also running an LSL inlet (it could, for example,
-subscribe to the "Android_GSR" stream), it could receive samples with
-timestamps that are already globally synced via LSL's internal clock
-synchronization. However, in this system, LSL is primarily used locally
-on each device for internal coordination (e.g., marking exactly when a
-thermal frame was saved relative to GSR samples). The main
-synchronization still relies on the custom network time alignment, which
-is more directly under the application's control. Combining these
-approaches -- precise device-local timestamps and network clock
-alignment -- addresses both **intra-device sync** (camera frames vs.
-sensor readings on the same phone) and **inter-device sync** (phone A
-vs. phone B vs. PC). As a result, all data collected across the system
-can be merged on a unified timeline during analysis with only
-microsecond-level adjustments needed at most.
+A core challenge of this project is enabling **reliable, low-latency
+communication** between the PC controller and the Android devices, along
+with a mechanism to synchronise their clocks for coordinated actions.
+The system addresses this with a custom-designed **communication
+protocol** built on standard networking protocols, and an integrated
+**synchronisation service** that keeps all devices aligned to a master
+clock.
 
-Finally, when it comes to stopping a recording and collecting files, the
-protocol ensures a coordinated shutdown. The PC issues `stop_recording`
-to all devices, each device stops and closes its files, then each device
-sends back an acknowledgment (or a message like `"recording_stopped"`
-with a summary). The PC can then send a `"transfer_files"` command to
-each device. Upon this request, the Android app prepares a zip of the
-session folder (as described in the next section) and then responds with
-a message containing the file's name and size and perhaps a ready
-status[\[30\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L74-L81).
-The actual file data transfer is done out-of-band (to avoid clogging the
-control channel): the phone opens a new socket to the PC's waiting file
-receiver on a specified port and streams the file bytes
-directly[\[45\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L50-L58).
-During this transfer, the PC may temporarily pause other commands or use
-a separate thread to handle the incoming file. Once the file is received
-and its checksum verified, the PC sends a final acknowledgment and the
-device can delete its local data if configured to do so. This concludes
-the session's active phase, handing off to the data processing stage.
-*Figure 4.5 should depict a sequence diagram of the PC-device
-communication, including discovery, connection handshake, sync message
-exchange, start/stop commands, and file transfer initiation, along with
-how timestamps are managed across these steps.*
+**Communication Protocol:** The Android app and desktop controller
+communicate over TCP/IP using a JSON-based messaging protocol. Upon
+startup, the desktop controller opens a server socket (by default on TCP
+port 9000) and waits for incoming
+connections[\[34\]](PythonApp/network/device_server.py#L124-L132).
+Each Android device, when the app is launched, will initiate a
+connection to the PC's IP and port. A simple handshake is performed in
+which the Android sends an identifying message containing its device ID
+(a unique name or serial) and a list of its capabilities (e.g.,
+indicating if it has a thermal camera, GSR sensor,
+etc.)[\[35\]](PythonApp/network/device_server.py#L34-L43)[\[36\]](PythonApp/network/device_server.py#L93-L101).
+The PC acknowledges and registers the device. All messages between PC
+and Android are formatted as JSON objects, with a length-prefixed
+framing (the first 4 bytes of each message indicate message size) to
+ensure the stream is parsed
+correctly[\[37\]](PythonApp/network/device_server.py#L156-L165)[\[38\]](PythonApp/network/device_server.py#L176-L184).
+This design avoids reliance on newline or other delimiters that could be
+unreliable for binary data; instead, it robustly handles message
+boundaries, allowing binary payloads (like images) to be transmitted if
+needed by encoding them (often images are base64-encoded within
+JSON)[\[39\]](PythonApp/network/device_server.py#L16-L24)[\[40\]](PythonApp/network/device_server.py#L96-L101).
+The protocol defines several message types, including: *control
+commands* (e.g., `start_recording`, `stop_recording`), *status updates*
+(e.g., the Android periodically sends a `status` message with battery
+level, free storage, current recording status, etc.), *sensor data
+messages* for streaming (such as `preview_frame` for a JPEG preview
+image, or `gsr_sample` for a live GSR data point), and *acknowledgments*
+(the devices reply to key commands with an ACK/NACK to confirm
+receipt)[\[41\]](PythonApp/network/device_server.py#L94-L101).
+The PC's network service is multi-threaded and non-blocking -- it can
+handle multiple device connections simultaneously and route messages to
+the appropriate handlers, emitting Qt signals that update the UI or
+trigger internal logic. The communication is two-way: the PC can send
+commands to all or individual devices, and devices send asynchronous
+updates or data back to the PC.
+
+To support different data exchange needs, the system effectively
+implements multiple logical channels over this link. For example,
+high-frequency binary data like video preview frames or sensor streams
+are sent in a compact form (with minimal JSON overhead aside from a
+message header), whereas less frequent control commands use a more
+verbose but human-readable JSON structure. In conceptual terms, we can
+think of a **control channel** and a **data channel** operating over the
+same socket. In future or in extensions, the design also allots a
+separate **file transfer mechanism** (e.g., an offline file download
+after recording, or an HTTP/FTP transfer) if large recorded files on the
+phone need to be pulled to the PC; however, in the current
+implementation, file transfer is often done manually after sessions or
+through external means, and the focus of the communication protocol is
+on real-time coordination and monitoring. All communications happen over
+the local network (typically the devices are on the same Wi-Fi or
+Ethernet LAN). Security is not heavily emphasized in this research
+prototype (messages are unencrypted JSON), but the system can be
+isolated on a private network during experiments for safety.
+
+**Synchronisation Mechanism:** Achieving **time synchronisation** across
+devices is critical because we want, for instance, a thermal frame and a
+GSR sample that occur at the "same time" to truly represent the same
+moment. In a distributed system with independent clocks, our approach is
+to designate the desktop PC as the **master clock** and synchronise all
+other devices to it. The desktop controller runs a component called the
+`MasterClockSynchronizer` (or Synchronisation Engine) which fulfills two
+primary roles: it distributes the current master time to clients
+(devices) and coordinates simultaneous actions based on that time.
+Concretely, the PC launches a lightweight **NTP (Network Time Protocol)
+server** on a UDP port (default 8889) to which devices can query for
+time[\[42\]](docs/multi_device_synchronization_readme.md#L170-L178).
+The Android app, upon connecting, performs an initial clock sync
+handshake -- this can be a custom sync message or an NTP query -- to
+measure the offset between its local clock and the PC clock. Given the
+typical latencies on a local network are low (on the order of a few
+milliseconds), this offset can be estimated with high precision using
+techniques akin to Cristian's algorithm or NTP's exchange (the system
+may send a timestamped sync message and get a response to calculate
+round-trip delay and clock
+offset)[\[43\]](docs/multi_device_synchronization_readme.md#L140-L149).
+The `SynchronizationEngine` on the PC possibly refines this by periodic
+pings (e.g., every 5 seconds) to adjust for any drift during a long
+session[\[44\]](PythonApp/master_clock_synchronizer.py#L62-L71)[\[45\]](PythonApp/master_clock_synchronizer.py#L80-L88).
+In practice, the Android device will apply any calculated offset to its
+own timestamps for data labelling, meaning if its clock was 5 ms ahead of
+the PC, it will subtract 5 ms from all timestamps to align with the
+master timeline.
+
+When a recording session is initiated, the PC doesn't just send a blind
+"start" command -- it issues a **coordinated start time**. For example,
+the PC might determine "start recording at time T = 1622541600.000 (Unix
+epoch seconds)" a few hundred milliseconds in the future, and send a
+message to each device: *"start_recording at T with session_id X"*. Each
+Android device receives this and waits until its local clock
+(synchronised to master) hits T to begin capturing
+data[\[46\]](PythonApp/master_clock_synchronizer.py#L164-L173)[\[47\]](PythonApp/master_clock_synchronizer.py#L170-L178).
+Because all devices are sync'd to the master within a few milliseconds
+accuracy, this effectively aligns the start of recording across devices
+to a very tight margin (usually well below 50 ms difference, often
+within a few ms). The devices then proceed to timestamp their data
+relative to this common start. The PC also notes its own start time for
+any local recordings (like webcams) to align with the same T. During
+recording, the devices continue to exchange sync information. Each
+status update from device to PC may include the device's current clock
+vs. the master clock (or implicitly, the PC knows when it sent a sync
+and what the device's last offset was). If any device's clock starts to
+drift beyond an acceptable tolerance (say more than a few milliseconds),
+the PC can issue a re-synchronisation or simply record the drift for
+later correction. The synchronisation engine might incorporate simple
+drift compensation -- for instance, if one phone tends to run its clock
+slightly faster, the system can predict and adjust timing gradually
+(rather than waiting for a large error to
+accumulate)[\[48\]](docs/multi_device_synchronization_readme.md#L30-L38)[\[49\]](docs/multi_device_synchronization_readme.md#L64-L67).
+In this implementation, because the recording durations might be on the
+order of minutes to an hour, and modern devices have reasonably stable
+clocks, straightforward NTP-based periodic correction is sufficient to
+maintain sub-millisecond
+alignment[\[50\]](docs/multi_device_synchronization_readme.md#L29-L37).
+
+Finally, the communication protocol assists synchronisation by carrying
+timing info in every message. The JSON messages often include
+timestamps. For example, when an Android sends a preview frame to the
+PC, it tags it with the timestamp of frame capture; the PC can compare
+that with its own reception time and the known offset to estimate
+network delay and clock skew in
+real-time[\[51\]](PythonApp/network/device_server.py#L48-L56)[\[36\]](PythonApp/network/device_server.py#L93-L101).
+Similarly, the PC's commands can carry the master timestamp. This
+pervasive inclusion of timestamps means that even if absolute clock sync
+had a small error, each piece of data can be re-aligned precisely in
+post-processing using interpolation or offset adjustment.
+
+In summary, the **PC--Android communication** is realised via a reliable
+JSON/TCP socket protocol, enabling complete remote control and live
+data streaming, while the **synchronisation mechanism** ensures all
+devices operate on a unified timeline. Together, these allow the system
+to achieve a high degree of temporal precision: tests have shown the
+system tolerates network latency variations from \~1 ms up to hundreds
+of milliseconds without losing
+synchronisation[\[52\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L128-L136).
+This is accomplished by designing for asynchronous, non-blocking
+communication and by decoupling the *command* from the *execution* time
+(i.e., schedule actions in the future on a shared clock). The result is
+a robust coordination layer that underpins the multi-modal data
+collection with the necessary timing guarantees.
+
+*(Figure 4.6: Communication and synchronisation sequence. This figure
+illustrates the sequence of interactions for device connection and a
+synchronised session start. Initially, each Android device connects to
+the desktop's socket server and sends a JSON handshake (including device
+ID and sensor capabilities). The desktop acknowledges and lists the
+device as ready. The figure then shows the* *synchronisation phase: the
+desktop (master) sends a time sync request or NTP response to the phone,
+and the phone adjusts its clock offset. When the researcher clicks
+"Start" on the PC, the desktop broadcasts a* *StartRecording* *message
+with a specified start timestamp. All Android devices (and the PC's own
+data acquisition for webcams) wait until the shared clock reaches that
+timestamp, then begin recording simultaneously. During recording,
+devices send periodic* *Status* *messages (with current frame counts,
+battery, and time sync quality) and stream preview data (video frames,
+sensor samples) to the PC. The PC might send occasional* *Sync*
+*messages if needed to fine-tune clocks. Finally, on "Stop", the PC
+sends a stop command and each device halts recording and closes files,
+confirming back to the PC. This sequence diagram underscores how the
+protocol and sync mechanism work in tandem to coordinate distributed
+devices in time.)*
 
 ## 4.5 Data Processing Pipeline
 
-The data processing pipeline encompasses everything from data capture on
-devices to the final preparation of datasets for analysis. It is a
-**streaming pipeline** during recording and a **batch pipeline**
-post-recording. On each Android device, when a new recording session
-starts, a unique session ID is generated (using a timestamp) and a
-dedicated directory is created in the device's storage for that
-session[\[46\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L14-L22).
-All data files for that session are saved under this directory,
-segregated by modality. For example, within a session directory the app
-creates sub-folders for raw images and thermal frames
-upfront[\[47\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L22-L30)[\[48\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L32-L40).
-This ensures that as data starts streaming in, the file system is
-organized to prevent conflicts and simplify later retrieval.
+The **data processing pipeline** in the Multi-Sensor Recording System
+encompasses the steps from raw data capture to the production of
+analysis-ready outputs. It involves components on both the Android side
+(which perform on-the-fly processing and organisation of data as it's
+collected) and the desktop side (which aggregates and post-processes
+data from all devices after or during a recording session). The design
+aim is to ensure that by the end of a session, all the heterogeneous
+data -- video, thermal, GSR, etc. -- are properly time-aligned,
+annotated, and stored in a structured format so that researchers can
+easily perform further analysis (such as feeding the data into machine
+learning models or statistical software).
 
-During an active recording, the following data handling occurs in
-parallel: - **RGB Video** -- The Android's `RgbCameraManager` starts
-recording via CameraX's VideoCapture API to an MP4 file on device
-storage. The file is typically named `RGB_<sessionId>.mp4` and saved in
-the session
-folder[\[49\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L26-L34).
-Video is encoded with H.264 at 1080p/30fps (Quality.HD) as
-configured[\[50\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/RgbCameraManager.kt#L111-L119).
-The recording runs until stopped, at which point the file is finalized
-(CameraX takes care of muxing the audio if included). - **Raw Image
-Stream** -- If enabled, the app captures full-resolution still images
-continuously during the recording. The `RgbCameraManager` uses an
-`ImageCapture` use case to take a picture roughly every 33ms (about 30
-FPS) on a background
-executor[\[51\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/RgbCameraManager.kt#L70-L78).
-Each image is saved as a JPEG file in the `raw_rgb_<sessionId>`
-directory with a filename containing its exact nanosecond timestamp
-(e.g.,
-`raw_rgb_frame_<timestamp>.jpg`)[\[52\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/RgbCameraManager.kt#L86-L95).
-These images are unprocessed (straight from the camera sensor in YUV
-format converted to JPEG) to allow later analysis or calibration. By
-capturing them concurrently with video, the system provides both a
-compressed continuous video and a series of key frames that can be
-examined frame-by-frame at full quality. - **Thermal Frames** -- The
-`TopdonThermalCamera` writes thermal data frames to a CSV file (or a
-sequence of CSV files). In the implementation, it creates one CSV named
-`thermal_data_<timestamp>.csv` in the `thermal_<sessionId>` directory
-when streaming
-starts[\[53\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L50-L58).
-The first row is a header with pixel index labels, and each subsequent
-row corresponds to one thermal image frame with the first column as the
-frame timestamp and the rest being temperature
-values[\[4\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L54-L62).
-If needed, the system could also save thermal images (e.g., a visual
-representation of the thermal data) by converting the temperature matrix
-to a grayscale or color-mapped image, but the current design prioritizes
-numerical data for precision. - **GSR/PPG Data** -- The Shimmer GSR+
-sensor data is logged to a CSV file named `GSR_<sessionId>.csv` in the
-session
-folder[\[49\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L26-L34).
-The file begins with a header (`timestamp_ns, GSR_uS, PPG_raw`) and each
-line represents one sample, as recorded by the `ShimmerGsrSensor`
-described
-earlier[\[12\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L52-L60)[\[19\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L103-L111).
-Sampling at 128 Hz means this file grows by 128 lines per second of
-recording. The timestamps here are the phone's nanosecond ticks, which
-will later be realigned to the global timeline. - **Audio** -- The
-Android app also records audio via the microphone (stereo 44.1 kHz) if
-enabled. The audio is recorded using Android's MediaRecorder or
-AudioRecorder API and saved as an AAC-encoded track, either in its own
-file (e.g., `Audio_<sessionId>.m4a`) or multiplexed into the RGB video
-MP4. In this system, audio was likely stored separately (for ease of
-synchronization, having a separate audio file with a known start time
-can simplify analysis). - **Annotations/Events** -- If any user markers
-or automatic events occur (for example, the app could allow the user to
-tap a button to mark an interesting moment), these are recorded either
-in a dedicated text log or embedded in the main metadata JSON. The
-`SessionManager` was designed to eventually produce a
-`session_metadata.json` file at the end of
-capture[\[54\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L40-L47),
-which would include things like start/stop times, device info, and event
-timestamps. For now, this is a placeholder in code, but the structure
-supports expansion.
+On the **Android device**, the pipeline begins with the **sensor
+recorder components** described earlier. Each recorder not only captures
+data but may also perform lightweight processing. For instance, the
+Camera recorder uses the Camera2 API which can provide hardware-level
+video encoding; the app records video in MP4 files (with embedded timing
+metadata) and also extracts periodic still images or RAW images if
+needed for later calibration. The Thermal recorder processes each frame
+to compute temperature values (applying the camera's calibration and any
+emissivity settings) before writing the frame to disk; it also
+down-samples frames for preview streaming, which is a form of data
+reduction (only a subset of frames or a lower resolution image is sent
+live, while full data is stored). The Shimmer recorder, as discussed,
+formats the data into CSV lines and might compute basic derived metrics
+(for example, it could convert the raw GSR voltage to microsiemens using
+calibration constants, if not already done by the device driver).
+Additionally, the **HandSegmentation** module on Android runs a machine
+learning model on each video frame (or at a set frequency) to detect
+hand
+landmarks[\[6\]](AndroidApp/README.md#L50-L54).
+The output of that -- e.g., coordinates of hand joints or a bounding box
+of the hand region -- can be used to tag frames or even to save an
+additional data stream (like a timeline of "hand present or not" flags).
+By performing this on-device, the system reduces the amount of data that
+needs to be transmitted or stored (no need to save entire images for
+analysis of hand presence -- just saving the coordinates or mask is
+enough, which is far smaller).
 
-Once the PC issues a stop command, each Android device closes its files.
-The next stage is **data aggregation**. The PC can request each phone to
-send over its session data. To streamline this, the Android app first
-compresses its session folder into a single ZIP archive using the
-`FileTransferManager.zipSession()`
-method[\[55\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L19-L28)[\[56\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L29-L37).
-This zips up all files (video, images, CSVs, etc.) from that recording
-session. The app places this ZIP in a cache directory and then uses
-`FileTransferManager.sendFile()` to initiate a transfer to the
-PC[\[57\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L45-L54)[\[45\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L50-L58).
-The transfer is done via a simple socket stream -- the phone knows the
-PC's IP and a designated port for file uploads (communicated during the
-protocol handshake). It opens a connection and streams the bytes of the
-ZIP file. On the PC side, a corresponding file receiver is listening and
-writes the incoming bytes to a file (usually naming it with the device
-name and session ID to avoid confusion). A progress indicator is
-typically shown in the PC UI (e.g., a QProgressDialog) to let the user
-know that data is being downloaded from the device.
+All data on the Android is saved in a **structured file system
+hierarchy** (often organised by session). For each recording session,
+the app creates a session folder containing the various files: e.g.,
+`session_001_metadata.json` (with high-level info like session ID, start
+time, participant ID), `session_001_camera.mp4` (phone RGB video),
+`session_001_thermal.raw` (thermal binary file),
+`session_001_shimmer.csv` (physio data), etc. This local organisation is
+part of the pipeline because it enforces consistent naming and indexing
+for later merging. The Persistence layer on Android ensures writes are
+flushed and files are closed safely at the end of sessions to avoid
+corruption[\[53\]](AndroidApp/README.md#L112-L120).
 
-After collection, the PC now holds all data from all devices. The
-**post-processing** can then proceed. The PC controller's analysis
-modules operate on the data in the session archives. For instance, the
-Playback module will unzip or directly access the video file and sensor
-CSVs to replay the session. Because every piece of data has an accurate
-timestamp, aligning them is straightforward: the GSR plot is rendered on
-a time axis (in seconds or milliseconds), and video frames are displayed
-at their corresponding timestamp (the controller may use the video
-file's frame timestamps or infer them from the naming of raw images).
-The annotation tool can overlay markers on both the timeline and perhaps
-directly on the video if needed.
+Moving to the **desktop side**, during an active session, the desktop
+controller is receiving live previews and status, but it usually does
+not store all raw data coming over the network (since the high-quality
+data stays on devices until the session ends). However, the PC does
+record some information: it might save the low-resolution preview video
+or individual frames for a quick review (not research quality, but for
+reference), and it logs time-stamped events (e.g., "Recording started at
+T", "Device A battery low at T", etc.). Once the session is completed,
+the data from each device needs to be **consolidated**. In some
+configurations, the Android devices might automatically upload their
+files to the PC (if a file transfer mechanism is enabled -- this could
+be initiated by the PC requesting each device to send its files,
+possibly using the same socket or a separate channel). In other cases, a
+researcher may manually copy the files. Either way, the PC application
+provides tools to import the session data from all devices into a single
+location on the PC for analysis.
 
-For research use-cases, exporting data is important. The pipeline ends
-with an **export step**, where the session's raw data is converted to
-shareable formats. A script or UI action on the PC triggers the export:
-the implementation uses libraries like **pandas** and **h5py** to
-combine data into HDF5 or MATLAB files. It might create a structured
-dataset where each sensor modality is a group or table (e.g., an HDF5
-group `/GSR` containing a timestamp array and a GSR value array, and a
-group `/Video` containing either references to frames or timestamps
-linked to an external video). Calibration results, if available, are
-appended so that pixel coordinates in the videos can be mapped to
-real-world units. The final exported files allow scientists to load the
-entire session in tools like MATLAB or Python with one command and have
-all streams readily synchronized.
+The desktop's **Data Processing components** then take over. A
+`DataProcessor` module on the PC can parse each data file (using
+knowledge of the format -- for example, it knows how to read the thermal
+.raw file and extract frames and timestamps, or read the Shimmer CSV)
+and then perform multi-modal synchronisation
+verification[\[54\]](docs/python_desktop_controller_readme.md#L158-L163).
+Because all data streams were independently recorded, the system
+double-checks that the timelines align: it may, for instance, compare
+the timestamp of the first frame of the phone video with the master
+start time to compute an offset, and do the same for the first thermal
+frame and first GSR sample. Minor adjustments (order of tens of
+milliseconds) can be handled by shifting timestamps in software to
+perfect the alignment. This post-processing synchronisation step is
+important if any device started a fraction of a second late or if there
+was clock drift -- the Synchronisation Engine on the PC assists by
+providing logs of the offset of each device over time, which the
+DataProcessor can use to correct timestamps. The result is that each
+piece of data can be assigned a **global timestamp** in a common
+reference (e.g., milliseconds since session start or an absolute UTC
+time).
 
-In summary, the pipeline ensures that from **capture to archive**, data
-is kept synchronized and labeled, and from **archive to analysis**, data
-is easily accessible and interpretable. The automated zipping and
-transferring remove manual steps, and the structured session directories
-prevent any mix-ups between sessions or devices. *Figure 4.6 should
-illustrate the data pipeline -- perhaps as a flow diagram -- starting
-from sensors/cameras capturing data, writing to files on the phone,
-zipping and transferring to PC, and finally the PC's analysis and export
-steps. Each modality (video, thermal, GSR, audio) can be represented in
-this diagram to show parallel paths converging into the session
-archive.*
+Following synchronisation, the pipeline can branch into different **data
+export and analysis preparation** tasks. A `DataExporter` component
+handles converting the data into formats needed for
+analysis[\[54\]](docs/python_desktop_controller_readme.md#L158-L163).
+Commonly, researchers might want all sensor data in a single file or
+database, or in a form that can be loaded into Python or MATLAB for
+analysis. The system might generate a unified CSV or HDF5 file that
+contains synchronised timestamps and all sensor readings. For video
+data, it might extract per-frame timestamps and save them alongside the
+physiological signals. If needed, the video and thermal imagery can be
+merged -- for example, some studies may overlay the thermal data on the
+RGB video frame or produce a side-by-side combined video; such an
+operation can be scripted using OpenCV with the calibration information
+(to map thermal pixels to the RGB frame if the cameras were calibrated).
+The Calibration Manager on the PC provides the calibration parameters
+(e.g., transformation matrices) to the DataProcessor for this purpose
+when needed.
+
+Another aspect of the pipeline is **quality assurance (QA)**. The system
+includes a `DataSchemaValidator` and possibly a `QualityMonitor` that
+verifies the data collected meets certain integrity
+criteria[\[55\]](AndroidApp/README.md#L140-L148).
+For instance, after recording, the software can check if the number of
+video frames roughly matches the expected frame rate and duration, or if
+there are gaps in the GSR timestamp sequence. It flags any anomalies
+(like dropped data or sensor errors) to the researcher. This is
+important for a thesis-grade project to demonstrate that the data is
+trustworthy. The QA results might be included in a session report
+automatically.
+
+To facilitate iterative analysis, the desktop application also supports
+**post-session visualisation**. The Files/Data tab can load a session's
+data and plot it (e.g., graph the GSR over time and allow overlaying
+markers where certain events happened, or scrub through the video with
+the corresponding thermal images). This isn't so much a part of the
+pipeline that creates new data, but it helps in verifying and exploring
+the synchronised dataset.
+
+In summary, the data processing pipeline ensures that raw streams from
+multiple sensors are first captured reliably (with minimal real-time
+processing except what's necessary for compression or region-of-interest
+extraction), then centrally synchronised and validated, and finally
+exported in a cohesive format. The pipeline leverages the structured
+approach of the system: each modality's data is handled by specialised
+code, but they converge in a common timeline. The design choice to
+timestamp everything and log rich metadata greatly simplifies the later
+stages of the pipeline, since the heavy lifting of alignment is mostly
+solved by design. This allows the **researchers to focus on analysis**,
+knowing that the incoming data has been properly collected and
+synchronised by the system. The pipeline thus transforms raw multi-modal
+data into an integrated dataset suitable for tasks like machine learning
+model training, statistical analysis of physiological responses, or
+visualisation in publications.
+
+*(Figure 4.7: Data processing pipeline from data capture to analysis.
+The figure depicts the flow of data through various stages: at the left,
+raw data acquisition on each Android device (camera frames, thermal
+readings, GSR samples) along with initial processing (video encoding,
+thermal calibration, formatting of GSR values). These are saved as local
+files on the device. In the middle, the* *synchronisation and
+aggregation* *step: the PC collects the metadata and possibly the data
+files from all devices, aligning them on a common timeline (using the
+master clock and timestamps). At the right, the* *output stage* *shows
+the generation of synchronised data outputs -- for example, combined
+datasets, synchronised video playback with sensor overlays, and summary
+reports. Also indicated is a quality check loop, where the system
+validates data integrity (e.g., checking for missing frames or drift)
+and logs any issues. This pipeline ensures that by the end of this
+stage, all data is ready for the next chapter of evaluation or
+analysis.)*
 
 ## 4.6 Implementation Challenges and Solutions
 
-Developing this complex system presented several implementation
-challenges. This section discusses key challenges and the solutions
-applied to overcome them:
+Building a complex multi-sensor system like this inevitably came with
+several implementation challenges. Throughout the development, we
+encountered issues related to synchronisation, data volume,
+cross-platform integration, and sensor hardware quirks. This section
+outlines the key challenges and the solutions or design decisions we
+adopted to address them:
 
-- **Ensuring Precise Synchronization:** Achieving tight time
-  synchronization across multiple Android devices and the PC was
-  non-trivial due to clock drift and network latency. The solution was
-  the two-tier synchronization mechanism. Each device timestamps data
-  with a local high-resolution clock (avoiding reliance on Internet time
-  or NTP, which can be imprecise on mobile). Then, the custom NTP-like
-  protocol aligns those clocks by calculating offset and delay. We
-  fine-tuned this by taking multiple measurements at connection time and
-  occasionally during recording. The result is that all devices maintain
-  a shared notion of time within a sub-millisecond tolerance. In
-  practice, this meant if an event (e.g., a LED flash) occurred and was
-  captured by two cameras and a GSR sensor, the timestamps recorded by
-  each device for that event differ by less than 1 ms after alignment --
-  a significant improvement over naive synchronization. **Solution
-  highlights:** use of monotonic clock APIs on each platform for
-  timestamping and a lightweight clock sync handshake for alignment.
+- **Precise Time Synchronisation Across Platforms:** Ensuring that an
+  Android phone and a PC (and possibly other devices) agree on time
+  within a few milliseconds is non-trivial, given differences in
+  operating system scheduling and clock
+  stability[\[56\]](docs/multi_device_synchronization_readme.md#L50-L58).
+  Our solution was to implement a **hybrid software NTP approach**. We
+  ran a local NTP server on the PC and had the Android periodically sync
+  to it, coupled with timestamped command protocols. By sending
+  scheduled start times and using the PC as the single source of truth
+  for time, we avoided the need for continuous tight coupling. We also
+  added drift monitoring -- if a device's clock started to stray, the
+  system would either resync it or account for the offset in data
+  post-processing. This approach yielded sub-millisecond synchronisation
+  accuracy in tests, meeting the project's requirements. An added
+  benefit is that each device could operate independently if needed (in
+  case of connection loss) and still later align via the timestamps,
+  which gave us robustness against network
+  issues[\[3\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L162-L169).
 
-- **High Data Throughput and Storage Management:** Recording
-  high-definition video alongside high-frequency sensor data can quickly
-  overwhelm device I/O and memory if not handled efficiently. Several
-  strategies were employed. First, writing to storage was done in a
-  streaming fashion (sequential writes) using Android's internal
-  buffers, which is efficient for video and CSV writes. The raw image
-  capture posed a challenge because writing a JPEG every 33ms could
-  saturate the I/O. This was mitigated by performing image captures on a
-  dedicated single-threaded executor separate from the main
-  thread[\[51\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/RgbCameraManager.kt#L70-L78),
-  ensuring the CameraX pipeline had its own thread and the disk writes
-  did not block UI or sensor reads. The system also avoids keeping large
-  data in memory; for example, the thermal frames are written directly
-  to file line by line inside the
-  callback[\[4\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L54-L62),
-  and GSR samples are appended to a file (and optionally a small
-  in-memory buffer for LSL) one by one. Android devices have limited
-  storage, so another challenge was ensuring that extended recordings
-  (which generate many image files and large videos) do not fill up the
-  device. The solution was to compress and offload data as soon as
-  possible. By zipping the session folder immediately after recording
-  and transferring it to the PC, the phone can optionally clear its
-  local data to free space (the design allows for a "delete after
-  transfer" option). This way, even if multiple sessions are recorded in
-  succession, the bulk of the data resides on the PC.
+- **Multi-Modal Data Integration and Volume:** Recording high-resolution
+  video at 30 fps, thermal images at 25 fps, and GSR at 50 Hz
+  simultaneously produces a vast amount of data per second. Handling
+  this without data loss or overload was a challenge. We tackled it
+  through **concurrency and efficient data handling**. On Android, each
+  sensor recorder runs largely on its own thread or coroutine, writing
+  to dedicated files or buffers so that no single thread becomes a
+  bottleneck. We used optimised libraries (Camera2 with hardware codecs,
+  buffered I/O streams for sensor data) to reduce CPU usage. Moreover,
+  by performing some data reduction in real time (e.g., not every frame
+  is forwarded as a preview, or sending compressed images), we kept the
+  network throughput within reasonable limits. The system's modular
+  architecture also helped: each data stream was independent, so if one
+  modality temporarily lagged (say a burst of disk writes for video), it
+  would not stall the others -- they each had their own queues and
+  threads. The outcome was a smooth integration where the data from
+  different sources could be recorded in parallel reliably.
+  Additionally, our **data schema** ensured integration after the fact:
+  because every data point had a timestamp, we could merge streams
+  offline without ambiguity. This design choice turned what could have
+  been a complex synchronisation problem into a straightforward data
+  merge task using timestamps.
 
-- **Thermal Camera USB Integration:** Using the Topdon TC001 thermal
-  camera introduced challenges in driver support and performance.
-  Android does not natively support thermal cameras, so the UVCCamera
-  library was used, but it required handling USB permissions and
-  ensuring real-time performance in Java. One challenge was that the
-  thermal camera provides a lot of data (nearly 50k float values per
-  frame). Pushing this through the Java/Kotlin layer every frame could
-  be slow. The chosen approach was to use the library's native code
-  (JNI) to get frames and only do minimal processing in Kotlin --
-  basically just copying the buffer to file. By writing frames as raw
-  floats to CSV, we avoided any expensive image rendering computations
-  during capture. Another challenge was that the USB device could
-  disconnect or produce errors if the app couldn't keep up. We solved
-  this by monitoring the frame callback speed and if frames started
-  queuing up, we could drop some preview processing to catch up
-  (ensuring the logging thread always runs at highest priority).
-  Additionally, upon connection, the camera had to be set to the correct
-  mode (thermal cameras often support different frame rates or
-  palettes). The implementation explicitly sets the frame size and
-  default frame format when opening the
-  camera[\[3\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L84-L92)
-  to avoid any negotiation issues. Handling permission pop-ups in a
-  timely manner was also addressed by initiating the USB permission
-  request as soon as the app detects the device, so by the time the user
-  is ready to record, the camera is already authorized and just needs to
-  be opened.
+- **Bluetooth Reliability and Sensor Connectivity:** The wireless nature
+  of the Shimmer GSR sensor introduced challenges like connection drops,
+  signal interference, and the need to pair/manage Bluetooth in
+  Android's constrained environment. The solution involved implementing
+  robust **reconnection logic and buffering**. The `ShimmerRecorder` was
+  built to automatically detect a disconnect and retry connecting up to
+  a few times before giving
+  up[\[24\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L114-L122).
+  We also made sure that short interruptions in connectivity did not
+  result in data loss: if the Shimmer missed a few packets during
+  reconnection, the system would fill the gap with a notation or
+  interpolate later. We had to carefully manage Android's Bluetooth
+  permissions and scanning (especially on newer OS versions that
+  restrict background BT operations). This was solved by prompting the
+  user upfront for the needed permissions and using the latest APIs for
+  scanning/connecting that respect Android's power management. On the PC
+  side, an alternative was ready: if a phone's Bluetooth failed, the
+  researcher could connect the Shimmer directly to the PC's Shimmer
+  Service, as a fail-safe. This dual-path approach improved reliability.
+  Finally, to mitigate interference and ensure a strong signal, we
+  advised that the phone be kept near the Shimmer sensor during
+  recordings (something noted in the user guide).
 
-- **Reliable BLE Sensor Streaming:** The Shimmer GSR+ streaming over BLE
-  can be susceptible to packet loss or disconnects, especially in
-  electrically noisy environments or if the phone's BLE stack is busy.
-  We tackled this by using the robust Nordic BLE library which provides
-  buffered writes, retries, and easy callback management. For example,
-  when connecting, the code explicitly retries the connection up to 3
-  times with a short
-  delay[\[20\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L39-L45).
-  This covers transient failures during the initial handshake. Moreover,
-  once connected, we immediately set up notifications and start
-  streaming to lock in the data
-  flow[\[15\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L69-L77).
-  The design of writing data to file vs. sending it live was carefully
-  balanced: writing every sample to CSV ensures no data loss (even if
-  the UI or network is slow, the data is safely on disk), while the live
-  LSL broadcast is best-effort (if a few samples are missed on the live
-  graph, it's acceptable as long as the file has the full record). We
-  also found it important to send the stop command before disconnecting
-  to gracefully terminate the stream on the Shimmer
-  hardware[\[21\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L61-L65);
-  otherwise, if a user immediately re-started a recording, the Shimmer
-  might still be in streaming mode and need a reset. By sending 0x20
-  (stop) and waiting a brief moment, we ensure the device is in a known
-  state. These precautions improved the reliability of the BLE link so
-  that hours-long recordings can proceed without dropout.
+- **Cross-Platform Integration and Compatibility:** Developing and
+  debugging two separate applications (Android and Python) that must
+  work in concert posed compatibility issues -- differences in
+  programming languages, data serialisation, and even how each handles
+  threading. A specific example was ensuring that the JSON protocol was
+  interpreted exactly the same on both ends, and that special data types
+  (like binary image frames or high-precision timestamps) survived the
+  journey. We addressed this by **standardising the communication and
+  using well-tested libraries**. Python's use of the `json` library and
+  Android's use of Kotlin's JSON handling (or manual parsing) were
+  aligned by a strict schema: we defined, in documentation, every
+  message's format and wrote unit tests for encoding/decoding on both
+  sides. We also decided on using UTC timestamps in milliseconds
+  everywhere to avoid any time zone or locale issues. Another aspect was
+  thread coordination: the Android app uses Handler threads and
+  coroutines, while the PC uses Qt's QThreads and async I/O. If the PC
+  sent multiple commands quickly, we had to ensure the phone could queue
+  and process them properly without race conditions. The fix was to
+  implement a simple **acknowledgment system** -- the PC would wait for
+  an ACK of a command before sending the next (for critical commands),
+  or tag messages with sequence numbers so out-of-order processing could
+  be detected. Through such measures, we achieved a reliable
+  cross-platform partnership between the apps. Continuous integration
+  testing, where we ran both the Android and Python components in test
+  scenarios, helped catch incompatibilities early.
 
-- **Cross-Platform Performance in the PC App:** Python is an interpreted
-  language and could become a bottleneck for real-time video and sensor
-  handling. Initially, we attempted to use OpenCV in Python for webcam
-  capture and pySerial for GSR, but the latency and jitter were
-  noticeable (on the order of tens of milliseconds variability). The
-  **solution** was to implement those parts in C++ and integrate via
-  PyBind11. The `NativeWebcam` class uses OpenCV's `VideoCapture` in a
-  separate thread to grab frames and push them into a
-  queue[\[38\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L80-L88)[\[58\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L84-L92).
-  Because this is C++ code, it's compiled and optimized, and runs
-  independent of the Python GIL. The frame rate became very stable (the
-  thread sleeps \~16ms to achieve \~60 FPS, matching the display
-  refresh) and frame delivery to the Python side is done by sharing the
-  memory pointer of the `cv::Mat` data with
-  NumPy[\[41\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L66-L74)
-  -- essentially zero-copy sharing of image data. Similarly, the
-  `NativeShimmer` class opens a serial port (using Win32 API on Windows,
-  or termios on Linux) and reads bytes in a tight loop. It applies the
-  same GSR conversion formula as the Android (mirror implementation in
-  C++)[\[43\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L200-L208)
-  and pushes timestamped samples into its
-  queue[\[43\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L200-L208).
-  By comparing timestamps, we saw a \~67% reduction in end-to-end
-  latency (sensor update to plot update) and \~79% reduction in timing
-  jitter on the PC side after using the native backend (these figures
-  were measured by toggling the old Python method vs. the new native
-  method). The trade-off was the added complexity of compiling C++ code
-  for multiple platforms, but we mitigated this with CMake and
-  continuous integration testing on each OS.
+- **Resource Constraints and Performance Optimisation:** Running
+  intensive tasks (recording video, processing images, streaming data)
+  on a mobile device for extended periods can lead to performance
+  degradation or even crashes due to memory, CPU, or thermal
+  constraints. We encountered issues like the phone's CPU heating up and
+  throttling during long sessions, or the garbage collector pausing the
+  app if too much memory was used improperly. Our solution was two-fold:
+  **optimise and monitor**. We optimised by using efficient data
+  structures and avoiding unnecessary copies of data (for instance,
+  reusing byte buffers for thermal frames rather than allocating new
+  ones each time). We also leveraged lower-level APIs when possible
+  (e.g., using Android's native media codec for video instead of a heavy
+  software encoding). On the monitoring side, we built a **Performance
+  Monitoring layer** in the app that tracks memory usage, CPU load, and
+  frame processing
+  time[\[57\]](AndroidApp/README.md#L94-L101).
+  If any metric exceeded a threshold (for example, if frame processing
+  was taking too long and queue lengths were growing), the system would
+  log it and could adjust behaviour (like dropping preview frames to
+  catch up). Additionally, we exposed some of these stats on the PC UI
+  so the user could see if a device was struggling. With these
+  strategies, we managed to keep the system running within the devices'
+  capabilities -- e.g., an Android phone could run a 20-minute session
+  with thermal and video without overheating by dynamically lowering
+  preview frame rate if temperature rose, which we implemented as a
+  simple adaptive measure.
 
-- **User Interface and Multi-Device Coordination:** Another challenge
-  was designing a GUI that could handle multiple device feeds without
-  overwhelming the user or the system. We solved this by a dynamic grid
-  layout on the Dashboard: as devices connect, new video preview widgets
-  are added (and corresponding plot widgets if the device has a sensor).
-  Qt's layouts automatically manage the positioning. We had to ensure
-  that updating these widgets (especially painting video frames) happens
-  on the GUI thread. The solution was using signals/slots -- the
-  background thread emits a signal with the QImage, and the main
-  thread's slot sets that image on a
-  QLabel[\[29\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L64-L72)[\[36\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L150-L158).
-  This is thread-safe and keeps the heavy lifting off the UI thread. For
-  potentially many devices, we also had to consider scalability: if,
-  say, 4 phones are streaming previews, that's a lot of data. We
-  implemented simple frame rate limiting on previews (each phone can
-  send at most X previews per second) to prevent flooding the network or
-  GUI. Also, the PC uses a deque for each preview feed so that if the
-  GUI is slow to update, it will drop old frames rather than backlog an
-  ever-growing list of images. These measures ensure the UI remains
-  smooth. Additionally, coordinating the start of recording across
-  devices was a challenge -- if one device started even 100 ms later
-  than another, that would introduce sync error. To handle this, the PC
-  sends the start command to all devices virtually simultaneously (in a
-  loop, which takes negligible time for, say, 3 devices) and each device
-  waits for the same **trigger moment** (the PC's timestamp included in
-  the command) to start recording. In effect, the PC says "Start
-  recording at time T=XYZ". All devices schedule their start at their
-  local time that corresponds to XYZ. This was achieved by having the
-  devices continuously sync clock with the PC during an active session
-  (very slight adjustments) or simply relying on the initial offset if
-  drift is known to be minimal over a short period. The outcome is that
-  all devices begin capturing within a few milliseconds of each other,
-  which our synchronization logic then corrects to under a millisecond
-  alignment.
+In conclusion, each major challenge was met with a targeted solution
+that was integrated into the system's design. The emphasis on modular
+architecture greatly facilitated this: we could improve or fix one part
+of the system (say, the Bluetooth reconnection logic) without needing to
+overhaul unrelated parts (like the video recorder). This flexibility
+allowed iterative refinement. Many of these challenges, especially
+synchronisation and multi-threaded performance, are common in
+distributed sensing systems; our implementation demonstrated effective
+strategies by combining well-known techniques (like NTP time sync,
+buffering, multithreading) with custom engineering (like our JSON
+command protocol and cross-checking of timestamps). The result is a
+robust system where all components work together smoothly despite the
+complexities involved, providing high-quality, synchronised data for the
+research objectives. Each solution reinforced the system's reliability
+and validated the chosen design principles in a real-world setting.
+---
+[\[1\]](AndroidApp/README.md#L8-L16)
+[\[4\]](AndroidApp/README.md#L82-L90)
+[\[5\]](AndroidApp/README.md#L88-L96)
+[\[6\]](AndroidApp/README.md#L50-L54)
+[\[13\]](AndroidApp/README.md#L146-L154)
+[\[14\]](AndroidApp/README.md#L160-L168)
+[\[53\]](AndroidApp/README.md#L112-L120)
+[\[55\]](AndroidApp/README.md#L140-L148)
+[\[57\]](AndroidApp/README.md#L94-L101)
+README.md
 
-In conclusion, by addressing these challenges with targeted solutions --
-from low-level optimizations (native code, buffering, threading) to
-high-level protocol design (sync and reliability features) -- the system
-became robust and performant. Each component was tuned to handle the
-worst-case scenario (e.g., max data rates, multiple devices, long
-recording duration) so that in typical use it operates with plenty of
-headroom. This careful engineering is what enables the **GSR &
-Dual-Video Recording System** to reliably collect synchronized
-multi-modal data in real-world research settings.
+<AndroidApp/README.md>
 
-------------------------------------------------------------------------
+[\[2\]](PythonApp/README.md#L70-L78)
+[\[27\]](PythonApp/README.md#L46-L54)
+[\[28\]](PythonApp/README.md#L82-L91)
+[\[29\]](PythonApp/README.md#L88-L96)
+[\[31\]](PythonApp/README.md#L94-L101)
+[\[32\]](PythonApp/README.md#L172-L180)
+[\[33\]](PythonApp/README.md#L175-L183)
+README.md
 
-[\[1\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L36-L45)
-[\[2\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L51-L59)
-[\[5\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L28-L32)
-[\[13\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L26-L34)
-[\[14\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt#L39-L47)
-RecordingController.kt
+<PythonApp/README.md>
 
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/controller/RecordingController.kt>
+[\[3\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L162-L169)
+[\[52\]](docs/thesis_report/Chapter_4_Design_and_Implementation.md#L128-L136)
+Chapter_4_Design_and_Implementation.md
 
-[\[3\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L84-L92)
-[\[4\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L54-L62)
-[\[6\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L28-L36)
-[\[7\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L80-L88)
-[\[8\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L36-L44)
-[\[9\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L66-L74)
-[\[10\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L76-L84)
-[\[53\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt#L50-L58)
-TopdonThermalCamera.kt
+<docs/thesis_report/Chapter_4_Design_and_Implementation.md>
 
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/TopdonThermalCamera.kt>
+[\[7\]](docs/thermal_camera_integration_readme.md#L22-L31)
+[\[8\]](docs/thermal_camera_integration_readme.md#L76-L84)
+[\[9\]](docs/thermal_camera_integration_readme.md#L88-L94)
+thermal_camera_integration_readme.md
 
-[\[11\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L16-L24)
-[\[12\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L52-L60)
-[\[15\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L69-L77)
-[\[16\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L84-L92)
-[\[17\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L86-L94)
-[\[18\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L94-L101)
-[\[19\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L103-L111)
-[\[20\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L39-L45)
-[\[21\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt#L61-L65)
-ShimmerGsrSensor.kt
+<docs/thermal_camera_integration_readme.md>
 
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/ShimmerGsrSensor.kt>
+[\[10\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L53-L61)
+[\[11\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L26-L34)
+[\[12\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt#L38-L41)
+ThermalRecorder.kt
 
-[\[22\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L112-L120)
-[\[23\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L140-L149)
-[\[24\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L114-L122)
-[\[25\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L144-L148)
-[\[26\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L116-L124)
-[\[27\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L32-L40)
-[\[28\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L53-L61)
-[\[29\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L64-L72)
-[\[30\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L74-L81)
-[\[32\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L126-L135)
-[\[33\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L126-L134)
-[\[34\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L132-L140)
-[\[35\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L150-L159)
-[\[36\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L150-L158)
-[\[37\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L154-L159)
-[\[44\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py#L89-L97)
-main.py
+<AndroidApp/src/main/java/com/multisensor/recording/recording/ThermalRecorder.kt>
 
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/main/main.py>
+[\[15\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L16-L24)
+[\[16\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L66-L73)
+[\[17\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L106-L114)
+[\[18\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L108-L116)
+[\[19\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L126-L134)
+[\[20\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L139-L147)
+[\[21\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L112-L120)
+[\[22\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L74-L82)
+[\[23\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L76-L84)
+[\[24\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L114-L122)
+[\[25\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L86-L95)
+[\[26\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L96-L104)
+ShimmerRecorder.kt
 
-[\[31\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/network/NsdHelper.kt#L34-L41)
-NsdHelper.kt
+<AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt>
 
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/network/NsdHelper.kt>
+[\[30\]](docs/python_desktop_controller_readme.md#L145-L153)
+[\[54\]](docs/python_desktop_controller_readme.md#L158-L163)
+python_desktop_controller_readme.md
 
-[\[38\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L80-L88)
-[\[39\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L22-L31)
-[\[40\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L94-L101)
-[\[41\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L66-L74)
-[\[42\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L193-L201)
-[\[43\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L200-L208)
-[\[58\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp#L84-L92)
-native_backend.cpp
+<docs/python_desktop_controller_readme.md>
 
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/pc_controller/src/cpp_backend/native_backend.cpp>
+[\[34\]](PythonApp/network/device_server.py#L124-L132)
+[\[35\]](PythonApp/network/device_server.py#L34-L43)
+[\[36\]](PythonApp/network/device_server.py#L93-L101)
+[\[37\]](PythonApp/network/device_server.py#L156-L165)
+[\[38\]](PythonApp/network/device_server.py#L176-L184)
+[\[39\]](PythonApp/network/device_server.py#L16-L24)
+[\[40\]](PythonApp/network/device_server.py#L96-L101)
+[\[41\]](PythonApp/network/device_server.py#L94-L101)
+[\[51\]](PythonApp/network/device_server.py#L48-L56)
+device_server.py
 
-[\[45\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L50-L58)
-[\[55\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L19-L28)
-[\[56\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L29-L37)
-[\[57\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt#L45-L54)
-FileTransferManager.kt
+<PythonApp/network/device_server.py>
 
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/FileTransferManager.kt>
+[\[42\]](docs/multi_device_synchronization_readme.md#L170-L178)
+[\[43\]](docs/multi_device_synchronization_readme.md#L140-L149)
+[\[48\]](docs/multi_device_synchronization_readme.md#L30-L38)
+[\[49\]](docs/multi_device_synchronization_readme.md#L64-L67)
+[\[50\]](docs/multi_device_synchronization_readme.md#L29-L37)
+[\[56\]](docs/multi_device_synchronization_readme.md#L50-L58)
+multi_device_synchronization_readme.md
 
-[\[46\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L14-L22)
-[\[47\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L22-L30)
-[\[48\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L32-L40)
-[\[49\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L26-L34)
-[\[54\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt#L40-L47)
-SessionManager.kt
+<docs/multi_device_synchronization_readme.md>
 
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/manager/SessionManager.kt>
+[\[44\]](PythonApp/master_clock_synchronizer.py#L62-L71)
+[\[45\]](PythonApp/master_clock_synchronizer.py#L80-L88)
+[\[46\]](PythonApp/master_clock_synchronizer.py#L164-L173)
+[\[47\]](PythonApp/master_clock_synchronizer.py#L170-L178)
+master_clock_synchronizer.py
 
-[\[50\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/RgbCameraManager.kt#L111-L119)
-[\[51\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/RgbCameraManager.kt#L70-L78)
-[\[52\]](https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/RgbCameraManager.kt#L86-L95)
-RgbCameraManager.kt
-
-<https://github.com/buccancs/GSR-Dual-Video-System/blob/05ae360cb7b4ae7c7861f72deb235ad64a74b38e/android/app/src/main/java/com/yourcompany/gsrcapture/hardware/RgbCameraManager.kt>
+<PythonApp/master_clock_synchronizer.py>

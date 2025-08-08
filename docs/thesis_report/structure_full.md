@@ -223,47 +223,45 @@ Version B: Full Structure
 
 - 5.1 Testing Strategy Overview
 
-  - 5.1.1 Methodology and Multi-Level Testing Approach
+  - 5.1.1 Multi-Tiered Testing Approach and Hardware Simulation Strategy
 
-  - 5.1.2 Research-Specific Testing Considerations and Metrics
+  - 5.1.2 Architecture-Mirrored Testing Structure
 
-- 5.2 Testing Framework Architecture
+- 5.2 Unit Testing (Android and PC Components)
 
-  - 5.2.1 Cross-Platform (PC--Android) Test Architecture
+  - 5.2.1 Android Unit Tests (JUnit and Robolectric Framework)
 
-  - 5.2.2 Test Data Management and Environment Setup
+  - 5.2.2 PC Unit Tests (pytest and unittest Framework)
 
-- 5.3 Unit Testing Implementation
+  - 5.2.3 Security and Architecture Enforcement Testing
 
-  - 5.3.1 Android Application Unit Tests (Camera & Sensor Modules)
+- 5.3 Integration Testing (Multi-Device Synchronization & Networking)
 
-  - 5.3.2 Desktop Controller Unit Tests (Calibration & Sync Modules)
+  - 5.3.1 Multi-Device Synchronization Testing with DeviceSimulator
 
-- 5.4 Integration Testing
+  - 5.3.2 Networking and Data Exchange Protocol Validation
 
-  - 5.4.1 Multi-Device Integration Testing (Android--PC Synchronisation)
+  - 5.3.3 Cross-Platform Integration with MockShimmerDevice
 
-  - 5.4.2 Network Communication Testing
+- 5.4 System Performance Evaluation
 
-- 5.5 System Testing and Validation
+  - 5.4.1 Endurance Testing (8-hour Continuous Operation)
 
-  - 5.5.1 End-to-End System Testing
+  - 5.4.2 Memory Leak Detection and Performance Monitoring
 
-  - 5.5.2 Data Quality and Accuracy Validation
+  - 5.4.3 CPU and Throughput Performance Analysis
 
-- 5.6 Performance Testing and Benchmarking
+  - 5.4.4 System Stability and Resource Management
 
-  - 5.6.1 Reliability and Stress Testing
+- 5.5 Results Analysis and Discussion
 
-  - 5.6.2 System Performance Benchmarking
+  - 5.5.1 Comprehensive Testing Campaign Results
 
-- 5.7 Results Analysis and Evaluation
+  - 5.5.2 Integration Testing Validation of System Architecture
 
-  - 5.7.1 Summary of Test Results
+  - 5.5.3 Performance Evaluation and Long-term Operation Validation
 
-  - 5.7.2 Requirements Validation (Functional & Non-Functional)
-
-  - 5.7.3 Defect Analysis and Improvements
+  - 5.5.4 Areas for Future Improvement and Hardware-Specific Testing
 
 - **Chapter 6. Conclusions**
 
