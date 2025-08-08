@@ -407,7 +407,7 @@ The Python environment uses Conda for dependency management:
 
 ```bash
 # Activate the conda environment
-conda activate thermal-env
+conda activate gsr-env
 
 # Install dependencies
 conda env update -f environment.yml
@@ -421,16 +421,21 @@ conda list
 ```yaml
 # environment.yml
 dependencies:
-  - python=3.8
-  - pyqt5=5.15.7
-  - opencv=4.8.0.74
-  - numpy=1.24.3
+  - python>=3.9,<3.13
+  - pyqt=5.15.*
+  - opencv
+  - pillow
+  - numpy>=1.26.0,<2.0.0
+  - scipy
+  - matplotlib
+  - pandas
+  - requests
+  - websockets
+  - pytest
+  - pytest-cov
+  - flake8
+  - black
   - pip
-  - pip:
-    - requests==2.31.0
-    - websockets==11.0.3
-    - pillow==10.0.0
-    - pyserial==3.5
 ```
 
 ### Build and Execution
@@ -635,7 +640,7 @@ class SessionManager:
 1. **Environment Preparation**:
    ```bash
    # Activate Python environment
-   conda activate thermal-env
+   conda activate gsr-env
    
    # Verify installation
    python application.py --version
@@ -1102,7 +1107,7 @@ class SessionTest:
 **Problem**: Application fails to start
 **Solutions**:
 
-1. Verify Python environment activation: `conda activate thermal-env`
+1. Verify Python environment activation: `conda activate gsr-env`
 2. Check dependency installation: `conda list`
 3. Validate PyQt5 installation: `python -c "import PyQt5; print('PyQt5 available')"`
 4. Run with debug mode: `python application.py --debug`
