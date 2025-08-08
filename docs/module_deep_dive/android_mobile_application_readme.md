@@ -32,12 +32,12 @@ Android Application (Refactored Architecture)
 │   ├── SettingsScreen                    # Device configuration and preferences
 │   └── ConnectionScreen                  # Network connectivity management
 ├── ViewModel Layer
-│   └── MainViewModelRefactored (451 lines) # Pure UI state coordination
+│   └── MainViewModel (867 lines) # Pure UI state coordination
 ├── Business Logic Layer
-│   ├── RecordingSessionController (218 lines) # Recording lifecycle operations
-│   ├── DeviceConnectionManager (389 lines)    # Device connectivity coordination
-│   ├── FileTransferManager (448 lines)        # Data transfer and persistence
-│   └── CalibrationManager (441 lines)         # Sensor calibration workflows
+│   ├── RecordingSessionController (219 lines) # Recording lifecycle operations
+│   ├── DeviceConnectionManager (390 lines)    # Device connectivity coordination
+│   ├── FileTransferManager (449 lines)        # Data transfer and persistence
+│   └── CalibrationManager (442 lines)         # Sensor calibration workflows
 ├── Data Layer
 │   ├── LocalDatabase (Room)              # Offline-first data persistence
 │   ├── PreferencesManager               # Configuration and user preferences
@@ -52,7 +52,7 @@ Android Application (Refactored Architecture)
 
 ### Specialised Controllers Architecture
 
-#### RecordingSessionController (218 lines)
+#### RecordingSessionController (219 lines)
 
 **Design Pattern**: Pure recording operation management following the Command pattern [Gamma1994]
 
@@ -64,7 +64,7 @@ Android Application (Refactored Architecture)
 
 **Implementation Rationale**: The controller pattern separates recording logic from UI concerns, enabling independent testing and validation of critical research data collection workflows [Beck2002].
 
-#### DeviceConnectionManager (389 lines)
+#### DeviceConnectionManager (390 lines)
 
 **Design Pattern**: Device connectivity orchestration implementing the Observer pattern [Gamma1994]
 
@@ -76,21 +76,21 @@ Android Application (Refactored Architecture)
 
 **Implementation Rationale**: Centralised connection management ensures consistent network behaviour and simplifies debugging of distributed system interactions [Tanenbaum2006].
 
-#### FileTransferManager (448 lines)
+#### FileTransferManager (449 lines)
 **Data transfer and file operations**
 - Manages file transfer operations to PC controller
 - Handles data export and session management
 - Implements progress tracking and error recovery
 - Coordinates storage optimisation and cleanup procedures
 
-#### CalibrationManager (441 lines)
+#### CalibrationManager (442 lines)
 **Calibration process coordination**
 - Manages camera and sensor calibration workflows
 - Handles calibration data validation and storage
 - Implements automated calibration quality assessment
 - Coordinates multi-device calibration synchronisation
 
-#### MainViewModelRefactored (451 lines)
+#### MainViewModel (867 lines)
 **Pure UI state coordination through reactive composition**
 ```kotlin
 val uiState = combine(
