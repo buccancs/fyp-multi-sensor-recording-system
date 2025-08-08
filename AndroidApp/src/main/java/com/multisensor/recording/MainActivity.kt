@@ -29,7 +29,7 @@ import com.multisensor.recording.ui.OnboardingActivity
 import com.multisensor.recording.ui.SettingsActivity
 import com.multisensor.recording.ui.ShimmerSettingsActivity
 import com.multisensor.recording.ui.ShimmerVisualizationActivity
-import com.multisensor.recording.ui.compose.navigation.EnhancedMainNavigation
+import com.multisensor.recording.ui.compose.navigation.MainNavigation
 import com.multisensor.recording.ui.theme.MultiSensorTheme
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        EnhancedMainNavigation()
+                        MainNavigation()
                     }
                 }
             }

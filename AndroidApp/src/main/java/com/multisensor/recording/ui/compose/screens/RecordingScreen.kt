@@ -27,7 +27,7 @@ import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.components.AnimatedRecordingButton
 import com.multisensor.recording.ui.components.ColorPaletteSelector
-import com.multisensor.recording.ui.components.EnhancedThermalPreview
+import com.multisensor.recording.ui.components.ThermalPreview
 import com.multisensor.recording.ui.components.SessionStatusCard
 import com.multisensor.recording.ui.theme.ConnectionGreen
 import com.multisensor.recording.ui.theme.DisconnectedRed

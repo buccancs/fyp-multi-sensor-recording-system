@@ -121,8 +121,8 @@ class PrivacyManagerAdapter(
             // Use configureAnonymization method that exists in PrivacyManager
             val settings = privacyManager.getAnonymizationSettings()
             privacyManager.configureAnonymization(
+                enableDataAnonymization = enabled,
                 enableFaceBlurring = settings.faceBlurringEnabled,
-                enableDataMinimization = enabled,
                 enableMetadataStripping = settings.metadataStrippingEnabled
             )
             updatePrivacySettingsFromManager()
@@ -136,8 +136,8 @@ class PrivacyManagerAdapter(
         return try {
             val settings = privacyManager.getAnonymizationSettings()
             privacyManager.configureAnonymization(
+                enableDataAnonymization = settings.dataAnonymizationEnabled,
                 enableFaceBlurring = enabled,
-                enableDataMinimization = settings.dataAnonymizationEnabled,
                 enableMetadataStripping = settings.metadataStrippingEnabled
             )
             updatePrivacySettingsFromManager()
@@ -151,8 +151,8 @@ class PrivacyManagerAdapter(
         return try {
             val settings = privacyManager.getAnonymizationSettings()
             privacyManager.configureAnonymization(
+                enableDataAnonymization = settings.dataAnonymizationEnabled,
                 enableFaceBlurring = settings.faceBlurringEnabled,
-                enableDataMinimization = settings.dataAnonymizationEnabled,
                 enableMetadataStripping = enabled
             )
             updatePrivacySettingsFromManager()
@@ -207,7 +207,14 @@ class PrivacyManagerAdapter(
     }
     
     override fun getConsentInfo(): ConsentInfo {
-        return privacyManager.getConsentInfo()
+        val managerInfo = privacyManager.getConsentInfo()
+        return ConsentInfo(
+            consentGiven = managerInfo.consentGiven,
+            consentDate = managerInfo.consentDate,
+            consentVersion = managerInfo.consentVersion,
+            participantId = managerInfo.participantId,
+            studyId = managerInfo.studyId
+        )
     }
     
     private fun updatePrivacySettingsFromManager() {
