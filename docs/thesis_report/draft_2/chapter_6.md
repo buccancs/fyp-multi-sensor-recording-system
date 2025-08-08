@@ -258,7 +258,7 @@ light of the project outcomes:
   outputs in a clear way, which reduces user burden. **However, a few
   usability issues remain**, as discussed in the limitations (Section
   3). These include occasional instability in the user interface and
-  less-than-perfect automatic device discovery. Despite those issues,
+  sub-optimal automatic device discovery. Despite those issues,
   the core design proves that the system is practical for real-world
   use: researchers can utilise it to collect synchronised data from
   sensors without needing specialised technical support. The scalability
@@ -305,7 +305,7 @@ features (such as security and adaptive quality control) go beyond what
 was initially envisioned in the project scope. The only notable unmet
 goal is the *practical demonstration in a pilot study*, which, while not
 realised within the project timeframe, does not detract from the
-system's proven capabilities but rather represents an outstanding task
+system's proven capabilities but rather represents a significant task
 for the future. Overall, the outcomes of this project validate the
 feasibility of the proposed approach to contactless GSR recording and
 lay down a strong foundation for subsequent research. The successful
@@ -465,7 +465,7 @@ efforts could be directed:
   if automatic discovery fails, users can still easily register a device
   by ID or IP address. Additionally, optimising network communication --
   for example, by using more fault-tolerant libraries or peer-to-peer
-  connection methods -- could reduce reliance on a perfect network
+  connection methods -- could reduce reliance on optimal network
   environment. In the longer term, one might explore a more
   decentralized or mesh-based synchronisation approach that does not
   rely as heavily on a single PC controller, thereby removing any single

@@ -242,7 +242,7 @@ Another issue is the **time delay**: cortisol does not spike instantly
 at the moment of stress; instead, it follows a cascade taking several
 minutes. After a stress event, saliva cortisol peaks roughly 20 minutes
 later as the hormone diffuses and appears in saliva. This latency means
-cortisol is excellent for capturing the magnitude of a stress response
+cortisol is effective for capturing the magnitude of a stress response
 but not the immediate dynamics. It also implies that cortisol responds
 to *significant* stressors; brief or low-level stress may not produce a
 clear cortisol change above baseline. Despite these constraints,
@@ -780,7 +780,7 @@ into the body's stress reactions.
 ### 2.7.3 Multi-Modal RGB+Thermal Approaches (Hypothesis)
 
 Given the complementary nature of RGB and thermal modalities, a
-reasonable hypothesis is that **fusing both will yield superior stress
+reasonable hypothesis is that **fusing both will yield better stress
 detection performance** than either alone. The idea is that RGB video
 and thermal imaging capture different manifestations of the underlying
 physiological state. By combining them, a model can use a richer set of
@@ -932,7 +932,7 @@ made it a clear choice over alternatives.
 
 For the thermal imaging component, the Topdon TC001 thermal camera was
 chosen as the hardware solution. The Topdon TC001 is a small,
-USB-powered infrared camera that offers impressive specifications at a
+USB-powered infrared camera that offers suitable specifications at a
 relatively accessible price point, making it ideal for research projects
 that need **research-grade thermal data at consumer-grade
 cost**[\[62\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/docs/thesis_report/Chapter_1_Introduction.md#L2-L5).
@@ -1014,7 +1014,7 @@ but these challenges were manageable given the available SDK and our
 system design.
 
 In conclusion, the Topdon TC001 thermal camera was chosen for its
-**excellent balance of high technical capability and practical
+**effective balance of high technical capability and practical
 usability**. It provides the necessary thermal imaging performance to
 detect stress-related thermal cues, as evidenced by its specifications
 and by prior use cases, and it could be readily integrated both in terms
@@ -1023,7 +1023,7 @@ backbone of our sensor suite, enabling the project to capture a rich set
 of synchronised physiological and behavioural data for context and
 literature-aligned stress analysis. The careful selection of these
 devices was guided by the aim to meet distinction-level project
-objectives: leveraging state-of-the-art yet realistic tools to push the
+objectives: leveraging contemporary yet realistic tools to push the
 boundaries of contactless stress detection in a scientifically rigorous
 manner.
 ---

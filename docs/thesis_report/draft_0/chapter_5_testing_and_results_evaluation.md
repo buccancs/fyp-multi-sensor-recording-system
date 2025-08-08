@@ -65,7 +65,7 @@ readiness for demanding research applications.
 
 The thorough testing strategy for the Multi-Sensor Recording System represents a systematic, rigorous, and
 scientifically-grounded approach to validation that addresses the complex challenges of verifying research-grade
-software quality while accommodating the unprecedented complexity of distributed multi-modal data collection systems
+software quality while accommodating the notable complexity of distributed multi-modal data collection systems
 operating across heterogeneous platforms and diverse research environments. The testing strategy recognises that
 research software applications require significantly higher reliability standards, measurement precision, and
 operational consistency than typical commercial applications, as system failures or measurement inaccuracies can result
@@ -474,7 +474,7 @@ emphasizing reliability and accuracy over features such as user interface sophis
 | **Accuracy Testing**    | All measurement modalities | Measurement precision     | ≤5ms synchronisation, ≤0.1°C thermal accuracy | Comparative analysis with reference standards   |
 
 **Coverage Target Justification**: The coverage targets reflect the higher reliability requirements of research software
-while acknowledging practical constraints in achieving perfect coverage across all system components. The targets
+while acknowledging practical constraints in achieving optimal coverage across all system components. The targets
 prioritise critical components and safety-critical functionality while allowing flexibility for components with lower
 risk profiles.
 

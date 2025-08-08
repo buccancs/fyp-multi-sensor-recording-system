@@ -216,7 +216,7 @@ class ShimmerCommand:
   "metadata": {
     "electrode_configuration": "standard",
     "calibration_applied": true,
-    "signal_quality": "excellent"
+    "signal_quality": "effective"
   }
 }
 ```
@@ -247,7 +247,7 @@ class ShimmerCommand:
       "overall_quality": 0.94,
       "artifact_percentage": 2.1,
       "signal_to_noise_ratio": 28.5,
-      "electrode_contact_quality": "excellent"
+      "electrode_contact_quality": "effective"
     },
     "physiological_indices": {
       "arousal_level": "moderate",
