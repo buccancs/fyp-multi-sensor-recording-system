@@ -53,7 +53,7 @@ class NetworkPreviewStreamer @Inject constructor(
     
     override suspend fun startStreaming(config: StreamingConfig) {
         if (isStreamingActive) {
-            logger.warn("Preview streaming already active")
+            logger.warning("Preview streaming already active")
             return
         }
         

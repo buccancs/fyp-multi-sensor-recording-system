@@ -18,7 +18,6 @@ from endurance_testing import (
     run_endurance_test
 )
 
-
 class TestMemoryLeakDetector:
     
     def setup_method(self):
@@ -70,7 +69,6 @@ class TestMemoryLeakDetector:
         
         assert leak_result["leak_detected"] == False
 
-
 class TestEnduranceTestConfig:
     
     def test_default_config(self):
@@ -92,7 +90,6 @@ class TestEnduranceTestConfig:
         assert config.duration_hours == 1.0
         assert config.device_count == 4
         assert config.memory_leak_threshold_mb == 50.0
-
 
 class TestEnduranceTestRunner:
     
@@ -161,7 +158,6 @@ class TestEnduranceTestRunner:
                         assert any(f.name.endswith("_final_results.json") for f in output_dir.iterdir())
                         assert any(f.name.endswith("_detailed_metrics.json") for f in output_dir.iterdir())
 
-
 class TestIntegrationWithExistingSystem:
     
     @pytest.mark.asyncio
@@ -199,7 +195,6 @@ class TestIntegrationWithExistingSystem:
         assert "final_memory_mb" in stats
         assert "peak_memory_mb" in stats
 
-
 def test_endurance_test_configuration_validation():
     config = EnduranceTestConfig(duration_hours=1.0)
     assert config.duration_hours == 1.0
@@ -210,7 +205,6 @@ def test_endurance_test_configuration_validation():
     )
     
     assert config.checkpoint_interval_minutes * 60 > config.monitoring_interval_seconds
-
 
 @pytest.mark.asyncio
 async def test_graceful_shutdown_handling():
@@ -247,7 +241,6 @@ async def test_graceful_shutdown_handling():
                         assert result.duration_hours < 1.0
                         
         await shutdown_task
-
 
 def test_performance_degradation_analysis():
     initial_metrics = [
@@ -294,7 +287,6 @@ def test_performance_degradation_analysis():
     
     assert cpu_degradation > 50
     assert memory_degradation > 30
-
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

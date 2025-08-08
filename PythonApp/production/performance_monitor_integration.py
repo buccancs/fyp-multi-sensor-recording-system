@@ -26,7 +26,6 @@ except ImportError:
     )
     from utils.logging_config import get_logger
 
-
 class PerformanceMonitorIntegration:
     
     def __init__(self, config_file: Optional[str] = None):
@@ -88,7 +87,6 @@ class PerformanceMonitorIntegration:
         
     def _get_application_metrics(self) -> SystemMetrics:
         current_time = time.time()
-        
         
         return SystemMetrics(
             timestamp=current_time,
@@ -406,16 +404,13 @@ class PerformanceMonitorIntegration:
     def get_adapted_recording_settings(self, **baseline_settings) -> Dict[str, Any]:
         return self.degradation_manager.get_adapted_quality_settings(**baseline_settings)
 
-
 _performance_monitor: Optional[PerformanceMonitorIntegration] = None
-
 
 def get_performance_monitor(config_file: Optional[str] = None) -> PerformanceMonitorIntegration:
     global _performance_monitor
     if _performance_monitor is None:
         _performance_monitor = PerformanceMonitorIntegration(config_file)
     return _performance_monitor
-
 
 async def main():
     import argparse
@@ -490,7 +485,6 @@ async def main():
         print(f"Error: {e}")
         import traceback
         traceback.print_exc()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -339,6 +339,8 @@ constructor(
         }
     }
 
+    fun getBaseRecordingFolder(): File = fileStructureManager.getBaseRecordingFolder()
+
     fun getAvailableStorageSpace(): Long =
         try {
             val baseFolder = getBaseRecordingFolder()
@@ -363,8 +365,8 @@ constructor(
                     return@withContext emptyList()
                 }
 
-                baseFolder.listFiles()?.forEach { sessionFolder ->
-                    if (sessionFolder.isDirectory && sessionFolder.name.startsWith("session_")) {
+                baseFolder.listFiles()?.forEach { sessionFolder: File ->
+                    if (sessionFolder.isDirectory() && sessionFolder.name.startsWith("session_")) {
                         try {
                             val sessionInfo = reconstructSessionInfo(sessionFolder)
                             if (sessionInfo != null) {
@@ -436,15 +438,15 @@ constructor(
                 )
 
             if (rawEnabled) {
-                rawFramesFolder.listFiles()?.forEach { rawFile ->
-                    if (rawFile.isFile && rawFile.name.endsWith(".dng")) {
+                filePaths.rawFramesFolder.listFiles()?.forEach { rawFile: File ->
+                    if (rawFile.isFile() && rawFile.name.endsWith(".dng")) {
                         sessionInfo.addRawFile(rawFile.absolutePath)
                     }
                 }
             }
 
             if (thermalEnabled) {
-                val thermalFileSize = thermalVideoFile.length()
+                val thermalFileSize = filePaths.thermalVideoFile.length()
                 val estimatedFrameCount = thermalFileSize / (256 * 192 * 2 + 8)
                 sessionInfo.updateThermalFrameCount(estimatedFrameCount)
             }

@@ -1,9 +1,3 @@
-"""
-Shimmer module for device management and data collection.
-
-This module breaks down the previously monolithic ShimmerManager into
-focused, maintainable components.
-"""
 
 from .connection_handler import ShimmerConnectionHandler
 from .data_processor import ShimmerDataProcessor

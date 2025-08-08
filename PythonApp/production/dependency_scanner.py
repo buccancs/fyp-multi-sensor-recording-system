@@ -16,7 +16,6 @@ except ImportError:
     def get_logger(name):
         return logging.getLogger(name)
 
-
 class DependencySecurityScanner:
     
     def __init__(self, project_root: Optional[str] = None):
@@ -380,7 +379,6 @@ class DependencySecurityScanner:
         else:
             self.logger.warning(f"   ⚠️  Action required for {summary['total_vulnerabilities']} vulnerabilities")
 
-
 def create_dependabot_config(project_root: str) -> bool:
     logger = get_logger(__name__)
     
@@ -428,7 +426,6 @@ def create_dependabot_config(project_root: str) -> bool:
     except Exception as e:
         logger.error(f"Failed to create Dependabot configuration: {e}")
         return False
-
 
 def create_ci_security_workflow(project_root: str) -> bool:
     logger = get_logger(__name__)
@@ -487,7 +484,6 @@ jobs:
     except Exception as e:
         logger.error(f"Error creating security workflow: {e}")
         return False
-
 
 if __name__ == "__main__":
     scanner = DependencySecurityScanner()

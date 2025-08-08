@@ -18,14 +18,11 @@ except ImportError:
     def get_logger(name):
         return logging.getLogger(name)
 
-
 class SecurityValidationError(Exception):
     pass
 
-
 class SecurityWarning(UserWarning):
     pass
-
 
 class RuntimeSecurityChecker:
     
@@ -356,11 +353,9 @@ class RuntimeSecurityChecker:
             "timestamp": str(Path(__file__).stat().st_mtime)
         }
 
-
 def validate_runtime_security(config_path: Optional[str] = None) -> bool:
     checker = RuntimeSecurityChecker()
     return checker.perform_startup_checks(config_path)
-
 
 def check_production_readiness() -> Dict[str, bool]:
     checker = RuntimeSecurityChecker()
@@ -381,7 +376,6 @@ def check_production_readiness() -> Dict[str, bool]:
         "android_device_secure": android_security.get("device_encrypted", False),
         "overall_ready": security_ready and len(checker._warnings) == 0
     }
-
 
 if __name__ == "__main__":
     try:

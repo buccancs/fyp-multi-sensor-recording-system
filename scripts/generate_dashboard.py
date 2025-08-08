@@ -1,13 +1,10 @@
-"""
-Quality Dashboard Generator
-Generates a comprehensive quality dashboard from collected metrics
-"""
+
 import json
 import os
 from datetime import datetime
 from pathlib import Path
 def generate_quality_dashboard():
-    """Generate complete quality dashboard"""
+
     quality_data = {
         'timestamp': datetime.now().isoformat(),
         'commit_sha': os.environ.get('GITHUB_SHA', 'unknown'),
@@ -30,7 +27,7 @@ def generate_quality_dashboard():
     generate_metrics_json(quality_data)
     return quality_data['overall_score']
 def collect_python_metrics(reports_path):
-    """Collect Python quality metrics from reports"""
+
     metrics = {}
     pylint_file = reports_path / 'pylint-report.json'
     if pylint_file.exists():
@@ -48,7 +45,7 @@ def collect_python_metrics(reports_path):
             metrics['security'] = json.load(f)
     return metrics
 def collect_kotlin_metrics(reports_path):
-    """Collect Kotlin quality metrics from reports"""
+
     metrics = {}
     complexity_file = reports_path / 'complexity-metrics.json'
     if complexity_file.exists():
@@ -56,7 +53,7 @@ def collect_kotlin_metrics(reports_path):
             metrics['complexity'] = json.load(f)
     return metrics
 def calculate_quality_score(python_metrics, kotlin_metrics):
-    """Calculate overall quality score (0-10)"""
+
     score = 10.0
     if 'complexity' in python_metrics:
         complexity = python_metrics['complexity']
@@ -77,7 +74,7 @@ def calculate_quality_score(python_metrics, kotlin_metrics):
             score -= 1.0
     return max(score, 0.0)
 def generate_dashboard_html(quality_data):
-    """Generate HTML dashboard"""
+
     html_template = """
 <!DOCTYPE html>
 <html>
@@ -128,7 +125,7 @@ def generate_dashboard_html(quality_data):
     with open('quality-dashboard.html', 'w') as f:
         f.write(html_content)
 def generate_metrics_json(quality_data):
-    """Generate JSON metrics file"""
+
     with open('quality-metrics.json', 'w') as f:
         json.dump(quality_data, f, indent=2)
 if __name__ == '__main__':

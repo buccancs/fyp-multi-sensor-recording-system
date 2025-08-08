@@ -1,10 +1,4 @@
-"""
-Foundation Testing Layer - Android Component Tests
 
-Implements complete integration testing for Android application components
-including camera recording, thermal camera integration, and Shimmer GSR sensor testing.
-Tests actual implementation code where possible.
-"""
 import asyncio
 import logging
 import time
@@ -24,13 +18,13 @@ current_dir = Path(__file__).parent
 repo_root = current_dir.parent.parent
 android_app_path = repo_root / "AndroidApp"
 class AndroidComponentTest(BaseTest):
-    """Base class for Android component tests that test real implementation"""
+
     def __init__(self, name: str, description: str = "", timeout: int = 300):
         super().__init__(name, description, timeout)
         self.temp_dir = None
         self.android_source_available = self._check_android_source()
     def _check_android_source(self) -> bool:
-        """Check if Android source code is available for testing"""
+
         main_activity = android_app_path / "src" / "main" / "java" / "com" / "multisensor" / "recording" / "MainActivity.kt"
         return main_activity.exists()
     async def setup(self, test_env: Dict[str, Any]):
@@ -44,7 +38,7 @@ class AndroidComponentTest(BaseTest):
         if self.temp_dir and os.path.exists(self.temp_dir):
             shutil.rmtree(self.temp_dir, ignore_errors=True)
 class CameraRecordingTest(AndroidComponentTest):
-    """Test real camera recording functionality"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real camera recording test"""
         result = TestResult(
@@ -166,7 +160,7 @@ class CameraRecordingTest(AndroidComponentTest):
             logger.error(f"Android manifests test failed: {e}")
             return False
 class ShimmerGSRTest(AndroidComponentTest):
-    """Test real Shimmer GSR sensor integration"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute Shimmer GSR integration test"""
         result = TestResult(
@@ -295,7 +289,7 @@ class ShimmerGSRTest(AndroidComponentTest):
             logger.error(f"GSR processing test failed: {e}")
             return False
 class NetworkCommunicationTest(AndroidComponentTest):
-    """Test network communication and WebSocket integration"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute network communication test"""
         result = TestResult(
@@ -425,7 +419,7 @@ class NetworkCommunicationTest(AndroidComponentTest):
             logger.error(f"Protocol handling test failed: {e}")
             return False
 class ThermalCameraTest(AndroidComponentTest):
-    """Test thermal camera integration"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute complete thermal camera test"""
         result = TestResult(
@@ -552,7 +546,7 @@ class ThermalCameraTest(AndroidComponentTest):
             logger.error(f"Thermal calibration test failed: {e}")
             return False
 class SessionManagementTest(AndroidComponentTest):
-    """Test session management and recording coordination"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute session management test"""
         result = TestResult(
@@ -709,7 +703,7 @@ class SessionManagementTest(AndroidComponentTest):
             logger.error(f"Thermal dependencies test failed: {e}")
             return False
 class ShimmerSensorTest(AndroidComponentTest):
-    """Test Shimmer GSR sensor integration"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute Shimmer sensor test"""
         result = TestResult(
@@ -805,7 +799,7 @@ class ShimmerSensorTest(AndroidComponentTest):
             logger.error(f"Bluetooth permissions test failed: {e}")
             return False
 def create_android_foundation_suite() -> TestSuite:
-    """Create the Android foundation testing suite with real component tests"""
+
     suite = TestSuite(
         name="android_foundation_real",
         category=TestCategory.FOUNDATION,

@@ -28,7 +28,6 @@ except ImportError:
     def get_logger(name):
         return logging.getLogger(name)
 
-
 class AccelerationType(Enum):
     CPU_OPTIMIZED = "cpu_optimized"
     GPU_OPENCL = "gpu_opencl"
@@ -38,7 +37,6 @@ class AccelerationType(Enum):
     INTEL_IPP = "intel_ipp"
     INTEL_TBB = "intel_tbb"
     ANDROID_MEDIACODEC = "android_mediacodec"
-
 
 @dataclass
 class HardwareCapability:
@@ -55,7 +53,6 @@ class HardwareCapability:
     def __post_init__(self):
         if self.limitations is None:
             self.limitations = []
-
 
 @dataclass
 class OptimizationProfile:
@@ -91,7 +88,6 @@ class OptimizationProfile:
             "enable_fast_algorithms": self.enable_fast_algorithms,
             "reduce_precision": self.reduce_precision
         }
-
 
 class HardwareAccelerationDetector:
     
@@ -308,7 +304,6 @@ class HardwareAccelerationDetector:
         available = self.get_available_capabilities()
         available.sort(key=lambda x: x.performance_score or 0, reverse=True)
         return available[:limit]
-
 
 class HardwareAccelerationOptimizer:
     
@@ -602,18 +597,15 @@ class HardwareAccelerationOptimizer:
             
         return recommendations
 
-
 def create_optimal_profile_for_system() -> OptimizationProfile:
     detector = HardwareAccelerationDetector()
     optimizer = HardwareAccelerationOptimizer(detector)
     
     return optimizer.create_optimization_profile("balanced")
 
-
 def benchmark_system_performance(duration_seconds: float = 30.0) -> Dict[str, Any]:
     optimizer = HardwareAccelerationOptimizer()
     return optimizer.benchmark_acceleration(duration_seconds)
-
 
 def main():
     import argparse
@@ -703,7 +695,6 @@ def main():
         print(f"Error: {e}")
         import traceback
         traceback.print_exc()
-
 
 if __name__ == "__main__":
     main()

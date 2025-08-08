@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.multisensor.recording.util.ThermalColorPalette
 import com.multisensor.recording.util.TemperatureRange
 @Composable
-fun EnhancedThermalPreview(
+fun ThermalPreview(
     thermalBitmap: Bitmap?,
     isRecording: Boolean,
     temperatureRange: TemperatureRange,

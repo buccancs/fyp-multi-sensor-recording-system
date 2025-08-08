@@ -88,7 +88,6 @@ except ImportError:
     WebDashboardIntegration = None
     WEB_UI_AVAILABLE = False
 
-
 class EnhancedApplicationWithWebUI:
 
     def __init__(self):
@@ -389,7 +388,6 @@ The web interface is connected to the same data sources as the desktop applicati
                 logger.error(f"Error stopping WebcamCapture: {e}")
         logger.info("Application cleanup completed")
 
-
 def main():
     app = EnhancedApplicationWithWebUI()
     try:
@@ -402,7 +400,6 @@ def main():
         return 1
     finally:
         app.cleanup()
-
 
 if __name__ == "__main__":
     sys.exit(main())

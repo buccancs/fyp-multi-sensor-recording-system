@@ -20,7 +20,6 @@ from .ntp_time_server import NTPTimeServer
 
 logger = get_logger(__name__)
 
-
 @dataclass
 class SyncStatus:
     device_id: str
@@ -32,7 +31,6 @@ class SyncStatus:
     recording_active: bool
     frame_count: int
 
-
 @dataclass
 class SyncCommand:
     command_type: str
@@ -40,7 +38,6 @@ class SyncCommand:
     master_timestamp: float
     target_devices: List[str]
     sync_tolerance_ms: float = 50.0
-
 
 @dataclass
 class RecordingSession:
@@ -51,7 +48,6 @@ class RecordingSession:
     android_files: Dict[str, List[str]]
     is_active: bool
     sync_quality: float
-
 
 class MasterClockSynchronizer:
 
@@ -373,16 +369,13 @@ class MasterClockSynchronizer:
                 self.logger.error(f"Error in sync monitoring loop: {e}")
                 time.sleep(1.0)
 
-
 _master_synchronizer: Optional[MasterClockSynchronizer] = None
-
 
 def get_master_synchronizer() -> MasterClockSynchronizer:
     global _master_synchronizer
     if _master_synchronizer is None:
         _master_synchronizer = MasterClockSynchronizer()
     return _master_synchronizer
-
 
 def initialize_master_synchronizer(
     ntp_port: int = 8889, pc_server_port: int = 9000
@@ -397,13 +390,11 @@ def initialize_master_synchronizer(
         logger.error(f"Failed to initialize master synchronizer: {e}")
         return False
 
-
 def shutdown_master_synchronizer():
     global _master_synchronizer
     if _master_synchronizer:
         _master_synchronizer.stop()
         _master_synchronizer = None
-
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

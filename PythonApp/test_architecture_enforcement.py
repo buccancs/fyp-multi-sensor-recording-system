@@ -5,7 +5,6 @@ import ast
 from pathlib import Path
 from typing import List, Set
 
-
 class PythonArchitectureTest(unittest.TestCase):
 
     def setUp(self):
@@ -150,7 +149,6 @@ class PythonArchitectureTest(unittest.TestCase):
                     f"Session file {file_path} should not directly access GUI layer"
                 )
 
-
     def _get_python_files_in_package(self, package_name: str) -> List[Path]:
         package_path = self.python_app_root / package_name
         if not package_path.exists():
@@ -187,7 +185,6 @@ class PythonArchitectureTest(unittest.TestCase):
             content = f.read()
         return ast.parse(content)
 
-
 class PythonArchitectureValidationSuite:
     
     @staticmethod
@@ -197,7 +194,6 @@ class PythonArchitectureValidationSuite:
         runner = unittest.TextTestRunner(verbosity=2)
         result = runner.run(suite)
         return result.wasSuccessful()
-
 
 if __name__ == "__main__":
     unittest.main()

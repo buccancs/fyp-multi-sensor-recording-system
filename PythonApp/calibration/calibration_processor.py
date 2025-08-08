@@ -5,17 +5,10 @@ import numpy as np
 
 from ..utils.logging_config import get_logger
 
-
 class CalibrationProcessor:
-    """
-    Handles computer vision-based calibration processing for camera alignment.
-    
-    This class provides methods for detecting chessboard patterns, computing
-    homographies, and performing camera calibration operations.
-    """
 
     def __init__(self):
-        """Initialize the calibration processor with default parameters."""
+
         self.logger = get_logger(__name__)
         self.pattern_size = 9, 6
         self.square_size = 25.0
@@ -143,16 +136,7 @@ class CalibrationProcessor:
     def compute_homography(
         self, points1: np.ndarray, points2: np.ndarray
     ) -> Optional[np.ndarray]:
-        """
-        Compute homography matrix between two sets of points.
-        
-        Args:
-            points1: First set of points
-            points2: Second set of points
-            
-        Returns:
-            Homography matrix if successful, None otherwise
-        """
+
         if len(points1) < 4 or len(points2) < 4:
             self.logger.debug("Insufficient points for homography computation")
             return None
@@ -299,7 +283,6 @@ class CalibrationProcessor:
         result_image = image.copy()
         cv2.drawChessboardCorners(result_image, pattern_size, corners, pattern_found)
         return result_image
-
 
 if __name__ == "__main__":
     logger = get_logger(__name__)
