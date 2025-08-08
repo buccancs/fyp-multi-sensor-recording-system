@@ -12,13 +12,9 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from ..utils.logging_config import get_logger
-
-
 class StatusIndicator(QWidget):
     statusChanged = pyqtSignal(bool, str)
-
     def __init__(self, label_text="Status", parent=None):
         super().__init__(parent)
         self.is_connected = False
@@ -26,7 +22,6 @@ class StatusIndicator(QWidget):
         self.logger = get_logger(__name__)
         self.setup_ui(label_text)
         self.update_appearance()
-
     def setup_ui(self, label_text):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)
@@ -44,7 +39,6 @@ class StatusIndicator(QWidget):
         self.status_label.setMinimumWidth(100)
         layout.addWidget(self.status_label)
         layout.addStretch()
-
     def set_status(self, is_connected, status_text=""):
         if self.is_connected != is_connected or self.status_text != status_text:
             self.is_connected = is_connected
@@ -57,7 +51,6 @@ class StatusIndicator(QWidget):
             self.logger.debug(
                 f"Status updated: {self.label.text()} - {self.status_text}"
             )
-
     def update_appearance(self):
         if self.is_connected:
             self.indicator.setStyleSheet("color: #4CAF50;")
@@ -66,15 +59,11 @@ class StatusIndicator(QWidget):
             self.indicator.setStyleSheet("color: #f44336;")
             self.status_label.setStyleSheet("color: #C62828;")
         self.status_label.setText(self.status_text)
-
-
 class ModernButton(QPushButton):
-
     def __init__(self, text, button_type="primary", parent=None):
         super().__init__(text, parent)
         self.button_type = button_type
         self.setup_styling()
-
     def setup_styling(self):
         base_style = """
             QPushButton {

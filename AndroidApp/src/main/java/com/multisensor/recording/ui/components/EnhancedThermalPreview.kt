@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui.components
-
 import android.graphics.Bitmap
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -22,11 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.multisensor.recording.util.ThermalColorPalette
 import com.multisensor.recording.util.TemperatureRange
-
-/**
- * Enhanced thermal preview component with professional overlays and animations
- * Provides beautiful, smooth preview with IRCamera-like quality
- */
 @Composable
 fun EnhancedThermalPreview(
     thermalBitmap: Bitmap?,
@@ -47,7 +41,6 @@ fun EnhancedThermalPreview(
         )
     ) {
         Box {
-            // High-quality thermal preview
             thermalBitmap?.let { bitmap ->
                 Image(
                     bitmap = bitmap.asImageBitmap(),
@@ -58,17 +51,12 @@ fun EnhancedThermalPreview(
                     contentScale = ContentScale.Crop
                 )
             } ?: run {
-                // Beautiful placeholder when no thermal data
                 ThermalPreviewPlaceholder()
             }
-            
-            // Temperature overlay
             TemperatureOverlay(
                 temperatureRange = temperatureRange,
                 modifier = Modifier.align(Alignment.TopStart)
             )
-            
-            // Recording indicator with smooth animation
             thermalBitmap?.let { 
                 if (isRecording) {
                     RecordingIndicator(
@@ -76,8 +64,6 @@ fun EnhancedThermalPreview(
                     )
                 }
             }
-            
-            // Color palette indicator
             ColorPaletteIndicator(
                 palette = colorPalette,
                 modifier = Modifier.align(Alignment.BottomStart)
@@ -85,7 +71,6 @@ fun EnhancedThermalPreview(
         }
     }
 }
-
 @Composable
 private fun ThermalPreviewPlaceholder(
     modifier: Modifier = Modifier
@@ -123,7 +108,6 @@ private fun ThermalPreviewPlaceholder(
         }
     }
 }
-
 @Composable
 private fun TemperatureOverlay(
     temperatureRange: TemperatureRange,
@@ -175,7 +159,6 @@ private fun TemperatureOverlay(
         }
     }
 }
-
 @Composable
 private fun RecordingIndicator(
     modifier: Modifier = Modifier
@@ -187,7 +170,6 @@ private fun RecordingIndicator(
             repeatMode = RepeatMode.Reverse
         )
     )
-    
     Card(
         modifier = modifier.padding(12.dp),
         colors = CardDefaults.cardColors(
@@ -214,7 +196,6 @@ private fun RecordingIndicator(
         }
     }
 }
-
 @Composable
 private fun ColorPaletteIndicator(
     palette: ThermalColorPalette,
