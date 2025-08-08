@@ -29,7 +29,7 @@ import com.multisensor.recording.ui.OnboardingActivity
 import com.multisensor.recording.ui.SettingsActivity
 import com.multisensor.recording.ui.ShimmerSettingsActivity
 import com.multisensor.recording.ui.ShimmerVisualizationActivity
-import com.multisensor.recording.ui.compose.navigation.MainComposeNavigation
+import com.multisensor.recording.ui.compose.navigation.EnhancedMainNavigation
 import com.multisensor.recording.ui.theme.MultiSensorTheme
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,18 +47,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        
         if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
             return
         }
+
         enableEdgeToEdge()
-        val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true) 
-        if (useComposeUI) {
-            initializeComposeUI()
-        } else {
-            initializeFragmentUI()
-        }
+        // Always use Compose UI for single-activity pattern
+        initializeComposeUI()
     }
     private fun initializeComposeUI() {
         try {
@@ -69,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        MainComposeNavigation()
+                        EnhancedMainNavigation()
                     }
                 }
             }
@@ -196,14 +194,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
     override fun onSupportNavigateUp(): Boolean {
-        val useComposeUI = sharedPreferences.getBoolean("use_compose_ui", true)
-        return if (!useComposeUI) {
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            val navController = navHostFragment.navController
-            navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-        } else {
-            super.onSupportNavigateUp()
-        }
+        // Single activity pattern with Compose navigation handles back navigation differently
+        return super.onSupportNavigateUp()
     }
     private fun showErrorDialog(title: String, message: String) {
         AlertDialog.Builder(this)
