@@ -35,7 +35,7 @@ Each device buffers and locally stores data so that even if connectivity is lost
 momentarily, data collection can continue uninterrupted; once the connection is
 restored, the system can realign the data streams in time.
 
-This fault-tolerant approach, combined with complete logging on both mobile and PC
+This fault-tolerant approach, combined with logging on both mobile and PC
 sides, guarantees data integrity and consistency throughout a recording session.
 
 \textit{Figure 4.1: System architecture overview of the multi-sensor recording system.
@@ -56,7 +56,7 @@ monitoring, and unified timekeeping across the system.} \section{4.2 Android
 Application Design and Sensor Integration}
 
 The \textbf{Android application}
- is a complete sensor data collection platform that integrates the phone's native
+ is a sensor data collection platform that integrates the phone's native
  sensors (e.g.  camera) with external devices.
 
 It is developed in Kotlin and structured using a clear \textbf{layered architecture}
@@ -713,7 +713,7 @@ small error, each piece of data can be re-aligned precisely in post-processing u
 interpolation or offset adjustment.
 
 In summary, the \textbf{PC---Android communication}
- is realized via a reliable JSON/TCP socket protocol, enabling complete remote
+ is realized via a reliable JSON/TCP socket protocol, enabling remote
  control and live data streaming, while the \textbf{synchronization mechanism}
  ensures all devices operate on a unified timeline.
 
