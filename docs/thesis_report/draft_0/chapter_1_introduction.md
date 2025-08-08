@@ -177,7 +177,7 @@ applications:
 
 **Performance Achievements:**
 
-The synchronisation system achieves exceptional performance metrics essential for research applications:
+The synchronisation system achieves suitable performance metrics essential for research applications:
 
 - **Temporal Precision**: ±3.2ms synchronisation accuracy across all connected devices
 - **Network Latency Tolerance**: Maintains accuracy across network conditions from 1ms to 500ms latency

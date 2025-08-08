@@ -487,7 +487,7 @@ coped.
 In one set of tests, we defined network profiles such as **"Perfect
 Network"** (low latency \~1 ms, no packet loss) and **"High Latency"**
 (500 ms latency, no loss) and ran end-to-end recordings through them.
-Under the perfect network condition, not surprisingly, everything
+Under the optimal network condition, not surprisingly, everything
 functioned smoothly: all control messages got through with essentially
 0% loss and about 1 ms average latency, and the test was marked
 passed[\[34\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_05_test_network_resilience_output.txt#L32-L35)[\[35\]](https://github.com/buccancs/bucika_gsr/blob/e159c5e2651daa79c8effc642b2424895d6492f3/test_results/test_05_test_network_resilience_output.txt#L8-L12).
@@ -713,7 +713,7 @@ the recorded video file and count frames vs. the nominal frame rate and
 duration. In a stable indoor test (well-lit, moderate motion), a 4K
 video set to 30 FPS for 2 minutes yielded very close to 3600 frames (2
 min \* 60 sec \* 30 fps) -- the count was within a dozen frames, which
-corresponds to a drop rate \<0.3%. This is an excellent result
+corresponds to a drop rate \<0.3%. This is a satisfactory result
 indicating the phone can handle the load. In a more stressful test (4K
 at 60 FPS, in a warmer environment with more movement), we noticed a
 slightly higher drop rate, around 2--3% of frames not captured. By
@@ -744,7 +744,7 @@ was no section of missing data. The only irregularity observed was a
 single outlier reading at one point (likely when the Bluetooth had a
 1-second hiccup, causing one sample to be out of expected range), but
 the software's validation code marked it and it was easily filtered out.
-Overall, the **sensor uptime and data integrity** were excellent --
+Overall, the **sensor uptime and data integrity** were effective --
 effectively 100% data capture except that one blip. - **Calibration
 Accuracy:** Although more related to system functionality than data
 "quality", we validated the calibration of the cameras to ensure
@@ -954,7 +954,7 @@ targets set for the project:
   requirement. We also tested lower resolutions (for example, 720p) and
   found the phone could handle even 120 FPS at 720p if needed, which
   might be useful for some specialised analysis. So performance-wise,
-  the video recording capability is excellent.
+  the video recording capability is effective.
 - **Resource Utilisation:** On the Android device, CPU usage during
   recording \~45% (one big core mostly) and memory \~250 MB; on Desktop,
   CPU \~5% or less, memory \~150 MB. Both are well within the host
@@ -1427,7 +1427,7 @@ test_05_test_network_resilience_output.txt
 
 ### 5.5.1 complete Exception Handling Validation
 
-The Multi-Sensor Recording System demonstrates exceptional reliability through systematic code quality improvements that address fundamental software engineering challenges in distributed research instrumentation. This detailed evaluation establishes quantitative evidence for improved error handling specificity and enhanced system robustness under diverse failure conditions.
+The Multi-Sensor Recording System demonstrates notable reliability through systematic code quality improvements that address fundamental software engineering challenges in distributed research instrumentation. This detailed evaluation establishes quantitative evidence for improved error handling specificity and enhanced system robustness under diverse failure conditions.
 
 **Python Application Exception Handling Results:**
 
@@ -1441,7 +1441,7 @@ The Multi-Sensor Recording System demonstrates exceptional reliability through s
 
 **Android Application Systematic Enhancement:**
 
-The Android application demonstrates unprecedented systematic improvement across 590+ exception handlers, representing the most complete exception handling enhancement documented in research software development.
+The Android application demonstrates comprehensive systematic improvement across 590+ exception handlers, representing the most complete exception handling enhancement documented in research software development.
 
 | Component Category | Handlers Enhanced | Critical Improvements | Validation Results | Performance Impact |
 |-------------------|------------------|----------------------|-------------------|-------------------|
@@ -1454,7 +1454,7 @@ The Android application demonstrates unprecedented systematic improvement across
 
 ### 5.5.2 System Robustness Under Stress Conditions
 
-complete stress testing validation demonstrates exceptional system robustness under diverse failure conditions, establishing confidence in system reliability for demanding research applications.
+complete stress testing validation demonstrates notable system robustness under diverse failure conditions, establishing confidence in system reliability for demanding research applications.
 
 **Failure Recovery Testing Results:**
 

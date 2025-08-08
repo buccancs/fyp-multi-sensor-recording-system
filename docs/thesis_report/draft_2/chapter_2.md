@@ -184,7 +184,7 @@ response[\[10\]](https://www.frontiersin.org/journals/computer-science/articles/
 As a result, skin conductance begins to climb almost immediately, often
 within 1--3 seconds of a
 stimulus[\[13\]](https://en.wikipedia.org/wiki/Electrodermal_activity#:~:text=example%2C%20the%20responses%20on%20the,38).
-This makes GSR an excellent *real-time* indicator of arousal. For
+This makes GSR an effective *real-time* indicator of arousal. For
 example, during a stressful task, one can observe distinctive GSR peaks
 corresponding to moments of heightened stress or excitement, long before
 any cortisol changes would be
@@ -258,7 +258,7 @@ control) ties it closely to the fight-or-flight machinery of the body,
 which is exactly what we seek to monitor in stress research.
 
 **Limitations of GSR measurements:** Despite its value, GSR is not a
-perfect signal and comes with several important limitations and
+optimal signal and comes with several important limitations and
 challenges[\[18\]](https://en.wikipedia.org/wiki/Electrodermal_activity#:~:text=External%20factors%20such%20as%20temperature,not%20only%20with%20different%20sweat)[\[19\]](https://en.wikipedia.org/wiki/Electrodermal_activity#:~:text=measured%20in%20different%20places%20on,38):
 
 - **Environmental and Individual Factors:** External conditions like

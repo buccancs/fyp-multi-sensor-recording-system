@@ -333,7 +333,7 @@ All synchronisation messages follow a standardised JSON format:
     "status": "recording",
     "synchronization_health": {
       "precision": "microsecond",
-      "stability": "excellent",
+      "stability": "effective",
       "last_compensation": 1640995200450
     },
     "sensors": {
@@ -407,7 +407,7 @@ The PC controller implements a local NTP server for high-precision time distribu
         "average_offset": 0.5,
         "standard_deviation": 0.2,
         "maximum_offset": 1.2,
-        "precision_grade": "excellent"
+        "precision_grade": "effective"
       },
       "stability": {
         "drift_rate": 0.000001,
