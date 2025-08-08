@@ -1,22 +1,24 @@
-# Chapter 2: Background and Literature Review - Complete Documentation
+# Chapter 2. Multi-Modal Physiological Data Collection Platform for Future GSR Prediction
 
-This complete chapter provides complete coverage of both technical foundations and physiological foundations for
-the Multi-Sensor Recording System thesis project, combining theoretical analysis with practical implementation guidance.
+## 2.1 Emotion Analysis Applications
 
-## 📚 Complete Documentation Structure
+Emotion recognition and stress monitoring are increasingly important across many fields, often using physiological signals like Galvanic Skin Response (GSR) to gain insight into human internal states. GSR, in particular, has a long history in psychophysiological research. By the early 1970s, over 1,500 scientific articles on GSR had been published, and it remains one of the most popular methods for investigating human emotional arousal. GSR-driven emotion analysis has broad applicability across several domains, including:
 
-### Part A: Technical Foundations and System Architecture
+**Psychological and Clinical Research:** Psychologists use GSR to quantify emotional reactions to stimuli and to study conditions like phobias or PTSD. High GSR readings can indicate fear or stress, so therapists often monitor GSR during exposure or relaxation therapy to gauge a patient's progress. For example, an anxious patient might exhibit elevated GSR when facing a feared stimulus. Over the course of therapy, a reduction in that GSR response would signal desensitization and recovery progress.
 
-**Coverage:**
+**Marketing and Media Testing:** In consumer neuroscience and marketing, GSR provides an objective measure of subtle differences in product appeal or advertisement impact. Marketers track GSR to determine which ads evoke arousal and engagement, pinpointing moments that resonate or fall flat. Similarly, media producers use GSR to test audience reactions to scenes in films or games. Spikes in GSR reveal where excitement or stress occurs at key moments, informing creative decisions.
 
-- Introduction and Research Context
-- Literature Survey and Related Work (Distributed Systems, Computer Vision, Mobile Computing)
-- Supporting Tools, Software, Libraries and Frameworks
-- Technology Choices and Justification
-- Theoretical Foundations (Distributed Systems Theory, Signal Processing, Computer Vision)
-- Research Gaps and Opportunities
+**Human–Computer Interaction and UX:** In human-computer interaction and user experience research, GSR helps detect user frustration or cognitive load during usability testing. When a user struggles with a confusing interface or encounters an error, their stress level rises, which is reflected in an increased skin conductance reading. Designers leverage these insights to pinpoint problematic interface elements. In adaptive systems, real-time GSR feedback can even trigger interface adjustments to reduce user stress, resulting in more responsive and empathetic technology.
 
-### Part B: Physiological Foundations and Stress Detection 🆕
+These application areas underscore the critical importance of reliably detecting emotional states. They create strong motivation to develop robust data collection platforms that fuel machine learning models for stress and emotion recognition. A multimodal approach – combining physiological signals like GSR with behavioral cues such as facial expressions or thermal signatures – promises to provide richer data for these applications. The ultimate goal is to enable models to detect or predict stress accurately in natural settings. Achieving this requires complete, high-quality datasets. By capturing synchronized multimodal data, the proposed platform aims to provide the ground truth needed to train and validate advanced affective computing systems.
+
+## 2.2 Rationale for Contactless Physiological Measurement
+
+Traditional emotion detection often uses wearable sensors attached to the body to measure signals like heart rate or skin conductance. While effective, these contact-based methods can be obtrusive and may alter the user's behavior or comfort. As a result, there is strong rationale for using contactless physiological measurement techniques in stress and emotion research. A contactless approach gathers data without encumbering the subject, allowing more natural interactions and broader applicability (for example, in scenarios where wearing sensors is impractical). For instance, in automotive research, monitoring driver stress with cameras is preferable to wiring a driver with electrodes. A recent study demonstrated a non-invasive driver stress monitoring system using only thermal infrared imaging, and validated its output against traditional ECG-based stress indices. The ability to assess stress through a camera without any physical contact proved to be feasible and accurate. This finding is promising for real-world driver assistance systems.
+
+Contactless measurement is also advantageous for continuous mental health monitoring in daily life. For example, modern smartphones equipped with optical (camera) and thermal sensors can passively gauge physiological signals. Researchers have even combined a smartphone's camera-based photoplethysmography (to capture heart pulse) with a small thermal camera, enabling quick and convenient daily stress measurements. These systems demonstrate that cameras – both standard RGB and infrared – can capture proxies for vital signs (such as subtle changes in facial blood flow or skin temperature) without any body attachments. This unobtrusiveness reduces the burden on participants, making long-term stress tracking more acceptable and scalable.
+
+In light of these benefits, our platform prioritizes contactless modalities alongside traditional sensors. By integrating a thermal camera (and optionally the device's own RGB camera), we obtain physiological data (such as heat patterns or heart-rate-related signals) with no additional contact points beyond a simple finger GSR sensor. This approach supports data collection in more natural environments (e.g., at work, while driving, or in everyday settings) where people might not tolerate multiple wired sensors. In summary, including contactless measurements in a multimodal platform broadens the contexts in which high-quality stress data can be collected. This approach ensures the platform can be used comfortably in real-world settings and easily extended for future stress inference applications.
 
 **Coverage:** Integrated in this document
 

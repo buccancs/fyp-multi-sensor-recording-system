@@ -24,25 +24,7 @@
 \begin{document}
 
 % Chapter 4 content
-\label{chap:4}
-
-\chapter{Chapter 4: Design and Implementation}
-
-\section{4.1 System Architecture Overview (PC---Android System Design)}
-
-The \textbf{Multi-Sensor Recording System} is implemented as a distributed
-architecture consisting of an Android mobile application and a
-Python-based desktop controller. The Android device functions as a
-sensor node responsible for data capture, while the PC acts as a central
-coordinator or hub. This \textbf{PC---Android system design} follows a
-master---slave paradigm in which the Python desktop application
-orchestrates one or more Android sensor nodes, achieving precise
-synchronized operation across all
-devices\cite{Boucsein2012}\cite{AppleHealthWatch2019}.
-The design balances device autonomy with centralized control: each
-Android device can operate independently for local sensor management and
-data logging, yet all devices participate in coordinated sessions
-managed by the desktop controller for unified timing and control.
+\input{chapter_4}
 
 The architecture emphasizes \textbf{temporal synchronization, reliability, and
 modularity}. A custom network communication layer links the mobile and
