@@ -19,25 +19,26 @@ This directory contains Mermaid diagrams for Chapter 6 figures and Appendix diag
 
 ### System Reliability
 - **A1_discovery_pattern.md** - Device discovery success patterns and failure modes
-- **A6_reliability_overview.md** - Comprehensive system reliability metrics and error classification
+- **A6_reliability_pie_chart.md** - Error distribution by category with quantitative analysis
+- **A6_reliability_flowchart.md** - Error classification hierarchy and reliability metrics
 
 ## Generated PNG Files
 
 The following PNG files have been generated from the Mermaid diagrams for immediate use:
 
 ### Essential Figures (Chapter 6)
-- **F1_system_architecture.png** - Complete system overview (1200x800px)
-- **F2_recording_pipeline.png** - Recording workflow sequence (1200x900px)  
-- **F3_device_discovery.png** - Device discovery protocol (1000x1200px)
-- **F4_sync_timeline.png** - Synchronized start timeline (1200x600px)
-- **F14_issues_timeline.png** - Known issues timeline (1200x800px)
+- **F1_system_architecture.png** - Complete system overview (3136x472px)
+- **F2_recording_pipeline.png** - Recording workflow sequence (3136x9340px)  
+- **F3_device_discovery.png** - Device discovery protocol (3136x6620px)
+- **F4_sync_timeline.png** - Synchronized start timeline (3136x3924px)
+- **F14_issues_timeline.png** - Known issues timeline (3136x2032px)
 
 ### Diagnostic Figures (Appendix G)
-- **A1_discovery_pattern.png** - Discovery success flowchart (1000x800px)
-- **A6_reliability_pie_chart.png** - Error distribution (1200x1000px)
-- **A6_reliability_flowchart.png** - Error classification (1200x1000px)
+- **A1_discovery_pattern.png** - Discovery success flowchart (2912x6084px)
+- **A6_reliability_pie_chart.png** - Error distribution (2636x1800px)
+- **A6_reliability_flowchart.png** - Error classification (3136x2000px)
 
-All PNG files are generated at publication quality with neutral theme, white background, and appropriate sizing for thesis inclusion.
+All PNG files are generated at ultra-high resolution (scale factor 4x) with neutral theme, white background, and publication-quality sizing for thesis inclusion.
 
 ## Rendering to PNG
 
@@ -46,12 +47,12 @@ All PNG files are generated at publication quality with neutral theme, white bac
 # Install Mermaid CLI
 npm install -g @mermaid-js/mermaid-cli
 
-# Render individual diagrams
-mmdc -i F1_system_architecture.md -o F1_system_architecture.png -t neutral -b white --width 1200 --height 800
+# Render individual diagrams with high resolution
+mmdc -i F1_system_architecture.md -o F1_system_architecture.png -t neutral -b white --scale 4
 
-# Batch render all diagrams  
+# Batch render all diagrams at high resolution
 for file in *.md; do
-    mmdc -i "$file" -o "${file%.md}.png" -t neutral -b white --width 1200 --height 800
+    mmdc -i "$file" -o "${file%.md}.png" -t neutral -b white --scale 4
 done
 ```
 
@@ -66,10 +67,10 @@ The diagrams render automatically in GitHub/GitLab markdown preview.
 ## Diagram Specifications
 
 ### Publication Standards
-- **Resolution**: 300 DPI for final thesis
-- **Format**: PNG with transparent background
-- **Size**: 1200x800px minimum for complex diagrams
-- **Fonts**: Sans-serif, minimum 10pt equivalent
+- **Resolution**: Ultra-high resolution (3000+ px width) for final thesis
+- **Format**: PNG with white background for publication compatibility
+- **Scale**: 4x scale factor for crisp rendering at any size
+- **Fonts**: Sans-serif, high readability at all zoom levels
 - **Colors**: High contrast, colorblind-friendly palette
 
 ### Mermaid Styling

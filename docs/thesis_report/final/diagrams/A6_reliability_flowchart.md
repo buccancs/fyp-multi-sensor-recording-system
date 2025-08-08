@@ -1,16 +1,4 @@
-# A6: System Reliability Overview
-
-```mermaid
-pie title Error Distribution by Category
-    "Connection Issues" : 35
-    "UI Responsiveness" : 25  
-    "Frame/Data Drops" : 20
-    "Sync Timing" : 12
-    "File Transfer" : 5
-    "Calibration" : 3
-```
-
-## Error Classification
+# A6: System Reliability - Error Classification
 
 ```mermaid
 flowchart LR
@@ -41,6 +29,16 @@ flowchart LR
         L3[Status Messages]
         L4[Minor UI Glitches]
     end
+    
+    classDef criticalStyle fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    classDef highStyle fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    classDef mediumStyle fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef lowStyle fill:#f5f5f5,stroke:#757575,stroke-width:1px
+    
+    class Critical,C1,C2,C3,C4 criticalStyle
+    class High,H1,H2,H3,H4 highStyle
+    class Medium,M1,M2,M3,M4 mediumStyle
+    class Low,L1,L2,L3,L4 lowStyle
 ```
 
 ## Reliability Metrics
@@ -63,4 +61,4 @@ flowchart LR
 - **Synchronization**: 89% within ±5ms target
 
 ## Description
-Comprehensive overview of system reliability patterns, error classification, and recovery characteristics. Provides quantitative assessment of current system stability and known limitation areas.
+Hierarchical classification of system errors by severity and impact. Provides quantitative assessment of reliability patterns, recovery characteristics, and current system stability limitations.

@@ -1,38 +1,35 @@
 # F4: Synchronized Start Trigger Timeline
 
 ```mermaid
-gantt
-    title Synchronized Recording Start Timeline
-    dateFormat X
-    axisFormat %L ms
+sequenceDiagram
+    participant PC as PC Master
+    participant N1 as Android Node 1<br/>(Offset: -2.1ms)
+    participant N2 as Android Node 2<br/>(Offset: +1.3ms)
+    participant N3 as Android Node 3<br/>(Offset: -0.7ms)
     
-    section PC Master
-    Generate Master Timestamp     :milestone, m1, 0, 0ms
-    Broadcast Start Commands      :active, 0, 5ms
+    Note over PC,N3: t=0ms: Master Timestamp Generated
     
-    section Android Node 1
-    Receive Start Command         :2, 7ms
-    Apply Clock Offset (-2.1ms)   :3, 9ms
-    Begin RGB Capture            :milestone, 4, 10ms
-    Begin Thermal Capture        :milestone, 5, 10ms
-    Begin GSR Logging            :milestone, 6, 10ms
+    PC->>N1: START_RECORDING(t=0)
+    PC->>N2: START_RECORDING(t=0)
+    PC->>N3: START_RECORDING(t=0)
     
-    section Android Node 2  
-    Receive Start Command         :7, 6ms
-    Apply Clock Offset (+1.3ms)   :8, 8ms
-    Begin RGB Capture            :milestone, 9, 11ms
-    Begin Thermal Capture        :milestone, 10, 11ms
-    Begin GSR Logging            :milestone, 11, 11ms
+    Note over N1: t=2ms: Command received<br/>Apply offset: -2.1ms
+    Note over N2: t=1ms: Command received<br/>Apply offset: +1.3ms
+    Note over N3: t=3ms: Command received<br/>Apply offset: -0.7ms
     
-    section Android Node 3
-    Receive Start Command         :12, 8ms
-    Apply Clock Offset (-0.7ms)   :13, 10ms
-    Begin RGB Capture            :milestone, 14, 12ms
-    Begin Thermal Capture        :milestone, 15, 12ms
-    Begin GSR Logging            :milestone, 16, 12ms
+    Note over N1: t=5ms: Effective start time<br/>t + offset = 2 - 2.1 = -0.1ms
+    Note over N2: t=5ms: Effective start time<br/>t + offset = 1 + 1.3 = 2.3ms
+    Note over N3: t=5ms: Effective start time<br/>t + offset = 3 - 0.7 = 2.3ms
     
-    section Synchronization Window
-    Target Sync Window (±5ms)     :crit, sync, 5, 15ms
+    par Synchronized Capture Start
+        N1->>N1: Begin RGB/Thermal/GSR
+    and
+        N2->>N2: Begin RGB/Thermal/GSR  
+    and
+        N3->>N3: Begin RGB/Thermal/GSR
+    end
+    
+    Note over PC,N3: Sync Window: ±5ms target<br/>Actual jitter: 2.4ms range
 ```
 
 ## Timeline Analysis

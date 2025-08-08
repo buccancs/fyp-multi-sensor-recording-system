@@ -1,31 +1,35 @@
 # F14: Known Issues Timeline
 
 ```mermaid
-timeline
+gantt
     title System Issues During Recording Session
+    dateFormat YYYY-MM-DD
+    axisFormat %M:%S
     
-    section Early Session (0-30s)
-        5-8s    : Device Discovery Failed (Node 1)
-        12s     : Node 1 Reconnect Success
-        15-18s  : Calibration Failure
-        23-27s  : UI Freeze Episode 1
-        25s     : Calibration Retry Success
+    section Critical Issues
+    Device Discovery Failed (Node 1)    :crit, d1, 2024-01-01, 3s
+    UI Freeze Episode 1                 :crit, u1, 2024-01-01, 4s
+    Calibration Failure                 :crit, c1, 2024-01-01, 3s
+    UI Freeze Episode 2                 :crit, u2, 2024-01-01, 4s
+    UI Freeze Episode 3                 :crit, u3, 2024-01-01, 3s
+    Device Discovery Failed (Node 3)    :crit, d3, 2024-01-01, 3s
     
-    section Mid Session (30-60s)
-        34-36s  : Node 2 Heartbeat Loss
-        38-41s  : RGB Frame Drops
-        45-48s  : Device Discovery Failed (Node 3)
-        52s     : Node 3 Reconnect Success
-        58-61s  : GSR Sampling Gaps
+    section Connection Issues
+    Node 2 Heartbeat Loss              :active, h2, 2024-01-01, 2s
+    Node 1 Heartbeat Loss              :active, h1, 2024-01-01, 2s
+    Node 3 Heartbeat Loss              :active, h3, 2024-01-01, 2s
     
-    section Late Session (60-120s)
-        67-71s  : UI Freeze Episode 2
-        73-76s  : Thermal Frame Drops
-        78-80s  : Node 1 Heartbeat Loss
-        89-92s  : UI Freeze Episode 3
-        95-97s  : Node 3 Heartbeat Loss
-        105-108s: Node 1 Transfer Retry
-        112-114s: Node 2 Transfer Retry
+    section Performance Issues
+    RGB Frame Drops                    :done, f1, 2024-01-01, 3s
+    GSR Sampling Gaps                  :done, g1, 2024-01-01, 3s
+    Thermal Frame Drops                :done, f2, 2024-01-01, 3s
+    
+    section Recovery Events
+    Node 1 Reconnect Success           :milestone, r1, 2024-01-01, 0s
+    Calibration Retry Success          :milestone, r2, 2024-01-01, 0s
+    Node 3 Reconnect Success           :milestone, r3, 2024-01-01, 0s
+    Node 1 Transfer Retry              :milestone, t1, 2024-01-01, 0s
+    Node 2 Transfer Retry              :milestone, t2, 2024-01-01, 0s
 ```
 
 ## Issue Classification
