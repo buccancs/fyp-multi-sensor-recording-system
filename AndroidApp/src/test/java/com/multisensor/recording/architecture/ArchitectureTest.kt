@@ -81,7 +81,7 @@ class ArchitectureTest {
         
         // Given - dependencies that can be mocked/substituted
         val mockPreviewStreamer = mock(PreviewStreamingInterface::class.java)
-        val mockHandSegmentation = mock(com.multisensor.recording.handsegmentation.HandSegmentationManager::class.java)
+        val mockHandSegmentation = mock(com.multisensor.recording.handsegmentation.HandSegmentationInterface::class.java)
         val mockSessionManager = mock(com.multisensor.recording.service.SessionManager::class.java)
         val mockLogger = mock(Logger::class.java)
         val mockContext = mock(android.content.Context::class.java)
@@ -94,7 +94,7 @@ class ArchitectureTest {
                     android.content.Context::class.java,
                     com.multisensor.recording.service.SessionManager::class.java,
                     Logger::class.java,
-                    com.multisensor.recording.handsegmentation.HandSegmentationManager::class.java,
+                    com.multisensor.recording.handsegmentation.HandSegmentationInterface::class.java,
                     PreviewStreamingInterface::class.java
                 )
             true
@@ -132,5 +132,50 @@ class ArchitectureTest {
         assertTrue("Should have settings screens", hasSettingsScreens)
         assertTrue("Should have advanced configuration screens", hasAdvancedScreens)
         assertEquals("Should consolidate 10 screens", 10, screenRoutes.size)
+    }
+
+    @Test
+    fun `Hand segmentation interface enables modular design`() = runTest {
+        // Given
+        val mockManager = mock(com.multisensor.recording.handsegmentation.HandSegmentationManager::class.java)
+        val handSegmentationInterface = com.multisensor.recording.handsegmentation.HandSegmentationAdapter(mockManager)
+        
+        // When
+        val config = com.multisensor.recording.handsegmentation.SegmentationConfig(
+            outputDirectory = java.io.File("/tmp"),
+            enableRealTimeProcessing = true
+        )
+        
+        // Then - interface provides clear contract
+        assertFalse("Should start uninitialized", handSegmentationInterface.isInitialized())
+        assertFalse("Should start without active session", handSegmentationInterface.isSessionActive())
+    }
+
+    @Test
+    fun `Privacy interface focuses on privacy concerns only`() = runTest {
+        // Given
+        val mockPrivacyManager = mock(com.multisensor.recording.security.PrivacyManager::class.java)
+        val privacyInterface = com.multisensor.recording.security.PrivacyManagerAdapter(mockPrivacyManager)
+        
+        // When
+        val consentData = com.multisensor.recording.security.ConsentData(
+            participantId = "P001",
+            studyId = "S001"
+        )
+        
+        // Then - interface focuses only on privacy-related operations
+        val privacyMethods = listOf(
+            "hasValidConsent",
+            "recordConsent", 
+            "withdrawConsent",
+            "enableDataAnonymization",
+            "anonymizeImage"
+        )
+        
+        val interfaceClass = com.multisensor.recording.security.PrivacyInterface::class.java
+        val methodNames = interfaceClass.methods.map { it.name }
+        
+        assertTrue("Should have core privacy methods", 
+            privacyMethods.all { it in methodNames })
     }
 }

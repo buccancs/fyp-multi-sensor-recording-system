@@ -18,7 +18,7 @@ import android.view.Surface
 import android.view.SurfaceTexture
 import android.view.TextureView
 import androidx.core.content.ContextCompat
-import com.multisensor.recording.handsegmentation.HandSegmentationManager
+import com.multisensor.recording.handsegmentation.HandSegmentationInterface
 import com.multisensor.recording.service.SessionManager
 import com.multisensor.recording.streaming.PreviewStreamingInterface
 import com.multisensor.recording.streaming.FrameType
@@ -47,7 +47,7 @@ constructor(
     @ApplicationContext private val context: Context,
     private val sessionManager: SessionManager,
     private val logger: Logger,
-    private val handSegmentationManager: HandSegmentationManager,
+    private val handSegmentationInterface: HandSegmentationInterface,
     private val previewStreamer: PreviewStreamingInterface,
 ) {
     private var cameraDevice: CameraDevice? = null
@@ -329,7 +329,7 @@ constructor(
                                 previewStreamer.streamFrame(img, FrameType.RGB_PREVIEW)
                                 
                                 // Process with hand segmentation if needed
-                                handSegmentationManager.processFrame(img)
+                                handSegmentationInterface.processFrame(img)
                             } catch (e: Exception) {
                                 logger.error("Error processing preview frame: ${e.message}", e)
                             } finally {
