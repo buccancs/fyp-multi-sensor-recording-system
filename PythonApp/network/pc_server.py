@@ -302,10 +302,15 @@ class PCServer:
             self.thread_pool.submit(self._heartbeat_monitor)
             self.logger.info(f"PC server started successfully on port {self.port}")
             return True
-        except Exception as e:
-            self.logger.error(f"Failed to start PC server: {e}")
+        except (OSError, RuntimeError) as e:
+            self.logger.error(
+                f"Failed to start PC server on port {self.port}: {e}"
+            )
+            if self.server_socket:
+                self.server_socket.close()
+                self.server_socket = None
             self.is_running = False
-            return False
+            raise
 
     def stop(self) -> None:
         try:
@@ -320,8 +325,11 @@ class PCServer:
                 self.server_thread.join(timeout=5.0)
             self.thread_pool.shutdown(wait=True)
             self.logger.info("PC server stopped successfully")
-        except Exception as e:
-            self.logger.error(f"Error stopping PC server: {e}")
+        except (OSError, RuntimeError) as e:
+            self.logger.error(
+                f"Error stopping PC server on port {self.port}: {e}"
+            )
+            raise
 
     def send_message(self, device_id: str, message: JsonMessage) -> bool:
         if device_id not in self.connected_devices:

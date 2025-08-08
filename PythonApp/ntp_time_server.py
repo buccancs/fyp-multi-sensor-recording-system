@@ -86,9 +86,16 @@ class NTPTimeServer:
                 "NTP time server started successfully on port %d", self.port
             )
             return True
-        except Exception as e:
-            self.logger.error("Failed to start NTP time server: %s", e)
-            return False
+        except OSError as e:
+            if self.server_socket:
+                self.server_socket.close()
+                self.server_socket = None
+            self.status.is_running = False
+            self.is_running = False
+            self.logger.error(
+                "Failed to start NTP time server on port %d: %s", self.port, e
+            )
+            raise
 
     def stop_server(self) -> None:
         try:
@@ -107,8 +114,11 @@ class NTPTimeServer:
             self.status.client_count = 0
             self.connected_clients.clear()
             self.logger.info("NTP time server stopped")
-        except Exception as e:
-            self.logger.error("Error stopping NTP time server: %s", e)
+        except (OSError, RuntimeError) as e:
+            self.logger.error(
+                "Error stopping NTP time server on port %d: %s", self.port, e
+            )
+            raise
 
     def get_precise_timestamp(self) -> float:
         try:
