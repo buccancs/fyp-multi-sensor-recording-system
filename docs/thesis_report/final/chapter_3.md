@@ -1,1135 +1,1011 @@
-# Chapter 3: Requirements and System Analysis
+# Chapter 3: Requirements
 
 ## 3.1 Problem Statement and Research Context
 
-Modern physiological monitoring techniques often rely on **Galvanic Skin
-Response (GSR)** sensors attached directly to a subject's skin to
-measure electrodermal activity. While GSR is a proven indicator of
-stress and arousal, traditional contact-based measurement is intrusive
-and limits natural behaviour. The research problem addressed is how to
-**predict GSR in a contactless manner** using alternative sensing
-modalities (such as thermal imaging and visual cameras) without
-sacrificing accuracy. In the current state of physiological measurement,
-cameras and thermal sensors have advanced to capture subtle
-physiological cues (e.g. facial temperature changes or perspiration)
-that could correlate with stress. However, **no integrated system
-existed** to simultaneously collect *synchronised* thermal, visual, and
-reference GSR data required to develop and validate contactless GSR
-prediction models. This thesis operates in the context of **affective
-computing and human-computer interaction research**, where unobtrusive
-monitoring of stress and emotional state is highly desirable. The goal
-is to provide a multi-sensor recording platform that enables new
-experiments in which participants are monitored **without wires or
-attached electrodes**, facilitating more natural interactions (e.g. in
-social or virtual reality settings) while still capturing high-quality
-ground-truth physiological data.
+The system is developed to support **contactless Galvanic Skin Response
+(GSR) prediction research**. Traditional GSR measurement requires
+contact sensors attached to a person's skin, but this project aims to
+bridge **contact-based and contact-free physiological monitoring**. In
+essence, the system enables researchers to collect **synchronized
+multi-modal data** -- combining **wearable GSR sensor readings** with
+**contactless signals** like thermal imagery and video -- to facilitate
+the development of models that predict GSR without direct skin contact.
+This addresses a key research gap: providing a reliable way to acquire
+**ground-truth GSR data** alongside contactless sensor data in
+experiments, ensuring all data streams are aligned in time for
+analysis[\[1\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/architecture.md#L14-L21).
 
-To bridge this gap, the project developed a **Multi-Sensor Recording
-System for Contactless GSR Prediction**. The system is designed to
-collect **synchronised multi-modal data streams** -- specifically
-high-resolution visual video, thermal infrared imagery, and **GSR
-readings from a Shimmer sensor** -- in real time. By aligning these data
-streams with sub-millisecond precision, the system creates rich datasets
-for training and evaluating machine learning models that estimate stress
-(or related physiological signals) from camera data alone. This research
-context demands a solution that is *both* scientifically rigorous
-(accurate timing, reliable signals) and practical for field use (mobile
-devices, untethered subjects). In summary, the problem statement centres
-on building a **distributed data acquisition system** that can capture
-synchronised physiological and imaging data to enable **contactless GSR
-measurement** research. The remainder of this chapter details the
-requirements derived from this problem and the system analysis that
-shaped the solution.
+The research context for this system is physiological computing and
+affective computing. The focus is on **stress and emotion analysis**,
+where GSR is a common measure of sympathetic nervous system activity. By
+integrating **thermal cameras, RGB video, and inertial sensors** with
+the GSR sensor, the system creates a rich dataset for exploring how
+observable signals (like facial thermal patterns or motion) correlate
+with actual skin conductance changes. The **multi-sensor recording
+platform** operates in real-world environments (e.g. lab or field
+studies) and emphasizes **temporal precision and data integrity** so
+that subtle physiological responses can be captured and later aligned
+for machine learning model
+training[\[1\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/architecture.md#L14-L21).
+Overall, the system's goal is to facilitate experiments that would
+**simultaneously record a participant's physiological responses and
+visual/thermal cues**, providing a foundation for research into
+contactless stress detection.
 
 ## 3.2 Requirements Engineering Approach
 
-The requirements for the multi-sensor system were derived using a
-combination of stakeholder-driven analysis and iterative prototyping.
-**Stakeholder analysis** identified the primary stakeholders as: (1)
-**Research scientists** who require accurate, high-fidelity data and
-straightforward operation in experiments; (2) **Study participants** who
-benefit from unobtrusive monitoring (hence the need for contactless
-methods and minimal encumbrances); (3) **Technical
-maintainers/developers** of the system who need the software to be
-maintainable, extensible, and testable; and (4) **Institutional review
-boards / ethics committees**, concerned with data security and
-participant safety. Each stakeholder group introduced distinct
-requirements. For example, researchers emphasized data synchronisation
-accuracy and multi-modal integration, participants motivated
-requirements for comfort and privacy, and developers focused on modular
-architecture and high code quality standards to ensure reliability.
+The requirements for the system were derived using an **iterative,
+research-driven approach**. Initially, high-level objectives (such as
+*"enable synchronized GSR and video recording"*) were identified from
+the research goals. These were refined through *requirements
+elicitation* that included the needs of researchers conducting
+experiments (the primary stakeholders) and the technical constraints of
+available hardware. The project followed a **prototyping and refinement
+methodology**: early versions of the system were implemented and tested,
+and feedback was used to update the requirements. For example, as the
+implementation progressed, additional needs such as **data encryption**
+and **device fault tolerance** were recognized and added to the
+requirements (evident from commit history showing security checks and
+recovery features being
+introduced[\[2\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L110-L119)[\[3\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L153-L161)).
 
-Given the experimental nature of the project, the **requirements
-engineering approach was iterative and incremental**. The team followed
-an agile-like process: initial core requirements were established from
-the research objectives (e.g. *"record thermal and video data
-synchronised with GSR"*), and a **prototype system** was quickly built
-to validate feasibility. As the prototype was tested with actual
-sensors, new requirements and refinements were discovered (for instance,
-the need for automated device re-connection on failure, or a method to
-log stimulus events during recording). The repository's commit history
-reflects these iterations -- each commit often corresponded to
-implementing or refining a specific requirement (e.g. adding the Shimmer
-sensor integration or improving time synchronisation). This evolutionary
-process ensured continuous alignment between requirements and
-implementation.
-
-The project also adhered to established **software requirements
-specification practices** (in line with IEEE guidelines) to
-systematically document each requirement with an identifier,
-description, and priority. Requirements were classified into functional
-and non-functional categories for clarity. Throughout development, a
-strong emphasis was placed on **validation and testing** to ensure
-requirements were met: a thorough test suite (with \>95% coverage)
-was developed to automatically verify that each functional requirement
-(device communication, data recording, etc.) behaved as expected in real
-scenarios. In summary, the requirements engineering combined up-front
-analysis of research needs with continuous feedback from implementation,
-resulting in a robust set of requirements that guided the system design
-and implementation.
+Requirements engineering was performed in alignment with IEEE
+guidelines. Each requirement was documented with a unique ID and
+categorized (functional vs. non-functional). The team maintained close
+alignment between requirements and implementation -- the repository's
+structure and commit messages show that whenever a new capability was
+implemented (e.g. a **calibration module** or **time synchronization
+service**), it corresponded to a defined requirement. Traceability was
+informally maintained by referencing issues/ADRs for major features. In
+summary, the approach was **incremental and user-focused**: starting
+from the core research use cases, and continuously refining the system
+requirements as technical insights were gained during development.
 
 ## 3.3 Functional Requirements Overview
 
-Table 3.1 lists the **Functional Requirements (FR)** identified for the
-multi-sensor recording system. Each requirement is labelled with a unique
-ID and a priority (H = High, M = Medium) indicating its importance.
-These functional requirements capture the intended capabilities and
-behaviours of the system. They were derived to ensure the system meets
-the needs of coordinating multiple devices, acquiring various sensor
-data streams, synchronising and storing data, and supporting the
-research workflow.
+The functional requirements of the system are listed below. Each
+requirement is labeled (FR#) and described in terms of what the system
+**shall** do. These requirements were directly derived from the system's
+implemented capabilities and verified against the source code:
 
-**Table 3.1 -- Functional Requirements**
----
-  ID                      Functional Requirement Description                                                                                                                                                                                                                                                                                                                                                 Priority
----
-  FR-01                   **Centralised Multi-Device Coordination:** The system shall provide a PC-based master controller application that can connect to and manage multiple remote recording devices (Android smartphones). This enables one operator to initiate and control recording sessions across all devices from a single interface.                                                              H
+- **FR1: Multi-Device Sensor Integration** -- The system shall support
+  connecting and managing multiple sensor devices simultaneously. This
+  includes **discovering and pairing Shimmer GSR sensors** via direct
+  Bluetooth or through an Android device acting as a
+  bridge[\[4\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L244-L253)[\[5\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L260-L268).
+  If no real sensors are available, the system shall offer a
+  **simulation mode** to generate dummy sensor data for
+  testing[\[6\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L268-L274).
 
-  FR-02                   **User Interface for Session Control:** The PC master controller shall offer an intuitive graphical user interface (GUI) for configuring sessions, displaying device status, and controlling recordings (start/stop). The GUI should show connected device indicators and allow the user to easily monitor the recording process in real time.                                     H
+- **FR2: Synchronized Multi-Modal Recording** -- The system shall start
+  and stop data recording **synchronously** across all connected
+  devices. When a recording session is initiated, the PC controller
+  instructs each Android device to begin recording **GSR data**, **video
+  (RGB camera)**, and **thermal imaging** in
+  parallel[\[7\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L120-L128).
+  At the same time, the PC begins logging local sensor streams (e.g.
+  from any directly connected Shimmer devices). All streams share a
+  common session timestamp to enable later alignment.
 
-  FR-03                   **High-Precision Synchronisation:** The system shall synchronise all data streams (video frames, thermal frames, GSR samples) with a unified timeline. Recording on all devices must start nearly simultaneously, achieving time alignment with an accuracy on the order of 1 millisecond or better. Each data sample/frame will be timestamped to enable precise cross-modal      H
-                          correlation [\[1\]](PythonApp/shimmer_manager.py#L144-L151).
+- **FR3: Time Synchronization Service** -- The system shall synchronize
+  clocks across devices to ensure all data is time-aligned. The PC
+  provides a time sync mechanism (e.g. an NTP-like time server on the
+  local network) so that each Android device can calibrate its clock to
+  the PC's clock before and during
+  recording[\[8\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/ntp_time_server.py#L66-L74)[\[9\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/ntp_time_server.py#L26-L34).
+  This achieves a sub-millisecond timestamp accuracy between GSR
+  readings and video frames, which is crucial for data integrity.
 
-  FR-04                   **Visual Video Capture:** Each Android recording device shall capture high-resolution **RGB video** of the participant during the session. The system should support at least 30 frames per second at HD (720p) resolution or higher (up to the device's capabilities, e.g. 1080p or 4K) for detailed visual data. The video recording is to be continuous for the session         H
-                          duration, saved in a standard format (e.g. MP4).
+- **FR4: Session Management** -- The system shall organize recordings
+  into sessions, each with a unique ID or name. It shall allow the user
+  (researcher) to **create a new session**, automatically timestamped,
+  and then **terminate the session** when finished. Upon session start,
+  a directory is created on the PC to store data, and a session metadata
+  file is
+  initialized[\[10\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L64-L73).
+  When the session ends, the metadata (start/end time, duration, status)
+  is finalized and
+  saved[\[11\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L82-L91).
+  Only one session can be active at a time, preventing overlap.
 
-  FR-05                   **Thermal Imaging Capture:** If a recording device is equipped with a thermal camera, the system shall capture **thermal infrared video** in parallel with the RGB video. Thermal frames must be recorded at the highest available resolution and frame rate (device-dependent) and time-synchronised with other streams. This provides contactless skin temperature data          H
-                          corresponding to the participant's physiological state.
+- **FR5: Data Recording and Storage** -- For each session, the system
+  shall record: (a) **Physiological sensor data** from the Shimmer GSR
+  module (including GSR conductivity and any other enabled channels like
+  PPG, accelerometer, etc., sampled at a default 128
+  Hz)[\[12\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L128-L135)[\[13\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L101-L109),
+  and (b) **Video and thermal data** from each Android device (with at
+  least 1920×1080 resolution video at 30
+  FPS)[\[14\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L18-L26).
+  Sensor readings are streamed to the PC in real-time and written to
+  local files (CSV format for numerical data) as they arrive, to avoid
+  data
+  loss[\[15\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L163-L171).
+  Each Android device stores its own raw video/thermal files during
+  recording and later transfers them to the PC (see FR7). The system
+  shall handle **audio recording** as well if enabled (e.g. microphone
+  audio at 44.1
+  kHz)[\[16\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L26-L34),
+  syncing it with other data streams.
 
-  FR-06                   **GSR Sensor Integration:** The system shall integrate **Shimmer GSR sensor** devices to collect ground-truth physiological signals (electrodermal activity and related sensors). The PC controller must handle Shimmer data either via direct Bluetooth connection or via an Android device acting as a relay (proxy) for the                                                     H
-                          sensor[\[2\]](PythonApp/shimmer_manager.py#L138-L145). All connected GSR sensors should be managed concurrently, and their data samples (GSR conductivity, plus other channels like PPG or accelerometer) timestamped and synchronised with the session timeline.
+- **FR6: User Interface for Monitoring & Control** -- The system shall
+  provide a GUI on the PC for the researcher to control sessions and
+  monitor devices. This includes listing connected devices and their
+  status (e.g. battery level, streaming/recording
+  state)[\[17\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L176-L185),
+  letting the user start/stop sessions, and showing indicators like
+  recording timers and data sample counts. The UI should also display
+  preview feeds or status updates periodically (for example, updating
+  every few seconds with how many samples have been
+  received)[\[18\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L260-L267).
+  **Device panels** in the UI will indicate if a device is disconnected
+  or has errors so the user can take
+  action[\[19\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L234-L242).
 
-  FR-07                   **Session Management and Metadata:** The system shall allow the user to create a new *recording session* and automatically assign it a unique Session ID. During a session, the controller will maintain metadata including session start time, configured duration (if applicable), and the list of active devices/sensors. Upon session start, each device and sensor is         H
-                          registered in the session metadata, and upon stop, the session is finalised with end time and duration
-                          recorded[\[3\]](PythonApp/session/session_manager.py#L74-L81)[\[4\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L334-L342). A session metadata file (e.g. JSON or
-                          text) shall be saved, summarising the session details for future reference.
+- **FR7: Device Synchronization and Signals** -- The system shall
+  coordinate multiple devices by sending control commands and sync
+  signals. For example, the PC can broadcast a **synchronization cue**
+  (such as a flash or buzzer) to all Android devices to mark a moment in
+  time across
+  videos[\[20\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L170-L173).
+  These signals (e.g. visual flash on phone screens) help with aligning
+  footage during analysis. The system uses a JSON-based command protocol
+  so that the PC can instruct devices to start/stop recording and
+  perform actions in unison.
 
-  FR-08                   **Local Data Storage (Offline-First):** All recording devices shall store their captured data **locally on-device** during the session to avoid reliance on continuous network streaming. Video streams are saved as files on the smartphones (and any PC-local video source) and GSR data is logged (e.g. to CSV) on the PC or device collecting it. Each data file is            H
-                          timestamped or contains timestamps internally. This *offline-first* design ensures no data loss in case of network disruption and maximises reliability of recording.
+- **FR8: Fault Tolerance and Recovery** -- If a device (Android or
+  sensor) disconnects or fails during an active session, the system
+  shall **detect the event** and continue the session with the remaining
+  devices[\[19\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L234-L242).
+  The PC will log a warning and mark the device as
+  offline[\[3\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L153-L161).
+  When the device reconnects, it should be able to rejoin the ongoing
+  session seamlessly. The system will attempt to **recover the session
+  state** on that device by re-synchronizing and sending any queued
+  commands that were missed while it was
+  offline[\[21\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L163-L171)[\[22\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L174-L182).
+  This ensures a temporary network drop doesn't invalidate the entire
+  session.
 
-  FR-09                   **Data Aggregation and Transfer:** After a recording session is stopped, the system shall support automatic aggregation of the distributed data. The PC controller will instruct each Android device to **transfer the recorded files** (video and any other data) to the PC over the network. The files are transmitted in chunks with verification -- the PC confirms the file   M
-                          sizes and integrity on receipt[\[5\]](PythonApp/network/device_server.py#L355-L364). All files from the session are collected into the PC's session folder for centralised storage. (In the event automatic transfer fails or is unavailable, the system permits manual retrieval as a
-                          fallback.)
+- **FR9: Calibration Utilities** -- The system shall include tools for
+  **calibrating sensors and cameras**. In particular, it provides a
+  calibration procedure for aligning the thermal camera field-of-view
+  with the RGB camera (e.g. using a checkerboard pattern). The user can
+  perform a calibration session where images are captured and
+  calibration parameters are computed. Configuration parameters for
+  calibration (such as pattern type, pattern size, number of images,
+  etc.) are adjustable in the system
+  settings[\[23\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L54-L62).
+  The resulting calibration data is saved so that recorded thermal and
+  visual data can be accurately merged in analysis. *(This requirement
+  is derived from the presence of a calibration module in the code
+  base.)*
 
-  FR-10                   **Real-Time Status Monitoring:** The PC interface shall display real-time status updates from each connected device, including indicators such as recording state (recording/idle), battery level, storage space, and connectivity health[\[6\]](PythonApp/network/device_server.py#L26-L34). M
-                          During an active session, the operator can observe that all devices are recording and see any warnings (e.g. low battery) in real time. Optionally, the system may also show a low-frame-rate preview of the video streams for verification purposes (e.g. a thumbnail
-                          update)[\[7\]](PythonApp/network/device_server.py#L244-L252). These status and preview updates help the operator ensure data quality throughout the session.
+- **FR10: Data Transfer and Aggregation** -- After a session is stopped,
+  the system shall support transferring all recorded data from each
+  Android device to the PC for central storage. The Android application
+  will package the session's files (video, thermal images, any local
+  sensor logs) and send them to the PC over the
+  network[\[24\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L124-L132)[\[25\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L142-L150).
+  The PC, upon receiving each file, saves it in the appropriate session
+  folder and updates the session metadata to include that file entry
+  (with file type and
+  size)[\[26\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L130-L138).
+  This automation ensures that the researcher can easily retrieve all
+  data without manually offloading devices. If any file fails to
+  transfer, the system logs an error and (if possible) retries the
+  transfer, so that data is not silently
+  lost[\[27\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L156-L165).
 
-  FR-11                   **Event Annotation:** The system shall allow the researcher to **annotate events** or markers during a recording session. For example, if a stimulus is presented to the participant at a specific time, the researcher can log an event (through the PC app UI or a hardware trigger). The event is recorded with a timestamp (relative to session start) and a short description M
-                          or type[\[8\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L124-L133). All such events are saved (e.g. in a `stimulus_events.csv` in the session folder) to facilitate aligning external events with physiological responses during data analysis.
-
-  FR-12                   **Sensor Calibration Mode:** The system shall provide a mode or tools for calibration and configuration of sensors before a session. This includes the ability to capture calibration data for the cameras (e.g. a one-time procedure to spatially align the thermal and RGB cameras using a reference pattern) and to configure sensor settings (focus, exposure, thermal range,  M
-                          etc.) as needed. Calibration data (such as images of a checkerboard or known thermal target) are stored in a dedicated calibration folder for each session or
-                          device[\[9\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L300-L308)[\[10\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L311-L319).
-                          This requirement ensures that the multi-modal data can be properly registered and any sensor biases corrected in post-processing.
-
-FR-13                   **Post-Session Data Processing:** The system shall support optional **post-processing steps** on the recorded data to enrich the dataset. For example, after a session, a *hand segmentation* algorithm can be run on the recorded video frames to identify and crop the participant's hand region (since GSR is often measured on the hand). If enabled, the PC controller will   M
-                          automatically invoke the hand segmentation module on the session's video files and save the results (segmented images or masks) in the session folder[\[11\]](PythonApp/session/session_manager.py#L216-L224). This automates part of the data analysis preparation (e.g. extracting relevant
-                          features) and is configurable by the user.
----
-**Discussion:** The above functional requirements cover the core
-capabilities of the system. Together, they ensure that the
-**multi-sensor recording system can capture synchronised data from
-multiple devices and sensors** and manage that data effectively for
-research use. The design addresses multi-device coordination (FR-01,
-FR-02) and tight time synchronisation (FR-03) as top priorities, since
-these are critical for aligning different data modalities. Requirements
-FR-04 through FR-06 enumerate the data acquisition needs for each sensor
-modality -- visual video, thermal imaging, and GSR -- reflecting the
-system's multi-modal nature. Session handling and data management
-(FR-07, FR-08, FR-09) form the backbone that guarantees recordings are
-organised and preserved reliably (e.g., creating session metadata and
-using offline local storage to avoid data loss). Real-time feedback and
-control (FR-10 and FR-11) improve the usability of the system during
-experiments, allowing the operator to monitor progress and mark
-important moments. Finally, FR-12 and FR-13 address advanced
-functionality: calibration support and post-processing, which enhance
-the quality and utility of the collected data (these are considered
-"Medium" priority since the system can run without them, but they are
-valuable for achieving research-grade results). Many of these
-requirements are explicitly supported by the implementation -- for
-instance, the **ShimmerManager** class in the code confirms the
-multi-sensor integration and error-handling for GSR
-sensors[\[2\]](PythonApp/shimmer_manager.py#L138-L145)[\[1\]](PythonApp/shimmer_manager.py#L144-L151),
-and the session management logic creates metadata files and directory
-structures as
-specified[\[3\]](PythonApp/session/session_manager.py#L74-L81)[\[4\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L334-L342).
-The next section will consider constraints and quality attributes
-(non-functional requirements) that also had to be satisfied to meet
-these functional goals.
+*(The above functional requirements are implemented across various
+components of the code. For example, the ability to connect multiple
+devices and record simultaneously is implemented in the*
+`ShimmerPCApplication` *start_session
+logic[\[7\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L120-L128),
+and the session metadata management is implemented in*
+`SessionManager`*[\[10\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L64-L73).)*
 
 ## 3.4 Non-Functional Requirements
 
-In addition to the explicit features and behaviours, the system must
-fulfill several **Non-Functional Requirements (NFR)** that define
-qualities such as performance, reliability, and usability. Table 3.2
-summarises the key non-functional requirements for the multi-sensor
-recording system, again with unique IDs and priority levels. These
-requirements ensure the system not only *works*, but works effectively
-and robustly in the contexts it will be used (research labs, possibly
-mobile or field environments, with human participants involved).
+In addition to the core functionality, the system must meet several
+non-functional requirements that ensure it is usable in a research
+setting. These include:
 
-**Table 3.2 -- Non-Functional Requirements**
----
-  ID                      Non-Functional Requirement Description                                                                                                                                                                                                                                                                Priority
----
-  NFR-01                  **Real-Time Performance:** The system shall operate in real time, handling data streams without undue delay. All components must be efficient enough to **capture video at full frame rate and sensor data at full sampling rate** without buffering issues or frame drops. For example, the Android  High
-                          app should sustain 30 FPS video recording and \~50 Hz GSR sampling simultaneously. The end-to-end latency from capturing a sensor sample/frame to logging it with a timestamp should be minimal (well below 100 ms), ensuring a responsive system.
+- **NFR1: Performance (Real-Time Data Handling)** -- The system must
+  handle data in real-time, with minimal latency and sufficient
+  throughput. It should support at least **128 Hz sensor sampling and 30
+  FPS video recording concurrently** without data loss or buffering
+  issues. The design uses multi-threading and asynchronous processing to
+  achieve this (e.g. a thread pool is used for data
+  handling)[\[28\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L169-L177).
+  Video is recorded at \~5 Mbps bitrate and audio at 128 kbps, which the
+  system must write to storage in
+  real-time[\[29\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L30-L37).
+  Even with multiple devices (e.g. 3+ cameras and a GSR sensor), the
+  system should not drop frames or samples due to performance
+  bottlenecks.
 
-  NFR-02                  **Synchronisation Accuracy:** The system's clock synchronisation and triggering mechanisms shall be precise, as reflected in FR-03. The design should ensure that any timestamp discrepancies between devices are below acceptable thresholds (on the order of milliseconds). In practice, this may   High
-                          involve time synchronisation protocols or timestamp calibration. Each data sample is tagged with both device-local time and a unified time reference to permit alignment during
-                          analysis[\[12\]](PythonApp/shimmer_manager.py#L91-L99). This requirement guarantees the **temporal integrity** of the multi-modal dataset.
+- **NFR2: Temporal Accuracy** -- Clock synchronization accuracy between
+  devices should be on the order of milliseconds or better. The system's
+  built-in NTP time server and sync protocol aim to keep timestamp
+  differences very low (e.g. **\<5 ms offset and jitter** as logged
+  after
+  synchronization)[\[9\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/ntp_time_server.py#L26-L34).
+  This is critical for valid sensor fusion; hence the system
+  continuously synchronizes device clocks during a session. Timestamp
+  precision is maintained in all logs (to milliseconds) and all devices
+  use the PC's time reference for consistency.
 
-  NFR-03                  **Reliability and Fault Tolerance:** The system must be reliable during long recording sessions. It shall handle errors gracefully -- for instance, if a device temporarily disconnects (due to network drop or power issues), the system will attempt to reconnect automatically and continue the    High
-                          session without crashing[\[13\]](PythonApp/shimmer_manager.py#L146-L150). Data already recorded should remain safe in such events (thanks to local storage on devices). The system should not lose data or
-                          corrupt files even if an interruption occurs; any partial data is cleanly saved up to the point of failure. Robust **error handling and recovery** mechanisms are implemented (e.g., retry logic for device connections and file transfers).
+- **NFR3: Reliability and Fault Tolerance** -- The system must be robust
+  to interruptions. If a sensor or network link fails, the rest of the
+  system continues recording unaffected (as per FR8). Data already
+  recorded must be safely preserved even if a session ends unexpectedly
+  (e.g. the PC app crashing). The system's session design ensures that
+  files are written incrementally and closed properly on stop, to avoid
+  corruption. A **recovery mechanism** is in place to handle device
+  reconnections (queuing messages while a device is
+  offline)[\[3\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L153-L161)[\[21\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L163-L171).
+  In addition, the Shimmer device interface has an auto-reconnect option
+  to try re-establishing Bluetooth connections
+  automatically[\[12\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L128-L135).
 
-  NFR-04                  **Data Integrity and Accuracy:** The system shall ensure the integrity and accuracy of recorded data. All data files (videos, sensor CSV) are verified for correctness after recording -- for example, the file transfer process includes confirming file sizes and sending                           High
-                          acknowledgments[\[5\]](PythonApp/network/device_server.py#L355-L364). Time stamps must be consistent and accurate (no clock drift over typical session durations). The GSR sensor data should be sampled with
-                          stable timing and recorded with the correct units (e.g., microSiemens for conductance) without clipping or quantization errors. This requirement is crucial for the scientific validity of the collected dataset.
+- **NFR4: Data Integrity and Validation** -- All data recorded by the
+  system should be accurate and free of corruption. The system enables a
+  data validation mode for sensor
+  data[\[30\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L130-L138)
+  to check incoming values are within expected ranges (for example, GSR
+  values are checked to be between 0.0 and 100.0
+  μS[\[31\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L184-L192)).
+  Each file transfer from devices is verified for completeness (file
+  sizes are known and logged in
+  metadata[\[26\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L130-L138)).
+  Session metadata acts as a manifest so that missing or inconsistent
+  files can be detected easily. Also, the system will not overwrite
+  existing session data -- each session gets a unique timestamped folder
+  to avoid conflicts.
 
-  NFR-05                  **Scalability (Multi-Device Support):** The architecture should scale to **multiple recording devices** operating concurrently. Adding more Android devices (or additional Shimmer sensors) to a session should have a linear or manageable impact on performance. The network and PC controller must Medium
-                          handle the bandwidth of multiple video streams and sensor feeds. At minimum, the system is expected to support a scenario of *at least two Android devices* plus one or two Shimmer sensors recording together. The design (threaded server, asynchronous I/O, etc.) allows scaling up the number of  
-                          devices with minimal
-                          modification[\[14\]](PythonApp/network/device_server.py#L424-L432)[\[15\]](PythonApp/network/device_server.py#L484-L492).
+- **NFR5: Security** -- The system must ensure the **security and
+  privacy** of recorded data, as it may involve sensitive physiological
+  information. All network communication between the PC and Android
+  devices is encrypted (the configuration enables TLS for the
+  protocol)[\[2\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L110-L119)[\[32\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L111-L119).
+  The system requires authentication tokens for device connections
+  (configurable minimum token length of 32
+  characters)[\[33\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L140-L148)[\[34\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L113-L119)
+  to prevent unauthorized devices from joining the session. Security
+  checks at startup will warn if encryption or authentication is not
+  properly
+  configured[\[35\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L106-L114).
+  Recorded data files are stored locally on the PC; if cloud or external
+  transfer is needed, it is done explicitly by the researcher (there is
+  no inadvertent data leak). Additionally, the **file permissions** and
+  environment are checked on startup (to avoid using insecure
+  defaults)[\[36\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L156-L164)[\[37\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L168-L171).
 
-  NFR-06                  **Usability and Accessibility:** The system's user interface and workflow shall be designed for **ease of use** by researchers who may not be software experts. This means the PC application should be straightforward to install and run, and the process to start a session is simple (e.g.,       High
-                          devices auto-discover the PC, one-click to start recording). Visual feedback (FR-10) is provided to reduce user uncertainty. The Android app should require minimal user interaction -- ideally launching and automatically connecting to the PC. Clear notifications or dialogues guide the user if
-                          any issues occur (e.g. permission requests, errors). The system should also be documented well enough that new users can learn to operate it quickly.
+- **NFR6: Usability** -- The system should be reasonably easy to use for
+  researchers who are not necessarily software experts. The **Graphical
+  User Interface** on the PC should be intuitive, with clear controls to
+  start/stop sessions and indicators for system status. For example, the
+  UI shows a **recording indicator** when a session is active and
+  displays device statuses (connected/disconnected, recording, battery)
+  in
+  real-time[\[38\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L40-L48)[\[39\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L261-L268).
+  Default settings (e.g. dark theme, window size) are provided to ensure
+  a good user experience out of the
+  box[\[40\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L39-L47).
+  The Android app is designed to run with minimal user interaction after
+  initial setup -- typically the researcher just needs to mount the
+  devices and tap "Connect", with the PC orchestrating the rest. User
+  manuals or on-screen guidance is provided for tasks like calibration.
 
-  NFR-07                  **Maintainability and Extensibility:** The software shall be designed following clean code and modular architecture principles to facilitate maintenance and future extension. For example, the Android app follows an MVVM (Model-View-ViewModel) architecture with dependency injection (Hilt) to   Medium
-                          separate concerns, making it easier to modify or upgrade components (such as replacing the camera subsystem or adding a new sensor) without affecting others. The PC code similarly separates the GUI, networking, and data management logic into distinct modules. Code quality metrics were
-                          enforced (e.g., complexity limits) to keep the implementation understandable and
-                          testable[\[16\]](changelog.md#L34-L41)[\[17\]](changelog.md#L60-L64). Additionally, a high level of automated test coverage
-                          was achieved, so developers can confidently refactor the system and add features while catching regressions early. This requirement ensures the longevity of the system as a research platform.
+- **NFR7: Scalability** -- The architecture should scale to accommodate
+  **multiple concurrent devices** and longer recordings. The system is
+  tested with up to *8 Android devices* streaming or recording
+  simultaneously (the config allows up to 10
+  connections)[\[41\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L6-L14).
+  The networking and session management components are designed to
+  handle dynamic addition of devices. Likewise, the system supports
+  sessions up to at least *120 minutes* in duration by
+  default[\[42\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L2-L5).
+  To manage large video files, recordings can be chunked into \~1 GB
+  segments automatically so that file sizes remain
+  manageable[\[29\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L30-L37).
+  This ensures that even high-resolution videos over long sessions do
+  not overwhelm the file system or become impossible to post-process.
 
-  NFR-08                  **Portability:** The system should be portable and not dependent on specialised or expensive hardware beyond the sensors themselves. The PC controller is a cross-platform Python application that can run on standard laptops or desktops (the only requirement being moderate processing power, \~4 Medium
-                          GB RAM, and Python 3.8+ environment). The Android app runs on common Android devices (Android 8.0 or above) and supports a range of phone models, provided they have the needed sensors (camera, etc.) and Bluetooth for Shimmer. This allows the system to be deployed in different laboratories or  
-                          even off-site (using a router or local hotspot for networking). Portability also implies that the system's components (PC and mobile) communicate over standard interfaces (TCP/IP network, JSON messages) without requiring wired connections, increasing the flexibility of where and how it can be
-                          used.
+- **NFR8: Maintainability and Modularity** -- Although primarily a
+  development concern, the system is built in a modular way to
+  facilitate maintenance. Components are separated (e.g., a
+  **Calibration Manager**, **Session Manager**, **Shimmer Manager**,
+  **Network Server** are distinct modules), following clear interfaces.
+  This modular design (observable in the repository structure and code)
+  makes it easier to update one part (like swapping out the thermal
+  camera SDK) without affecting others. Configuration is also
+  externalized (`config.json` and various settings in
+  code)[\[23\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L54-L62)[\[43\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L80-L88)
+  so that changes in requirements (e.g., new sensor types, different
+  sampling rates) can be accommodated by editing configurations rather
+  than rewriting code. Finally, the project includes test scripts and
+  logging to aid in debugging, which contributes to maintainability.
 
-NFR-09                  **Security and Data Privacy:** While the system is typically used in controlled research settings, basic security measures are required. The network communication (JSON command channel and file transfers) should occur only over a secure local network. Only authorized devices (which send a     Medium
-                          correct handshake/hello message with expected format) are allowed to connect to the PC controller, reducing the risk of unauthorized interception. Additionally, participant data (video and physiological signals) are sensitive, so the system should provide options to encrypt stored data or
-                          otherwise protect data at rest, according to institutional data handling guidelines. (For example, the recorded files can be stored on encrypted drives or be anonymized by not embedding personal identifiers.) Although full encryption of live streams is not implemented in the current version,  
-                          this requirement is noted for completeness to ensure ethical research data management.
----
-**Discussion:** These non-functional requirements underline the system's
-quality attributes that make it suitable for research use. Performance
-(NFR-01) and synchronisation accuracy (NFR-02) ensure that the **data
-quality** meets scientific standards -- the system can capture
-high-resolution, high-frequency data in sync, which is essential for
-meaningful analysis. Reliability and data integrity (NFR-03, NFR-04) are
-critical given that experimental sessions are often unrepeatable -- the
-system must not crash or lose data during a trial. Scalability (NFR-05)
-acknowledges that the research may expand to more devices or
-participants; the system's **distributed architecture** (with a
-multi-threaded server and modular device handling) was designed to
-accommodate this growth with minimal rework. Usability (NFR-06) was a
-high priority because complex setups can impede researchers -- features
-like auto device discovery and real-time feedback were included to make
-the system as user-friendly as possible. Maintainability and
-extensibility (NFR-07) have been addressed by following rigorous
-software engineering practices (the commit history shows extensive
-refactoring and documentation efforts to keep code complexity in
-check[\[16\]](changelog.md#L34-L41)).
-This means the system can be updated (for example, to integrate a new
-type of physiological sensor or to improve algorithms) by future
-developers with relative ease. Portability (NFR-08) ensures the system
-can be used in various environments -- whether in a lab or a field study
--- without heavy infrastructure. Finally, security (NFR-09) and data
-privacy considerations reflect the ethical dimension: while not the
-primary focus during development, the design allows operation on closed
-networks and the addition of security layers so that sensitive
-participant data is safeguarded. In sum, the NFRs complement the
-functional requirements by guaranteeing that the system operates
-**efficiently, robustly, and responsibly** in a real-world research
-context.
+*(The non-functional requirements were verified through system testing
+and by examining configuration parameters. For instance, security
+requirements are evidenced by the presence of TLS configuration and
+checks[\[2\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L110-L119),
+and performance requirements by the multi-threaded design and resource
+limits set in
+config[\[44\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L102-L109).)*
 
 ## 3.5 Use Case Scenarios
 
 To illustrate how the system is intended to be used, this section
-describes several primary **use case scenarios**. These scenarios
-represent typical workflows for the multi-sensor recording system,
-demonstrating how the functional requirements come together to support
-research activities. *(Figure 3.1 provides a use case diagram
-summarising the actors and interactions in these scenarios
-\[Placeholder\].)* The main actor in these use cases is the
-**Researcher** operating the system via the PC Master Controller, with
-secondary actors being the **Recording Devices** (Android phones with
-cameras, sensors) and the **Participant(s)** being recorded. The
-scenarios assume all devices have been set up and the software is
-running on the PC and smartphones.
+describes several **use case scenarios**. Each scenario outlines the
+typical interaction between the **user (researcher)** and the system,
+along with how the system's components work together to fulfill the
+requirements.
 
-***Figure 3.1: Use case diagram illustrating the system's primary
-scenarios -- conducting a multi-participant recording session,
-performing system calibration, and real-time monitoring with event
-annotation (Placeholder).***
+### Use Case 1: Conducting a Multi-Modal Recording Session
 
-**Use Case 1: Multi-Participant Recording Session** -- *"Conduct a
-synchronised multi-sensor recording for one or more participants."* In
-this primary use case, a researcher records an experimental session
-involving physiological monitoring. The steps are as follows:
+**Description:** A researcher initiates and completes a recording
+session capturing GSR data alongside video and thermal streams from
+multiple devices. This is the primary use of the system, corresponding
+to a live experiment with a participant.
 
-1. **Setup:** The researcher ensures all Android devices (e.g., two
-    smartphones, each focusing on a participant) are powered on and
-    running the recording app. Each participant is equipped with a
-    Shimmer GSR sensor (e.g., worn on the fingers) which is either
-    paired to the PC or to one of the phones. All devices are connected
-    to the same Wi-Fi network. The researcher launches the PC Controller
-    application and sees indications that the devices have
-    auto-discovered and connected (each device sends a "hello"
-    registration to the
-    PC[\[18\]](PythonApp/network/device_server.py#L216-L224),
-    and appears in the PC UI list of available devices). The PC UI shows
-    each device's ID and capabilities (for example, "Device A: camera +
-    thermal, Device B: camera + GSR").
+- **Primary Actor:** Researcher (system operator).
 
-1. **Initiate Recording:** The researcher configures session parameters
-    on the PC (optionally setting a session name or notes) and clicks
-    "Start Session". The PC controller then broadcasts a **start
-    recording command** to all connected
-    devices[\[14\]](PythonApp/network/device_server.py#L424-L432)[\[19\]](PythonApp/network/device_server.py#L486-L494).
-    Each Android device receives the command and begins recording its
-    sensors: the cameras start capturing video frames and writing to
-    local MP4 files, and if a device has a paired Shimmer, it starts
-    streaming GSR data to a local file. The PC concurrently might start
-    its own recording (e.g., if a webcam on the PC is used as another
-    video source). All these actions are synchronised -- devices either
-    start immediately upon command or according to a coordinated start
-    timestamp so that their internal clocks align (the system accounts
-    for network latency by using very short command messages and
-    preparing devices in advance). The PC UI updates to indicate
-    "Recording in progress" for each device, and the session timer
-    begins.
+- **Secondary Actors:** Participant (subject being recorded), though
+  they do not directly interact with the system UI.
 
-1. **Data Collection:** During the session (which could last e.g. 5
-    minutes, 30 minutes, or longer), the system continuously collects
-    data. Each smartphone writes video frames to its storage and
-    periodically sends status updates to the PC (battery level, elapsed
-    recording time, file size, etc. as per FR-10). The Shimmer sensors
-    stream GSR (and possibly additional signals like PPG, accelerometer)
-    -- if a Shimmer is connected directly to the PC, the PC logs that
-    data in real time; if connected via a phone, the phone relays the
-    sensor data packets to the PC over the network or stores them to
-    include in its file. The system ensures that all data streams are
-    timestamped consistently (each device uses a monotonic clock or
-    synchronised timestamp). If any device encounters an error (for
-    example, a camera error or a Bluetooth disconnection), it
-    automatically tries to resolve it (restart the camera, reconnect the
-    sensor) without user intervention, as long as the session is active.
-    The researcher observes the PC dashboard occasionally -- for
-    example, they might see a small preview frame updating for each
-    device, confirming that video is being captured, and status text
-    like "Device A: Recording 120s, Battery 85%".
+- **Preconditions:**
 
-1. **Concurrent Participants:** This use case can involve **multiple
-    participants**. For instance, if two participants are in an
-    interaction, each is being recorded by a separate phone and wearing
-    a separate GSR sensor. The PC coordinates both streams. This scaled
-    scenario simply repeats the above for each device -- because of the
-    system's scalability, it handles two sets of data as easily as one.
-    The PC's session metadata will log both devices under the same
-    Session ID, and all data will share the timeline. The researcher can
-    thus capture social or group scenarios with synchronised
-    physiological measurements for each person.
+- The Shimmer GSR sensor is charged and either connected to the PC (via
+  Bluetooth dongle) or paired with an Android device.
 
-1. **Stop Session:** Once the desired recording duration or
-    experimental task is completed, the researcher clicks "Stop Session"
-    on the PC. The controller sends a **stop command** to all devices.
-    Each Android device stops recording: it finalises the video file
-    (closing the file safely) and similarly finalises any sensor data
-    file. The devices then each report back a final status (e.g., "Saved
-    300s of video, file size 500 MB"). At this point, the PC invokes the
-    data aggregation process (FR-09): it requests each device to
-    transmit its files. One by one, the phones send their recorded files
-    to the PC: for example, Device A sends
-    `session_20250806_101530_rgb.mp4` and `thermal.mp4`, Device B sends
-    its `session_20250806_101530_rgb.mp4` and `sensors.csv`. The PC
-    receives these via the JSON socket connection in
-    chunks[\[20\]](PythonApp/network/device_server.py#L313-L322)[\[5\]](PythonApp/network/device_server.py#L355-L364),
-    writing them into the PC's own storage
-    (`recordings/session_20250806_101530/DeviceA_rgb.mp4`, etc.). The PC
-    verifies the file sizes match what the device reported. When all
-    files are received, the PC marks the session as completed, updates
-    the session metadata (end time and
-    duration)[\[21\]](PythonApp/session/session_manager.py#L82-L91),
-    and presents a summary to the researcher (e.g., "Session completed:
-    2 devices, 2 video files, 1 sensor file, duration 5:00"). The
-    researcher can then proceed to analyse the data offline.
+- Android recording devices are powered on, running the recording app,
+  and on the same network as the PC. The PC application is running and
+  all devices have synchronized their clocks (either via initial NTP
+  sync or prior calibration).
 
-1. **Post-conditions:** The outcome of this use case is that **all
-    relevant multi-modal data has been recorded and centralised**. The
-    session folder on the PC now contains subfolders or files for each
-    device: e.g., video files from each camera, thermal data, GSR CSV,
-    plus a session log and metadata. The researcher has a complete,
-    time-synchronised dataset from the multi-participant session, which
-    can be used for model training or other analysis.
+- The researcher has configured any necessary settings (e.g. chosen a
+  session name, verified camera focus, etc.).
 
-**Use Case 2: System Calibration and Configuration** -- *"Calibrate
-sensors and configure system settings prior to recording."* This
-secondary use case is often performed before an actual data collection
-session (it can be considered a preparatory or maintenance scenario).
-Its goal is to ensure that all sensors are correctly configured and
-aligned to collect high-quality data.
+- **Main Flow:**
 
-1. **Camera Calibration:** The researcher wants to calibrate the
-    alignment between the RGB camera and the thermal camera on a device
-    (if the device has both, or between two devices if one provides
-    thermal and another RGB). Using a **calibration module** in the
-    system (invoked via the PC UI or directly on the device app), the
-    researcher places a known reference object (such as a checkerboard
-    pattern or a thermal reference pad) in view. They then trigger a
-    **calibration capture** -- the system might capture a set of images
-    from the RGB and thermal cameras simultaneously. These images are
-    saved in the session's calibration folder (e.g., `calibration/`
-    directory for that
-    session)[\[9\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L300-L308)[\[10\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L311-L319).
-    Later, the researcher can use these image pairs to compute a spatial
-    transformation that maps thermal images to the RGB frame (this
-    computation might be done by an external script or a provided
-    calibration tool). The resulting calibration parameters (e.g., a
-    matrix or alignment file) can be stored and used in analysing the
-    recorded data (so that features in the thermal and visual data can
-    be compared pixel-to-pixel after alignment).
+- The Researcher opens the PC control interface and **creates a new
+  session** (providing a session name or accepting a default). The
+  system validates the name and creates a session folder and metadata
+  file on
+  disk[\[10\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L64-L73).
+  The session is now "active" but not recording yet.
 
-1. **Sensor Configuration:** The system allows adjusting certain sensor
-    settings to suit the experimental needs. For example, the researcher
-    can configure the Shimmer GSR device's **sampling rate** (e.g.
-    51.2 Hz by default, but maybe set to 128 Hz for higher resolution)
-    and which channels are enabled (GSR, photoplethysmograph, 3-axis
-    accelerometer,
-    etc.)[\[22\]](PythonApp/shimmer_manager.py#L72-L80)[\[23\]](PythonApp/shimmer_manager.py#L96-L104).
-    This is done through a configuration interface (the PC or Android
-    app exposes options if the sensor is connected). The chosen
-    configuration is saved so that the device will use those settings in
-    the upcoming session -- the ShimmerManager, for instance, stores a
-    profile for the device with its MAC address and the enabled channels
-    and sampling
-    rate[\[24\]](PythonApp/shimmer_manager.py#L184-L191).
-    Similarly, the researcher can set the resolution or frame rate for
-    the smartphone cameras if needed (though by default, the system
-    auto-selects the highest supported resolution and a standard frame
-    rate).
+- The Researcher selects the devices to use. For example, they ensure
+  the Shimmer sensor appears in the device list and one or more Android
+  devices show as "connected" in the UI. If the Shimmer is not yet
+  connected, the Researcher clicks "Scan for Devices". The system
+  performs a scan: it finds the Shimmer sensor either directly via
+  Bluetooth or through an Android's paired
+  devices[\[4\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L244-L253)[\[5\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L260-L268).
+  The Researcher then clicks "Connect" for the Shimmer. The system
+  establishes a connection (or uses a simulated device if the real
+  sensor is unavailable) and updates the UI status to "Connected".
 
-1. **System Checks:** Before recording, the researcher performs a quick
-    system diagnostic. They may use a **"Preview" mode** in the PC UI
-    where each device streams a preview frame or short segment to the
-    PC. The PC displays these to confirm the cameras have the
-    participant in frame and the thermal camera is properly focused,
-    etc. The researcher also checks that all devices show good battery
-    levels or are connected to power (to satisfy reliability needs for a
-    long session). The PC's status panel might show available storage on
-    each device; if a device has low space, the researcher knows to free
-    up space (this is part of configuration -- ensuring enough memory
-    for the session).
+- The Researcher checks that video previews from each Android (if
+  available) are showing in the UI (small preview panels) and that the
+  GSR signal is streaming (e.g., a live plot or at least a sample
+  counter incrementing). Internally, the PC has started a background
+  thread receiving data from the Shimmer sensor
+  continuously[\[45\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L191-L200).
+  The system also maintains a heartbeat to each Android (pinging every
+  few seconds) to ensure connectivity.
 
-1. **Result:** After this use case, the system is calibrated and
-    configured. All devices are aligned and set with optimal parameters.
-    This increases the quality of the data in the main recording use
-    case. Calibration images and configuration files are stored for
-    reference. For instance, the `session_config.json` might record the
-    settings used (thermal camera frame rate, emissivity setting,
-    etc.)[\[25\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L354-L362)[\[26\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L370-L378),
-    and the `calibration/` directory holds raw frames used for
-    calibration. The system is now ready to begin an actual recording
-    session with confidence that data from different sensors will be
-    comparable and that sensors are operating within desired ranges.
+- The Researcher initiates recording by clicking "Start Recording". The
+  PC sends a **start command** to all connected Android devices (with a
+  session ID). Each Android begins recording its camera (and thermal
+  sensor, if present) and optionally starts streaming its own sensor
+  data (if any) back to
+  PC[\[7\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L120-L128).
+  Simultaneously, the PC instructs the Shimmer Manager to start logging
+  data to
+  file[\[46\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L130-L138).
+  This is done nearly simultaneously for all devices. The PC's session
+  manager marks the session status as "recording" and timestamps the
+  start time.
 
-**Use Case 3: Real-Time Monitoring and Annotation** -- *"Monitor live
-data and annotate events during a session."* This use case occurs
-concurrently with an active recording (as in Use Case 1) but focuses on
-the researcher's interaction with the system while it is running. Its
-purpose is to allow the researcher to mark important moments and observe
-the data quality in real time.
+- During the recording, the Researcher can observe real-time status. For
+  example, the UI might display the **elapsed time**, the number of data
+  samples received so far, and the count of connected devices. Every 30
+  seconds, the system logs a status summary (e.g., "Status: 1 Android, 1
+  Shimmer, 3000
+  samples")[\[18\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L260-L267).
+  If the Researcher has a specific event to mark, they can trigger a
+  sync signal: for instance, pressing a "Flash Sync" button. When
+  pressed, the system calls `send_sync_signal` to all Androids to flash
+  their screen
+  LEDs[\[20\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L170-L173)
+  (creating a visible marker in the videos) and logs the event in the
+  GSR data stream.
 
-1. **Live Monitoring:** As the session proceeds, the researcher watches
-    the PC application's live dashboard. The PC receives periodic
-    **preview frames** from the devices (for example, a downsampled
-    image every few
-    seconds)[\[7\]](PythonApp/network/device_server.py#L244-L252).
-    The UI might show a small video window for each device updating with
-    these frames, so the researcher can ensure the participant remains
-    properly framed and that lighting/thermal conditions are good. The
-    PC also could display running plots for sensor streams (e.g., a
-    real-time chart of GSR values) -- in this system, since GSR is
-    recorded either on PC or relayed, the PC can plot the incoming GSR
-    signal live. This real-time feedback helps detect any issues (e.g.,
-    a sensor detached or a camera view obstructed) so they can be fixed
-    immediately rather than only discovered after the session.
+- If any device disconnects mid-session (e.g., an Android phone's WiFi
+  drops out), the system warns the Researcher via the UI (perhaps
+  highlighting that device in red). The recording on that device might
+  continue offline (the Android app will still save its local video).
+  The PC's Session Synchronizer marks the device as offline and queues
+  any commands for
+  it[\[3\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L153-L161).
+  The Researcher can continue the session if the other streams are still
+  running. When the disconnected device comes back online (e.g., WiFi
+  reconnects), the system automatically detects it, re-synchronizes the
+  session state, and executes any missed commands (all in the
+  background)[\[21\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L163-L171)[\[22\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L174-L182).
+  This recovery happens without user intervention, ensuring the session
+  can proceed.
 
-1. **Stimulus/Event Annotation:** During the recording, certain events
-    might occur that the researcher wants to log. For instance, in a
-    stress experiment, at time 2:00 a loud sound might be played to
-    startle the participant. The researcher clicks an **"Add Event"**
-    button in the PC UI at that moment (and perhaps types "Startle
-    sound" or selects an event type from a list). The PC then records an
-    event with a timestamp (relative to session start) and a label
-    "Startle sound". In the implementation, this triggers a call to the
-    Session Manager's `addStimulusEvent()` method on the Android device
-    or PC, which appends the event to the `stimulus_events.csv` file
-    along with the exact
-    timestamp[\[8\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L124-L133).
-    Multiple events can be logged: e.g., "Questionnaire start",
-    "Questionnaire end", "Unexpected noise", etc., each at specific
-    times. These annotations are invaluable later when analysing the
-    physiological data, as they mark when external stimuli or notable
-    participant actions occurred.
+- The Researcher decides to end the recording after, say, 15 minutes.
+  They click "Stop Recording" on the PC interface. The PC sends stop
+  commands to all Androids, which then cease recording their
+  cameras[\[47\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L146-L155).
+  The Shimmer Manager stops logging GSR data at the same
+  time[\[48\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L151-L159).
+  Each component flushes and closes its output files. The session
+  manager marks the session as completed, calculates the duration, and
+  updates the session metadata (end time, duration, and
+  status)[\[49\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L86-L95)[\[50\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L99-L102).
+  A log message confirms the session has ended along with its duration
+  and sample count
+  stats[\[51\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L156-L164).
 
-1. **Adaptive Control (if applicable):** In some scenarios, the
-    researcher might make adjustments during the session. For example,
-    if they notice the thermal camera's auto-calibration has triggered a
-    re-adjustment (which might briefly pause the feed), they could note
-    that or disable auto-calibration next time. Or if one participant
-    leaves the frame, the researcher might physically adjust the camera
-    and use the preview to recentre. The system design allows for such
-    mid-session interventions without stopping the recording -- the data
-    continues to be captured uninterrupted.
+- After stopping, the system **automatically initiates data transfer**
+  from the Android devices. The File Transfer Manager on each Android
+  packages the recorded files (e.g., `video_20250807_...mp4`, thermal
+  data, etc.) and begins sending them to the PC, one file at a
+  time[\[24\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L124-L132)[\[25\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L142-L150).
+  The PC receives each file (via its network server) and saves it into
+  the session folder, simultaneously calling
+  `SessionManager.add_file_to_session()` to record the file's name and
+  size in the
+  metadata[\[26\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L130-L138).
+  A progress indicator may be shown to the Researcher.
 
-1. **Observation of Limits:** Real-time monitoring also lets the
-    researcher see if any **system limits** are being approached -- for
-    instance, the PC might show that one phone's storage is 90% filled
-    or that its battery is at 15%. The researcher can then decide to
-    stop the session a bit early or ensure data just up to that point is
-    used. Because of NFRs like reliability, these warnings are part of
-    the UI to prevent data loss (e.g., a low storage warning at runtime
-    might prompt the researcher to stop recording before the file system
-    is full).
+- Once all files are transferred, the system notifies the Researcher
+  that the session data collection is complete (e.g., "Session
+  15min_stress_test completed -- 5 files saved"). The Researcher can
+  then optionally review summary statistics (the UI might show, for
+  example, average GSR level, or simply confirm the number of files and
+  total data size). The session is now closed and all resources are
+  cleaned up.
 
-1. **Session End and Event Log:** After the session, the
-    `session_metadata.json` or `session_log.txt` on each device/PC
-    includes a summary of any events annotated (with their timestamps
-    and
-    labels)[\[27\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L126-L134)[\[28\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L140-L148).
-    The researcher, when reviewing the data, can easily line up the
-    event times with spikes in GSR or changes in thermal imagery. The
-    result of this use case is an **enhanced dataset**: not only the raw
-    sensor data, but also contextual markers that help interpret that
-    data. The live monitoring aspect ensured that the data captured is
-    of high quality (since the operator could catch problems in real
-    time), and the annotation aspect enriched the dataset for analysis.
+- **Postconditions:** All recorded data (GSR CSV, video files, etc.) are
+  safely stored in the PC's session directory. The session metadata JSON
+  lists all devices that participated and all files collected. The
+  system remains running, and the researcher could start a new session
+  if needed. The participant's involvement is done, and the data is
+  ready for analysis (outside the scope of the recording system). If any
+  device failed to transfer data, the researcher is made aware so they
+  can retrieve it manually if possible.
 
-These use case scenarios demonstrate the end-to-end flow of how the
-system is used in practice. In a typical experiment day, the researcher
-would first calibrate and configure the system (Use Case 2), then run
-one or multiple recording sessions (Use Case 1) while monitoring and
-annotating (Use Case 3), and finally end up with well-organised data
-ready for analysis. The scenarios involve multiple system components
-interacting seamlessly: for example, the **network communication** plays
-a crucial role in all cases (device discovery, start/stop commands, live
-data relay, file transfer) and must function reliably under the hood.
-The next section will delve into the system's architecture and data
-flow, explaining how these use cases are supported by the design of the
-software and the distribution of responsibilities between the PC
-controller and the Android devices.
+- **Alternate Flows:**\
+  a. *No Shimmer available:* If the Shimmer sensor is not connected or
+  malfunctions, the Researcher can still run a session with just
+  video/thermal. The system will log that no GSR device is present, and
+  it can operate in a video-only mode (possibly using a **simulated GSR
+  signal** for
+  demonstration)[\[6\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L268-L274).\
+  b. *Calibration needed:* If this is the first session or devices have
+  been re-arranged, the Researcher might perform a **calibration
+  routine** before step 4. In that case, they would use the Calibration
+  Utility (see Use Case 2) to calibrate cameras. Once calibration is
+  done and saved, the recording session proceeds as normal.\
+  c. *Device battery low:* During step 5, if an Android's battery is
+  critically low, the system could alert the Researcher (since the
+  device status includes battery
+  level)[\[52\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L205-L213).
+  The Researcher might decide to stop the session early or replace the
+  device. The system will include the battery status in metadata for
+  transparency.\
+  d. *Network loss at end:* If the network connection to a device is
+  lost exactly when "Stop" is pressed, the PC might not immediately
+  receive confirmation from that device. In this case, the PC will mark
+  the device as offline (as in step 6) and proceed to finalize the
+  session with whatever data it has. Later, when the device reconnects,
+  the Session Synchronizer can still trigger the file transfer for that
+  device's data so it eventually gets saved on the PC.
+
+### Use Case 2: Camera Calibration for Thermal Alignment
+
+**Description:** Before conducting recordings that involve a thermal
+camera, the researcher performs a calibration procedure to align the
+thermal camera's view with the RGB camera view. This ensures that data
+from these two modalities can be compared pixel-to-pixel in analysis.
+
+- **Primary Actor:** Researcher.
+
+- **Preconditions:** At least one Android device with both an RGB and a
+  thermal camera (or an external thermal camera attached) is available.
+  A calibration pattern (e.g. a black-and-white checkerboard) is printed
+  and ready. The system's calibration settings (pattern size, etc.) are
+  configured if
+  needed[\[23\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L54-L62).
+
+- **Main Flow:**
+
+- The Researcher opens the **Calibration Tool** in the PC application
+  (or on the Android app, depending on implementation -- assume PC-side
+  coordination). They select the device(s) to calibrate (e.g., "Device A
+  -- RGB + Thermal").
+
+- The system instructs the device to enter calibration mode. Typically,
+  the Android app might open a special calibration capture activity
+  (with perhaps an overlay or just using both cameras). The Researcher
+  holds the checkerboard pattern in front of the cameras and ensures it
+  is visible to both the RGB and thermal cameras.
+
+- The Researcher initiates capture (maybe pressing a "Capture Image"
+  button). The device (or PC via the device) captures a pair of images
+  -- one from the RGB camera and one from the thermal camera -- at the
+  same moment. It may need multiple images from different angles; the
+  configuration might specify capturing, say, 10
+  images[\[23\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L54-L62).
+  The system gives feedback after each capture (e.g., "Image 1/10
+  captured").
+
+- After the required number of calibration images are collected, the
+  Researcher clicks "Compute Calibration". The system runs a calibration
+  algorithm (likely implementing Zhang's method for camera calibration)
+  on the collected image pairs. This computes parameters like camera
+  intrinsics for each camera and the extrinsic transform aligning
+  thermal to RGB.
+
+- The system stores the resulting calibration parameters (e.g., in a
+  calibration result file or in config). It also might display an
+  estimate of calibration error (so the Researcher can judge quality).
+  For instance, if the reprojection error exceeds the
+  threshold[\[23\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L54-L62)
+  (say threshold = 1.0 pixel), the system might warn that the
+  calibration quality is low.
+
+- The Researcher is satisfied with the calibration (error is
+  acceptable). They save the calibration profile. Now the system will
+  use this calibration data in future sessions to correct or align
+  thermal images to the RGB frame if needed (this might be done in
+  post-processing rather than during recording). The Researcher exits
+  the calibration mode.
+
+- **Alternate Flows:**\
+  a. *Calibration failure:* If the system cannot detect the calibration
+  pattern in the images (e.g., poor contrast in thermal image), it
+  notifies the Researcher. The Researcher can then recapture images
+  (maybe adjust the pattern distance or lighting) until the system
+  successfully computes a calibration.\
+  b. *Partial calibration:* The Researcher may choose to only calibrate
+  intrinsics of each camera separately (for example, if thermal-RGB
+  alignment is less important than ensuring each camera's lens
+  distortion is corrected). In this case, the flow would be adjusted to
+  capturing images of a known grid for each camera independently.\
+  c. *Using stored calibration:* If calibration was done previously, the
+  Researcher might skip this use case entirely and rely on the stored
+  calibration parameters. The system allows loading a saved calibration
+  file, which then becomes active for subsequent recordings.
+
+**Use Case 3 (Secondary): Reviewing and Managing Session Data**
+(Optional) -- *This use case would describe how a researcher can use the
+system to review past session metadata and possibly replay or export
+data.* (For brevity, this is not expanded here, but the system does
+include features like session listing and possibly data export tools,
+given that a web UI template for sessions exists.)
+
+*(The above scenarios demonstrate the system's functionality in context.
+They confirm that the requirements -- from multi-device synchronization
+to calibration -- all serve real user workflows. The sequence of
+interactions in Use Case 1, especially, shows how the system meets the
+need for synchronized multi-modal data collection in a practical
+experiment setting.)*
 
 ## 3.6 System Analysis (Architecture & Data Flow)
 
-This section analyses the overall architecture of the multi-sensor
-recording system and describes the flow of data through the system's
-components. The design follows a **distributed client-server
-architecture** with the PC as the central server (or coordinator) and
-the Android devices as clients. It also employs modular subsystems to
-handle the various concerns: user interface, device communication,
-sensor data handling, and data storage. The analysis here shows how the
-chosen architecture meets the requirements (both functional and
-non-functional) and how data moves from capture to storage in a
-synchronised way. Key architectural elements and their interactions are
-summarised in *Figure 3.2* and the data flow is illustrated in *Figure
-3.3*.
+**System Architecture:** The system adopts a **distributed
+architecture** with a central **PC Controller** and multiple **Mobile
+Recording Units**. The PC (a Python desktop application) acts as the
+master, coordinating all devices, while each Android device runs a
+recording application that functions as a client node. This architecture
+is essentially a **hub-and-spoke topology**, where the PC hub maintains
+control and timing, and the spokes (sensors/cameras) carry out data
+collection.
 
-***Figure 3.2: High-level system architecture, showing the PC Master
-Controller communicating over a Wi-Fi network with multiple Android
-Recording Devices and directly or indirectly with Shimmer GSR sensors
-(Placeholder).***
+On the PC side, the software is organized into modular managers, each
+responsible for a subset of functionality: - The **Session Manager**
+handles the overall session lifecycle (creation, metadata logging, and
+closure)[\[10\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L64-L73)[\[11\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L82-L91). -
+The **Network Server** component (within the `AndroidDeviceManager` and
+`PCServer` classes) manages communication with Android devices over
+TCP/IP (listening on a specified port, e.g.
+9000)[\[53\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L212-L220)[\[41\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L6-L14).
+It uses a custom JSON-based protocol for commands and status messages. -
+The **Shimmer Manager** deals with the Shimmer GSR sensors, including
+Bluetooth connectivity (via the PyShimmer library if available) and data
+streaming to the
+PC[\[54\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L150-L159)[\[31\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L184-L192).
+It also multiplexes data from multiple sensors and writes sensor data to
+CSV files in real-time. - The **Time Synchronization Service** (Master
+Clock) runs on the PC to keep device clocks aligned. As seen in the
+code, an `NTPTimeServer` thread on the PC listens on a port (e.g. 8889)
+and services time-sync requests from
+clients[\[8\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/ntp_time_server.py#L66-L74).
+It periodically syncs with external NTP sources for accuracy and
+provides time offset information to the Android devices, which adjust
+their local clocks accordingly. - The **GUI Module** (built with PyQt5
+or a similar framework) provides the desktop interface. It includes
+panels for device status, session control, and live previews. This GUI
+updates based on callbacks and status data from the managers (for
+instance, when a new device connects, the Shimmer Manager invokes a
+callback that the GUI listens to, so it can display the device).
 
-**Architecture Overview:** The system architecture can be viewed in two
-layers -- **hardware nodes** and **software components**. On the
-hardware side, we have: (1) the **PC Master Controller** (a
-laptop/desktop running the Python application) and (2) one or more
-**Android Recording Devices** (smartphones). Optionally, (3) **Shimmer
-GSR sensor devices** are also present; they can interface either with
-the PC (via Bluetooth) or with an Android phone (via the phone's
-Bluetooth). The PC and phones are connected via a **Wireless LAN**
-(e.g., a dedicated Wi-Fi router or hotspot), forming a private network
-for the system. This network enables low-latency communication required
-for synchronisation and data transfer.
+On the Android side, each device's application is composed of several
+components: - A **Recording Controller** that receives start/stop
+commands from the PC and controls the local recording (camera and sensor
+capture). - Separate **Recorder modules** for each modality: e.g.,
+`CameraRecorder` for RGB video, `ThermalRecorder` for thermal imaging,
+and `ShimmerRecorder` if the Android is paired to a Shimmer
+sensor[\[55\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/architecture.md#L26-L34).
+These recorders interface with hardware (camera APIs, etc.) and save
+data to local storage. - A **Network Client** (or Device Connection
+Manager) that maintains the socket connection to the PC's server. It
+listens for commands (e.g., start/stop, sync signal) and sends back
+status updates or data as needed. - A **FileTransferManager** on
+Android, which, after recording, handles sending the recorded files to
+the PC upon
+request[\[24\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L124-L132)[\[25\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L142-L150). -
+Utility components like a **Security Manager** (ensuring encryption if
+TLS is used), a **Storage Manager** (to check available space and
+organize files), etc., are also part of the design (many of these are
+hinted by the architecture and config files).
 
-On the software side, the PC runs a **Master Controller Application**
-which includes several components working together: a **GUI Module**
-(for the user interface), a **Session Manager** (for session metadata
-and file management), and a **Network Communication Server** (to handle
-connections with devices). The network server on PC is implemented as a
-custom JSON socket server listening on a known port (e.g.,
-9000)[\[29\]](PythonApp/network/device_server.py#L129-L137)[\[30\]](PythonApp/network/device_server.py#L120-L128).
-It accepts incoming connections from the Android clients and uses a
-length-prefixed JSON message protocol to exchange commands and data.
-Each connected Android device is represented in the PC software as a
-**RemoteDevice** object which tracks its capabilities (camera, thermal,
-GSR, etc.) and
-status[\[31\]](PythonApp/network/device_server.py#L18-L26)[\[32\]](PythonApp/network/device_server.py#L40-L48).
-The PC's Session Manager on the other hand handles higher-level logic:
-creating session folders, writing metadata, and coordinating the
-start/stop across devices.
+**Communication and Data Flow:** All communication between the PC and
+Android devices uses a **client-server model**. The PC runs the server
+(listening on a specified host/port, with a maximum number of
+connections
+defined)[\[41\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L6-L14),
+and each Android client connects to it when ready. Messages are likely
+encoded in JSON and could be sent over a persistent TCP socket (the
+config specifies
+`protocol: "TCP"`[\[41\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L6-L14)).
+Important message types include: device registration/hello, start
+session command, stop session command, sync signal command, status
+update from device, file transfer requests, etc.
 
-Each **Android Recording Device** runs an **Android app** (written in
-Kotlin) that has its own internal architecture. The app is built with a
-**Model-View-ViewModel (MVVM)** pattern. The core components include: a
-**Recording Controller/Service** (which manages the camera and sensor
-hardware on that phone), a **Session Manager** (on Android, which
-parallels the PC's session logic, creating local folders on the phone's
-storage for each session), and a **Network Client** that maintains a
-socket connection back to the PC. The Android app's UI (if the user
-opens it) provides local status, but in typical operation it runs mostly
-headlessly after startup, responding to PC commands. The Android's
-Recording Controller uses Android's Camera2 API for video and the
-Shimmer SDK for sensor data if a Shimmer is connected to the phone.
-Crucially, the Android app does not make autonomous decisions -- it acts
-on commands from the PC or on a local user action (which is rare in this
-use case). This separation ensures that **control logic is centralised**
-on the PC, fulfilling the requirement of FR-01 (centralised multi-device
-coordination).
+During a session, the **data flow** is as follows: - **Shimmer GSR
+Data:** If a Shimmer sensor is directly connected to the PC, it streams
+data via Bluetooth to the PC's Shimmer Manager, which then immediately
+enqueues the data for writing to a CSV and also triggers any real-time
+displays. If the Shimmer is connected to an Android (i.e.,
+Android-mediated), the sensor data first goes to the Android (via
+Bluetooth), and the Android then forwards each GSR sample (or batch of
+samples) over the network to the
+PC[\[56\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L260-L269)[\[57\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L261-L268).
+This is handled by the `AndroidDeviceManager._on_android_shimmer_data`
+callback on the PC side, which receives `ShimmerDataSample` objects from
+the device and processes them similarly. In both cases, each GSR sample
+is timestamped (using the synchronized clock) and logged. The PC might
+accumulate these in memory (e.g., in `data_queues`) briefly for
+processing but ultimately writes them out via a background file-writing
+thread[\[15\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L163-L171). -
+**Video and Thermal Data:** The Android devices record video and thermal
+streams locally to their flash storage (to avoid saturating the network
+by streaming raw video). The PC may receive low-frequency updates or
+thumbnails for monitoring, but the bulk video data stays on the device
+until session end. The **temporal synchronization** of video with GSR is
+ensured by all devices starting recording upon the same start command
+and using synchronized clocks. Additionally, the PC's sync signal
+(flash) provides a reference point that can be seen in the video and is
+logged in the GSR timeline, tying the streams together. After the
+recording, when the PC issues the file transfer, the video files are
+sent to the PC. This transfer uses the network (possibly chunking files
+if large). The FileTransferHandler on PC receives each chunk or file and
+saves it. Because the PC knows the session start time and each video
+frame's device timestamp (the Android might embed timestamp metadata in
+video or provide a separate timestamp log), alignment can be done in
+post-processing. There is also a possibility that the Android app sends
+periodic timestamps during recording to the PC (as part of
+SessionSynchronizer updates) so the PC is aware of recording
+progress[\[58\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L113-L122)[\[59\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L130-L138). -
+**Time Sync and Heartbeats:** Throughout a session, the PC might send
+periodic time sync packets to the Androids (or the Androids request
+them). The `SessionSynchronizer` on PC also keeps a heartbeat: it tracks
+if it hasn't heard from a device's state in a while, marking it offline
+after a
+threshold[\[60\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L154-L161).
+Android devices likely send a small status message every few seconds
+("I'm alive, recording, file X size = ..."). This data flow ensures the
+PC has up-to-date knowledge of each device (e.g., how many frames
+recorded, or storage used). - **Data Aggregation:** Once all data
+reaches the PC, the system has a **session aggregation step** (which can
+be considered post-session). For instance, the Session Manager might
+invoke a function to perform any post-processing -- the code even shows
+a hook for *post-session hand segmentation processing* on the recorded
+video[\[61\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L172-L180)[\[62\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L214-L222).
+In practice, after all files are in place, the PC could combine or index
+them (for example, generating an index of timestamps). This ensures that
+all data from the distributed sources is now centralized in one place
+(the PC's file system) and organized.
 
-The **Shimmer GSR Sensors** integration is architected flexibly. The
-system supports three modes (as mentioned in FR-06): **Direct PC
-Connection**, **Android-Mediated Connection**, or **Simulation Mode**
-(for testing). In direct mode, the PC runs a Shimmer Bluetooth driver
-(via the PyShimmer library) in the Python app -- the `ShimmerManager` on
-PC opens a Bluetooth COM port to the Shimmer and reads data packets in a
-background
-thread[\[33\]](PythonApp/shimmer_manager.py#L19-L28)[\[34\]](PythonApp/shimmer_manager.py#L51-L59).
-In Android-mediated mode, an Android phone pairs with the Shimmer (using
-the Shimmer Android API) and that phone's app becomes responsible for
-reading the GSR data; the phone then sends those sensor readings to the
-PC over the network (using JSON messages of type
-"sensor_data")[\[35\]](PythonApp/network/device_server.py#L256-L265).
-The PC doesn't directly talk to the Shimmer in that case; it receives
-the data already parsed from the phone. The architecture allows both
-modes to operate simultaneously if needed (for example, two Shimmers
-could be connected, one via PC, one via a phone). In all cases, the
-Shimmer data is funneled into the same session structure: the PC will
-eventually store it as part of the session data (either logging directly
-or saving the file sent from the phone).
+**System Architecture Diagram:** *Figure 3.1 (Placeholder)* would
+illustrate the above in a block diagram: a PC node on one side with
+blocks for Session Manager, Shimmer Manager, Network Server, etc., and
+multiple Android nodes on the other, each containing Camera, Thermal,
+Shimmer (if any) and a network client. Lines would show Bluetooth links
+(PC to Shimmer, or Android to Shimmer), and WiFi/LAN links between PC
+and each Android. Data flows (like GSR data flowing to PC, video files
+flowing after stop) would be indicated with arrows. Time sync flows (PC
+broadcasting time) would also be shown. The diagram would emphasize the
+star topology (PC in center).
 
-Several design patterns and strategies were used to satisfy
-maintainability and extensibility (NFR-07) in the architecture. For
-instance, the Android app relies heavily on **dependency injection**
-(using Dagger/Hilt): components like the Camera Recorder, Thermal
-Recorder, and Shimmer Recorder are provided to the Main ViewModel, so
-they can be easily replaced or mocked for
-testing[\[36\]](AndroidApp/src/main/java/com/multisensor/recording/ui/MainViewModel.kt#L32-L40)[\[37\]](AndroidApp/src/main/java/com/multisensor/recording/ui/MainViewModel.kt#L34-L42).
-This makes it possible to extend support to new sensor types by adding
-new modules without altering the core logic. On the PC side, the
-networking is abstracted behind a `JsonSocketServer` class with
-well-defined events (device_connected, status_received, etc.), and the
-GUI is kept separate in a Qt-based `MainWindow`. This separation
-enforces a **modular architecture** -- for example, one could develop an
-alternative web-based UI (and indeed, the code contains a `web_ui`
-module as an experimental interface) without needing to rewrite how
-sessions or networking work. The architecture also emphasizes thread
-separation for performance: the PC networking runs in a background
-thread (so that heavy file transfers don't freeze the GUI), and the
-Android uses background threads or coroutines for camera and file
-operations (preventing UI jank on the phone). Overall, the chosen
-architecture ensures that the system can reliably coordinate multiple
-devices and handle data streams, while also being organised for future
-modifications.
+**Key Design Considerations:** The architecture ensures **scalability**
+by decoupling data producers (devices) from the central coordinator.
+Each Android operates largely independently during recording (writing to
+local disk), which avoids overloading the network. The PC focuses on
+low-bandwidth critical data (GSR streams, commands, and occasional
+thumbnails or status). By using local storage on devices and
+transferring after, the system mitigates the risk of network bandwidth
+issues affecting the recording quality. The use of threads and
+asynchronous I/O on the PC side (for writing files and handling multiple
+sockets) ensures that adding more devices will linearly increase
+resource usage but not deadlock the
+system[\[28\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L169-L177).
 
-**Data Flow Analysis:** The flow of data through the system can be
-described step-by-step for a typical session, highlighting how
-information moves and transforms from capture to storage. *Figure 3.3
-depicts this flow, from the moment the user initiates a session to the
-final data aggregation \[Placeholder\].* Here is the sequence:
+The architecture also provides **fault isolation**: if one device
+crashes, it does not bring down the whole system -- the PC will continue
+managing others. The SessionSynchronizer component acts like a watchdog
+and queue, so even if connectivity returns after a lapse, the overall
+session can still be
+coherent[\[63\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L169-L178)[\[64\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L179-L187).
 
-1. **Session Initiation (Command Flow):** The user action of starting a
-    session on the PC triggers command messages over the network. The
-    PC's JsonSocketServer sends a
-    `{"type": "command", "command": "start_recording", ...}` (for
-    example) to each connected Android
-    device[\[38\]](PythonApp/network/device_server.py#L410-L419)[\[14\]](PythonApp/network/device_server.py#L424-L432).
-    These messages are small JSON payloads, prefixed with a length
-    header (to ensure the receiver knows how many bytes to
-    read)[\[39\]](PythonApp/network/device_server.py#L156-L165).
-    When an Android device receives the start command, it immediately
-    responds (if needed) with an acknowledgment
-    (`{"type": "ack", "cmd": "start_recording", "status": "ok"}`)[\[40\]](PythonApp/network/device_server.py#L276-L284)
-    and then begins its recording process. This command flow is
-    one-to-many (one PC to multiple clients) and happens almost
-    simultaneously to all devices (the PC either sends commands in a
-    quick loop or uses a broadcast helper function to send to
-    all[\[14\]](PythonApp/network/device_server.py#L424-L432)).
-
-1. **Sensor Data Capture (Local Flow on Devices):** Once recording,
-    each device is capturing data from sensors:
-
-1. The **camera data** (visual and thermal) flows from the camera
-    hardware through Android's Camera2 API into either a file or a
-    buffer. On Android, the CameraRecorder sets up a MediaRecorder that
-    encodes video frames directly to an MP4 file on the device's file
-    system[\[41\]](PythonApp/webcam/webcam_capture.py#L98-L106)[\[42\]](PythonApp/webcam/webcam_capture.py#L159-L168).
-    Simultaneously, for thermal, if a separate stream exists, it might
-    use a similar approach or raw frames saved as images (depending on
-    implementation). The key is that frames are timestamped by the
-    system -- the MediaRecorder frames are implicitly timed, and if raw
-    frames are grabbed (for thermal or for preview), the code attaches
-    the current timestamp to them (for preview frames, they even convert
-    to Base64 strings to send to PC).
-
-1. The **GSR sensor data** flow varies by mode: in direct PC mode, the
-    PC's ShimmerManager receives Bluetooth packets, decodes them to
-    numeric values (like GSR microSiemens) and immediately writes them
-    to a CSV file or stores them in memory
-    queues[\[43\]](PythonApp/shimmer_manager.py#L9-L17)[\[12\]](PythonApp/shimmer_manager.py#L91-L99).
-    In Android-mediated mode, the Shimmer Android API delivers sensor
-    samples to the phone app, which then either writes to a local CSV on
-    the phone or streams the values as JSON messages to the PC (the code
-    supports a streaming socket for live
-    data[\[44\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L74-L82)[\[45\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L76-L84)).
-    In both cases, each sensor sample is augmented with timing info:
-    e.g., the code records the sample's device timestamp and the system
-    time it arrived on the
-    PC[\[12\]](PythonApp/shimmer_manager.py#L91-L99),
-    ensuring later that alignment can be done.
-
-1. **Real-Time Data Communication (Status/Preview Flow):** Throughout
-    recording, a parallel flow of **status and preview data** occurs
-    from the Android devices back to the PC. Each device periodically
-    sends a `status` message with its current recording status (every
-    few
-    seconds)[\[46\]](PythonApp/network/device_server.py#L228-L237)[\[47\]](PythonApp/network/device_server.py#L240-L248).
-    This includes data like battery % and free storage, as well as a
-    `timestamp` (which can be used by PC to gauge device clock vs PC
-    clock). These status packets help update the UI and also carry
-    implicit sync info. Additionally, if preview is enabled, the device
-    captures a frame (say every 1 second), compresses it (e.g., JPEG),
-    Base64-encodes it, and sends a `preview_frame` message containing a
-    small image
-    string[\[7\]](PythonApp/network/device_server.py#L244-L252).
-    The PC receives this and emits a signal that the GUI uses to display
-    the new frame. This data flow is one-way from each device to PC and
-    is designed to be low-bandwidth (e.g., a thumbnail image rather than
-    full-frame, to avoid bogging down the network). Meanwhile, if the
-    Shimmer is streaming live via Android, those readings might also be
-    sent continuously in `sensor_data`
-    messages[\[35\]](PythonApp/network/device_server.py#L256-L265);
-    however, in practice the PC may choose not to plot every point to
-    avoid overload -- it could sample or aggregate before display.
-
-1. **Command and Control Feedback:** The PC can also send other
-    commands during the session -- for example, if the user triggers an
-    event annotation, the PC might send a `notification` message to
-    devices (or directly log it on PC). In many cases, the annotation is
-    handled on PC side (since PC knows the session time and can just
-    write to the events file immediately). If devices needed to do
-    something (like flash a light when an event is marked), a message
-    would be sent. In our design, most *mid-session* control is minimal;
-    the heavy command flows are start and stop.
-
-1. **Session Termination and Data Gathering:** When stop command is
-    issued, the data flow reverses for file transfer. Each device, after
-    closing its files, initiates a **file transfer protocol** to send
-    the recorded files to PC. The flow is:
-
-1. Device sends a `file_info` message indicating it is about to send a
-    file, including file name and
-    size[\[48\]](PythonApp/network/device_server.py#L284-L293)[\[49\]](PythonApp/network/device_server.py#L298-L306).
-    For example, `"name": "rgb_video.mp4", "size": 50012345`.
-
-1. PC prepares to receive by creating a new file in the session folder
-    (`DeviceID_rgb_video.mp4`) and responds (implicitly via ack or
-    readiness).
-
-1. Device then sends a series of `file_chunk` messages, each containing
-    a segment of the file encoded (typically in
-    Base64)[\[50\]](PythonApp/network/device_server.py#L320-L328).
-    The PC decodes each chunk and writes to the file
-    handle[\[51\]](PythonApp/network/device_server.py#L323-L331).
-    This continues until the whole file is sent (chunks are often a few
-    KB each). The PC's networking layer tracks how many bytes have been
-    received and can log
-    progress[\[52\]](PythonApp/network/device_server.py#L330-L338).
-
-1. When the device finishes sending, it sends `file_end` message with
-    the file
-    name[\[53\]](PythonApp/network/device_server.py#L347-L355).
-    PC then closes the file and compares the received byte count to the
-    expected
-    size[\[54\]](PythonApp/network/device_server.py#L356-L364).
-    If they match, PC logs success and sends back a confirmation
-    (`file_received` message with status
-    ok)[\[55\]](PythonApp/network/device_server.py#L364-L372).
-    If there's a mismatch, PC logs an error and could request a retry
-    (in our code, it at least reports the error; a full retry mechanism
-    could be initiated if needed).
-
-1. This process repeats for each file (each device might have multiple
-    files: e.g., one for video, one for thermal, one for sensor data).
-    The PC can pipeline requests or handle one device at a time. In the
-    current implementation, it likely sequentially requests each
-    expected file from each
-    device[\[56\]](PythonApp/network/device_server.py#L509-L518)
-    to avoid network congestion (with a short delay between as
-    indicated[\[57\]](PythonApp/network/device_server.py#L516-L524)).
-
-1. Throughout this, the Session Manager on PC is aware of incoming
-    files and uses
-    `add_file_to_session(device_id, file_type, path, size)` to update
-    the session
-    metadata[\[58\]](PythonApp/session/session_manager.py#L120-L129)[\[59\]](PythonApp/session/session_manager.py#L130-L139).
-    This means the session's JSON metadata will list, for each device,
-    the files that were collected (with file paths and sizes),
-    confirming that they are now on the PC.
-
-1. **Post-Processing Flow:** If post-processing (FR-13) is enabled,
-    once all raw data is gathered, the PC may invoke additional
-    processing. For instance, the PC might load the recorded video file
-    and run the hand segmentation algorithm. This would generate output
-    files (images or mask videos) which the Session Manager then places
-    into the session folder (e.g., under a `processed/` subdirectory or
-    by appending results next to original files). The data flow here is
-    local on the PC -- using OpenCV or other libraries on the saved
-    files. The results are logged (the `post_processing` field in
-    session metadata is updated to true with a
-    timestamp[\[60\]](PythonApp/session/session_manager.py#L218-L226)[\[61\]](PythonApp/session/session_manager.py#L232-L240)).
-
-1. **Data Storage and Access:** At the end of the data flow, all data
-    resides in an organised manner on the PC. The **session folder**
-    (typically under a `recordings/` directory) contains the following:
-    video files (named by device and type), sensor data CSV, events log,
-    session metadata JSON, and any calibration or processed data
-    subfolders. For example, one might see:
-
-- recordings/session_20250806_101530/
-        session_metadata.json
-        DeviceA_rgb_video.mp4
-        DeviceA_thermal_video.mp4
-        DeviceB_rgb_video.mp4
-        DeviceB_sensors.csv
-        stimulus_events.csv
-        calibration/ (folder with calibration images)
-        processed/ (folder with segmented hand images)
-
-  This structure was defined by the requirements and is implemented in
-  code (the Android app creates similar filenames on its
-  side[\[62\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L374-L382),
-  and the PC adds the device prefix upon receipt). Because each data
-  file is timestamped or accompanied by timestamps internally, a
-  researcher can load, for instance, the `DeviceB_sensors.csv` and the
-  videos and align them using the timestamps. The data integrity checks
-  ensure these files are complete and not corrupted.
-
-1. **Scalability and Data Flow Considerations:** The architecture's
-    data flow is largely **parallel** -- each device operates
-    independently for data capture, which is crucial for scalability.
-    The PC coordinates and eventually brings data together. As more
-    devices are added, the network traffic and PC disk I/O grow, but the
-    modular handling (each device in its thread) means the system can
-    scale up to the point where either network bandwidth or PC write
-    speed becomes the bottleneck. Because video files can be large, the
-    file transfer part is the heaviest data flow; the system mitigates
-    issues by writing chunks to disk as they arrive and using a binary
-    encoding to avoid JSON overhead for large
-    data[\[50\]](PythonApp/network/device_server.py#L320-L328).
-    Also, to maintain performance, intensive tasks like video encoding
-    are done on the devices (leveraging phone hardware encoders), and
-    the PC mainly handles control and file aggregation -- this
-    distribution balances load across the system.
-
-In summary, the system's architecture is a **star topology** with
-intelligent clients, and the data flow is designed to minimis\1 latency
-and maintain synchronisation. The PC orchestrates the process (command
-flows out, data flows back), which aligns well with the requirement of
-central control and monitoring. The use of standard formats (MP4, CSV,
-JSON) in the data flow ensures that once data reaches the PC, it's
-immediately usable with analysis tools. The combination of real-time
-communication and local storage means the system is robust: even if the
-network has a hiccup, each phone still has its data, and it can be
-transferred later. The thorough session metadata and logging implemented
-(on both PC and Android) provide traceability -- one can trace each step
-in the data flow from the logs (e.g., see in the PC log that Device A
-started recording at time X, or that file transfer for file Y completed,
-etc.). Thus, the architecture and data flow together fulfill the system
-requirements by enabling **coordinated, synchronous data capture and
-reliable data unification**.
-
-***Figure 3.3: Data flow diagram for a typical session, illustrating
-command dissemination, local data capture on devices, status/preview
-feedback, and post-session data collection into the PC's storage
-\[Placeholder\].***
+Finally, the data flow design was made with **data integrity** in mind.
+Every piece of data is tagged with device ID and timestamp, and funneled
+into the session structure. The system uses consistent file naming
+conventions (e.g., `<device>_<datatype>_<timestamp>.ext` for
+files)[\[65\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L20-L28)
+to aid in identifying and parsing data later. This systematic approach
+to data flow and storage helps maintain the quality of the dataset
+produced for research.
 
 ## 3.7 Data Requirements and Management
 
-The multi-sensor system produces and handles a variety of data types.
-This section outlines the specific **data requirements**, including data
-formats, volumes, and how data is managed and stored to ensure integrity
-and accessibility for analysis.
+The system handles multiple types of data, each with specific
+requirements for quality and management:
 
-**Data Types and Formats:** The primary data generated by the system
-are: - **Video data:** This includes regular RGB video and thermal
-video. The video is encoded in a standard compressed format
-(MPEG-4/H.264 in an MP4 container) on the recording devices to manage
-file size. Each video file is accompanied by an internal timestamp track
-(every video frame has a timestamp in the file), and frame rate
-information is stored. Thermal video, if captured, is also stored as an
-MP4 (if using a sensor that outputs a stream) or potentially as a
-sequence of images if the device captures frame-by-frame -- in this
-implementation it was designed to be an MP4 for consistency (FR-05).
-Typical video resolution for RGB might be 1920×1080 at 30 fps (if the
-phone supports it, possibly even 4K as configured in
-code[\[63\]](AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt#L74-L82)[\[64\]](AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt#L75-L83)),
-whereas thermal cameras usually have lower resolution (for example
-320×240 or 160×120 at a lower frame rate like 8--30 fps). Regardless,
-the system handles these as just "video files" -- the exact resolution
-and frame rate used in a session are recorded in the session
-configuration
-file[\[65\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L356-L364)[\[26\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L370-L378)
-for reference. - **Sensor data:** The Shimmer GSR (and associated
-sensors) produce time-series data. This data is recorded in **CSV
-(Comma-Separated Values)** format for human readability and easy import
-into analysis tools. Each row in the CSV represents a sensor sample. For
-example, a row might contain: *Timestamp, SystemTime, GSR_Conductance,
-PPG, Accel_X, Accel_Y, Accel_Z,
-BatteryLevel*[\[66\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L113-L119).
-The `Timestamp` is the device's relative time or sample count, and
-`SystemTime` could be an absolute UNIX timestamp (to tie it to PC
-clock). Using CSV ensures that researchers can open the file in Python,
-MATLAB, Excel, etc. easily. If multiple Shimmer sensors are used, either
-multiple CSV files are created (one per device) or all data is merged
-into one file with device identifiers -- in our design we create
-separate files per device to keep things simple (the file naming will
-include the device ID or name). - **Metadata and logs:** The system
-generates JSON and text files for metadata. The **session metadata**
-(JSON) contains structured information about the session: session ID,
-start/end times, list of devices, files names, and possibly environment
-info (like app versions). For instance, `session_metadata.json` might
-have an entry listing each device by ID and the files it
-produced[\[67\]](PythonApp/session/session_manager.py#L104-L112)[\[68\]](PythonApp/session/session_manager.py#L130-L138).
-Additionally, a human-readable **session_info.txt** is generated on the
-Android side listing the folder contents and
-status[\[69\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L322-L330)[\[4\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L334-L342).
-This redundancy is intentional for clarity -- researchers can quickly
-read the text summary or use the JSON for programmatic processing. The
-PC and devices also maintain **log files** (e.g., `session_log.txt`)
-that record events and any errors with timestamps -- these are useful
-for debugging and audit trails. - **Event annotations:** As discussed,
-event markers are stored in a simple CSV file (e.g.,
-`stimulus_events.csv`). Each line has an event timestamp (in
-milliseconds or a readable time format) and a label. This file is
-managed by the Session Manager (either on PC or device) whenever an
-event is
-added[\[27\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L126-L134).
-The format is straightforward, ensuring that during analysis one can
-load this file and overlay events onto signal timelines.
+- **Data Types and Formats:** The primary data types include:
 
-**Data Volume and Storage Considerations:** The system is expected to
-handle significant data volumes, especially for video. For example, one
-minute of 1080p RGB video at 30 fps can be on the order of 60--120 MB
-when encoded (depending on the scene and compression bit rate). Thermal
-video tends to be smaller (both in resolution and often lower frame
-rate, plus uniform scenes compress well), perhaps a few MB per minute.
-GSR CSV files are relatively tiny in comparison (on the order of
-kilobytes per minute; e.g., 60 samples per second for 60 seconds is 3600
-lines -- a few hundred KB at most). Even so, a multi-hour recording
-could generate multiple gigabytes of data (mostly video), so the
-system's data requirement is that devices have **sufficient storage**
-available. The Android app checks available free space on the device
-storage before and during
-recording[\[70\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L424-L428)
-and can warn the PC if space is low. The data management plan recommends
-using high-capacity SD cards or internal memory on phones, and the PC of
-course typically has ample disk space.
+- *GSR (Galvanic Skin Response) data:* continuous time-series of skin
+  conductance values (in microsiemens) recorded at **128 Hz** by
+  default[\[12\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L128-L135).
+  Each sample may also include related signals (e.g., PPG, accelerometer
+  axes) if those Shimmer channels are
+  enabled[\[13\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L101-L109).
+  GSR and other sensor readings are saved in **CSV format** with
+  timestamps.
 
-To manage this, each recording session's data is isolated in its own
-directory (both on the device during capture and on the PC after
-aggregation). This not only organises the data but makes it easier to
-move or archive entire sessions. If a user needs to free space, they can
-archive older session folders to an external drive. The naming
-convention with session timestamps (e.g., `session_YYYYMMDD_HHMMSS`)
-ensures uniqueness and chronological order. The inclusion of the session
-name (if the researcher provided one) in the folder or file names helps
-in identifying the context of the data (for example,
-`session_20250806_101530_stressTest` if "stressTest" was given as a
-name).
+- *Video footage:* high-resolution RGB video, typically **1080p at 30
+  FPS**
+  (configurable)[\[14\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L18-L26),
+  encoded in a standard format (e.g. H.264 MP4). If multiple cameras
+  (e.g., front and rear or multiple angles) are used, each video is
+  stored separately.
 
-**Data Integrity and Verification:** As outlined in NFR-04, the system
-has built-in measures to verify data integrity. During file transfer,
-checksums or at least byte counts are
-compared[\[54\]](PythonApp/network/device_server.py#L356-L364).
-After a session, the Session Manager on PC logs a **session summary**
-that includes whether each expected file is present and its
-size[\[71\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L410-L418).
-For example, the PC log might say "RGB Video: ✓ (50012345 bytes),
-Thermal Video: ✓ (12345678 bytes), Shimmer Data: ✓ (N bytes)" confirming
-successful captures. In case a file is missing or incomplete, that is
-flagged in the log (and the PC UI would alert the user). The system
-avoids modifying the raw data once recorded -- all data files are
-write-once (append or create-only). If post-processing outputs are
-generated, they are written as new files rather than altering the
-originals. This way, the raw recordings remain pristine for analysis or
-for rerunning analysis with different parameters.
+- *Thermal imaging data:* either recorded as thermal video (if the
+  thermal camera supports video) or as a sequence of image frames.
+  Thermal data has lower resolution (depending on camera, e.g., 320×240)
+  and frame rate (\~8-15 FPS is common for thermal). The system treats
+  it similarly to video (MP4 or a series of JPEG/PNG images).
 
-**Data Accessibility and Use:** The data formats chosen (MP4, CSV, JSON)
-make the dataset **portable** across analysis environments. Researchers
-can copy the entire session folder and load it into analysis software.
-For example, MP4 videos can be played or imported into computer vision
-pipelines (OpenCV, etc.), and CSV sensor data can be read by pandas or
-MATLAB. The system's documentation includes a **Technical Glossary**
-(not reproduced here) which describes each data field and any
-calibration that has been applied, so analysts understand how to
-interpret values (e.g., that GSR is in microSiemens, temperature might
-be in Celsius if thermal camera yields absolute temperature after
-calibration, etc.). In some cases, calibration results (from Use Case 2)
-might also produce data (like a camera intrinsic matrix or a mapping
-file); these are stored in the calibration folder or appended to the
-metadata JSON so that analysis code can automatically correct the data
-if needed.
+- *Audio:* if recorded, stereo audio sampled at 44.1 kHz, stored within
+  the video file (as AAC audio track) or as separate WAV
+  files[\[16\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L26-L34).
 
-**Data Security and Privacy Management:** As noted in NFR-09, while the
-system doesn't inherently encrypt data, it assumes data will be handled
-on secure storage. If required, the entire `recordings/` directory on
-the PC can reside on an encrypted drive. Personal identifiers are
-generally not embedded in file names (device IDs are generic like
-"phone1" or a device serial, and session IDs are timestamps or
-user-defined codes, not participant names). This is a conscious decision
-to keep the data pseudonymized at the file system level. The mapping
-from session ID to a specific participant or experiment trial would be
-maintained separately by the researcher (not in the recorded data
-itself), to protect participant identity if files are shared with others
-for analysis.
+- *Metadata:* JSON files (such as `session_metadata.json`) which contain
+  structured information about the session (session ID, device list,
+  start/end times, and lists of data
+  files)[\[10\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L64-L73).
+  These are crucial for data management but are small in size.
 
-In conclusion, the system's data management strategy creates a
-**self-contained record** of each session that is easy to navigate and
-analyse. By structuring the files logically and including metadata and
-logs, the system meets all requirements for data completeness,
-integrity, and usability. Even if months later a researcher or a
-different team examines the files, they should be able to understand the
-content and trust that it accurately represents what occurred during the
-session. This careful attention to data requirements and management
-ensures that the valuable multi-modal data collected by the system can
-lead to reliable research findings in contactless GSR prediction.
----
-[\[1\]](PythonApp/shimmer_manager.py#L144-L151)
-[\[2\]](PythonApp/shimmer_manager.py#L138-L145)
-[\[12\]](PythonApp/shimmer_manager.py#L91-L99)
-[\[13\]](PythonApp/shimmer_manager.py#L146-L150)
-[\[22\]](PythonApp/shimmer_manager.py#L72-L80)
-[\[23\]](PythonApp/shimmer_manager.py#L96-L104)
-[\[24\]](PythonApp/shimmer_manager.py#L184-L191)
-[\[33\]](PythonApp/shimmer_manager.py#L19-L28)
-[\[34\]](PythonApp/shimmer_manager.py#L51-L59)
-[\[43\]](PythonApp/shimmer_manager.py#L9-L17)
+- **Quality Requirements:** For research validity, the data must be high
+  quality:
+
+- GSR data should have appropriate resolution (the Shimmer GSR+ device
+  provides 16-bit resolution) and be free from gaps. The system's 128 Hz
+  sampling satisfies typical GSR analysis needs, and it can be increased
+  if needed (config allows setting a higher rate, up to the hardware
+  max)[\[12\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L128-L135).
+  Signal noise should be minimized (the system does basic validation and
+  could be extended with filtering if required).
+
+- Video quality is set to high (1080p) so that fine details (e.g.,
+  subtle facial perspiration or color changes) are visible. The bitrate
+  \~5
+  Mbps[\[29\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L30-L37)
+  is chosen to avoid excessive compression artifacts. The system ensures
+  that lighting conditions are sufficient (not a direct software
+  requirement, but an experimental protocol matter). Thermal images must
+  have good contrast; the system cannot control thermal camera
+  resolution (that's hardware-defined) but ensures that all frames are
+  timestamped and in focus (if the thermal camera has focus
+  adjustments).
+
+- Synchronization quality is part of data quality: as noted, all data
+  streams carry timestamps from a common reference. The system's time
+  management ensures that when data is analyzed, a sample from the GSR
+  CSV can be aligned to the exact video frame using timestamps (within a
+  few milliseconds tolerance).
+
+- **Volume and Storage Management:** The system is expected to generate
+  **large volumes of data** per session, especially video. For example,
+  a 10-minute session with one 1080p camera (\~5 Mbps) will produce
+  around 375 MB of video data, plus a few MB of sensor data. With
+  multiple cameras or longer sessions, this scales up. To manage this:
+
+- The Android app monitors available storage before and during
+  recording. If free space is below a threshold (configurable, e.g.,
+  warn at 500 MB
+  remaining)[\[66\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L32-L38),
+  it alerts the user to avoid data loss.
+
+- The system is configured to **chunk large files**: video files are
+  capped at \~1000 MB
+  each[\[66\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L32-L38),
+  so a long recording will result in sequential files (e.g., video1.mp4,
+  video2.mp4) rather than one enormous file. This makes transfers and
+  post-processing more reliable.
+
+- **Session Directory Structure:** On the PC, all data for a session is
+  contained in one folder (e.g., `recordings/session_20250808_123000/`).
+  Within it, subfolders or naming conventions separate data by device or
+  type. For instance, GSR CSV might be named
+  `Shimmer01_gsr_20250808_123000.csv`[\[67\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L8-L16)[\[65\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L20-L28)
+  and an Android's video `AndroidDeviceA_video_20250808_123000.mp4`.
+  This systematic naming is created by the `generate_device_filename`
+  utility[\[68\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L2-L9).
+  The session metadata JSON lists each file with its device and type for
+  easy
+  reference[\[26\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L130-L138).
+
+- **Backup and Redundancy:** The system can be configured to keep a
+  backup of data. In the config, `backup_enabled` is
+  true[\[42\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L2-L5),
+  meaning the system will duplicate session data to a secondary location
+  (this could be an external drive or cloud, depending on setup). This
+  is important for research robustness -- no single copy of valuable
+  data. The backup operation might happen after the session or at the
+  end of the day, ensuring at least two copies of each file exist.
+
+- **Data Retention:** Sessions are stored with unique IDs, and the
+  system does not automatically delete anything (unless a retention
+  policy is specified). It's up to the user to clear old sessions if
+  needed. The session listing in the UI helps track what is stored.
+
+- **Post-Processing and Data Export:** While not the primary focus of
+  requirements, the system does facilitate post-session processing. For
+  example, as noted in the SessionManager code, after a session the
+  researcher can trigger a **hand segmentation** process on the recorded
+  video[\[61\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L172-L180)[\[62\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L214-L222)
+  -- this would produce additional data (segmentation masks) stored
+  alongside the session. Also, the design allows exporting data in
+  standard formats for analysis (the raw data is already in CSV/MP4
+  which are standard). If needed, an export utility could package a
+  session's data (e.g., compress the folder or convert it to a specific
+  data format required by analysis software).
+
+In summary, the system meets stringent data requirements by capturing
+**high-resolution, high-frequency data**, keeping it well-organized per
+session, and implementing measures for integrity (synchronization,
+validation) and safety (storage management, backups). This ensures that
+researchers using the system will obtain a comprehensive and reliable
+dataset for each experiment, without worrying about data loss or
+misalignment. All these measures together make the data management
+**compliant with research best practices** -- for instance, it aligns
+with FAIR data principles by clearly documenting metadata and
+maintaining data
+quality[\[69\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/architecture.md#L6-L14).
+
+------------------------------------------------------------------------
+
+[\[1\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/architecture.md#L14-L21)
+[\[55\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/architecture.md#L26-L34)
+[\[69\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/architecture.md#L6-L14)
+architecture.md
+
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/architecture.md>
+
+[\[2\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L110-L119)
+[\[33\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L140-L148)
+[\[35\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L106-L114)
+[\[36\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L156-L164)
+[\[37\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py#L168-L171)
+runtime_security_checker.py
+
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/production/runtime_security_checker.py>
+
+[\[3\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L153-L161)
+[\[21\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L163-L171)
+[\[22\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L174-L182)
+[\[58\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L113-L122)
+[\[59\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L130-L138)
+[\[60\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L154-L161)
+[\[63\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L169-L178)
+[\[64\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py#L179-L187)
+session_synchronizer.py
+
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_synchronizer.py>
+
+[\[4\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L244-L253)
+[\[5\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L260-L268)
+[\[6\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L268-L274)
+[\[12\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L128-L135)
+[\[13\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L101-L109)
+[\[15\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L163-L171)
+[\[28\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L169-L177)
+[\[30\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L130-L138)
+[\[31\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L184-L192)
+[\[53\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L212-L220)
+[\[54\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L150-L159)
+[\[56\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L260-L269)
+[\[57\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py#L261-L268)
 shimmer_manager.py
 
-<PythonApp/shimmer_manager.py>
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_manager.py>
 
-[\[3\]](PythonApp/session/session_manager.py#L74-L81)
-[\[11\]](PythonApp/session/session_manager.py#L216-L224)
-[\[21\]](PythonApp/session/session_manager.py#L82-L91)
-[\[58\]](PythonApp/session/session_manager.py#L120-L129)
-[\[59\]](PythonApp/session/session_manager.py#L130-L139)
-[\[60\]](PythonApp/session/session_manager.py#L218-L226)
-[\[61\]](PythonApp/session/session_manager.py#L232-L240)
-[\[67\]](PythonApp/session/session_manager.py#L104-L112)
-[\[68\]](PythonApp/session/session_manager.py#L130-L138)
+[\[7\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L120-L128)
+[\[17\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L176-L185)
+[\[18\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L260-L267)
+[\[19\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L234-L242)
+[\[20\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L170-L173)
+[\[39\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L261-L268)
+[\[45\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L191-L200)
+[\[46\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L130-L138)
+[\[47\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L146-L155)
+[\[48\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L151-L159)
+[\[51\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L156-L164)
+[\[52\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py#L205-L213)
+shimmer_pc_app.py
+
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/shimmer_pc_app.py>
+
+[\[8\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/ntp_time_server.py#L66-L74)
+[\[9\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/ntp_time_server.py#L26-L34)
+ntp_time_server.py
+
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/ntp_time_server.py>
+
+[\[10\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L64-L73)
+[\[11\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L82-L91)
+[\[26\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L130-L138)
+[\[49\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L86-L95)
+[\[50\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L99-L102)
+[\[61\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L172-L180)
+[\[62\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L214-L222)
+[\[65\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L20-L28)
+[\[67\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L8-L16)
+[\[68\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py#L2-L9)
 session_manager.py
 
-<PythonApp/session/session_manager.py>
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/PythonApp/session/session_manager.py>
 
-[\[4\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L334-L342)
-[\[8\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L124-L133)
-[\[9\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L300-L308)
-[\[10\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L311-L319)
-[\[25\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L354-L362)
-[\[26\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L370-L378)
-[\[27\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L126-L134)
-[\[28\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L140-L148)
-[\[62\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L374-L382)
-[\[65\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L356-L364)
-[\[69\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L322-L330)
-[\[70\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L424-L428)
-[\[71\]](AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt#L410-L418)
-SessionManager.kt
+[\[14\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L18-L26)
+[\[16\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L26-L34)
+[\[23\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L54-L62)
+[\[29\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L30-L37)
+[\[32\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L111-L119)
+[\[34\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L113-L119)
+[\[38\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L40-L48)
+[\[40\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L39-L47)
+[\[41\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L6-L14)
+[\[42\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L2-L5)
+[\[43\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L80-L88)
+[\[44\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L102-L109)
+[\[66\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json#L32-L38)
+config.json
 
-<AndroidApp/src/main/java/com/multisensor/recording/service/SessionManager.kt>
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/protocol/config.json>
 
-[\[5\]](PythonApp/network/device_server.py#L355-L364)
-[\[6\]](PythonApp/network/device_server.py#L26-L34)
-[\[7\]](PythonApp/network/device_server.py#L244-L252)
-[\[14\]](PythonApp/network/device_server.py#L424-L432)
-[\[15\]](PythonApp/network/device_server.py#L484-L492)
-[\[18\]](PythonApp/network/device_server.py#L216-L224)
-[\[19\]](PythonApp/network/device_server.py#L486-L494)
-[\[20\]](PythonApp/network/device_server.py#L313-L322)
-[\[29\]](PythonApp/network/device_server.py#L129-L137)
-[\[30\]](PythonApp/network/device_server.py#L120-L128)
-[\[31\]](PythonApp/network/device_server.py#L18-L26)
-[\[32\]](PythonApp/network/device_server.py#L40-L48)
-[\[35\]](PythonApp/network/device_server.py#L256-L265)
-[\[38\]](PythonApp/network/device_server.py#L410-L419)
-[\[39\]](PythonApp/network/device_server.py#L156-L165)
-[\[40\]](PythonApp/network/device_server.py#L276-L284)
-[\[46\]](PythonApp/network/device_server.py#L228-L237)
-[\[47\]](PythonApp/network/device_server.py#L240-L248)
-[\[48\]](PythonApp/network/device_server.py#L284-L293)
-[\[49\]](PythonApp/network/device_server.py#L298-L306)
-[\[50\]](PythonApp/network/device_server.py#L320-L328)
-[\[51\]](PythonApp/network/device_server.py#L323-L331)
-[\[52\]](PythonApp/network/device_server.py#L330-L338)
-[\[53\]](PythonApp/network/device_server.py#L347-L355)
-[\[54\]](PythonApp/network/device_server.py#L356-L364)
-[\[55\]](PythonApp/network/device_server.py#L364-L372)
-[\[56\]](PythonApp/network/device_server.py#L509-L518)
-[\[57\]](PythonApp/network/device_server.py#L516-L524)
-device_server.py
+[\[24\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L124-L132)
+[\[25\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L142-L150)
+[\[27\]](https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt#L156-L165)
+FileTransferManager.kt
 
-<PythonApp/network/device_server.py>
-
-[\[16\]](changelog.md#L34-L41)
-[\[17\]](changelog.md#L60-L64)
-changelog.md
-
-<changelog.md>
-
-[\[36\]](AndroidApp/src/main/java/com/multisensor/recording/ui/MainViewModel.kt#L32-L40)
-[\[37\]](AndroidApp/src/main/java/com/multisensor/recording/ui/MainViewModel.kt#L34-L42)
-MainViewModel.kt
-
-<AndroidApp/src/main/java/com/multisensor/recording/ui/MainViewModel.kt>
-
-[\[41\]](PythonApp/webcam/webcam_capture.py#L98-L106)
-[\[42\]](PythonApp/webcam/webcam_capture.py#L159-L168)
-webcam_capture.py
-
-<PythonApp/webcam/webcam_capture.py>
-
-[\[44\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L74-L82)
-[\[45\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L76-L84)
-[\[66\]](AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt#L113-L119)
-ShimmerRecorder.kt
-
-<AndroidApp/src/main/java/com/multisensor/recording/recording/ShimmerRecorder.kt>
-
-[\[63\]](AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt#L74-L82)
-[\[64\]](AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt#L75-L83)
-CameraRecorder.kt
-
-<AndroidApp/src/main/java/com/multisensor/recording/recording/CameraRecorder.kt>
+<https://github.com/buccancs/bucika_gsr/blob/7048f7f6a7536f5cd577ed2184800d3dad97fd08/AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt>
