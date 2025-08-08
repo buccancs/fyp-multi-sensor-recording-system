@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.components.ColorPaletteSelector
-import com.multisensor.recording.ui.components.EnhancedThermalPreview
+import com.multisensor.recording.ui.components.ThermalPreview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThermalPreviewScreen(
@@ -54,7 +54,7 @@ fun ThermalPreviewScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            EnhancedThermalPreview(
+            ThermalPreview(
                 thermalBitmap = uiState.currentThermalFrame,
                 isRecording = uiState.isRecording,
                 temperatureRange = uiState.temperatureRange,
