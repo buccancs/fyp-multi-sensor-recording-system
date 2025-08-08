@@ -16,36 +16,26 @@ from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSa
 from ..network.pc_server import PCServer
 from ..utils.logging_config import get_logger
 
-sys.path.append(
-    os.path.join(
-        os.path.dirname(__file__), "..", "..", "AndroidApp", "libs", "pyshimmer"
-    )
-)
+# Clean import of shimmer libraries without sys.path manipulation
 try:
-    from pyshimmer import DEFAULT_BAUDRATE, DataPacket, ShimmerBluetooth
-    from serial import Serial
-
-    PYSHIMMER_AVAILABLE = True
-except ImportError as e:
-    logging.warning(f"PyShimmer library not available: {e}")
-    PYSHIMMER_AVAILABLE = False
-
-    class Serial:
-
-        def __init__(self, *args, **kwargs):
-            pass
-
-    class ShimmerBluetooth:
-
-        def __init__(self, *args, **kwargs):
-            pass
-
-    class DataPacket:
-
-        def __init__(self, *args, **kwargs):
-            pass
-
-    DEFAULT_BAUDRATE = 115200
+    from .shimmer.shimmer_imports import (
+        DEFAULT_BAUDRATE,
+        DataPacket,
+        Serial,
+        ShimmerBluetooth,
+        PYSHIMMER_AVAILABLE,
+    )
+except ImportError:
+    # Fallback import for when running as script
+    import sys
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+    from shimmer.shimmer_imports import (
+        DEFAULT_BAUDRATE,
+        DataPacket,
+        Serial,
+        ShimmerBluetooth,
+        PYSHIMMER_AVAILABLE,
+    )
 
 
 class ConnectionType(Enum):
@@ -147,10 +137,36 @@ class DeviceStatus:
 
 
 class ShimmerManager:
+    """
+    Manages Shimmer sensor devices for physiological data collection.
+    
+    This class provides a unified interface for connecting to, configuring,
+    and collecting data from Shimmer wearable sensors. It supports multiple
+    connection types including direct Bluetooth, Android-mediated connections,
+    and simulation mode for testing.
+    
+    Key Features:
+    - Multi-device connection management
+    - Real-time data streaming and recording
+    - Android integration via TCP socket protocol
+    - Data validation and CSV file output
+    - Session management with synchronized recording
+    
+    Note: This class is currently large and will be refactored into smaller
+    components in future versions to improve maintainability.
+    """
 
     def __init__(
         self, session_manager=None, logger=None, enable_android_integration=True
     ):
+        """
+        Initialize the ShimmerManager.
+        
+        Args:
+            session_manager: Optional session manager for coordinated recording
+            logger: Optional logger instance, creates default if None
+            enable_android_integration: Whether to enable Android device connections
+        """
         self.session_manager = session_manager
         self.logger = logger or get_logger(__name__)
         self.enable_android_integration = enable_android_integration
@@ -198,6 +214,16 @@ class ShimmerManager:
         )
 
     def initialize(self) -> bool:
+        """
+        Initialize the ShimmerManager and set up connections.
+        
+        This method initializes the Android device manager (if enabled),
+        clears any existing device connections, and prepares the system
+        for device scanning and connection.
+        
+        Returns:
+            True if initialization successful, False otherwise
+        """
         try:
             self.logger.info("Initializing Enhanced ShimmerManager...")
             if not PYSHIMMER_AVAILABLE:
@@ -1266,17 +1292,17 @@ if __name__ == "__main__":
     logger = get_logger(__name__)
 
     def on_data_received(sample: ShimmerSample):
-        print(
+        logger.info(
             f"Data from {sample.device_id} ({sample.connection_type.value}): GSR={sample.gsr_conductance}, PPG={sample.ppg_a13}"
         )
 
     def on_status_update(device_id: str, status: ShimmerStatus):
-        print(
+        logger.info(
             f"Status {device_id}: {status.device_state.value} - Battery: {status.battery_level}%"
         )
 
     def on_android_device(device_id: str, status: Dict[str, Any]):
-        print(f"Android device {device_id}: {status}")
+        logger.info(f"Android device {device_id}: {status}")
 
     manager = ShimmerManager(enable_android_integration=True)
     manager.add_data_callback(on_data_received)
@@ -1284,19 +1310,19 @@ if __name__ == "__main__":
     manager.add_android_device_callback(on_android_device)
     try:
         if manager.initialize():
-            print("Enhanced ShimmerManager initialized successfully")
-            print("Listening for Android devices on port 9000...")
-            print("Connect Android devices and they will appear here.")
+            logger.info("Enhanced ShimmerManager initialized successfully")
+            logger.info("Listening for Android devices on port 9000...")
+            logger.info("Connect Android devices and they will appear here.")
             devices = manager.scan_and_pair_devices()
-            print(f"Found devices: {devices}")
+            logger.info(f"Found devices: {devices}")
             if any(devices.values()) and manager.connect_devices(devices):
-                print("Connected to devices")
+                logger.info("Connected to devices")
                 channels = {"GSR", "PPG_A13", "Accel_X", "Accel_Y", "Accel_Z"}
                 for device_id in manager.device_status:
                     manager.set_enabled_channels(device_id, channels)
                 if manager.start_streaming():
-                    print("Streaming started")
-                    print("Monitoring data for 30 seconds...")
+                    logger.info("Streaming started")
+                    logger.info("Monitoring data for 30 seconds...")
                     for i in range(30):
                         time.sleep(1)
                         if i % 10 == 0:
