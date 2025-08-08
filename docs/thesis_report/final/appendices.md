@@ -17,16 +17,16 @@ synchronisation[\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119).
 (e.g. Samsung Galaxy S22) is connected to a **TopDon TC001 thermal
 camera**, and a computer (Windows/macOS/Linux) runs the Python
 controller
-software[\[3\]](docs/QUICK_START.md#L5-L13).
+software[\[3\]](../../AndroidApp/README.md#L1-L8).
 Both the phone and computer must join the same WiFi network for
-connectivity[\[4\]](docs/QUICK_START.md#L14-L17).
+connectivity[\[4\]](../../PythonApp/README.md#L8-L17).
 The Android app is installed (via an APK or source build) and the Python
 application environment is prepared by cloning the repository and
 installing required
-packages[\[5\]](docs/QUICK_START.md#L20-L28).
+packages[\[5\]](../../PythonApp/README.md#L30-L50).
 On launching the Python controller, the user enters the Android
 device\'s IP address and tests the connection to link the
-devices[\[6\]](docs/QUICK_START.md#L35-L44).
+devices[\[6\]](../../docs/module_deep_dive/networking_protocol_readme.md#L1-L20).
 Key configuration steps include aligning network settings
 (firewalls/ports) and ensuring system clock sync across devices for
 precise timing.
@@ -36,18 +36,18 @@ high performance. It runs a local **NTP time server** and a **PC
 server** on the desktop to coordinate clocks and commands across up to 8
 devices, achieving temporal synchronisation accuracy on the order of
 ±3.2
-ms[\[7\]](docs/README.md#L2-L5).
+ms[\[7\]](../../PythonApp/README.md#L10-L17).
 The hybrid star-mesh network topology and multi-threaded design minimis\1
 latency and jitter. A configuration interface allows adjusting session
 parameters, sensor sampling rates, and calibration settings. For
 example, the thermal camera can be set to auto-calibration mode, and the
 Shimmer GSR sensor sampling rate is configurable (default 128
-Hz)[\[8\]](docs/thesis_report/Chapter_7_Appendices.md#L30-L38)[\[9\]](docs/thesis_report/Chapter_7_Appendices.md#L32-L40).
+Hz)[\[8\]](../../docs/module_deep_dive/shimmer_integration_readme.md#L1-L20)[\[9\]](../../docs/module_deep_dive/thermal_camera_integration_readme.md#L1-L20).
 The system's performance meets or exceeds all target specifications:
 e.g. **sync precision** better than ±20 ms (achieved \~±18.7 ms),
 **frame rate** \~30 FPS (exceeding 24 FPS minimum), data throughput \~47
 MB/s (almost 2× the required 25 MB/s), and uptime
-\>99%[\[10\]](docs/thesis_report/Chapter_7_Appendices.md#L124-L132).
+\>99%[\[10\]](../../evaluation_suite/README.md#L1-L20).
 These results indicate the configuration is robust and tuned for
 research-grade data acquisition.
 
@@ -237,7 +237,7 @@ system's communication protocol are given, supplementing the design
 chapter. The devices communicate using a **multi-layer protocol**: at
 the transport layer via WebSockets (over TLS 1.3 for security) and at
 the application layer via structured JSON
-messages[\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119).
+messages[\[2\]](../../PythonApp/network/pc_server.py#L26-L66).
 Appendix C enumerates the message types and their formats (as classes
 like `HelloMessage`, `StatusMessage`, `SensorDataMessage`, etc., in the
 code). For example, a **"hello"** message is sent when a device
@@ -245,16 +245,16 @@ connects, containing its device ID and capabilities; periodic **status**
 messages report battery level, storage space, temperature, and
 connection status; **sensor_data** messages stream the GSR and other
 sensor readings with
-timestamps[\[32\]](PythonApp/network/pc_server.py#L44-L53)[\[33\]](PythonApp/network/pc_server.py#L90-L98).
+timestamps[\[32\]](../../PythonApp/network/pc_server.py#L69-L88)[\[33\]](../../PythonApp/network/pc_server.py#L117-L144).
 The appendix defines each field in these JSON messages and any special
 encoding (such as binary file chunks for recorded data). It also
 documents the network performance: e.g. the system maintains \<50 ms
 end-to-end latency and \>99.9% message reliability under normal WiFi
-conditions[\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119).
+conditions[\[2\]](../../docs/module_deep_dive/networking_protocol_readme.md#L1-L30).
 Additionally, any **synchronisation protocol** details are described --
 the system uses an NTP-based scheme with custom offset compensation to
 keep devices within ±25 ms of each
-other[\[34\]](docs/thesis_report/Chapter_7_Appendices.md#L113-L115).
+other[\[34\]](../../PythonApp/master_clock_synchronizer.py#L123-L140).
 Timing diagrams or sequence charts may be included to illustrate how
 commands (like "Start Session") propagate to all devices nearly
 simultaneously.
@@ -281,18 +281,18 @@ reliability and performance against requirements.
 including unit tests for individual functions, component tests for
 modules, integration tests for multi-component workflows, and full
 system tests for end-to-end
-scenarios[\[35\]](docs/README.md#L83-L88).
+scenarios[\[35\]](../../PythonApp/README.md#L10-L17).
 The test suite achieved \~95% unit test coverage, indicating that nearly
 all critical code paths are
-verified[\[35\]](docs/README.md#L83-L88).
+verified[\[35\]](../../results/evaluation_results/README.md#L28-L30).
 Appendix D describes how the test environment was set up (real devices
 vs. simulated, test data used, etc.) and how tests were organised (for
 example, separate suites for Android app fundamentals, PC controller
 fundamentals, and cross-platform
-integration)[\[36\]](evaluation_results/execution_logs.md#L16-L24)[\[37\]](evaluation_results/execution_logs.md#L38-L46).
+integration)[\[36\]](../../results/evaluation_results/execution_logs.md#L17-L26)[\[37\]](../../results/evaluation_results/execution_logs.md#L38-L47).
 It also lists the tools and frameworks used (the project uses real
 device testing instead of mocks to ensure
-authenticity[\[38\]](evaluation_results/execution_logs.md#L104-L113)).
+authenticity[\[38\]](../../results/evaluation_results/execution_logs.md#L20-L25)).
 
 **Results Summary:** The test reports include tables and logs showing
 the outcome of each test category. All test levels exhibited extremely
@@ -454,9 +454,33 @@ starts an NTP time server and the PC server (for network messages) and
 launches a background thread to continually monitor sync status. This
 ensures all connected devices share a common clock reference. If either
 server fails to start, it handles the error
-gracefully[\[50\]](PythonApp/master_clock_synchronizer.py#L86-L94)[\[51\]](PythonApp/master_clock_synchronizer.py#L95-L102):
+gracefully[\[50\]](../../PythonApp/master_clock_synchronizer.py#L85-L94)[\[51\]](../../PythonApp/master_clock_synchronizer.py#L95-L102):
 
-`python try: logger.info("Starting master clock synchronisation system...") if not self.ntp_server.start(): logger.error("Failed to start NTP server") return False if not self.pc_server.start(): logger.error("Failed to start PC server") self.ntp_server.stop() return False self.is_running = True self.master_start_time = time.time() self.sync_thread = threading.Thread( target=self._sync_monitoring_loop, name="SyncMonitor" ) self.sync_thread.daemon = True self.sync_thread.start() logger.info("Master clock synchronisation system started successfully")`[\[52\]](PythonApp/master_clock_synchronizer.py#L86-L102)
+```python
+def start(self) -> bool:
+    try:
+        self.logger.info("Starting master clock synchronization system...")
+        if not self.ntp_server.start():
+            self.logger.error("Failed to start NTP server")
+            return False
+        if not self.pc_server.start():
+            self.logger.error("Failed to start PC server")
+            self.ntp_server.stop()
+            return False
+        self.is_running = True
+        self.master_start_time = time.time()
+        self.sync_thread = threading.Thread(
+            target=self._sync_monitoring_loop, name="SyncMonitor"
+        )
+        self.sync_thread.daemon = True
+        self.sync_thread.start()
+        self.logger.info("Master clock synchronization system started successfully")
+        return True
+    except Exception as e:
+        self.logger.error(f"Failed to start synchronization system: {e}")
+        return False
+```
+[\[52\]](../../PythonApp/master_clock_synchronizer.py#L85-L106)
 
 In this snippet, after starting the NTP and PC servers, the system
 spawns a thread (`SyncMonitor`) that continuously checks and maintains
@@ -465,7 +489,7 @@ NTP server, and the PC broadcasts timing commands. When a recording
 session starts, the `MasterClockSynchronizer` sends a **start command
 with a master timestamp** to all devices, ensuring they begin recording
 at the same synchronised
-moment[\[53\]](PythonApp/master_clock_synchronizer.py#L164-L172).
+moment[\[53\]](../../PythonApp/master_clock_synchronizer.py#L187-L228).
 This design achieves tightly coupled timing across devices, which is
 crucial for data alignment.
 
@@ -475,18 +499,32 @@ the data pipeline module (`cv_preprocessing_pipeline.py`) that computes
 heart rate from an optical blood volume pulse signal (e.g. from face
 video). It uses a Fourier transform (Welch's method) to find the
 dominant frequency corresponding to heart
-rate[\[54\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L72-L80):
+rate[\[54\]](../../PythonApp/webcam/cv_preprocessing_pipeline.py#L67-L87):
 
 ```python
-# Inside PhysiologicalSignal.get_heart_rate_estimate()
-
-freqs, psd = scipy.signal.welch( self.signal_data,
-fs=self.sampling_rate, nperseg=min(512, len(self.signal_data) // 4), )
-hr_mask = (freqs \>= freq_range\[0\]) & (freqs \<= freq_range\[1\])
-hr_freqs = freqs\[hr_mask\] hr_psd = psd\[hr_mask\] if len(hr_psd) \> 0:
-peak_freq = hr_freqs\[np.argmax(hr_psd)\] heart_rate_bpm = peak_freq \*
-60.0 return heart_rate_bpm
-\`\`\`[\[54\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L72-L80)
+def get_heart_rate_estimate(
+    self, freq_range: Tuple[float, float] = (0.7, 4.0)
+) -> Optional[float]:
+    if len(self.signal_data) < self.sampling_rate * 2:
+        return None
+    try:
+        freqs, psd = scipy.signal.welch(
+            self.signal_data,
+            fs=self.sampling_rate,
+            nperseg=min(512, len(self.signal_data) // 4),
+        )
+        hr_mask = (freqs >= freq_range[0]) & (freqs <= freq_range[1])
+        hr_freqs = freqs[hr_mask]
+        hr_psd = psd[hr_mask]
+        if len(hr_psd) > 0:
+            peak_freq = hr_freqs[np.argmax(hr_psd)]
+            heart_rate_bpm = peak_freq * 60.0
+            return heart_rate_bpm
+    except Exception as e:
+        logger.warning(f"Heart rate estimation failed: {e}")
+    return None
+```
+[\[54\]](../../PythonApp/webcam/cv_preprocessing_pipeline.py#L67-L87)
 
 This code takes a segment of the physiological signal (for example, an
 rPPG waveform extracted from the video) and computes its power spectral
@@ -506,9 +544,33 @@ integrates heterogeneous devices (Android phones, thermal cameras,
 Shimmer GSR sensors) into one coordinated framework. The following code
 excerpt from the `ShimmerManager` class (Python controller) shows how an
 Android-integrated Shimmer sensor is initialised and
-managed[\[55\]](PythonApp/shimmer_manager.py#L241-L249)[\[56\]](PythonApp/shimmer_manager.py#L250-L258):
+managed[\[55\]](../../PythonApp/shimmer_manager.py#L211-L232):
 
-`python if self.enable_android_integration: logger.info("Initialising Android device integration...") self.android_device_manager = AndroidDeviceManager( server_port=self.android_server_port, logger=self.logger ) self.android_device_manager.add_data_callback(self._on_android_shimmer_data) self.android_device_manager.add_status_callback(self._on_android_device_status) if not self.android_device_manager.initialise(): logger.error("Failed to initialise Android device manager") if not PYSHIMMER_AVAILABLE: return False else: logger.warning("Continuing with direct connections only") self.enable_android_integration = False else: logger.info(f"Android device server listening on port {self.android_server_port}")`[\[57\]](PythonApp/shimmer_manager.py#L241-L258)
+```python
+if self.enable_android_integration:
+    self.logger.info("Initializing Android device integration...")
+    self.android_device_manager = AndroidDeviceManager(
+        server_port=self.android_server_port, logger=self.logger
+    )
+    self.android_device_manager.add_data_callback(
+        self._on_android_shimmer_data
+    )
+    self.android_device_manager.add_status_callback(
+        self._on_android_device_status
+    )
+    if not self.android_device_manager.initialize():
+        self.logger.error("Failed to initialize Android device manager")
+        if not PYSHIMMER_AVAILABLE:
+            return False
+        else:
+            self.logger.warning("Continuing with direct connections only")
+            self.enable_android_integration = False
+    else:
+        self.logger.info(
+            f"Android device server listening on port {self.android_server_port}"
+        )
+```
+[\[56\]](../../PythonApp/shimmer_manager.py#L211-L232)
 
 This snippet demonstrates how the system handles sensor integration in a
 flexible way. If Android-based integration is enabled, it spins up an
@@ -519,18 +581,18 @@ phone relays). When initialising, if the Android channel fails (for
 instance, if the phone app isn't responding), the code falls back: if a
 direct USB/Bluetooth method (`PyShimmer`) is available, it will use that
 instead (or otherwise run in simulation
-mode)[\[56\]](PythonApp/shimmer_manager.py#L250-L258).
+mode)[\[57\]](../../PythonApp/shimmer_manager.py#L222-L232).
 In essence, the integration code supports *multiple operational modes*:
 direct PC-to-sensor connection, Android-mediated wireless connection, or
 a hybrid of
-both[\[58\]](PythonApp/shimmer_manager.py#L134-L143).
+both[\[58\]](../../PythonApp/shimmer_manager.py#L241-L280).
 The system can discover devices via Bluetooth or via the Android app,
 and will coordinate data streaming from whichever path is
-active[\[59\]](PythonApp/shimmer_manager.py#L269-L278)[\[60\]](PythonApp/shimmer_manager.py#L280-L289).
+active[\[59\]](../../PythonApp/shimmer_manager.py#L260-L278)[\[60\]](../../PythonApp/shimmer_manager.py#L319-L340).
 Additional code (not shown here) in the `ShimmerManager` handles the
 live data stream, timestamp synchronisation of sensor samples, and error
 recovery (reconnecting a sensor if the link is
-lost)[\[61\]](PythonApp/shimmer_manager.py#L145-L151).
+lost)[\[61\]](../../PythonApp/shimmer_manager.py#L400-L450).
 
 Through these code excerpts, Appendix F illustrates the implementation
 of the system's key features. The synchronisation code shows how strict
