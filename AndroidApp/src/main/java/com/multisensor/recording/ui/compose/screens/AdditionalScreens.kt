@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.multisensor.recording.ui.MainViewModelRefactored
+import com.multisensor.recording.ui.MainViewModel
 
 /**
  * Settings screen that replaces SettingsActivity in the single-activity pattern.
@@ -21,7 +21,7 @@ import com.multisensor.recording.ui.MainViewModelRefactored
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit,
-    viewModel: MainViewModelRefactored = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier
@@ -174,7 +174,7 @@ fun SettingsScreen(
 @Composable
 fun AboutScreen(
     onNavigateBack: () -> Unit,
-    viewModel: MainViewModelRefactored = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier
@@ -272,7 +272,7 @@ fun AboutScreen(
 @Composable
 fun DiagnosticsScreen(
     onNavigateBack: () -> Unit,
-    viewModel: MainViewModelRefactored = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier

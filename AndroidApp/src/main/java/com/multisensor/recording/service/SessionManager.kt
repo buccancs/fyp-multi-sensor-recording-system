@@ -438,15 +438,15 @@ constructor(
                 )
 
             if (rawEnabled) {
-                rawFramesFolder.listFiles()?.forEach { rawFile ->
-                    if (rawFile.isFile && rawFile.name.endsWith(".dng")) {
+                filePaths.rawFramesFolder.listFiles()?.forEach { rawFile: File ->
+                    if (rawFile.isFile() && rawFile.name.endsWith(".dng")) {
                         sessionInfo.addRawFile(rawFile.absolutePath)
                     }
                 }
             }
 
             if (thermalEnabled) {
-                val thermalFileSize = thermalVideoFile.length()
+                val thermalFileSize = filePaths.thermalVideoFile.length()
                 val estimatedFrameCount = thermalFileSize / (256 * 192 * 2 + 8)
                 sessionInfo.updateThermalFrameCount(estimatedFrameCount)
             }

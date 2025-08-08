@@ -413,17 +413,13 @@ class MainViewModel @Inject constructor(
 
     fun getShimmerDeviceInfo(deviceId: String, callback: (Any?) -> Unit) {
         // TODO: Implement Shimmer device info retrieval
-        val stubInfo = object {
-            fun getDisplaySummary() = "Shimmer Device Info - Stub Implementation"
-        }
+        val stubInfo = ShimmerDeviceInfoStub()
         callback(stubInfo) // Stub implementation
     }
 
     fun getShimmerDataQuality(deviceId: String, callback: (Any?) -> Unit) {
         // TODO: Implement Shimmer data quality retrieval
-        val stubQuality = object {
-            fun getDisplaySummary() = "Data Quality: Good - Stub Implementation"
-        }
+        val stubQuality = ShimmerDataQualityStub()
         callback(stubQuality) // Stub implementation
     }
 
@@ -434,17 +430,12 @@ class MainViewModel @Inject constructor(
 
     fun getFirstConnectedShimmerDevice(): Any? {
         // TODO: Implement first connected Shimmer device retrieval
-        return object {
-            fun isStreaming() = false
-            fun isSDLogging() = false
-        } // Stub implementation
+        return ShimmerDeviceStub() // Stub implementation
     }
 
     fun getShimmerBluetoothManager(): Any? {
         // TODO: Implement Shimmer Bluetooth manager retrieval
-        return object {
-            // Stub Bluetooth manager
-        } // Stub implementation
+        return ShimmerBluetoothManagerStub() // Stub implementation
     }
 
     fun isAnyShimmerDeviceStreaming(): Boolean {
@@ -467,4 +458,22 @@ class MainViewModel @Inject constructor(
         callback(true) // Stub implementation
     }
 
+}
+
+// Stub classes for Shimmer API compatibility
+private class ShimmerDeviceInfoStub {
+    fun getDisplaySummary() = "Shimmer Device Info - Stub Implementation"
+}
+
+private class ShimmerDataQualityStub {
+    fun getDisplaySummary() = "Data Quality: Good - Stub Implementation"
+}
+
+private class ShimmerDeviceStub {
+    fun isStreaming() = false
+    fun isSDLogging() = false
+}
+
+private class ShimmerBluetoothManagerStub {
+    // Stub Bluetooth manager implementation
 }

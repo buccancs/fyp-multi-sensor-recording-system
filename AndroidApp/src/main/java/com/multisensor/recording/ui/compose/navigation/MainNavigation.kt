@@ -15,14 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.multisensor.recording.ui.compose.screens.*
-
-sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
-    object Recording : Screen("recording", "Recording", Icons.Filled.RadioButtonChecked)
-    object ThermalPreview : Screen("thermal_preview", "Preview", Icons.Filled.Visibility)
-    object Devices : Screen("devices", "Devices", Icons.Filled.Devices)
-    object Calibration : Screen("calibration", "Calibration", Icons.Filled.Tune)
-    object Files : Screen("files", "Files", Icons.Filled.Folder)
-}
+import com.multisensor.recording.ui.compose.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

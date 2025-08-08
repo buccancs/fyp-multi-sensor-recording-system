@@ -20,21 +20,6 @@ import com.multisensor.recording.ui.compose.screens.*
  * Enhanced navigation for single-activity pattern.
  * Consolidates all activities into a unified Compose navigation system.
  */
-sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
-    // Main navigation screens
-    object Recording : Screen("recording", "Recording", Icons.Filled.RadioButtonChecked)
-    object ThermalPreview : Screen("thermal_preview", "Preview", Icons.Filled.Visibility)
-    object Devices : Screen("devices", "Devices", Icons.Filled.Devices)
-    object Calibration : Screen("calibration", "Calibration", Icons.Filled.Tune)
-    object Files : Screen("files", "Files", Icons.Filled.Folder)
-    
-    // Additional screens that were previously separate activities
-    object Settings : Screen("settings", "Settings", Icons.Filled.Settings)
-    object About : Screen("about", "About", Icons.Filled.Info)
-    object Diagnostics : Screen("diagnostics", "Diagnostics", Icons.Filled.BugReport)
-    object ShimmerSettings : Screen("shimmer_settings", "Shimmer", Icons.Filled.Bluetooth)
-    object ShimmerVisualization : Screen("shimmer_viz", "Visualization", Icons.Filled.Analytics)
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
