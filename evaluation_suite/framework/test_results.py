@@ -1,9 +1,4 @@
-"""
-Test Results Data Models
 
-Defines data structures for storing and analyzing test results
-across the evaluation suite.
-"""
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List, Optional, Any
@@ -11,7 +6,7 @@ from enum import Enum
 import uuid
 from .test_categories import TestCategory, TestType, TestPriority
 class TestStatus(Enum):
-    """Test execution status"""
+
     PENDING = "pending"
     RUNNING = "running" 
     PASSED = "passed"
@@ -20,7 +15,7 @@ class TestStatus(Enum):
     ERROR = "error"
 @dataclass
 class PerformanceMetrics:
-    """Performance metrics collected during test execution"""
+
     execution_time: float = 0.0
     memory_usage_mb: float = 0.0
     cpu_usage_percent: float = 0.0
@@ -34,7 +29,7 @@ class PerformanceMetrics:
     data_throughput_mb_per_sec: float = 0.0
 @dataclass
 class TestResult:
-    """Individual test result with complete metrics"""
+
     test_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     test_name: str = ""
     test_type: TestType = TestType.UNIT_ANDROID
@@ -56,7 +51,7 @@ class TestResult:
     test_data: Dict[str, Any] = field(default_factory=dict)
     artifacts: List[str] = field(default_factory=list)
     def to_dict(self) -> Dict[str, Any]:
-        """Convert test result to dictionary for serialization"""
+
         return {
             "test_id": self.test_id,
             "test_name": self.test_name,
@@ -93,7 +88,7 @@ class TestResult:
         }
 @dataclass
 class SuiteResults:
-    """Results for a complete test suite"""
+
     suite_name: str = ""
     suite_category: TestCategory = TestCategory.FOUNDATION
     start_time: Optional[datetime] = None
@@ -113,11 +108,11 @@ class SuiteResults:
     average_cpu_percent: float = 0.0
     average_latency_ms: float = 0.0
     def add_test_result(self, result: TestResult):
-        """Add a test result and update summary statistics"""
+
         self.test_results.append(result)
         self._update_statistics()
     def _update_statistics(self):
-        """Update summary statistics based on current test results"""
+
         self.total_tests = len(self.test_results)
         if self.total_tests == 0:
             return
@@ -140,7 +135,7 @@ class SuiteResults:
         self.average_latency_ms = sum(latency_values) / len(latency_values) if latency_values else 0.0
 @dataclass 
 class TestResults:
-    """Complete test execution results across all suites"""
+
     execution_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
@@ -155,11 +150,11 @@ class TestResults:
     reliability_score: float = 0.0
     usability_score: float = 0.0
     def add_suite_results(self, suite_name: str, results: SuiteResults):
-        """Add suite results and update overall statistics"""
+
         self.suite_results[suite_name] = results
         self._update_overall_statistics()
     def _update_overall_statistics(self):
-        """Update overall statistics based on all suite results"""
+
         self.total_suites = len(self.suite_results)
         self.total_tests = sum(suite.total_tests for suite in self.suite_results.values())
         if self.total_tests > 0:
@@ -175,7 +170,7 @@ class TestResults:
                     weight * suite.total_coverage for weight, suite in suite_weights
                 ) / total_weight
     def get_summary_report(self) -> Dict[str, Any]:
-        """Generate detailed summary report"""
+
         return {
             "execution_id": self.execution_id,
             "execution_time": {

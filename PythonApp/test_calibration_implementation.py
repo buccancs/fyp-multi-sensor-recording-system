@@ -85,7 +85,6 @@ def _setup_single_camera_parameters():
         'true_camera_matrix': true_camera_matrix, 'true_dist_coeffs': true_dist_coeffs
     }
 
-
 def _generate_single_camera_data(params):
     import cv2
     import numpy as np
@@ -109,7 +108,6 @@ def _generate_single_camera_data(params):
     
     return objpoints, imgpoints
 
-
 def _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coeffs, rvecs, tvecs):
     import cv2
     
@@ -129,7 +127,6 @@ def _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coef
     print(f"✓ Distortion coefficients: {dist_coeffs.flatten()}")
     
     return True
-
 
 def test_single_camera_calibration():
     print("Testing single camera calibration...")
@@ -187,7 +184,6 @@ def _setup_stereo_calibration_parameters():
         'stereo_R': stereo_R, 'stereo_T': stereo_T
     }
 
-
 def _generate_synthetic_stereo_data(params):
     import cv2
     import numpy as np
@@ -222,7 +218,6 @@ def _generate_synthetic_stereo_data(params):
     
     return objpoints, imgpoints1, imgpoints2
 
-
 def _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, params):
     import cv2
     import numpy as np
@@ -253,7 +248,6 @@ def _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, p
         print(f"⚠ Stereo calibration failed with synthetic data: {str(e)}")
         print("✓ Stereo calibration functionality verified (algorithm available)")
         return True
-
 
 def test_stereo_calibration():
     print("Testing stereo calibration...")

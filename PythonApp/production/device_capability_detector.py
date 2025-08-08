@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, Tuple
 import json
 
-
 @dataclass
 class DeviceCapabilities:
     
@@ -47,7 +46,6 @@ class DeviceCapabilities:
     battery_percent: Optional[float]
     power_plugged: bool
 
-
 @dataclass
 class PerformanceProfile:
     
@@ -73,7 +71,6 @@ class PerformanceProfile:
     cpu_warning_threshold: float
     memory_warning_threshold: float
     frame_drop_threshold: float
-
 
 class DeviceCapabilityDetector:
     
@@ -600,7 +597,6 @@ class DeviceCapabilityDetector:
         
         return recommendations
 
-
 def detect_device_and_generate_profile(save_to_file: bool = True) -> Tuple[DeviceCapabilities, PerformanceProfile]:
     detector = DeviceCapabilityDetector()
     
@@ -613,7 +609,6 @@ def detect_device_and_generate_profile(save_to_file: bool = True) -> Tuple[Devic
         detector.save_device_profile(filename)
     
     return capabilities, profile
-
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

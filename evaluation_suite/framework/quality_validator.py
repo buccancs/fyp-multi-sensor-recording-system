@@ -1,9 +1,4 @@
-"""
-Quality Validator for Test Results
 
-Implements automated quality validation for test results following
-the validation methodology framework from Chapter 5.
-"""
 import logging
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
@@ -14,7 +9,7 @@ from .test_categories import QualityThresholds, TestCategory, TestType
 logger = logging.getLogger(__name__)
 @dataclass
 class ValidationRule:
-    """Individual validation rule for test assessment"""
+
     name: str
     description: str
     threshold: float
@@ -24,7 +19,7 @@ class ValidationRule:
     critical: bool = False
 @dataclass
 class ValidationIssue:
-    """Represents a validation issue found during assessment"""
+
     rule_name: str
     severity: str
     message: str
@@ -33,7 +28,7 @@ class ValidationIssue:
     test_names: List[str]
 @dataclass
 class SuiteValidation:
-    """Validation results for a test suite"""
+
     suite_name: str
     suite_category: TestCategory
     success_rate_valid: bool = False
@@ -51,7 +46,7 @@ class SuiteValidation:
             self.recommendations = []
 @dataclass
 class ValidationReport:
-    """complete validation report for test execution"""
+
     execution_id: str
     timestamp: datetime
     overall_quality: float = 0.0
@@ -76,19 +71,14 @@ class ValidationReport:
         if self.confidence_intervals is None:
             self.confidence_intervals = {}
 class QualityValidator:
-    """
-    Automated quality validation for test results
-    
-    Implements the validation methodology framework with statistical validation,
-    reproducibility assessment, and research compliance validation.
-    """
+
     def __init__(self, quality_thresholds: Optional[QualityThresholds] = None):
         self.quality_thresholds = quality_thresholds or QualityThresholds()
         self.validation_rules: Dict[str, List[ValidationRule]] = {}
         self.logger = logging.getLogger(__name__)
         self._initialize_default_rules()
     def _initialize_default_rules(self):
-        """Initialize default validation rules for all test categories"""
+
         foundation_rules = [
             ValidationRule(
                 name="success_rate_foundation",
@@ -200,22 +190,14 @@ class QualityValidator:
         ]
         self.validation_rules[TestCategory.PERFORMANCE.name] = performance_rules
     def register_validation_rule(self, test_category: TestCategory, rule: ValidationRule):
-        """Register a custom validation rule for specific test category"""
+
         category_name = test_category.name
         if category_name not in self.validation_rules:
             self.validation_rules[category_name] = []
         self.validation_rules[category_name].append(rule)
         self.logger.info(f"Registered validation rule '{rule.name}' for category {category_name}")
     def validate_test_results(self, test_results: TestResults) -> ValidationReport:
-        """
-        Validate test results against quality criteria
-        
-        Performs thorough validation including:
-        - Success rate validation
-        - Performance threshold checking  
-        - Statistical validation
-        - Research compliance assessment
-        """
+
         self.logger.info(f"Starting validation for execution {test_results.execution_id}")
         validation_report = ValidationReport(
             execution_id=test_results.execution_id,
@@ -236,7 +218,7 @@ class QualityValidator:
         self.logger.info(f"Validation completed. Overall quality: {validation_report.overall_quality:.3f}")
         return validation_report
     def _validate_suite_results(self, suite_results: SuiteResults) -> SuiteValidation:
-        """Validate individual test suite results"""
+
         suite_validation = SuiteValidation(
             suite_name=suite_results.suite_name,
             suite_category=suite_results.suite_category
@@ -257,7 +239,7 @@ class QualityValidator:
         return suite_validation
     def _apply_validation_rule(self, rule: ValidationRule, suite_results: SuiteResults, 
                               suite_validation: SuiteValidation):
-        """Apply a specific validation rule to suite results"""
+
         measured_value = self._extract_measurement_value(rule.name, suite_results)
         if measured_value is None:
             self.logger.warning(f"Could not extract value for rule {rule.name}")
@@ -283,7 +265,7 @@ class QualityValidator:
             )
             suite_validation.issues.append(issue)
     def _extract_measurement_value(self, rule_name: str, suite_results: SuiteResults) -> Optional[float]:
-        """Extract the appropriate measurement value for validation rule"""
+
         if "success_rate" in rule_name:
             return suite_results.success_rate
         elif "execution_time" in rule_name:
@@ -315,7 +297,7 @@ class QualityValidator:
         return None
     def _compare_value(self, measured: float, threshold: float, comparison: str, 
                       threshold_max: Optional[float] = None) -> bool:
-        """Compare measured value against threshold using specified comparison"""
+
         if comparison == "gt":
             return measured > threshold
         elif comparison == "gte":
@@ -332,7 +314,7 @@ class QualityValidator:
             self.logger.error(f"Unknown comparison operator: {comparison}")
             return False
     def _calculate_overall_quality(self, validation_report: ValidationReport) -> float:
-        """Calculate overall quality score across all test suites"""
+
         if not validation_report.suite_validations:
             return 0.0
         total_weight = 0.0
@@ -347,7 +329,7 @@ class QualityValidator:
         return min(1.0, overall_quality)
     def _calculate_suite_quality_score(self, suite_results: SuiteResults, 
                                      suite_validation: SuiteValidation) -> float:
-        """Calculate quality score for individual test suite"""
+
         base_score = suite_results.success_rate
         performance_factor = 1.0
         if suite_results.average_cpu_percent > 0:
@@ -363,7 +345,7 @@ class QualityValidator:
         return min(1.0, quality_score)
     def _perform_statistical_validation(self, test_results: TestResults, 
                                        validation_report: ValidationReport):
-        """Perform statistical validation and confidence analysis"""
+
         execution_times = []
         for suite in test_results.suite_results.values():
             execution_times.extend([r.execution_time for r in suite.test_results if r.execution_time > 0])
@@ -383,7 +365,7 @@ class QualityValidator:
             validation_report.statistical_summary["mean_success_rate"] = statistics.mean(success_rates)
             validation_report.statistical_summary["min_success_rate"] = min(success_rates)
     def _generate_recommendations(self, validation_report: ValidationReport) -> List[str]:
-        """Generate actionable recommendations based on validation results"""
+
         recommendations = []
         if validation_report.critical_issues:
             recommendations.append(

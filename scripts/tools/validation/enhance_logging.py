@@ -497,7 +497,6 @@ object LoggingTestUtility {
 
         return overall_success
 
-
 def main():
     print("🔧 Multi-Sensor Recording System - Logging Enhancement for Phase 1")
     print("=" * 70)
@@ -516,7 +515,6 @@ def main():
         import traceback
         traceback.print_exc()
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

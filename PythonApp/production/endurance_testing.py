@@ -32,7 +32,6 @@ except ImportError:
     from utils.system_monitor import get_system_monitor
     from performance_optimizer import PerformanceManager, OptimizationConfig
 
-
 @dataclass
 class EnduranceTestConfig:
     
@@ -63,7 +62,6 @@ class EnduranceTestConfig:
     enable_graceful_shutdown: bool = True
     shutdown_timeout_seconds: float = 300.0
 
-
 @dataclass
 class EnduranceMetrics:
     
@@ -93,7 +91,6 @@ class EnduranceMetrics:
     active_recording_sessions: int = 0
     connected_devices: int = 0
     data_processing_queue_size: int = 0
-
 
 @dataclass
 class EnduranceTestResult:
@@ -126,7 +123,6 @@ class EnduranceTestResult:
     
     detailed_metrics_file: str
     memory_snapshots_file: Optional[str] = None
-
 
 class MemoryLeakDetector:
     
@@ -252,7 +248,6 @@ class MemoryLeakDetector:
             
         self.tracemalloc_snapshots.append(snapshot_data)
         return snapshot_data
-
 
 class EnduranceTestRunner:
     
@@ -650,14 +645,12 @@ class EnduranceTestRunner:
         except Exception as e:
             self.logger.warning(f"EnduranceTestRunner: Error stopping performance manager: {e}")
 
-
 async def run_endurance_test(config: Optional[EnduranceTestConfig] = None) -> EnduranceTestResult:
     if config is None:
         config = EnduranceTestConfig()
         
     runner = EnduranceTestRunner(config)
     return await runner.run_endurance_test()
-
 
 def main():
     import argparse
@@ -712,7 +705,6 @@ def main():
         print(f"Test failed: {e}")
         import traceback
         traceback.print_exc()
-
 
 if __name__ == "__main__":
     main()

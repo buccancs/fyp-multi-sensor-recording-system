@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 try:
     from consolidated_tests import (
         create_calibration_test_suite,
-        create_network_test_suite, 
+        create_network_test_suite,
         create_session_test_suite,
         create_shimmer_test_suite,
         create_gui_test_suite,
@@ -274,7 +274,7 @@ class ComprehensiveTestRunner:
 </html>
     import argparse
     parser = argparse.ArgumentParser(description="complete Python Test Runner")
-    parser.add_argument("--suites", nargs="*", 
+    parser.add_argument("--suites", nargs="*",
                        help="Specific test suites to run (default: all available)")
     parser.add_argument("--html", action="store_true",
                        help="Generate HTML report")

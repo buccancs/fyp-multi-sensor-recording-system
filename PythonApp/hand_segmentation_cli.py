@@ -6,18 +6,16 @@ from pathlib import Path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from hand_segmentation import SessionPostProcessor, create_session_post_processor
 
-
 def main():
     parser = _create_argument_parser()
     args = parser.parse_args()
-    
+
     if not args.command:
         parser.print_help()
         return 1
-    
+
     processor = create_session_post_processor(args.recordings_dir)
     return _execute_command(processor, args)
-
 
 def _create_argument_parser():
     parser = argparse.ArgumentParser(
@@ -25,16 +23,15 @@ def _create_argument_parser():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=_get_help_examples(),
     )
-    
+
     parser.add_argument(
         "--recordings-dir",
         default="recordings",
         help="Base directory containing session recordings (default: recordings)",
     )
-    
+
     _add_subcommands(parser)
     return parser
-
 
 def _get_help_examples():
     return """
@@ -57,24 +54,23 @@ Examples:
     --output-cropped \\
     --output-masks
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
-    
+
     subparsers.add_parser("list-sessions", help="List available sessions that contain videos")
-    
+
     session_parser = subparsers.add_parser("process-session", help="Process all videos in a session")
     session_parser.add_argument("session_id", help="Session ID to process")
     add_processing_args(session_parser)
-    
+
     video_parser = subparsers.add_parser("process-video", help="Process a single video file")
     video_parser.add_argument("video_path", help="Path to video file")
     video_parser.add_argument("--output-dir", help="Output directory (default: same directory as video)")
     add_processing_args(video_parser)
-    
+
     status_parser = subparsers.add_parser("status", help="Check processing status of a session")
     status_parser.add_argument("session_id", help="Session ID to check")
-    
+
     cleanup_parser = subparsers.add_parser("cleanup", help="Clean up segmentation outputs for a session")
     cleanup_parser.add_argument("session_id", help="Session ID to clean up")
-
 
 def _execute_command(processor, args):
     try:
@@ -85,7 +81,7 @@ def _execute_command(processor, args):
             "status": cmd_status,
             "cleanup": cmd_cleanup,
         }
-        
+
         if args.command in command_map:
             if args.command == "list-sessions":
                 return command_map[args.command](processor)
@@ -94,14 +90,13 @@ def _execute_command(processor, args):
         else:
             print(f"Unknown command: {args.command}")
             return 1
-            
+
     except KeyboardInterrupt:
         print("\n[INFO] Processing interrupted by user")
         return 1
     except Exception as e:
         print(f"[ERROR] {e}")
         return 1
-
 
 def add_processing_args(parser):
     parser.add_argument(
@@ -143,7 +138,6 @@ def add_processing_args(parser):
         help="Padding around detected hand regions (default: 20)",
     )
 
-
 def cmd_list_sessions(processor: SessionPostProcessor) -> int:
     sessions = processor.discover_sessions()
     if not sessions:
@@ -158,7 +152,6 @@ def cmd_list_sessions(processor: SessionPostProcessor) -> int:
         if processed_count > 0:
             print(f"    - {processed_count}/{len(videos)} videos already processed")
     return 0
-
 
 def cmd_process_session(processor: SessionPostProcessor, args) -> int:
     print(f"Processing session: {args.session_id}")
@@ -197,7 +190,6 @@ def cmd_process_session(processor: SessionPostProcessor, args) -> int:
         print("No videos processed.")
         return 1
 
-
 def cmd_process_video(processor: SessionPostProcessor, args) -> int:
     video_path = Path(args.video_path)
     if not video_path.exists():
@@ -231,7 +223,6 @@ def cmd_process_video(processor: SessionPostProcessor, args) -> int:
         print(f"[ERROR] Processing failed: {result.error_message}")
         return 1
 
-
 def cmd_status(processor: SessionPostProcessor, args) -> int:
     sessions = processor.discover_sessions()
     if args.session_id not in sessions:
@@ -251,7 +242,6 @@ def cmd_status(processor: SessionPostProcessor, args) -> int:
     print(f"\nSummary: {processed_count}/{len(status)} videos processed")
     return 0
 
-
 def cmd_cleanup(processor: SessionPostProcessor, args) -> int:
     sessions = processor.discover_sessions()
     if args.session_id not in sessions:
@@ -261,7 +251,6 @@ def cmd_cleanup(processor: SessionPostProcessor, args) -> int:
     processor.cleanup_session_outputs(args.session_id)
     print("Cleanup completed.")
     return 0
-
 
 if __name__ == "__main__":
     exit_code = main()

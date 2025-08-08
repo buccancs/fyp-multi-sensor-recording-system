@@ -16,7 +16,6 @@ from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSa
 from ..network.pc_server import PCServer
 from ..utils.logging_config import get_logger
 
-# Clean import of shimmer libraries without sys.path manipulation
 try:
     from .shimmer.shimmer_imports import (
         DEFAULT_BAUDRATE,
@@ -26,7 +25,7 @@ try:
         PYSHIMMER_AVAILABLE,
     )
 except ImportError:
-    # Fallback import for when running as script
+
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
     from shimmer.shimmer_imports import (
@@ -37,12 +36,10 @@ except ImportError:
         PYSHIMMER_AVAILABLE,
     )
 
-
 class ConnectionType(Enum):
     DIRECT_BLUETOOTH = "direct_bluetooth"
     ANDROID_MEDIATED = "android_mediated"
     SIMULATION = "simulation"
-
 
 class DeviceState(Enum):
     DISCONNECTED = "disconnected"
@@ -51,13 +48,11 @@ class DeviceState(Enum):
     STREAMING = "streaming"
     ERROR = "error"
 
-
 class ConnectionStatus(Enum):
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
     CONNECTED = "connected"
     ERROR = "error"
-
 
 @dataclass
 class ShimmerStatus:
@@ -84,7 +79,6 @@ class ShimmerStatus:
         if self.enabled_channels is None:
             self.enabled_channels = set()
 
-
 @dataclass
 class ShimmerSample:
     timestamp: float
@@ -110,7 +104,6 @@ class ShimmerSample:
     raw_data: Optional[Dict[str, Any]] = None
     session_id: Optional[str] = None
 
-
 @dataclass
 class DeviceConfiguration:
     device_id: str
@@ -123,7 +116,6 @@ class DeviceConfiguration:
     data_validation: bool = True
     buffer_size: int = 1000
 
-
 @dataclass
 class DeviceStatus:
     device_id: str
@@ -135,38 +127,12 @@ class DeviceStatus:
     samples_count: int = 0
     last_error: Optional[str] = None
 
-
 class ShimmerManager:
-    """
-    Manages Shimmer sensor devices for physiological data collection.
-    
-    This class provides a unified interface for connecting to, configuring,
-    and collecting data from Shimmer wearable sensors. It supports multiple
-    connection types including direct Bluetooth, Android-mediated connections,
-    and simulation mode for testing.
-    
-    Key Features:
-    - Multi-device connection management
-    - Real-time data streaming and recording
-    - Android integration via TCP socket protocol
-    - Data validation and CSV file output
-    - Session management with synchronized recording
-    
-    Note: This class is currently large and will be refactored into smaller
-    components in future versions to improve maintainability.
-    """
 
     def __init__(
         self, session_manager=None, logger=None, enable_android_integration=True
     ):
-        """
-        Initialize the ShimmerManager.
-        
-        Args:
-            session_manager: Optional session manager for coordinated recording
-            logger: Optional logger instance, creates default if None
-            enable_android_integration: Whether to enable Android device connections
-        """
+
         self.session_manager = session_manager
         self.logger = logger or get_logger(__name__)
         self.enable_android_integration = enable_android_integration
@@ -214,16 +180,7 @@ class ShimmerManager:
         )
 
     def initialize(self) -> bool:
-        """
-        Initialize the ShimmerManager and set up connections.
-        
-        This method initializes the Android device manager (if enabled),
-        clears any existing device connections, and prepares the system
-        for device scanning and connection.
-        
-        Returns:
-            True if initialization successful, False otherwise
-        """
+
         try:
             self.logger.info("Initializing Enhanced ShimmerManager...")
             if not PYSHIMMER_AVAILABLE:
@@ -1286,7 +1243,6 @@ class ShimmerManager:
             accel_z=accel_z,
             battery_percentage=battery_percentage,
         )
-
 
 if __name__ == "__main__":
     logger = get_logger(__name__)

@@ -36,7 +36,6 @@ except ImportError:
     SYSTEM_MONITOR_AVAILABLE = False
     get_system_monitor = lambda: None
 
-
 class WebDashboardServer:
 
     def __init__(
@@ -1118,12 +1117,10 @@ Generated at: {datetime.now().isoformat()}"""
     def is_running(self) -> bool:
         return self.running
 
-
 def create_web_dashboard(
     host: str = "0.0.0.0", port: int = 5000, debug: bool = False
 ) -> WebDashboardServer:
     return WebDashboardServer(host=host, port=port, debug=debug)
-
 
 if __name__ == "__main__":
     dashboard = create_web_dashboard(debug=True)

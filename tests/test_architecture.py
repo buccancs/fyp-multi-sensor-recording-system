@@ -6,10 +6,8 @@ from pathlib import Path
 from typing import Set, List, Dict, Tuple
 import pytest
 
-
 class ArchitectureViolation(Exception):
     pass
-
 
 class DependencyAnalyzer(ast.NodeVisitor):
     
@@ -28,7 +26,6 @@ class DependencyAnalyzer(ast.NodeVisitor):
             self.from_imports.add(node.module)
         self.generic_visit(node)
 
-
 def analyze_file_dependencies(file_path: Path) -> Tuple[Set[str], Set[str]]:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -41,7 +38,6 @@ def analyze_file_dependencies(file_path: Path) -> Tuple[Set[str], Set[str]]:
         return analyzer.imports, analyzer.from_imports
     except Exception:
         return set(), set()
-
 
 def get_project_structure() -> Dict[str, List[Path]]:
     
@@ -133,7 +129,6 @@ def get_project_structure() -> Dict[str, List[Path]]:
     
     return structure
 
-
 def check_layer_dependencies(structure: Dict[str, List[Path]]) -> List[str]:
     violations = []
     
@@ -175,7 +170,6 @@ def check_layer_dependencies(structure: Dict[str, List[Path]]) -> List[str]:
     
     return violations
 
-
 def check_cross_platform_dependencies() -> List[str]:
     violations = []
     
@@ -204,7 +198,6 @@ def check_cross_platform_dependencies() -> List[str]:
                 )
     
     return violations
-
 
 def check_test_isolation() -> List[str]:
     violations = []
@@ -239,7 +232,6 @@ def check_test_isolation() -> List[str]:
                     )
     
     return violations
-
 
 def check_circular_dependencies() -> List[str]:
     violations = []
@@ -288,8 +280,6 @@ def check_circular_dependencies() -> List[str]:
     
     return violations
 
-
-
 def test_layer_separation():
     structure = get_project_structure()
     violations = check_layer_dependencies(structure)
@@ -297,20 +287,17 @@ def test_layer_separation():
     if violations:
         pytest.fail(f"Architecture violations found:\n" + "\n".join(violations))
 
-
 def test_platform_independence():
     violations = check_cross_platform_dependencies()
     
     if violations:
         pytest.fail(f"Platform dependency violations found:\n" + "\n".join(violations))
 
-
 def test_test_isolation():
     violations = check_test_isolation()
     
     if violations:
         pytest.fail(f"Test isolation violations found:\n" + "\n".join(violations))
-
 
 def test_no_circular_dependencies():
     violations = check_circular_dependencies()
@@ -323,7 +310,6 @@ def test_no_circular_dependencies():
     if significant_violations:
         pytest.fail(f"Circular dependency violations found:\n" + "\n".join(significant_violations))
 
-
 def test_project_structure_completeness():
     structure = get_project_structure()
     
@@ -335,14 +321,12 @@ def test_project_structure_completeness():
     for layer in important_layers:
         assert len(structure[layer]) > 0, f"No files found in {layer} layer"
 
-
 def test_architecture_documentation():
     project_root = Path(__file__).parent.parent
     
     arch_docs = list(project_root.rglob('*ARCHITECTURE*')) + list(project_root.rglob('*architecture*'))
     
     assert len(arch_docs) > 0, "No architecture documentation found. Add ARCHITECTURE.md or similar."
-
 
 if __name__ == '__main__':
     print("🏗️  Architecture Analysis")

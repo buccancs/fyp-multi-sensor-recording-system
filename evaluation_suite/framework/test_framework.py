@@ -1,9 +1,4 @@
-"""
-Test Framework - Central Test Coordination and Execution
 
-Implements the thorough testing framework coordinator as described
-in Chapter 5, providing systematic test execution across all layers.
-"""
 import asyncio
 import logging
 import time
@@ -19,7 +14,7 @@ from .test_results import TestResults, SuiteResults, TestResult, TestStatus, Per
 from .quality_validator import QualityValidator, ValidationReport
 logger = logging.getLogger(__name__)
 class TestSuite:
-    """Base class for test suites"""
+
     def __init__(self, name: str, category: TestCategory, description: str = ""):
         self.name = name
         self.category = category
@@ -28,16 +23,16 @@ class TestSuite:
         self.setup_functions: List[Callable] = []
         self.teardown_functions: List[Callable] = []
     def add_test(self, test: 'BaseTest'):
-        """Add a test to this suite"""
+
         self.tests.append(test)
     def add_setup(self, setup_func: Callable):
-        """Add setup function to run before tests"""
+
         self.setup_functions.append(setup_func)
     def add_teardown(self, teardown_func: Callable):
-        """Add teardown function to run after tests"""
+
         self.teardown_functions.append(teardown_func)
 class BaseTest:
-    """Base class for individual tests"""
+
     def __init__(self, name: str, description: str = "", timeout: int = 300):
         self.name = name
         self.description = description
@@ -45,23 +40,23 @@ class BaseTest:
         self.setup_functions: List[Callable] = []
         self.teardown_functions: List[Callable] = []
     def add_setup(self, setup_func: Callable):
-        """Add setup function for this test"""
+
         self.setup_functions.append(setup_func)
     def add_teardown(self, teardown_func: Callable):
-        """Add teardown function for this test"""
+
         self.teardown_functions.append(teardown_func)
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute the test - to be implemented by subclasses"""
         raise NotImplementedError("Subclasses must implement execute method")
 class PerformanceMonitor:
-    """Real-time performance metrics collection"""
+
     def __init__(self):
         self.monitoring = False
         self.monitor_thread = None
         self.metrics_history = []
         self._lock = threading.Lock()
     def start_monitoring(self):
-        """Start performance monitoring"""
+
         with self._lock:
             if not self.monitoring:
                 self.monitoring = True
@@ -69,7 +64,7 @@ class PerformanceMonitor:
                 self.monitor_thread.start()
                 logger.debug("Performance monitoring started")
     def stop_monitoring(self):
-        """Stop performance monitoring"""
+
         with self._lock:
             self.monitoring = False
             if self.monitor_thread:
@@ -77,7 +72,7 @@ class PerformanceMonitor:
                 self.monitor_thread = None
             logger.debug("Performance monitoring stopped")
     def _monitor_loop(self):
-        """Continuous monitoring loop"""
+
         while self.monitoring:
             try:
                 cpu_percent = psutil.cpu_percent(interval=0.1)
@@ -103,7 +98,7 @@ class PerformanceMonitor:
                 logger.error(f"Error in performance monitoring: {e}")
                 time.sleep(5.0)
     def get_current_metrics(self) -> PerformanceMetrics:
-        """Get current performance metrics"""
+
         with self._lock:
             if not self.metrics_history:
                 return PerformanceMetrics()
@@ -117,7 +112,7 @@ class PerformanceMonitor:
                 ) / len(recent_metrics) if len(recent_metrics) > 1 else 0
             )
 class TestEnvironment:
-    """Test execution environment with resource management"""
+
     def __init__(self, config: TestConfiguration):
         self.config = config
         self.temp_files: List[Path] = []
@@ -125,19 +120,19 @@ class TestEnvironment:
         self.resources: Dict[str, Any] = {}
         self.cleanup_functions: List[Callable] = []
     def add_temp_file(self, file_path: Path):
-        """Register temporary file for cleanup"""
+
         self.temp_files.append(file_path)
     def add_temp_dir(self, dir_path: Path):
-        """Register temporary directory for cleanup"""
+
         self.temp_dirs.append(dir_path)
     def add_resource(self, name: str, resource: Any):
-        """Register a named resource"""
+
         self.resources[name] = resource
     def add_cleanup(self, cleanup_func: Callable):
-        """Register cleanup function"""
+
         self.cleanup_functions.append(cleanup_func)
     def cleanup(self):
-        """Clean up test environment resources"""
+
         logger.debug("Cleaning up test environment")
         for cleanup_func in self.cleanup_functions:
             try:
@@ -159,12 +154,7 @@ class TestEnvironment:
                 logger.error(f"Error cleaning up temp dir {dir_path}: {e}")
         self.resources.clear()
 class TestFramework:
-    """
-    complete testing framework coordinator
-    
-    Implements the multi-level testing approach with systematic execution,
-    performance monitoring, and quality validation.
-    """
+
     def __init__(self, quality_thresholds: Optional[QualityThresholds] = None):
         self.test_suites: Dict[str, TestSuite] = {}
         self.quality_validator = QualityValidator(quality_thresholds)
@@ -176,7 +166,7 @@ class TestFramework:
         self.logger = logging.getLogger(__name__)
         self._setup_logging()
     def _setup_logging(self):
-        """Configure logging for test framework"""
+
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -186,11 +176,11 @@ class TestFramework:
             ]
         )
     def register_test_suite(self, name: str, test_suite: TestSuite):
-        """Register test suite for execution"""
+
         self.test_suites[name] = test_suite
         self.logger.info(f"Registered test suite: {name} ({test_suite.category.name})")
     def configure(self, config: TestConfiguration):
-        """Configure test execution parameters"""
+
         self.config = config
         self.logger.info("Test framework configuration updated")
     async def run_all_tests(self) -> TestResults:
@@ -397,7 +387,7 @@ class TestFramework:
             }
         return test_result
     def _generate_execution_report(self, results: TestResults, validation_report: ValidationReport):
-        """Generate complete execution report"""
+
         report_path = Path(f"test_execution_report_{results.execution_id[:8]}.json")
         report_data = {
             "execution_summary": results.get_summary_report(),
@@ -426,10 +416,10 @@ class TestFramework:
             json.dump(report_data, f, indent=2, default=str)
         self.logger.info(f"complete test report generated: {report_path}")
     def get_execution_history(self) -> List[TestResults]:
-        """Get historical test execution results"""
+
         return self.execution_history.copy()
     def get_quality_trends(self) -> Dict[str, List[float]]:
-        """Get quality trends over execution history"""
+
         trends = {
             "overall_quality": [],
             "success_rates": [],

@@ -1,20 +1,15 @@
-"""
-Test Categories and Enumerations
 
-Defines the test categories and classification systems used throughout
-the evaluation suite.
-"""
 from enum import Enum, auto
 from typing import Dict, Any
 from dataclasses import dataclass
 class TestCategory(Enum):
-    """Test category classifications following the multi-level testing approach"""
+
     FOUNDATION = auto()
     INTEGRATION = auto()
     SYSTEM = auto()
     PERFORMANCE = auto()
 class TestType(Enum):
-    """Specific test type classifications"""
+
     UNIT_ANDROID = auto()
     UNIT_PC = auto()
     ALGORITHM_VALIDATION = auto()
@@ -33,14 +28,14 @@ class TestType(Enum):
     PERFORMANCE = auto()
     STRESS_TEST = auto()
 class TestPriority(Enum):
-    """Test priority levels for execution ordering"""
+
     CRITICAL = 1
     HIGH = 2
     MEDIUM = 3
     LOW = 4
 @dataclass
 class TestConfiguration:
-    """Configuration parameters for test execution"""
+
     timeout_seconds: int = 300
     retry_attempts: int = 3
     parallel_execution: bool = False
@@ -49,7 +44,7 @@ class TestConfiguration:
     generate_reports: bool = True
 @dataclass
 class QualityThresholds:
-    """Quality thresholds for test validation"""
+
     minimum_success_rate: float = 0.95
     maximum_execution_time: float = 1800.0
     minimum_coverage: float = 0.80

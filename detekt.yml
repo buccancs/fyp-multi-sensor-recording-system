@@ -7,9 +7,6 @@ build:
     style: 1
     comments: 1
 
-# Note: Custom rules configuration has been removed as it's not supported in this Detekt version
-# Architecture enforcement is handled via ForbiddenImport rule in the style section
-
 config:
   validation: true
   warningsAsErrors: false
@@ -463,7 +460,7 @@ potential-bugs:
     active: false
   IgnoredReturnValue:
     active: false
-    restrictToConfig: 
+    restrictToConfig:
       - '*.CheckReturnValue'
       - '*.CheckResult'
   ImplicitDefaultLocale:
@@ -532,14 +529,14 @@ style:
     allowedPatterns: ''
   ForbiddenImport:
     active: true
-    imports: 
-      # Architecture enforcement - UI layer should not directly import service/network layers
+    imports:
+
       - 'com.multisensor.recording.network.**'
       - 'com.multisensor.recording.service.**'
-      - 'android.util.Log'  # Use centralized logging utility instead
+      - 'android.util.Log'
     forbiddenPatterns: ''
-    # Exclude specific packages where these imports are allowed
-    excludes: 
+
+    excludes:
       - '**/network/**'
       - '**/service/**'
       - '**/util/**'
@@ -609,7 +606,7 @@ style:
   ReturnCount:
     active: true
     max: 2
-    excludedFunctions: 
+    excludedFunctions:
       - 'equals'
     excludeLabeled: false
     excludeReturnFromLambda: true

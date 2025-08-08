@@ -1,10 +1,4 @@
-"""
-Performance Optimization Test Suite
 
-Extended test cases for the performance optimization features including
-endurance testing, graceful degradation, hardware acceleration, and 
-device-specific optimization capabilities.
-"""
 import asyncio
 import logging
 import time
@@ -19,7 +13,7 @@ from PythonApp.performance_optimizer import PerformanceManager, OptimizationConf
 from PythonApp.production.endurance_test_suite import EnduranceTestSuite, EnduranceTestConfig
 from PythonApp.production.device_capability_detector import DeviceCapabilityDetector
 class PerformanceOptimizationTestSuite(TestSuite):
-    """complete performance optimization testing"""
+
     def __init__(self):
         super().__init__(
             name="performance_optimization",

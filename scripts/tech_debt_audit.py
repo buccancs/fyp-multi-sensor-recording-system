@@ -493,8 +493,8 @@ class TechnicalDebtAuditor:
     def _check_large_files(self) -> List[Dict[str, Any]]:
         issues = []
         code_files = (
-            list(self.repo_path.rglob("*.py")) + 
-            list(self.repo_path.rglob("*.kt")) + 
+            list(self.repo_path.rglob("*.py")) +
+            list(self.repo_path.rglob("*.kt")) +
             list(self.repo_path.rglob("*.java"))
         )
         for file_path in code_files:
@@ -520,8 +520,8 @@ class TechnicalDebtAuditor:
         ]
         import re
         code_files = (
-            list(self.repo_path.rglob("*.py")) + 
-            list(self.repo_path.rglob("*.kt")) + 
+            list(self.repo_path.rglob("*.py")) +
+            list(self.repo_path.rglob("*.kt")) +
             list(self.repo_path.rglob("*.java")) +
             list(self.repo_path.rglob("*.js")) +
             list(self.repo_path.rglob("*.ts"))

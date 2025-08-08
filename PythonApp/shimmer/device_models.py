@@ -1,26 +1,16 @@
-"""
-Data models and enums for Shimmer device management.
-
-This module contains all the data structures that were previously embedded
-in the shimmer_manager.py file.
-"""
 
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
 
-
 class ConnectionType(Enum):
-    """Types of connections supported for Shimmer devices."""
 
     DIRECT_BLUETOOTH = "direct_bluetooth"
     ANDROID_MEDIATED = "android_mediated"
     SIMULATION = "simulation"
 
-
 class DeviceState(Enum):
-    """Current state of a Shimmer device."""
 
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
@@ -28,24 +18,15 @@ class DeviceState(Enum):
     STREAMING = "streaming"
     ERROR = "error"
 
-
 class ConnectionStatus(Enum):
-    """Connection status for device tracking."""
 
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
     CONNECTED = "connected"
     ERROR = "error"
 
-
 @dataclass
 class ShimmerStatus:
-    """
-    Current status of a Shimmer device.
-
-    This dataclass contains all the state information for a Shimmer device
-    including connection status, streaming state, and device capabilities.
-    """
 
     is_available: bool = False
     is_connected: bool = False
@@ -67,19 +48,12 @@ class ShimmerStatus:
     connection_attempts: int = 0
 
     def __post_init__(self):
-        """Initialize enabled_channels if None."""
+
         if self.enabled_channels is None:
             self.enabled_channels = set()
 
-
 @dataclass
 class ShimmerSample:
-    """
-    A single data sample from a Shimmer device.
-
-    Contains all possible sensor readings and metadata for a single
-    timestamp from a Shimmer device.
-    """
 
     timestamp: float
     system_time: str
@@ -104,15 +78,8 @@ class ShimmerSample:
     raw_data: Optional[Dict[str, Any]] = None
     session_id: Optional[str] = None
 
-
 @dataclass
 class DeviceConfiguration:
-    """
-    Configuration settings for a Shimmer device.
-
-    Defines how a device should be configured for data collection
-    including enabled sensors and sampling parameters.
-    """
 
     device_id: str
     mac_address: str
@@ -124,14 +91,8 @@ class DeviceConfiguration:
     data_validation: bool = True
     buffer_size: int = 1000
 
-
 @dataclass
 class DeviceStatus:
-    """
-    Status tracking for device management.
-
-    Used for monitoring device health and connection state over time.
-    """
 
     device_id: str
     mac_address: str

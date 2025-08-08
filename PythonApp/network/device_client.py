@@ -9,7 +9,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from PyQt5.QtCore import QThread, QTimer, pyqtSignal
 
-
 class DeviceClient(QThread):
     device_connected = pyqtSignal(int, str)
     device_disconnected = pyqtSignal(int)

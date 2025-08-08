@@ -26,7 +26,6 @@ try:
 except ImportError:
     NVML_AVAILABLE = False
 
-
 @dataclass
 class EnduranceMetrics:
     timestamp: float
@@ -44,7 +43,6 @@ class EnduranceMetrics:
     gpu_memory_mb: Optional[float] = None
     temperature_cpu: Optional[float] = None
 
-
 @dataclass
 class MemoryLeakDetection:
     start_memory_mb: float
@@ -55,7 +53,6 @@ class MemoryLeakDetection:
     unreachable_objects: int
     is_leak_suspected: bool
     trend_analysis: str
-
 
 @dataclass
 class EnduranceTestConfig:
@@ -71,7 +68,6 @@ class EnduranceTestConfig:
     gc_interval_minutes: float = 5.0
     checkpoint_interval_hours: float = 1.0
     save_detailed_logs: bool = True
-
 
 class SimulatedWorkload:
     
@@ -201,7 +197,6 @@ class SimulatedWorkload:
                     
             except Exception as e:
                 self.logger.error(f"Sensor processing simulation error: {e}")
-
 
 class EnduranceTestSuite:
     
@@ -650,7 +645,6 @@ class EnduranceTestSuite:
             for i, rec in enumerate(report["recommendations"], 1):
                 f.write(f"{i}. {rec}\n")
 
-
 async def run_endurance_test(
     duration_hours: float = 8.0,
     workload_intensity: str = "medium",
@@ -666,7 +660,6 @@ async def run_endurance_test(
     
     suite = EnduranceTestSuite(config, output_dir)
     return await suite.run_endurance_test()
-
 
 if __name__ == "__main__":
     import argparse
