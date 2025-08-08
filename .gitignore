@@ -152,3 +152,6 @@ package.json
 
 # Backup files
 *_backup.md
+
+# Temporary visualization scripts
+docs/thesis_report/final/viz/
