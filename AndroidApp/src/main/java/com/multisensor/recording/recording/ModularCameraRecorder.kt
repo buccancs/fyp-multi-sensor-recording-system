@@ -15,7 +15,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Size
 import android.view.Surface
-import android.view.SurfaceTexture
 import android.view.TextureView
 import androidx.core.content.ContextCompat
 import com.multisensor.recording.handsegmentation.HandSegmentationInterface
@@ -170,7 +169,7 @@ constructor(
                 val outputSizes = it.getOutputSizes(MediaRecorder::class.java)
                 videoSize = outputSizes.maxByOrNull { it.width * it.height } ?: Size(1920, 1080)
                 
-                val previewSizes = it.getOutputSizes(SurfaceTexture::class.java)
+                val previewSizes = it.getOutputSizes(android.graphics.ImageFormat.PRIVATE)
                 previewSize = previewSizes.find { it.width <= 1920 && it.height <= 1080 } ?: Size(1280, 720)
                 
                 val rawSizes = it.getOutputSizes(ImageFormat.JPEG)

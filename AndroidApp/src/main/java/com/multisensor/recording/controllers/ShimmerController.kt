@@ -470,7 +470,13 @@ class ShimmerController @Inject constructor(
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Getting device information for: $deviceId")
 
             viewModel.getShimmerDeviceInfo(deviceId) { deviceInfo ->
-                val infoText = deviceInfo?.getDisplaySummary() ?: "Device information not available"
+                val infoText = try {
+                    // Use reflection to call getDisplaySummary if it exists
+                    deviceInfo?.javaClass?.getMethod("getDisplaySummary")?.invoke(deviceInfo) as? String
+                        ?: "Device information not available"
+                } catch (e: Exception) {
+                    "Device information not available"
+                }
                 callback(infoText)
             }
         } ?: run {
@@ -483,7 +489,13 @@ class ShimmerController @Inject constructor(
             android.util.Log.d("ShimmerController", "[DEBUG_LOG] Getting data quality metrics for: $deviceId")
 
             viewModel.getShimmerDataQuality(deviceId) { metrics ->
-                val metricsText = metrics?.getDisplaySummary() ?: "Data quality metrics not available"
+                val metricsText = try {
+                    // Use reflection to call getDisplaySummary if it exists
+                    metrics?.javaClass?.getMethod("getDisplaySummary")?.invoke(metrics) as? String
+                        ?: "Data quality metrics not available"
+                } catch (e: Exception) {
+                    "Data quality metrics not available"
+                }
                 callback(metricsText)
             }
         } ?: run {
