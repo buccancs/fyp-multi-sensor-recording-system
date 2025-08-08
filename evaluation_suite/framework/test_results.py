@@ -4,16 +4,12 @@ Test Results Data Models
 Defines data structures for storing and analyzing test results
 across the evaluation suite.
 """
-
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 from enum import Enum
 import uuid
-
 from .test_categories import TestCategory, TestType, TestPriority
-
-
 class TestStatus(Enum):
     """Test execution status"""
     PENDING = "pending"
@@ -22,8 +18,6 @@ class TestStatus(Enum):
     FAILED = "failed"
     SKIPPED = "skipped"
     ERROR = "error"
-
-
 @dataclass
 class PerformanceMetrics:
     """Performance metrics collected during test execution"""
@@ -33,15 +27,11 @@ class PerformanceMetrics:
     network_latency_ms: float = 0.0
     disk_io_mb_per_sec: float = 0.0
     gpu_usage_percent: float = 0.0
-    
-    # Research-specific metrics
     synchronization_precision_ms: float = 0.0
     data_quality_score: float = 0.0
     measurement_accuracy: float = 0.0
     frame_rate_fps: float = 0.0
     data_throughput_mb_per_sec: float = 0.0
-
-
 @dataclass
 class TestResult:
     """Individual test result with complete metrics"""
@@ -50,29 +40,21 @@ class TestResult:
     test_type: TestType = TestType.UNIT_ANDROID
     test_category: TestCategory = TestCategory.FOUNDATION
     priority: TestPriority = TestPriority.MEDIUM
-    
     status: TestStatus = TestStatus.PENDING
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
     execution_time: float = 0.0
-    
     success: bool = False
     error_message: Optional[str] = None
     exception_details: Optional[str] = None
-    
     performance_metrics: PerformanceMetrics = field(default_factory=PerformanceMetrics)
     custom_metrics: Dict[str, Any] = field(default_factory=dict)
-    
-    # Validation and quality data
     validation_passed: bool = False
     quality_score: float = 0.0
     coverage_percentage: float = 0.0
-    
-    # Additional context
     environment_info: Dict[str, Any] = field(default_factory=dict)
     test_data: Dict[str, Any] = field(default_factory=dict)
-    artifacts: List[str] = field(default_factory=list)  # File paths to generated artifacts
-    
+    artifacts: List[str] = field(default_factory=list)
     def to_dict(self) -> Dict[str, Any]:
         """Convert test result to dictionary for serialization"""
         return {
@@ -109,8 +91,6 @@ class TestResult:
             "test_data": self.test_data,
             "artifacts": self.artifacts
         }
-
-
 @dataclass
 class SuiteResults:
     """Results for a complete test suite"""
@@ -119,65 +99,45 @@ class SuiteResults:
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
     total_execution_time: float = 0.0
-    
     test_results: List[TestResult] = field(default_factory=list)
-    
-    # Summary statistics
     total_tests: int = 0
     passed_tests: int = 0
     failed_tests: int = 0
     skipped_tests: int = 0
     error_tests: int = 0
-    
     success_rate: float = 0.0
     average_execution_time: float = 0.0
     total_coverage: float = 0.0
     overall_quality_score: float = 0.0
-    
-    # Performance summary
     peak_memory_mb: float = 0.0
     average_cpu_percent: float = 0.0
     average_latency_ms: float = 0.0
-    
     def add_test_result(self, result: TestResult):
         """Add a test result and update summary statistics"""
         self.test_results.append(result)
         self._update_statistics()
-    
     def _update_statistics(self):
         """Update summary statistics based on current test results"""
         self.total_tests = len(self.test_results)
         if self.total_tests == 0:
             return
-            
         self.passed_tests = sum(1 for r in self.test_results if r.status == TestStatus.PASSED)
         self.failed_tests = sum(1 for r in self.test_results if r.status == TestStatus.FAILED)
         self.skipped_tests = sum(1 for r in self.test_results if r.status == TestStatus.SKIPPED)
         self.error_tests = sum(1 for r in self.test_results if r.status == TestStatus.ERROR)
-        
         self.success_rate = self.passed_tests / self.total_tests if self.total_tests > 0 else 0.0
-        
         execution_times = [r.execution_time for r in self.test_results if r.execution_time > 0]
         self.average_execution_time = sum(execution_times) / len(execution_times) if execution_times else 0.0
-        
-        # Calculate coverage and quality averages
         coverages = [r.coverage_percentage for r in self.test_results if r.coverage_percentage > 0]
         self.total_coverage = sum(coverages) / len(coverages) if coverages else 0.0
-        
         quality_scores = [r.quality_score for r in self.test_results if r.quality_score > 0]
         self.overall_quality_score = sum(quality_scores) / len(quality_scores) if quality_scores else 0.0
-        
-        # Performance metrics
         memory_values = [r.performance_metrics.memory_usage_mb for r in self.test_results]
         self.peak_memory_mb = max(memory_values) if memory_values else 0.0
-        
         cpu_values = [r.performance_metrics.cpu_usage_percent for r in self.test_results]
         self.average_cpu_percent = sum(cpu_values) / len(cpu_values) if cpu_values else 0.0
-        
         latency_values = [r.performance_metrics.network_latency_ms for r in self.test_results]
         self.average_latency_ms = sum(latency_values) / len(latency_values) if latency_values else 0.0
-
-
 @dataclass 
 class TestResults:
     """Complete test execution results across all suites"""
@@ -185,48 +145,35 @@ class TestResults:
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
     total_execution_time: float = 0.0
-    
     suite_results: Dict[str, SuiteResults] = field(default_factory=dict)
-    
-    # Overall statistics
     total_suites: int = 0
     total_tests: int = 0
     overall_success_rate: float = 0.0
     overall_quality_score: float = 0.0
     overall_coverage: float = 0.0
-    
-    # System-wide metrics
     system_performance_score: float = 0.0
     reliability_score: float = 0.0
     usability_score: float = 0.0
-    
     def add_suite_results(self, suite_name: str, results: SuiteResults):
         """Add suite results and update overall statistics"""
         self.suite_results[suite_name] = results
         self._update_overall_statistics()
-    
     def _update_overall_statistics(self):
         """Update overall statistics based on all suite results"""
         self.total_suites = len(self.suite_results)
         self.total_tests = sum(suite.total_tests for suite in self.suite_results.values())
-        
         if self.total_tests > 0:
             total_passed = sum(suite.passed_tests for suite in self.suite_results.values())
             self.overall_success_rate = total_passed / self.total_tests
-            
-            # Calculate weighted averages
             suite_weights = [(suite.total_tests, suite) for suite in self.suite_results.values()]
             total_weight = sum(weight for weight, _ in suite_weights)
-            
             if total_weight > 0:
                 self.overall_quality_score = sum(
                     weight * suite.overall_quality_score for weight, suite in suite_weights
                 ) / total_weight
-                
                 self.overall_coverage = sum(
                     weight * suite.total_coverage for weight, suite in suite_weights
                 ) / total_weight
-    
     def get_summary_report(self) -> Dict[str, Any]:
         """Generate detailed summary report"""
         return {

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import argparse
 import ast
 import asyncio
@@ -34,7 +32,6 @@ from pathlib import Path
 from threading import Event
 from typing import Any, Callable, Dict, List, Optional, Tuple
 from unittest.mock import MagicMock, Mock, call, patch
-
 import cv2
 import numpy as np
 import psutil
@@ -53,7 +50,6 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from PythonApp.application import Application
 from PythonApp.calibration.calibration import (
     CalibrationManager,
@@ -186,15 +182,11 @@ from PythonApp.webcam.dual_webcam_capture import (
     test_dual_webcam_access,
 )
 from PythonApp.webcam.webcam_capture import WebcamCapture, test_webcam_access
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 AppLogger.set_level("INFO")
 logger = get_logger(__name__)
-
-
 class TestSuiteRunner:
-
     def __init__(self, output_dir: str = None):
         self.output_dir = Path(output_dir) if output_dir else Path("test_results")
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -273,7 +265,6 @@ class TestSuiteRunner:
         logger.info(
             f"TestSuiteRunner initialized with {len(self.test_scripts)} test scripts"
         )
-
     async def run_single_test(self, test_info: Dict) -> Dict[str, Any]:
         test_name = test_info["name"]
         script_name = test_info["script"]
@@ -346,7 +337,6 @@ class TestSuiteRunner:
             )
             self.results["failed_tests"] += 1
         return result
-
     def analyze_requirements_coverage(self) -> Dict[str, Any]:
         requirements = {
             "pc_android_coordination": {
@@ -548,7 +538,6 @@ class TestSuiteRunner:
                 "percentage": coverage_percentage,
             },
         }
-
     def generate_summary(self) -> Dict[str, Any]:
         success_rate = self.results["passed_tests"] / self.results["total_tests"] * 100
         categories = {}
@@ -580,7 +569,6 @@ class TestSuiteRunner:
                 "average_duration": total_duration / len(self.results["test_results"]),
             },
         }
-
     async def run_complete_test_suite(self) -> Dict[str, Any]:
         self.results["suite_start_time"] = datetime.now().isoformat()
         suite_start = time.time()
@@ -622,7 +610,6 @@ class TestSuiteRunner:
             json.dump(self.results, f, indent=2, default=str)
         logger.info(f"\n💾 Complete test results saved to: {results_file}")
         return self.results
-
     def print_final_summary(self):
         print("\n" + "=" * 80)
         print("📊 MULTI-SENSOR RECORDING SYSTEM - FINAL TEST REPORT")
@@ -715,35 +702,27 @@ class TestSuiteRunner:
         print("✅ Freezing/crashing detection implemented")
         print("✅ complete logging verification completed")
         print("=" * 80)
-
-
 async def main():
     print("🚀 Starting Multi-Sensor Recording System Test Suite...")
     runner = TestSuiteRunner()
     results = await runner.run_complete_test_suite()
     return 0 if results["summary"]["overall_success"] else 1
-
-
 if __name__ == "__main__":
     exit_code = asyncio.run(main())
     sys.exit(exit_code)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 try:
     from tests.test_calibration_comprehensive import run_calibration_tests
-
     CALIBRATION_TESTS_AVAILABLE = True
 except ImportError:
     CALIBRATION_TESTS_AVAILABLE = False
 try:
     from tests.test_shimmer_comprehensive import run_shimmer_tests
-
     SHIMMER_TESTS_AVAILABLE = True
 except ImportError:
     SHIMMER_TESTS_AVAILABLE = False
 try:
     from tests.test_system_integration import run_integration_tests
-
     INTEGRATION_TESTS_AVAILABLE = True
 except ImportError:
     INTEGRATION_TESTS_AVAILABLE = False
@@ -751,19 +730,14 @@ try:
     from tests.test_comprehensive_recording_session import (
         run_comprehensive_recording_session_test,
     )
-
     RECORDING_SESSION_TESTS_AVAILABLE = True
 except ImportError:
     RECORDING_SESSION_TESTS_AVAILABLE = False
-
-
 class EnhancedTestRunner:
-
     def __init__(self):
         self.results = {}
         self.start_time = None
         self.end_time = None
-
     def run_all_tests(self, include_performance=True, include_stress=True):
         print("=" * 100)
         print("ENHANCED MULTI-SENSOR RECORDING SYSTEM TEST SUITE")
@@ -785,7 +759,6 @@ class EnhancedTestRunner:
         self.end_time = time.time()
         self._generate_report()
         return self._overall_success()
-
     def _check_component_availability(self):
         print("Component Availability Check:")
         print("-" * 40)
@@ -799,7 +772,6 @@ class EnhancedTestRunner:
             status = "✓ Available" if available else "✗ Not Available"
             print(f"  {component:.<30} {status}")
         print()
-
     def _validate_environment(self):
         print("Environment Validation:")
         print("-" * 40)
@@ -841,7 +813,6 @@ class EnhancedTestRunner:
             f"  Optional dependencies available: {len(available_optional)}/{len(optional_deps)}"
         )
         print()
-
     def _run_unit_tests(self):
         print("Unit Tests:")
         print("-" * 40)
@@ -897,7 +868,6 @@ class EnhancedTestRunner:
             print(f"  Error running unit tests: {e}")
             self.results["unit_tests"] = {"status": "error", "error": str(e)}
         print()
-
     def _run_component_tests(self):
         print("Component-Specific Tests:")
         print("-" * 40)
@@ -944,7 +914,6 @@ class EnhancedTestRunner:
             print("  Recording session tests: Not available")
             self.results["recording_session_tests"] = {"status": "not_available"}
         print()
-
     def _run_integration_tests(self):
         print("Integration Tests:")
         print("-" * 40)
@@ -962,18 +931,14 @@ class EnhancedTestRunner:
             print("  Integration tests: Not available")
             self.results["integration_tests"] = {"status": "not_available"}
         print()
-
     def _run_performance_tests(self):
         print("Performance Tests:")
         print("-" * 40)
         import time
-
         import numpy as np
-
         benchmarks = {}
         try:
             import cv2
-
             print("  Running image processing benchmark...")
             start_time = time.time()
             img = np.random.randint(0, 255, (1920, 1080, 3), dtype=np.uint8)
@@ -1033,7 +998,6 @@ class EnhancedTestRunner:
         del large_arrays
         self.results["performance_tests"] = benchmarks
         print()
-
     def _run_stress_tests(self):
         print("Stress Tests:")
         print("-" * 40)
@@ -1042,11 +1006,9 @@ class EnhancedTestRunner:
         try:
             import queue
             import threading
-
             data_queue = queue.Queue()
             processed_count = 0
             error_count = 0
-
             def data_producer():
                 for i in range(5000):
                     data = {
@@ -1056,7 +1018,6 @@ class EnhancedTestRunner:
                     }
                     data_queue.put(data)
                     time.sleep(0.0001)
-
             def data_consumer():
                 nonlocal processed_count, error_count
                 while True:
@@ -1071,7 +1032,6 @@ class EnhancedTestRunner:
                         break
                     except Exception:
                         error_count += 1
-
             start_time = time.time()
             producer = threading.Thread(target=data_producer)
             consumer = threading.Thread(target=data_consumer)
@@ -1097,9 +1057,7 @@ class EnhancedTestRunner:
         print("  Running memory pressure stress test...")
         try:
             import gc
-
             import psutil
-
             process = psutil.Process()
             initial_memory = process.memory_info().rss / 1024 / 1024
             max_memory = initial_memory
@@ -1129,7 +1087,6 @@ class EnhancedTestRunner:
             stress_results["memory_pressure"] = {"error": str(e)}
         self.results["stress_tests"] = stress_results
         print()
-
     def _generate_report(self):
         print("Test Execution Summary:")
         print("=" * 80)
@@ -1218,7 +1175,6 @@ class EnhancedTestRunner:
         except Exception as e:
             print(f"Could not save detailed report: {e}")
         print()
-
     def _overall_success(self):
         critical_categories = [
             "calibration_tests",
@@ -1232,8 +1188,6 @@ class EnhancedTestRunner:
                 if "success" in result and (not result["success"]):
                     return False
         return True
-
-
 def main():
     runner = EnhancedTestRunner()
     include_performance = "--no-performance" not in sys.argv
@@ -1257,21 +1211,15 @@ def main():
     else:
         print("❌ SOME TESTS FAILED!")
         return 1
-
-
 if __name__ == "__main__":
     sys.exit(main())
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     datefmt="%H:%M:%S",
 )
-
-
 class SimpleDeviceSimulator:
-
     def __init__(self, device_id: str, host: str = "127.0.0.1", port: int = 9000):
         self.device_id = device_id
         self.host = host
@@ -1280,7 +1228,6 @@ class SimpleDeviceSimulator:
         self.connected = False
         self.running = False
         self.logger = logging.getLogger(f"Device.{device_id}")
-
     def connect(self) -> bool:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -1292,7 +1239,6 @@ class SimpleDeviceSimulator:
         except Exception as e:
             self.logger.error(f"Connection failed: {e}")
             return False
-
     def disconnect(self):
         if self.socket:
             try:
@@ -1303,7 +1249,6 @@ class SimpleDeviceSimulator:
         self.connected = False
         self.running = False
         self.logger.info("Disconnected")
-
     def send_message(self, message: dict) -> bool:
         if not self.connected or not self.socket:
             return False
@@ -1316,7 +1261,6 @@ class SimpleDeviceSimulator:
         except Exception as e:
             self.logger.error(f"Send failed: {e}")
             return False
-
     def simulate_sensors(self, duration: int = 10):
         if not self.connect():
             return False
@@ -1362,10 +1306,7 @@ class SimpleDeviceSimulator:
             f"Simulation completed: {sample_count} samples in {time.time() - start_time:.1f}s"
         )
         return True
-
-
 class SimpleSocketServer:
-
     def __init__(self, host: str = "127.0.0.1", port: int = 9000):
         self.host = host
         self.port = port
@@ -1374,7 +1315,6 @@ class SimpleSocketServer:
         self.clients = {}
         self.message_count = 0
         self.logger = logging.getLogger("Server")
-
     def start(self):
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -1397,7 +1337,6 @@ class SimpleSocketServer:
                         self.logger.error(f"Accept error: {e}")
         except Exception as e:
             self.logger.error(f"Server start error: {e}")
-
     def stop(self):
         self.running = False
         if self.server_socket:
@@ -1406,7 +1345,6 @@ class SimpleSocketServer:
             except:
                 pass
         self.logger.info("Server stopped")
-
     def _handle_client(self, client_socket, addr):
         self.logger.info(f"Client connected: {addr}")
         try:
@@ -1436,7 +1374,6 @@ class SimpleSocketServer:
         finally:
             client_socket.close()
             self.logger.info(f"Client disconnected: {addr}")
-
     def _process_message(self, message: dict, addr):
         msg_type = message.get("type", "unknown")
         device_id = message.get("device_id", "unknown")
@@ -1452,16 +1389,12 @@ class SimpleSocketServer:
             self.logger.debug(f"Status from {device_id}: Battery={battery}%")
         else:
             self.logger.debug(f"Message from {device_id}: {msg_type}")
-
-
 class QuickRecordingSessionTest(unittest.TestCase):
-
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.server = None
         self.devices = []
         self.logger = logging.getLogger(self.__class__.__name__)
-
     def tearDown(self):
         for device in self.devices:
             device.running = False
@@ -1469,9 +1402,7 @@ class QuickRecordingSessionTest(unittest.TestCase):
         if self.server:
             self.server.stop()
         import shutil
-
         shutil.rmtree(self.test_dir, ignore_errors=True)
-
     def test_recording_session_workflow(self):
         self.logger.info("=" * 80)
         self.logger.info("QUICK RECORDING SESSION TEST")
@@ -1534,15 +1465,11 @@ class QuickRecordingSessionTest(unittest.TestCase):
         self.logger.info("=" * 80)
         self.logger.info("✅ QUICK RECORDING SESSION TEST PASSED")
         self.logger.info("=" * 80)
-
-
 def run_quick_recording_session_test():
     suite = unittest.TestLoader().loadTestsFromTestCase(QuickRecordingSessionTest)
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     print("Quick Recording Session Test")
     print("Testing core recording session functionality")
@@ -1555,7 +1482,6 @@ if __name__ == "__main__":
     else:
         print("\n❌ Some tests failed. Check the output above for details.")
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tests"))
 try:
@@ -1564,21 +1490,16 @@ try:
         run_comprehensive_recording_session_test,
     )
     from utils.logging_config import AppLogger, get_logger
-
     RECORDING_SESSION_TEST_AVAILABLE = True
 except ImportError as e:
     print(f"Error importing recording session test: {e}")
     RECORDING_SESSION_TEST_AVAILABLE = False
 try:
     import psutil
-
     PSUTIL_AVAILABLE = True
 except ImportError:
     PSUTIL_AVAILABLE = False
-
-
 class RecordingSessionTestRunner:
-
     def __init__(self, config):
         self.config = config
         self.start_time = None
@@ -1595,7 +1516,6 @@ class RecordingSessionTestRunner:
                 file_output=config.get("save_logs", False),
             )
         self.logger = get_logger(self.__class__.__name__)
-
     def run_comprehensive_test(self):
         self.start_time = time.time()
         self.logger.info("=" * 100)
@@ -1614,7 +1534,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Test runner failed: {e}", exc_info=True)
             return False
-
     def _perform_pre_test_checks(self):
         self.logger.info("Performing pre-test system checks...")
         if PSUTIL_AVAILABLE:
@@ -1637,7 +1556,6 @@ class RecordingSessionTestRunner:
             if disk.free / 1024**3 < 1:
                 self.logger.warning("Low disk space detected")
         import socket
-
         try:
             test_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             test_socket.settimeout(1)
@@ -1669,7 +1587,6 @@ class RecordingSessionTestRunner:
             self.logger.error(f"Missing required modules: {missing_modules}")
             raise RuntimeError(f"Missing required modules: {missing_modules}")
         self.logger.info("✓ Pre-test checks completed successfully")
-
     def _run_main_test(self):
         self.logger.info("Running complete recording session test...")
         if not RECORDING_SESSION_TEST_AVAILABLE:
@@ -1720,7 +1637,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Main test execution failed: {e}", exc_info=True)
             return False
-
     def _determine_test_scenarios(self):
         scenarios = {}
         scenarios["basic_comprehensive"] = {
@@ -1779,7 +1695,6 @@ class RecordingSessionTestRunner:
                 "memory_monitoring": True,
             }
         return scenarios
-
     def _run_test_scenario(self, scenario_name, scenario_config):
         scenario_type = scenario_config.get("type", "basic")
         if scenario_type == "basic":
@@ -1799,7 +1714,6 @@ class RecordingSessionTestRunner:
         else:
             self.logger.error(f"Unknown test scenario type: {scenario_type}")
             return False
-
     def _run_basic_test(self, config):
         self.logger.info("Executing basic thorough test...")
         try:
@@ -1808,7 +1722,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Basic test failed: {e}")
             return False
-
     def _run_stress_test(self, config):
         self.logger.info(
             f"Executing stress test with {config['devices']} devices for {config['duration']} seconds..."
@@ -1823,7 +1736,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Stress test failed: {e}")
             return False
-
     def _run_error_simulation_test(self, config):
         self.logger.info("Executing error simulation test...")
         try:
@@ -1836,7 +1748,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Error simulation test failed: {e}")
             return False
-
     def _run_performance_benchmark(self, config):
         self.logger.info("Executing performance benchmark...")
         try:
@@ -1851,7 +1762,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Performance benchmark failed: {e}")
             return False
-
     def _run_stability_test(self, config):
         self.logger.info(
             f"Executing stability test for {config['duration']} seconds..."
@@ -1866,7 +1776,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Stability test failed: {e}")
             return False
-
     def _run_network_stress_test(self, config):
         self.logger.info("Executing network stress test...")
         try:
@@ -1879,7 +1788,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Network stress test failed: {e}")
             return False
-
     def _run_memory_stress_test(self, config):
         self.logger.info("Executing memory stress test...")
         try:
@@ -1892,7 +1800,6 @@ class RecordingSessionTestRunner:
         except Exception as e:
             self.logger.error(f"Memory stress test failed: {e}")
             return False
-
     def _perform_post_test_validation(self):
         self.logger.info("Performing post-test validation...")
         if PSUTIL_AVAILABLE:
@@ -1929,7 +1836,6 @@ class RecordingSessionTestRunner:
                     file_size = log_file.stat().st_size
                     self.logger.info(f"    {log_file.name}: {file_size} bytes")
         self.logger.info("✓ Post-test validation completed")
-
     def _generate_final_report(self, success):
         total_duration = self.end_time - self.start_time
         self.logger.info("=" * 100)
@@ -2005,8 +1911,6 @@ class RecordingSessionTestRunner:
             self.logger.error("❌ complete RECORDING SESSION TEST FAILED!")
             self.logger.error("Some requirements were not met. Check logs for details.")
         self.logger.info("=" * 100)
-
-
 def main():
     parser = argparse.ArgumentParser(
         description="Run complete recording session test for multi-sensor recording system",
@@ -2125,16 +2029,10 @@ def main():
     runner = RecordingSessionTestRunner(config)
     success = runner.run_comprehensive_test()
     return 0 if success else 1
-
-
 if __name__ == "__main__":
     sys.exit(main())
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class TestHandSegmentationUtils(unittest.TestCase):
-
     def test_bounding_box_from_landmarks(self):
         landmarks = [(0.1, 0.1), (0.9, 0.1), (0.9, 0.9), (0.1, 0.9)]
         bbox = create_bounding_box_from_landmarks(landmarks, 100, 100, padding=10)
@@ -2142,22 +2040,17 @@ class TestHandSegmentationUtils(unittest.TestCase):
         self.assertEqual(bbox[1], 0)
         self.assertEqual(bbox[2], 100)
         self.assertEqual(bbox[3], 100)
-
     def test_crop_frame_to_region(self):
         frame = np.ones((100, 100, 3), dtype=np.uint8) * 255
         bbox = (10, 10, 50, 50)
         cropped = crop_frame_to_region(frame, bbox)
         self.assertEqual(cropped.shape, (50, 50, 3))
-
     def test_hand_mask_creation(self):
         landmarks = [(0.2, 0.2), (0.8, 0.2), (0.8, 0.8), (0.2, 0.8)]
         mask = create_hand_mask_from_landmarks(landmarks, (100, 100))
         self.assertEqual(mask.shape, (100, 100))
         self.assertTrue(np.any(mask > 0))
-
-
 class TestSegmentationConfig(unittest.TestCase):
-
     def test_default_config(self):
         config = SegmentationConfig()
         self.assertEqual(config.method, SegmentationMethod.MEDIAPIPE)
@@ -2165,7 +2058,6 @@ class TestSegmentationConfig(unittest.TestCase):
         self.assertEqual(config.max_num_hands, 2)
         self.assertTrue(config.output_cropped)
         self.assertTrue(config.output_masks)
-
     def test_custom_config(self):
         config = SegmentationConfig(
             method=SegmentationMethod.COLOR_BASED,
@@ -2177,10 +2069,7 @@ class TestSegmentationConfig(unittest.TestCase):
         self.assertEqual(config.min_detection_confidence, 0.7)
         self.assertEqual(config.max_num_hands, 1)
         self.assertFalse(config.output_cropped)
-
-
 class TestHandSegmentationEngine(unittest.TestCase):
-
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.config = SegmentationConfig(
@@ -2189,30 +2078,25 @@ class TestHandSegmentationEngine(unittest.TestCase):
             output_masks=True,
         )
         self.engine = HandSegmentationEngine(self.config)
-
     def tearDown(self):
         if hasattr(self, "engine"):
             self.engine.cleanup()
         shutil.rmtree(self.test_dir)
-
     def test_engine_initialization(self):
         self.assertFalse(self.engine.is_initialized)
         success = self.engine.initialize()
         self.assertTrue(success)
         self.assertTrue(self.engine.is_initialized)
-
     def test_supported_methods(self):
         methods = self.engine.get_supported_methods()
         expected_methods = ["mediapipe", "color_based", "contour_based"]
         self.assertEqual(sorted(methods), sorted(expected_methods))
-
     def test_frame_processing(self):
         self.engine.initialize()
         frame = np.zeros((100, 100, 3), dtype=np.uint8)
         frame[30:70, 30:70] = [10, 50, 150]
         hand_regions = self.engine.segmentation_model.process_frame(frame)
         self.assertIsInstance(hand_regions, list)
-
     def create_test_video(self, path: str, frames: int = 10, fps: int = 30):
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
         writer = cv2.VideoWriter(str(path), fourcc, fps, (100, 100))
@@ -2222,7 +2106,6 @@ class TestHandSegmentationEngine(unittest.TestCase):
             frame[30:70, x : x + 20] = [10, 50, 150]
             writer.write(frame)
         writer.release()
-
     def test_video_processing(self):
         video_path = os.path.join(self.test_dir, "test_video.mp4")
         self.create_test_video(video_path, frames=5)
@@ -2233,25 +2116,19 @@ class TestHandSegmentationEngine(unittest.TestCase):
         self.assertEqual(result.input_video_path, video_path)
         self.assertEqual(result.output_directory, output_dir)
         self.assertGreater(result.processed_frames, 0)
-
-
 class TestSessionPostProcessor(unittest.TestCase):
-
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.recordings_dir = os.path.join(self.test_dir, "recordings")
         self.processor = create_session_post_processor(self.recordings_dir)
-
     def tearDown(self):
         shutil.rmtree(self.test_dir)
-
     def create_test_session(self, session_id: str):
         session_dir = Path(self.recordings_dir) / session_id
         session_dir.mkdir(parents=True, exist_ok=True)
         video_path = session_dir / "test_video.mp4"
         self.create_test_video(str(video_path), frames=3)
         return session_dir
-
     def create_test_video(self, path: str, frames: int = 3, fps: int = 30):
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
         writer = cv2.VideoWriter(str(path), fourcc, fps, (50, 50))
@@ -2259,7 +2136,6 @@ class TestSessionPostProcessor(unittest.TestCase):
             frame = np.ones((50, 50, 3), dtype=np.uint8) * (i * 50 + 50)
             writer.write(frame)
         writer.release()
-
     def test_session_discovery(self):
         sessions = self.processor.discover_sessions()
         self.assertEqual(len(sessions), 0)
@@ -2267,36 +2143,28 @@ class TestSessionPostProcessor(unittest.TestCase):
         sessions = self.processor.discover_sessions()
         self.assertEqual(len(sessions), 1)
         self.assertIn("test_session_001", sessions)
-
     def test_get_session_videos(self):
         session_id = "test_session_002"
         self.create_test_session(session_id)
         videos = self.processor.get_session_videos(session_id)
         self.assertEqual(len(videos), 1)
         self.assertTrue(videos[0].endswith("test_video.mp4"))
-
     def test_processing_status(self):
         session_id = "test_session_003"
         self.create_test_session(session_id)
         status = self.processor.get_processing_status(session_id)
         self.assertEqual(len(status), 1)
         self.assertFalse(list(status.values())[0])
-
     def test_available_methods(self):
         methods = self.processor.get_available_methods()
         expected = ["mediapipe", "color_based", "contour_based"]
         self.assertEqual(sorted(methods), sorted(expected))
-
-
 class TestIntegrationEndToEnd(unittest.TestCase):
-
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.recordings_dir = os.path.join(self.test_dir, "recordings")
-
     def tearDown(self):
         shutil.rmtree(self.test_dir)
-
     def create_realistic_test_video(self, path: str, frames: int = 10):
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
         writer = cv2.VideoWriter(str(path), fourcc, 30, (320, 240))
@@ -2313,7 +2181,6 @@ class TestIntegrationEndToEnd(unittest.TestCase):
                 cv2.circle(frame, (finger_x, finger_y), 8, [10, 80, 160], -1)
             writer.write(frame)
         writer.release()
-
     def test_end_to_end_processing(self):
         session_id = "integration_test_session"
         session_dir = Path(self.recordings_dir) / session_id
@@ -2336,30 +2203,22 @@ class TestIntegrationEndToEnd(unittest.TestCase):
         self.assertTrue(metadata_file.exists())
         status = processor.get_processing_status(session_id)
         self.assertEqual(len(status), 1)
-
-
 if __name__ == "__main__":
     unittest.main(verbosity=2)
-
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     from utils.logging_config import get_logger
-
     logger = get_logger(__name__)
 except ImportError:
     import logging
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-
-
 def test_real_web_integration():
     print("=" * 60)
     print("TESTING REAL WEB UI INTEGRATION WITH BACKEND COMPONENTS")
     print("=" * 60)
     try:
         from web_ui.integration import WebDashboardIntegration
-
         print("\n1. Creating WebDashboardIntegration with real components...")
         web_integration = WebDashboardIntegration(
             enable_web_ui=True,
@@ -2390,25 +2249,21 @@ def test_real_web_integration():
             print(f"✓ Web dashboard started at: {dashboard_url}")
             print("\n3. Testing signal connections...")
             signal_received = {"count": 0}
-
             def on_device_status(device_id, status_data):
                 signal_received["count"] += 1
                 print(
                     f"   📡 Device status signal: {device_id} -> {status_data.get('type', 'unknown')} ({status_data.get('status', 'unknown')})"
                 )
-
             def on_sensor_data(device_id, sensor_data):
                 signal_received["count"] += 1
                 print(
                     f"   📊 Sensor data signal: {device_id} -> {list(sensor_data.keys())}"
                 )
-
             def on_session_change(session_id, is_active):
                 signal_received["count"] += 1
                 print(
                     f"   🎬 Session signal: {session_id} -> {('ACTIVE' if is_active else 'INACTIVE')}"
                 )
-
             if web_integration.using_web_controller and web_integration.controller:
                 web_integration.controller.device_status_received.connect(
                     on_device_status
@@ -2489,18 +2344,14 @@ def test_real_web_integration():
     except Exception as e:
         print(f"✗ Error testing web integration: {e}")
         import traceback
-
         traceback.print_exc()
         return False
-
-
 def test_web_only_mode():
     print("\n" + "=" * 60)
     print("TESTING WEB-ONLY MODE (NO PYQT DEPENDENCIES)")
     print("=" * 60)
     try:
         from web_ui.web_controller import create_web_controller_with_real_components
-
         print("\n1. Creating WebController with real backend components...")
         web_controller = create_web_controller_with_real_components()
         print("✓ WebController created successfully")
@@ -2516,10 +2367,8 @@ def test_web_only_mode():
         print(f"✓ Session info retrieved: {session_info.get('active', False)}")
         print("\n3. Testing signal system...")
         signals_received = {"count": 0}
-
         def test_signal_handler(*args):
             signals_received["count"] += 1
-
         web_controller.device_status_received.connect(test_signal_handler)
         web_controller.sensor_data_received.connect(test_signal_handler)
         time.sleep(3)
@@ -2533,11 +2382,8 @@ def test_web_only_mode():
     except Exception as e:
         print(f"✗ Error in web-only mode test: {e}")
         import traceback
-
         traceback.print_exc()
         return False
-
-
 if __name__ == "__main__":
     print("Starting Web UI Integration Tests...")
     print(f"Test time: {datetime.now()}")
@@ -2556,13 +2402,9 @@ if __name__ == "__main__":
         print("\n❌ SOME TESTS FAILED!")
         print("   Check the error messages above for details")
     print("\n" + "=" * 60)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 logger = get_logger(__name__)
-
-
 class TestAdvancedSynchronization(unittest.TestCase):
-
     def setUp(self):
         self.synchronizer = AdaptiveSynchronizer(
             target_fps=30.0,
@@ -2571,7 +2413,6 @@ class TestAdvancedSynchronization(unittest.TestCase):
         )
         self.test_frame1 = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
         self.test_frame2 = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
-
     def test_synchronizer_initialization(self):
         sync = AdaptiveSynchronizer(target_fps=60.0, sync_threshold_ms=8.33)
         self.assertEqual(sync.target_fps, 60.0)
@@ -2579,7 +2420,6 @@ class TestAdvancedSynchronization(unittest.TestCase):
         self.assertEqual(sync.frame_interval_ms, 1000.0 / 60.0)
         self.assertIsNotNone(sync.timing_buffer)
         self.assertIsNotNone(sync.metrics)
-
     def test_synchronize_frames_basic(self):
         timestamp1 = time.time()
         timestamp2 = timestamp1 + 0.005
@@ -2592,7 +2432,6 @@ class TestAdvancedSynchronization(unittest.TestCase):
         self.assertLessEqual(sync_frame.sync_quality, 1.0)
         self.assertEqual(sync_frame.camera1_frame.shape, self.test_frame1.shape)
         self.assertEqual(sync_frame.camera2_frame.shape, self.test_frame2.shape)
-
     def test_synchronization_strategies(self):
         strategies = [
             SynchronizationStrategy.MASTER_SLAVE,
@@ -2608,7 +2447,6 @@ class TestAdvancedSynchronization(unittest.TestCase):
                 )
                 self.assertIsNotNone(sync_frame)
                 self.assertGreaterEqual(sync_frame.sync_quality, 0.0)
-
     def test_adaptive_parameter_adjustment(self):
         for i in range(50):
             timestamp1 = time.time()
@@ -2619,7 +2457,6 @@ class TestAdvancedSynchronization(unittest.TestCase):
         diagnostics = self.synchronizer.get_diagnostics()
         self.assertGreater(diagnostics["metrics"]["frames_processed"], 0)
         self.assertIn("adaptive_threshold_ms", diagnostics)
-
     def test_performance_metrics(self):
         for i in range(20):
             offset = 0.001 * (i % 5)
@@ -2634,7 +2471,6 @@ class TestAdvancedSynchronization(unittest.TestCase):
         self.assertGreaterEqual(metrics["mean_offset_ms"], 0)
         self.assertGreaterEqual(metrics["std_dev_offset_ms"], 0)
         self.assertIsInstance(metrics["violation_rate"], float)
-
     def test_sync_frame_methods(self):
         sync_frame = SyncFrame(
             timestamp=time.time(),
@@ -2647,10 +2483,7 @@ class TestAdvancedSynchronization(unittest.TestCase):
         offset_ms = sync_frame.get_sync_offset_ms()
         self.assertGreater(offset_ms, 0)
         self.assertLess(offset_ms, 10)
-
-
 class TestComputerVisionPipeline(unittest.TestCase):
-
     def setUp(self):
         self.roi_detector = AdvancedROIDetector(
             method=ROIDetectionMethod.FACE_CASCADE, tracking_enabled=True
@@ -2659,7 +2492,6 @@ class TestComputerVisionPipeline(unittest.TestCase):
             method=SignalExtractionMethod.MEAN_RGB, sampling_rate=30.0
         )
         self.test_image = self._create_test_face_image()
-
     def _create_test_face_image(self) -> np.ndarray:
         image = np.ones((480, 640, 3), dtype=np.uint8) * 128
         cv2.rectangle(image, (200, 150), (440, 350), (180, 160, 140), -1)
@@ -2667,7 +2499,6 @@ class TestComputerVisionPipeline(unittest.TestCase):
         cv2.circle(image, (360, 220), 10, (50, 50, 50), -1)
         cv2.rectangle(image, (310, 270), (330, 290), (100, 80, 80), -1)
         return image
-
     @patch("cv2.CascadeClassifier")
     def test_roi_detector_initialization(self, mock_cascade):
         mock_cascade.return_value = Mock()
@@ -2675,7 +2506,6 @@ class TestComputerVisionPipeline(unittest.TestCase):
         self.assertEqual(detector.method, ROIDetectionMethod.FACE_CASCADE)
         self.assertTrue(detector.tracking_enabled)
         self.assertIsNotNone(detector.roi_history)
-
     @patch("cv2.CascadeClassifier")
     def test_roi_detection_basic(self, mock_cascade):
         mock_classifier = Mock()
@@ -2686,7 +2516,6 @@ class TestComputerVisionPipeline(unittest.TestCase):
         self.assertIsNotNone(roi)
         self.assertEqual(len(roi), 4)
         self.assertIsInstance(roi[0], (int, np.integer))
-
     def test_signal_extractor_initialization(self):
         extractor = PhysiologicalSignalExtractor(
             method=SignalExtractionMethod.CHROM_METHOD,
@@ -2696,7 +2525,6 @@ class TestComputerVisionPipeline(unittest.TestCase):
         self.assertEqual(extractor.method, SignalExtractionMethod.CHROM_METHOD)
         self.assertEqual(extractor.sampling_rate, 60.0)
         self.assertEqual(extractor.buffer_size, 300)
-
     def test_signal_extraction_methods(self):
         methods = [
             SignalExtractionMethod.MEAN_RGB,
@@ -2717,7 +2545,6 @@ class TestComputerVisionPipeline(unittest.TestCase):
                         self.assertIsInstance(signal, PhysiologicalSignal)
                         self.assertGreater(len(signal.signal_data), 0)
                         break
-
     def test_physiological_signal_properties(self):
         signal_data = np.sin(2 * np.pi * 1.2 * np.linspace(0, 10, 300))
         signal = PhysiologicalSignal(
@@ -2727,7 +2554,6 @@ class TestComputerVisionPipeline(unittest.TestCase):
         self.assertIsNotNone(hr_estimate)
         self.assertGreater(hr_estimate, 60)
         self.assertLess(hr_estimate, 90)
-
     def test_roi_metrics_calculation(self):
         for i in range(10):
             x = 200 + np.random.randint(-5, 5)
@@ -2738,13 +2564,9 @@ class TestComputerVisionPipeline(unittest.TestCase):
         self.assertGreater(metrics.frame_count, 0)
         self.assertGreaterEqual(metrics.stability_score, 0.0)
         self.assertLessEqual(metrics.stability_score, 1.0)
-
-
 class TestDualWebcamIntegration(unittest.TestCase):
-
     def setUp(self):
         self.test_camera_indices = [99, 98]
-
     def test_dual_webcam_initialization(self):
         capture = DualWebcamCapture(
             camera1_index=self.test_camera_indices[0],
@@ -2759,7 +2581,6 @@ class TestDualWebcamIntegration(unittest.TestCase):
         self.assertIsNotNone(capture.synchronizer)
         self.assertIsNotNone(capture.roi_detector)
         self.assertIsNotNone(capture.signal_extractor)
-
     def test_physiological_monitoring_controls(self):
         capture = DualWebcamCapture(
             camera1_index=self.test_camera_indices[0],
@@ -2771,7 +2592,6 @@ class TestDualWebcamIntegration(unittest.TestCase):
         self.assertFalse(capture.enable_physio_monitoring)
         self.assertIsNone(capture.current_roi)
         self.assertIsNone(capture.latest_physio_signal)
-
     def test_synchronization_strategy_changes(self):
         capture = DualWebcamCapture(
             camera1_index=self.test_camera_indices[0],
@@ -2779,7 +2599,6 @@ class TestDualWebcamIntegration(unittest.TestCase):
         )
         capture.set_synchronization_strategy("master_slave")
         capture.set_synchronization_strategy("invalid_strategy")
-
     def test_metrics_and_diagnostics(self):
         capture = DualWebcamCapture(
             camera1_index=self.test_camera_indices[0],
@@ -2792,14 +2611,12 @@ class TestDualWebcamIntegration(unittest.TestCase):
         self.assertIsInstance(roi_metrics, dict)
         physio_signal = capture.get_latest_physiological_signal()
         self.assertIsNone(physio_signal)
-
     def test_data_export_functionality(self):
         capture = DualWebcamCapture(
             camera1_index=self.test_camera_indices[0],
             camera2_index=self.test_camera_indices[1],
         )
         import tempfile
-
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             export_path = f.name
         try:
@@ -2807,7 +2624,6 @@ class TestDualWebcamIntegration(unittest.TestCase):
             self.assertTrue(success)
             self.assertTrue(os.path.exists(export_path))
             import json
-
             with open(export_path, "r") as f:
                 data = json.load(f)
             self.assertIn("export_timestamp", data)
@@ -2816,10 +2632,7 @@ class TestDualWebcamIntegration(unittest.TestCase):
         finally:
             if os.path.exists(export_path):
                 os.unlink(export_path)
-
-
 class TestPerformanceBenchmarks(unittest.TestCase):
-
     def test_synchronization_performance(self):
         synchronizer = AdaptiveSynchronizer(target_fps=30.0)
         frame1 = np.random.randint(0, 255, (1080, 1920, 3), dtype=np.uint8)
@@ -2834,7 +2647,6 @@ class TestPerformanceBenchmarks(unittest.TestCase):
             avg_time_ms, 10.0, f"Synchronization too slow: {avg_time_ms:.2f}ms"
         )
         logger.info(f"Synchronization performance: {avg_time_ms:.2f}ms per frame")
-
     def test_roi_detection_performance(self):
         detector = AdvancedROIDetector(method=ROIDetectionMethod.FACE_CASCADE)
         test_image = np.random.randint(0, 255, (720, 1280, 3), dtype=np.uint8)
@@ -2848,7 +2660,6 @@ class TestPerformanceBenchmarks(unittest.TestCase):
             avg_time_ms, 50.0, f"ROI detection too slow: {avg_time_ms:.2f}ms"
         )
         logger.info(f"ROI detection performance: {avg_time_ms:.2f}ms per frame")
-
     def test_signal_extraction_performance(self):
         extractor = PhysiologicalSignalExtractor(
             method=SignalExtractionMethod.CHROM_METHOD
@@ -2866,10 +2677,7 @@ class TestPerformanceBenchmarks(unittest.TestCase):
             avg_time_ms, 20.0, f"Signal extraction too slow: {avg_time_ms:.2f}ms"
         )
         logger.info(f"Signal extraction performance: {avg_time_ms:.2f}ms per frame")
-
-
 class TestErrorHandlingAndRobustness(unittest.TestCase):
-
     def test_invalid_frame_handling(self):
         synchronizer = AdaptiveSynchronizer()
         result = synchronizer.synchronize_frames(None, None, time.time(), time.time())
@@ -2879,7 +2687,6 @@ class TestErrorHandlingAndRobustness(unittest.TestCase):
             empty_frame, empty_frame, time.time(), time.time()
         )
         self.assertIsNotNone(result)
-
     def test_roi_detection_edge_cases(self):
         detector = AdvancedROIDetector()
         empty_image = np.array([])
@@ -2891,7 +2698,6 @@ class TestErrorHandlingAndRobustness(unittest.TestCase):
             roi = detector.detect_roi(gray_image)
         except Exception as e:
             self.assertIsInstance(e, (ValueError, cv2.error))
-
     def test_signal_extraction_edge_cases(self):
         extractor = PhysiologicalSignalExtractor()
         empty_roi = np.array([])
@@ -2902,8 +2708,6 @@ class TestErrorHandlingAndRobustness(unittest.TestCase):
         constant_roi = np.ones((100, 100, 3), dtype=np.uint8) * 128
         for i in range(50):
             signal = extractor.extract_signal(constant_roi)
-
-
 def run_comprehensive_tests():
     logger.info("Starting complete dual webcam system test suite")
     test_suite = unittest.TestSuite()
@@ -2931,13 +2735,10 @@ def run_comprehensive_tests():
     }
     logger.info(f"Test suite completed: {test_summary}")
     return test_summary
-
-
 if __name__ == "__main__":
     try:
         import cv2
         import scipy.signal
-
         results = run_comprehensive_tests()
         print("\n" + "=" * 60)
         print("complete TEST SUITE RESULTS")
@@ -2953,10 +2754,7 @@ if __name__ == "__main__":
         print(f"Required dependencies not available: {e}")
         print("Please install required packages: opencv-python, scipy, numpy")
         sys.exit(1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
-
-
 def test_basic_functionality():
     print("Testing basic Shimmer PC integration...")
     print("1. Creating ShimmerManager...")
@@ -2988,8 +2786,6 @@ def test_basic_functionality():
     print("   ✅ Cleanup completed")
     print("\n🎉 All basic tests passed!")
     return True
-
-
 if __name__ == "__main__":
     try:
         success = test_basic_functionality()
@@ -3000,12 +2796,8 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n❌ Test failed with exception: {e}")
         import traceback
-
         traceback.print_exc()
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
-
-
 def create_test_chessboard_image(
     pattern_size=(9, 6), square_size=50, image_size=(640, 480)
 ):
@@ -3024,8 +2816,6 @@ def create_test_chessboard_image(
                 y2 = min(y1 + square_size, image_size[1])
                 cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 0), -1)
     return img
-
-
 def test_calibration_implementation():
     print("=" * 60)
     print("Testing Implemented Calibration Functionality")
@@ -3119,8 +2909,6 @@ def test_calibration_implementation():
     except:
         pass
     return True
-
-
 if __name__ == "__main__":
     try:
         success = test_calibration_implementation()
@@ -3128,10 +2916,8 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Test failed with exception: {e}")
         import traceback
-
         traceback.print_exc()
         sys.exit(1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 AppLogger.set_level("DEBUG")
@@ -3147,21 +2933,16 @@ try:
     from session.session_manager import SessionManager
     from shimmer_manager import ShimmerManager
     from webcam.webcam_capture import WebcamCapture
-
     DEPENDENCIES_AVAILABLE = True
 except ImportError as e:
     logger.error(f"Missing dependencies: {e}")
     DEPENDENCIES_AVAILABLE = False
-
-
 @dataclass
 class MockSensorData:
     timestamp: float
     sensor_type: str
     device_id: str
     data: Dict[str, Any]
-
-
 @dataclass
 class SessionResult:
     session_id: str
@@ -3172,10 +2953,7 @@ class SessionResult:
     files_created: List[str]
     network_stats: Dict[str, Any]
     performance_metrics: Dict[str, Any]
-
-
 class MockAndroidDevice:
-
     def __init__(self, device_id: str, pc_host: str = "localhost", pc_port: int = 9000):
         self.device_id = device_id
         self.pc_host = pc_host
@@ -3195,7 +2973,6 @@ class MockAndroidDevice:
         self.messages_received = 0
         self.data_sent_bytes = 0
         logger.info(f"MockAndroidDevice {device_id} initialized")
-
     async def connect_to_pc(self) -> bool:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -3219,7 +2996,6 @@ class MockAndroidDevice:
         except Exception as e:
             logger.error(f"Failed to connect {self.device_id} to PC: {e}")
             return False
-
     async def _send_message(self, message: Dict) -> bool:
         try:
             if not self.socket:
@@ -3235,9 +3011,7 @@ class MockAndroidDevice:
         except Exception as e:
             logger.error(f"Failed to send message from {self.device_id}: {e}")
             return False
-
     def _start_message_listener(self):
-
         def listen():
             while self.connected and self.running:
                 try:
@@ -3258,10 +3032,8 @@ class MockAndroidDevice:
                 except Exception as e:
                     logger.warning(f"Message listening error for {self.device_id}: {e}")
                     break
-
         self.listener_thread = threading.Thread(target=listen, daemon=True)
         self.listener_thread.start()
-
     async def _handle_pc_message(self, message: Dict):
         message_type = message.get("type")
         logger.debug(f"MockAndroidDevice {self.device_id} received: {message_type}")
@@ -3277,7 +3049,6 @@ class MockAndroidDevice:
             await self._configure_sensors(message)
         else:
             logger.warning(f"Unknown message type: {message_type}")
-
     async def _start_recording(self, message: Dict):
         session_info = message.get("session_info", {})
         self.current_session = session_info
@@ -3299,7 +3070,6 @@ class MockAndroidDevice:
         }
         await self._send_message(response)
         logger.info(f"MockAndroidDevice {self.device_id} started recording")
-
     async def _stop_recording(self, message: Dict):
         self.recording = False
         self.camera_active = False
@@ -3322,7 +3092,6 @@ class MockAndroidDevice:
         }
         await self._send_message(response)
         logger.info(f"MockAndroidDevice {self.device_id} stopped recording")
-
     async def _sync_clock(self, message: Dict):
         pc_timestamp = message.get("pc_timestamp", time.time())
         device_timestamp = time.time()
@@ -3335,7 +3104,6 @@ class MockAndroidDevice:
         }
         await self._send_message(response)
         logger.debug(f"MockAndroidDevice {self.device_id} synchronized clock")
-
     async def _send_status(self):
         status = {
             "type": "device_status",
@@ -3358,7 +3126,6 @@ class MockAndroidDevice:
             },
         }
         await self._send_message(status)
-
     async def _configure_sensors(self, message: Dict):
         config = message.get("sensor_config", {})
         response = {
@@ -3369,9 +3136,7 @@ class MockAndroidDevice:
         }
         await self._send_message(response)
         logger.debug(f"MockAndroidDevice {self.device_id} configured sensors")
-
     def _start_data_generation(self):
-
         def generate_data():
             while self.recording and self.running:
                 try:
@@ -3410,13 +3175,10 @@ class MockAndroidDevice:
                     time.sleep(0.1)
                 except Exception as e:
                     logger.error(f"Data generation error for {self.device_id}: {e}")
-
         self.data_thread = threading.Thread(target=generate_data, daemon=True)
         self.data_thread.start()
-
     def _stop_data_generation(self):
         pass
-
     def disconnect(self):
         self.running = False
         self.connected = False
@@ -3426,32 +3188,25 @@ class MockAndroidDevice:
             except:
                 pass
         logger.info(f"MockAndroidDevice {self.device_id} disconnected")
-
-
 class MockWebcamCapture:
-
     def __init__(self):
         self.active = False
         self.recording = False
         self.frame_count = 0
         logger.info("MockWebcamCapture initialized")
-
     def list_cameras(self) -> List[Dict]:
         return [
             {"index": 0, "name": "Mock USB Webcam 1", "resolution": "1920x1080"},
             {"index": 1, "name": "Mock USB Webcam 2", "resolution": "1920x1080"},
         ]
-
     def start_capture(self, camera_index: int = 0) -> bool:
         self.active = True
         logger.info(f"MockWebcamCapture started on camera {camera_index}")
         return True
-
     def stop_capture(self):
         self.active = False
         self.recording = False
         logger.info("MockWebcamCapture stopped")
-
     def start_recording(self, output_path: str) -> bool:
         if not self.active:
             return False
@@ -3459,7 +3214,6 @@ class MockWebcamCapture:
         self.output_path = output_path
         logger.info(f"MockWebcamCapture started recording to {output_path}")
         return True
-
     def stop_recording(self) -> bool:
         if not self.recording:
             return False
@@ -3473,15 +3227,11 @@ class MockWebcamCapture:
         except Exception as e:
             logger.error(f"Failed to save mock recording: {e}")
             return False
-
-
 class MockShimmerManager:
-
     def __init__(self):
         self.connected_devices = {}
         self.recording_sessions = {}
         logger.info("MockShimmerManager initialized")
-
     def discover_devices(self, timeout: float = 5.0) -> List[Dict]:
         mock_devices = [
             {
@@ -3497,7 +3247,6 @@ class MockShimmerManager:
         ]
         logger.info(f"MockShimmerManager discovered {len(mock_devices)} devices")
         return mock_devices
-
     def connect_device(self, device_address: str) -> bool:
         self.connected_devices[device_address] = {
             "address": device_address,
@@ -3506,7 +3255,6 @@ class MockShimmerManager:
         }
         logger.info(f"MockShimmerManager connected to {device_address}")
         return True
-
     def start_recording(self, device_address: str, session_id: str) -> bool:
         if device_address not in self.connected_devices:
             return False
@@ -3517,7 +3265,6 @@ class MockShimmerManager:
         }
         logger.info(f"MockShimmerManager started recording session {session_id}")
         return True
-
     def stop_recording(self, session_id: str) -> Dict:
         if session_id not in self.recording_sessions:
             return {}
@@ -3532,10 +3279,7 @@ class MockShimmerManager:
         del self.recording_sessions[session_id]
         logger.info(f"MockShimmerManager stopped recording session {session_id}")
         return session_data
-
-
 class TestComprehensiveRecordingSession:
-
     @pytest.fixture(autouse=True)
     def setup_test(self, tmp_path):
         self.test_dir = tmp_path / "recording_test"
@@ -3551,7 +3295,6 @@ class TestComprehensiveRecordingSession:
         self.start_time = None
         self.end_time = None
         logger.info(f"ComprehensiveRecordingSessionTest initialized in {self.test_dir}")
-
     def setup_test_environment(self) -> bool:
         try:
             logger.info("Setting up thorough test environment...")
@@ -3571,7 +3314,6 @@ class TestComprehensiveRecordingSession:
             logger.error(f"Failed to setup test environment: {e}")
             self.errors.append(f"Setup error: {e}")
             return False
-
     def create_mock_android_devices(self, count: int = 2) -> bool:
         try:
             logger.info(f"Creating {count} mock Android devices...")
@@ -3585,7 +3327,6 @@ class TestComprehensiveRecordingSession:
             logger.error(f"Failed to create mock devices: {e}")
             self.errors.append(f"Mock device creation error: {e}")
             return False
-
     @pytest.mark.asyncio
     async def test_device_connections(self) -> bool:
         try:
@@ -3610,7 +3351,6 @@ class TestComprehensiveRecordingSession:
             logger.error(f"Device connection test failed: {e}")
             self.errors.append(f"Connection test error: {e}")
             return False
-
     @pytest.mark.asyncio
     async def test_recording_session_lifecycle(self) -> SessionResult:
         session_start = time.time()
@@ -3737,7 +3477,6 @@ class TestComprehensiveRecordingSession:
                 network_stats=self._get_network_stats(),
                 performance_metrics=self._get_performance_metrics(),
             )
-
     def _get_network_stats(self) -> Dict[str, Any]:
         stats = {
             "total_messages_sent": 0,
@@ -3756,11 +3495,9 @@ class TestComprehensiveRecordingSession:
             stats["total_messages_received"] += device.messages_received
             stats["total_data_sent_mb"] += device_stats["data_sent_mb"]
         return stats
-
     def _get_performance_metrics(self) -> Dict[str, Any]:
         try:
             import psutil
-
             process = psutil.Process()
             memory_info = process.memory_info()
             return {
@@ -3771,7 +3508,6 @@ class TestComprehensiveRecordingSession:
             }
         except ImportError:
             return {"error": "psutil not available"}
-
     @pytest.mark.asyncio
     async def test_error_conditions(self) -> List[Dict]:
         error_tests = []
@@ -3834,7 +3570,6 @@ class TestComprehensiveRecordingSession:
         except Exception as e:
             logger.error(f"Error condition testing failed: {e}")
             return [{"test": "error_testing", "result": "failed", "details": str(e)}]
-
     def test_logging_functionality(self) -> Dict[str, Any]:
         logger.info("=== Testing Logging Functionality ===")
         logging_results = {
@@ -3889,7 +3624,6 @@ class TestComprehensiveRecordingSession:
             logger.error(f"Logging functionality test failed: {e}")
             logging_results["error"] = str(e)
             return logging_results
-
     def test_ui_responsiveness(self) -> Dict[str, Any]:
         logger.info("=== Testing UI Responsiveness (Simulated) ===")
         ui_results = {
@@ -3921,7 +3655,6 @@ class TestComprehensiveRecordingSession:
             logger.error(f"UI responsiveness test failed: {e}")
             ui_results["error"] = str(e)
             return ui_results
-
     def verify_file_structure(self) -> Dict[str, Any]:
         logger.info("=== Verifying File Structure ===")
         file_verification = {
@@ -3967,10 +3700,8 @@ class TestComprehensiveRecordingSession:
             logger.error(f"File structure verification failed: {e}")
             file_verification["error"] = str(e)
             return file_verification
-
     def _verify_filename_convention(self, filename: str) -> bool:
         import re
-
         patterns = [
             "^phone_\\d+_\\w+_\\d{8}_\\d{6}\\.\\w+$",
             "^webcam_\\d+\\.\\w+$",
@@ -3982,7 +3713,6 @@ class TestComprehensiveRecordingSession:
             if re.match(pattern, filename):
                 return True
         return filename in ["test_file.txt", "session_info.json"]
-
     async def run_comprehensive_test(self) -> Dict[str, Any]:
         self.start_time = time.time()
         logger.info("=" * 80)
@@ -4057,7 +3787,6 @@ class TestComprehensiveRecordingSession:
             return test_results
         finally:
             await self.cleanup()
-
     async def cleanup(self):
         logger.info("Cleaning up test resources...")
         try:
@@ -4070,8 +3799,6 @@ class TestComprehensiveRecordingSession:
             logger.info("Cleanup completed")
         except Exception as e:
             logger.error(f"Cleanup error: {e}")
-
-
 def print_test_summary(results: Dict[str, Any]):
     print("\n" + "=" * 80)
     print("📊 complete RECORDING SESSION TEST SUMMARY")
@@ -4136,8 +3863,6 @@ def print_test_summary(results: Dict[str, Any]):
         for warning in warnings:
             print(f"  • {warning}")
     print("\n" + "=" * 80)
-
-
 async def main():
     logger.info("Starting complete Recording Session Integration Test...")
     test = ComprehensiveRecordingSessionTest()
@@ -4146,14 +3871,12 @@ async def main():
         print_test_summary(results)
         results_file = test.test_dir / "test_results.json"
         with open(results_file, "w") as f:
-
             def json_serializer(obj):
                 if hasattr(obj, "isoformat"):
                     return obj.isoformat()
                 elif hasattr(obj, "__dict__"):
                     return obj.__dict__
                 return str(obj)
-
             json.dump(results, f, indent=2, default=json_serializer)
         logger.info(f"Test results saved to: {results_file}")
         return 0 if results["overall_success"] else 1
@@ -4161,20 +3884,15 @@ async def main():
         logger.error(f"Test execution failed: {e}")
         print(f"\n❌ TEST EXECUTION FAILED: {e}")
         return 1
-
-
 if __name__ == "__main__":
     if not DEPENDENCIES_AVAILABLE:
         print("⚠️  Some dependencies are missing, running with mock components")
     exit_code = asyncio.run(main())
     sys.exit(exit_code)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 AppLogger.set_level("INFO")
 logger = get_logger(__name__)
-
-
 @dataclass
 class DataFile:
     file_path: Path
@@ -4186,8 +3904,6 @@ class DataFile:
     checksum_sha256: str
     timestamp_created: float
     metadata: Dict[str, Any]
-
-
 @dataclass
 class IntegrityTestResult:
     test_name: str
@@ -4201,14 +3917,10 @@ class IntegrityTestResult:
     metadata_errors: int
     data_loss_bytes: int
     recovery_success_rate: float
-
-
 class DataGenerator:
-
     def __init__(self, output_dir: Path):
         self.output_dir = output_dir
         self.output_dir.mkdir(parents=True, exist_ok=True)
-
     def generate_video_file(
         self, device_id: str, session_id: str, duration_seconds: int = 30
     ) -> DataFile:
@@ -4243,7 +3955,6 @@ class DataGenerator:
             timestamp_created=time.time(),
             metadata=metadata,
         )
-
     def generate_thermal_file(
         self, device_id: str, session_id: str, duration_seconds: int = 30
     ) -> DataFile:
@@ -4282,7 +3993,6 @@ class DataGenerator:
             timestamp_created=time.time(),
             metadata=metadata,
         )
-
     def generate_gsr_file(
         self, device_id: str, session_id: str, duration_seconds: int = 30
     ) -> DataFile:
@@ -4326,7 +4036,6 @@ class DataGenerator:
             timestamp_created=time.time(),
             metadata=metadata,
         )
-
     def generate_session_metadata(
         self, session_id: str, data_files: List[DataFile]
     ) -> DataFile:
@@ -4372,18 +4081,13 @@ class DataGenerator:
             timestamp_created=time.time(),
             metadata={"format": "JSON", "schema_version": "1.0"},
         )
-
-
     def _calculate_sha256(self, file_path: Path) -> str:
         hash_sha256 = hashlib.sha256()
         with open(file_path, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_sha256.update(chunk)
         return hash_sha256.hexdigest()
-
-
 class DataCorruptor:
-
     @staticmethod
     def corrupt_file_random(file_path: Path, corruption_percent: float = 1.0) -> int:
         file_size = file_path.stat().st_size
@@ -4403,7 +4107,6 @@ class DataCorruptor:
                     corrupted_bytes += 1
         logger.debug(f"Corrupted {corrupted_bytes} bytes in {file_path.name}")
         return corrupted_bytes
-
     @staticmethod
     def corrupt_file_header(file_path: Path) -> int:
         with open(file_path, "r+b") as f:
@@ -4425,7 +4128,6 @@ class DataCorruptor:
                     corrupted_bytes += 1
         logger.debug(f"Corrupted {corrupted_bytes} header bytes in {file_path.name}")
         return corrupted_bytes
-
     @staticmethod
     def truncate_file(file_path: Path, truncate_percent: float = 10.0) -> int:
         original_size = file_path.stat().st_size
@@ -4435,13 +4137,9 @@ class DataCorruptor:
             f.truncate(new_size)
         logger.debug(f"Truncated {bytes_to_remove} bytes from {file_path.name}")
         return bytes_to_remove
-
-
 class DataIntegrityValidator:
-
     def __init__(self):
         self.validation_results = []
-
     def validate_file_integrity(self, data_file: DataFile) -> Dict[str, Any]:
         validation_result = {
             "file_path": str(data_file.file_path),
@@ -4489,7 +4187,6 @@ class DataIntegrityValidator:
             validation_result["integrity_checks"]["error"] = str(e)
             validation_result["integrity_checks"]["overall_valid"] = False
         return validation_result
-
     def _validate_file_format(self, data_file: DataFile) -> Dict[str, Any]:
         try:
             if data_file.file_type == "video":
@@ -4507,7 +4204,6 @@ class DataIntegrityValidator:
                 }
         except Exception as e:
             return {"valid": False, "error": str(e)}
-
     def _validate_video_format(self, data_file: DataFile) -> Dict[str, Any]:
         try:
             with open(data_file.file_path, "rb") as f:
@@ -4525,7 +4221,6 @@ class DataIntegrityValidator:
                     }
         except Exception as e:
             return {"valid": False, "error": str(e)}
-
     def _validate_thermal_format(self, data_file: DataFile) -> Dict[str, Any]:
         try:
             expected_size = (
@@ -4545,7 +4240,6 @@ class DataIntegrityValidator:
                 }
         except Exception as e:
             return {"valid": False, "error": str(e)}
-
     def _validate_gsr_format(self, data_file: DataFile) -> Dict[str, Any]:
         try:
             with open(data_file.file_path, "r") as f:
@@ -4581,7 +4275,6 @@ class DataIntegrityValidator:
                 }
         except Exception as e:
             return {"valid": False, "error": str(e)}
-
     def _validate_metadata_format(self, data_file: DataFile) -> Dict[str, Any]:
         try:
             with open(data_file.file_path, "r") as f:
@@ -4600,23 +4293,17 @@ class DataIntegrityValidator:
             return {"valid": False, "message": f"Invalid JSON format: {e}"}
         except Exception as e:
             return {"valid": False, "error": str(e)}
-
-
     def _calculate_sha256(self, file_path: Path) -> str:
         hash_sha256 = hashlib.sha256()
         with open(file_path, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_sha256.update(chunk)
         return hash_sha256.hexdigest()
-
-
 class DataIntegrityTester:
-
     def __init__(self):
         self.results: List[IntegrityTestResult] = []
         self.test_dir = Path(tempfile.mkdtemp(prefix="data_integrity_test_"))
         logger.info(f"Data integrity test directory: {self.test_dir}")
-
     def test_data_integrity_under_corruption(self) -> IntegrityTestResult:
         logger.info("🧪 Testing data integrity under corruption scenarios...")
         start_time = time.time()
@@ -4740,15 +4427,12 @@ class DataIntegrityTester:
         logger.info(f"   Data Loss: {data_loss_bytes} bytes")
         logger.info(f"   Detection Success: {files_corrupted == files_tested}")
         return test_result
-
     def cleanup(self):
         try:
             shutil.rmtree(self.test_dir)
             logger.info(f"Cleaned up test directory: {self.test_dir}")
         except Exception as e:
             logger.warning(f"Failed to cleanup test directory: {e}")
-
-
 async def main():
     logger.info("=" * 80)
     logger.info("🔍 DATA INTEGRITY VALIDATION SUITE - MULTI-SENSOR RECORDING SYSTEM")
@@ -4818,18 +4502,13 @@ async def main():
     except Exception as e:
         logger.error(f"Data integrity testing failed with error: {e}")
         import traceback
-
         traceback.print_exc()
         return False
     finally:
         tester.cleanup()
-
-
 def test_data_integrity_tester_initialization():
     tester = DataIntegrityTester()
     assert tester is not None
-
-
 def test_integrity_test_result_creation():
     assert IntegrityTestResult is not None
     try:
@@ -4847,8 +4526,6 @@ def test_integrity_test_result_creation():
         assert result.test_name == "test"
     except TypeError:
         assert True
-
-
 def test_corruption_scenario_creation():
     scenario = {
         "type": "random_corruption",
@@ -4857,21 +4534,14 @@ def test_corruption_scenario_creation():
     }
     assert scenario is not None
     assert scenario["type"] == "random_corruption"
-
-
 if __name__ == "__main__":
     success = asyncio.run(main())
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
-
-
 class TestDualWebcamIntegration(unittest.TestCase):
-
     def setUp(self):
         self.logger = get_logger("TestDualWebcamIntegration")
         AppLogger.set_level("DEBUG")
-
     def test_camera_test_function_default_indices(self):
         self.logger.info("Testing camera test function with default indices")
         with patch("cv2.VideoCapture") as mock_video_capture:
@@ -4881,7 +4551,6 @@ class TestDualWebcamIntegration(unittest.TestCase):
             mock_cap1.read.return_value = (True, Mock(shape=(480, 640, 3)))
             mock_cap2.isOpened.return_value = True
             mock_cap2.read.return_value = (True, Mock(shape=(480, 640, 3)))
-
             def video_capture_side_effect(index):
                 if index == 0:
                     return mock_cap1
@@ -4891,14 +4560,12 @@ class TestDualWebcamIntegration(unittest.TestCase):
                     mock_fail = Mock()
                     mock_fail.isOpened.return_value = False
                     return mock_fail
-
             mock_video_capture.side_effect = video_capture_side_effect
             result = test_dual_webcam_access()
             self.assertTrue(result, "Camera test should succeed with mocked cameras")
             self.assertEqual(mock_video_capture.call_count, 2)
             mock_cap1.release.assert_called_once()
             mock_cap2.release.assert_called_once()
-
     def test_camera_test_function_custom_indices(self):
         self.logger.info("Testing camera test function with custom indices")
         with patch("cv2.VideoCapture") as mock_video_capture:
@@ -4908,7 +4575,6 @@ class TestDualWebcamIntegration(unittest.TestCase):
             mock_cap2.read.return_value = (True, Mock(shape=(1080, 1920, 3)))
             mock_cap3.isOpened.return_value = True
             mock_cap3.read.return_value = (True, Mock(shape=(1080, 1920, 3)))
-
             def video_capture_side_effect(index):
                 if index == 2:
                     return mock_cap2
@@ -4918,14 +4584,12 @@ class TestDualWebcamIntegration(unittest.TestCase):
                     mock_fail = Mock()
                     mock_fail.isOpened.return_value = False
                     return mock_fail
-
             mock_video_capture.side_effect = video_capture_side_effect
             result = test_dual_webcam_access([2, 3])
             self.assertTrue(result, "Camera test should succeed with custom indices")
             self.assertEqual(mock_video_capture.call_count, 2)
             mock_video_capture.assert_any_call(2)
             mock_video_capture.assert_any_call(3)
-
     def test_camera_test_function_failure(self):
         self.logger.info("Testing camera test function failure scenarios")
         with patch("cv2.VideoCapture") as mock_video_capture:
@@ -4942,7 +4606,6 @@ class TestDualWebcamIntegration(unittest.TestCase):
             self.assertFalse(
                 result, "Camera test should fail when first camera cannot read"
             )
-
     def test_camera_test_invalid_indices(self):
         self.logger.info("Testing camera test function with invalid indices")
         result = test_dual_webcam_access([0])
@@ -4951,13 +4614,11 @@ class TestDualWebcamIntegration(unittest.TestCase):
         self.assertFalse(
             result, "Camera test should fail with more than two camera indices"
         )
-
     @patch("PyQt5.QtWidgets.QApplication")
     def test_dual_webcam_main_window_import(self, mock_qapp):
         self.logger.info("Testing DualWebcamMainWindow import and instantiation")
         try:
             from gui.dual_webcam_main_window import DualWebcamMainWindow
-
             with patch("gui.dual_webcam_main_window.test_dual_webcam_access"):
                 main_window = DualWebcamMainWindow()
                 self.assertIsNotNone(main_window, "Main window should be created")
@@ -4982,16 +4643,13 @@ class TestDualWebcamIntegration(unittest.TestCase):
                 self.assertEqual(main_window.initial_settings, initial_settings)
         except ImportError as e:
             self.fail(f"Could not import DualWebcamMainWindow: {e}")
-
     def test_launch_script_argument_parsing(self):
         self.logger.info("Testing launch script argument parsing")
         import sys
-
         original_argv = sys.argv.copy()
         try:
             sys.path.insert(0, str(Path(__file__).parent))
             from launch_dual_webcam import parse_arguments
-
             sys.argv = ["launch_dual_webcam.py"]
             args = parse_arguments()
             self.assertEqual(args.cameras, "0,1")
@@ -5018,7 +4676,6 @@ class TestDualWebcamIntegration(unittest.TestCase):
             self.assertEqual(args.log_level, "DEBUG")
         finally:
             sys.argv = original_argv
-
     def test_settings_parsing_in_launch_script(self):
         self.logger.info("Testing camera settings parsing")
         test_cases = [
@@ -5043,13 +4700,9 @@ class TestDualWebcamIntegration(unittest.TestCase):
             self.assertEqual(
                 (width, height), expected, f"Failed for resolution: {res_str}"
             )
-
-
 class TestLoggingEnhancements(unittest.TestCase):
-
     def setUp(self):
         self.logger = get_logger("TestLoggingEnhancements")
-
     def test_structured_logging(self):
         self.logger.info("Testing structured logging")
         extra_data = {"operation": "camera_test", "camera_index": 0, "success": True}
@@ -5059,25 +4712,21 @@ class TestLoggingEnhancements(unittest.TestCase):
             "Warning message", extra={"warning_type": "camera_disconnected"}
         )
         self.logger.error("Error message", extra={"error_code": 404})
-
     def test_performance_monitoring(self):
         self.logger.info("Testing performance monitoring")
         timer_id = AppLogger.start_performance_timer("test_operation", "unit_test")
         self.assertIsNotNone(timer_id, "Timer ID should not be None")
         import time
-
         time.sleep(0.01)
         duration = AppLogger.end_performance_timer(timer_id, "TestLoggingEnhancements")
         self.assertGreater(duration, 0, "Duration should be positive")
         self.assertLess(duration, 1.0, "Duration should be reasonable for test")
-
     def test_memory_usage_logging(self):
         self.logger.info("Testing memory usage logging")
         AppLogger.log_memory_usage("unit_test_start")
         test_data = [i for i in range(1000)]
         AppLogger.log_memory_usage("unit_test_after_allocation")
         del test_data
-
     def test_log_level_changes(self):
         self.logger.info("Testing log level changes")
         AppLogger.set_level("DEBUG")
@@ -5086,8 +4735,6 @@ class TestLoggingEnhancements(unittest.TestCase):
         self.logger.info("This info message should be filtered")
         self.logger.warning("This warning message should be visible")
         AppLogger.set_level("INFO")
-
-
 def run_tests():
     logger = get_logger("TestRunner")
     logger.info("=== Running Dual Webcam Integration Tests ===")
@@ -5104,26 +4751,18 @@ def run_tests():
             f"✗ {len(result.failures)} test(s) failed, {len(result.errors)} error(s)"
         )
         return 1
-
-
 if __name__ == "__main__":
     exit_code = run_tests()
     sys.exit(exit_code)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 logger = get_logger(__name__)
-
-
 class TestDualWebcamHardware(unittest.TestCase):
-
     def test_dual_webcam_access(self):
         logger.info("Testing dual webcam hardware access...")
         success = test_dual_webcam_access()
         self.assertTrue(success, "Both webcams should be accessible")
-
     def test_camera_enumeration(self):
         import cv2
-
         detected_cameras = []
         for i in range(5):
             cap = cv2.VideoCapture(i)
@@ -5137,19 +4776,14 @@ class TestDualWebcamHardware(unittest.TestCase):
         self.assertGreaterEqual(
             len(detected_cameras), 2, "At least 2 cameras should be detected"
         )
-
-
 class TestDualWebcamCapture(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.dual_webcam = None
-
     def tearDown(self):
         if self.dual_webcam:
             self.dual_webcam.cleanup()
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     def test_dual_webcam_initialization(self):
         logger.info("Testing dual webcam initialization...")
         self.dual_webcam = DualWebcamCapture(
@@ -5157,7 +4791,6 @@ class TestDualWebcamCapture(unittest.TestCase):
         )
         success = self.dual_webcam.initialize_cameras()
         self.assertTrue(success, "Dual webcam initialization should succeed")
-
     def test_recording_functionality(self):
         logger.info("Testing dual webcam recording...")
         self.dual_webcam = DualWebcamCapture(
@@ -5182,23 +4815,17 @@ class TestDualWebcamCapture(unittest.TestCase):
             os.path.getsize(files[1]), 0, "Camera 2 file should not be empty"
         )
         logger.info(f"Test recording files created: {files[0]}, {files[1]}")
-
-
 class TestMasterClockSynchronization(unittest.TestCase):
-
     def setUp(self):
         self.master_sync = None
-
     def tearDown(self):
         if self.master_sync:
             self.master_sync.stop()
-
     def test_synchronizer_initialization(self):
         logger.info("Testing master synchronizer initialization...")
         self.master_sync = MasterClockSynchronizer(ntp_port=8890, pc_server_port=9001)
         self.assertIsNotNone(self.master_sync.ntp_server)
         self.assertIsNotNone(self.master_sync.pc_server)
-
     def test_timestamp_accuracy(self):
         logger.info("Testing timestamp accuracy...")
         self.master_sync = MasterClockSynchronizer(ntp_port=8890, pc_server_port=9001)
@@ -5214,22 +4841,16 @@ class TestMasterClockSynchronization(unittest.TestCase):
         time_span = timestamps[-1] - timestamps[0]
         self.assertGreater(time_span, 0.08, "Time span should be reasonable")
         self.assertLess(time_span, 0.15, "Time span should not be too large")
-
-
 class TestNTPTimeServer(unittest.TestCase):
-
     def setUp(self):
         self.ntp_server = None
-
     def tearDown(self):
         if self.ntp_server:
             self.ntp_server.stop()
-
     def test_ntp_server_initialization(self):
         logger.info("Testing NTP server initialization...")
         self.ntp_server = NTPTimeServer(port=8891)
         self.assertIsNotNone(self.ntp_server)
-
     def test_ntp_server_start_stop(self):
         logger.info("Testing NTP server start/stop...")
         self.ntp_server = NTPTimeServer(port=8891)
@@ -5240,31 +4861,24 @@ class TestNTPTimeServer(unittest.TestCase):
             self.ntp_server.stop()
             time.sleep(0.5)
             self.assertFalse(self.ntp_server.is_running)
-
-
 class TestIntegration(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.master_sync = None
         self.dual_webcam = None
-
     def tearDown(self):
         if self.dual_webcam:
             self.dual_webcam.cleanup()
         if self.master_sync:
             self.master_sync.stop()
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     @unittest.skipIf(not test_dual_webcam_access(), "Dual webcams not available")
     def test_synchronized_recording(self):
         logger.info("Testing synchronized recording integration...")
         self.master_sync = MasterClockSynchronizer(ntp_port=8892, pc_server_port=9002)
         sync_timestamps = []
-
         def sync_callback(timestamp):
             sync_timestamps.append(timestamp)
-
         self.dual_webcam = DualWebcamCapture(
             camera1_index=0,
             camera2_index=1,
@@ -5295,8 +4909,6 @@ class TestIntegration(unittest.TestCase):
                 )
         else:
             logger.warning("Could not start all components - skipping integration test")
-
-
 def run_hardware_check():
     print("=== Dual Webcam Recording System - Hardware Check ===\n")
     print("Testing webcam hardware access...")
@@ -5313,7 +4925,6 @@ def run_hardware_check():
         return False
     print("\nTesting camera capabilities...")
     import cv2
-
     for cam_idx in [0, 1]:
         cap = cv2.VideoCapture(cam_idx)
         if cap.isOpened():
@@ -5335,11 +4946,8 @@ def run_hardware_check():
             print(f"✗ Camera {cam_idx}: Failed to open")
     print("\nHardware check completed.")
     return True
-
-
 def main():
     import argparse
-
     parser = argparse.ArgumentParser(
         description="Dual Webcam Recording System Test Suite"
     )
@@ -5353,7 +4961,6 @@ def main():
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
     import logging
-
     level = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(
         level=level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -5388,17 +4995,12 @@ def main():
             return 1
     print("\n=== All Tests Completed Successfully ===")
     return 0
-
-
 if __name__ == "__main__":
     sys.exit(main())
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 AppLogger.set_level("INFO")
 logger = get_logger(__name__)
-
-
 @dataclass
 class PerformanceMetrics:
     timestamp: float
@@ -5410,8 +5012,6 @@ class PerformanceMetrics:
     network_bytes_recv: int
     active_threads: int
     open_files: int
-
-
 @dataclass
 class StressTestResult:
     test_name: str
@@ -5424,17 +5024,13 @@ class StressTestResult:
     error_count: int
     recovery_count: int
     performance_degradation_percent: float
-
-
 class PerformanceMonitor:
-
     def __init__(self):
         self.process = psutil.Process()
         self.initial_memory = self.process.memory_info().rss / 1024 / 1024
         self.metrics_history: List[PerformanceMetrics] = []
         self.monitoring = False
         self.monitor_thread = None
-
     def start_monitoring(self, interval: float = 1.0):
         self.monitoring = True
         self.monitor_thread = threading.Thread(
@@ -5443,7 +5039,6 @@ class PerformanceMonitor:
         self.monitor_thread.daemon = True
         self.monitor_thread.start()
         logger.info("Performance monitoring started")
-
     def stop_monitoring(self):
         self.monitoring = False
         if self.monitor_thread:
@@ -5452,7 +5047,6 @@ class PerformanceMonitor:
             f"Performance monitoring stopped. Collected {len(self.metrics_history)} metrics"
         )
         return self.metrics_history
-
     def _monitor_loop(self, interval: float):
         while self.monitoring:
             try:
@@ -5502,7 +5096,6 @@ class PerformanceMonitor:
             except Exception as e:
                 logger.error(f"Error in performance monitoring: {e}")
             time.sleep(interval)
-
     def get_summary(self) -> Dict[str, Any]:
         if not self.metrics_history:
             return {"error": "No metrics collected"}
@@ -5529,10 +5122,7 @@ class PerformanceMonitor:
             },
             "total_metrics_collected": len(self.metrics_history),
         }
-
-
 class MockDevice:
-
     def __init__(self, device_id: str, device_type: str):
         self.device_id = device_id
         self.device_type = device_type
@@ -5541,7 +5131,6 @@ class MockDevice:
         self.data_generated_mb = 0.0
         self.error_count = 0
         self.recovery_count = 0
-
     async def connect(self, timeout: float = 5.0):
         await asyncio.sleep(0.1 + hash(self.device_id) % 100 / 1000)
         if hash(self.device_id) % 20 == 0:
@@ -5550,7 +5139,6 @@ class MockDevice:
         self.connected = True
         logger.debug(f"Device {self.device_id} connected")
         return True
-
     async def start_recording(self, session_id: str):
         if not self.connected:
             raise RuntimeError(f"Device {self.device_id} not connected")
@@ -5559,7 +5147,6 @@ class MockDevice:
             f"Device {self.device_id} started recording for session {session_id}"
         )
         asyncio.create_task(self._generate_data())
-
     async def stop_recording(self):
         self.recording = False
         logger.debug(
@@ -5571,7 +5158,6 @@ class MockDevice:
             "error_count": self.error_count,
             "recovery_count": self.recovery_count,
         }
-
     async def _generate_data(self):
         data_rates = {
             "android_camera": 2.5,
@@ -5589,14 +5175,10 @@ class MockDevice:
                 await asyncio.sleep(0.5)
                 self.recovery_count += 1
                 logger.info(f"Device {self.device_id} recovered from error")
-
-
 class StressTester:
-
     def __init__(self):
         self.monitor = PerformanceMonitor()
         self.results: List[StressTestResult] = []
-
     async def run_memory_stress_test(
         self, duration_seconds: int = 60
     ) -> StressTestResult:
@@ -5688,7 +5270,6 @@ class StressTester:
             f"   Errors/Recoveries: {result.error_count}/{result.recovery_count}"
         )
         return result
-
     async def run_concurrent_session_test(
         self, num_sessions: int = 5
     ) -> StressTestResult:
@@ -5741,7 +5322,6 @@ class StressTester:
         logger.info(f"   Max Memory: {result.max_memory_mb:.1f}MB")
         logger.info(f"   Peak Threads: {result.peak_threads}")
         return result
-
     async def _run_single_session(
         self, session_id: str, duration: int = 30
     ) -> Dict[str, Any]:
@@ -5769,8 +5349,6 @@ class StressTester:
         except Exception as e:
             logger.error(f"Session {session_id} failed: {e}")
             return {"error": str(e)}
-
-
 async def main():
     logger.info("=" * 80)
     logger.info("🚀 ENHANCED STRESS TESTING SUITE - MULTI-SENSOR RECORDING SYSTEM")
@@ -5841,24 +5419,17 @@ async def main():
     except Exception as e:
         logger.error(f"Enhanced stress testing failed with error: {e}")
         import traceback
-
         traceback.print_exc()
         return False
-
-
 def test_stress_testing_initialization():
     tester = StressTester()
     assert tester is not None
     assert hasattr(tester, "monitor")
     assert hasattr(tester, "results")
-
-
 def test_performance_monitor_creation():
     monitor = PerformanceMonitor()
     assert monitor is not None
     assert True
-
-
 def test_stress_test_result_creation():
     assert StressTestResult is not None
     try:
@@ -5876,41 +5447,32 @@ def test_stress_test_result_creation():
         assert result.test_name == "test"
     except TypeError:
         assert True
-
-
 if __name__ == "__main__":
     success = asyncio.run(main())
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 try:
     from PyQt5.QtCore import Qt
     from PyQt5.QtTest import QTest
     from PyQt5.QtWidgets import QApplication
-
     PYQT_AVAILABLE = True
 except ImportError:
     PYQT_AVAILABLE = False
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
 class TestEnhancedUI(unittest.TestCase):
-
     def setUp(self):
         if PYQT_AVAILABLE:
             if not QApplication.instance():
                 self.app = QApplication(sys.argv)
             else:
                 self.app = QApplication.instance()
-
     def test_enhanced_window_creation(self):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
         try:
             from gui.enhanced_ui_main_window import EnhancedMainWindow
-
             window = EnhancedMainWindow()
             self.assertIsNotNone(window)
             self.assertTrue(hasattr(window, "central_widget") or hasattr(window, "centralWidget"))
@@ -5923,7 +5485,6 @@ class TestEnhancedUI(unittest.TestCase):
             logger.info("✓ Enhanced window creation test passed")
         except Exception as e:
             self.fail(f"Failed to create enhanced window: {e}")
-
     def test_real_time_data_plotter(self):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
@@ -5932,7 +5493,6 @@ class TestEnhancedUI(unittest.TestCase):
             logger.info("✓ Real-time data plotter test passed")
         except Exception as e:
             self.fail(f"Failed to test data plotter: {e}")
-
     def test_system_monitor(self):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
@@ -5940,7 +5500,6 @@ class TestEnhancedUI(unittest.TestCase):
             self.skipTest("SystemMonitor was part of simplified UI components that were removed")
         except Exception as e:
             self.fail(f"Failed to test system monitor: {e}")
-
     def test_device_config_dialog(self):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
@@ -5948,7 +5507,6 @@ class TestEnhancedUI(unittest.TestCase):
             self.skipTest("DeviceConfigDialog was part of simplified UI components that were removed")
         except Exception as e:
             self.fail(f"Failed to test device config dialog: {e}")
-
     def test_file_browser_widget(self):
         if not PYQT_AVAILABLE:
             self.skipTest("PyQt5 not available")
@@ -5956,11 +5514,9 @@ class TestEnhancedUI(unittest.TestCase):
             self.skipTest("FileBrowserWidget was part of simplified UI components that were removed")
         except Exception as e:
             self.fail(f"Failed to test file browser: {e}")
-
     def test_backend_integration(self):
         try:
             from gui.enhanced_ui_main_window import EnhancedMainWindow
-
             window = EnhancedMainWindow()
             self.assertIsNotNone(window)
             window.close()
@@ -5978,13 +5534,11 @@ class TestEnhancedUI(unittest.TestCase):
             logger.info("✓ Backend integration test passed")
         except Exception as e:
             self.fail(f"Failed to test backend integration: {e}")
-
     def test_real_functionality_methods(self):
         try:
             self.skipTest("Real functionality methods were part of simplified UI components that were removed")
         except Exception as e:
             self.fail(f"Failed to test real functionality: {e}")
-
     def test_critical_features_implemented(self):
         feature_checklist = {
             "Real-time Data Visualization": False,
@@ -6000,8 +5554,6 @@ class TestEnhancedUI(unittest.TestCase):
             self.skipTest("complete advanced features test skipped - simplified UI components were removed")
         except Exception as e:
             self.fail(f"Failed to verify critical features: {e}")
-
-
 def main():
     print("=" * 60)
     print("ENHANCED PYTHON DESKTOP UI TEST SUITE")
@@ -6022,15 +5574,10 @@ def main():
         for test, error in result.failures + result.errors:
             print(f"   - {test}: {error}")
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
-
-
 def test_enhanced_ui_implementation():
     print("=" * 60)
     print("ENHANCED PYTHON DESKTOP UI CODE VERIFICATION")
@@ -6190,8 +5737,6 @@ def test_enhanced_ui_implementation():
     print("✅ System monitoring and data visualization ready")
     print("=" * 60)
     return True
-
-
 def test_requirements_file():
     print("\n📋 Testing Requirements File:")
     req_file = Path(__file__).parent / "test-requirements.txt"
@@ -6218,8 +5763,6 @@ def test_requirements_file():
     else:
         print("❌ Enhanced requirements file: Missing")
         return False
-
-
 if __name__ == "__main__":
     print("🔍 Verifying Enhanced Python Desktop UI Implementation")
     print("This test verifies code structure without requiring PyQt5")
@@ -6237,13 +5780,10 @@ if __name__ == "__main__":
         print("🎛️ Device management and configuration dialogs ready")
         print("📁 File browser and session management integrated")
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 AppLogger.set_level("DEBUG")
 logger = get_logger(__name__)
-
-
 @dataclass
 class MockSensorReading:
     timestamp: float
@@ -6251,10 +5791,7 @@ class MockSensorReading:
     device_id: str
     value: float
     metadata: Dict[str, Any]
-
-
 class MockTcpServer:
-
     def __init__(self, host: str = "localhost", port: int = 9000):
         self.host = host
         self.port = port
@@ -6264,7 +5801,6 @@ class MockTcpServer:
         self.message_handlers = {}
         self.server_thread = None
         logger.info(f"MockTcpServer initialized on {host}:{port}")
-
     def start(self):
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -6279,7 +5815,6 @@ class MockTcpServer:
         except Exception as e:
             logger.error(f"Failed to start MockTcpServer: {e}")
             return False
-
     def stop(self):
         self.running = False
         if self.socket:
@@ -6294,7 +5829,6 @@ class MockTcpServer:
                 pass
         self.clients.clear()
         logger.info("MockTcpServer stopped")
-
     def _server_loop(self):
         while self.running:
             try:
@@ -6312,7 +5846,6 @@ class MockTcpServer:
                 if self.running:
                     logger.error(f"Server accept error: {e}")
                 break
-
     def _handle_client(self, client_socket, client_id):
         while self.running:
             try:
@@ -6344,7 +5877,6 @@ class MockTcpServer:
         except:
             pass
         logger.info(f"MockTcpServer: Client {client_id} disconnected")
-
     def _process_message(self, message: Dict, client_id: str) -> Optional[Dict]:
         message_type = message.get("type")
         if message_type == "device_connected":
@@ -6362,7 +5894,6 @@ class MockTcpServer:
             "original_type": message_type,
             "timestamp": time.time(),
         }
-
     def _send_message(self, client_socket, message: Dict):
         try:
             json_data = json.dumps(message)
@@ -6373,7 +5904,6 @@ class MockTcpServer:
         except Exception as e:
             logger.error(f"Failed to send message: {e}")
             return False
-
     def broadcast_message(self, message: Dict):
         disconnected_clients = []
         for client_id, client_socket in self.clients.items():
@@ -6382,10 +5912,7 @@ class MockTcpServer:
         for client_id in disconnected_clients:
             if client_id in self.clients:
                 del self.clients[client_id]
-
-
 class MockAndroidApp:
-
     def __init__(
         self, device_id: str, server_host: str = "localhost", server_port: int = 9000
     ):
@@ -6401,7 +5928,6 @@ class MockAndroidApp:
         self.messages_sent = 0
         self.messages_received = 0
         logger.info(f"MockAndroidApp {device_id} initialized")
-
     async def connect_to_pc(self) -> bool:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -6421,7 +5947,6 @@ class MockAndroidApp:
         except Exception as e:
             logger.error(f"MockAndroidApp {self.device_id} connection failed: {e}")
             return False
-
     async def _send_message(self, message: Dict) -> bool:
         try:
             if not self.socket or not self.connected:
@@ -6438,7 +5963,6 @@ class MockAndroidApp:
         except Exception as e:
             logger.error(f"MockAndroidApp {self.device_id} send failed: {e}")
             return False
-
     async def start_recording(self, session_info: Dict) -> bool:
         try:
             self.recording = True
@@ -6459,7 +5983,6 @@ class MockAndroidApp:
         except Exception as e:
             logger.error(f"MockAndroidApp {self.device_id} start recording failed: {e}")
             return False
-
     async def stop_recording(self) -> bool:
         try:
             self.recording = False
@@ -6482,7 +6005,6 @@ class MockAndroidApp:
         except Exception as e:
             logger.error(f"MockAndroidApp {self.device_id} stop recording failed: {e}")
             return False
-
     async def _generate_sensor_data(self):
         frame_count = 0
         while self.recording:
@@ -6519,7 +6041,6 @@ class MockAndroidApp:
                     f"MockAndroidApp {self.device_id} data generation error: {e}"
                 )
                 break
-
     async def send_device_status(self) -> bool:
         try:
             status = {
@@ -6539,7 +6060,6 @@ class MockAndroidApp:
         except Exception as e:
             logger.error(f"MockAndroidApp {self.device_id} status send failed: {e}")
             return False
-
     def disconnect(self):
         self.connected = False
         self.recording = False
@@ -6549,10 +6069,7 @@ class MockAndroidApp:
             except:
                 pass
         logger.info(f"MockAndroidApp {self.device_id} disconnected")
-
-
 class FocusedRecordingSessionTest:
-
     def __init__(self, test_dir: Optional[str] = None):
         self.test_dir = (
             Path(test_dir)
@@ -6575,7 +6092,6 @@ class FocusedRecordingSessionTest:
             "network_messages": 0,
         }
         logger.info(f"FocusedRecordingSessionTest initialized in {self.test_dir}")
-
     def setup_environment(self) -> bool:
         try:
             logger.info("Setting up focused test environment...")
@@ -6593,7 +6109,6 @@ class FocusedRecordingSessionTest:
             logger.error(f"Setup failed: {e}")
             self.test_results["errors"].append(f"Setup error: {e}")
             return False
-
     async def test_pc_android_connection(self) -> bool:
         logger.info("=== Testing PC-Android Connections ===")
         self.test_results["tests_total"] += 1
@@ -6620,7 +6135,6 @@ class FocusedRecordingSessionTest:
             logger.error(f"Connection test failed: {e}")
             self.test_results["errors"].append(f"Connection test: {e}")
             return False
-
     async def test_recording_session_coordination(self) -> bool:
         logger.info("=== Testing Recording Session Coordination ===")
         self.test_results["tests_total"] += 1
@@ -6683,7 +6197,6 @@ class FocusedRecordingSessionTest:
             logger.error(f"Recording coordination test failed: {e}")
             self.test_results["errors"].append(f"Recording coordination: {e}")
             return False
-
     async def test_sensor_data_simulation(self) -> bool:
         logger.info("=== Testing Sensor Data Simulation ===")
         self.test_results["tests_total"] += 1
@@ -6722,7 +6235,6 @@ class FocusedRecordingSessionTest:
             logger.error(f"Sensor simulation test failed: {e}")
             self.test_results["errors"].append(f"Sensor simulation: {e}")
             return False
-
     async def test_network_communication(self) -> bool:
         logger.info("=== Testing Network Communication ===")
         self.test_results["tests_total"] += 1
@@ -6771,7 +6283,6 @@ class FocusedRecordingSessionTest:
             logger.error(f"Network communication test failed: {e}")
             self.test_results["errors"].append(f"Network communication: {e}")
             return False
-
     def test_file_operations(self) -> bool:
         logger.info("=== Testing File Operations ===")
         self.test_results["tests_total"] += 1
@@ -6815,7 +6326,6 @@ class FocusedRecordingSessionTest:
             logger.error(f"File operations test failed: {e}")
             self.test_results["errors"].append(f"File operations: {e}")
             return False
-
     def test_logging_validation(self) -> bool:
         logger.info("=== Testing Logging Validation ===")
         self.test_results["tests_total"] += 1
@@ -6849,7 +6359,6 @@ class FocusedRecordingSessionTest:
             logger.error(f"Logging validation test failed: {e}")
             self.test_results["errors"].append(f"Logging validation: {e}")
             return False
-
     def test_error_handling(self) -> bool:
         logger.info("=== Testing Error Handling ===")
         self.test_results["tests_total"] += 1
@@ -6893,7 +6402,6 @@ class FocusedRecordingSessionTest:
             logger.error(f"Error handling test failed: {e}")
             self.test_results["errors"].append(f"Error handling: {e}")
             return False
-
     async def run_focused_test_suite(self) -> Dict[str, Any]:
         self.test_results["start_time"] = datetime.now().isoformat()
         start_time = time.time()
@@ -6950,7 +6458,6 @@ class FocusedRecordingSessionTest:
             return self.test_results
         finally:
             await self.cleanup()
-
     async def cleanup(self):
         logger.info("Cleaning up test resources...")
         try:
@@ -6961,8 +6468,6 @@ class FocusedRecordingSessionTest:
             logger.info("Cleanup completed")
         except Exception as e:
             logger.error(f"Cleanup error: {e}")
-
-
 def print_focused_test_summary(results: Dict[str, Any]):
     print("\n" + "=" * 60)
     print("📊 FOCUSED RECORDING SESSION TEST SUMMARY")
@@ -6991,8 +6496,6 @@ def print_focused_test_summary(results: Dict[str, Any]):
         for warning in warnings:
             print(f"  • {warning}")
     print("=" * 60)
-
-
 async def main():
     logger.info("Starting Focused Recording Session Test...")
     test = FocusedRecordingSessionTest()
@@ -7003,32 +6506,25 @@ async def main():
         json.dump(results, f, indent=2, default=str)
     logger.info(f"Test results saved to: {results_file}")
     return 0 if results.get("overall_success") else 1
-
-
 if __name__ == "__main__":
     exit_code = asyncio.run(main())
     sys.exit(exit_code)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 AppLogger.set_level("DEBUG")
 logger = get_logger(__name__)
 try:
     import cv2
-
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
     logger.warning("OpenCV not available - will simulate camera detection")
 try:
     import numpy as np
-
     NUMPY_AVAILABLE = True
 except ImportError:
     NUMPY_AVAILABLE = False
     logger.warning("NumPy not available - will use basic calculations")
-
-
 @dataclass
 class SensorSpec:
     name: str
@@ -7038,8 +6534,6 @@ class SensorSpec:
     data_format: str
     available: bool = False
     simulated: bool = False
-
-
 @dataclass
 class SensorData:
     sensor_id: str
@@ -7048,14 +6542,10 @@ class SensorData:
     raw_data: Any
     processed_data: Optional[Dict] = None
     metadata: Optional[Dict] = None
-
-
 class USBCameraDetector:
-
     def __init__(self):
         self.detected_cameras = []
         self.simulated_cameras = []
-
     def detect_available_cameras(self) -> List[Dict]:
         cameras = []
         if OPENCV_AVAILABLE:
@@ -7095,28 +6585,21 @@ class USBCameraDetector:
         self.detected_cameras = [c for c in cameras if c["available"]]
         self.simulated_cameras = [c for c in cameras if c.get("simulated")]
         return cameras
-
     def create_camera_stream(self, camera_info: Dict) -> "MockCameraStream":
         return MockCameraStream(camera_info)
-
-
 class MockCameraStream:
-
     def __init__(self, camera_info: Dict):
         self.camera_info = camera_info
         self.active = False
         self.frame_count = 0
         self.fps = 30.0
-
     def start_stream(self) -> bool:
         self.active = True
         logger.info(f"Started camera stream: {self.camera_info['name']}")
         return True
-
     def stop_stream(self):
         self.active = False
         logger.info(f"Stopped camera stream: {self.camera_info['name']}")
-
     def get_frame(self) -> Optional[SensorData]:
         if not self.active:
             return None
@@ -7137,14 +6620,10 @@ class MockCameraStream:
                 "fps": self.fps,
             },
         )
-
-
 class BluetoothSensorDetector:
-
     def __init__(self):
         self.detected_devices = []
         self.simulated_devices = []
-
     def scan_bluetooth_devices(self, timeout: float = 5.0) -> List[Dict]:
         devices = []
         try:
@@ -7177,30 +6656,23 @@ class BluetoothSensorDetector:
         self.simulated_devices = shimmer_devices
         logger.info(f"Bluetooth scan completed: {len(devices)} devices found")
         return devices
-
     def create_shimmer_connection(self, device_info: Dict) -> "MockShimmerDevice":
         return MockShimmerDevice(device_info)
-
-
 class MockShimmerDevice:
-
     def __init__(self, device_info: Dict):
         self.device_info = device_info
         self.connected = False
         self.recording = False
         self.sample_count = 0
         self.sample_rate = 51.2
-
     def connect(self) -> bool:
         self.connected = True
         logger.info(f"Connected to Shimmer: {self.device_info['name']}")
         return True
-
     def disconnect(self):
         self.connected = False
         self.recording = False
         logger.info(f"Disconnected from Shimmer: {self.device_info['name']}")
-
     def start_recording(self) -> bool:
         if not self.connected:
             return False
@@ -7208,12 +6680,10 @@ class MockShimmerDevice:
         self.sample_count = 0
         logger.info(f"Started GSR recording: {self.device_info['name']}")
         return True
-
     def stop_recording(self) -> bool:
         self.recording = False
         logger.info(f"Stopped GSR recording: {self.device_info['name']}")
         return True
-
     def get_sample(self) -> Optional[SensorData]:
         if not self.recording:
             return None
@@ -7237,15 +6707,11 @@ class MockShimmerDevice:
                 "device_name": self.device_info["name"],
             },
         )
-
-
 class ThermalCameraSimulator:
-
     def __init__(self):
         self.connected = False
         self.recording = False
         self.frame_count = 0
-
     def detect_thermal_camera(self) -> Dict:
         thermal_info = {
             "name": "Topdon TC001 (Simulated)",
@@ -7258,17 +6724,14 @@ class ThermalCameraSimulator:
         }
         logger.info("Thermal camera simulation initialized")
         return thermal_info
-
     def connect(self) -> bool:
         self.connected = True
         logger.info("Connected to thermal camera (simulated)")
         return True
-
     def disconnect(self):
         self.connected = False
         self.recording = False
         logger.info("Disconnected thermal camera")
-
     def start_recording(self) -> bool:
         if not self.connected:
             return False
@@ -7276,12 +6739,10 @@ class ThermalCameraSimulator:
         self.frame_count = 0
         logger.info("Started thermal recording")
         return True
-
     def stop_recording(self) -> bool:
         self.recording = False
         logger.info("Stopped thermal recording")
         return True
-
     def get_thermal_frame(self) -> Optional[SensorData]:
         if not self.recording:
             return None
@@ -7316,10 +6777,7 @@ class ThermalCameraSimulator:
                 "temp_unit": "celsius",
             },
         )
-
-
 class NetworkSensorSimulator:
-
     def __init__(self, device_id: str, base_port: int = 8080):
         self.device_id = device_id
         self.base_port = base_port
@@ -7330,7 +6788,6 @@ class NetworkSensorSimulator:
             "magnetometer": {"port": base_port + 4, "active": False},
         }
         self.socket_server = None
-
     def start_sensor_services(self) -> bool:
         try:
             self.socket_server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -7344,14 +6801,12 @@ class NetworkSensorSimulator:
         except Exception as e:
             logger.error(f"Failed to start network sensors: {e}")
             return False
-
     def stop_sensor_services(self):
         for sensor_name in self.sensors:
             self.sensors[sensor_name]["active"] = False
         if self.socket_server:
             self.socket_server.close()
         logger.info(f"Network sensors stopped for {self.device_id}")
-
     def get_sensor_data(self, sensor_type: str) -> Optional[SensorData]:
         if sensor_type not in self.sensors or not self.sensors[sensor_type]["active"]:
             return None
@@ -7399,10 +6854,7 @@ class NetworkSensorSimulator:
                 metadata={"unit": "µT", "sample_rate": 20},
             )
         return None
-
-
 class HardwareSensorTest:
-
     def __init__(self, test_dir: Optional[str] = None):
         self.test_dir = (
             Path(test_dir)
@@ -7428,7 +6880,6 @@ class HardwareSensorTest:
             "performance_metrics": {},
         }
         logger.info(f"HardwareSensorTest initialized in {self.test_dir}")
-
     def detect_all_sensors(self) -> Dict[str, Any]:
         logger.info("=== Detecting All Sensor Types ===")
         detection_results = {
@@ -7483,7 +6934,6 @@ class HardwareSensorTest:
             "network_simulated": len(self.network_simulators),
         }
         return detection_results
-
     async def test_usb_camera_streams(self) -> bool:
         logger.info("=== Testing USB Camera Streams ===")
         try:
@@ -7522,7 +6972,6 @@ class HardwareSensorTest:
             logger.error(f"USB camera test failed: {e}")
             self.test_results["errors"].append(f"USB camera: {e}")
             return False
-
     async def test_bluetooth_sensors(self) -> bool:
         logger.info("=== Testing Bluetooth Sensors ===")
         try:
@@ -7563,7 +7012,6 @@ class HardwareSensorTest:
             logger.error(f"Bluetooth sensor test failed: {e}")
             self.test_results["errors"].append(f"Bluetooth sensors: {e}")
             return False
-
     async def test_thermal_camera(self) -> bool:
         logger.info("=== Testing Thermal Camera ===")
         try:
@@ -7604,7 +7052,6 @@ class HardwareSensorTest:
             logger.error(f"Thermal camera test failed: {e}")
             self.test_results["errors"].append(f"Thermal camera: {e}")
             return False
-
     async def test_network_sensors(self) -> bool:
         logger.info("=== Testing Network Sensors ===")
         try:
@@ -7653,7 +7100,6 @@ class HardwareSensorTest:
             logger.error(f"Network sensor test failed: {e}")
             self.test_results["errors"].append(f"Network sensors: {e}")
             return False
-
     def test_sensor_port_assignments(self) -> bool:
         logger.info("=== Testing Sensor Port Assignments ===")
         try:
@@ -7706,7 +7152,6 @@ class HardwareSensorTest:
             logger.error(f"Port assignment test failed: {e}")
             self.test_results["errors"].append(f"Port assignments: {e}")
             return False
-
     def test_sensor_synchronization(self) -> bool:
         logger.info("=== Testing Sensor Synchronization ===")
         try:
@@ -7747,7 +7192,6 @@ class HardwareSensorTest:
             logger.error(f"Synchronization test failed: {e}")
             self.test_results["errors"].append(f"Synchronization: {e}")
             return False
-
     async def run_hardware_sensor_tests(self) -> Dict[str, Any]:
         self.test_results["start_time"] = datetime.now().isoformat()
         start_time = time.time()
@@ -7808,8 +7252,6 @@ class HardwareSensorTest:
         logger.info("=" * 80)
         self.test_results["overall_success"] = overall_success
         return self.test_results
-
-
 def print_sensor_test_summary(results: Dict[str, Any]):
     print("\n" + "=" * 70)
     print("🔬 HARDWARE SENSOR SIMULATION TEST SUMMARY")
@@ -7866,8 +7308,6 @@ def print_sensor_test_summary(results: Dict[str, Any]):
         for warning in warnings:
             print(f"  • {warning}")
     print("=" * 70)
-
-
 async def main():
     logger.info("Starting Hardware Sensor Simulation Test...")
     test = HardwareSensorTest()
@@ -7878,12 +7318,9 @@ async def main():
         json.dump(results, f, indent=2, default=str)
     logger.info(f"Test results saved to: {results_file}")
     return 0 if results.get("overall_success") else 1
-
-
 if __name__ == "__main__":
     exit_code = asyncio.run(main())
     sys.exit(exit_code)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 try:
     from session.session_manager import SessionManager
@@ -7915,8 +7352,6 @@ try:
 except ImportError as e:
     print(f"Warning: Could not import RecoveryManager: {e}")
     RecoveryManager = None
-
-
 def test_comprehensive_logging():
     AppLogger.set_level("DEBUG")
     logger = get_logger("IntegrationTest")
@@ -7996,14 +7431,12 @@ def test_comprehensive_logging():
         logger.critical("Critical message - serious system issue")
         logger.info("Testing performance timing...")
         import time
-
         start_time = time.time()
         time.sleep(0.1)
         end_time = time.time()
         logger.info(f"Operation completed in {(end_time - start_time) * 1000:.1f}ms")
         try:
             import psutil
-
             process = psutil.Process()
             memory_info = process.memory_info()
             logger.info(
@@ -8025,8 +7458,6 @@ def test_comprehensive_logging():
         logger.error(f"Integration test failed: {e}", exc_info=True)
         return False
     return True
-
-
 def test_log_rotation():
     logger = get_logger("RotationTest")
     logger.info("Testing log rotation by generating many log entries...")
@@ -8040,8 +7471,6 @@ def test_log_rotation():
         if i % 20 == 0:
             logger.warning(f"Milestone log entry {i + 1}")
     logger.info("Log rotation test completed")
-
-
 def main():
     print("Starting Multi-Sensor Recording System Logging Integration Test...")
     success = test_comprehensive_logging()
@@ -8062,14 +7491,9 @@ def main():
     print("✅ Log file creation and rotation")
     print("=" * 60)
     return 0
-
-
 if __name__ == "__main__":
     sys.exit(main())
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
-
-
 def test_logging():
     logger = get_logger("LoggingTest")
     logger.info("=== Testing Multi-Sensor Recording System Logging ===")
@@ -8099,17 +7523,12 @@ def test_logging():
         if log_dir.exists():
             log_files = list(log_dir.glob("*.log"))
             logger.info(f"Log files found: {[f.name for f in log_files]}")
-
-
 if __name__ == "__main__":
     test_logging()
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 AppLogger.set_level("INFO")
 logger = get_logger(__name__)
-
-
 @dataclass
 class NetworkCondition:
     name: str
@@ -8119,8 +7538,6 @@ class NetworkCondition:
     jitter_ms: float
     connection_drops: bool
     description: str
-
-
 @dataclass
 class NetworkTestResult:
     test_name: str
@@ -8136,10 +7553,7 @@ class NetworkTestResult:
     recovery_time_seconds: float
     data_throughput_mbps: float
     error_count: int
-
-
 class NetworkSimulator:
-
     def __init__(self, condition: NetworkCondition):
         self.condition = condition
         self.active = False
@@ -8153,7 +7567,6 @@ class NetworkSimulator:
             "connection_drops": 0,
             "bytes_transferred": 0,
         }
-
     async def simulate_message_delivery(
         self, message: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
@@ -8182,10 +7595,7 @@ class NetworkSimulator:
         self.stats["messages_received"] += 1
         self.stats["bytes_transferred"] += len(json.dumps(message).encode())
         return message
-
-
 class MockNetworkDevice:
-
     def __init__(self, device_id: str, network_simulator: NetworkSimulator):
         self.device_id = device_id
         self.network_simulator = network_simulator
@@ -8193,7 +7603,6 @@ class MockNetworkDevice:
         self.recording = False
         self.message_count = 0
         self.reconnection_attempts = 0
-
     async def connect(self, max_retries: int = 3) -> bool:
         for attempt in range(max_retries):
             try:
@@ -8222,7 +7631,6 @@ class MockNetworkDevice:
                     await asyncio.sleep(retry_delay)
         logger.error(f"Failed to connect {self.device_id} after {max_retries} attempts")
         return False
-
     async def send_status_update(self) -> bool:
         if not self.connected:
             return False
@@ -8247,7 +7655,6 @@ class MockNetworkDevice:
             )
             self.connected = False
             return await self.connect()
-
     async def start_recording(self, session_id: str) -> bool:
         if not self.connected:
             logger.error(
@@ -8277,10 +7684,7 @@ class MockNetworkDevice:
             logger.error(f"Network error while starting recording on {self.device_id}")
             self.connected = False
             return False
-
-
 class NetworkResilienceTester:
-
     def __init__(self):
         self.results: List[NetworkTestResult] = []
         self.test_conditions = [
@@ -8330,7 +7734,6 @@ class NetworkResilienceTester:
                 description="Unstable network with occasional disconnections",
             ),
         ]
-
     async def test_network_condition(
         self, condition: NetworkCondition, duration: int = 30
     ) -> NetworkTestResult:
@@ -8462,7 +7865,6 @@ class NetworkResilienceTester:
         logger.info(f"   Throughput: {data_throughput_mbps:.2f} Mbps")
         logger.info(f"   Errors: {error_count}, Drops: {connection_drops}")
         return result
-
     async def run_comprehensive_network_test(self) -> List[NetworkTestResult]:
         logger.info("🌐 Starting complete network resilience testing...")
         all_results = []
@@ -8473,8 +7875,6 @@ class NetworkResilienceTester:
             except Exception as e:
                 logger.error(f"Failed to test condition {condition.name}: {e}")
         return all_results
-
-
 async def main():
     logger.info("=" * 80)
     logger.info("🌐 NETWORK RESILIENCE TESTING SUITE - MULTI-SENSOR RECORDING SYSTEM")
@@ -8550,16 +7950,11 @@ async def main():
     except Exception as e:
         logger.error(f"Network resilience testing failed with error: {e}")
         import traceback
-
         traceback.print_exc()
         return False
-
-
 def test_network_resilience_initialization():
     tester = NetworkResilienceTester()
     assert tester is not None
-
-
 def test_network_condition_creation():
     condition = NetworkCondition(
         name="Test",
@@ -8573,8 +7968,6 @@ def test_network_condition_creation():
     assert condition is not None
     assert condition.name == "Test"
     assert condition.latency_ms == 100
-
-
 def test_network_test_result_creation():
     assert NetworkTestResult is not None
     try:
@@ -8588,38 +7981,28 @@ def test_network_test_result_creation():
         assert result.test_name == "test"
     except TypeError:
         assert True
-
-
 if __name__ == "__main__":
     success = asyncio.run(main())
     sys.exit(0 if success else 1)
-
 current_dir = os.path.dirname(__file__)
 src_dir = os.path.join(current_dir, "src")
 sys.path.insert(0, src_dir)
-
-
 class TestPythonDesktopControllerDocumentation(unittest.TestCase):
-
     def setUp(self):
         sys.modules["PyQt5"] = MagicMock()
         sys.modules["PyQt5.QtWidgets"] = MagicMock()
         sys.modules["PyQt5.QtCore"] = MagicMock()
         sys.modules["PyQt5.QtGui"] = MagicMock()
-
     def test_application_import(self):
         try:
             from application import Application
-
             self.assertTrue(hasattr(Application, "__init__"))
             print("✓ Application class imports successfully")
         except Exception as e:
             self.fail(f"Failed to import Application class: {e}")
-
     def test_session_manager_import(self):
         try:
             from session.session_manager import SessionManager
-
             self.assertTrue(hasattr(SessionManager, "__init__"))
             self.assertTrue(hasattr(SessionManager, "create_session"))
             self.assertTrue(hasattr(SessionManager, "start_recording"))
@@ -8627,40 +8010,32 @@ class TestPythonDesktopControllerDocumentation(unittest.TestCase):
             print("✓ SessionManager class imports successfully with documented methods")
         except Exception as e:
             self.fail(f"Failed to import SessionManager class: {e}")
-
     def test_device_server_import(self):
         try:
             from network.device_server import JsonSocketServer, RemoteDevice
-
             self.assertTrue(hasattr(JsonSocketServer, "__init__"))
             self.assertTrue(hasattr(RemoteDevice, "__init__"))
             print("✓ Network components import successfully")
         except Exception as e:
             self.fail(f"Failed to import network components: {e}")
-
     def test_webcam_capture_import(self):
         try:
             from webcam.webcam_capture import WebcamCapture
-
             self.assertTrue(hasattr(WebcamCapture, "__init__"))
             print("✓ WebcamCapture class imports successfully")
         except Exception as e:
             self.fail(f"Failed to import WebcamCapture class: {e}")
-
     def test_calibration_manager_import(self):
         try:
             from calibration.calibration_manager import CalibrationManager
-
             self.assertTrue(hasattr(CalibrationManager, "__init__"))
             print("✓ CalibrationManager class imports successfully")
         except Exception as e:
             self.fail(f"Failed to import CalibrationManager class: {e}")
-
     @patch("PyQt5.QtWidgets.QApplication")
     def test_application_initialization(self, mock_qapp):
         try:
             from application import Application
-
             app_simplified = Application(use_simplified_ui=True)
             self.assertIsNotNone(app_simplified)
             print("✓ Application initializes with simplified UI")
@@ -8669,11 +8044,9 @@ class TestPythonDesktopControllerDocumentation(unittest.TestCase):
             print("✓ Application initializes with enhanced UI")
         except Exception as e:
             self.fail(f"Failed to initialize Application: {e}")
-
     def test_session_manager_functionality(self):
         try:
             from session.session_manager import SessionManager
-
             self.assertTrue(SessionManager.validate_session_name("Valid_Session_Name"))
             self.assertFalse(SessionManager.validate_session_name(""))
             self.assertFalse(
@@ -8685,7 +8058,6 @@ class TestPythonDesktopControllerDocumentation(unittest.TestCase):
             print("✓ SessionManager initializes with correct directory structure")
         except Exception as e:
             self.fail(f"Failed to test SessionManager functionality: {e}")
-
     def test_file_structure_documentation(self):
         src_dir = os.path.join(os.path.dirname(__file__), "src")
         expected_files = [
@@ -8705,25 +8077,20 @@ class TestPythonDesktopControllerDocumentation(unittest.TestCase):
                 f"Documented file/directory {expected_file} does not exist",
             )
         print("✓ Documented file structure matches actual implementation")
-
     def test_gui_components_import(self):
         try:
             from gui.enhanced_ui_main_window import EnhancedMainWindow, ModernButton
-
             self.assertTrue(hasattr(EnhancedMainWindow, "__init__"))
             self.assertTrue(hasattr(ModernButton, "__init__"))
             print("✓ Enhanced UI components import successfully")
             from gui.common_components import ModernButton
-
             self.assertTrue(hasattr(ModernButton, "__init__"))
             print("✓ Common UI components import successfully")
         except Exception as e:
             self.fail(f"Failed to import GUI components: {e}")
-
     def test_logging_configuration(self):
         try:
             from utils.logging_config import AppLogger, get_logger
-
             logger = get_logger(__name__)
             self.assertIsNotNone(logger)
             print("✓ Logging configuration works as documented")
@@ -8731,8 +8098,6 @@ class TestPythonDesktopControllerDocumentation(unittest.TestCase):
             print("✓ Logger level setting works as documented")
         except Exception as e:
             self.fail(f"Failed to test logging configuration: {e}")
-
-
 def run_documentation_validation():
     print("=" * 60)
     print("Python Desktop Controller Documentation Validation")
@@ -8763,19 +8128,15 @@ def run_documentation_validation():
         print("❌ Some documentation validation tests failed!")
         print("❌ Documentation may need updates!")
         return False
-
-
 if __name__ == "__main__":
     success = run_documentation_validation()
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 try:
     from PyQt5.QtCore import Qt, QTimer
     from PyQt5.QtTest import QTest
     from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QTabWidget, QWidget
-
     PYQT_AVAILABLE = True
 except ImportError:
     PYQT_AVAILABLE = False
@@ -8786,10 +8147,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger(__name__)
-
-
 class PythonUITestSuite:
-
     def __init__(self):
         self.logger = logging.getLogger(f"{__name__}.PythonUITest")
         self.app = None
@@ -8869,7 +8227,6 @@ class PythonUITestSuite:
                 "settings_button",
             ],
         }
-
     def setUp(self):
         self.start_time = datetime.now()
         self.logger.info("Setting up Python UI test environment")
@@ -8880,7 +8237,6 @@ class PythonUITestSuite:
                 self.app = QApplication.instance()
             try:
                 from gui.enhanced_ui_main_window import EnhancedMainWindow
-
                 self.main_window = EnhancedMainWindow()
                 self.main_window.show()
                 self.app.processEvents()
@@ -8892,12 +8248,10 @@ class PythonUITestSuite:
                 return self._setup_simulation_mode()
         else:
             return self._setup_simulation_mode()
-
     def _setup_simulation_mode(self):
         self.logger.info("Setting up simulation mode")
         self.main_window = Mock()
         return True
-
     def run_complete_ui_test(self) -> Dict[str, Any]:
         self.start_time = datetime.now()
         self.logger.info("=" * 60)
@@ -8957,7 +8311,6 @@ class PythonUITestSuite:
         self.logger.info("PYTHON UI INTEGRATION TEST COMPLETED")
         self.logger.info("=" * 60)
         return results
-
     def _test_tab_navigation(self) -> Dict[str, Any]:
         results = {"overall_success": True, "tab_results": {}}
         for tab_name in self.ui_structure["tabs"].keys():
@@ -8989,7 +8342,6 @@ class PythonUITestSuite:
                 results["overall_success"] = False
             results["tab_results"][tab_name] = tab_result
         return results
-
     def _test_button_interactions(self) -> Dict[str, Any]:
         results = {"overall_success": True, "tab_button_results": {}}
         for tab_name, tab_info in self.ui_structure["tabs"].items():
@@ -9008,7 +8360,6 @@ class PythonUITestSuite:
                     results["overall_success"] = False
             results["tab_button_results"][tab_name] = tab_button_results
         return results
-
     def _test_single_button(self, button_name: str, tab_name: str) -> Dict[str, Any]:
         result = {
             "button_name": button_name,
@@ -9039,7 +8390,6 @@ class PythonUITestSuite:
             self.logger.error(f"❌ Button {button_name} in {tab_name} failed: {e}")
             result["error"] = str(e)
         return result
-
     def _test_navigation_flows(self) -> Dict[str, Any]:
         results = {"overall_success": True, "flow_results": {}}
         navigation_sequences = [
@@ -9093,7 +8443,6 @@ class PythonUITestSuite:
                 results["overall_success"] = False
             results["flow_results"][sequence_name] = flow_result
         return results
-
     def _test_menu_functionality(self) -> Dict[str, Any]:
         results = {"overall_success": True, "menu_results": {}}
         for menu_name in self.ui_structure["menu_items"]:
@@ -9123,7 +8472,6 @@ class PythonUITestSuite:
                 results["overall_success"] = False
             results["menu_results"][menu_name] = menu_result
         return results
-
     def _test_status_indicators(self) -> Dict[str, Any]:
         results = {"overall_success": True, "indicator_results": {}}
         for tab_name, tab_info in self.ui_structure["tabs"].items():
@@ -9164,7 +8512,6 @@ class PythonUITestSuite:
                 indicator_key = f"{tab_name}_{indicator_name}"
                 results["indicator_results"][indicator_key] = indicator_result
         return results
-
     def _navigate_to_tab(self, tab_name: str) -> bool:
         try:
             if not PYQT_AVAILABLE or not self.main_window:
@@ -9182,7 +8529,6 @@ class PythonUITestSuite:
         except Exception as e:
             self.logger.error(f"Failed to navigate to tab {tab_name}: {e}")
             return False
-
     def _click_button(self, button_name: str) -> bool:
         try:
             if not PYQT_AVAILABLE or not self.main_window:
@@ -9199,7 +8545,6 @@ class PythonUITestSuite:
         except Exception as e:
             self.logger.error(f"Failed to click button {button_name}: {e}")
             return False
-
     def _test_menu(self, menu_name: str) -> bool:
         try:
             if not PYQT_AVAILABLE or not self.main_window:
@@ -9213,7 +8558,6 @@ class PythonUITestSuite:
         except Exception as e:
             self.logger.error(f"Failed to test menu {menu_name}: {e}")
             return False
-
     def _check_indicator_visibility(self, indicator_name: str) -> bool:
         try:
             if not PYQT_AVAILABLE or not self.main_window:
@@ -9225,7 +8569,6 @@ class PythonUITestSuite:
         except Exception as e:
             self.logger.error(f"Failed to check indicator {indicator_name}: {e}")
             return False
-
     def _find_widget(self, widget_type):
         try:
             if not PYQT_AVAILABLE or not self.main_window:
@@ -9234,7 +8577,6 @@ class PythonUITestSuite:
         except Exception as e:
             self.logger.error(f"Failed to find widget of type {widget_type}: {e}")
             return None
-
     def _generate_test_summary(self, results: Dict[str, Any]):
         total_tests = 0
         passed_tests = 0
@@ -9284,7 +8626,6 @@ class PythonUITestSuite:
         self.logger.info(f"PyQt Available: {PYQT_AVAILABLE}")
         self.logger.info(f"Simulation Mode: {not PYQT_AVAILABLE}")
         self.logger.info("=" * 50)
-
     def _save_test_results(self, results: Dict[str, Any]):
         try:
             results_dir = Path("test_results")
@@ -9300,7 +8641,6 @@ class PythonUITestSuite:
             self.logger.info(f"Test results saved to: {results_file}")
         except Exception as e:
             self.logger.error(f"Failed to save test results: {e}")
-
     def tearDown(self):
         try:
             if PYQT_AVAILABLE and self.main_window:
@@ -9308,8 +8648,6 @@ class PythonUITestSuite:
             self.logger.info("Test environment cleaned up")
         except Exception as e:
             self.logger.error(f"Error during teardown: {e}")
-
-
 def run_python_ui_integration_test() -> Dict[str, Any]:
     logger.info("=" * 80)
     logger.info("PYTHON UI INTEGRATION TEST - Multi-Sensor Recording System")
@@ -9330,22 +8668,16 @@ def run_python_ui_integration_test() -> Dict[str, Any]:
         logger.info(f"Success Rate: {summary.get('success_rate', 0):.1f}%")
     logger.info("=" * 80)
     return results
-
-
 if __name__ == "__main__":
     results = run_python_ui_integration_test()
     sys.exit(0 if results.get("overall_success", False) else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
-
-
 def test_shimmer_manager_implementation():
     print("=" * 60)
     print("Testing Implemented Shimmer Manager Functionality")
     print("=" * 60)
     try:
         from shimmer_manager import ShimmerManager
-
         print("\n1. Creating ShimmerManager...")
         with patch("shimmer_manager.AndroidDeviceManager") as mock_android_manager:
             manager = ShimmerManager(enable_android_integration=False)
@@ -9372,7 +8704,6 @@ def test_shimmer_manager_implementation():
                 mock_device.connect.return_value = True
                 mock_shimmer.return_value = mock_device
                 from shimmer_manager import ConnectionType
-
                 result = manager._connect_single_device(
                     "00:06:66:66:66:66", ConnectionType.DIRECT_BLUETOOTH
                 )
@@ -9386,7 +8717,6 @@ def test_shimmer_manager_implementation():
         port = manager._find_serial_port_for_device("00:06:66:66:66:66")
         print(f"✓ Serial port finding implemented (returned: {port})")
         from shimmer_manager import DeviceConfiguration
-
         config = DeviceConfiguration(
             device_id="test",
             mac_address="00:06:66:66:66:66",
@@ -9423,11 +8753,8 @@ def test_shimmer_manager_implementation():
     except Exception as e:
         print(f"Test failed with exception: {e}")
         import traceback
-
         traceback.print_exc()
         return False
-
-
 if __name__ == "__main__":
     try:
         success = test_shimmer_manager_implementation()
@@ -9435,15 +8762,10 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Test failed with exception: {e}")
         import traceback
-
         traceback.print_exc()
         sys.exit(1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
-
-
 class MockAndroidDevice:
-
     def __init__(
         self, device_id: str, server_host: str = "localhost", server_port: int = 9000
     ):
@@ -9453,7 +8775,6 @@ class MockAndroidDevice:
         self.socket = None
         self.is_connected = False
         self.is_running = False
-
     def connect(self) -> bool:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -9468,21 +8789,17 @@ class MockAndroidDevice:
         except Exception as e:
             print(f"Failed to connect mock device {self.device_id}: {e}")
             return False
-
     def start_simulation(self):
         self.is_running = True
         thread = threading.Thread(target=self._simulation_loop, daemon=True)
         thread.start()
-
     def stop_simulation(self):
         self.is_running = False
-
     def disconnect(self):
         self.is_running = False
         self.is_connected = False
         if self.socket:
             self.socket.close()
-
     def _send_message(self, message):
         if not self.socket or not self.is_connected:
             return
@@ -9493,7 +8810,6 @@ class MockAndroidDevice:
             self.socket.sendall(length_header + json_bytes)
         except Exception as e:
             print(f"Error sending message from {self.device_id}: {e}")
-
     def _simulation_loop(self):
         sample_count = 0
         while self.is_running and self.is_connected:
@@ -9522,24 +8838,18 @@ class MockAndroidDevice:
             except Exception as e:
                 print(f"Error in simulation loop for {self.device_id}: {e}")
                 break
-
-
 def test_pc_server():
     print("=== Testing PC Server ===")
     messages_received = []
     devices_connected = []
-
     def on_message(device_id, message):
         messages_received.append((device_id, message.type))
         print(f"Received {message.type} from {device_id}")
-
     def on_device_connected(device_id, device):
         devices_connected.append(device_id)
         print(f"Device connected: {device_id} with capabilities: {device.capabilities}")
-
     def on_device_disconnected(device_id):
         print(f"Device disconnected: {device_id}")
-
     server = PCServer(port=9001)
     server.add_message_callback(on_message)
     server.add_device_callback(on_device_connected)
@@ -9571,22 +8881,17 @@ def test_pc_server():
         return True
     finally:
         server.stop()
-
-
 def test_android_device_manager():
     print("\n=== Testing Android Device Manager ===")
     data_samples_received = []
     status_updates = []
-
     def on_data(sample):
         data_samples_received.append(sample)
         if len(data_samples_received) % 10 == 0:
             print(f"Received {len(data_samples_received)} data samples")
-
     def on_status(device_id, device):
         status_updates.append((device_id, device))
         print(f"Status update from {device_id}")
-
     manager = AndroidDeviceManager(server_port=9002)
     manager.add_data_callback(on_data)
     manager.add_status_callback(on_status)
@@ -9620,22 +8925,17 @@ def test_android_device_manager():
         return True
     finally:
         manager.shutdown()
-
-
 def test_shimmer_manager():
     print("\n=== Testing Enhanced Shimmer Manager ===")
     shimmer_samples = []
     status_updates = []
-
     def on_shimmer_data(sample):
         shimmer_samples.append(sample)
         if len(shimmer_samples) % 10 == 0:
             print(f"Received {len(shimmer_samples)} Shimmer samples")
-
     def on_status_update(device_id, status):
         status_updates.append((device_id, status))
         print(f"Status update: {device_id} - {status.device_state.value}")
-
     manager = ShimmerManager(enable_android_integration=True)
     manager.android_server_port = 9003
     manager.add_data_callback(on_shimmer_data)
@@ -9686,8 +8986,6 @@ def test_shimmer_manager():
         return True
     finally:
         manager.cleanup()
-
-
 def test_integration():
     print("🧪 Starting Shimmer PC Integration Tests\n")
     logging.basicConfig(
@@ -9722,25 +9020,17 @@ def test_integration():
     else:
         print(f"\n⚠️  Some tests failed. Please check the implementation.")
         return False
-
-
 if __name__ == "__main__":
     success = test_integration()
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
-
-
 class TestLoggingComprehensive(unittest.TestCase):
-
     def setUp(self):
         self.logger = get_logger("TestLoggingComprehensive")
         AppLogger.set_level("DEBUG")
-
     def test_logger_manager_functionality(self):
         self.logger.info("Testing LoggerManager functionality")
         from utils.logger import LogLevel, get_logger_manager
-
         logger_manager = get_logger_manager()
         self.assertIsNotNone(logger_manager, "Logger manager should be created")
         test_logger = logger_manager.get_logger("test_module")
@@ -9761,10 +9051,8 @@ class TestLoggingComprehensive(unittest.TestCase):
         logger_manager.log_calibration_event(
             "calibration_started", camera_id=0, calibration_type="intrinsic"
         )
-
     def test_log_levels_enum(self):
         from utils.logger import LogLevel
-
         levels = [
             LogLevel.DEBUG,
             LogLevel.INFO,
@@ -9778,7 +9066,6 @@ class TestLoggingComprehensive(unittest.TestCase):
         self.assertEqual(LogLevel.WARNING.value, "WARNING")
         self.assertEqual(LogLevel.ERROR.value, "ERROR")
         self.assertEqual(LogLevel.CRITICAL.value, "CRITICAL")
-
     def test_convenience_logging_functions(self):
         from utils.logger import (
             log_critical,
@@ -9787,47 +9074,35 @@ class TestLoggingComprehensive(unittest.TestCase):
             log_info,
             log_warning,
         )
-
         log_debug("test_logger", "Debug message", test_data="debug")
         log_info("test_logger", "Info message", test_data="info")
         log_warning("test_logger", "Warning message", test_data="warning")
         log_error("test_logger", "Error message", test_data="error")
         log_critical("test_logger", "Critical message", test_data="critical")
-
     def test_performance_decorators(self):
         from utils.logging_config import log_function_entry, performance_timer
-
         @performance_timer("test_function")
         def test_function():
             import time
-
             time.sleep(0.01)
             return "success"
-
         result = test_function()
         self.assertEqual(result, "success")
-
         @log_function_entry
         def test_function_entry(arg1, arg2="default"):
             return f"{arg1}_{arg2}"
-
         result = test_function_entry("test", arg2="value")
         self.assertEqual(result, "test_value")
-
     def test_memory_usage_monitoring(self):
         from utils.logging_config import log_memory_usage
-
         @log_memory_usage("memory_test")
         def memory_intensive_function():
             data = [i for i in range(1000)]
             return len(data)
-
         result = memory_intensive_function()
         self.assertEqual(result, 1000)
-
     def test_exception_context_logging(self):
         from utils.logging_config import log_exception_context
-
         with log_exception_context("test_operation"):
             result = 2 + 2
         self.assertEqual(result, 4)
@@ -9836,13 +9111,10 @@ class TestLoggingComprehensive(unittest.TestCase):
                 raise ValueError("Test exception")
         except ValueError as e:
             self.assertEqual(str(e), "Test exception")
-
     def test_structured_formatter(self):
         import json
         import logging
-
         from utils.logging_config import StructuredFormatter
-
         logger = logging.getLogger("test")
         record = logger.makeRecord(
             name="test",
@@ -9864,7 +9136,6 @@ class TestLoggingComprehensive(unittest.TestCase):
             self.assertEqual(log_data["message"], "Test message")
         except json.JSONDecodeError:
             self.fail("Formatted log should be valid JSON")
-
     def test_app_logger_initialization(self):
         log_dir = AppLogger.get_log_dir()
         self.assertIsNotNone(log_dir, "Log directory should be set")
@@ -9876,17 +9147,13 @@ class TestLoggingComprehensive(unittest.TestCase):
         timer_id = AppLogger.start_performance_timer("test_timer", "unit_test")
         self.assertIsNotNone(timer_id)
         import time
-
         time.sleep(0.01)
         duration = AppLogger.end_performance_timer(timer_id, "TestLoggingComprehensive")
         self.assertGreater(duration, 0)
         self.assertLess(duration, 1.0)
-
     def test_log_cleanup_functionality(self):
         from datetime import datetime, timedelta
-
         from utils.logger import get_logger_manager
-
         logger_manager = get_logger_manager()
         start_date = datetime.now() - timedelta(days=1)
         end_date = datetime.now() + timedelta(days=1)
@@ -9903,10 +9170,7 @@ class TestLoggingComprehensive(unittest.TestCase):
             self.assertIn("errors", cleanup_report)
         except Exception:
             pass
-
-
 class TestLaunchScriptLogic(unittest.TestCase):
-
     def test_argument_parsing_logic(self):
         test_cases = [
             ("0,1", [0, 1]),
@@ -9936,7 +9200,6 @@ class TestLaunchScriptLogic(unittest.TestCase):
                 self.fail(f"Should not parse invalid camera string: {invalid_str}")
             except ValueError:
                 pass
-
     def test_resolution_parsing_logic(self):
         resolution_cases = [
             ("3840x2160", (3840, 2160)),
@@ -9963,7 +9226,6 @@ class TestLaunchScriptLogic(unittest.TestCase):
                 self.fail(f"Should not parse invalid resolution: {invalid_res}")
             except ValueError:
                 pass
-
     def test_camera_settings_structure(self):
         camera_indices = [0, 1]
         width, height = (1920, 1080)
@@ -9988,8 +9250,6 @@ class TestLaunchScriptLogic(unittest.TestCase):
         self.assertGreater(camera_settings["width"], 0)
         self.assertGreater(camera_settings["height"], 0)
         self.assertGreater(camera_settings["fps"], 0)
-
-
 def run_simplified_tests():
     logger = get_logger("SimplifiedTestRunner")
     logger.info("=== Running Simplified Dual Webcam Integration Tests ===")
@@ -10006,27 +9266,20 @@ def run_simplified_tests():
             f"✗ {len(result.failures)} test(s) failed, {len(result.errors)} error(s)"
         )
         return 1
-
-
 if __name__ == "__main__":
     exit_code = run_simplified_tests()
     sys.exit(exit_code)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 try:
     from gui.enhanced_stimulus_controller import (
         VLC_AVAILABLE,
         EnhancedStimulusController,
     )
-
     ENHANCED_AVAILABLE = True
 except ImportError:
     ENHANCED_AVAILABLE = False
     VLC_AVAILABLE = False
-
-
 class ComprehensiveVideoTestSuite:
-
     def __init__(self):
         self.app = QApplication.instance() or QApplication(sys.argv)
         self.test_results = []
@@ -10038,7 +9291,6 @@ class ComprehensiveVideoTestSuite:
         print(f"[DEBUG_LOG] Found {len(self.sample_videos)} test videos")
         print(f"[DEBUG_LOG] Enhanced controller available: {ENHANCED_AVAILABLE}")
         print(f"[DEBUG_LOG] VLC backend available: {VLC_AVAILABLE}")
-
     def discover_test_videos(self):
         videos = []
         if not self.test_videos_dir.exists():
@@ -10075,7 +9327,6 @@ class ComprehensiveVideoTestSuite:
                     }
                 )
         return videos
-
     def test_basic_video_loading(self):
         print("\n[DEBUG_LOG] Testing basic video loading...")
         passed = 0
@@ -10099,7 +9350,6 @@ class ComprehensiveVideoTestSuite:
                 self.add_result(f"✗ Basic loading error: {video['name']} - {str(e)}")
         self.add_result(f"Basic video loading: {passed}/{total} passed")
         return (passed, total)
-
     def test_enhanced_video_loading(self):
         if not ENHANCED_AVAILABLE:
             self.add_result(
@@ -10133,7 +9383,6 @@ class ComprehensiveVideoTestSuite:
                 self.add_result(f"✗ Enhanced loading error: {video['name']} - {str(e)}")
         self.add_result(f"Enhanced video loading: {passed}/{total} passed")
         return (passed, total)
-
     def test_format_compatibility(self):
         print("\n[DEBUG_LOG] Testing format compatibility...")
         format_results = {}
@@ -10160,7 +9409,6 @@ class ComprehensiveVideoTestSuite:
                 f"Format {format_name}: {results['passed']}/{results['total']} ({success_rate:.1f}%)"
             )
         return format_results
-
     def test_backend_comparison(self):
         if not ENHANCED_AVAILABLE or not VLC_AVAILABLE:
             self.add_result("! VLC backend not available - skipping backend comparison")
@@ -10175,7 +9423,6 @@ class ComprehensiveVideoTestSuite:
             try:
                 if hasattr(self.enhanced_controller, "_load_with_backend"):
                     from gui.enhanced_stimulus_controller import VideoBackend
-
                     success = self.enhanced_controller._load_with_backend(
                         video["path"], VideoBackend.QT_MULTIMEDIA
                     )
@@ -10187,7 +9434,6 @@ class ComprehensiveVideoTestSuite:
             try:
                 if hasattr(self.enhanced_controller, "_load_with_backend"):
                     from gui.enhanced_stimulus_controller import VideoBackend
-
                     success = self.enhanced_controller._load_with_backend(
                         video["path"], VideoBackend.VLC
                     )
@@ -10212,7 +9458,6 @@ class ComprehensiveVideoTestSuite:
             f"VLC backend: {vlc_results['passed']}/{vlc_results['total']} ({vlc_rate:.1f}%)"
         )
         return (qt_results, vlc_results)
-
     def test_error_handling(self):
         print("\n[DEBUG_LOG] Testing error handling...")
         error_tests = 0
@@ -10235,7 +9480,6 @@ class ComprehensiveVideoTestSuite:
             f"Error handling: {handled_errors}/{error_tests} handled correctly"
         )
         return (handled_errors, error_tests)
-
     def test_timing_accuracy(self):
         print("\n[DEBUG_LOG] Testing timing accuracy...")
         timing_video = None
@@ -10276,7 +9520,6 @@ class ComprehensiveVideoTestSuite:
         except Exception as e:
             self.add_result(f"✗ Timing accuracy test failed: {str(e)}")
         return False
-
     def test_performance_metrics(self):
         print("\n[DEBUG_LOG] Testing performance metrics...")
         performance_results = []
@@ -10315,11 +9558,9 @@ class ComprehensiveVideoTestSuite:
                 avg_time = sum(times) / len(times)
                 self.add_result(f"Format {fmt}: Average load time {avg_time:.1f}ms")
         return performance_results
-
     def add_result(self, message):
         self.test_results.append(message)
         print(f"[DEBUG_LOG] {message}")
-
     def run_all_tests(self):
         print("[DEBUG_LOG] Starting complete Video Test Suite")
         print("=" * 60)
@@ -10352,8 +9593,6 @@ class ComprehensiveVideoTestSuite:
             f"VLC backend: {('Available' if VLC_AVAILABLE else 'Not Available')}"
         )
         return self.test_results
-
-
 def main():
     print("[DEBUG_LOG] complete Video Testing Suite")
     test_suite = ComprehensiveVideoTestSuite()
@@ -10371,16 +9610,12 @@ def main():
     print(f"\n[DEBUG_LOG] Test results saved to: {results_file}")
     print("[DEBUG_LOG] complete video testing completed!")
     return True
-
-
 if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)
-
 try:
     import cv2
     import numpy as np
-
     CV2_AVAILABLE = True
     print("[DEBUG_LOG] OpenCV available for video creation")
 except ImportError:
@@ -10388,16 +9623,12 @@ except ImportError:
     print("[DEBUG_LOG] OpenCV not available - limited video creation capabilities")
 try:
     import requests
-
     REQUESTS_AVAILABLE = True
     print("[DEBUG_LOG] Requests available for downloading sample videos")
 except ImportError:
     REQUESTS_AVAILABLE = False
     print("[DEBUG_LOG] Requests not available - cannot download external samples")
-
-
 class TestVideoCreator:
-
     def __init__(self, output_dir: str = "PythonApp/test_videos"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -10446,7 +9677,6 @@ class TestVideoCreator:
         }
         self.created_videos = []
         self.video_manifest = {}
-
     def create_test_video(self, name: str, spec: Dict, format_name: str) -> bool:
         if not CV2_AVAILABLE:
             print(f"[DEBUG_LOG] Cannot create {name} - OpenCV not available")
@@ -10490,7 +9720,6 @@ class TestVideoCreator:
         except Exception as e:
             print(f"[DEBUG_LOG] Error creating {name}: {e}")
             return False
-
     def create_test_frame(
         self, frame_num: int, total_frames: int, spec: Dict
     ) -> np.ndarray:
@@ -10572,7 +9801,6 @@ class TestVideoCreator:
             for y in range(0, height, grid_size):
                 cv2.line(frame, (0, y), (width, y), (50, 50, 50), 1)
         return frame
-
     def download_sample_videos(self) -> bool:
         if not REQUESTS_AVAILABLE:
             print(
@@ -10613,7 +9841,6 @@ class TestVideoCreator:
             except Exception as e:
                 print(f"[DEBUG_LOG] Failed to download {name}: {e}")
         return success_count > 0
-
     def create_problematic_videos(self) -> bool:
         if not CV2_AVAILABLE:
             return False
@@ -10642,7 +9869,6 @@ class TestVideoCreator:
         except Exception as e:
             print(f"[DEBUG_LOG] Error creating problematic videos: {e}")
             return False
-
     def save_manifest(self):
         manifest_path = self.output_dir / "video_manifest.json"
         manifest_data = {
@@ -10655,7 +9881,6 @@ class TestVideoCreator:
         with open(manifest_path, "w") as f:
             json.dump(manifest_data, f, indent=2)
         print(f"[DEBUG_LOG] Saved video manifest: {manifest_path}")
-
     def create_all_test_videos(self) -> bool:
         print("[DEBUG_LOG] Starting thorough test video creation...")
         total_created = 0
@@ -10675,8 +9900,6 @@ class TestVideoCreator:
         )
         print(f"[DEBUG_LOG] Total videos available: {len(self.created_videos)}")
         return total_created > 0
-
-
 def main():
     print("[DEBUG_LOG] Test Video Creation Script")
     print("=" * 50)
@@ -10705,18 +9928,12 @@ def main():
         print("\n[DEBUG_LOG] Test video creation failed!")
         print("[DEBUG_LOG] Check dependencies and try again")
     return success
-
-
 if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)
-
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 logger = logging.getLogger(__name__)
-
-
 class FakeAndroidDevice:
-
     def __init__(
         self,
         device_id: str = "fake_device_001",
@@ -10741,7 +9958,6 @@ class FakeAndroidDevice:
         self.on_connected: Optional[Callable[[], None]] = None
         self.on_disconnected: Optional[Callable[[], None]] = None
         logger.info(f"Initialized fake device {device_id}")
-
     def connect(self, timeout: float = 10.0) -> bool:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -10764,7 +9980,6 @@ class FakeAndroidDevice:
             logger.error(f"Failed to connect fake device: {e}")
             self.connected = False
             return False
-
     def disconnect(self) -> None:
         self.running = False
         self.recording = False
@@ -10778,7 +9993,6 @@ class FakeAndroidDevice:
         if self.on_disconnected:
             self.on_disconnected()
         logger.info(f"Fake device {self.device_id} disconnected")
-
     def _message_handler(self) -> None:
         while self.running and self.connected:
             try:
@@ -10800,7 +10014,6 @@ class FakeAndroidDevice:
                 logger.error(f"Error in message handler: {e}")
                 break
         self.disconnect()
-
     def _recv_exact(self, length: int) -> Optional[bytes]:
         if not self.socket:
             return None
@@ -10816,7 +10029,6 @@ class FakeAndroidDevice:
             except Exception:
                 return None
         return data
-
     def _handle_message(self, message: Dict[str, Any]) -> None:
         message_type = message.get("type")
         if self.on_command_received:
@@ -10829,7 +10041,6 @@ class FakeAndroidDevice:
             self._handle_calibration_start(message)
         else:
             logger.info(f"Received message type: {message_type}")
-
     def _handle_start_record(self, message: Dict[str, Any]) -> None:
         self.session_id = message.get("session_id")
         self.recording = True
@@ -10845,7 +10056,6 @@ class FakeAndroidDevice:
         self.preview_thread.start()
         threading.Timer(2.0, self._send_file_chunks).start()
         logger.info(f"Started recording session: {self.session_id}")
-
     def _handle_stop_record(self, message: Dict[str, Any]) -> None:
         self.recording = False
         ack_msg = create_message(
@@ -10854,11 +10064,9 @@ class FakeAndroidDevice:
         self._send_message(ack_msg)
         logger.info(f"Stopped recording session: {self.session_id}")
         self.session_id = None
-
     def _handle_calibration_start(self, message: Dict[str, Any]) -> None:
         threading.Timer(1.0, self._send_calibration_result).start()
         logger.info("Started calibration process")
-
     def _send_preview_frames(self) -> None:
         while self.recording and self.connected:
             try:
@@ -10876,7 +10084,6 @@ class FakeAndroidDevice:
             except Exception as e:
                 logger.error(f"Error sending preview frame: {e}")
                 break
-
     def _send_file_chunks(self) -> None:
         if not self.recording:
             return
@@ -10900,7 +10107,6 @@ class FakeAndroidDevice:
             self._send_message(chunk_msg)
             time.sleep(0.5)
         logger.info(f"Completed sending file chunks for {file_id}")
-
     def _send_calibration_result(self) -> None:
         result_msg = create_message(
             "calibration_result",
@@ -10911,7 +10117,6 @@ class FakeAndroidDevice:
         )
         self._send_message(result_msg)
         logger.info("Sent calibration result")
-
     def _send_device_status(self) -> None:
         status = "recording" if self.recording else "idle"
         status_msg = create_message(
@@ -10922,7 +10127,6 @@ class FakeAndroidDevice:
             storage_available=self.storage_available,
         )
         self._send_message(status_msg)
-
     def _generate_fake_image(self) -> str:
         fake_data = (
             b"\xff\xd8\xff\xe0"
@@ -10931,7 +10135,6 @@ class FakeAndroidDevice:
             + b"\xff\xd9"
         )
         return base64.b64encode(fake_data).decode()
-
     def _send_message(self, message: Dict[str, Any]) -> bool:
         if not self.connected or not self.socket:
             return False
@@ -10947,59 +10150,45 @@ class FakeAndroidDevice:
         except Exception as e:
             logger.error(f"Failed to send message: {e}")
             return False
-
     def simulate_battery_drain(self) -> None:
         if self.battery_level > 10:
             self.battery_level -= random.uniform(0.1, 0.5)
             self._send_device_status()
-
     def simulate_storage_usage(self) -> None:
         if self.recording and self.storage_available > 100:
             self.storage_available -= random.uniform(1, 5)
             self._send_device_status()
-
-
 class FakeDeviceManager:
-
     def __init__(self):
         self.devices: List[FakeAndroidDevice] = []
         self.running = False
-
     def add_device(
         self, device_id: str, host: Optional[str] = None, port: Optional[int] = None
     ) -> FakeAndroidDevice:
         device = FakeAndroidDevice(device_id, host, port)
         self.devices.append(device)
         return device
-
     def connect_all(self) -> int:
         connected_count = 0
         for device in self.devices:
             if device.connect():
                 connected_count += 1
         return connected_count
-
     def disconnect_all(self) -> None:
         for device in self.devices:
             device.disconnect()
-
     def start_recording_all(self, session_id: str) -> None:
         start_msg = create_message("start_record", session_id=session_id)
         for device in self.devices:
             if device.connected:
                 device._send_message(start_msg)
-
     def stop_recording_all(self, session_id: str) -> None:
         stop_msg = create_message("stop_record", session_id=session_id)
         for device in self.devices:
             if device.connected:
                 device._send_message(stop_msg)
-
-
 def create_test_device(device_id: str = "test_device") -> FakeAndroidDevice:
     return FakeAndroidDevice(device_id)
-
-
 def run_basic_test() -> bool:
     device = create_test_device()
     try:
@@ -11013,8 +10202,6 @@ def run_basic_test() -> bool:
     except Exception as e:
         logger.error(f"Basic test failed: {e}")
         return False
-
-
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
@@ -11022,16 +10209,12 @@ if __name__ == "__main__":
     )
     success = run_basic_test()
     exit(0 if success else 1)
-
 try:
     import cv2
     import numpy as np
-
     CV2_AVAILABLE = True
 except ImportError:
     CV2_AVAILABLE = False
-
-
 def create_quick_test_video(filename, duration=3, fps=30, resolution=(640, 480)):
     if not CV2_AVAILABLE:
         print(f"[DEBUG_LOG] Cannot create {filename} - OpenCV not available")
@@ -11097,8 +10280,6 @@ def create_quick_test_video(filename, duration=3, fps=30, resolution=(640, 480))
     except Exception as e:
         print(f"[DEBUG_LOG] Error creating {filename}: {e}")
         return False
-
-
 def create_problematic_video(filename):
     try:
         Path(filename).touch()
@@ -11107,8 +10288,6 @@ def create_problematic_video(filename):
     except Exception as e:
         print(f"[DEBUG_LOG] Error creating problematic video: {e}")
         return False
-
-
 def main():
     print("[DEBUG_LOG] Quick Test Video Generation")
     print("=" * 40)
@@ -11148,12 +10327,9 @@ def main():
             size = Path(video).stat().st_size
             print(f"[DEBUG_LOG] - {Path(video).name} ({size} bytes)")
     return len(created_videos) > 0
-
-
 if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -11164,10 +10340,7 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
 class AllFullTestSuitesOrchestrator:
-
     def __init__(self):
         self.test_suites = [
             {
@@ -11204,7 +10377,6 @@ class AllFullTestSuitesOrchestrator:
         self.results = {}
         self.start_time = None
         self.end_time = None
-
     async def run_all_test_suites(self, parallel: bool = False) -> Dict[str, Any]:
         self.start_time = datetime.now()
         logger.info("=" * 80)
@@ -11267,7 +10439,6 @@ class AllFullTestSuitesOrchestrator:
             logger.info("ALL FULL TEST SUITES COMPLETED")
             logger.info("=" * 80)
         return overall_results
-
     async def _run_test_suite(self, suite_info: Dict[str, str]) -> Dict[str, Any]:
         result = {
             "suite_name": suite_info["name"],
@@ -11309,7 +10480,6 @@ class AllFullTestSuitesOrchestrator:
             result["error"] = str(e)
             logger.error(f"❌ {suite_info['name']} failed with exception: {e}")
         return result
-
     def _generate_comprehensive_summary(self, results: Dict[str, Any]):
         summary = {
             "total_suites": len(self.test_suites),
@@ -11350,7 +10520,6 @@ class AllFullTestSuitesOrchestrator:
             duration = breakdown["duration"]
             logger.info(f"{status} - {breakdown['name']} ({duration:.1f}s)")
         logger.info("=" * 60)
-
     async def _save_comprehensive_results(self, results: Dict[str, Any]):
         try:
             results_dir = Path("test_results")
@@ -11364,7 +10533,6 @@ class AllFullTestSuitesOrchestrator:
             await self._generate_comprehensive_markdown_report(summary_file, results)
         except Exception as e:
             logger.error(f"Failed to save complete results: {e}")
-
     async def _generate_comprehensive_markdown_report(
         self, file_path: Path, results: Dict[str, Any]
     ):
@@ -11444,8 +10612,6 @@ class AllFullTestSuitesOrchestrator:
             logger.info(f"complete markdown report saved to: {file_path}")
         except Exception as e:
             logger.error(f"Failed to generate complete markdown report: {e}")
-
-
 async def main():
     print("=" * 80)
     print("ALL FULL TEST SUITES ORCHESTRATOR - Multi-Sensor Recording System")
@@ -11473,13 +10639,9 @@ async def main():
         print(f"Total Duration: {summary.get('total_duration', 0):.1f} seconds")
     print("=" * 80)
     return results
-
-
 if __name__ == "__main__":
     results = asyncio.run(main())
     sys.exit(0 if results.get("overall_success", False) else 1)
-
-
 def check_file_content(file_path, expected_patterns):
     if not os.path.exists(file_path):
         return (False, f"File not found: {file_path}")
@@ -11492,8 +10654,6 @@ def check_file_content(file_path, expected_patterns):
     if missing_patterns:
         return (False, f"Missing patterns: {missing_patterns}")
     return (True, "All patterns found")
-
-
 def test_main_ui_state_fixes():
     file_path = "AndroidApp/src/main/java/com/multisensor/recording/ui/MainUiState.kt"
     expected_patterns = {
@@ -11503,8 +10663,6 @@ def test_main_ui_state_fixes():
     }
     success, message = check_file_content(file_path, expected_patterns)
     assert success, message
-
-
 def test_main_view_model_fixes():
     file_path = "AndroidApp/src/main/java/com/multisensor/recording/ui/MainViewModel.kt"
     expected_patterns = {
@@ -11515,8 +10673,6 @@ def test_main_view_model_fixes():
     }
     success, message = check_file_content(file_path, expected_patterns)
     assert success, message
-
-
 def test_main_activity_fixes():
     file_path = "AndroidApp/src/main/java/com/multisensor/recording/MainActivity.kt"
     expected_patterns = {
@@ -11526,8 +10682,6 @@ def test_main_activity_fixes():
     }
     success, message = check_file_content(file_path, expected_patterns)
     assert success, message
-
-
 def run_all_tests():
     print("🧪 Testing Button Functionality Fixes")
     print("=" * 50)
@@ -11556,8 +10710,6 @@ def run_all_tests():
     else:
         print("⚠️  Some tests failed. Button functionality may still have issues.")
         return False
-
-
 if __name__ == "__main__":
     if os.path.exists("AndroidApp"):
         success = run_all_tests()
@@ -11565,13 +10717,9 @@ if __name__ == "__main__":
     else:
         print("❌ Error: Run this script from the repository root directory")
         exit(1)
-
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 logger = logging.getLogger(__name__)
-
-
 class CalibrationTestData:
-
     def __init__(self):
         self.config = get_calibration_config()
         self.pattern_size = (
@@ -11580,7 +10728,6 @@ class CalibrationTestData:
         )
         self.square_size = self.config.get("square_size_m", 0.0245)
         self.error_threshold = get_calibration_error_threshold()
-
     def generate_object_points(self) -> np.ndarray:
         objp = np.zeros((self.pattern_size[0] * self.pattern_size[1], 3), np.float32)
         objp[:, :2] = np.mgrid[
@@ -11588,7 +10735,6 @@ class CalibrationTestData:
         ].T.reshape(-1, 2)
         objp *= self.square_size
         return objp
-
     def generate_synthetic_image_points(self, num_images: int = 15) -> List[np.ndarray]:
         camera_matrix = np.array(
             [[800, 0, 320], [0, 800, 240], [0, 0, 1]], dtype=np.float32
@@ -11605,7 +10751,6 @@ class CalibrationTestData:
             imgpts += noise
             image_points.append(imgpts.astype(np.float32))
         return image_points
-
     def load_real_calibration_data(
         self, data_dir: str
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
@@ -11629,14 +10774,10 @@ class CalibrationTestData:
                     )
         logger.info(f"Loaded {len(image_points)} calibration images from {data_dir}")
         return (object_points, image_points)
-
-
 class CalibrationTester:
-
     def __init__(self):
         self.test_data = CalibrationTestData()
         self.image_size = (640, 480)
-
     def run_calibration(
         self, object_points: List[np.ndarray], image_points: List[np.ndarray]
     ) -> Tuple[float, np.ndarray, np.ndarray]:
@@ -11649,7 +10790,6 @@ class CalibrationTester:
             object_points, image_points, self.image_size, None, None, flags=flags
         )
         return (ret, camera_matrix, dist_coeffs)
-
     def validate_calibration_result(
         self, rms_error: float, camera_matrix: np.ndarray, dist_coeffs: np.ndarray
     ) -> bool:
@@ -11677,21 +10817,15 @@ class CalibrationTester:
                 )
         logger.info(f"Calibration validation passed: RMS={rms_error:.3f}")
         return True
-
-
 @pytest.fixture
 def calibration_tester():
     return CalibrationTester()
-
-
 @pytest.fixture
 def synthetic_calibration_data():
     test_data = CalibrationTestData()
     object_points = [test_data.generate_object_points() for _ in range(15)]
     image_points = test_data.generate_synthetic_image_points(15)
     return (object_points, image_points)
-
-
 @pytest.mark.integration
 def test_calibration_with_synthetic_data(
     calibration_tester, synthetic_calibration_data
@@ -11706,8 +10840,6 @@ def test_calibration_with_synthetic_data(
     assert rms_error < calibration_tester.test_data.error_threshold
     assert camera_matrix.shape == (3, 3)
     assert dist_coeffs.size >= 4
-
-
 @pytest.mark.integration
 def test_calibration_insufficient_images(calibration_tester):
     test_data = CalibrationTestData()
@@ -11715,8 +10847,6 @@ def test_calibration_insufficient_images(calibration_tester):
     image_points = test_data.generate_synthetic_image_points(2)
     with pytest.raises(ValueError, match="Need at least 3 calibration images"):
         calibration_tester.run_calibration(object_points, image_points)
-
-
 @pytest.mark.integration
 def test_calibration_mismatched_points(calibration_tester):
     test_data = CalibrationTestData()
@@ -11726,8 +10856,6 @@ def test_calibration_mismatched_points(calibration_tester):
         ValueError, match="Number of object and image point sets must match"
     ):
         calibration_tester.run_calibration(object_points, image_points)
-
-
 @pytest.mark.integration
 def test_calibration_with_noise(calibration_tester):
     test_data = CalibrationTestData()
@@ -11743,8 +10871,6 @@ def test_calibration_with_noise(calibration_tester):
     )
     assert rms_error < 5.0
     assert camera_matrix.shape == (3, 3)
-
-
 @pytest.mark.integration
 def test_calibration_config_loading():
     config = get_calibration_config()
@@ -11756,8 +10882,6 @@ def test_calibration_config_loading():
     assert config["pattern_cols"] > 0
     assert config["square_size_m"] > 0
     assert config["error_threshold"] > 0
-
-
 @pytest.mark.integration
 def test_calibration_pattern_generation():
     test_data = CalibrationTestData()
@@ -11771,8 +10895,6 @@ def test_calibration_pattern_generation():
     expected_max_y = (test_data.pattern_size[1] - 1) * test_data.square_size
     assert abs(max_x - expected_max_x) < 1e-06
     assert abs(max_y - expected_max_y) < 1e-06
-
-
 @pytest.mark.integration
 def test_calibration_with_real_data():
     test_data = CalibrationTestData()
@@ -11790,14 +10912,10 @@ def test_calibration_with_real_data():
         )
     else:
         pytest.skip("No real calibration data available")
-
-
 def test_calibration_error_threshold_config():
     threshold = get_calibration_error_threshold()
     assert 0.1 <= threshold <= 10.0
     assert isinstance(threshold, (int, float))
-
-
 @pytest.mark.integration
 @pytest.mark.slow
 def test_calibration_performance():
@@ -11807,7 +10925,6 @@ def test_calibration_performance():
     object_points = [test_data.generate_object_points() for _ in range(num_images)]
     image_points = test_data.generate_synthetic_image_points(num_images)
     import time
-
     start_time = time.time()
     rms_error, camera_matrix, dist_coeffs = calibration_tester.run_calibration(
         object_points, image_points
@@ -11821,8 +10938,6 @@ def test_calibration_performance():
     logger.info(
         f"Calibration with {num_images} images took {calibration_time:.2f} seconds"
     )
-
-
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
@@ -11845,86 +10960,62 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"✗ Calibration test failed with error: {e}")
         import traceback
-
         traceback.print_exc()
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class TestCalibrationEnvironment:
-
     def test_opencv_import(self):
         try:
             import cv2
             import numpy as np
-
             assert True
         except ImportError as e:
             pytest.fail(f"OpenCV import failed: {e}")
-
     def test_calibration_dependencies(self):
         try:
             import json
             import pathlib
             import tempfile
-
             assert True
         except ImportError as e:
             pytest.fail(f"Calibration dependency import failed: {e}")
-
-
 class TestCalibrationManagerBasics:
-
     def setup_method(self):
         try:
             from calibration.calibration_manager import CalibrationManager
-
             self.manager = CalibrationManager()
         except ImportError:
             pytest.skip("CalibrationManager not available")
-
     def test_manager_initialization(self):
         assert self.manager is not None
         assert hasattr(self.manager, "current_session")
         assert hasattr(self.manager, "captured_frames")
         assert hasattr(self.manager, "calibration_results")
-
     def test_session_management_interface(self):
         assert hasattr(self.manager, "start_calibration_session")
         assert hasattr(self.manager, "end_calibration_session")
         assert callable(getattr(self.manager, "start_calibration_session"))
         assert callable(getattr(self.manager, "end_calibration_session"))
-
     def test_frame_capture_interface(self):
         assert hasattr(self.manager, "capture_calibration_frame")
         assert callable(getattr(self.manager, "capture_calibration_frame"))
-
     def test_calibration_computation_interface(self):
         assert hasattr(self.manager, "compute_calibration")
         assert callable(getattr(self.manager, "compute_calibration"))
-
     def test_overlay_functionality_interface(self):
         assert hasattr(self.manager, "apply_thermal_overlay")
         assert callable(getattr(self.manager, "apply_thermal_overlay"))
-
-
 class TestCalibrationProcessorBasics:
-
     def setup_method(self):
         try:
             from calibration.calibration_processor import CalibrationProcessor
-
             self.processor = CalibrationProcessor()
         except ImportError:
             pytest.skip("CalibrationProcessor not available")
-
     def test_processor_initialization(self):
         assert self.processor is not None
-
     def test_pattern_detection_interface(self):
         assert hasattr(self.processor, "find_calibration_corners")
         assert callable(getattr(self.processor, "find_calibration_corners"))
-
     def test_calibration_computation_interface(self):
         assert hasattr(self.processor, "calibrate_camera_intrinsics")
         assert hasattr(self.processor, "calibrate_stereo_cameras")
@@ -11934,40 +11025,28 @@ class TestCalibrationProcessorBasics:
         assert callable(
             getattr(self.processor, "calibrate_stereo_cameras", lambda: None)
         )
-
-
 class TestCalibrationResultBasics:
-
     def setup_method(self):
         try:
             from calibration.calibration_result import CalibrationResult
-
             self.result = CalibrationResult("test_device")
         except ImportError:
             pytest.skip("CalibrationResult not available")
-
     def test_result_initialization(self):
         assert self.result is not None
         assert self.result.device_id == "test_device"
-
     def test_serialization_interface(self):
         assert hasattr(self.result, "save_to_file")
         assert hasattr(self.result, "load_from_file")
         assert callable(getattr(self.result, "save_to_file"))
-
     def test_summary_interface(self):
         assert hasattr(self.result, "get_calibration_summary")
         assert callable(getattr(self.result, "get_calibration_summary"))
-
-
 class TestCalibrationWorkflow:
-
     def setup_method(self):
         self.temp_dir = tempfile.mkdtemp()
-
     def teardown_method(self):
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     @patch("calibration.calibration_manager.CalibrationManager")
     def test_session_workflow_mock(self, mock_manager_class):
         mock_manager = Mock()
@@ -11984,7 +11063,6 @@ class TestCalibrationWorkflow:
         assert end_result["success"] is True
         mock_manager.start_calibration_session.assert_called_once()
         mock_manager.end_calibration_session.assert_called_once()
-
     @patch("calibration.calibration_manager.CalibrationManager")
     def test_frame_capture_workflow_mock(self, mock_manager_class):
         mock_manager = Mock()
@@ -12000,7 +11078,6 @@ class TestCalibrationWorkflow:
         assert result["success"] is True
         assert result["total_frames"] == 1
         mock_manager.capture_calibration_frame.assert_called_once_with(mock_server)
-
     @patch("calibration.calibration_manager.CalibrationManager")
     def test_calibration_computation_workflow_mock(self, mock_manager_class):
         mock_manager = Mock()
@@ -12015,10 +11092,7 @@ class TestCalibrationWorkflow:
         assert "results" in result
         assert "device_1" in result["results"]
         mock_manager.compute_calibration.assert_called_once()
-
-
 class TestCalibrationErrorHandling:
-
     @patch("calibration.calibration_manager.CalibrationManager")
     def test_session_error_handling(self, mock_manager_class):
         mock_manager = Mock()
@@ -12031,7 +11105,6 @@ class TestCalibrationErrorHandling:
         result = manager.start_calibration_session([], "test_session")
         assert result["success"] is False
         assert "error" in result
-
     @patch("calibration.calibration_manager.CalibrationManager")
     def test_computation_error_handling(self, mock_manager_class):
         mock_manager = Mock()
@@ -12044,11 +11117,8 @@ class TestCalibrationErrorHandling:
         result = manager.compute_calibration()
         assert result["success"] is False
         assert "error" in result
-
-
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 try:
     from calibration.calibration import (
@@ -12059,17 +11129,13 @@ except ImportError as e:
     print(f"Warning: Cannot import calibration module: {e}")
     CalibrationManager = None
     create_calibration_pattern_points = None
-
-
 class TestCalibrationManagerComprehensive(unittest.TestCase):
-
     def setUp(self):
         if CalibrationManager is None:
             self.skipTest("CalibrationManager not available")
         self.manager = CalibrationManager()
         self.test_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, self.test_dir)
-
     def create_synthetic_chessboard(
         self,
         pattern_size=(9, 6),
@@ -12094,12 +11160,10 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
             noise = np.random.randint(-10, 10, img.shape, dtype=np.int16)
             img = np.clip(img.astype(np.int16) + noise, 0, 255).astype(np.uint8)
         return img
-
     def test_calibration_manager_initialization(self):
         self.assertIsNotNone(self.manager)
         self.assertEqual(self.manager.pattern_size, (9, 6))
         self.assertEqual(self.manager.square_size, 1.0)
-
     def test_pattern_detection_chessboard(self):
         img = self.create_synthetic_chessboard()
         found, corners = self.manager.detect_pattern(img, "chessboard")
@@ -12108,7 +11172,6 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         self.assertEqual(
             len(corners), self.manager.pattern_size[0] * self.manager.pattern_size[1]
         )
-
     def test_pattern_detection_circles(self):
         img = np.ones((480, 640, 3), dtype=np.uint8) * 255
         pattern_size = (4, 11)
@@ -12125,7 +11188,6 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         found, corners = self.manager.detect_pattern(img, "circles")
         self.manager.pattern_size = old_pattern
         self.assertIsInstance(found, bool)
-
     def test_single_camera_calibration(self):
         images = []
         image_points = []
@@ -12148,7 +11210,6 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         self.assertIn("rms_error", result)
         self.assertEqual(result["camera_matrix"].shape, (3, 3))
         self.assertEqual(len(result["distortion_coefficients"]), 5)
-
     def test_stereo_calibration(self):
         image_size = (640, 480)
         num_images = 8
@@ -12177,7 +11238,6 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         self.assertIn("rotation_matrix", result)
         self.assertIn("translation_vector", result)
         self.assertIn("rms_error", result)
-
     def test_calibration_quality_assessment(self):
         camera_matrix = np.array(
             [[800, 0, 320], [0, 800, 240], [0, 0, 1]], dtype=np.float32
@@ -12198,7 +11258,6 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         self.assertIn("max_error", quality)
         self.assertIn("coverage_score", quality)
         self.assertIn("recommendations", quality)
-
     def test_save_load_calibration(self):
         calibration_data = {
             "camera_matrix": np.array([[800, 0, 320], [0, 800, 240], [0, 0, 1]]),
@@ -12218,7 +11277,6 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         np.testing.assert_array_almost_equal(
             loaded_data["camera_matrix"], calibration_data["camera_matrix"]
         )
-
     def test_error_handling(self):
         result = self.manager.calibrate_single_camera([], [], (640, 480))
         self.assertIsNone(result)
@@ -12228,7 +11286,6 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         self.assertIsNone(corners)
         result = self.manager.load_calibration("/non/existent/file.json")
         self.assertIsNone(result)
-
     def test_calibration_workflow_integration(self):
         print("\nTesting complete calibration workflow...")
         images = []
@@ -12266,10 +11323,8 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         loaded_calibration = self.manager.load_calibration(save_path)
         self.assertIsNotNone(loaded_calibration)
         print("✓ Complete workflow test passed")
-
     def test_performance_benchmarks(self):
         import time
-
         print("\nRunning performance benchmarks...")
         img = self.create_synthetic_chessboard()
         start_time = time.time()
@@ -12290,8 +11345,6 @@ class TestCalibrationManagerComprehensive(unittest.TestCase):
         print(f"Calibration time: {calibration_time:.4f}s")
         self.assertLess(calibration_time, 10.0)
         self.assertIsNotNone(result)
-
-
 def run_calibration_tests():
     if CalibrationManager is None:
         print("Skipping calibration tests - module not available")
@@ -12311,17 +11364,11 @@ def run_calibration_tests():
         f"Success rate: {(result.testsRun - len(result.failures) - len(result.errors)) / result.testsRun * 100:.1f}%"
     )
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     success = run_calibration_tests()
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class TestCalibrationDialogEnvironment:
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_pyqt5_gui_imports(self):
         try:
@@ -12347,46 +11394,35 @@ class TestCalibrationDialogEnvironment:
                 QVBoxLayout,
                 QWidget,
             )
-
             assert True
         except ImportError as e:
             pytest.fail(f"PyQt5 GUI import failed: {e}")
-
     def test_calibration_dialog_dependencies(self):
         try:
             import json
             import time
-
             import cv2
             import numpy as np
-
             assert True
         except ImportError as e:
             pytest.fail(f"CalibrationDialog dependency import failed: {e}")
-
-
 class TestCalibrationDialogInitialization:
-
     def setup_method(self):
         self.mock_device_server = Mock()
         self.mock_parent = Mock()
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_dialog_initialization(self):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             assert dialog is not None
             assert dialog.device_server == self.mock_device_server
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_dialog_window_properties(self):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             assert dialog.windowTitle() == "Camera Calibration - Milestone 3.4"
             assert dialog.isModal() is True
@@ -12395,12 +11431,10 @@ class TestCalibrationDialogInitialization:
             assert size.height() >= 600
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_dialog_components_initialization(self):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             assert hasattr(dialog, "start_session_btn")
             assert hasattr(dialog, "end_session_btn")
@@ -12417,20 +11451,15 @@ class TestCalibrationDialogInitialization:
             assert dialog.save_btn.isEnabled() is False
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
-
 class TestCalibrationDialogSessionManagement:
-
     def setup_method(self):
         self.mock_device_server = Mock()
         self.mock_parent = Mock()
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     @patch("gui.calibration_dialog.CalibrationManager")
     def test_start_calibration_session_success(self, mock_manager_class):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             mock_manager = Mock()
             mock_manager_class.return_value = mock_manager
             mock_manager.start_calibration_session.return_value = {
@@ -12448,13 +11477,11 @@ class TestCalibrationDialogSessionManagement:
             assert dialog.capture_frame_btn.isEnabled() is True
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     @patch("gui.calibration_dialog.CalibrationManager")
     def test_start_session_no_devices(self, mock_manager_class):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             with patch.object(dialog, "get_connected_devices", return_value=[]):
                 with patch("PyQt5.QtWidgets.QMessageBox.warning") as mock_warning:
@@ -12464,13 +11491,11 @@ class TestCalibrationDialogSessionManagement:
             assert dialog.start_session_btn.isEnabled() is True
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     @patch("gui.calibration_dialog.CalibrationManager")
     def test_end_calibration_session(self, mock_manager_class):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             mock_manager = Mock()
             mock_manager_class.return_value = mock_manager
             mock_manager.end_calibration_session.return_value = {"success": True}
@@ -12483,20 +11508,15 @@ class TestCalibrationDialogSessionManagement:
             assert dialog.capture_frame_btn.isEnabled() is False
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
-
 class TestCalibrationDialogFrameCapture:
-
     def setup_method(self):
         self.mock_device_server = Mock()
         self.mock_parent = Mock()
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     @patch("gui.calibration_dialog.CalibrationManager")
     def test_capture_calibration_frame_success(self, mock_manager_class):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             mock_manager = Mock()
             mock_manager_class.return_value = mock_manager
             mock_manager.capture_calibration_frame.return_value = {
@@ -12515,13 +11535,11 @@ class TestCalibrationDialogFrameCapture:
                 assert dialog.compute_btn.isEnabled() is True
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     @patch("gui.calibration_dialog.CalibrationManager")
     def test_capture_frame_failure(self, mock_manager_class):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             mock_manager = Mock()
             mock_manager_class.return_value = mock_manager
             mock_manager.capture_calibration_frame.return_value = {
@@ -12535,21 +11553,16 @@ class TestCalibrationDialogFrameCapture:
                 mock_warning.assert_called_once()
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
-
 class TestCalibrationDialogComputation:
-
     def setup_method(self):
         self.mock_device_server = Mock()
         self.mock_parent = Mock()
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     @patch("gui.calibration_dialog.CalibrationManager")
     def test_compute_calibration_success(self, mock_manager_class):
         try:
             from calibration.calibration_result import CalibrationResult
             from gui.calibration_dialog import CalibrationDialog
-
             mock_manager = Mock()
             mock_manager_class.return_value = mock_manager
             mock_result = Mock(spec=CalibrationResult)
@@ -12581,13 +11594,11 @@ class TestCalibrationDialogComputation:
             assert "device_1" in dialog.device_results
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     @patch("gui.calibration_dialog.CalibrationManager")
     def test_compute_calibration_failure(self, mock_manager_class):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             mock_manager = Mock()
             mock_manager_class.return_value = mock_manager
             mock_manager.compute_calibration.return_value = {
@@ -12601,24 +11612,18 @@ class TestCalibrationDialogComputation:
                 mock_critical.assert_called_once()
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
-
 class TestCalibrationDialogResultsManagement:
-
     def setup_method(self):
         self.mock_device_server = Mock()
         self.mock_parent = Mock()
         self.temp_dir = tempfile.mkdtemp()
-
     def teardown_method(self):
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_save_calibration_results(self):
         try:
             from calibration.calibration_result import CalibrationResult
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             mock_result = Mock(spec=CalibrationResult)
             mock_result.save_to_file = Mock()
@@ -12634,13 +11639,11 @@ class TestCalibrationDialogResultsManagement:
             mock_result.save_to_file.assert_called_once()
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_load_calibration_results(self):
         try:
             from calibration.calibration_result import CalibrationResult
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             test_filename = os.path.join(self.temp_dir, "test_calibration.json")
             with patch(
@@ -12658,20 +11661,15 @@ class TestCalibrationDialogResultsManagement:
             assert dialog.overlay_checkbox.isEnabled() is True
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
-
 class TestCalibrationDialogOverlayFunctionality:
-
     def setup_method(self):
         self.mock_device_server = Mock()
         self.mock_parent = Mock()
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_overlay_toggle_functionality(self):
         try:
             from calibration.calibration_result import CalibrationResult
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             mock_result = Mock(spec=CalibrationResult)
             dialog.device_results = {"device_1": mock_result}
@@ -12683,12 +11681,10 @@ class TestCalibrationDialogOverlayFunctionality:
                 mock_signal.emit.assert_called_once_with("device_1", True)
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_alpha_slider_functionality(self):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             dialog.update_alpha_label(50)
             assert dialog.overlay_alpha_label.text() == "Alpha: 50%"
@@ -12696,19 +11692,14 @@ class TestCalibrationDialogOverlayFunctionality:
             assert dialog.overlay_alpha_label.text() == "Alpha: 75%"
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
-
 class TestCalibrationDialogErrorHandling:
-
     def setup_method(self):
         self.mock_device_server = Mock()
         self.mock_parent = Mock()
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_exception_handling_in_session_start(self):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             with patch.object(
                 dialog,
@@ -12720,12 +11711,10 @@ class TestCalibrationDialogErrorHandling:
                     mock_critical.assert_called_once()
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_exception_handling_in_frame_capture(self):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             dialog.current_session = "test_session"
             with patch.object(
@@ -12738,37 +11727,26 @@ class TestCalibrationDialogErrorHandling:
                     mock_critical.assert_called_once()
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
-
 class TestCalibrationDialogSignalHandling:
-
     def setup_method(self):
         self.mock_device_server = Mock()
         self.mock_parent = Mock()
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_signal_connections(self):
         try:
             from gui.calibration_dialog import CalibrationDialog
-
             dialog = CalibrationDialog(self.mock_device_server, self.mock_parent)
             assert hasattr(dialog, "calibration_completed")
             assert hasattr(dialog, "overlay_toggled")
             from PyQt5.QtCore import pyqtSignal
-
             assert isinstance(dialog.calibration_completed, pyqtSignal)
             assert isinstance(dialog.overlay_toggled, pyqtSignal)
         except ImportError:
             pytest.skip("CalibrationDialog not available")
-
-
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
 async def main():
     print("=" * 80)
     print("CALIBRATION FULL TEST SUITE - Multi-Sensor Recording System")
@@ -12789,17 +11767,11 @@ async def main():
     }
     print("✅ Calibration Test Suite structure created")
     return results
-
-
 if __name__ == "__main__":
     results = asyncio.run(main())
     sys.exit(0 if results.get("overall_success", False) else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class TestCalibrationManagerInitialization:
-
     def test_manager_initialization(self):
         manager = CalibrationManager()
         assert manager is not None
@@ -12810,12 +11782,10 @@ class TestCalibrationManagerInitialization:
         assert manager.current_session is None
         assert len(manager.captured_frames) == 0
         assert len(manager.calibration_results) == 0
-
     def test_processor_integration(self):
         manager = CalibrationManager()
         assert isinstance(manager.calibration_processor, CalibrationProcessor)
         assert manager.calibration_processor is not None
-
     def test_default_configuration(self):
         manager = CalibrationManager()
         assert hasattr(manager, "pattern_size")
@@ -12823,15 +11793,11 @@ class TestCalibrationManagerInitialization:
         assert hasattr(manager, "min_frames_required")
         assert manager.min_frames_required >= 5
         assert manager.square_size > 0
-
-
 class TestCalibrationSessionManagement:
-
     def setup_method(self):
         self.manager = CalibrationManager()
         self.mock_device_ids = ["device_1", "device_2"]
         self.session_name = "test_calibration_session"
-
     def test_start_calibration_session_success(self):
         result = self.manager.start_calibration_session(
             self.mock_device_ids, self.session_name
@@ -12843,32 +11809,27 @@ class TestCalibrationSessionManagement:
         assert self.manager.current_session["session_id"] == result["session_id"]
         assert self.manager.current_session["device_ids"] == self.mock_device_ids
         assert self.manager.current_session["session_name"] == self.session_name
-
     def test_start_session_with_empty_devices(self):
         result = self.manager.start_calibration_session([], self.session_name)
         assert result["success"] is False
         assert "error" in result
         assert "No devices" in result["error"]
         assert self.manager.current_session is None
-
     def test_start_session_with_existing_session(self):
         self.manager.start_calibration_session(self.mock_device_ids, self.session_name)
         result = self.manager.start_calibration_session(["device_3"], "another_session")
         assert result["success"] is False
         assert "already active" in result["error"]
-
     def test_end_calibration_session_success(self):
         self.manager.start_calibration_session(self.mock_device_ids, self.session_name)
         result = self.manager.end_calibration_session()
         assert result["success"] is True
         assert self.manager.current_session is None
         assert len(self.manager.captured_frames) == 0
-
     def test_end_session_without_active_session(self):
         result = self.manager.end_calibration_session()
         assert result["success"] is False
         assert "No active session" in result["error"]
-
     def test_session_state_persistence(self):
         self.manager.start_calibration_session(self.mock_device_ids, self.session_name)
         session = self.manager.current_session
@@ -12876,16 +11837,12 @@ class TestCalibrationSessionManagement:
         assert session["session_name"] == self.session_name
         assert "start_time" in session
         assert "session_id" in session
-
-
 class TestFrameCaptureCoordination:
-
     def setup_method(self):
         self.manager = CalibrationManager()
         self.mock_device_server = Mock()
         self.mock_device_ids = ["device_1", "device_2"]
         self.manager.start_calibration_session(self.mock_device_ids, "test_session")
-
     @patch("src.calibration.calibration_manager.time.time")
     def test_capture_calibration_frame_success(self, mock_time):
         mock_time.return_value = 1234567890.0
@@ -12909,19 +11866,16 @@ class TestFrameCaptureCoordination:
         assert result["total_frames"] == 1
         assert "timestamp" in result
         assert len(self.manager.captured_frames) == 1
-
     def test_capture_frame_without_session(self):
         manager = CalibrationManager()
         result = manager.capture_calibration_frame(self.mock_device_server)
         assert result["success"] is False
         assert "No active session" in result["error"]
-
     def test_capture_frame_server_failure(self):
         self.mock_device_server.broadcast_command.return_value = 0
         result = self.manager.capture_calibration_frame(self.mock_device_server)
         assert result["success"] is False
         assert "Failed to send" in result["error"]
-
     @patch("src.calibration.calibration_manager.cv2.findChessboardCorners")
     def test_pattern_detection_validation(self, mock_find_corners):
         mock_find_corners.return_value = (True, np.array([[100, 100], [200, 200]]))
@@ -12939,7 +11893,6 @@ class TestFrameCaptureCoordination:
             result = self.manager.capture_calibration_frame(self.mock_device_server)
         assert result["success"] is True
         assert result.get("pattern_detected", False) is True
-
     def test_frame_storage_structure(self):
         self.mock_device_server.broadcast_command.return_value = 1
         with patch.object(self.manager, "_receive_calibration_frames") as mock_receive:
@@ -12960,16 +11913,12 @@ class TestFrameCaptureCoordination:
         assert "device_1" in frame_data["frames"]
         assert "rgb" in frame_data["frames"]["device_1"]
         assert "thermal" in frame_data["frames"]["device_1"]
-
-
 class TestCalibrationComputation:
-
     def setup_method(self):
         self.manager = CalibrationManager()
         self.mock_device_ids = ["device_1"]
         self.manager.start_calibration_session(self.mock_device_ids, "test_session")
         self._add_mock_frames()
-
     def _add_mock_frames(self):
         for i in range(10):
             frame_data = {
@@ -12984,7 +11933,6 @@ class TestCalibrationComputation:
                 },
             }
             self.manager.captured_frames.append(frame_data)
-
     @patch(
         "src.calibration.calibration_processor.CalibrationProcessor.process_calibration"
     )
@@ -13005,19 +11953,16 @@ class TestCalibrationComputation:
         assert "results" in result
         assert "device_1" in result["results"]
         assert len(self.manager.calibration_results) == 1
-
     def test_compute_calibration_insufficient_frames(self):
         self.manager.captured_frames = []
         result = self.manager.compute_calibration()
         assert result["success"] is False
         assert "Insufficient frames" in result["error"]
-
     def test_compute_calibration_without_session(self):
         manager = CalibrationManager()
         result = manager.compute_calibration()
         assert result["success"] is False
         assert "No active session" in result["error"]
-
     @patch(
         "src.calibration.calibration_processor.CalibrationProcessor.process_calibration"
     )
@@ -13026,7 +11971,6 @@ class TestCalibrationComputation:
         result = self.manager.compute_calibration()
         assert result["success"] is False
         assert "Processing failed" in result["error"]
-
     @patch(
         "src.calibration.calibration_processor.CalibrationProcessor.process_calibration"
     )
@@ -13042,19 +11986,14 @@ class TestCalibrationComputation:
             "quality_warnings" in result
             or result["results"]["device_1"].rgb_reprojection_error > 1.0
         )
-
-
 class TestResultManagement:
-
     def setup_method(self):
         self.manager = CalibrationManager()
         self.temp_dir = tempfile.mkdtemp()
         self.test_result = CalibrationResult("device_1")
         self._setup_test_result()
-
     def teardown_method(self):
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     def _setup_test_result(self):
         self.test_result.rgb_camera_matrix = np.eye(3)
         self.test_result.rgb_dist_coeffs = np.zeros(5)
@@ -13065,7 +12004,6 @@ class TestResultManagement:
         self.test_result.rgb_reprojection_error = 0.5
         self.test_result.thermal_reprojection_error = 0.7
         self.test_result.stereo_reprojection_error = 0.8
-
     def test_save_calibration_results(self):
         self.manager.calibration_results = {"device_1": self.test_result}
         save_path = os.path.join(self.temp_dir, "calibration_device_1.json")
@@ -13076,7 +12014,6 @@ class TestResultManagement:
             data = json.load(f)
             assert "device_id" in data
             assert data["device_id"] == "device_1"
-
     def test_load_calibration_results(self):
         save_path = os.path.join(self.temp_dir, "calibration_device_1.json")
         self.test_result.save_to_file(save_path)
@@ -13085,13 +12022,11 @@ class TestResultManagement:
         assert "device_1" in self.manager.calibration_results
         loaded_result = self.manager.calibration_results["device_1"]
         assert loaded_result.device_id == "device_1"
-
     def test_save_results_without_data(self):
         save_path = os.path.join(self.temp_dir, "empty_calibration.json")
         result = self.manager.save_calibration_results(save_path)
         assert result["success"] is False
         assert "No calibration results" in result["error"]
-
     def test_load_nonexistent_file(self):
         nonexistent_path = os.path.join(self.temp_dir, "nonexistent.json")
         result = self.manager.load_calibration_results(nonexistent_path)
@@ -13099,7 +12034,6 @@ class TestResultManagement:
         assert (
             "File not found" in result["error"] or "does not exist" in result["error"]
         )
-
     def test_result_validation_on_load(self):
         invalid_path = os.path.join(self.temp_dir, "invalid_calibration.json")
         with open(invalid_path, "w") as f:
@@ -13107,21 +12041,16 @@ class TestResultManagement:
         result = self.manager.load_calibration_results(invalid_path)
         assert result["success"] is False
         assert "Invalid" in result["error"] or "validation" in result["error"]
-
-
 class TestThermalOverlayFunctionality:
-
     def setup_method(self):
         self.manager = CalibrationManager()
         self.test_result = CalibrationResult("device_1")
         self._setup_overlay_data()
-
     def _setup_overlay_data(self):
         self.test_result.homography_matrix = np.eye(3)
         self.manager.calibration_results = {"device_1": self.test_result}
         self.rgb_image = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
         self.thermal_image = np.random.randint(0, 255, (240, 320), dtype=np.uint8)
-
     def test_apply_thermal_overlay_success(self):
         result = self.manager.apply_thermal_overlay(
             "device_1", self.rgb_image, self.thermal_image, alpha=0.3
@@ -13129,7 +12058,6 @@ class TestThermalOverlayFunctionality:
         assert result["success"] is True
         assert "overlay_image" in result
         assert result["overlay_image"].shape == self.rgb_image.shape
-
     def test_overlay_without_calibration(self):
         manager = CalibrationManager()
         result = manager.apply_thermal_overlay(
@@ -13137,7 +12065,6 @@ class TestThermalOverlayFunctionality:
         )
         assert result["success"] is False
         assert "No calibration data" in result["error"]
-
     def test_overlay_alpha_blending(self):
         alpha_values = [0.0, 0.3, 0.5, 0.7, 1.0]
         for alpha in alpha_values:
@@ -13146,14 +12073,12 @@ class TestThermalOverlayFunctionality:
             )
             assert result["success"] is True
             assert result["alpha"] == alpha
-
     def test_overlay_with_invalid_images(self):
         result = self.manager.apply_thermal_overlay(
             "device_1", None, self.thermal_image
         )
         assert result["success"] is False
         assert "Invalid" in result["error"]
-
     def test_overlay_color_mapping(self):
         with patch("cv2.applyColorMap") as mock_colormap:
             mock_colormap.return_value = np.random.randint(
@@ -13164,19 +12089,14 @@ class TestThermalOverlayFunctionality:
             )
             assert result["success"] is True
             mock_colormap.assert_called_once()
-
-
 class TestErrorHandlingAndEdgeCases:
-
     def setup_method(self):
         self.manager = CalibrationManager()
-
     def test_invalid_device_ids(self):
         invalid_ids = [None, "", [], [""], [None]]
         for invalid_id in invalid_ids:
             result = self.manager.start_calibration_session(invalid_id, "test")
             assert result["success"] is False
-
     def test_memory_management_large_frames(self):
         self.manager.start_calibration_session(["device_1"], "memory_test")
         for i in range(50):
@@ -13198,7 +12118,6 @@ class TestErrorHandlingAndEdgeCases:
         result = self.manager.end_calibration_session()
         assert result["success"] is True
         assert len(self.manager.captured_frames) == 0
-
     def test_concurrent_operations(self):
         self.manager.start_calibration_session(["device_1"], "concurrent_test")
         with patch.object(self.manager, "_receive_calibration_frames") as mock_receive:
@@ -13220,7 +12139,6 @@ class TestErrorHandlingAndEdgeCases:
             for result in results:
                 assert result["success"] is True
             assert len(self.manager.captured_frames) == 5
-
     def test_resource_cleanup_on_error(self):
         self.manager.start_calibration_session(["device_1"], "cleanup_test")
         self.manager.captured_frames.append(
@@ -13243,18 +12161,13 @@ class TestErrorHandlingAndEdgeCases:
         cleanup_result = self.manager.end_calibration_session()
         assert cleanup_result["success"] is True
         assert len(self.manager.captured_frames) == 0
-
-
 class TestIntegrationScenarios:
-
     def setup_method(self):
         self.manager = CalibrationManager()
         self.mock_server = Mock()
         self.temp_dir = tempfile.mkdtemp()
-
     def teardown_method(self):
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     def test_complete_calibration_workflow(self):
         device_ids = ["device_1", "device_2"]
         session_result = self.manager.start_calibration_session(
@@ -13310,7 +12223,6 @@ class TestIntegrationScenarios:
         assert overlay_result["success"] is True
         end_result = self.manager.end_calibration_session()
         assert end_result["success"] is True
-
     def test_multi_device_calibration_workflow(self):
         device_ids = ["device_1", "device_2", "device_3"]
         session_result = self.manager.start_calibration_session(
@@ -13354,24 +12266,16 @@ class TestIntegrationScenarios:
             compute_result = self.manager.compute_calibration()
             assert compute_result["success"] is True
             assert len(self.manager.calibration_results) == 3
-
-
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-
 class TestCalibrationProcessor:
-
     def setup_method(self):
         self.processor = CalibrationProcessor()
-
     def test_processor_initialization(self):
         assert self.processor is not None
         assert hasattr(self.processor, "pattern_size")
         assert hasattr(self.processor, "square_size")
-
     @patch("src.calibration.calibration_processor.cv2.cornerSubPix")
     @patch("src.calibration.calibration_processor.cv2.findChessboardCorners")
     def test_find_calibration_corners_success(
@@ -13386,7 +12290,6 @@ class TestCalibrationProcessor:
         assert result["success"] is True
         assert "corners" in result
         mock_find_corners.assert_called_once()
-
     @patch("src.calibration.calibration_processor.cv2.findChessboardCorners")
     def test_find_calibration_corners_failure(self, mock_find_corners):
         mock_find_corners.return_value = (False, None)
@@ -13394,39 +12297,29 @@ class TestCalibrationProcessor:
         result = self.processor.find_calibration_corners(test_image)
         assert result["success"] is False
         assert "error" in result
-
-
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 try:
     from PyQt5.QtCore import Qt
     from PyQt5.QtTest import QTest
     from PyQt5.QtWidgets import QApplication, QWidget
-
     PYQT_AVAILABLE = True
 except ImportError:
     PYQT_AVAILABLE = False
-
-
 @unittest.skipUnless(PYQT_AVAILABLE, "PyQt5 not available")
 class TestCommonComponents(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         if not hasattr(cls, "app"):
             cls.app = QApplication.instance()
             if cls.app is None:
                 cls.app = QApplication(sys.argv)
-
     def setUp(self):
         self.test_app = self.app
-
     def test_status_indicator_creation(self):
         try:
             from gui.common_components import StatusIndicator
-
             indicator = StatusIndicator()
             self.assertIsNotNone(indicator)
             self.assertFalse(indicator.is_connected)
@@ -13435,11 +12328,9 @@ class TestCommonComponents(unittest.TestCase):
             self.assertIsNotNone(custom_indicator)
         except ImportError as e:
             self.skipTest(f"Cannot import StatusIndicator: {e}")
-
     def test_status_indicator_update(self):
         try:
             from gui.common_components import StatusIndicator
-
             indicator = StatusIndicator("Test Device")
             indicator.set_status(True, "Connected successfully")
             self.assertTrue(indicator.is_connected)
@@ -13449,11 +12340,9 @@ class TestCommonComponents(unittest.TestCase):
             self.assertEqual(indicator.status_text, "Connection lost")
         except (ImportError, AttributeError) as e:
             self.skipTest(f"Cannot test StatusIndicator updates: {e}")
-
     def test_modern_button_creation(self):
         try:
             from gui.common_components import ModernButton
-
             button = ModernButton("Test Button")
             self.assertIsNotNone(button)
             success_button = ModernButton("Success", "success")
@@ -13462,11 +12351,9 @@ class TestCommonComponents(unittest.TestCase):
             self.assertIsNotNone(danger_button)
         except ImportError as e:
             self.skipTest(f"Cannot import ModernButton: {e}")
-
     def test_modern_button_styling(self):
         try:
             from gui.common_components import ModernButton
-
             button = ModernButton("Test")
             button.set_button_type("primary")
             button.set_button_type("success")
@@ -13478,22 +12365,18 @@ class TestCommonComponents(unittest.TestCase):
             self.assertFalse(button.isEnabled())
         except (ImportError, AttributeError) as e:
             self.skipTest(f"Cannot test ModernButton styling: {e}")
-
     def test_progress_indicator_creation(self):
         try:
             from gui.common_components import ProgressIndicator
-
             progress = ProgressIndicator()
             self.assertIsNotNone(progress)
             custom_progress = ProgressIndicator("Custom Progress")
             self.assertIsNotNone(custom_progress)
         except ImportError as e:
             self.skipTest(f"Cannot import ProgressIndicator: {e}")
-
     def test_progress_indicator_value_updates(self):
         try:
             from gui.common_components import ProgressIndicator
-
             progress = ProgressIndicator("Test Progress")
             progress.set_progress(0)
             progress.set_progress(50)
@@ -13502,21 +12385,17 @@ class TestCommonComponents(unittest.TestCase):
             progress.set_status_text("Complete")
         except (ImportError, AttributeError) as e:
             self.skipTest(f"Cannot test ProgressIndicator updates: {e}")
-
     def test_connection_manager_creation(self):
         try:
             from gui.common_components import ConnectionManager
-
             devices = ["Device1", "Device2", "Device3"]
             manager = ConnectionManager(devices)
             self.assertIsNotNone(manager)
         except ImportError as e:
             self.skipTest(f"Cannot import ConnectionManager: {e}")
-
     def test_connection_manager_device_updates(self):
         try:
             from gui.common_components import ConnectionManager
-
             devices = ["PC", "Shimmer", "Thermal"]
             manager = ConnectionManager(devices)
             manager.update_device_status("PC", True, "Connected")
@@ -13524,22 +12403,18 @@ class TestCommonComponents(unittest.TestCase):
             manager.update_device_status("Thermal", True, "Active")
         except (ImportError, AttributeError) as e:
             self.skipTest(f"Cannot test ConnectionManager updates: {e}")
-
     def test_log_viewer_creation(self):
         try:
             from gui.common_components import LogViewer
-
             log_viewer = LogViewer()
             self.assertIsNotNone(log_viewer)
             custom_viewer = LogViewer("Custom Log")
             self.assertIsNotNone(custom_viewer)
         except ImportError as e:
             self.skipTest(f"Cannot import LogViewer: {e}")
-
     def test_log_viewer_operations(self):
         try:
             from gui.common_components import LogViewer
-
             log_viewer = LogViewer("Test Log")
             log_viewer.add_log("Info message", "info")
             log_viewer.add_log("Warning message", "warning")
@@ -13547,16 +12422,13 @@ class TestCommonComponents(unittest.TestCase):
             log_viewer.clear_logs()
         except (ImportError, AttributeError) as e:
             self.skipTest(f"Cannot test LogViewer operations: {e}")
-
     def test_modern_group_box_creation(self):
         try:
             from gui.common_components import ModernGroupBox
-
             group_box = ModernGroupBox("Test Group")
             self.assertIsNotNone(group_box)
         except ImportError as e:
             self.skipTest(f"Cannot import ModernGroupBox: {e}")
-
     def test_component_integration(self):
         try:
             from gui.common_components import (
@@ -13567,7 +12439,6 @@ class TestCommonComponents(unittest.TestCase):
                 ProgressIndicator,
                 StatusIndicator,
             )
-
             group = ModernGroupBox("Integration Test")
             status = StatusIndicator("Test Status")
             button = ModernButton("Test Action", "primary")
@@ -13578,38 +12449,30 @@ class TestCommonComponents(unittest.TestCase):
             self.assertIsNotNone(progress)
         except ImportError as e:
             self.skipTest(f"Cannot test component integration: {e}")
-
     def test_component_signals(self):
         try:
             from gui.common_components import ModernButton, StatusIndicator
-
             status = StatusIndicator()
             signal_emitted = False
-
             def on_status_changed(connected, text):
                 nonlocal signal_emitted
                 signal_emitted = True
-
             status.statusChanged.connect(on_status_changed)
             status.set_status(True, "Connected")
             QTest.qWait(10)
             button = ModernButton("Test")
             button_clicked = False
-
             def on_button_clicked():
                 nonlocal button_clicked
                 button_clicked = True
-
             button.clicked.connect(on_button_clicked)
             button.click()
             QTest.qWait(10)
         except (ImportError, AttributeError) as e:
             self.skipTest(f"Cannot test component signals: {e}")
-
     def test_error_handling(self):
         try:
             from gui.common_components import ProgressIndicator, StatusIndicator
-
             status = StatusIndicator()
             status.set_status(None, None)
             progress = ProgressIndicator()
@@ -13617,10 +12480,7 @@ class TestCommonComponents(unittest.TestCase):
             progress.set_progress(150)
         except (ImportError, AttributeError) as e:
             self.skipTest(f"Cannot test error handling: {e}")
-
-
 class TestComponentModuleMocking(unittest.TestCase):
-
     def test_module_import_with_mock(self):
         with patch.dict(
             "sys.modules",
@@ -13632,11 +12492,9 @@ class TestComponentModuleMocking(unittest.TestCase):
         ):
             try:
                 from gui import common_components
-
                 self.assertIsNotNone(common_components)
             except ImportError as e:
                 self.skipTest(f"Cannot import common_components even with mocks: {e}")
-
     def test_component_functionality_with_mocks(self):
         mock_widget = MagicMock()
         mock_signal = MagicMock()
@@ -13650,13 +12508,10 @@ class TestComponentModuleMocking(unittest.TestCase):
         ):
             try:
                 from gui.common_components import StatusIndicator
-
                 status = StatusIndicator()
                 self.assertIsNotNone(status)
             except ImportError as e:
                 self.skipTest(f"Cannot test with mocks: {e}")
-
-
 if __name__ == "__main__":
     verbosity = 2 if "-v" in sys.argv else 1
     test_suite = unittest.TestLoader().loadTestsFromTestCase(TestCommonComponents)
@@ -13665,48 +12520,36 @@ if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=verbosity)
     result = runner.run(combined_suite)
     sys.exit(0 if result.wasSuccessful() else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 try:
     from application import Application
     from network.device_server import JsonSocketServer, RemoteDevice
     from session.session_manager import SessionManager
     from utils.logging_config import AppLogger, get_logger
-
     APP_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: Some app components not available: {e}")
     APP_COMPONENTS_AVAILABLE = False
 try:
     from test_device_simulator import DeviceSimulator
-
     DEVICE_SIMULATOR_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: DeviceSimulator not available: {e}")
     DEVICE_SIMULATOR_AVAILABLE = False
-
     class DeviceSimulator:
-
         def __init__(self, device_id, host="127.0.0.1", port=9000):
             pass
-
-
 try:
     import numpy as np
-
     NUMPY_AVAILABLE = True
 except ImportError:
     NUMPY_AVAILABLE = False
 try:
     import cv2
-
     CV2_AVAILABLE = True
 except ImportError:
     CV2_AVAILABLE = False
-
-
 class HealthMonitor:
-
     def __init__(self):
         self.start_time = time.time()
         self.last_heartbeat = time.time()
@@ -13715,20 +12558,16 @@ class HealthMonitor:
         self.monitoring = False
         self.monitor_thread = None
         self.health_status = {"status": "healthy", "issues": []}
-
     def start_monitoring(self):
         self.monitoring = True
         self.monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
         self.monitor_thread.start()
-
     def stop_monitoring(self):
         self.monitoring = False
         if self.monitor_thread:
             self.monitor_thread.join(timeout=1.0)
-
     def heartbeat(self):
         self.last_heartbeat = time.time()
-
     def _monitor_loop(self):
         while self.monitoring:
             current_time = time.time()
@@ -13757,7 +12596,6 @@ class HealthMonitor:
             except:
                 pass
             time.sleep(self.heartbeat_interval)
-
     def get_status(self) -> Dict[str, Any]:
         return {
             "status": self.health_status["status"],
@@ -13766,10 +12604,7 @@ class HealthMonitor:
             "last_heartbeat": self.last_heartbeat,
             "silence_duration": time.time() - self.last_heartbeat,
         }
-
-
 class EnhancedDeviceSimulator(DeviceSimulator):
-
     def __init__(self, device_id: str, host: str = "127.0.0.1", port: int = 9000):
         super().__init__(device_id, host, port)
         self.gsr_base_value = 1000 + hash(device_id) % 500
@@ -13777,7 +12612,6 @@ class EnhancedDeviceSimulator(DeviceSimulator):
         self.sensor_data_history = []
         self.max_history = 1000
         self.health_monitor = HealthMonitor()
-
     def start_realistic_sensor_simulation(self, duration: int = 60):
         self.health_monitor.start_monitoring()
         if not self.connect():
@@ -13796,7 +12630,6 @@ class EnhancedDeviceSimulator(DeviceSimulator):
         if not self.send_hello(capabilities):
             return False
         return self._run_realistic_simulation(duration)
-
     def _run_realistic_simulation(self, duration: int) -> bool:
         start_time = time.time()
         last_status = start_time
@@ -13859,7 +12692,6 @@ class EnhancedDeviceSimulator(DeviceSimulator):
             f"Simulation completed successfully after {time.time() - start_time:.2f} seconds"
         )
         return True
-
     def _generate_realistic_sensor_data(self, timestamp: float) -> Dict[str, Any]:
         time_offset = timestamp % 3600
         stress_factor = (
@@ -13902,7 +12734,6 @@ class EnhancedDeviceSimulator(DeviceSimulator):
                 "z": 45.0 + (hash(str(timestamp + 9)) % 100 - 50) / 10,
             },
         }
-
     def _handle_command(self, message: Dict[str, Any]):
         logger = get_logger(f"DeviceSimulator.{self.device_id}")
         command_type = message.get("type")
@@ -13943,10 +12774,7 @@ class EnhancedDeviceSimulator(DeviceSimulator):
             logger.info(f"Received handshake acknowledgment, compatible: {compatible}")
         else:
             logger.warning(f"Unknown command type: {command_type}")
-
-
 class ComprehensiveRecordingSessionTest(unittest.TestCase):
-
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, self.test_dir)
@@ -13964,7 +12792,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
         self.logger.info("=" * 80)
         self.logger.info("complete RECORDING SESSION TEST STARTED")
         self.logger.info("=" * 80)
-
     def tearDown(self):
         for device in self.simulated_devices:
             device.disconnect()
@@ -13977,7 +12804,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
         self.logger.info(f"Errors detected: {len(self.errors_detected)}")
         self.logger.info(f"Warnings detected: {len(self.warnings_detected)}")
         self.logger.info("=" * 80)
-
     def test_complete_recording_session_workflow(self):
         self.logger.info("Starting complete recording session workflow test")
         self.logger.info("Phase 1: Initializing PC Application Components")
@@ -14001,7 +12827,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
         self.logger.info("Phase 10: complete Logging Validation")
         self._validate_logging()
         self.logger.info("✅ Complete recording session workflow test PASSED")
-
     def _initialize_pc_components(self):
         timer_id = AppLogger.start_performance_timer("pc_initialization")
         try:
@@ -14023,7 +12848,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _start_android_simulations(self):
         timer_id = AppLogger.start_performance_timer("android_simulations_start")
         try:
@@ -14061,7 +12885,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _test_communication_networking(self):
         timer_id = AppLogger.start_performance_timer("communication_test")
         try:
@@ -14089,7 +12912,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _start_recording_session(self) -> str:
         timer_id = AppLogger.start_performance_timer("start_recording_session")
         try:
@@ -14116,7 +12938,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _monitor_recording_session(self, session_id: str, duration: int = 30):
         timer_id = AppLogger.start_performance_timer("monitor_recording_session")
         try:
@@ -14149,7 +12970,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _simulate_button_interactions(self, session_id: str):
         timer_id = AppLogger.start_performance_timer("button_interactions")
         try:
@@ -14200,7 +13020,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _stop_recording_and_validate_files(self, session_id: str):
         timer_id = AppLogger.start_performance_timer("stop_recording_validate_files")
         try:
@@ -14243,7 +13062,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _validate_post_processing(self, session_id: str):
         timer_id = AppLogger.start_performance_timer("post_processing_validation")
         try:
@@ -14281,7 +13099,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _validate_system_health(self):
         timer_id = AppLogger.start_performance_timer("system_health_validation")
         try:
@@ -14320,7 +13137,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
     def _validate_logging(self):
         timer_id = AppLogger.start_performance_timer("logging_validation")
         try:
@@ -14376,8 +13192,6 @@ class ComprehensiveRecordingSessionTest(unittest.TestCase):
             raise
         finally:
             AppLogger.end_performance_timer(timer_id, self.__class__.__name__)
-
-
 def run_comprehensive_recording_session_test():
     print("=" * 100)
     print("complete RECORDING SESSION TEST")
@@ -14408,8 +13222,6 @@ def run_comprehensive_recording_session_test():
     )
     print(f"Success rate: {success_rate:.1f}%")
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     if not APP_COMPONENTS_AVAILABLE:
         print(
@@ -14419,13 +13231,9 @@ if __name__ == "__main__":
         print("Warning: NumPy not available. Using simplified sensor simulation.")
     success = run_comprehensive_recording_session_test()
     sys.exit(0 if success else 1)
-
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 logger = logging.getLogger(__name__)
-
-
 class ConfigIntegrityTester:
-
     def __init__(self):
         self.config_manager = get_config_manager()
         self.required_sections = ["network", "devices", "UI", "calibration"]
@@ -14436,7 +13244,6 @@ class ConfigIntegrityTester:
             "performance",
             "security",
         ]
-
     def test_config_file_exists(self) -> bool:
         try:
             config_path = self.config_manager.config_path
@@ -14444,7 +13251,6 @@ class ConfigIntegrityTester:
         except Exception as e:
             logger.error(f"Error checking config file existence: {e}")
             return False
-
     def test_config_json_valid(self) -> bool:
         try:
             with open(self.config_manager.config_path, "r", encoding="utf-8") as f:
@@ -14456,7 +13262,6 @@ class ConfigIntegrityTester:
         except Exception as e:
             logger.error(f"Error reading config file: {e}")
             return False
-
     def test_required_sections_exist(self) -> bool:
         config = self.config_manager.config
         if not config:
@@ -14469,7 +13274,6 @@ class ConfigIntegrityTester:
             logger.error(f"Missing required config sections: {missing_sections}")
             return False
         return True
-
     def test_network_config_structure(self) -> bool:
         network = self.config_manager.get_network_config()
         required_keys = ["host", "port"]
@@ -14493,7 +13297,6 @@ class ConfigIntegrityTester:
             logger.error(f"Invalid network port: {port}")
             return False
         return True
-
     def test_devices_config_structure(self) -> bool:
         devices = self.config_manager.get_devices_config()
         required_keys = ["camera_id", "frame_rate"]
@@ -14522,7 +13325,6 @@ class ConfigIntegrityTester:
                 logger.error("Invalid resolution values")
                 return False
         return True
-
     def test_calibration_config_structure(self) -> bool:
         calibration = self.config_manager.get_calibration_config()
         required_keys = [
@@ -14552,7 +13354,6 @@ class ConfigIntegrityTester:
             logger.error(f"Invalid error threshold: {threshold}")
             return False
         return True
-
     def test_config_cross_validation(self) -> bool:
         devices = self.config_manager.get_devices_config()
         if "resolution" in devices and "preview_resolution" in devices:
@@ -14564,10 +13365,7 @@ class ConfigIntegrityTester:
             ):
                 logger.warning("Preview resolution larger than main resolution")
         return True
-
-
 class SchemaIntegrityTester:
-
     def __init__(self):
         self.schema_manager = get_schema_manager()
         self.expected_message_types = {
@@ -14580,7 +13378,6 @@ class SchemaIntegrityTester:
             "calibration_start",
             "calibration_result",
         }
-
     def test_schema_file_exists(self) -> bool:
         try:
             schema_path = self.schema_manager.schema_path
@@ -14588,7 +13385,6 @@ class SchemaIntegrityTester:
         except Exception as e:
             logger.error(f"Error checking schema file existence: {e}")
             return False
-
     def test_schema_json_valid(self) -> bool:
         try:
             with open(self.schema_manager.schema_path, "r", encoding="utf-8") as f:
@@ -14600,7 +13396,6 @@ class SchemaIntegrityTester:
         except Exception as e:
             logger.error(f"Error reading schema file: {e}")
             return False
-
     def test_schema_structure(self) -> bool:
         schema = self.schema_manager.schema
         if not schema:
@@ -14614,7 +13409,6 @@ class SchemaIntegrityTester:
             logger.error("Schema oneOf must be a list")
             return False
         return True
-
     def test_message_types_coverage(self) -> bool:
         valid_types = set(get_valid_message_types())
         missing_types = self.expected_message_types - valid_types
@@ -14625,7 +13419,6 @@ class SchemaIntegrityTester:
         if extra_types:
             logger.info(f"Additional message types in schema: {extra_types}")
         return True
-
     def test_message_validation(self) -> bool:
         test_messages = [
             {
@@ -14653,7 +13446,6 @@ class SchemaIntegrityTester:
                 logger.error(f"Valid message failed validation: {message}")
                 return False
         return True
-
     def test_invalid_message_rejection(self) -> bool:
         invalid_messages = [
             {"type": "start_record", "timestamp": 1234567890000},
@@ -14675,74 +13467,40 @@ class SchemaIntegrityTester:
                 logger.error(f"Invalid message passed validation: {message}")
                 return False
         return True
-
-
 @pytest.fixture
 def config_tester():
     return ConfigIntegrityTester()
-
-
 @pytest.fixture
 def schema_tester():
     return SchemaIntegrityTester()
-
-
 def test_config_file_exists(config_tester):
     assert config_tester.test_config_file_exists()
-
-
 def test_config_json_valid(config_tester):
     assert config_tester.test_config_json_valid()
-
-
 def test_config_required_sections(config_tester):
     assert config_tester.test_required_sections_exist()
-
-
 def test_network_config_structure(config_tester):
     assert config_tester.test_network_config_structure()
-
-
 def test_devices_config_structure(config_tester):
     assert config_tester.test_devices_config_structure()
-
-
 def test_calibration_config_structure(config_tester):
     assert config_tester.test_calibration_config_structure()
-
-
 def test_config_cross_validation(config_tester):
     assert config_tester.test_config_cross_validation()
-
-
 def test_config_validation_function():
     assert validate_config()
-
-
 def test_schema_file_exists(schema_tester):
     assert schema_tester.test_schema_file_exists()
-
-
 def test_schema_json_valid(schema_tester):
     assert schema_tester.test_schema_json_valid()
-
-
 def test_schema_structure(schema_tester):
     assert schema_tester.test_schema_structure()
-
-
 def test_message_types_coverage(schema_tester):
     assert schema_tester.test_message_types_coverage()
-
-
 def test_message_validation(schema_tester):
     assert schema_tester.test_message_validation()
-
-
 def test_invalid_message_rejection(schema_tester):
     assert schema_tester.test_invalid_message_rejection()
-
-
 def test_message_creation():
     start_msg = create_message("start_record", session_id="test_session")
     assert start_msg["type"] == "start_record"
@@ -14755,8 +13513,6 @@ def test_message_creation():
     assert preview_msg["frame_id"] == 1
     assert preview_msg["width"] == 640
     assert preview_msg["height"] == 480
-
-
 def test_config_schema_consistency():
     config_manager = get_config_manager()
     calibration_config = config_manager.get_calibration_config()
@@ -14771,8 +13527,6 @@ def test_config_schema_consistency():
     )
     schema_manager = get_schema_manager()
     assert schema_manager.validate_message(cal_msg)
-
-
 @pytest.mark.integration
 def test_config_reload():
     config_manager = get_config_manager()
@@ -14780,8 +13534,6 @@ def test_config_reload():
     config_manager.reload_config()
     reloaded_host = config_manager.get_host()
     assert reloaded_host == initial_host
-
-
 @pytest.mark.integration
 def test_schema_reload():
     schema_manager = get_schema_manager()
@@ -14789,11 +13541,8 @@ def test_schema_reload():
     schema_manager.reload_schema()
     reloaded_types = set(get_valid_message_types())
     assert reloaded_types == initial_types
-
-
 def test_config_convenience_functions():
     from protocol import get_frame_rate, get_host, get_port, get_resolution
-
     host = get_host()
     assert isinstance(host, str)
     assert len(host) > 0
@@ -14807,8 +13556,6 @@ def test_config_convenience_functions():
     assert isinstance(resolution, tuple)
     assert len(resolution) == 2
     assert all((isinstance(x, int) and x > 0 for x in resolution))
-
-
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
@@ -14857,10 +13604,7 @@ if __name__ == "__main__":
     else:
         print("Some tests failed. Check the logs for details.")
     exit(0 if failed == 0 else 1)
-
-
 class TestDeviceClientEnhanced(unittest.TestCase):
-
     def setUp(self):
         self.app = QCoreApplication.instance()
         if self.app is None:
@@ -14869,11 +13613,9 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         self.test_device_ip = "127.0.0.1"
         self.test_device_port = 9999
         self.device_client.server_port = self.test_device_port
-
     def tearDown(self):
         if self.device_client.running:
             self.device_client.stop_client()
-
     def test_device_client_initialization_enhanced(self):
         self.assertIsInstance(self.device_client, DeviceClient)
         self.assertEqual(self.device_client.server_port, self.test_device_port)
@@ -14889,7 +13631,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         self.assertIsInstance(self.device_client._rate_limiter, defaultdict)
         self.assertEqual(self.device_client._max_requests_per_minute, 60)
         self.assertFalse(self.device_client._ssl_enabled)
-
     def test_ssl_configuration(self):
         with patch("ssl.create_default_context") as mock_ssl_context:
             mock_context = Mock()
@@ -14904,7 +13645,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
             mock_context.load_cert_chain.assert_called_once_with(
                 "/path/to/cert.pem", "/path/to/key.pem"
             )
-
     def test_rate_limiting_mechanism(self):
         device_ip = "192.168.1.100"
         for i in range(30):
@@ -14914,7 +13654,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
             self.device_client._check_rate_limit(device_ip)
         result = self.device_client._check_rate_limit(device_ip)
         self.assertFalse(result, "Rate limit should be exceeded")
-
     def test_capability_negotiation(self):
         device_id = 0
         device_capabilities = ["recording", "streaming", "thermal_imaging"]
@@ -14939,7 +13678,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         self.assertTrue(result["streaming"])
         self.assertFalse(result["audio_capture"])
         self.assertFalse(result["gsr_monitoring"])
-
     def test_reliable_message_delivery_with_ack(self):
         device_id = 0
         mock_socket = Mock()
@@ -14960,7 +13698,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         sent_message = json.loads(sent_data.decode("utf-8"))
         message_id = sent_message["message_id"]
         self.assertIn(message_id, self.device_client._pending_acknowledgments)
-
     def test_acknowledgment_timeout_handling(self):
         message_id = str(uuid.uuid4())
         device_id = 0
@@ -14983,7 +13720,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         self.assertEqual(
             self.device_client._pending_acknowledgments[message_id]["attempts"], 2
         )
-
     def test_enhanced_message_processing(self):
         device_id = 0
         ack_message = {
@@ -15002,7 +13738,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         self.assertNotIn(
             "test-message-123", self.device_client._pending_acknowledgments
         )
-
     def test_capability_response_processing(self):
         device_id = 0
         with self.device_client._device_lock:
@@ -15023,7 +13758,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
             self.assertEqual(
                 updated_capabilities, ["recording", "streaming", "thermal_imaging"]
             )
-
     def test_performance_metrics_collection(self):
         self.device_client._message_stats["sent"] = 100
         self.device_client._message_stats["received"] = 95
@@ -15041,7 +13775,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         self.assertEqual(metrics["pending_acknowledgments"], 2)
         self.assertFalse(metrics["ssl_enabled"])
         self.assertEqual(metrics["rate_limit_per_minute"], 60)
-
     def test_latency_statistics_update(self):
         self.device_client._update_latency_stats(0.02)
         self.assertAlmostEqual(
@@ -15052,7 +13785,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         self.assertAlmostEqual(
             self.device_client._message_stats["avg_latency"], expected_avg, places=3
         )
-
     def test_error_message_processing(self):
         device_id = 0
         error_spy = QSignalSpy(self.device_client.error_occurred)
@@ -15066,7 +13798,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         emitted_error = error_spy[0][0]
         self.assertIn("Device 0 error", emitted_error)
         self.assertIn("Sensor calibration failed", emitted_error)
-
     def test_comprehensive_ssl_server_setup(self):
         with patch("ssl.create_default_context") as mock_ssl_context:
             mock_context = Mock()
@@ -15084,7 +13815,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
                 mock_context.wrap_socket.assert_called_once_with(
                     mock_socket_instance, server_side=True
                 )
-
     def test_device_connection_rate_limiting(self):
         address = ("192.168.1.100", 12345)
         for _ in range(65):
@@ -15093,7 +13823,6 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         with patch.object(self.device_client, "_check_rate_limit", return_value=False):
             self.device_client.handle_device_connection(mock_socket, address)
             mock_socket.close.assert_called_once()
-
     def test_json_protocol_validation(self):
         device_id = 0
         valid_message = {
@@ -15111,11 +13840,9 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         self.assertEqual(
             self.device_client._message_stats["received"], initial_received + 1
         )
-
     def test_thread_safety_concurrent_operations(self):
         import threading
         import time
-
         device_id = 0
         mock_socket = Mock()
         with self.device_client._device_lock:
@@ -15126,20 +13853,17 @@ class TestDeviceClientEnhanced(unittest.TestCase):
                 "status": "connected",
                 "capabilities": ["recording"],
             }
-
         def send_commands():
             for i in range(10):
                 self.device_client.send_command(
                     device_id, f"TEST_{i}", require_ack=False
                 )
                 time.sleep(0.001)
-
         def process_messages():
             for i in range(10):
                 message = {"type": "heartbeat", "timestamp": time.time()}
                 self.device_client._process_device_message(device_id, message)
                 time.sleep(0.001)
-
         thread1 = threading.Thread(target=send_commands)
         thread2 = threading.Thread(target=process_messages)
         thread1.start()
@@ -15147,11 +13871,8 @@ class TestDeviceClientEnhanced(unittest.TestCase):
         thread1.join()
         thread2.join()
         self.assertTrue(True)
-
-
 if __name__ == "__main__":
     unittest.main()
-
     def test_device_connection_success(self):
         with patch("socket.socket") as mock_socket:
             mock_socket_instance = MagicMock()
@@ -15171,7 +13892,6 @@ if __name__ == "__main__":
             )
             mock_socket_instance.send.assert_called()
             mock_socket_instance.recv.assert_called()
-
     def test_device_connection_failure(self):
         with patch("socket.socket") as mock_socket:
             mock_socket_instance = MagicMock()
@@ -15181,7 +13901,6 @@ if __name__ == "__main__":
             )
             result = self.device_client.connect_to_device("192.168.1.100", 8080)
             self.assertFalse(result)
-
     def test_device_disconnection(self):
         with patch("socket.socket") as mock_socket:
             mock_socket_instance = MagicMock()
@@ -15197,7 +13916,6 @@ if __name__ == "__main__":
             self.device_client.connect_to_device("192.168.1.100", 8080)
             self.device_client.disconnect_device(0)
             mock_socket_instance.close.assert_called()
-
     def test_send_command_success(self):
         with patch("socket.socket") as mock_socket:
             mock_socket_instance = MagicMock()
@@ -15215,16 +13933,13 @@ if __name__ == "__main__":
             result = self.device_client.send_command(0, "START", {"mode": "recording"})
             self.assertTrue(result)
             mock_socket_instance.send.assert_called()
-
     def test_send_command_to_nonexistent_device(self):
         result = self.device_client.send_command(99, "START")
         self.assertFalse(result)
-
     def test_get_connected_devices(self):
         devices = self.device_client.get_connected_devices()
         self.assertIsInstance(devices, dict)
         self.assertEqual(len(devices), 0)
-
     def test_command_protocol_format(self):
         with patch("socket.socket") as mock_socket:
             mock_socket_instance = MagicMock()
@@ -15254,7 +13969,6 @@ if __name__ == "__main__":
                 self.assertEqual(message["parameters"]["sensor"], "GSR")
             except json.JSONDecodeError:
                 self.fail("Sent data is not valid JSON")
-
     @patch("time.sleep")
     def test_server_socket_setup(self, mock_sleep):
         with patch("socket.socket") as mock_socket:
@@ -15265,13 +13979,10 @@ if __name__ == "__main__":
             self.device_client.stop_client()
             mock_server_socket.bind.assert_called_with(("0.0.0.0", 8080))
             mock_server_socket.listen.assert_called()
-
     def test_error_signal_emission(self):
         error_messages = []
-
         def capture_error(message):
             error_messages.append(message)
-
         self.device_client.error_occurred.connect(capture_error)
         with patch("socket.socket") as mock_socket:
             mock_socket_instance = MagicMock()
@@ -15281,7 +13992,6 @@ if __name__ == "__main__":
             self.assertFalse(result)
             self.assertEqual(len(error_messages), 1)
             self.assertIn("Network unreachable", error_messages[0])
-
     def test_multiple_device_connections(self):
         with patch("socket.socket") as mock_socket:
             mock_socket1 = MagicMock()
@@ -15301,7 +14011,6 @@ if __name__ == "__main__":
             self.assertTrue(result2)
             devices = self.device_client.get_connected_devices()
             self.assertEqual(len(devices), 2)
-
     def test_cleanup_procedures(self):
         with patch("socket.socket") as mock_socket:
             mock_socket_instance = MagicMock()
@@ -15311,10 +14020,7 @@ if __name__ == "__main__":
             time.sleep(0.1)
             self.device_client.stop_client()
             self.assertFalse(self.device_client.running)
-
-
 class TestDeviceClientIntegration(unittest.TestCase):
-
     def setUp(self):
         self.app = QCoreApplication.instance()
         if self.app is None:
@@ -15322,7 +14028,6 @@ class TestDeviceClientIntegration(unittest.TestCase):
         self.device_client = DeviceClient()
         self.test_server_socket = None
         self.test_server_thread = None
-
     def tearDown(self):
         if self.device_client.running:
             self.device_client.stop_client()
@@ -15331,9 +14036,7 @@ class TestDeviceClientIntegration(unittest.TestCase):
                 self.test_server_socket.close()
             except:
                 pass
-
     def start_mock_device_server(self, port=8081):
-
         def server_thread():
             try:
                 self.test_server_socket = socket.socket(
@@ -15355,24 +14058,17 @@ class TestDeviceClientIntegration(unittest.TestCase):
                         break
             except Exception as e:
                 print(f"Mock server error: {e}")
-
         self.test_server_thread = threading.Thread(target=server_thread, daemon=True)
         self.test_server_thread.start()
         time.sleep(0.1)
-
     def test_real_socket_connection(self):
         self.start_mock_device_server(8081)
         result = self.device_client.connect_to_device("localhost", 8081)
         self.assertIsInstance(result, bool)
-
-
 if __name__ == "__main__":
     unittest.main()
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
 async def main():
     print("=" * 80)
     print("DEVICE MANAGEMENT FULL TEST SUITE - Multi-Sensor Recording System")
@@ -15393,21 +14089,15 @@ async def main():
     }
     print("✅ Device Management Test Suite structure created")
     return results
-
-
 if __name__ == "__main__":
     results = asyncio.run(main())
     sys.exit(0 if results.get("overall_success", False) else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
-
-
 class DeviceSimulator:
-
     def __init__(self, device_id: str, host: str = "127.0.0.1", port: int = 9000):
         self.device_id = device_id
         self.host = host
@@ -15415,7 +14105,6 @@ class DeviceSimulator:
         self.socket: Optional[socket.socket] = None
         self.connected = False
         self.running = False
-
     def connect(self) -> bool:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15426,7 +14115,6 @@ class DeviceSimulator:
         except Exception as e:
             logger.error(f"Device {self.device_id} failed to connect: {e}")
             return False
-
     def disconnect(self):
         if self.socket:
             try:
@@ -15437,7 +14125,6 @@ class DeviceSimulator:
         self.connected = False
         self.running = False
         logger.info(f"Device {self.device_id} disconnected")
-
     def send_message(self, message: Dict[str, Any]) -> bool:
         if not self.connected or not self.socket:
             logger.error(f"Device {self.device_id} not connected")
@@ -15453,7 +14140,6 @@ class DeviceSimulator:
         except Exception as e:
             logger.error(f"Device {self.device_id} failed to send message: {e}")
             return False
-
     def send_hello(self, capabilities: list = None) -> bool:
         if capabilities is None:
             capabilities = ["camera", "thermal", "imu", "gsr"]
@@ -15464,7 +14150,6 @@ class DeviceSimulator:
             "timestamp": time.time(),
         }
         return self.send_message(hello_message)
-
     def send_status(
         self,
         battery: int = 85,
@@ -15482,7 +14167,6 @@ class DeviceSimulator:
             "timestamp": time.time(),
         }
         return self.send_message(status_message)
-
     def send_preview_frame(
         self, frame_type: str = "rgb", image_data: bytes = None
     ) -> bool:
@@ -15496,7 +14180,6 @@ class DeviceSimulator:
             "timestamp": time.time(),
         }
         return self.send_message(frame_message)
-
     def send_sensor_data(self, gsr: float = 0.5, ppg: float = 75.0) -> bool:
         sensor_message = {
             "type": "sensor_data",
@@ -15508,7 +14191,6 @@ class DeviceSimulator:
             "timestamp": time.time(),
         }
         return self.send_message(sensor_message)
-
     def send_ack(
         self,
         command: str,
@@ -15523,7 +14205,6 @@ class DeviceSimulator:
             "timestamp": time.time(),
         }
         return self.send_message(ack_message)
-
     def send_notification(
         self, event_type: str, event_data: Dict[str, Any] = None
     ) -> bool:
@@ -15536,7 +14217,6 @@ class DeviceSimulator:
             "timestamp": time.time(),
         }
         return self.send_message(notification_message)
-
     def receive_message(self) -> Optional[Dict[str, Any]]:
         if not self.connected or not self.socket:
             return None
@@ -15559,7 +14239,6 @@ class DeviceSimulator:
         except Exception as e:
             logger.error(f"Device {self.device_id} failed to receive message: {e}")
             return None
-
     def run_simulation(self, duration: int = 30):
         if not self.connect():
             return
@@ -15615,8 +14294,6 @@ class DeviceSimulator:
             logger.info(f"Device {self.device_id} simulation interrupted")
         finally:
             self.disconnect()
-
-
 def test_single_device():
     logger.info("=== Testing Single Device Connection ===")
     device = DeviceSimulator("TestDevice1")
@@ -15651,8 +14328,6 @@ def test_single_device():
     device.disconnect()
     logger.info("Single device test completed successfully")
     return True
-
-
 def test_multiple_devices():
     logger.info("=== Testing Multiple Device Connections ===")
     devices = [
@@ -15677,8 +14352,6 @@ def test_multiple_devices():
         device.disconnect()
     logger.info(f"Multiple device test completed with {len(connected_devices)} devices")
     return len(connected_devices) == len(devices)
-
-
 def test_device_simulation():
     logger.info("=== Testing Device Simulation ===")
     device = DeviceSimulator("SimulationDevice")
@@ -15687,8 +14360,6 @@ def test_device_simulation():
     simulation_thread.join()
     logger.info("Device simulation test completed")
     return True
-
-
 def main():
     logger.info("Starting JsonSocketServer Device Simulator Tests")
     tests = [
@@ -15718,16 +14389,10 @@ def main():
     else:
         logger.error("Some tests failed! ✗")
         return 1
-
-
 if __name__ == "__main__":
     exit(main())
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class TestEnhancedLogging:
-
     def setup_method(self):
         self.temp_dir = tempfile.mkdtemp()
         AppLogger._initialized = False
@@ -15740,7 +14405,6 @@ class TestEnhancedLogging:
             file_output=True,
             structured_logging=True,
         )
-
     def teardown_method(self):
         if AppLogger._root_logger:
             for handler in AppLogger._root_logger.handlers[:]:
@@ -15749,7 +14413,6 @@ class TestEnhancedLogging:
         AppLogger._initialized = False
         AppLogger._root_logger = None
         AppLogger._log_dir = None
-
     def test_basic_logging(self):
         logger = get_logger("test_module")
         logger.debug("Debug message")
@@ -15774,7 +14437,6 @@ class TestEnhancedLogging:
             assert "Info message" not in error_log_content
             assert "Error message" in error_log_content
             assert "Critical message" in error_log_content
-
     def test_structured_logging(self):
         logger = get_logger("test_structured")
         logger.info("Test structured message", extra={"custom_field": "custom_value"})
@@ -15798,19 +14460,16 @@ class TestEnhancedLogging:
         assert "thread" in test_entry
         assert "extra" in test_entry
         assert test_entry["extra"]["custom_field"] == "custom_value"
-
     def test_performance_monitoring(self):
         timer_id = AppLogger.start_performance_timer("test_operation", "test_context")
         time.sleep(0.1)
         duration = AppLogger.end_performance_timer(timer_id, "test_logger")
         assert duration >= 0.1
         assert duration < 0.2
-
         @performance_timer("decorated_operation")
         def test_function():
             time.sleep(0.05)
             return "test_result"
-
         result = test_function()
         assert result == "test_result"
         log_dir = Path(self.temp_dir)
@@ -15818,13 +14477,10 @@ class TestEnhancedLogging:
             log_content = f.read()
             assert "Operation 'test_operation' completed in" in log_content
             assert "Operation 'decorated_operation' completed in" in log_content
-
     def test_function_entry_logging(self):
-
         @log_function_entry
         def test_function(arg1, arg2=None):
             return f"{arg1}_{arg2}"
-
         result = test_function("hello", arg2="world")
         assert result == "hello_world"
         log_dir = Path(self.temp_dir)
@@ -15832,15 +14488,11 @@ class TestEnhancedLogging:
             log_content = f.read()
             assert "→ Entering test_function" in log_content
             assert "← Exiting test_function successfully" in log_content
-
     def test_method_entry_logging(self):
-
         class TestClass:
-
             @log_method_entry
             def test_method(self, arg1):
                 return f"method_{arg1}"
-
         test_obj = TestClass()
         result = test_obj.test_method("test")
         assert result == "method_test"
@@ -15849,13 +14501,10 @@ class TestEnhancedLogging:
             log_content = f.read()
             assert "→ Entering TestClass.test_method" in log_content
             assert "← Exiting TestClass.test_method successfully" in log_content
-
     def test_exception_logging(self):
-
         @log_function_entry
         def failing_function():
             raise ValueError("Test exception")
-
         with pytest.raises(ValueError):
             failing_function()
         log_dir = Path(self.temp_dir)
@@ -15863,7 +14512,6 @@ class TestEnhancedLogging:
             log_content = f.read()
             assert "✗ Exception in failing_function" in log_content
             assert "ValueError: Test exception" in log_content
-
     def test_exception_context_manager(self):
         with pytest.raises(RuntimeError):
             with log_exception_context("test_context"):
@@ -15875,7 +14523,6 @@ class TestEnhancedLogging:
                 "Exception occurred: RuntimeError: Context test exception"
                 in log_content
             )
-
     @patch("psutil.Process")
     def test_memory_usage_logging(self, mock_process):
         mock_memory_info = MagicMock()
@@ -15893,7 +14540,6 @@ class TestEnhancedLogging:
             assert "RSS=100.0MB" in log_content
             assert "VMS=200.0MB" in log_content
             assert "15.5%" in log_content
-
     def test_memory_usage_decorator(self):
         with patch("psutil.Process") as mock_process:
             mock_memory_info = MagicMock()
@@ -15903,11 +14549,9 @@ class TestEnhancedLogging:
             mock_process_instance.memory_info.return_value = mock_memory_info
             mock_process_instance.memory_percent.return_value = 10.0
             mock_process.return_value = mock_process_instance
-
             @log_memory_usage("decorator_test")
             def test_function():
                 return "memory_test"
-
             result = test_function()
             assert result == "memory_test"
             log_dir = Path(self.temp_dir)
@@ -15921,11 +14565,9 @@ class TestEnhancedLogging:
                     "Memory usage at decorator_test - after test_function"
                     in log_content
                 )
-
     def test_colored_formatter(self):
         formatter = ColoredFormatter("%(levelname)s: %(message)s")
         import logging
-
         record = logging.LogRecord(
             name="test_logger",
             level=logging.INFO,
@@ -15939,11 +14581,9 @@ class TestEnhancedLogging:
         assert "\x1b[32m" in formatted
         assert "\x1b[0m" in formatted
         assert "Test message" in formatted
-
     def test_structured_formatter(self):
         formatter = StructuredFormatter()
         import logging
-
         record = logging.LogRecord(
             name="test_logger",
             level=logging.INFO,
@@ -15967,16 +14607,13 @@ class TestEnhancedLogging:
         assert "timestamp" in parsed
         assert "extra" in parsed
         assert parsed["extra"]["custom_field"] == "custom_value"
-
     def test_performance_monitor_thread_safety(self):
         results = []
-
         def worker_function(worker_id):
             timer_id = PerformanceMonitor.start_timer(f"worker_{worker_id}")
             time.sleep(0.01)
             duration = PerformanceMonitor.end_timer(timer_id)
             results.append((worker_id, duration))
-
         threads = []
         for i in range(5):
             thread = threading.Thread(target=worker_function, args=(i,))
@@ -15988,7 +14625,6 @@ class TestEnhancedLogging:
         for worker_id, duration in results:
             assert duration > 0.005
             assert duration < 0.1
-
     def test_log_level_changes(self):
         logger = get_logger("level_test")
         AppLogger.set_level("INFO")
@@ -16003,7 +14639,6 @@ class TestEnhancedLogging:
             assert "Info message - should appear" in log_content
             assert "Debug message - should now appear" in log_content
             assert "Another info message" in log_content
-
     def test_get_active_timers(self):
         timer1 = AppLogger.start_performance_timer("operation1", "context1")
         timer2 = AppLogger.start_performance_timer("operation2", "context2")
@@ -16022,22 +14657,15 @@ class TestEnhancedLogging:
         assert timer1 not in active_timers
         assert timer2 in active_timers
         AppLogger.end_performance_timer(timer2)
-
-
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class MockDevice:
-
     def __init__(self, device_id: str, capabilities: List[str] = None):
         self.device_id = device_id
         self.capabilities = capabilities or ["camera", "thermal"]
         self.socket = None
         self.connected = False
-
     def connect(self, host: str = "127.0.0.1", port: int = 9001) -> bool:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16047,7 +14675,6 @@ class MockDevice:
         except Exception as e:
             print(f"Mock device connection failed: {e}")
             return False
-
     def disconnect(self):
         if self.socket:
             try:
@@ -16056,7 +14683,6 @@ class MockDevice:
                 pass
         self.connected = False
         self.socket = None
-
     def send_handshake(self) -> bool:
         message = {
             "type": "handshake",
@@ -16065,7 +14691,6 @@ class MockDevice:
             "timestamp": time.time(),
         }
         return self.send_message(message)
-
     def send_message(self, message: dict) -> bool:
         if not self.connected or not self.socket:
             return False
@@ -16077,7 +14702,6 @@ class MockDevice:
         except Exception as e:
             print(f"Send error: {e}")
             return False
-
     def receive_message(self, timeout: float = 1.0) -> dict:
         if not self.connected or not self.socket:
             return None
@@ -16099,15 +14723,12 @@ class MockDevice:
         except Exception as e:
             print(f"Receive error: {e}")
             return None
-
     def send_heartbeat(self) -> bool:
         message = {"type": "heartbeat", "timestamp": time.time()}
         return self.send_message(message)
-
     def send_status(self, **kwargs) -> bool:
         message = {"type": "status", "timestamp": time.time(), **kwargs}
         return self.send_message(message)
-
     def send_preview_frame(self, frame_type: str = "rgb") -> bool:
         test_image = b"test_image_data_" + os.urandom(100)
         image_b64 = base64.b64encode(test_image).decode("utf-8")
@@ -16120,17 +14741,13 @@ class MockDevice:
             "timestamp": time.time(),
         }
         return self.send_message(message)
-
-
 class TestEnhancedNetworking(unittest.TestCase):
-
     def setUp(self):
         self.server = EnhancedDeviceServer(
             host="127.0.0.1", port=9001, heartbeat_interval=1.0
         )
         self.server_thread = None
         self.mock_devices = []
-
     def tearDown(self):
         for device in self.mock_devices:
             device.disconnect()
@@ -16139,12 +14756,10 @@ class TestEnhancedNetworking(unittest.TestCase):
             self.server.stop_server()
         if self.server_thread and self.server_thread.is_alive():
             self.server_thread.join(timeout=5)
-
     def start_server(self):
         success = self.server.start_server()
         self.assertTrue(success, "Server should start successfully")
         time.sleep(0.5)
-
     def create_mock_device(self, device_id: str) -> MockDevice:
         device = MockDevice(device_id)
         self.assertTrue(device.connect(port=9001), f"Device {device_id} should connect")
@@ -16154,7 +14769,6 @@ class TestEnhancedNetworking(unittest.TestCase):
         self.mock_devices.append(device)
         time.sleep(0.2)
         return device
-
     def test_enhanced_server_startup(self):
         self.assertFalse(self.server.running)
         self.start_server()
@@ -16162,14 +14776,11 @@ class TestEnhancedNetworking(unittest.TestCase):
         stats = self.server.get_network_statistics()
         self.assertEqual(stats["active_devices"], 0)
         self.assertEqual(stats["total_connections"], 0)
-
     def test_device_connection_with_handshake(self):
         self.start_server()
         connection_events = []
-
         def on_device_connected(device_id, device_info):
             connection_events.append(("connected", device_id, device_info))
-
         self.server.device_connected.connect(on_device_connected)
         device = self.create_mock_device("test_device_1")
         time.sleep(1.0)
@@ -16178,7 +14789,6 @@ class TestEnhancedNetworking(unittest.TestCase):
         self.assertIn("test_device_1", stats["devices"])
         self.assertEqual(len(connection_events), 1)
         self.assertEqual(connection_events[0][1], "test_device_1")
-
     def test_heartbeat_mechanism(self):
         self.start_server()
         device = self.create_mock_device("heartbeat_test")
@@ -16190,7 +14800,6 @@ class TestEnhancedNetworking(unittest.TestCase):
         self.assertTrue(device_info["is_alive"])
         time.sleep(3.0)
         stats = self.server.get_network_statistics()
-
     def test_message_priority_handling(self):
         self.start_server()
         device = self.create_mock_device("priority_test")
@@ -16205,7 +14814,6 @@ class TestEnhancedNetworking(unittest.TestCase):
         self.assertTrue(preview_msg)
         self.assertTrue(status_msg)
         self.assertTrue(heartbeat_msg)
-
     def test_adaptive_streaming_quality(self):
         self.start_server()
         device = self.create_mock_device("streaming_test")
@@ -16219,14 +14827,11 @@ class TestEnhancedNetworking(unittest.TestCase):
         actual_fps = frame_count / duration
         self.assertLess(actual_fps, 18, "Frame rate should be limited")
         print(f"Actual FPS: {actual_fps:.2f}")
-
     def test_connection_recovery(self):
         self.start_server()
         disconnection_events = []
-
         def on_device_disconnected(device_id, reason):
             disconnection_events.append((device_id, reason))
-
         self.server.device_disconnected.connect(on_device_disconnected)
         device = self.create_mock_device("recovery_test")
         device.socket.close()
@@ -16234,18 +14839,15 @@ class TestEnhancedNetworking(unittest.TestCase):
         time.sleep(2.0)
         stats = self.server.get_network_statistics()
         self.assertEqual(stats["active_devices"], 0)
-
     def test_concurrent_device_connections(self):
         self.start_server()
         devices = []
         threads = []
-
         def connect_device(device_id):
             device = MockDevice(device_id)
             if device.connect(port=9001) and device.send_handshake():
                 devices.append(device)
                 self.mock_devices.append(device)
-
         for i in range(5):
             thread = threading.Thread(
                 target=connect_device, args=(f"concurrent_device_{i}",)
@@ -16259,13 +14861,11 @@ class TestEnhancedNetworking(unittest.TestCase):
         self.assertEqual(stats["active_devices"], 5)
         self.assertEqual(len(devices), 5)
         message_threads = []
-
         def send_messages(device):
             for i in range(10):
                 device.send_status(battery=random.randint(50, 100))
                 device.send_preview_frame("rgb")
                 time.sleep(0.1)
-
         for device in devices:
             thread = threading.Thread(target=send_messages, args=(device,))
             message_threads.append(thread)
@@ -16273,7 +14873,6 @@ class TestEnhancedNetworking(unittest.TestCase):
         for thread in message_threads:
             thread.join()
         print(f"Concurrent test completed with {len(devices)} devices")
-
     def test_large_message_handling(self):
         self.start_server()
         device = self.create_mock_device("large_msg_test")
@@ -16293,14 +14892,11 @@ class TestEnhancedNetworking(unittest.TestCase):
         stats = self.server.get_network_statistics()
         device_stats = stats["devices"]["large_msg_test"]
         self.assertGreater(device_stats["stats"]["bytes_received"], 1024 * 1024)
-
     def test_error_handling_and_recovery(self):
         self.start_server()
         error_events = []
-
         def on_error_occurred(device_id, error_type, error_message):
             error_events.append((device_id, error_type, error_message))
-
         self.server.error_occurred.connect(on_error_occurred)
         device = self.create_mock_device("error_test")
         invalid_message = b"invalid_json_data"
@@ -16316,7 +14912,6 @@ class TestEnhancedNetworking(unittest.TestCase):
         if "error_test" in stats["devices"]:
             device_stats = stats["devices"]["error_test"]
             self.assertGreater(device_stats["stats"]["error_count"], 0)
-
     def test_server_command_broadcasting(self):
         self.start_server()
         devices = []
@@ -16333,7 +14928,6 @@ class TestEnhancedNetworking(unittest.TestCase):
             if response:
                 self.assertEqual(response.get("type"), "command")
                 self.assertEqual(response.get("command"), "start_recording")
-
     def test_network_statistics_accuracy(self):
         self.start_server()
         device = self.create_mock_device("stats_test")
@@ -16352,19 +14946,14 @@ class TestEnhancedNetworking(unittest.TestCase):
         self.assertGreater(
             device_stats["stats"]["bytes_received"], 0, "Byte count should be tracked"
         )
-
-
 class TestNetworkPerformance(unittest.TestCase):
-
     def setUp(self):
         self.server = EnhancedDeviceServer(
             host="127.0.0.1", port=9002, max_connections=20, heartbeat_interval=2.0
         )
-
     def tearDown(self):
         if self.server and self.server.running:
             self.server.stop_server()
-
     def test_high_frequency_messaging(self):
         success = self.server.start_server()
         self.assertTrue(success)
@@ -16388,12 +14977,9 @@ class TestNetworkPerformance(unittest.TestCase):
             successful_sends / duration, 50, "Should handle at least 50 msg/sec"
         )
         device.disconnect()
-
     def test_memory_usage_stability(self):
         import gc
-
         import psutil
-
         process = psutil.Process()
         initial_memory = process.memory_info().rss
         success = self.server.start_server()
@@ -16418,8 +15004,6 @@ class TestNetworkPerformance(unittest.TestCase):
             total_growth, 50 * 1024 * 1024, "Memory growth should be bounded"
         )
         device.disconnect()
-
-
 def run_comprehensive_tests():
     print("Starting complete Enhanced Networking Tests")
     print("=" * 60)
@@ -16445,27 +15029,19 @@ def run_comprehensive_tests():
         for test, trace in result.errors:
             print(f"- {test}: {trace.split(chr(10))[-2]}")
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     import sys
-
     success = run_comprehensive_tests()
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class PerformanceTestThread(QThread):
     progress_updated = pyqtSignal(int, str)
     test_completed = pyqtSignal(dict)
-
     def __init__(self, controller, test_duration=10):
         super().__init__()
         self.controller = controller
         self.test_duration = test_duration
         self.results = {}
-
     def run(self):
         self.progress_updated.emit(0, "Starting performance test...")
         start_time = time.perf_counter()
@@ -16496,10 +15072,7 @@ class PerformanceTestThread(QThread):
             ),
         }
         self.test_completed.emit(self.results)
-
-
 class EnhancedStimulusTestWindow(QMainWindow):
-
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Enhanced Stimulus Presentation Test Suite")
@@ -16519,7 +15092,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
         self.connect_test_signals()
         print("[DEBUG_LOG] Enhanced StimulusTestWindow initialized")
         print(f"[DEBUG_LOG] VLC Backend Available: {VLC_AVAILABLE}")
-
     def create_header(self, layout):
         header_layout = QHBoxLayout()
         title_label = QLabel("Enhanced Stimulus Presentation Test Suite")
@@ -16529,13 +15101,11 @@ class EnhancedStimulusTestWindow(QMainWindow):
         info_label.setStyleSheet("QLabel { color: #666; }")
         header_layout.addWidget(info_label)
         layout.addLayout(header_layout)
-
     def create_controller_section(self, layout):
         layout.addWidget(QLabel("Enhanced Stimulus Controller:"))
         layout.addWidget(self.enhanced_controller)
         layout.addWidget(QLabel("Stimulus Control Panel:"))
         layout.addWidget(self.stimulus_panel)
-
     def create_test_controls(self, layout):
         test_layout = QVBoxLayout()
         file_test_layout = QHBoxLayout()
@@ -16580,7 +15150,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
         codec_test_layout.addWidget(self.format_support_btn)
         test_layout.addLayout(codec_test_layout)
         layout.addLayout(test_layout)
-
     def create_results_section(self, layout):
         layout.addWidget(QLabel("Test Results:"))
         self.progress_bar = QProgressBar()
@@ -16590,7 +15159,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
         self.results_text.setMaximumHeight(200)
         self.results_text.setPlainText("Test Results: Ready to run tests")
         layout.addWidget(self.results_text)
-
     def connect_test_signals(self):
         self.stimulus_panel.file_loaded.connect(self.enhanced_controller.load_video)
         self.stimulus_panel.play_requested.connect(self.enhanced_controller.test_play)
@@ -16606,7 +15174,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
         self.enhanced_controller.experiment_ended.connect(self.on_experiment_ended)
         self.enhanced_controller.error_occurred.connect(self.on_error_occurred)
         self.enhanced_controller.backend_changed.connect(self.on_backend_changed)
-
     def load_test_video(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self,
@@ -16626,12 +15193,10 @@ class EnhancedStimulusTestWindow(QMainWindow):
                 self.add_result(
                     f"✗ Failed to load video: {os.path.basename(file_path)}"
                 )
-
     def create_test_video(self):
         try:
             import cv2
             import numpy as np
-
             fourcc = cv2.VideoWriter_fourcc(*"mp4v")
             filename = "enhanced_test_video.mp4"
             out = cv2.VideoWriter(filename, fourcc, 30.0, (640, 480))
@@ -16681,7 +15246,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
             self.add_result("✗ OpenCV not available - cannot create test video")
         except Exception as e:
             self.add_result(f"✗ Error creating test video: {e}")
-
     def test_qt_backend(self):
         if not self.enhanced_controller.current_video_file:
             self.add_result("✗ No video loaded for Qt backend test")
@@ -16697,7 +15261,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
                 self.add_result("✗ Qt backend test failed")
         except Exception as e:
             self.add_result(f"✗ Qt backend test error: {e}")
-
     def test_vlc_backend(self):
         if not VLC_AVAILABLE:
             self.add_result("✗ VLC backend not available")
@@ -16716,7 +15279,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
                 self.add_result("✗ VLC backend test failed")
         except Exception as e:
             self.add_result(f"✗ VLC backend test error: {e}")
-
     def test_synchronized_start(self):
         if not self.enhanced_controller.current_video_file:
             self.add_result("✗ No video loaded for synchronization test")
@@ -16736,7 +15298,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
                 self.add_result("✗ Enhanced synchronized start test failed")
         except Exception as e:
             self.add_result(f"✗ Synchronization test error: {e}")
-
     def test_timing_precision(self):
         try:
             test_logger = EnhancedTimingLogger("test_logs")
@@ -16764,7 +15325,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
             )
         except Exception as e:
             self.add_result(f"✗ Timing precision test error: {e}")
-
     def test_codec_detection(self):
         try:
             test_formats = [
@@ -16792,7 +15352,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
                 self.add_result(f"✓ {result}")
         except Exception as e:
             self.add_result(f"✗ Codec detection test error: {e}")
-
     def test_format_support(self):
         try:
             qt_formats = self.codec_info.qt_supported
@@ -16815,7 +15374,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
             self.add_result(f"✓ Recommended formats: {', '.join(recommended_formats)}")
         except Exception as e:
             self.add_result(f"✗ Format support test error: {e}")
-
     def run_performance_test(self):
         if self.performance_thread and self.performance_thread.isRunning():
             self.add_result("! Performance test already running")
@@ -16827,7 +15385,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
         self.performance_thread.test_completed.connect(self.on_performance_completed)
         self.performance_thread.start()
         self.add_result("✓ Performance test started...")
-
     def run_all_tests(self):
         self.add_result("=== Starting Enhanced complete Test Suite ===")
         self.test_results.clear()
@@ -16840,7 +15397,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
         if self.enhanced_controller.current_video_file:
             self.test_performance_monitoring()
         self.display_final_results()
-
     def test_component_initialization(self):
         try:
             assert self.enhanced_controller is not None
@@ -16855,7 +15411,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
             self.add_result("✓ Enhanced component initialization test passed")
         except Exception as e:
             self.add_result(f"✗ Enhanced component initialization test failed: {e}")
-
     def test_enhanced_signal_connections(self):
         try:
             assert hasattr(self.enhanced_controller, "status_changed")
@@ -16870,7 +15425,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
             self.add_result("✓ Enhanced signal connections test passed")
         except Exception as e:
             self.add_result(f"✗ Enhanced signal connections test failed: {e}")
-
     def test_backend_availability(self):
         try:
             assert self.enhanced_controller.qt_media_player is not None
@@ -16891,7 +15445,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
                 )
         except Exception as e:
             self.add_result(f"✗ Backend availability test failed: {e}")
-
     def test_performance_monitoring(self):
         try:
             assert hasattr(self.enhanced_controller, "performance_bar")
@@ -16906,7 +15459,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
             )
         except Exception as e:
             self.add_result(f"✗ Performance monitoring test failed: {e}")
-
     def display_final_results(self):
         passed_tests = len([r for r in self.test_results if r.startswith("✓")])
         failed_tests = len([r for r in self.test_results if r.startswith("✗")])
@@ -16923,12 +15475,10 @@ class EnhancedStimulusTestWindow(QMainWindow):
             success_rate = passed_tests / total_tests * 100
             summary += f"Success Rate: {success_rate:.1f}%\n"
         self.add_result(summary)
-
     def _enable_backend_tests(self):
         self.test_qt_backend_btn.setEnabled(True)
         self.test_vlc_backend_btn.setEnabled(VLC_AVAILABLE)
         self.switch_backend_btn.setEnabled(VLC_AVAILABLE)
-
     def add_result(self, message):
         self.test_results.append(message)
         current_text = self.results_text.toPlainText()
@@ -16936,28 +15486,21 @@ class EnhancedStimulusTestWindow(QMainWindow):
         scrollbar = self.results_text.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
         print(f"[DEBUG_LOG] {message}")
-
     def on_status_changed(self, status):
         self.add_result(f"Status: {status}")
-
     def on_experiment_started(self):
         self.add_result("✓ Enhanced experiment started")
-
     def on_experiment_ended(self):
         self.add_result("✓ Enhanced experiment ended")
         self.stimulus_panel.set_experiment_active(False)
-
     def on_error_occurred(self, error):
         self.add_result(f"✗ Error: {error}")
-
     def on_backend_changed(self, backend):
         self.add_result(f"✓ Backend switched to: {backend}")
-
     def on_performance_progress(self, progress, message):
         self.progress_bar.setValue(progress)
         if progress % 20 == 0:
             self.add_result(message)
-
     def on_performance_completed(self, results):
         self.progress_bar.setVisible(False)
         self.add_result("=== Performance Test Results ===")
@@ -16967,8 +15510,6 @@ class EnhancedStimulusTestWindow(QMainWindow):
         self.add_result(f"✓ Total frames: {results['total_frames']}")
         self.add_result(f"✓ Dropped frames: {results['dropped_frames']}")
         self.add_result(f"✓ Performance score: {results['performance_score']}/100")
-
-
 def main():
     print("[DEBUG_LOG] Starting Enhanced Stimulus Presentation Test Suite")
     app = QApplication(sys.argv)
@@ -16982,15 +15523,10 @@ def main():
     print("[DEBUG_LOG] - Automatic Backend Selection")
     print("[DEBUG_LOG] - complete Codec Support")
     sys.exit(app.exec_())
-
-
 if __name__ == "__main__":
     main()
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
 async def main():
     print("=" * 80)
     print("FILE MANAGEMENT FULL TEST SUITE - Multi-Sensor Recording System")
@@ -17011,17 +15547,11 @@ async def main():
     }
     print("✅ File Management Test Suite structure created")
     return results
-
-
 if __name__ == "__main__":
     results = asyncio.run(main())
     sys.exit(0 if results.get("overall_success", False) else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class TestFileTransferIntegration(unittest.TestCase):
-
     def setUp(self):
         self.server = JsonSocketServer(host="localhost", port=9001)
         self.test_dir = tempfile.mkdtemp()
@@ -17036,12 +15566,10 @@ class TestFileTransferIntegration(unittest.TestCase):
         self.server.devices[self.device_id] = self.test_device
         self.test_file_content = b"Test file content for transfer validation. " * 100
         self.test_file_name = "test_video.mp4"
-
     def tearDown(self):
         if os.path.exists(self.test_dir):
             shutil.rmtree(self.test_dir)
         self.server.cleanup()
-
     def test_file_info_message_processing(self):
         file_info_message = {
             "type": "file_info",
@@ -17064,7 +15592,6 @@ class TestFileTransferIntegration(unittest.TestCase):
                 len(self.test_file_content),
             )
             self.assertEqual(self.test_device.file_transfer_state["received_bytes"], 0)
-
     def test_file_chunk_message_processing(self):
         self.test_device.file_transfer_state = {
             "filename": self.test_file_name,
@@ -17095,7 +15622,6 @@ class TestFileTransferIntegration(unittest.TestCase):
         finally:
             if self.test_device.file_transfer_state["file_handle"]:
                 self.test_device.file_transfer_state["file_handle"].close()
-
     def test_file_end_message_processing(self):
         test_file_path = os.path.join(
             self.test_dir, f"{self.device_id}_{self.test_file_name}"
@@ -17121,7 +15647,6 @@ class TestFileTransferIntegration(unittest.TestCase):
             self.assertEqual(call_args[0], self.device_id)
             self.assertEqual(call_args[1]["type"], "file_received")
             self.assertEqual(call_args[1]["status"], "ok")
-
     def test_file_end_message_size_mismatch(self):
         test_file_path = os.path.join(
             self.test_dir, f"{self.device_id}_{self.test_file_name}"
@@ -17143,7 +15668,6 @@ class TestFileTransferIntegration(unittest.TestCase):
             call_args = mock_send.call_args[0]
             self.assertEqual(call_args[1]["type"], "file_received")
             self.assertEqual(call_args[1]["status"], "error")
-
     def test_request_file_from_device(self):
         test_filepath = "/storage/test/file.mp4"
         with patch.object(self.server, "send_command", return_value=True) as mock_send:
@@ -17155,13 +15679,11 @@ class TestFileTransferIntegration(unittest.TestCase):
                 self.device_id,
                 {"type": "send_file", "filepath": test_filepath, "filetype": "video"},
             )
-
     def test_request_file_from_nonexistent_device(self):
         result = self.server.request_file_from_device(
             "nonexistent_device", "/test/file.mp4"
         )
         self.assertFalse(result)
-
     def test_get_expected_files_for_device(self):
         expected_files = self.server.get_expected_files_for_device(
             self.device_id, self.session_id, ["rgb_video", "thermal", "shimmer"]
@@ -17174,14 +15696,12 @@ class TestFileTransferIntegration(unittest.TestCase):
         for filepath in expected_files:
             self.assertIn(self.session_id, filepath)
             self.assertIn(self.device_id, filepath)
-
     def test_get_expected_files_partial_capabilities(self):
         expected_files = self.server.get_expected_files_for_device(
             self.device_id, self.session_id, ["rgb_video"]
         )
         self.assertEqual(len(expected_files), 1)
         self.assertTrue(expected_files[0].endswith("rgb.mp4"))
-
     def test_request_all_session_files(self):
         device2_id = "test_device_789"
         device2 = RemoteDevice(
@@ -17201,7 +15721,6 @@ class TestFileTransferIntegration(unittest.TestCase):
                 device_ids_called.add(call[0][0])
             self.assertIn(self.device_id, device_ids_called)
             self.assertIn(device2_id, device_ids_called)
-
     @patch("os.makedirs")
     @patch("os.getcwd")
     def test_get_session_directory(self, mock_getcwd, mock_makedirs):
@@ -17211,7 +15730,6 @@ class TestFileTransferIntegration(unittest.TestCase):
         self.assertTrue(session_dir.startswith("/test/working/dir/sessions/"))
         self.assertIn("session_", session_dir)
         mock_makedirs.assert_called()
-
     def test_complete_file_transfer_workflow(self):
         with patch.object(
             self.server, "get_session_directory", return_value=self.test_dir
@@ -17254,7 +15772,6 @@ class TestFileTransferIntegration(unittest.TestCase):
                 mock_send.assert_called_once()
                 call_args = mock_send.call_args[0]
                 self.assertEqual(call_args[1]["status"], "ok")
-
     def test_multiple_concurrent_transfers(self):
         devices = []
         for i in range(3):
@@ -17282,19 +15799,12 @@ class TestFileTransferIntegration(unittest.TestCase):
                 self.assertEqual(
                     device.file_transfer_state["filename"], f"video_{device_id}.mp4"
                 )
-
-
 if __name__ == "__main__":
     import logging
-
     logging.basicConfig(level=logging.DEBUG)
     unittest.main(verbosity=2)
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-
 class TestResult:
-
     def __init__(
         self, test_name: str, success: bool, message: str, details: Dict = None
     ):
@@ -17304,7 +15814,6 @@ class TestResult:
         self.details = details or {}
         self.timestamp = datetime.now()
         self.duration = 0.0
-
     def to_dict(self) -> Dict:
         return {
             "test_name": self.test_name,
@@ -17314,16 +15823,12 @@ class TestResult:
             "timestamp": self.timestamp.isoformat(),
             "duration": self.duration,
         }
-
-
 class MultiDeviceSyncTester:
-
     def __init__(self):
         self.webcam_capture = None
         self.session_manager = None
         self.server = None
         self.test_results = []
-
     def setup_test_environment(self) -> TestResult:
         try:
             print("[DEBUG_LOG] Setting up multi-device sync test environment...")
@@ -17347,7 +15852,6 @@ class MultiDeviceSyncTester:
                 f"Failed to setup test environment: {str(e)}",
                 {"error": str(e)},
             )
-
     def test_webcam_initialization(self) -> TestResult:
         start_time = time.time()
         try:
@@ -17396,7 +15900,6 @@ class MultiDeviceSyncTester:
             )
             result.duration = duration
             return result
-
     def test_session_synchronization(self, test_duration: int = 10) -> TestResult:
         start_time = time.time()
         try:
@@ -17481,7 +15984,6 @@ class MultiDeviceSyncTester:
             )
             result.duration = duration
             return result
-
     def test_video_file_validation(self, video_path: str) -> TestResult:
         start_time = time.time()
         try:
@@ -17595,7 +16097,6 @@ class MultiDeviceSyncTester:
             )
             result.duration = duration_test
             return result
-
     def cleanup_test_environment(self) -> TestResult:
         try:
             print("[DEBUG_LOG] Cleaning up test environment...")
@@ -17616,16 +16117,12 @@ class MultiDeviceSyncTester:
                 f"Test environment cleanup failed: {str(e)}",
                 {"error": str(e)},
             )
-
-
 class PerformanceStabilityTester:
-
     def __init__(self):
         self.webcam_capture = None
         self.session_manager = None
         self.monitoring_active = False
         self.performance_data = []
-
     def test_long_recording_session(self, duration_minutes: int = 5) -> TestResult:
         start_time = time.time()
         try:
@@ -17715,10 +16212,8 @@ class PerformanceStabilityTester:
         finally:
             if self.webcam_capture:
                 self.webcam_capture.cleanup()
-
     def _monitor_performance(self):
         import psutil
-
         while self.monitoring_active:
             try:
                 process = psutil.Process()
@@ -17740,7 +16235,6 @@ class PerformanceStabilityTester:
             except Exception as e:
                 print(f"[DEBUG_LOG] Performance monitoring error: {e}")
                 break
-
     def _analyze_performance_data(self) -> Dict:
         if not self.performance_data:
             return {"stable": False, "reason": "No performance data collected"}
@@ -17767,13 +16261,9 @@ class PerformanceStabilityTester:
             "no_memory_leak": no_memory_leak,
             "sample_count": len(self.performance_data),
         }
-
-
 class RobustnessTester:
-
     def __init__(self):
         self.webcam_capture = None
-
     def test_webcam_disconnection_recovery(self) -> TestResult:
         start_time = time.time()
         try:
@@ -17824,7 +16314,6 @@ class RobustnessTester:
             )
             result.duration = duration
             return result
-
     def test_multiple_camera_indices(self) -> TestResult:
         start_time = time.time()
         try:
@@ -17883,15 +16372,11 @@ class RobustnessTester:
             )
             result.duration = duration
             return result
-
-
 class TestFramework:
-
     def __init__(self, output_dir: str = "test_results"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         self.test_results = []
-
     def run_all_tests(self) -> Dict:
         print("[DEBUG_LOG] Starting thorough test framework...")
         start_time = time.time()
@@ -17940,7 +16425,6 @@ class TestFramework:
         report = self._generate_test_report(total_duration)
         self._save_test_report(report)
         return report
-
     def _generate_test_report(self, total_duration: float) -> Dict:
         total_tests = len(self.test_results)
         passed_tests = len([r for r in self.test_results if r.success])
@@ -17959,7 +16443,6 @@ class TestFramework:
             "recommendations": self._generate_recommendations(),
         }
         return report
-
     def _generate_recommendations(self) -> List[str]:
         recommendations = []
         failed_tests = [r for r in self.test_results if not r.success]
@@ -17978,15 +16461,12 @@ class TestFramework:
         if not recommendations:
             recommendations.append("All tests passed - system is functioning correctly")
         return recommendations
-
     def _save_test_report(self, report: Dict):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         report_file = self.output_dir / f"test_report_{timestamp}.json"
         with open(report_file, "w") as f:
             json.dump(report, f, indent=2)
         print(f"[DEBUG_LOG] Test report saved to: {report_file}")
-
-
 if __name__ == "__main__":
     print("[DEBUG_LOG] Starting Milestone 3.3 complete Testing Framework...")
     framework = TestFramework()
@@ -18003,18 +16483,13 @@ if __name__ == "__main__":
     for rec in report["recommendations"]:
         print(f"- {rec}")
     print("\n[DEBUG_LOG] complete testing framework completed successfully")
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class TestHardwareFailureRecovery(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.mock_logger = Mock()
         self.shimmer_manager = ShimmerManager(logger=self.mock_logger)
         self.time_server_manager = TimeServerManager(logger=self.mock_logger)
-
     def tearDown(self):
         try:
             self.shimmer_manager.cleanup()
@@ -18022,7 +16497,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
         except:
             pass
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     def test_shimmer_device_disconnection_recovery(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
@@ -18037,7 +16511,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
         self.assertTrue(self.shimmer_manager.is_recording)
         result = self.shimmer_manager.stop_recording()
         self.assertTrue(result)
-
     def test_ntp_server_network_interruption(self):
         self.time_server_manager.initialize(port=8901)
         self.time_server_manager.start()
@@ -18049,7 +16522,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
         if status:
             self.assertFalse(status.is_running)
         restart_result = self.time_server_manager.start()
-
     def test_concurrent_device_failures(self):
         self.shimmer_manager.initialize()
         self.time_server_manager.initialize(port=8902)
@@ -18059,7 +16531,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
         session_id = "concurrent_failure_test"
         recording_started = self.shimmer_manager.start_recording(session_id)
         failure_events = []
-
         def simulate_shimmer_failure():
             try:
                 for device_id in self.shimmer_manager.device_status:
@@ -18067,14 +16538,12 @@ class TestHardwareFailureRecovery(unittest.TestCase):
                 failure_events.append("shimmer_failed")
             except Exception as e:
                 failure_events.append(f"shimmer_error: {e}")
-
         def simulate_ntp_failure():
             try:
                 self.time_server_manager.stop()
                 failure_events.append("ntp_failed")
             except Exception as e:
                 failure_events.append(f"ntp_error: {e}")
-
         shimmer_thread = threading.Thread(target=simulate_shimmer_failure)
         ntp_thread = threading.Thread(target=simulate_ntp_failure)
         shimmer_thread.start()
@@ -18083,7 +16552,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
         ntp_thread.join(timeout=2.0)
         self.assertGreater(len(failure_events), 0)
         cleanup_result = self.shimmer_manager.stop_recording()
-
     def test_resource_exhaustion_recovery(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
@@ -18098,7 +16566,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
         except Exception:
             cleanup_success = False
         self.assertTrue(cleanup_success)
-
     def test_data_corruption_handling(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
@@ -18119,7 +16586,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
             self.shimmer_manager._process_data_sample(corrupted_sample)
         except Exception:
             processing_success = False
-
     def test_memory_leak_prevention(self):
         self.shimmer_manager.initialize()
         for cycle in range(5):
@@ -18132,14 +16598,12 @@ class TestHardwareFailureRecovery(unittest.TestCase):
         self.assertEqual(len(self.shimmer_manager.connected_devices), 0)
         self.assertEqual(len(self.shimmer_manager.csv_writers), 0)
         self.assertEqual(len(self.shimmer_manager.csv_files), 0)
-
     def test_thread_safety_under_failure(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
         self.shimmer_manager.connect_devices(devices)
         self.shimmer_manager.start_streaming()
         results = []
-
         def concurrent_status_check():
             for _ in range(5):
                 try:
@@ -18148,7 +16612,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
                 except Exception as e:
                     results.append(("error", str(e)))
                 time.sleep(0.01)
-
         def concurrent_failure_simulation():
             time.sleep(0.02)
             try:
@@ -18157,7 +16620,6 @@ class TestHardwareFailureRecovery(unittest.TestCase):
                 results.append(("failure_simulated", True))
             except Exception as e:
                 results.append(("failure_error", str(e)))
-
         threads = []
         for _ in range(3):
             thread = threading.Thread(target=concurrent_status_check)
@@ -18170,17 +16632,13 @@ class TestHardwareFailureRecovery(unittest.TestCase):
             thread.join(timeout=2.0)
         self.assertGreater(len(results), 0)
         self.shimmer_manager.stop_streaming()
-
-
 if __name__ == "__main__":
     import logging
-
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
     unittest.main(verbosity=2)
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -18191,10 +16649,7 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
 class NavigationGraph:
-
     def __init__(self):
         self.navigation_flow = {
             "nav_recording": {
@@ -18284,10 +16739,7 @@ class NavigationGraph:
             "bottom_nav_monitor",
             "bottom_nav_calibrate",
         ]
-
-
 class PythonAppController:
-
     def __init__(self):
         self.process = None
         self.test_results = {}
@@ -18308,7 +16760,6 @@ class PythonAppController:
             ],
             "files_tab_buttons": ["export_data", "open_folder", "delete_session"],
         }
-
     async def launch_through_intellij(self) -> bool:
         try:
             self.logger.info("Launching Python app through IntelliJ IDEA...")
@@ -18331,7 +16782,6 @@ class PythonAppController:
         except Exception as e:
             self.logger.error(f"Failed to launch Python app: {e}")
             return False
-
     async def test_ui_elements(self) -> Dict[str, Any]:
         results = {
             "tab_navigation": {},
@@ -18359,7 +16809,6 @@ class PythonAppController:
             results["overall_success"] = False
             results["error"] = str(e)
         return results
-
     async def _test_tab_navigation(self, tab_name: str) -> Dict[str, Any]:
         result = {
             "tab": tab_name,
@@ -18378,7 +16827,6 @@ class PythonAppController:
             self.logger.error(f"Failed to navigate to {tab_name} tab: {e}")
             result["details"]["error"] = str(e)
         return result
-
     async def _test_buttons(self, tab_name: str, buttons: List[str]) -> Dict[str, Any]:
         results = {}
         for button in buttons:
@@ -18400,7 +16848,6 @@ class PythonAppController:
                 button_result["error"] = str(e)
             results[button] = button_result
         return results
-
     def cleanup(self):
         if self.process and self.process.poll() is None:
             self.logger.info("Terminating Python app")
@@ -18409,17 +16856,13 @@ class PythonAppController:
                 self.process.wait(timeout=10)
             except subprocess.TimeoutExpired:
                 self.process.kill()
-
-
 class AndroidAppController:
-
     def __init__(self, navigation_graph: NavigationGraph):
         self.navigation_graph = navigation_graph
         self.device_id = None
         self.test_results = {}
         self.logger = logging.getLogger(f"{__name__}.AndroidApp")
         self.adb_available = False
-
     async def setup_android_environment(self) -> bool:
         try:
             result = subprocess.run(["adb", "version"], capture_output=True, text=True)
@@ -18449,7 +16892,6 @@ class AndroidAppController:
         except Exception as e:
             self.logger.error(f"Error setting up Android environment: {e}")
             return False
-
     async def launch_through_intellij(self) -> bool:
         try:
             self.logger.info("Launching Android app through IntelliJ IDEA...")
@@ -18506,7 +16948,6 @@ class AndroidAppController:
         except Exception as e:
             self.logger.error(f"Failed to launch Android app: {e}")
             return False
-
     async def test_navigation_graph(self) -> Dict[str, Any]:
         results = {
             "navigation_tests": {},
@@ -18534,7 +16975,6 @@ class AndroidAppController:
             results["overall_success"] = False
             results["error"] = str(e)
         return results
-
     async def _test_navigation_destination(self, destination: str) -> Dict[str, Any]:
         result = {
             "destination": destination,
@@ -18563,7 +17003,6 @@ class AndroidAppController:
             self.logger.error(f"Failed to navigate to {destination}: {e}")
             result["error"] = str(e)
         return result
-
     async def _test_destination_buttons(self, destination: str) -> Dict[str, Any]:
         dest_info = self.navigation_graph.navigation_flow[destination]
         buttons = dest_info.get("buttons", [])
@@ -18592,7 +17031,6 @@ class AndroidAppController:
                 results["overall_success"] = False
             results["button_results"][button] = button_result
         return results
-
     async def _test_navigation_flows(self, source_destination: str) -> Dict[str, Any]:
         source_info = self.navigation_graph.navigation_flow[source_destination]
         possible_destinations = source_info.get("can_navigate_to", [])
@@ -18621,37 +17059,31 @@ class AndroidAppController:
                 results["overall_success"] = False
             results["flow_tests"][target] = flow_result
         return results
-
     async def _simulate_drawer_navigation(self, destination: str):
         if self.adb_available and self.device_id:
             await asyncio.sleep(1)
         else:
             await asyncio.sleep(0.5)
-
     async def _simulate_activity_navigation(self, destination: str):
         if self.adb_available and self.device_id:
             await asyncio.sleep(1.5)
         else:
             await asyncio.sleep(0.5)
-
     async def _simulate_bottom_nav_navigation(self, destination: str):
         if self.adb_available and self.device_id:
             await asyncio.sleep(0.8)
         else:
             await asyncio.sleep(0.3)
-
     async def _simulate_button_click(self, button: str, destination: str):
         if self.adb_available and self.device_id:
             await asyncio.sleep(0.5)
         else:
             await asyncio.sleep(0.2)
-
     async def _simulate_navigation_flow(self, source: str, target: str):
         if self.adb_available and self.device_id:
             await asyncio.sleep(1.2)
         else:
             await asyncio.sleep(0.4)
-
     def cleanup(self):
         if self.adb_available and self.device_id:
             try:
@@ -18670,10 +17102,7 @@ class AndroidAppController:
                 self.logger.info("Android app stopped")
             except Exception as e:
                 self.logger.error(f"Error stopping Android app: {e}")
-
-
 class IDEIntegrationTestSuite:
-
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.navigation_graph = NavigationGraph()
@@ -18682,7 +17111,6 @@ class IDEIntegrationTestSuite:
         self.test_results = {}
         self.start_time = None
         self.end_time = None
-
     async def run_complete_test_suite(self) -> Dict[str, Any]:
         self.start_time = datetime.now()
         self.logger.info("=" * 80)
@@ -18745,7 +17173,6 @@ class IDEIntegrationTestSuite:
             self.logger.info("IDE INTEGRATION TEST SUITE COMPLETED")
             self.logger.info("=" * 80)
             return self.test_results
-
     def _generate_test_summary(self):
         summary = {
             "total_tests": 0,
@@ -18885,7 +17312,6 @@ class IDEIntegrationTestSuite:
             f"Navigation Coverage: {summary['navigation_coverage']['coverage_percentage']:.1f}%"
         )
         self.logger.info("=" * 60)
-
     async def _save_test_results(self):
         try:
             results_dir = Path("test_results")
@@ -18901,7 +17327,6 @@ class IDEIntegrationTestSuite:
             await self._generate_markdown_report(summary_file)
         except Exception as e:
             self.logger.error(f"Failed to save test results: {e}")
-
     async def _generate_markdown_report(self, file_path: Path):
         try:
             with open(file_path, "w") as f:
@@ -18972,8 +17397,6 @@ class IDEIntegrationTestSuite:
             self.logger.info(f"Markdown report saved to: {file_path}")
         except Exception as e:
             self.logger.error(f"Failed to generate markdown report: {e}")
-
-
 async def main():
     print("=" * 80)
     print("IDE INTEGRATION TEST SUITE - Multi-Sensor Recording System")
@@ -19004,63 +17427,45 @@ async def main():
         )
     print("=" * 80)
     return results
-
-
 if __name__ == "__main__":
     results = asyncio.run(main())
     sys.exit(0 if results.get("overall_success", False) else 1)
-
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
-
 class TestIntegrationComprehensive(unittest.TestCase):
-
     def setUp(self):
         self.app = None
-
     def tearDown(self):
         if self.app:
             self.app.cleanup()
-
     @patch("PyQt5.QtWidgets.QApplication")
     def test_application_initialization(self, mock_qt_app):
         self.app = Application()
         self.assertIsNotNone(self.app.session_manager)
         self.assertIsNotNone(self.app.json_server)
         self.assertIsNotNone(self.app.main_controller)
-
     @patch("PyQt5.QtWidgets.QApplication")
     def test_service_dependencies(self, mock_qt_app):
         self.app = Application()
         self.assertEqual(self.app.json_server.session_manager, self.app.session_manager)
-
     def test_session_manager_creation(self):
         session_manager = SessionManager()
         self.assertIsNotNone(session_manager)
-
     @patch("socket.socket")
     def test_network_server_creation(self, mock_socket):
         session_manager = SessionManager()
         server = JsonSocketServer(session_manager=session_manager)
         self.assertIsNotNone(server)
         self.assertEqual(server.session_manager, session_manager)
-
-
 if __name__ == "__main__":
     unittest.main()
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class TestEndToEndIntegration(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.mock_logger = Mock()
         self.shimmer_manager = ShimmerManager(logger=self.mock_logger)
         self.time_server_manager = TimeServerManager(logger=self.mock_logger)
         self.stimulus_manager = StimulusManager(logger=self.mock_logger)
-
     def tearDown(self):
         try:
             self.shimmer_manager.cleanup()
@@ -19069,7 +17474,6 @@ class TestEndToEndIntegration(unittest.TestCase):
         except:
             pass
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     def test_complete_system_initialization(self):
         shimmer_init = self.shimmer_manager.initialize()
         ntp_init = self.time_server_manager.initialize(port=8899)
@@ -19080,13 +17484,11 @@ class TestEndToEndIntegration(unittest.TestCase):
         ntp_status = self.time_server_manager.get_status()
         self.assertIsNotNone(ntp_status)
         self.assertTrue(ntp_status.is_running)
-
     def test_multi_device_time_synchronization(self):
         self.time_server_manager.initialize(port=8900)
         self.time_server_manager.start()
         time.sleep(0.1)
         sync_results = []
-
         def simulate_android_sync(device_id):
             try:
                 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19111,7 +17513,6 @@ class TestEndToEndIntegration(unittest.TestCase):
                 return True
             except Exception as e:
                 return False
-
         threads = []
         for i in range(3):
             thread = threading.Thread(
@@ -19125,16 +17526,10 @@ class TestEndToEndIntegration(unittest.TestCase):
         timestamps = [result["server_time"] for result in sync_results]
         time_spread = max(timestamps) - min(timestamps)
         self.assertLess(time_spread, 1000)
-
-
 if __name__ == "__main__":
     unittest.main(verbosity=2)
-
 logger = get_logger(__name__)
-
-
 class DeviceSimulator:
-
     def __init__(
         self, device_id: str, server_host: str = "localhost", server_port: int = 9000
     ):
@@ -19145,7 +17540,6 @@ class DeviceSimulator:
         self.connected = False
         self.recording_active = False
         self.session_id = None
-
     async def connect(self) -> bool:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19156,13 +17550,11 @@ class DeviceSimulator:
         except Exception as e:
             logger.error(f"[DeviceSimulator] Connection failed: {e}")
             return False
-
     async def disconnect(self):
         if self.socket:
             self.socket.close()
             self.socket = None
         self.connected = False
-
     async def send_hello_message(self):
         message = {
             "type": "hello",
@@ -19171,7 +17563,6 @@ class DeviceSimulator:
             "timestamp": datetime.now().isoformat(),
         }
         await self.send_message(message)
-
     async def send_status_message(self):
         message = {
             "type": "status",
@@ -19183,7 +17574,6 @@ class DeviceSimulator:
             "timestamp": datetime.now().isoformat(),
         }
         await self.send_message(message)
-
     async def send_session_state(self):
         state = {
             "device_id": self.device_id,
@@ -19200,7 +17590,6 @@ class DeviceSimulator:
             "metadata": {"test_device": True, "simulator": True},
         }
         return state
-
     async def send_message(self, message: Dict[str, Any]):
         if self.socket and self.connected:
             try:
@@ -19209,7 +17598,6 @@ class DeviceSimulator:
                 self.socket.send(length_bytes + message_json.encode())
             except Exception as e:
                 logger.error(f"[DeviceSimulator] Send failed: {e}")
-
     async def receive_message(self, timeout: float = 5.0) -> Optional[Dict[str, Any]]:
         if not self.socket or not self.connected:
             return None
@@ -19226,17 +17614,12 @@ class DeviceSimulator:
         except Exception as e:
             logger.error(f"[DeviceSimulator] Receive failed: {e}")
             return None
-
     def start_recording(self, session_id: str):
         self.recording_active = True
         self.session_id = session_id
-
     def stop_recording(self):
         self.recording_active = False
-
-
 class IntegrationTestSuite(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.test_dir = Path("/tmp/integration_tests")
@@ -19245,21 +17628,17 @@ class IntegrationTestSuite(unittest.TestCase):
         cls.session_synchronizer = SessionSynchronizer()
         cls.device_server = EnhancedDeviceServer()
         logger.info("[IntegrationTestSuite] Test environment initialized")
-
     @classmethod
     def tearDownClass(cls):
         cls.session_synchronizer.stop_synchronization()
         logger.info("[IntegrationTestSuite] Test environment cleaned up")
-
     def setUp(self):
         self.test_devices = []
         self.session_synchronizer.start_synchronization()
-
     def tearDown(self):
         for device in self.test_devices:
             asyncio.run(device.disconnect())
         self.test_devices.clear()
-
     def test_full_recording_workflow(self):
         logger.info("[IntegrationTest] Starting full recording workflow test")
         device = DeviceSimulator("workflow_test_device")
@@ -19292,7 +17671,6 @@ class IntegrationTestSuite(unittest.TestCase):
         logger.info(
             "[IntegrationTest] Full recording workflow test completed successfully"
         )
-
     def test_device_synchronization(self):
         logger.info("[IntegrationTest] Starting device synchronization test")
         device_count = 3
@@ -19335,7 +17713,6 @@ class IntegrationTestSuite(unittest.TestCase):
         logger.info(
             "[IntegrationTest] Device synchronization test completed successfully"
         )
-
     def test_error_recovery_scenarios(self):
         logger.info("[IntegrationTest] Starting error recovery scenarios test")
         device = DeviceSimulator("recovery_test_device")
@@ -19392,7 +17769,6 @@ class IntegrationTestSuite(unittest.TestCase):
         logger.info(
             "[IntegrationTest] Error recovery scenarios test completed successfully"
         )
-
     def test_hardware_integration_simulation(self):
         logger.info("[IntegrationTest] Starting hardware integration simulation test")
         device = DeviceSimulator("hardware_test_device")
@@ -19465,7 +17841,6 @@ class IntegrationTestSuite(unittest.TestCase):
         logger.info(
             "[IntegrationTest] Hardware integration simulation test completed successfully"
         )
-
     def test_performance_under_load(self):
         logger.info("[IntegrationTest] Starting performance under load test")
         device_count = 5
@@ -19519,7 +17894,6 @@ class IntegrationTestSuite(unittest.TestCase):
         logger.info(
             "[IntegrationTest] Performance under load test completed successfully"
         )
-
     def test_cross_platform_compatibility(self):
         logger.info("[IntegrationTest] Starting cross-platform compatibility test")
         device = DeviceSimulator("compatibility_test_device")
@@ -19572,8 +17946,6 @@ class IntegrationTestSuite(unittest.TestCase):
         logger.info(
             "[IntegrationTest] Cross-platform compatibility test completed successfully"
         )
-
-
 def run_integration_tests():
     logger.info("[IntegrationTestSuite] Starting integration test suite")
     loader = unittest.TestLoader()
@@ -19597,8 +17969,6 @@ def run_integration_tests():
     }
     logger.info(f"[IntegrationTestSuite] Test suite completed: {test_report}")
     return test_report
-
-
 if __name__ == "__main__":
     print("[DEBUG_LOG] Running Phase 2 Integration Test Suite...")
     results = run_integration_tests()
@@ -19617,33 +17987,25 @@ if __name__ == "__main__":
             "\n[DEBUG_LOG] ❌ Some integration tests failed - Phase 2 implementation needs review."
         )
     print("\n[DEBUG_LOG] Phase 2 Integration Test Suite completed.")
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class TestJsonSocketServer(unittest.TestCase):
-
     def setUp(self):
         self.server = JsonSocketServer(host="127.0.0.1", port=9001)
         self.server_thread = None
-
     def tearDown(self):
         if self.server_thread and self.server_thread.is_alive():
             self.server.stop_server()
             self.server_thread.join(timeout=2)
-
     def start_server(self):
         self.server_thread = threading.Thread(target=self.server.run)
         self.server_thread.daemon = True
         self.server_thread.start()
         time.sleep(0.5)
-
     def test_server_initialization(self):
         self.assertEqual(self.server.host, "127.0.0.1")
         self.assertEqual(self.server.port, 9001)
         self.assertFalse(self.server.running)
         self.assertEqual(len(self.server.clients), 0)
-
     def test_server_start_stop(self):
         self.start_server()
         time.sleep(0.5)
@@ -19651,7 +18013,6 @@ class TestJsonSocketServer(unittest.TestCase):
         self.server.stop_server()
         time.sleep(0.5)
         self.assertFalse(self.server.running)
-
     def test_device_connection(self):
         self.start_server()
         device_connected_mock = Mock()
@@ -19663,7 +18024,6 @@ class TestJsonSocketServer(unittest.TestCase):
         self.assertIn("TestDevice1", self.server.clients)
         device_connected_mock.emit.assert_called_once()
         device.disconnect()
-
     def test_multiple_device_connections(self):
         self.start_server()
         devices = []
@@ -19680,7 +18040,6 @@ class TestJsonSocketServer(unittest.TestCase):
             device.disconnect()
         time.sleep(0.5)
         self.assertEqual(len(self.server.clients), 0)
-
     def test_message_processing(self):
         self.start_server()
         status_received_mock = Mock()
@@ -19708,7 +18067,6 @@ class TestJsonSocketServer(unittest.TestCase):
         time.sleep(0.2)
         notification_mock.emit.assert_called_once()
         device.disconnect()
-
     def test_command_sending(self):
         self.start_server()
         device = DeviceSimulator("TestDevice1", port=9001)
@@ -19721,7 +18079,6 @@ class TestJsonSocketServer(unittest.TestCase):
         count = self.server.broadcast_command(command)
         self.assertEqual(count, 1)
         device.disconnect()
-
     def test_device_disconnection(self):
         self.start_server()
         device_disconnected_mock = Mock()
@@ -19735,7 +18092,6 @@ class TestJsonSocketServer(unittest.TestCase):
         time.sleep(0.5)
         self.assertNotIn("TestDevice1", self.server.clients)
         device_disconnected_mock.emit.assert_called_once()
-
     def test_error_handling(self):
         self.start_server()
         error_occurred_mock = Mock()
@@ -19748,7 +18104,6 @@ class TestJsonSocketServer(unittest.TestCase):
         except:
             pass
         device.disconnect()
-
     def test_get_connected_devices(self):
         self.start_server()
         self.assertEqual(len(self.server.get_connected_devices()), 0)
@@ -19768,21 +18123,16 @@ class TestJsonSocketServer(unittest.TestCase):
         self.assertFalse(self.server.is_device_connected("NonExistentDevice"))
         for device in devices:
             device.disconnect()
-
-
 class TestUtilityFunctions(unittest.TestCase):
-
     def test_create_command_message(self):
         command = create_command_message("start_recording", session_id="test123")
         self.assertEqual(command["type"], "command")
         self.assertEqual(command["command"], "start_recording")
         self.assertEqual(command["session_id"], "test123")
         self.assertIn("timestamp", command)
-
     def test_decode_base64_image(self):
         test_data = b"test image data"
         import base64
-
         encoded_data = base64.b64encode(test_data).decode("utf-8")
         decoded = decode_base64_image(encoded_data)
         self.assertEqual(decoded, test_data)
@@ -19791,25 +18141,19 @@ class TestUtilityFunctions(unittest.TestCase):
         self.assertEqual(decoded, test_data)
         invalid_decoded = decode_base64_image("invalid_base64_data")
         self.assertIsNone(invalid_decoded)
-
-
 class TestIntegrationScenarios(unittest.TestCase):
-
     def setUp(self):
         self.server = JsonSocketServer(host="127.0.0.1", port=9002)
         self.server_thread = None
-
     def tearDown(self):
         if self.server_thread and self.server_thread.is_alive():
             self.server.stop_server()
             self.server_thread.join(timeout=2)
-
     def start_server(self):
         self.server_thread = threading.Thread(target=self.server.run)
         self.server_thread.daemon = True
         self.server_thread.start()
         time.sleep(0.5)
-
     def test_complete_device_lifecycle(self):
         self.start_server()
         signals_received = {
@@ -19819,14 +18163,10 @@ class TestIntegrationScenarios(unittest.TestCase):
             "ack_received": [],
             "device_disconnected": [],
         }
-
         def track_signal(signal_name):
-
             def handler(*args):
                 signals_received[signal_name].append(args)
-
             return handler
-
         self.server.device_connected.connect(track_signal("device_connected"))
         self.server.status_received.connect(track_signal("status_received"))
         self.server.preview_frame_received.connect(
@@ -19853,7 +18193,6 @@ class TestIntegrationScenarios(unittest.TestCase):
         self.assertEqual(len(signals_received["preview_frame_received"]), 1)
         self.assertEqual(len(signals_received["ack_received"]), 1)
         self.assertEqual(len(signals_received["device_disconnected"]), 1)
-
     def test_concurrent_device_operations(self):
         self.start_server()
         devices = []
@@ -19865,12 +18204,10 @@ class TestIntegrationScenarios(unittest.TestCase):
             time.sleep(0.1)
         threads = []
         for i, device in enumerate(devices):
-
             def send_messages(dev, device_num):
                 dev.send_status(battery=90 - device_num * 10)
                 dev.send_preview_frame("rgb" if device_num % 2 == 0 else "thermal")
                 dev.send_sensor_data(gsr=0.5 + device_num * 0.1)
-
             thread = threading.Thread(target=send_messages, args=(device, i))
             threads.append(thread)
             thread.start()
@@ -19885,8 +18222,6 @@ class TestIntegrationScenarios(unittest.TestCase):
             device.disconnect()
         time.sleep(0.5)
         self.assertEqual(self.server.get_device_count(), 0)
-
-
 def run_tests():
     test_suite = unittest.TestSuite()
     test_suite.addTest(unittest.makeSuite(TestJsonSocketServer))
@@ -19895,29 +18230,21 @@ def run_tests():
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(test_suite)
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     success = run_tests()
     exit(0 if success else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class TestLatencyMeasurement(unittest.TestCase):
-
     def setUp(self):
         self.server = EnhancedDeviceServer(
             host="127.0.0.1", port=9001, max_connections=5, heartbeat_interval=1.0
         )
         self.mock_devices = []
-
     def tearDown(self):
         for device in self.mock_devices:
             device.disconnect()
         if self.server.running:
             self.server.stop_server()
-
     def test_latency_calculation_basic(self):
         mock_socket = Mock()
         device = EnhancedRemoteDevice(
@@ -19934,7 +18261,6 @@ class TestLatencyMeasurement(unittest.TestCase):
         self.assertEqual(device.stats.min_latency, 10.0)
         self.assertEqual(device.stats.max_latency, 20.0)
         self.assertGreater(device.stats.jitter, 0)
-
     def test_ping_pong_handling(self):
         mock_socket = Mock()
         device = EnhancedRemoteDevice(
@@ -19948,7 +18274,6 @@ class TestLatencyMeasurement(unittest.TestCase):
         self.server.handle_ping_message(device, ping_data, ping_timestamp)
         self.assertEqual(device.stats.pong_count, 1)
         self.assertGreater(len(device.stats.latency_samples), 0)
-
     def test_jitter_calculation(self):
         mock_socket = Mock()
         device = EnhancedRemoteDevice(
@@ -19967,7 +18292,6 @@ class TestLatencyMeasurement(unittest.TestCase):
             device.update_latency(latency)
         low_jitter = device.stats.jitter
         self.assertGreater(high_jitter, low_jitter)
-
     def test_packet_loss_calculation(self):
         mock_socket = Mock()
         device = EnhancedRemoteDevice(
@@ -19980,7 +18304,6 @@ class TestLatencyMeasurement(unittest.TestCase):
         device.stats.pong_count = 8
         device.update_latency(10.0)
         self.assertAlmostEqual(device.stats.packet_loss_rate, 20.0, places=1)
-
     def test_network_quality_assessment(self):
         self.assertTrue(self.server.start_server())
         time.sleep(0.1)
@@ -20010,7 +18333,6 @@ class TestLatencyMeasurement(unittest.TestCase):
             self.assertIn("average_latency", device_stats)
             self.assertIn("jitter", device_stats)
             self.assertIn("packet_loss_rate", device_stats)
-
     def test_latency_statistics_api(self):
         mock_socket = Mock()
         device = EnhancedRemoteDevice(
@@ -20033,7 +18355,6 @@ class TestLatencyMeasurement(unittest.TestCase):
         self.assertIsInstance(stats["recent_samples"], list)
         empty_stats = self.server.get_device_latency_statistics("non_existent")
         self.assertIn("error", empty_stats)
-
     def test_adaptive_quality_based_on_latency(self):
         mock_socket = Mock()
         device = EnhancedRemoteDevice(
@@ -20051,7 +18372,6 @@ class TestLatencyMeasurement(unittest.TestCase):
         device.adapt_streaming_quality(100.0, 0.07)
         self.assertEqual(device.streaming_quality, "medium")
         self.assertEqual(device.max_frame_rate, 15)
-
     def test_timestamp_accuracy(self):
         start_time = time.time()
         message = {"type": "heartbeat", "timestamp": start_time}
@@ -20060,7 +18380,6 @@ class TestLatencyMeasurement(unittest.TestCase):
         latency = (process_time - message["timestamp"]) * 1000
         self.assertGreater(latency, 5.0)
         self.assertLess(latency, 50.0)
-
     def test_concurrent_latency_measurement(self):
         mock_socket = Mock()
         device = EnhancedRemoteDevice(
@@ -20069,11 +18388,9 @@ class TestLatencyMeasurement(unittest.TestCase):
             client_socket=mock_socket,
             address=("127.0.0.1", 12345),
         )
-
         def add_latencies(start_latency, count):
             for i in range(count):
                 device.update_latency(start_latency + i)
-
         threads = []
         for i in range(5):
             thread = threading.Thread(target=add_latencies, args=(i * 10, 10))
@@ -20084,19 +18401,14 @@ class TestLatencyMeasurement(unittest.TestCase):
         self.assertEqual(len(device.stats.latency_samples), 50)
         self.assertGreater(device.stats.average_latency, 0)
         self.assertGreater(device.stats.max_latency, device.stats.min_latency)
-
-
 class TestLatencyIntegration(unittest.TestCase):
-
     def setUp(self):
         self.server = EnhancedDeviceServer(
             host="127.0.0.1", port=9002, max_connections=5, heartbeat_interval=0.5
         )
-
     def tearDown(self):
         if self.server.running:
             self.server.stop_server()
-
     def test_end_to_end_latency_measurement(self):
         self.assertTrue(self.server.start_server())
         time.sleep(0.1)
@@ -20132,45 +18444,30 @@ class TestLatencyIntegration(unittest.TestCase):
                 self.assertGreaterEqual(device_stats["pong_count"], 1)
         finally:
             client_socket.close()
-
-
 if __name__ == "__main__":
     unittest.main(verbosity=2)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-
-
 class TestCoreFunctionality(unittest.TestCase):
-
     def test_basic_imports(self):
         try:
             import session
-
             import protocol
-
             self.assertTrue(True)
         except ImportError:
             self.skipTest("core modules not available")
-
     def test_session_manager_exists(self):
         try:
             from session.session_manager import SessionManager
-
             self.assertTrue(hasattr(SessionManager, "__init__"))
         except ImportError:
             self.skipTest("session manager not available")
-
     def test_protocol_module_exists(self):
         try:
             import protocol
-
             self.assertTrue(hasattr(protocol, "__path__"))
         except ImportError:
             self.skipTest("protocol module not available")
-
-
 class TestProjectStructure(unittest.TestCase):
-
     def test_src_directory_structure(self):
         src_dir = os.path.join(os.path.dirname(__file__), "..")
         expected_dirs = ["session", "network", "gui", "protocol"]
@@ -20178,48 +18475,34 @@ class TestProjectStructure(unittest.TestCase):
             dir_path = os.path.join(src_dir, expected_dir)
             if os.path.exists(dir_path):
                 self.assertTrue(os.path.isdir(dir_path))
-
     def test_tests_directory_exists(self):
         tests_dir = os.path.dirname(__file__)
         self.assertTrue(os.path.exists(tests_dir))
         self.assertTrue(os.path.isdir(tests_dir))
-
-
 if __name__ == "__main__":
     unittest.main()
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class TestPythonEnvironment:
-
     def test_python_version(self):
         assert sys.version_info >= (3, 8), "Python 3.8+ required"
-
     def test_required_imports(self):
         try:
             import cv2
             import numpy
             import PIL
             import requests
-
             assert True
         except ImportError as e:
             pytest.fail(f"Required package import failed: {e}")
-
     @pytest.mark.skipif(os.environ.get("CI") == "true", reason="Skip GUI tests in CI")
     def test_pyqt5_import(self):
         try:
             import PyQt5.QtCore
             import PyQt5.QtWidgets
-
             assert True
         except ImportError as e:
             pytest.fail(f"PyQt5 import failed: {e}")
-
-
 class TestApplicationConfiguration:
-
     def test_application_constants(self):
         DEFAULT_PORT = 8080
         DEFAULT_HOST = "localhost"
@@ -20227,17 +18510,12 @@ class TestApplicationConfiguration:
         assert DEFAULT_PORT > 0
         assert isinstance(DEFAULT_HOST, str)
         assert len(DEFAULT_HOST) > 0
-
     def test_logging_configuration(self):
         import logging
-
         logger = logging.getLogger("test_logger")
         logger.setLevel(logging.INFO)
         assert logger.level == logging.INFO
-
-
 class TestNetworkCommunication:
-
     @patch("socket.socket")
     def test_socket_connection_mock(self, mock_socket):
         mock_socket_instance = Mock()
@@ -20246,7 +18524,6 @@ class TestNetworkCommunication:
         mock_socket_instance.send.return_value = 10
         mock_socket_instance.recv.return_value = b"test_response"
         import socket
-
         sock = socket.socket()
         sock.connect(("localhost", 8080))
         bytes_sent = sock.send(b"test_data")
@@ -20254,7 +18531,6 @@ class TestNetworkCommunication:
         assert bytes_sent == 10
         assert response == b"test_response"
         mock_socket_instance.connect.assert_called_once_with(("localhost", 8080))
-
     @patch("requests.get")
     def test_http_request_mock(self, mock_get):
         mock_response = Mock()
@@ -20262,19 +18538,14 @@ class TestNetworkCommunication:
         mock_response.json.return_value = {"status": "success"}
         mock_get.return_value = mock_response
         import requests
-
         response = requests.get("http://localhost:8080/status")
         assert response.status_code == 200
         assert response.json() == {"status": "success"}
         mock_get.assert_called_once_with("http://localhost:8080/status")
-
-
 class TestImageProcessing:
-
     def test_opencv_basic_operations(self):
         import cv2
         import numpy as np
-
         test_image = np.zeros((100, 100, 3), dtype=np.uint8)
         test_image[:, :] = [255, 0, 0]
         gray_image = cv2.cvtColor(test_image, cv2.COLOR_BGR2GRAY)
@@ -20282,36 +18553,27 @@ class TestImageProcessing:
         assert gray_image.shape == (100, 100)
         assert resized_image.shape == (50, 50, 3)
         assert np.all(gray_image == 29)
-
     def test_numpy_operations(self):
         import numpy as np
-
         arr1 = np.array([1, 2, 3, 4, 5])
         arr2 = np.array([2, 4, 6, 8, 10])
         result_add = arr1 + arr2
         result_multiply = arr1 * 2
         assert np.array_equal(result_add, np.array([3, 6, 9, 12, 15]))
         assert np.array_equal(result_multiply, arr2)
-
-
 class TestDataProcessing:
-
     def test_data_validation(self):
-
         def validate_sensor_data(data):
             if not isinstance(data, dict):
                 return False
             required_keys = ["timestamp", "sensor_id", "value"]
             return all((key in data for key in required_keys))
-
         valid_data = {"timestamp": 1234567890, "sensor_id": "sensor_001", "value": 25.5}
         assert validate_sensor_data(valid_data) is True
         invalid_data = {"timestamp": 1234567890}
         assert validate_sensor_data(invalid_data) is False
-
     def test_data_processing_pipeline(self):
         import numpy as np
-
         raw_data = np.random.rand(100) * 100
         filtered_data = raw_data[raw_data > 50]
         normalized_data = (filtered_data - np.min(filtered_data)) / (
@@ -20319,26 +18581,17 @@ class TestDataProcessing:
         )
         assert len(filtered_data) <= len(raw_data)
         assert np.all(normalized_data >= 0) and np.all(normalized_data <= 1)
-
-
 @pytest.fixture
 def sample_config():
     return {"host": "localhost", "port": 8080, "timeout": 30, "max_retries": 3}
-
-
 def test_configuration_fixture(sample_config):
     assert sample_config["host"] == "localhost"
     assert sample_config["port"] == 8080
     assert isinstance(sample_config["timeout"], int)
-
-
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
 async def main():
     print("=" * 80)
     print("NETWORK CONNECTIVITY FULL TEST SUITE - Multi-Sensor Recording System")
@@ -20359,21 +18612,15 @@ async def main():
     }
     print("✅ Network Connectivity Test Suite structure created")
     return results
-
-
 if __name__ == "__main__":
     results = asyncio.run(main())
     sys.exit(0 if results.get("overall_success", False) else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "PythonApp", "src"))
-
-
 def test_network_protocol_integration():
     print("🔗 TESTING WEB UI NETWORK PROTOCOL INTEGRATION")
     print("=" * 60)
     try:
         from web_ui.web_controller import create_web_controller_with_real_components
-
         print("✅ 1. Creating WebController with real network components...")
         controller = create_web_controller_with_real_components()
         if controller.android_device_manager:
@@ -20408,7 +18655,6 @@ def test_network_protocol_integration():
         print("\n🌐 TESTING WEB DASHBOARD INTEGRATION")
         print("-" * 40)
         from web_ui.integration import WebDashboardIntegration
-
         web_integration = WebDashboardIntegration(
             enable_web_ui=True, web_port=5001, main_controller=None
         )
@@ -20466,37 +18712,27 @@ def test_network_protocol_integration():
     except Exception as e:
         print(f"❌ ERROR: Failed to test network integration: {e}")
         import traceback
-
         traceback.print_exc()
         return False
-
-
 if __name__ == "__main__":
     success = test_network_protocol_integration()
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class TestNTPTimeServer(unittest.TestCase):
-
     def setUp(self):
         self.mock_logger = Mock()
         self.test_port = 8890
         self.ntp_server = NTPTimeServer(logger=self.mock_logger, port=self.test_port)
-
     def tearDown(self):
         if hasattr(self, "ntp_server"):
             self.ntp_server.stop_server()
             time.sleep(0.1)
-
     def test_server_initialization(self):
         self.assertEqual(self.ntp_server.port, self.test_port)
         self.assertFalse(self.ntp_server.is_running)
         self.assertIsNotNone(self.ntp_server.ntp_client)
         self.assertEqual(len(self.ntp_server.ntp_servers), 3)
         self.mock_logger.info.assert_called()
-
     def test_server_start_stop(self):
         result = self.ntp_server.start_server()
         self.assertTrue(result)
@@ -20505,14 +18741,12 @@ class TestNTPTimeServer(unittest.TestCase):
         self.ntp_server.stop_server()
         self.assertFalse(self.ntp_server.is_running)
         self.mock_logger.info.assert_called()
-
     def test_server_double_start(self):
         result1 = self.ntp_server.start_server()
         self.assertTrue(result1)
         result2 = self.ntp_server.start_server()
         self.assertTrue(result2)
         self.mock_logger.warning.assert_called()
-
     def test_precise_timestamp(self):
         timestamp1 = self.ntp_server.get_precise_timestamp()
         time.sleep(0.01)
@@ -20523,7 +18757,6 @@ class TestNTPTimeServer(unittest.TestCase):
         ms_timestamp = self.ntp_server.get_timestamp_milliseconds()
         self.assertIsInstance(ms_timestamp, int)
         self.assertGreater(ms_timestamp, 1600000000000)
-
     @patch("ntplib.NTPClient.request")
     def test_ntp_synchronization_success(self, mock_ntp_request):
         mock_response = Mock()
@@ -20537,7 +18770,6 @@ class TestNTPTimeServer(unittest.TestCase):
         self.assertTrue(status.is_synchronized)
         self.assertEqual(status.reference_source, "ntp")
         self.assertIsNotNone(status.last_ntp_sync)
-
     @patch("ntplib.NTPClient.request")
     def test_ntp_synchronization_failure(self, mock_ntp_request):
         mock_ntp_request.side_effect = Exception("NTP server unreachable")
@@ -20546,7 +18778,6 @@ class TestNTPTimeServer(unittest.TestCase):
         status = self.ntp_server.get_server_status()
         self.assertFalse(status.is_synchronized)
         self.assertEqual(status.reference_source, "system")
-
     def test_time_sync_request_handling(self):
         self.ntp_server.start_server()
         time.sleep(0.1)
@@ -20571,7 +18802,6 @@ class TestNTPTimeServer(unittest.TestCase):
             client_socket.close()
         except Exception as e:
             self.fail(f"Time sync request failed: {e}")
-
     def test_invalid_request_handling(self):
         self.ntp_server.start_server()
         time.sleep(0.1)
@@ -20584,7 +18814,6 @@ class TestNTPTimeServer(unittest.TestCase):
             self.assertTrue(self.ntp_server.is_running)
         except Exception as e:
             self.fail(f"Invalid request handling failed: {e}")
-
     def test_server_status_tracking(self):
         status = self.ntp_server.get_server_status()
         self.assertFalse(status.is_running)
@@ -20594,13 +18823,10 @@ class TestNTPTimeServer(unittest.TestCase):
         time.sleep(0.1)
         status = self.ntp_server.get_server_status()
         self.assertTrue(status.is_running)
-
     def test_callback_functionality(self):
         callback_data = []
-
         def test_callback(response):
             callback_data.append(response)
-
         self.ntp_server.add_sync_callback(test_callback)
         self.ntp_server.start_server()
         time.sleep(0.1)
@@ -20623,11 +18849,9 @@ class TestNTPTimeServer(unittest.TestCase):
             self.assertEqual(callback_data[0].sequence_number, 42)
         except Exception as e:
             self.fail(f"Callback test failed: {e}")
-
     def test_concurrent_requests(self):
         self.ntp_server.start_server()
         time.sleep(0.1)
-
         def send_request(client_id):
             try:
                 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20646,7 +18870,6 @@ class TestNTPTimeServer(unittest.TestCase):
                 return response["type"] == "time_sync_response"
             except Exception:
                 return False
-
         threads = []
         results = []
         for i in range(5):
@@ -20659,37 +18882,29 @@ class TestNTPTimeServer(unittest.TestCase):
             thread.join(timeout=5.0)
         self.assertEqual(len(results), 5)
         self.assertTrue(all(results))
-
     def test_server_error_recovery(self):
         self.ntp_server.start_server()
         server2 = NTPTimeServer(logger=Mock(), port=self.test_port)
         result = server2.start_server()
         self.assertFalse(result)
         server2.stop_server()
-
-
 class TestTimeServerManager(unittest.TestCase):
-
     def setUp(self):
         self.mock_logger = Mock()
         self.manager = TimeServerManager(logger=self.mock_logger)
-
     def tearDown(self):
         if hasattr(self, "manager"):
             self.manager.stop()
-
     def test_manager_initialization(self):
         result = self.manager.initialize(port=8891)
         self.assertTrue(result)
         self.assertIsNotNone(self.manager.time_server)
-
     def test_manager_start_stop(self):
         self.manager.initialize(port=8892)
         result = self.manager.start()
         self.assertTrue(result)
         self.manager.stop()
         self.mock_logger.info.assert_called()
-
     def test_manager_status(self):
         status = self.manager.get_status()
         self.assertIsNone(status)
@@ -20698,7 +18913,6 @@ class TestTimeServerManager(unittest.TestCase):
         status = self.manager.get_status()
         self.assertIsNotNone(status)
         self.assertIsInstance(status, TimeServerStatus)
-
     def test_manager_timestamp(self):
         timestamp = self.manager.get_timestamp_ms()
         self.assertIsInstance(timestamp, int)
@@ -20707,15 +18921,10 @@ class TestTimeServerManager(unittest.TestCase):
         timestamp = self.manager.get_timestamp_ms()
         self.assertIsInstance(timestamp, int)
         self.assertGreater(timestamp, 1600000000000)
-
-
 class TestNTPTimeServerIntegration(unittest.TestCase):
-
     def setUp(self):
         self.mock_logger = Mock()
-
     def tearDown(self):
-
         pass
     def test_main_application_integration(self):
         manager = TimeServerManager(logger=self.mock_logger)
@@ -20729,7 +18938,6 @@ class TestNTPTimeServerIntegration(unittest.TestCase):
             self.assertIsInstance(timestamp, int)
         finally:
             manager.stop()
-
     def test_android_sync_protocol_compatibility(self):
         server = NTPTimeServer(logger=self.mock_logger, port=8896)
         try:
@@ -20758,22 +18966,15 @@ class TestNTPTimeServerIntegration(unittest.TestCase):
             self.assertLess(time_diff, 1000)
         finally:
             server.stop_server()
-
-
 if __name__ == "__main__":
     import logging
-
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
     unittest.main(verbosity=2)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-
 class AndroidDeviceSimulator:
-
     def __init__(self, device_id: str, capabilities: List[str] = None):
         self.device_id = device_id
         self.capabilities = capabilities or [
@@ -20804,11 +19005,9 @@ class AndroidDeviceSimulator:
         self.commands_received = 0
         self.frames_sent = 0
         self.last_heartbeat = time.time()
-
     def connect(self, host: str = "127.0.0.1", port: int = 9001) -> bool:
         try:
             import socket
-
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((host, port))
             self.connected = True
@@ -20817,7 +19016,6 @@ class AndroidDeviceSimulator:
         except Exception as e:
             print(f"Connection failed: {e}")
             return False
-
     def disconnect(self):
         self.running = False
         if self.socket:
@@ -20827,7 +19025,6 @@ class AndroidDeviceSimulator:
                 pass
         self.connected = False
         print(f"Android simulator {self.device_id} disconnected")
-
     def start_simulation(self):
         if not self.connected:
             return False
@@ -20839,7 +19036,6 @@ class AndroidDeviceSimulator:
         threading.Thread(target=self.heartbeat_loop, daemon=True).start()
         print(f"Android simulator {self.device_id} started")
         return True
-
     def send_handshake(self) -> bool:
         handshake = {
             "type": "handshake",
@@ -20850,7 +19046,6 @@ class AndroidDeviceSimulator:
             "timestamp": time.time(),
         }
         return self.send_message(handshake)
-
     def send_message(self, message: dict) -> bool:
         if not self.connected or not self.socket:
             return False
@@ -20862,7 +19057,6 @@ class AndroidDeviceSimulator:
         except Exception as e:
             print(f"Send error: {e}")
             return False
-
     def receive_message(self, timeout: float = 1.0) -> Optional[dict]:
         if not self.connected or not self.socket:
             return None
@@ -20881,14 +19075,12 @@ class AndroidDeviceSimulator:
             return json.loads(json_data.decode("utf-8"))
         except Exception:
             return None
-
     def message_loop(self):
         while self.running and self.connected:
             message = self.receive_message(timeout=0.5)
             if message:
                 self.process_message(message)
             time.sleep(0.01)
-
     def process_message(self, message: dict):
         msg_type = message.get("type")
         if msg_type == "command":
@@ -20899,7 +19091,6 @@ class AndroidDeviceSimulator:
             self.handle_handshake_ack(message)
         else:
             print(f"Unknown message type: {msg_type}")
-
     def handle_command(self, message: dict):
         command = message.get("command")
         self.commands_received += 1
@@ -20918,7 +19109,6 @@ class AndroidDeviceSimulator:
             success = False
             error_message = f"Unknown command: {command}"
         self.send_ack(command, success, error_message)
-
     def send_ack(self, command: str, success: bool, error_message: str = None):
         ack = {
             "type": "ack",
@@ -20928,7 +19118,6 @@ class AndroidDeviceSimulator:
             "timestamp": time.time(),
         }
         self.send_message(ack)
-
     def handle_start_recording(self, message: dict) -> dict:
         session_id = message.get("session_id", "unknown")
         self.recording = True
@@ -20937,13 +19126,11 @@ class AndroidDeviceSimulator:
             threading.Thread(target=self.preview_streaming_loop, daemon=True).start()
         print(f"Android {self.device_id} started recording session: {session_id}")
         return {"success": True}
-
     def handle_stop_recording(self, message: dict) -> dict:
         self.recording = False
         self.streaming_preview = False
         print(f"Android {self.device_id} stopped recording")
         return {"success": True}
-
     def handle_capture_calibration(self, message: dict) -> dict:
         calibration_id = message.get("calibration_id", "cal_" + str(int(time.time())))
         capture_rgb = message.get("capture_rgb", True)
@@ -20960,48 +19147,40 @@ class AndroidDeviceSimulator:
         self.send_message(calibration_result)
         print(f"Android {self.device_id} captured calibration: {calibration_id}")
         return {"success": True}
-
     def handle_set_streaming_quality(self, message: dict) -> dict:
         quality = message.get("quality", "medium")
         self.streaming_quality = quality
         print(f"Android {self.device_id} set streaming quality to: {quality}")
         return {"success": True}
-
     def handle_get_status(self, message: dict) -> dict:
         self.send_status_update()
         return {"success": True}
-
     def handle_start_preview(self, message: dict) -> dict:
         if not self.streaming_preview:
             self.streaming_preview = True
             threading.Thread(target=self.preview_streaming_loop, daemon=True).start()
         print(f"Android {self.device_id} started preview streaming")
         return {"success": True}
-
     def handle_stop_preview(self, message: dict) -> dict:
         self.streaming_preview = False
         print(f"Android {self.device_id} stopped preview streaming")
         return {"success": True}
-
     def handle_heartbeat(self, message: dict):
         self.last_heartbeat = time.time()
         response = {"type": "heartbeat_response", "timestamp": time.time()}
         self.send_message(response)
-
     def handle_handshake_ack(self, message: dict):
         compatible = message.get("compatible", False)
         if compatible:
             print(f"Android {self.device_id} handshake acknowledged")
         else:
             print(f"Android {self.device_id} protocol incompatible")
-
     def status_update_loop(self):
         while self.running and self.connected:
             time.sleep(10)
             if self.recording:
                 self.battery_level = max(0, self.battery_level - 1)
             self.send_status_update()
-
     def send_status_update(self):
         status = {
             "type": "status",
@@ -21013,13 +19192,11 @@ class AndroidDeviceSimulator:
             "timestamp": time.time(),
         }
         self.send_message(status)
-
     def heartbeat_loop(self):
         while self.running and self.connected:
             time.sleep(5)
             heartbeat = {"type": "heartbeat", "timestamp": time.time()}
             self.send_message(heartbeat)
-
     def preview_streaming_loop(self):
         frame_rates = {"low": 5, "medium": 15, "high": 30}
         while self.streaming_preview and self.running and self.connected:
@@ -21028,7 +19205,6 @@ class AndroidDeviceSimulator:
             self.send_preview_frame()
             self.frames_sent += 1
             time.sleep(frame_interval)
-
     def send_preview_frame(self):
         frame_size = {"low": 100, "medium": 500, "high": 1000}
         size = frame_size.get(self.streaming_quality, 500)
@@ -21046,7 +19222,6 @@ class AndroidDeviceSimulator:
         }
         self.send_message(frame)
         self.frame_counter += 1
-
     def get_statistics(self) -> dict:
         return {
             "device_id": self.device_id,
@@ -21058,10 +19233,7 @@ class AndroidDeviceSimulator:
             "battery_level": self.battery_level,
             "last_heartbeat": self.last_heartbeat,
         }
-
-
 class PCController:
-
     def __init__(self, server: EnhancedDeviceServer):
         self.server = server
         self.connected_devices = {}
@@ -21070,16 +19242,13 @@ class PCController:
         self.server.device_disconnected.connect(self.on_device_disconnected)
         self.server.message_received.connect(self.on_message_received)
         self.server.preview_frame_received.connect(self.on_preview_frame_received)
-
     def on_device_connected(self, device_id: str, device_info: dict):
         self.connected_devices[device_id] = device_info
         print(f"PC Controller: Device {device_id} connected")
-
     def on_device_disconnected(self, device_id: str, reason: str):
         if device_id in self.connected_devices:
             del self.connected_devices[device_id]
         print(f"PC Controller: Device {device_id} disconnected - {reason}")
-
     def on_message_received(self, device_id: str, message: dict):
         msg_type = message.get("type")
         if msg_type == "ack":
@@ -21099,7 +19268,6 @@ class PCController:
             print(
                 f"PC Controller: Calibration result from {device_id} - Success: {message.get('success')}, RMS Error: {message.get('rms_error')}"
             )
-
     def on_preview_frame_received(
         self, device_id: str, frame_type: str, frame_data: bytes, metadata: dict
     ):
@@ -21109,7 +19277,6 @@ class PCController:
         print(
             f"PC Controller: Preview frame from {device_id} - Type: {frame_type}, Frame: {frame_id}, Quality: {quality}, Size: {size} bytes"
         )
-
     def send_command_to_device(self, device_id: str, command: str, **kwargs) -> bool:
         success = self.server.send_command_to_device(device_id, command, **kwargs)
         if success:
@@ -21117,12 +19284,10 @@ class PCController:
         else:
             print(f"PC Controller: Failed to send {command} to {device_id}")
         return success
-
     def broadcast_command(self, command: str, **kwargs) -> int:
         count = self.server.broadcast_command(command, **kwargs)
         print(f"PC Controller: Broadcasted {command} to {count} devices")
         return count
-
     def wait_for_ack(self, device_id: str, command: str, timeout: float = 5.0) -> bool:
         start_time = time.time()
         ack_key = f"{device_id}_{command}"
@@ -21134,31 +19299,24 @@ class PCController:
             time.sleep(0.1)
         print(f"PC Controller: Timeout waiting for ACK from {device_id} for {command}")
         return False
-
     def get_connected_devices(self) -> List[str]:
         return list(self.connected_devices.keys())
-
-
 class TestPCAndroidIntegration(unittest.TestCase):
-
     def setUp(self):
         self.server = EnhancedDeviceServer(
             host="127.0.0.1", port=9003, heartbeat_interval=2.0
         )
         self.pc_controller = PCController(self.server)
         self.android_devices = []
-
     def tearDown(self):
         for device in self.android_devices:
             device.disconnect()
         if self.server.running:
             self.server.stop_server()
-
     def start_test_environment(self):
         success = self.server.start_server()
         self.assertTrue(success, "Server should start")
         time.sleep(0.5)
-
     def create_android_device(self, device_id: str) -> AndroidDeviceSimulator:
         device = AndroidDeviceSimulator(device_id)
         self.assertTrue(device.connect(port=9003), f"Device {device_id} should connect")
@@ -21166,7 +19324,6 @@ class TestPCAndroidIntegration(unittest.TestCase):
         self.android_devices.append(device)
         time.sleep(1.0)
         return device
-
     def test_basic_pc_android_communication(self):
         self.start_test_environment()
         android_device = self.create_android_device("test_phone_1")
@@ -21178,7 +19335,6 @@ class TestPCAndroidIntegration(unittest.TestCase):
         self.assertTrue(success)
         ack_received = self.pc_controller.wait_for_ack("test_phone_1", "get_status")
         self.assertTrue(ack_received, "Should receive acknowledgment")
-
     def test_recording_control_workflow(self):
         self.start_test_environment()
         android_device = self.create_android_device("recording_phone")
@@ -21205,7 +19361,6 @@ class TestPCAndroidIntegration(unittest.TestCase):
         time.sleep(1.0)
         stats = android_device.get_statistics()
         self.assertFalse(stats["recording"], "Device should stop recording")
-
     def test_calibration_workflow(self):
         self.start_test_environment()
         android_device = self.create_android_device("calibration_phone")
@@ -21222,7 +19377,6 @@ class TestPCAndroidIntegration(unittest.TestCase):
         )
         self.assertTrue(ack_received, "Should acknowledge calibration command")
         time.sleep(2.0)
-
     def test_real_time_streaming(self):
         self.start_test_environment()
         android_device = self.create_android_device("streaming_phone")
@@ -21253,7 +19407,6 @@ class TestPCAndroidIntegration(unittest.TestCase):
             "streaming_phone", "stop_preview"
         )
         self.assertTrue(ack_received, "Should acknowledge stop preview")
-
     def test_multiple_device_control(self):
         self.start_test_environment()
         devices = []
@@ -21281,7 +19434,6 @@ class TestPCAndroidIntegration(unittest.TestCase):
         self.assertTrue(success)
         count = self.pc_controller.broadcast_command("stop_recording")
         self.assertEqual(count, 3, "Stop command should reach all devices")
-
     def test_error_recovery_and_reconnection(self):
         self.start_test_environment()
         android_device = self.create_android_device("recovery_phone")
@@ -21303,7 +19455,6 @@ class TestPCAndroidIntegration(unittest.TestCase):
         self.assertTrue(success)
         ack_received = self.pc_controller.wait_for_ack("recovery_phone", "get_status")
         self.assertTrue(ack_received, "Commands should work after reconnection")
-
     def test_heartbeat_and_connection_monitoring(self):
         self.start_test_environment()
         android_device = self.create_android_device("heartbeat_phone")
@@ -21317,8 +19468,6 @@ class TestPCAndroidIntegration(unittest.TestCase):
         server_stats = self.server.get_network_statistics()
         device_stats = server_stats["devices"]["heartbeat_phone"]
         self.assertTrue(device_stats["is_alive"], "Device should be alive")
-
-
 def run_integration_tests():
     print("Starting PC-Android Integration Tests")
     print("=" * 60)
@@ -21346,15 +19495,10 @@ def run_integration_tests():
             for test, trace in result.errors:
                 print(f"- {test}")
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     success = run_integration_tests()
     sys.exit(0 if success else 1)
-
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-
-
 def test_configuration_manager():
     logging.basicConfig(level=logging.INFO)
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -21422,22 +19566,15 @@ def test_configuration_manager():
         print("- Session restoration: Working")
         print("=" * 50)
         return True
-
-
 if __name__ == "__main__":
     test_configuration_manager()
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class TestPythonAndroidIntegration(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.mock_logger = Mock()
         self.shimmer_manager = ShimmerManager(logger=self.mock_logger)
         self.time_server_manager = TimeServerManager(logger=self.mock_logger)
-
     def tearDown(self):
         try:
             self.shimmer_manager.cleanup()
@@ -21445,7 +19582,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
         except:
             pass
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     def test_android_sync_clock_protocol_compatibility(self):
         self.time_server_manager.initialize(port=8903)
         self.time_server_manager.start()
@@ -21480,7 +19616,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
             self.assertLess(time_diff, 2000)
         except Exception as e:
             self.fail(f"Android sync protocol test failed: {e}")
-
     def test_shimmer_failover_protocol(self):
         self.shimmer_manager.initialize()
         failover_request = {
@@ -21508,7 +19643,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
             )
             if recording_result:
                 self.shimmer_manager.stop_recording()
-
     def test_network_message_schema_validation(self):
         expected_schemas = {
             "recording_start": {
@@ -21552,7 +19686,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
                 self.assertEqual(parsed_message["type"], message_type)
             except Exception as e:
                 self.fail(f"Message schema validation failed for {message_type}: {e}")
-
     def test_cross_platform_data_synchronization(self):
         self.shimmer_manager.initialize()
         self.time_server_manager.initialize(port=8904)
@@ -21580,7 +19713,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
                 except Exception as e:
                     self.fail(f"Cross-platform sync failed: {e}")
                 self.shimmer_manager.stop_recording()
-
     def test_android_device_discovery_simulation(self):
         device_announcement = {
             "type": "device_announcement",
@@ -21607,7 +19739,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
             self.assertIn("time_sync", capabilities)
         except Exception as e:
             self.fail(f"Device discovery simulation failed: {e}")
-
     def test_protocol_version_compatibility(self):
         python_protocol_version = "1.0.0"
         android_protocol_versions = ["1.0.0", "0.9.0", "1.1.0"]
@@ -21623,7 +19754,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
             )
             if android_version == "1.0.0":
                 self.assertTrue(is_compatible)
-
     def test_error_handling_cross_platform(self):
         error_scenarios = [
             {"type": "invalid_message_format", "data": '{"invalid": json format'},
@@ -21651,7 +19781,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
                 client_socket.close()
             except Exception as e:
                 pass
-
     def test_data_format_consistency(self):
         python_sample = ShimmerSample(
             timestamp=time.time(),
@@ -21680,7 +19809,6 @@ class TestPythonAndroidIntegration(unittest.TestCase):
         self.assertIsInstance(android_format["timestamp_ms"], int)
         self.assertIn("sensor_data", android_format)
         self.assertEqual(android_format["device_id"], python_sample.device_id)
-
     def _check_protocol_compatibility(
         self, python_version: str, android_version: str
     ) -> bool:
@@ -21691,17 +19819,13 @@ class TestPythonAndroidIntegration(unittest.TestCase):
         python_minor = int(python_parts[1])
         android_minor = int(android_parts[1])
         return android_minor <= python_minor
-
-
 if __name__ == "__main__":
     import logging
-
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
     unittest.main(verbosity=2)
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -21712,10 +19836,7 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
 class RecordingTestScenarios:
-
     def __init__(self):
         self.recording_workflows = {
             "basic_recording_session": {
@@ -21828,17 +19949,13 @@ class RecordingTestScenarios:
                 "quick_record_button": "quick_record",
             },
         }
-
-
 class AndroidRecordingController:
-
     def __init__(self, test_scenarios: RecordingTestScenarios):
         self.test_scenarios = test_scenarios
         self.device_id = None
         self.logger = logging.getLogger(f"{__name__}.AndroidRecording")
         self.adb_available = False
         self.recording_state = {"active": False, "preview": False}
-
     async def setup_android_recording_environment(self) -> bool:
         try:
             result = subprocess.run(["adb", "version"], capture_output=True, text=True)
@@ -21872,7 +19989,6 @@ class AndroidRecordingController:
         except Exception as e:
             self.logger.error(f"Error setting up Android recording environment: {e}")
             return False
-
     async def launch_android_app_for_recording(self) -> bool:
         try:
             self.logger.info("Launching Android app for recording tests...")
@@ -21931,7 +20047,6 @@ class AndroidRecordingController:
         except Exception as e:
             self.logger.error(f"Failed to launch Android app for recording: {e}")
             return False
-
     async def test_recording_workflows(self) -> Dict[str, Any]:
         results = {"workflow_tests": {}, "control_tests": {}, "overall_success": True}
         try:
@@ -21958,7 +20073,6 @@ class AndroidRecordingController:
             results["overall_success"] = False
             results["error"] = str(e)
         return results
-
     async def _test_recording_workflow(
         self, workflow_id: str, workflow_info: Dict[str, Any]
     ) -> Dict[str, Any]:
@@ -22004,7 +20118,6 @@ class AndroidRecordingController:
             result["error"] = str(e)
             result["duration"] = time.time() - start_time
         return result
-
     async def _execute_workflow_step(self, step: str) -> Dict[str, Any]:
         step_result = {
             "step": step,
@@ -22061,7 +20174,6 @@ class AndroidRecordingController:
             step_result["error"] = str(e)
             step_result["execution_time"] = time.time() - start_time
         return step_result
-
     async def _test_recording_controls(self) -> Dict[str, Any]:
         results = {"overall_success": True, "control_results": {}}
         controls = self.test_scenarios.recording_controls["android_app"]
@@ -22097,7 +20209,6 @@ class AndroidRecordingController:
                 results["overall_success"] = False
             results["control_results"][control_name] = control_result
         return results
-
     async def _navigate_to_recording_fragment(self) -> bool:
         if self.adb_available and self.device_id:
             await asyncio.sleep(1)
@@ -22105,7 +20216,6 @@ class AndroidRecordingController:
         else:
             await asyncio.sleep(0.5)
             return True
-
     async def _start_recording(self) -> bool:
         self.recording_state["active"] = True
         if self.adb_available and self.device_id:
@@ -22114,7 +20224,6 @@ class AndroidRecordingController:
         else:
             await asyncio.sleep(0.3)
             return True
-
     async def _stop_recording(self) -> bool:
         self.recording_state["active"] = False
         if self.adb_available and self.device_id:
@@ -22123,10 +20232,8 @@ class AndroidRecordingController:
         else:
             await asyncio.sleep(0.3)
             return True
-
     async def _verify_recording_state(self, should_be_active: bool) -> bool:
         return self.recording_state["active"] == should_be_active
-
     async def _toggle_preview(self, enable: bool) -> bool:
         self.recording_state["preview"] = enable
         if self.adb_available and self.device_id:
@@ -22135,49 +20242,38 @@ class AndroidRecordingController:
         else:
             await asyncio.sleep(0.3)
             return True
-
     async def _verify_preview_state(self, should_be_active: bool) -> bool:
         return self.recording_state["preview"] == should_be_active
-
     async def _toggle_preview_during_recording(self) -> bool:
         if self.recording_state["active"]:
             self.recording_state["preview"] = not self.recording_state["preview"]
             await asyncio.sleep(0.5)
             return True
         return False
-
     async def _open_session_settings(self) -> bool:
         await asyncio.sleep(0.8)
         return True
-
     async def _configure_recording_parameters(self) -> bool:
         await asyncio.sleep(1.2)
         return True
-
     async def _save_recording_settings(self) -> bool:
         await asyncio.sleep(0.5)
         return True
-
     async def _verify_custom_settings_applied(self) -> bool:
         await asyncio.sleep(0.3)
         return True
-
     async def _simulate_generic_step(self, step: str) -> bool:
         await asyncio.sleep(0.5)
         return True
-
     async def _test_recording_button(self, button_id: str) -> bool:
         await asyncio.sleep(0.3)
         return True
-
     async def _test_recording_indicator(self, indicator_id: str) -> bool:
         await asyncio.sleep(0.2)
         return True
-
     async def _test_generic_control(self, control_id: str) -> bool:
         await asyncio.sleep(0.2)
         return True
-
     async def _validate_workflow_completion(
         self, workflow_info: Dict[str, Any]
     ) -> Dict[str, Any]:
@@ -22193,11 +20289,9 @@ class AndroidRecordingController:
             if not validation_result:
                 validation_results["overall_validation_success"] = False
         return validation_results
-
     async def _validate_point(self, validation_point: str) -> bool:
         await asyncio.sleep(0.2)
         return True
-
     def cleanup(self):
         if self.adb_available and self.device_id:
             try:
@@ -22216,16 +20310,12 @@ class AndroidRecordingController:
                 self.logger.info("Android recording app stopped")
             except Exception as e:
                 self.logger.error(f"Error stopping Android recording app: {e}")
-
-
 class PythonRecordingController:
-
     def __init__(self, test_scenarios: RecordingTestScenarios):
         self.test_scenarios = test_scenarios
         self.process = None
         self.logger = logging.getLogger(f"{__name__}.PythonRecording")
         self.recording_state = {"active": False, "preview": False}
-
     async def launch_python_app_for_recording(self) -> bool:
         try:
             self.logger.info("Launching Python app for recording tests...")
@@ -22248,7 +20338,6 @@ class PythonRecordingController:
         except Exception as e:
             self.logger.error(f"Failed to launch Python recording app: {e}")
             return False
-
     async def test_recording_workflows(self) -> Dict[str, Any]:
         results = {"workflow_tests": {}, "control_tests": {}, "overall_success": True}
         try:
@@ -22275,7 +20364,6 @@ class PythonRecordingController:
             results["overall_success"] = False
             results["error"] = str(e)
         return results
-
     async def _test_recording_workflow(
         self, workflow_id: str, workflow_info: Dict[str, Any]
     ) -> Dict[str, Any]:
@@ -22322,7 +20410,6 @@ class PythonRecordingController:
             result["error"] = str(e)
             result["duration"] = time.time() - start_time
         return result
-
     async def _execute_python_workflow_step(self, step: str) -> Dict[str, Any]:
         step_result = {
             "step": step,
@@ -22405,7 +20492,6 @@ class PythonRecordingController:
             step_result["error"] = str(e)
             step_result["execution_time"] = time.time() - start_time
         return step_result
-
     async def _test_recording_controls(self) -> Dict[str, Any]:
         results = {"overall_success": True, "control_results": {}}
         controls = self.test_scenarios.recording_controls["python_app"]
@@ -22445,43 +20531,33 @@ class PythonRecordingController:
                 results["overall_success"] = False
             results["control_results"][control_name] = control_result
         return results
-
     async def _navigate_to_recording_tab(self) -> bool:
         await asyncio.sleep(0.5)
         return True
-
     async def _click_python_recording_button(self, button_id: str) -> bool:
         await asyncio.sleep(0.3)
         return True
-
     async def _verify_python_recording_indicator(self) -> bool:
         await asyncio.sleep(0.2)
         return True
-
     async def _configure_python_recording_parameters(self) -> bool:
         await asyncio.sleep(1.0)
         return True
-
     async def _save_python_recording_settings(self) -> bool:
         await asyncio.sleep(0.5)
         return True
-
     async def _verify_python_custom_settings(self) -> bool:
         await asyncio.sleep(0.3)
         return True
-
     async def _check_python_indicator(self, indicator_id: str) -> bool:
         await asyncio.sleep(0.2)
         return True
-
     async def _test_python_generic_control(self, control_id: str) -> bool:
         await asyncio.sleep(0.2)
         return True
-
     async def _simulate_python_generic_step(self, step: str) -> bool:
         await asyncio.sleep(0.5)
         return True
-
     async def _validate_python_workflow_completion(
         self, workflow_info: Dict[str, Any]
     ) -> Dict[str, Any]:
@@ -22497,11 +20573,9 @@ class PythonRecordingController:
             if not validation_result:
                 validation_results["overall_validation_success"] = False
         return validation_results
-
     async def _validate_python_point(self, validation_point: str) -> bool:
         await asyncio.sleep(0.2)
         return True
-
     def cleanup(self):
         if self.process and self.process.poll() is None:
             self.logger.info("Terminating Python recording app")
@@ -22510,10 +20584,7 @@ class PythonRecordingController:
                 self.process.wait(timeout=10)
             except subprocess.TimeoutExpired:
                 self.process.kill()
-
-
 class RecordingFullTestSuite:
-
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.test_scenarios = RecordingTestScenarios()
@@ -22522,7 +20593,6 @@ class RecordingFullTestSuite:
         self.test_results = {}
         self.start_time = None
         self.end_time = None
-
     async def run_complete_recording_test_suite(self) -> Dict[str, Any]:
         self.start_time = datetime.now()
         self.logger.info("=" * 80)
@@ -22598,7 +20668,6 @@ class RecordingFullTestSuite:
             self.logger.info("RECORDING FUNCTIONALITY FULL TEST SUITE COMPLETED")
             self.logger.info("=" * 80)
             return self.test_results
-
     async def _test_cross_platform_recording(self) -> Dict[str, Any]:
         results = {
             "overall_success": True,
@@ -22632,7 +20701,6 @@ class RecordingFullTestSuite:
             results["overall_success"] = False
             results["error"] = str(e)
         return results
-
     async def _test_synchronized_recording_start(self) -> Dict[str, Any]:
         result = {
             "test_name": "synchronized_recording_start",
@@ -22656,7 +20724,6 @@ class RecordingFullTestSuite:
             self.logger.error(f"❌ Synchronized recording start test failed: {e}")
             result["error"] = str(e)
         return result
-
     async def _test_synchronized_recording_stop(self) -> Dict[str, Any]:
         result = {
             "test_name": "synchronized_recording_stop",
@@ -22680,7 +20747,6 @@ class RecordingFullTestSuite:
             self.logger.error(f"❌ Synchronized recording stop test failed: {e}")
             result["error"] = str(e)
         return result
-
     async def _test_recording_data_consistency(self) -> Dict[str, Any]:
         result = {
             "test_name": "recording_data_consistency",
@@ -22702,7 +20768,6 @@ class RecordingFullTestSuite:
             self.logger.error(f"❌ Recording data consistency test failed: {e}")
             result["error"] = str(e)
         return result
-
     async def _test_workflow_coordination(self) -> Dict[str, Any]:
         result = {
             "test_name": "workflow_coordination",
@@ -22724,7 +20789,6 @@ class RecordingFullTestSuite:
             self.logger.error(f"❌ Workflow coordination test failed: {e}")
             result["error"] = str(e)
         return result
-
     def _generate_recording_test_summary(self):
         summary = {
             "total_workflows_tested": 0,
@@ -22823,7 +20887,6 @@ class RecordingFullTestSuite:
                 f"Overall Success Rate: {total_success / total_tests * 100:.1f}%"
             )
         self.logger.info("=" * 60)
-
     async def _save_recording_test_results(self):
         try:
             results_dir = Path("test_results")
@@ -22837,7 +20900,6 @@ class RecordingFullTestSuite:
             await self._generate_recording_markdown_report(summary_file)
         except Exception as e:
             self.logger.error(f"Failed to save recording test results: {e}")
-
     async def _generate_recording_markdown_report(self, file_path: Path):
         try:
             with open(file_path, "w") as f:
@@ -22929,8 +20991,6 @@ class RecordingFullTestSuite:
             self.logger.info(f"Recording test markdown report saved to: {file_path}")
         except Exception as e:
             self.logger.error(f"Failed to generate recording test markdown report: {e}")
-
-
 async def main():
     print("=" * 80)
     print("RECORDING FUNCTIONALITY FULL TEST SUITE - Multi-Sensor Recording System")
@@ -22967,28 +21027,20 @@ async def main():
             print(f"Success Rate: {total_success / total_tests * 100:.1f}%")
     print("=" * 80)
     return results
-
-
 if __name__ == "__main__":
     results = asyncio.run(main())
     sys.exit(0 if results.get("overall_success", False) else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class TestSessionLogger(unittest.TestCase):
-
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.session_logger = SessionLogger(base_sessions_dir=self.test_dir)
         print(f"[DEBUG_LOG] Test setup: Using temporary directory {self.test_dir}")
-
     def tearDown(self):
         if os.path.exists(self.test_dir):
             shutil.rmtree(self.test_dir)
         reset_session_logger()
         print(f"[DEBUG_LOG] Test cleanup: Removed temporary directory {self.test_dir}")
-
     def test_basic_session_lifecycle(self):
         print("[DEBUG_LOG] Testing basic session lifecycle...")
         devices = [
@@ -23007,7 +21059,6 @@ class TestSessionLogger(unittest.TestCase):
         self.assertIsNotNone(completed_session.get("end_time"))
         self.assertIsNotNone(completed_session.get("duration"))
         print("[DEBUG_LOG] Basic session lifecycle test passed")
-
     def test_event_logging(self):
         print("[DEBUG_LOG] Testing event logging...")
         devices = [{"id": "TestDevice", "type": "test_device"}]
@@ -23049,7 +21100,6 @@ class TestSessionLogger(unittest.TestCase):
                 f"Event type '{expected_event}' not found in logged events",
             )
         print(f"[DEBUG_LOG] Event logging test passed - logged {len(events)} events")
-
     def test_json_file_creation(self):
         print("[DEBUG_LOG] Testing JSON file creation...")
         self.session_logger.start_session("JSONTest")
@@ -23084,7 +21134,6 @@ class TestSessionLogger(unittest.TestCase):
         print(
             f"[DEBUG_LOG] JSON file creation test passed - file size: {expected_log_file.stat().st_size} bytes"
         )
-
     def test_ui_signal_emission(self):
         print("[DEBUG_LOG] Testing UI signal emission...")
         log_entry_mock = Mock()
@@ -23104,7 +21153,6 @@ class TestSessionLogger(unittest.TestCase):
         self.session_logger.end_session()
         session_ended_mock.assert_called()
         print("[DEBUG_LOG] UI signal emission test passed")
-
     def test_global_instance_management(self):
         print("[DEBUG_LOG] Testing global instance management...")
         logger1 = get_session_logger()
@@ -23114,7 +21162,6 @@ class TestSessionLogger(unittest.TestCase):
         logger3 = get_session_logger()
         self.assertIsNot(logger1, logger3, "Reset should create new instance")
         print("[DEBUG_LOG] Global instance management test passed")
-
     def test_error_handling(self):
         print("[DEBUG_LOG] Testing error handling...")
         self.session_logger.log_event("test_event")
@@ -23126,11 +21173,9 @@ class TestSessionLogger(unittest.TestCase):
         self.assertTrue(self.session_logger.is_session_active())
         self.session_logger.end_session()
         print("[DEBUG_LOG] Error handling test passed")
-
     def test_performance_high_frequency_logging(self):
         print("[DEBUG_LOG] Testing high-frequency logging performance...")
         import time
-
         self.session_logger.start_session("PerformanceTest")
         start_time = time.time()
         event_count = 1000
@@ -23150,7 +21195,6 @@ class TestSessionLogger(unittest.TestCase):
         print(
             f"[DEBUG_LOG] Performance test passed - {events_per_second:.1f} events/second"
         )
-
     def test_large_session_simulation(self):
         print("[DEBUG_LOG] Testing large session simulation...")
         devices = [{"id": f"Device_{i}", "type": "test_device"} for i in range(10)]
@@ -23181,7 +21225,6 @@ class TestSessionLogger(unittest.TestCase):
             len(events), expected_events, "All events should be logged in large session"
         )
         print(f"[DEBUG_LOG] Large session test passed - {len(events)} events logged")
-
     def test_crash_recovery_simulation(self):
         print("[DEBUG_LOG] Testing crash recovery simulation...")
         self.session_logger.start_session("CrashRecoveryTest")
@@ -23201,11 +21244,9 @@ class TestSessionLogger(unittest.TestCase):
         print(
             "[DEBUG_LOG] Crash recovery test passed - data preserved after simulated crash"
         )
-
     def test_memory_usage_monitoring(self):
         print("[DEBUG_LOG] Testing memory usage monitoring...")
         import sys
-
         initial_size = sys.getsizeof(self.session_logger)
         self.session_logger.start_session("MemoryTest")
         event_count = 500
@@ -23236,17 +21277,14 @@ class TestSessionLogger(unittest.TestCase):
         print(
             f"[DEBUG_LOG] Memory usage test passed - total growth: {total_growth} bytes"
         )
-
     def test_concurrent_logging_thread_safety(self):
         print("[DEBUG_LOG] Testing concurrent logging thread safety...")
         import threading
         import time
-
         self.session_logger.start_session("ConcurrencyTest")
         thread_results = []
         thread_count = 5
         events_per_thread = 50
-
         def logging_thread(thread_id):
             try:
                 for i in range(events_per_thread):
@@ -23262,7 +21300,6 @@ class TestSessionLogger(unittest.TestCase):
                 thread_results.append(f"Thread {thread_id} completed successfully")
             except Exception as e:
                 thread_results.append(f"Thread {thread_id} failed: {str(e)}")
-
         threads = []
         for thread_id in range(thread_count):
             thread = threading.Thread(target=logging_thread, args=(thread_id,))
@@ -23286,10 +21323,7 @@ class TestSessionLogger(unittest.TestCase):
         print(
             f"[DEBUG_LOG] Concurrent logging test passed - {len(events)} events from {thread_count} threads"
         )
-
-
 class TestSessionLoggerIntegration(unittest.TestCase):
-
     def test_session_manager_integration(self):
         print("[DEBUG_LOG] Testing SessionManager integration...")
         logger = get_session_logger()
@@ -23300,8 +21334,6 @@ class TestSessionLoggerIntegration(unittest.TestCase):
         self.assertFalse(logger.is_session_active())
         reset_session_logger()
         print("[DEBUG_LOG] SessionManager integration test passed")
-
-
 def run_session_logger_tests():
     print("[DEBUG_LOG] Starting SessionLogger test suite...")
     test_suite = unittest.TestSuite()
@@ -23319,40 +21351,31 @@ def run_session_logger_tests():
             f"[DEBUG_LOG] Tests failed! {len(result.failures)} failures, {len(result.errors)} errors."
         )
         return False
-
-
 if __name__ == "__main__":
     "Run tests when script is executed directly."
     success = run_session_logger_tests()
     exit(0 if success else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 try:
     from shimmer_manager import ShimmerManager
 except ImportError as e:
     print(f"Warning: Cannot import ShimmerManager: {e}")
     ShimmerManager = None
-
-
 class TestShimmerManagerComprehensive(unittest.TestCase):
-
     def setUp(self):
         if ShimmerManager is None:
             self.skipTest("ShimmerManager not available")
         self.test_dir = tempfile.mkdtemp()
         with patch("shimmer_manager.AndroidDeviceManager"):
             self.manager = ShimmerManager(enable_android_integration=False)
-
     def tearDown(self):
         if hasattr(self, "manager"):
             self.manager.stop_recording()
             self.manager.disconnect_all_devices()
-
     def test_shimmer_manager_initialization(self):
         self.assertIsNotNone(self.manager)
         self.assertFalse(self.manager.android_integration_enabled)
         self.assertEqual(len(self.manager.connected_devices), 0)
-
     @patch("shimmer_manager.socket.socket")
     def test_bluetooth_scanning_framework(self, mock_socket):
         mock_sock = Mock()
@@ -23364,7 +21387,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         self.assertIn("android", devices)
         self.assertIn("simulated", devices)
         self.assertGreater(len(devices["simulated"]), 0)
-
     def test_shimmer_library_detection(self):
         available_libs = self.manager._check_available_libraries()
         self.assertIsInstance(available_libs, dict)
@@ -23373,7 +21395,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         self.assertIn("pybluez", available_libs)
         for lib, available in available_libs.items():
             self.assertIsInstance(available, bool)
-
     @patch("shimmer_manager.serial.Serial")
     def test_device_connection_framework(self, mock_serial):
         mock_connection = Mock()
@@ -23386,22 +21407,18 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         }
         success = self.manager.connect_device(device_info)
         self.assertIsInstance(success, bool)
-
     def test_sensor_channel_mapping(self):
         channel_map = self.manager._get_channel_mapping()
         self.assertIsInstance(channel_map, dict)
         expected_channels = ["timestamp", "gsr", "ppg", "accel_x", "accel_y", "accel_z"]
         for channel in expected_channels:
             self.assertIn(channel, channel_map)
-
     def test_data_callback_system(self):
         callback_called = Event()
         received_data = []
-
         def test_callback(data):
             received_data.append(data)
             callback_called.set()
-
         self.manager.register_data_callback(test_callback)
         mock_data = {
             "timestamp": time.time(),
@@ -23415,7 +21432,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         callback_called.wait(timeout=1.0)
         self.assertEqual(len(received_data), 1)
         self.assertEqual(received_data[0], mock_data)
-
     def test_data_conversion_utilities(self):
         raw_data = [12345, 6789, 1024, 2048, 4096, 8192]
         converted = self.manager._convert_raw_data(raw_data)
@@ -23433,7 +21449,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         invalid_data = {"gsr": "invalid_value"}
         is_valid = self.manager._validate_data(invalid_data)
         self.assertFalse(is_valid)
-
     def test_session_management(self):
         session_id = self.manager.start_recording_session()
         self.assertIsNotNone(session_id)
@@ -23454,7 +21469,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
                 content = f.read()
                 self.assertIn("timestamp", content)
                 self.assertIn("gsr", content)
-
     def test_csv_export_functionality(self):
         session_data = []
         for i in range(5):
@@ -23477,7 +21491,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
             self.assertGreater(len(lines), 1)
             self.assertIn("timestamp", lines[0])
             self.assertIn("gsr", lines[0])
-
     @patch("shimmer_manager.threading.Thread")
     def test_concurrent_device_management(self, mock_thread):
         mock_thread_instance = Mock()
@@ -23489,7 +21502,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         for device in devices:
             self.manager.connect_device(device)
         self.assertIsInstance(self.manager.connected_devices, dict)
-
     def test_error_handling_and_recovery(self):
         fake_device = {
             "address": "fake_address",
@@ -23503,7 +21515,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
             self.manager._process_shimmer_data(invalid_data)
         except Exception as e:
             self.fail(f"Should handle invalid data gracefully: {e}")
-
     def test_configuration_management(self):
         device_address = "mock_device"
         sampling_rate = 128
@@ -23514,7 +21525,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
             self.assertIsInstance(success, bool)
         except Exception as e:
             self.fail(f"Configuration should handle gracefully: {e}")
-
     def test_performance_monitoring(self):
         start_time = time.time()
         for i in range(100):
@@ -23523,7 +21533,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         processing_time = time.time() - start_time
         self.assertLess(processing_time, 5.0)
         print(f"Processed 100 samples in {processing_time:.3f}s")
-
     def test_bluetooth_library_fallbacks(self):
         with patch.dict("sys.modules", {"pyshimmer": None}):
             devices = self.manager.scan_and_pair_devices()
@@ -23531,7 +21540,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         with patch.dict("sys.modules", {"bluetooth": None}):
             devices = self.manager.scan_and_pair_devices()
             self.assertIn("simulated", devices)
-
     def test_data_quality_validation(self):
         good_data = {
             "timestamp": time.time(),
@@ -23553,7 +21561,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         }
         quality_score = self.manager._assess_data_quality(poor_data)
         self.assertLess(quality_score, 0.5)
-
     def test_integration_workflow(self):
         print("\nTesting complete Shimmer integration workflow...")
         devices = self.manager.scan_and_pair_devices()
@@ -23584,7 +21591,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
                 print(f"Output file contains {len(lines)} lines")
                 self.assertGreater(len(lines), 1)
         print("✓ Complete workflow test passed")
-
     def test_stress_testing(self):
         print("\nRunning stress tests...")
         start_time = time.time()
@@ -23602,8 +21608,6 @@ class TestShimmerManagerComprehensive(unittest.TestCase):
         print(f"Processed {data_count} samples in {processing_time:.3f}s")
         print(f"Throughput: {throughput:.1f} samples/second")
         self.assertGreater(throughput, 100)
-
-
 def run_shimmer_tests():
     if ShimmerManager is None:
         print("Skipping Shimmer tests - module not available")
@@ -23623,17 +21627,11 @@ def run_shimmer_tests():
         f"Success rate: {(result.testsRun - len(result.failures) - len(result.errors)) / result.testsRun * 100:.1f}%"
     )
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     success = run_shimmer_tests()
     sys.exit(0 if success else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class TestShimmerManager(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.mock_logger = Mock()
@@ -23641,18 +21639,15 @@ class TestShimmerManager(unittest.TestCase):
         self.shimmer_manager = ShimmerManager(
             session_manager=self.mock_session_manager, logger=self.mock_logger
         )
-
     def tearDown(self):
         if hasattr(self, "shimmer_manager"):
             self.shimmer_manager.cleanup()
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     def test_initialization(self):
         result = self.shimmer_manager.initialize()
         self.assertTrue(result)
         self.assertTrue(self.shimmer_manager.is_initialized)
         self.mock_logger.info.assert_called()
-
     def test_initialization_failure(self):
         with patch.object(
             self.shimmer_manager,
@@ -23662,7 +21657,6 @@ class TestShimmerManager(unittest.TestCase):
             result = self.shimmer_manager.initialize()
             self.assertFalse(result)
             self.assertFalse(self.shimmer_manager.is_initialized)
-
     def test_device_scanning(self):
         devices = self.shimmer_manager.scan_and_pair_devices()
         if not PYSHIMMER_AVAILABLE:
@@ -23671,7 +21665,6 @@ class TestShimmerManager(unittest.TestCase):
             for device in devices:
                 self.assertRegex(device, "^[0-9A-Fa-f:]{17}$")
         self.mock_logger.info.assert_called()
-
     def test_device_connection(self):
         self.shimmer_manager.initialize()
         test_devices = ["00:06:66:66:66:66", "00:06:66:66:66:67"]
@@ -23684,7 +21677,6 @@ class TestShimmerManager(unittest.TestCase):
                 self.assertIsInstance(device_status, ShimmerStatus)
                 self.assertTrue(device_status.is_available)
                 self.assertTrue(device_status.is_connected)
-
     def test_channel_configuration(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
@@ -23697,7 +21689,6 @@ class TestShimmerManager(unittest.TestCase):
             self.assertIn(device_id, self.shimmer_manager.device_configurations)
             config = self.shimmer_manager.device_configurations[device_id]
             self.assertEqual(config.enabled_channels, channels)
-
     def test_streaming_control(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
@@ -23714,7 +21705,6 @@ class TestShimmerManager(unittest.TestCase):
         status = self.shimmer_manager.get_shimmer_status()
         for device_status in status.values():
             self.assertFalse(device_status.is_streaming)
-
     def test_recording_session(self):
         session_dir = Path(self.temp_dir) / "test_session" / "shimmer"
         self.mock_session_manager.get_session_directory.return_value = str(
@@ -23735,14 +21725,11 @@ class TestShimmerManager(unittest.TestCase):
         self.assertTrue(result)
         self.assertFalse(self.shimmer_manager.is_recording)
         self.assertIsNone(self.shimmer_manager.current_session_id)
-
     def test_data_callbacks(self):
         self.shimmer_manager.initialize()
         callback_data = []
-
         def test_callback(sample):
             callback_data.append(sample)
-
         self.shimmer_manager.add_data_callback(test_callback)
         test_sample = ShimmerSample(
             timestamp=time.time(),
@@ -23758,18 +21745,14 @@ class TestShimmerManager(unittest.TestCase):
         self.shimmer_manager._process_data_sample(test_sample)
         self.assertEqual(len(callback_data), 1)
         self.assertEqual(callback_data[0], test_sample)
-
     def test_status_callbacks(self):
         self.shimmer_manager.initialize()
         callback_data = []
-
         def test_callback(device_id, status):
             callback_data.append((device_id, status))
-
         self.shimmer_manager.add_status_callback(test_callback)
         devices = self.shimmer_manager.scan_and_pair_devices()
         self.shimmer_manager.connect_devices(devices)
-
     def test_csv_data_logging(self):
         session_dir = Path(self.temp_dir) / "csv_test_session" / "shimmer"
         self.mock_session_manager.get_session_directory.return_value = str(
@@ -23799,7 +21782,6 @@ class TestShimmerManager(unittest.TestCase):
         csv_files = list(session_dir.glob("*.csv"))
         self.assertGreater(len(csv_files), 0)
         import csv
-
         for csv_file in csv_files:
             with open(csv_file, "r") as f:
                 reader = csv.DictReader(f)
@@ -23817,7 +21799,6 @@ class TestShimmerManager(unittest.TestCase):
                     "battery_percentage",
                 ]
                 self.assertEqual(list(reader.fieldnames), expected_headers)
-
     def test_simulated_data_generation(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
@@ -23827,14 +21808,12 @@ class TestShimmerManager(unittest.TestCase):
         for device_id, data_queue in self.shimmer_manager.data_queues.items():
             self.assertGreater(data_queue.qsize(), 0)
         self.shimmer_manager.stop_streaming()
-
     def test_error_handling(self):
         result = self.shimmer_manager.start_streaming()
         self.assertFalse(result)
         result = self.shimmer_manager.set_enabled_channels("invalid_device", {"GSR"})
         self.assertFalse(result)
         result = self.shimmer_manager.start_recording("test_session")
-
     def test_cleanup(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
@@ -23846,19 +21825,16 @@ class TestShimmerManager(unittest.TestCase):
         self.assertFalse(self.shimmer_manager.is_recording)
         self.assertEqual(len(self.shimmer_manager.connected_devices), 0)
         self.assertEqual(len(self.shimmer_manager.device_status), 0)
-
     def test_thread_safety(self):
         self.shimmer_manager.initialize()
         devices = self.shimmer_manager.scan_and_pair_devices()
         self.shimmer_manager.connect_devices(devices)
         self.shimmer_manager.start_streaming()
-
         def concurrent_status_check():
             for _ in range(10):
                 status = self.shimmer_manager.get_shimmer_status()
                 self.assertIsInstance(status, dict)
                 time.sleep(0.1)
-
         threads = []
         for _ in range(3):
             thread = threading.Thread(target=concurrent_status_check)
@@ -23867,7 +21843,6 @@ class TestShimmerManager(unittest.TestCase):
         for thread in threads:
             thread.join(timeout=5.0)
         self.shimmer_manager.stop_streaming()
-
     def test_data_structures(self):
         status = ShimmerStatus(
             is_available=True,
@@ -23910,16 +21885,11 @@ class TestShimmerManager(unittest.TestCase):
         self.assertEqual(config.device_id, "test_device")
         self.assertEqual(config.sampling_rate, 128)
         self.assertIn("GSR", config.enabled_channels)
-
-
 class TestShimmerManagerIntegration(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
-
     def tearDown(self):
         shutil.rmtree(self.temp_dir, ignore_errors=True)
-
     def test_main_backup_integration(self):
         manager = ShimmerManager()
         try:
@@ -23939,30 +21909,22 @@ class TestShimmerManagerIntegration(unittest.TestCase):
                     self.assertGreaterEqual(device_status.samples_recorded, 0)
         finally:
             manager.cleanup()
-
-
 if __name__ == "__main__":
     import logging
-
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
     unittest.main(verbosity=2)
-
-
 class SimpleNetworkMessage:
-
     def __init__(self, msg_type: str, payload: Dict, priority: int = 3):
         self.type = msg_type
         self.payload = payload
         self.priority = priority
         self.timestamp = time.time()
-
     def to_json(self) -> str:
         data = {"type": self.type, "timestamp": self.timestamp, **self.payload}
         return json.dumps(data)
-
     @classmethod
     def from_json(cls, json_str: str) -> Optional["SimpleNetworkMessage"]:
         try:
@@ -23974,10 +21936,7 @@ class SimpleNetworkMessage:
             return msg
         except Exception:
             return None
-
-
 class SimpleServer:
-
     def __init__(self, host: str = "127.0.0.1", port: int = None):
         self.host = host
         self.port = port or 9000 + random.randint(1, 999)
@@ -23985,7 +21944,6 @@ class SimpleServer:
         self.running = False
         self.clients = {}
         self.message_count = 0
-
     def start(self):
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23999,7 +21957,6 @@ class SimpleServer:
         except Exception as e:
             print(f"Server start failed: {e}")
             return False
-
     def stop(self):
         self.running = False
         if self.server_socket:
@@ -24008,7 +21965,6 @@ class SimpleServer:
             except:
                 pass
         print("Simple server stopped")
-
     def _accept_loop(self):
         while self.running:
             try:
@@ -24024,7 +21980,6 @@ class SimpleServer:
             except Exception as e:
                 if self.running:
                     print(f"Accept error: {e}")
-
     def _handle_client(self, client_socket: socket.socket, client_id: str):
         try:
             while self.running:
@@ -24058,7 +22013,6 @@ class SimpleServer:
             if client_id in self.clients:
                 del self.clients[client_id]
             print(f"Client {client_id} disconnected")
-
     def _receive_message(self, sock: socket.socket) -> Optional[SimpleNetworkMessage]:
         try:
             length_data = self._recv_exact(sock, 4)
@@ -24074,7 +22028,6 @@ class SimpleServer:
             return SimpleNetworkMessage.from_json(json_str)
         except Exception:
             return None
-
     def _send_message(self, sock: socket.socket, message: SimpleNetworkMessage) -> bool:
         try:
             json_data = message.to_json().encode("utf-8")
@@ -24084,7 +22037,6 @@ class SimpleServer:
         except Exception as e:
             print(f"Send error: {e}")
             return False
-
     def _recv_exact(self, sock: socket.socket, length: int) -> Optional[bytes]:
         data = b""
         while len(data) < length:
@@ -24093,7 +22045,6 @@ class SimpleServer:
                 return None
             data += chunk
         return data
-
     def send_command_to_all(self, command: str) -> int:
         message = SimpleNetworkMessage("command", {"command": command})
         count = 0
@@ -24101,24 +22052,19 @@ class SimpleServer:
             if self._send_message(client_socket, message):
                 count += 1
         return count
-
     def get_stats(self) -> Dict:
         return {
             "running": self.running,
             "connected_clients": len(self.clients),
             "messages_processed": self.message_count,
         }
-
-
 class SimpleClient:
-
     def __init__(self, client_id: str):
         self.client_id = client_id
         self.socket = None
         self.connected = False
         self.running = False
         self.messages_received = 0
-
     def connect(self, host: str = "127.0.0.1", port: int = None) -> bool:
         if port is None:
             port = 9004
@@ -24133,7 +22079,6 @@ class SimpleClient:
         except Exception as e:
             print(f"Client {self.client_id} connection failed: {e}")
             return False
-
     def disconnect(self):
         self.running = False
         self.connected = False
@@ -24143,22 +22088,18 @@ class SimpleClient:
             except:
                 pass
         print(f"Client {self.client_id} disconnected")
-
     def send_handshake(self) -> bool:
         message = SimpleNetworkMessage(
             "handshake",
             {"device_id": self.client_id, "capabilities": ["test_capability"]},
         )
         return self._send_message(message)
-
     def send_heartbeat(self) -> bool:
         message = SimpleNetworkMessage("heartbeat", {})
         return self._send_message(message)
-
     def send_status(self, **kwargs) -> bool:
         message = SimpleNetworkMessage("status", kwargs)
         return self._send_message(message)
-
     def _send_message(self, message: SimpleNetworkMessage) -> bool:
         if not self.connected or not self.socket:
             return False
@@ -24170,7 +22111,6 @@ class SimpleClient:
         except Exception as e:
             print(f"Client {self.client_id} send error: {e}")
             return False
-
     def _receive_loop(self):
         while self.running and self.connected:
             try:
@@ -24184,7 +22124,6 @@ class SimpleClient:
                 if self.running:
                     print(f"Client {self.client_id} receive error: {e}")
                 break
-
     def _receive_message(self) -> Optional[SimpleNetworkMessage]:
         try:
             length_data = self._recv_exact(4)
@@ -24200,7 +22139,6 @@ class SimpleClient:
             return SimpleNetworkMessage.from_json(json_str)
         except Exception:
             return None
-
     def _recv_exact(self, length: int) -> Optional[bytes]:
         data = b""
         while len(data) < length:
@@ -24209,29 +22147,23 @@ class SimpleClient:
                 return None
             data += chunk
         return data
-
     def get_stats(self) -> Dict:
         return {
             "client_id": self.client_id,
             "connected": self.connected,
             "messages_received": self.messages_received,
         }
-
-
 class TestSimpleNetworking(unittest.TestCase):
-
     def setUp(self):
         self.test_port = 9000 + random.randint(100, 999)
         self.server = SimpleServer(port=self.test_port)
         self.clients = []
-
     def tearDown(self):
         for client in self.clients:
             client.disconnect()
         if self.server:
             self.server.stop()
         time.sleep(0.5)
-
     def test_server_startup(self):
         success = self.server.start()
         self.assertTrue(success, "Server should start successfully")
@@ -24243,7 +22175,6 @@ class TestSimpleNetworking(unittest.TestCase):
         time.sleep(0.2)
         stats = self.server.get_stats()
         self.assertFalse(stats["running"], "Server should be stopped")
-
     def test_client_connection(self):
         self.assertTrue(self.server.start(), "Server should start")
         time.sleep(0.2)
@@ -24258,7 +22189,6 @@ class TestSimpleNetworking(unittest.TestCase):
         self.assertEqual(
             stats["connected_clients"], 1, "One client should be connected"
         )
-
     def test_message_exchange(self):
         self.assertTrue(self.server.start(), "Server should start")
         time.sleep(0.2)
@@ -24281,7 +22211,6 @@ class TestSimpleNetworking(unittest.TestCase):
         self.assertGreaterEqual(
             client_stats["messages_received"], 2, "Client should receive responses"
         )
-
     def test_multiple_clients(self):
         self.assertTrue(self.server.start(), "Server should start")
         time.sleep(0.2)
@@ -24303,7 +22232,6 @@ class TestSimpleNetworking(unittest.TestCase):
             num_clients,
             f"Should have {num_clients} clients",
         )
-
     def test_broadcast_command(self):
         self.assertTrue(self.server.start(), "Server should start")
         time.sleep(0.2)
@@ -24327,7 +22255,6 @@ class TestSimpleNetworking(unittest.TestCase):
             self.assertGreaterEqual(
                 stats["messages_received"], 1, "Client should receive broadcast"
             )
-
     def test_connection_resilience(self):
         self.assertTrue(self.server.start(), "Server should start")
         time.sleep(0.2)
@@ -24345,7 +22272,6 @@ class TestSimpleNetworking(unittest.TestCase):
         self.assertEqual(
             stats["connected_clients"], 0, "Client should be removed from server"
         )
-
     def test_message_framing(self):
         message = SimpleNetworkMessage("test", {"data": "hello", "number": 42})
         json_str = message.to_json()
@@ -24359,7 +22285,6 @@ class TestSimpleNetworking(unittest.TestCase):
         self.assertEqual(reconstructed.type, "test")
         self.assertEqual(reconstructed.payload["data"], "hello")
         self.assertEqual(reconstructed.payload["number"], 42)
-
     def test_performance_basic(self):
         self.assertTrue(self.server.start(), "Server should start")
         time.sleep(0.2)
@@ -24383,8 +22308,6 @@ class TestSimpleNetworking(unittest.TestCase):
         self.assertGreater(
             successful, message_count * 0.8, "At least 80% messages should succeed"
         )
-
-
 def run_simple_tests():
     print("Running Simple Rock-Solid Networking Tests")
     print("=" * 50)
@@ -24411,17 +22334,11 @@ def run_simple_tests():
             for test, trace in result.errors:
                 print(f"- {test}")
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     success = run_simple_tests()
     exit(0 if success else 1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class TestStimulusManager(unittest.TestCase):
-
     def setUp(self):
         self.mock_logger = Mock()
         self.mock_app = Mock()
@@ -24439,16 +22356,13 @@ class TestStimulusManager(unittest.TestCase):
         self.mock_screen2.logicalDotsPerInch.return_value = 96.0
         self.mock_app.screens.return_value = [self.mock_screen1, self.mock_screen2]
         self.stimulus_manager = StimulusManager(logger=self.mock_logger)
-
     def tearDown(self):
         if hasattr(self, "stimulus_manager"):
             self.stimulus_manager.cleanup()
-
     def test_initialization(self):
         self.assertFalse(self.stimulus_manager.is_initialized)
         self.assertEqual(len(self.stimulus_manager.available_monitors), 0)
         self.mock_logger.info.assert_called()
-
     @patch("stimulus_manager.QApplication.instance")
     @patch("stimulus_manager.QDesktopWidget")
     def test_initialization_with_monitors(self, mock_desktop, mock_app_instance):
@@ -24466,14 +22380,12 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(monitor2.monitor_id, 1)
         self.assertEqual(monitor2.name, "Secondary Monitor")
         self.assertFalse(monitor2.is_primary)
-
     @patch("stimulus_manager.QApplication.instance")
     def test_initialization_no_app(self, mock_app_instance):
         mock_app_instance.return_value = None
         result = self.stimulus_manager.initialize()
         self.assertFalse(result)
         self.assertFalse(self.stimulus_manager.is_initialized)
-
     def test_monitor_utilities(self):
         self.stimulus_manager.available_monitors = [
             MonitorInfo(0, "Primary", Mock(), True, 96.0),
@@ -24490,7 +22402,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(primary_id, 0)
         secondary_id = self.stimulus_manager.get_secondary_monitor_id()
         self.assertEqual(secondary_id, 1)
-
     def test_stimulus_config(self):
         config = StimulusConfig()
         self.assertEqual(config.stimulus_type, "video")
@@ -24510,14 +22421,12 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(custom_config.duration_ms, 3000)
         self.assertEqual(custom_config.monitor_id, 1)
         self.assertEqual(custom_config.font_size, 64)
-
     @patch("stimulus_manager.StimulusWindow")
     def test_present_stimulus_not_initialized(self, mock_window):
         config = StimulusConfig(stimulus_type="pattern")
         result = self.stimulus_manager.present_stimulus(config)
         self.assertFalse(result)
         self.mock_logger.error.assert_called()
-
     @patch("stimulus_manager.StimulusWindow")
     def test_present_stimulus_invalid_monitor(self, mock_window):
         self.stimulus_manager.is_initialized = True
@@ -24527,7 +22436,6 @@ class TestStimulusManager(unittest.TestCase):
         config = StimulusConfig(monitor_id=5)
         result = self.stimulus_manager.present_stimulus(config)
         self.assertFalse(result)
-
     @patch("stimulus_manager.StimulusWindow")
     @patch("stimulus_manager.QTimer")
     def test_present_stimulus_success(self, mock_timer_class, mock_window_class):
@@ -24552,7 +22460,6 @@ class TestStimulusManager(unittest.TestCase):
         event = self.stimulus_manager.presentation_history[0]
         self.assertEqual(event.event_type, "stimulus_start")
         self.assertEqual(event.monitor_id, 0)
-
     def test_stop_stimulus(self):
         mock_window = Mock()
         self.stimulus_manager.stimulus_windows[0] = mock_window
@@ -24565,12 +22472,10 @@ class TestStimulusManager(unittest.TestCase):
         mock_timer.stop.assert_called_once()
         self.assertNotIn(0, self.stimulus_manager.stimulus_windows)
         self.assertNotIn(0, self.stimulus_manager.presentation_timers)
-
     def test_stop_stimulus_not_active(self):
         result = self.stimulus_manager.stop_stimulus(0)
         self.assertFalse(result)
         self.mock_logger.warning.assert_called()
-
     def test_stop_all_stimuli(self):
         mock_window1 = Mock()
         mock_window2 = Mock()
@@ -24578,7 +22483,6 @@ class TestStimulusManager(unittest.TestCase):
         self.stimulus_manager.stimulus_windows[1] = mock_window2
         self.stimulus_manager.stop_all_stimuli()
         self.assertEqual(len(self.stimulus_manager.stimulus_windows), 0)
-
     @patch("stimulus_manager.StimulusWindow")
     def test_present_synchronized_stimuli(self, mock_window_class):
         self.stimulus_manager.is_initialized = True
@@ -24601,13 +22505,10 @@ class TestStimulusManager(unittest.TestCase):
         mock_window1.start_presentation.assert_called_once()
         mock_window2.start_presentation.assert_called_once()
         self.assertEqual(len(self.stimulus_manager.presentation_history), 2)
-
     def test_event_callbacks(self):
         callback_data = []
-
         def test_callback(event):
             callback_data.append(event)
-
         self.stimulus_manager.add_event_callback(test_callback)
         test_event = StimulusEvent(
             event_type="test_event",
@@ -24620,7 +22521,6 @@ class TestStimulusManager(unittest.TestCase):
             callback(test_event)
         self.assertEqual(len(callback_data), 1)
         self.assertEqual(callback_data[0], test_event)
-
     def test_presentation_history(self):
         history = self.stimulus_manager.get_presentation_history()
         self.assertEqual(len(history), 0)
@@ -24634,7 +22534,6 @@ class TestStimulusManager(unittest.TestCase):
         history.append(StimulusEvent("extra", time.time(), 0, StimulusConfig()))
         original_history = self.stimulus_manager.get_presentation_history()
         self.assertEqual(len(original_history), 2)
-
     def test_cleanup(self):
         mock_window = Mock()
         mock_timer = Mock()
@@ -24648,7 +22547,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(len(self.stimulus_manager.presentation_timers), 0)
         self.assertEqual(len(self.stimulus_manager.event_callbacks), 0)
         mock_timer.stop.assert_called_once()
-
     def test_error_handling(self):
         self.stimulus_manager.is_initialized = True
         self.stimulus_manager.available_monitors = [Mock()]
@@ -24659,7 +22557,6 @@ class TestStimulusManager(unittest.TestCase):
             result = self.stimulus_manager.present_stimulus(config)
             self.assertFalse(result)
             self.mock_logger.error.assert_called()
-
     def test_stimulus_event_dataclass(self):
         config = StimulusConfig(stimulus_type="test")
         event = StimulusEvent(
@@ -24674,7 +22571,6 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(event.monitor_id, 1)
         self.assertEqual(event.stimulus_config, config)
         self.assertEqual(event.duration_actual_ms, 2500.0)
-
     def test_monitor_info_dataclass(self):
         geometry = Mock()
         monitor = MonitorInfo(
@@ -24689,15 +22585,10 @@ class TestStimulusManager(unittest.TestCase):
         self.assertEqual(monitor.geometry, geometry)
         self.assertTrue(monitor.is_primary)
         self.assertEqual(monitor.dpi, 120.0)
-
-
 class TestStimulusManagerIntegration(unittest.TestCase):
-
     def setUp(self):
         self.mock_logger = Mock()
-
     def tearDown(self):
-
         pass
     def test_main_application_integration(self):
         manager = StimulusManager(logger=self.mock_logger)
@@ -24713,30 +22604,21 @@ class TestStimulusManagerIntegration(unittest.TestCase):
             self.assertEqual(config.stimulus_type, "text")
             self.assertEqual(config.duration_ms, 5000)
             events = []
-
             def event_handler(event):
                 events.append(event)
-
             manager.add_event_callback(event_handler)
             self.assertEqual(len(manager.event_callbacks), 1)
         finally:
             manager.cleanup()
-
-
 if __name__ == "__main__":
     import logging
-
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
     unittest.main(verbosity=2)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
-
 class StimulusTestWindow(QMainWindow):
-
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Stimulus Presentation Test")
@@ -24753,7 +22635,6 @@ class StimulusTestWindow(QMainWindow):
         self.connect_test_signals()
         self.test_results = []
         print("[DEBUG_LOG] StimulusTestWindow initialized")
-
     def create_test_buttons(self, layout):
         self.load_test_video_btn = QPushButton("Load Test Video")
         self.load_test_video_btn.clicked.connect(self.load_test_video)
@@ -24763,7 +22644,6 @@ class StimulusTestWindow(QMainWindow):
         layout.addWidget(self.run_tests_btn)
         self.results_label = QLabel("Test Results: Not started")
         layout.addWidget(self.results_label)
-
     def connect_test_signals(self):
         self.stimulus_panel.file_loaded.connect(self.stimulus_controller.load_video)
         self.stimulus_panel.play_requested.connect(self.stimulus_controller.test_play)
@@ -24778,7 +22658,6 @@ class StimulusTestWindow(QMainWindow):
         self.stimulus_controller.experiment_started.connect(self.on_experiment_started)
         self.stimulus_controller.experiment_ended.connect(self.on_experiment_ended)
         self.stimulus_controller.error_occurred.connect(self.on_error_occurred)
-
     def load_test_video(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self,
@@ -24789,7 +22668,6 @@ class StimulusTestWindow(QMainWindow):
         if file_path:
             self.stimulus_panel.load_file(file_path)
             print(f"[DEBUG_LOG] Test video loaded: {file_path}")
-
     def test_synchronized_start(self):
         print("[DEBUG_LOG] Testing synchronized start...")
         screen_index = self.stimulus_panel.get_selected_screen()
@@ -24801,7 +22679,6 @@ class StimulusTestWindow(QMainWindow):
         else:
             print("[DEBUG_LOG] Synchronized start test failed")
             self.test_results.append("✗ Synchronized start test failed")
-
     def run_all_tests(self):
         print("[DEBUG_LOG] Starting thorough test suite...")
         self.test_results.clear()
@@ -24812,7 +22689,6 @@ class StimulusTestWindow(QMainWindow):
         if self.stimulus_controller.current_video_file:
             self.test_keyboard_shortcuts()
         self.display_test_results()
-
     def test_component_initialization(self):
         try:
             assert self.stimulus_controller is not None
@@ -24827,7 +22703,6 @@ class StimulusTestWindow(QMainWindow):
         except Exception as e:
             self.test_results.append(f"✗ Component initialization test failed: {e}")
             print(f"[DEBUG_LOG] Component initialization test failed: {e}")
-
     def test_signal_connections(self):
         try:
             assert hasattr(self.stimulus_panel, "file_loaded")
@@ -24841,7 +22716,6 @@ class StimulusTestWindow(QMainWindow):
         except Exception as e:
             self.test_results.append(f"✗ Signal connections test failed: {e}")
             print(f"[DEBUG_LOG] Signal connections test failed: {e}")
-
     def test_timing_logger(self):
         try:
             test_logger = TimingLogger("test_logs")
@@ -24861,7 +22735,6 @@ class StimulusTestWindow(QMainWindow):
         except Exception as e:
             self.test_results.append(f"✗ Timing logger test failed: {e}")
             print(f"[DEBUG_LOG] Timing logger test failed: {e}")
-
     def test_screen_detection(self):
         try:
             screens = QApplication.screens()
@@ -24878,7 +22751,6 @@ class StimulusTestWindow(QMainWindow):
         except Exception as e:
             self.test_results.append(f"✗ Screen detection test failed: {e}")
             print(f"[DEBUG_LOG] Screen detection test failed: {e}")
-
     def test_keyboard_shortcuts(self):
         try:
             assert hasattr(self.stimulus_controller, "space_shortcut")
@@ -24890,7 +22762,6 @@ class StimulusTestWindow(QMainWindow):
         except Exception as e:
             self.test_results.append(f"✗ Keyboard shortcuts test failed: {e}")
             print(f"[DEBUG_LOG] Keyboard shortcuts test failed: {e}")
-
     def display_test_results(self):
         passed = len([r for r in self.test_results if r.startswith("✓")])
         total = len(self.test_results)
@@ -24901,26 +22772,19 @@ class StimulusTestWindow(QMainWindow):
         print(f"[DEBUG_LOG] Test suite completed: {passed}/{total} tests passed")
         for result in self.test_results:
             print(f"[DEBUG_LOG] {result}")
-
     def on_status_changed(self, status):
         print(f"[DEBUG_LOG] Status changed: {status}")
-
     def on_experiment_started(self):
         print("[DEBUG_LOG] Experiment started signal received")
-
     def on_experiment_ended(self):
         print("[DEBUG_LOG] Experiment ended signal received")
         self.stimulus_panel.set_experiment_active(False)
-
     def on_error_occurred(self, error):
         print(f"[DEBUG_LOG] Error occurred: {error}")
-
-
 def create_test_video():
     try:
         import cv2
         import numpy as np
-
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
         out = cv2.VideoWriter("test_video.mp4", fourcc, 30.0, (640, 480))
         for i in range(300):
@@ -24946,8 +22810,6 @@ def create_test_video():
     except Exception as e:
         print(f"[DEBUG_LOG] Error creating test video: {e}")
         return None
-
-
 def main():
     print("[DEBUG_LOG] Starting Stimulus Presentation Test Suite")
     app = QApplication(sys.argv)
@@ -24967,11 +22829,8 @@ def main():
         "[DEBUG_LOG] 4. Keyboard Shortcuts - Space (play/pause), Esc (exit fullscreen)"
     )
     sys.exit(app.exec_())
-
-
 if __name__ == "__main__":
     main()
-
 print("🎉 complete RECORDING SESSION TEST - IMPLEMENTATION COMPLETE")
 print("=" * 80)
 print()
@@ -25056,24 +22915,18 @@ print("validates communication, networking, file saving, post-processing,")
 print("button reactions, and complete logging - exactly as requested.")
 print()
 print("=" * 80)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 try:
     from calibration.calibration import CalibrationManager
-
     CALIBRATION_AVAILABLE = True
 except ImportError:
     CALIBRATION_AVAILABLE = False
 try:
     from shimmer_manager import ShimmerManager
-
     SHIMMER_AVAILABLE = True
 except ImportError:
     SHIMMER_AVAILABLE = False
-
-
 class TestSystemIntegration(unittest.TestCase):
-
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, self.test_dir)
@@ -25082,12 +22935,10 @@ class TestSystemIntegration(unittest.TestCase):
         if SHIMMER_AVAILABLE:
             with patch("shimmer_manager.AndroidDeviceManager"):
                 self.shimmer_manager = ShimmerManager(enable_android_integration=False)
-
     def tearDown(self):
         if hasattr(self, "shimmer_manager"):
             self.shimmer_manager.stop_recording()
             self.shimmer_manager.disconnect_all_devices()
-
     @unittest.skipUnless(
         CALIBRATION_AVAILABLE and SHIMMER_AVAILABLE,
         "Requires both calibration and Shimmer components",
@@ -25097,7 +22948,6 @@ class TestSystemIntegration(unittest.TestCase):
         print("Phase 1: Camera calibration")
         import cv2
         import numpy as np
-
         images = []
         image_points = []
         image_size = (640, 480)
@@ -25170,13 +23020,11 @@ class TestSystemIntegration(unittest.TestCase):
                 self.assertGreater(len(lines), sample_count // 2)
                 print(f"✓ Sensor data verified: {len(lines)} lines")
         print("\n✅ Complete system workflow test PASSED")
-
     @unittest.skipUnless(CALIBRATION_AVAILABLE, "Requires calibration component")
     def test_calibration_performance_integration(self):
         print("\nTesting calibration performance integration...")
         import cv2
         import numpy as np
-
         test_configurations = [
             {"size": (640, 480), "pattern": (9, 6)},
             {"size": (1280, 720), "pattern": (12, 8)},
@@ -25225,7 +23073,6 @@ class TestSystemIntegration(unittest.TestCase):
                 print(f"  RMS error: {result['rms_error']:.4f}")
             self.calibration_manager.pattern_size = old_pattern
         print("✓ Calibration performance tests completed")
-
     @unittest.skipUnless(SHIMMER_AVAILABLE, "Requires Shimmer component")
     def test_shimmer_stress_integration(self):
         print("\nTesting Shimmer stress integration...")
@@ -25263,14 +23110,12 @@ class TestSystemIntegration(unittest.TestCase):
                         f"  Saved {data_lines} samples ({data_lines / samples_sent * 100:.1f}% retention)"
                     )
         print("✓ Shimmer stress tests completed")
-
     def test_error_recovery_integration(self):
         print("\nTesting error recovery integration...")
         if CALIBRATION_AVAILABLE:
             print("Testing calibration error recovery...")
             import cv2
             import numpy as np
-
             images = []
             image_points = []
             for i in range(8):
@@ -25345,12 +23190,10 @@ class TestSystemIntegration(unittest.TestCase):
                     lines = f.readlines()
                     self.assertGreater(len(lines), good_samples // 2)
         print("✓ Error recovery tests completed")
-
     def test_concurrent_operations_integration(self):
         print("\nTesting concurrent operations integration...")
         if not SHIMMER_AVAILABLE:
             self.skipTest("Requires Shimmer component")
-
         def data_generator(manager, thread_id, samples_per_thread):
             for i in range(samples_per_thread):
                 mock_data = {
@@ -25363,7 +23206,6 @@ class TestSystemIntegration(unittest.TestCase):
                 }
                 manager._process_shimmer_data(mock_data)
                 time.sleep(0.001)
-
         session_id = self.shimmer_manager.start_recording_session()
         num_threads = 3
         samples_per_thread = 20
@@ -25392,15 +23234,12 @@ class TestSystemIntegration(unittest.TestCase):
                     f"✓ Saved {data_lines} samples ({data_lines / total_samples * 100:.1f}% retention)"
                 )
         print("✓ Concurrent operations tests completed")
-
     def test_memory_usage_integration(self):
         print("\nTesting memory usage integration...")
         if not SHIMMER_AVAILABLE:
             self.skipTest("Requires Shimmer component")
         import gc
-
         import psutil
-
         process = psutil.Process()
         initial_memory = process.memory_info().rss / 1024 / 1024
         print(f"Initial memory usage: {initial_memory:.1f} MB")
@@ -25434,8 +23273,6 @@ class TestSystemIntegration(unittest.TestCase):
         print(f"Memory per sample: {total_increase * 1024 / samples_processed:.3f} KB")
         self.assertLess(total_increase, 100)
         print("✓ Memory usage tests completed")
-
-
 def run_integration_tests():
     print("=" * 80)
     print("complete SYSTEM INTEGRATION TESTS")
@@ -25459,70 +23296,49 @@ def run_integration_tests():
         f"Success rate: {(result.testsRun - len(result.failures) - len(result.errors)) / result.testsRun * 100:.1f}%"
     )
     return result.wasSuccessful()
-
-
 if __name__ == "__main__":
     success = run_integration_tests()
     sys.exit(0 if success else 1)
-
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
-
 class TestApplicationCore(unittest.TestCase):
-
     def test_import_modules(self):
         try:
             from application import Application
             from session.session_manager import SessionManager
         except ImportError as e:
             self.fail(f"failed to import core modules: {e}")
-
     @patch("logging.getLogger")
     @patch("PyQt5.QtWidgets.QApplication")
     def test_logging_setup(self, mock_qt_app, mock_logger):
         mock_logger_instance = Mock()
         mock_logger.return_value = mock_logger_instance
         from application import Application
-
         app = Application()
         mock_logger.assert_called()
         mock_logger_instance.info.assert_called()
-
     def test_session_manager_functionality(self):
         from session.session_manager import SessionManager
-
         session_manager = SessionManager()
         self.assertIsNotNone(session_manager)
         session_id = session_manager.create_session()
         self.assertIsNotNone(session_id)
-
-
 class TestNetworkComponents(unittest.TestCase):
-
     @patch("socket.socket")
     def test_server_initialization(self, mock_socket):
         from network.device_server import JsonSocketServer
         from session.session_manager import SessionManager
-
         session_manager = SessionManager()
         server = JsonSocketServer(session_manager=session_manager)
         self.assertIsNotNone(server)
         self.assertEqual(server.session_manager, session_manager)
-
     def test_protocol_schema_loading(self):
         try:
             from protocol.schema_utils import load_schema
-
             self.assertTrue(True)
         except ImportError:
             self.skipTest("schema utilities not implemented")
-
-
 if __name__ == "__main__":
     unittest.main()
-
-
-
 def validate_testing_qa_document():
     doc_path = Path(__file__).parent.parent / "docs" / "TESTING_QA_FRAMEWORK.md"
     print("🔍 Testing and QA Framework Document Validation")
@@ -25650,12 +23466,9 @@ def validate_testing_qa_document():
         json.dump(validation_results, f, indent=2)
     print(f"💾 Validation results saved to: {results_path}")
     return overall_score >= 4
-
-
 if __name__ == "__main__":
     success = validate_testing_qa_document()
     exit(0 if success else 1)
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -25666,10 +23479,7 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
 class ComprehensiveTestSummary:
-
     def __init__(self):
         self.test_results_dir = Path("test_results")
         self.test_results_dir.mkdir(exist_ok=True)
@@ -25686,7 +23496,6 @@ class ComprehensiveTestSummary:
             "consolidated_results": {},
             "overall_statistics": {},
         }
-
     def _get_system_info(self) -> Dict[str, Any]:
         try:
             python_version = subprocess.check_output(
@@ -25709,7 +23518,6 @@ class ComprehensiveTestSummary:
         except Exception as e:
             logger.warning(f"Could not gather complete system info: {e}")
             return {"error": str(e)}
-
     def collect_python_orchestrator_results(self):
         logger.info("Collecting Python orchestrator test results...")
         orchestrator_results = []
@@ -25732,7 +23540,6 @@ class ComprehensiveTestSummary:
             "results": orchestrator_results,
         }
         return orchestrator_results
-
     def collect_individual_test_outputs(self):
         logger.info("Collecting individual test output files...")
         output_files = []
@@ -25758,7 +23565,6 @@ class ComprehensiveTestSummary:
             "files": output_files,
         }
         return output_files
-
     def run_pytest_summary(self):
         logger.info("Running pytest summary...")
         try:
@@ -25792,7 +23598,6 @@ class ComprehensiveTestSummary:
             logger.error(f"❌ Pytest collection failed: {e}")
         self.summary["test_categories"]["pytest_tests"] = pytest_summary
         return pytest_summary
-
     def run_gradle_test_summary(self):
         logger.info("Running Gradle test summary...")
         try:
@@ -25819,7 +23624,6 @@ class ComprehensiveTestSummary:
             logger.error(f"❌ Gradle task listing failed: {e}")
         self.summary["test_categories"]["gradle_tests"] = gradle_summary
         return gradle_summary
-
     def calculate_overall_statistics(self):
         logger.info("Calculating overall statistics...")
         stats = {
@@ -25861,7 +23665,6 @@ class ComprehensiveTestSummary:
         stats["test_coverage_areas"] = coverage_areas
         self.summary["overall_statistics"] = stats
         return stats
-
     def generate_comprehensive_report(self):
         logger.info("Generating thorough test report...")
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -25876,7 +23679,6 @@ class ComprehensiveTestSummary:
         logger.info(f"✅ complete summary saved to: {json_file}")
         logger.info(f"✅ complete report saved to: {md_file}")
         return (json_file, md_file)
-
     def _generate_markdown_content(self) -> str:
         stats = self.summary["overall_statistics"]
         system_info = self.summary["system_info"]
@@ -25910,7 +23712,6 @@ class ComprehensiveTestSummary:
             content += "⚠️ **Overall Status: NEEDS ATTENTION** - Some test areas require investigation.\n\n"
         content += "\n### Next Steps:\n1. **✅ Test Results Saved**: All test results are properly saved for later reference\n2. **✅ Test Orchestrator**: Python test orchestrator is functional\n3. **✅ Dependencies**: Required test dependencies are installed\n4. **📊 Monitoring**: Regular test execution can be automated via Gradle tasks\n\n### Available Test Commands:\n- `python test_all_full_suites.py` - Run all Python test suites\n- `./gradlew runAllFullTestSuites` - Run all test suites via Gradle\n- `python -m pytest PythonApp/src/tests/` - Run pytest on Python tests\n- Individual test suites are available for targeted testing\n\n## Test Results Archive\n\nAll test results are preserved in the `test_results/` directory for historical reference and analysis.\n"
         return content
-
     def run_comprehensive_analysis(self):
         logger.info("=" * 80)
         logger.info("complete TEST SUMMARY - Multi-Sensor Recording System")
@@ -25933,8 +23734,6 @@ class ComprehensiveTestSummary:
         logger.info(f"Test Output Files: {stats['test_output_files']}")
         logger.info("=" * 60)
         return (self.summary, json_file, md_file)
-
-
 def main():
     print("=" * 80)
     print("complete TEST SUMMARY GENERATOR - Multi-Sensor Recording System")
@@ -25949,14 +23748,9 @@ def main():
     print(f"Markdown Report: {md_file}")
     print("=" * 80)
     return summary
-
-
 if __name__ == "__main__":
     summary = main()
     sys.exit(0)
-
-
-
 def test_android_python_integration():
     print("=== Android-Python Hand Segmentation Integration Test ===")
     try:
@@ -26009,10 +23803,7 @@ def test_android_python_integration():
     finally:
         if "android_output_dir" in locals():
             import shutil
-
             shutil.rmtree(android_output_dir, ignore_errors=True)
-
-
 def test_integration_features():
     print("\n--- Testing Integration Features ---")
     print("1. Testing dataset format compatibility...")
@@ -26048,8 +23839,6 @@ def test_integration_features():
     return all(
         [compatible, schema_compatible, color_space_compatible, coord_system_compatible]
     )
-
-
 def demonstrate_complete_workflow():
     print("\n=== Complete Workflow Demonstration ===")
     workflow_steps = [
@@ -26070,8 +23859,6 @@ def demonstrate_complete_workflow():
     print("   • Cross-platform compatibility")
     print("   • Reduced data footprint")
     print("   • Neural network ready outputs")
-
-
 if __name__ == "__main__":
     success = test_android_python_integration()
     if success:
@@ -26081,17 +23868,13 @@ if __name__ == "__main__":
     else:
         print(f"\n❌ Integration tests failed. Check implementation.")
         sys.exit(1)
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "PythonApp", "src"))
-
-
 def test_automated_file_collection():
     print("Testing automated file collection trigger...")
     try:
         from gui.main_window import MainWindow
         from PyQt5.QtCore import QTimer
         from PyQt5.QtWidgets import QApplication
-
         app = QApplication([])
         main_window = MainWindow()
         mock_json_server = Mock()
@@ -26130,14 +23913,11 @@ def test_automated_file_collection():
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
         return False
-
-
 def test_collect_session_files_method():
     print("\nTesting collect_session_files method...")
     try:
         from gui.main_window import MainWindow
         from PyQt5.QtWidgets import QApplication
-
         app = QApplication([])
         main_window = MainWindow()
         mock_json_server = Mock()
@@ -26158,14 +23938,11 @@ def test_collect_session_files_method():
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
         return False
-
-
 def test_error_handling():
     print("\nTesting error handling...")
     try:
         from gui.main_window import MainWindow
         from PyQt5.QtWidgets import QApplication
-
         app = QApplication([])
         main_window = MainWindow()
         main_window.server_running = False
@@ -26186,8 +23963,6 @@ def test_error_handling():
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
         return False
-
-
 if __name__ == "__main__":
     print("=" * 60)
     print("AUTOMATED FILE COLLECTION INTEGRATION TEST")
@@ -26207,18 +23982,13 @@ if __name__ == "__main__":
     else:
         print("⚠️  Some tests failed - Check the implementation")
     print("=" * 60)
-
 sys.path.insert(0, str(Path(__file__).parent / "PythonApp" / "src"))
 logger = get_logger(__name__)
-
-
 class LoggingTestSuite:
-
     def __init__(self):
         self.logger = get_logger(__name__)
         self.tests_passed = 0
         self.tests_failed = 0
-
     @performance_timer("logging_infrastructure_test")
     def test_logging_infrastructure(self):
         self.logger.info("=== Testing Logging Infrastructure ===")
@@ -26246,7 +24016,6 @@ class LoggingTestSuite:
         except Exception as e:
             self.tests_failed += 1
             self.logger.error(f"❌ Logging infrastructure test FAILED: {e}")
-
     def test_component_logging(self):
         self.logger.info("=== Testing Component Logging ===")
         components = [
@@ -26267,7 +24036,6 @@ class LoggingTestSuite:
                 self.tests_failed += 1
                 continue
         self.tests_passed += 1
-
     def test_performance_monitoring(self):
         self.logger.info("=== Testing Performance Monitoring ===")
         try:
@@ -26284,7 +24052,6 @@ class LoggingTestSuite:
         except Exception as e:
             self.tests_failed += 1
             self.logger.error(f"❌ Performance monitoring test FAILED: {e}")
-
     def test_log_file_creation(self):
         self.logger.info("=== Testing Log File Creation ===")
         try:
@@ -26308,7 +24075,6 @@ class LoggingTestSuite:
         except Exception as e:
             self.tests_failed += 1
             self.logger.error(f"❌ Log file creation test FAILED: {e}")
-
     def run_all_tests(self):
         self.logger.info("🚀 Starting complete Logging Test Suite")
         self.logger.info("=" * 60)
@@ -26339,8 +24105,6 @@ class LoggingTestSuite:
         else:
             self.logger.warning("⚠️ Logging validation needs attention")
             return False
-
-
 def main():
     try:
         AppLogger.initialize(log_level="DEBUG", console_output=True, file_output=True)
@@ -26350,20 +24114,14 @@ def main():
     except Exception as e:
         print(f"Logging test suite failed: {e}")
         sys.exit(1)
-
-
 if __name__ == "__main__":
     main()
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "PythonApp", "src"))
-
-
 def test_session_directory_integration():
     print("Testing Session Directory Integration...")
     try:
         from network.device_server import JsonSocketServer
         from session.session_manager import SessionManager
-
         test_base_dir = tempfile.mkdtemp()
         print(f"Using test directory: {test_base_dir}")
         try:
@@ -26394,14 +24152,11 @@ def test_session_directory_integration():
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
         return False
-
-
 def test_fallback_behavior():
     print("\nTesting Fallback Behavior...")
     try:
         from network.device_server import JsonSocketServer
         from session.session_manager import SessionManager
-
         session_manager = SessionManager("test_recordings")
         json_server = JsonSocketServer(session_manager=session_manager)
         session_dir = json_server.get_session_directory()
@@ -26419,13 +24174,10 @@ def test_fallback_behavior():
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
         return False
-
-
 def test_without_session_manager():
     print("\nTesting Behavior Without SessionManager...")
     try:
         from network.device_server import JsonSocketServer
-
         json_server = JsonSocketServer()
         session_dir = json_server.get_session_directory()
         print(f"JsonSocketServer standalone directory: {session_dir}")
@@ -26442,15 +24194,12 @@ def test_without_session_manager():
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
         return False
-
-
 def test_main_window_integration():
     print("\nTesting MainWindow Integration...")
     try:
         try:
             from gui.main_window import MainWindow
             from PyQt5.QtWidgets import QApplication
-
             app = QApplication([])
             main_window = MainWindow()
             if hasattr(main_window.json_server, "session_manager"):
@@ -26478,8 +24227,6 @@ def test_main_window_integration():
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
         return False
-
-
 if __name__ == "__main__":
     print("=" * 70)
     print("SESSION DIRECTORY INTEGRATION TEST")

@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui
-
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,31 +14,24 @@ import com.multisensor.recording.BuildConfig
 import com.multisensor.recording.databinding.ActivityAboutBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
 @AndroidEntryPoint
 class AboutActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityAboutBinding
     private lateinit var viewModel: AboutViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         try {
             viewModel = ViewModelProvider(this)[AboutViewModel::class.java]
         } catch (e: Exception) {
             showError("Failed to initialize about: ${e.message}")
             return
         }
-
         setupUI()
         observeViewModel()
     }
-
     private fun setupUI() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
@@ -48,20 +40,16 @@ class AboutActivity : AppCompatActivity() {
             title = "About"
             subtitle = "Multi-Sensor Recording System"
         }
-
         setupAppInfo()
         setupLinks()
         setupSystemInfo()
     }
-
     private fun setupAppInfo() {
         binding.appVersionText.text = "Version ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         binding.buildTypeText.text = "Build: ${BuildConfig.BUILD_TYPE}"
         binding.buildTimeText.text = "Built: ${viewModel.getBuildDate()}"
-
         binding.appDescriptionText.text = getString(com.multisensor.recording.R.string.app_description)
     }
-
     private fun setupLinks() {
         binding.githubLinkButton.setOnClickListener {
             try {
@@ -71,7 +59,6 @@ class AboutActivity : AppCompatActivity() {
                 showError("Failed to open GitHub: ${e.message}")
             }
         }
-
         binding.documentationLinkButton.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/wiki"))
@@ -80,7 +67,6 @@ class AboutActivity : AppCompatActivity() {
                 showError("Failed to open documentation: ${e.message}")
             }
         }
-
         binding.supportEmailButton.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
@@ -89,7 +75,6 @@ class AboutActivity : AppCompatActivity() {
                     putExtra(Intent.EXTRA_SUBJECT, "Multi-Sensor Recording App Support")
                     putExtra(Intent.EXTRA_TEXT, "Please describe your issue or question:")
                 }
-
                 if (intent.resolveActivity(packageManager) != null) {
                     startActivity(intent)
                 } else {
@@ -99,7 +84,6 @@ class AboutActivity : AppCompatActivity() {
                 showError("Failed to open email: ${e.message}")
             }
         }
-
         binding.licenseLinkButton.setOnClickListener {
             try {
                 val intent =
@@ -109,7 +93,6 @@ class AboutActivity : AppCompatActivity() {
                 showError("Failed to open license: ${e.message}")
             }
         }
-
         binding.privacyPolicyButton.setOnClickListener {
             try {
                 val intent =
@@ -120,7 +103,6 @@ class AboutActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun setupSystemInfo() {
         binding.refreshSystemInfoButton.setOnClickListener {
             try {
@@ -131,7 +113,6 @@ class AboutActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun observeViewModel() {
         try {
             lifecycleScope.launch {
@@ -145,14 +126,12 @@ class AboutActivity : AppCompatActivity() {
             showError("Failed to setup monitoring: ${e.message}")
         }
     }
-
     private fun updateUI(uiState: AboutUiState) {
         updateSystemInfo(uiState)
         updateHardwareInfo(uiState)
         updateLegalInfo(uiState)
         updateCredits(uiState)
     }
-
     private fun updateSystemInfo(uiState: AboutUiState) {
         binding.androidVersionText.text = "Android ${uiState.androidVersion} (API ${uiState.androidApiLevel})"
         binding.deviceModelText.text = "${uiState.deviceManufacturer} ${uiState.deviceModel}"
@@ -161,7 +140,6 @@ class AboutActivity : AppCompatActivity() {
         binding.kernelVersionText.text = "Kernel: ${uiState.kernelVersion}"
         binding.javaVersionText.text = "Java: ${uiState.javaVersion}"
     }
-
     private fun updateHardwareInfo(uiState: AboutUiState) {
         binding.totalMemoryText.text = "Total RAM: ${uiState.totalMemory}"
         binding.availableMemoryText.text = "Available RAM: ${uiState.availableMemory}"
@@ -170,24 +148,20 @@ class AboutActivity : AppCompatActivity() {
         binding.processorInfoText.text = "Processor: ${uiState.processorInfo}"
         binding.screenResolutionText.text = "Screen: ${uiState.screenResolution}"
         binding.screenDensityText.text = "Density: ${uiState.screenDensity} DPI"
-
         if (uiState.cameraInfo.isNotEmpty()) {
             binding.cameraInfoText.text = "Cameras:\n${uiState.cameraInfo.joinToString("\n") { "• $it" }}"
         } else {
             binding.cameraInfoText.text = "Camera information unavailable"
         }
-
         if (uiState.sensorInfo.isNotEmpty()) {
             binding.sensorInfoText.text = "Sensors:\n${uiState.sensorInfo.joinToString("\n") { "• $it" }}"
         } else {
             binding.sensorInfoText.text = "Sensor information unavailable"
         }
     }
-
     private fun updateLegalInfo(uiState: AboutUiState) {
         binding.copyrightText.text = uiState.copyrightInfo
         binding.licenseText.text = uiState.licenseInfo
-
         if (uiState.thirdPartyLicenses.isNotEmpty()) {
             binding.thirdPartyLicensesText.text =
                 "Third-party Libraries:\n${uiState.thirdPartyLicenses.joinToString("\n") { "• $it" }}"
@@ -195,7 +169,6 @@ class AboutActivity : AppCompatActivity() {
             binding.thirdPartyLicensesText.text = "No third-party licenses to display"
         }
     }
-
     private fun updateCredits(uiState: AboutUiState) {
         binding.developersText.text = buildString {
             append("Development Team:\n")
@@ -207,7 +180,6 @@ class AboutActivity : AppCompatActivity() {
                 append("\n")
             }
         }
-
         if (uiState.contributors.isNotEmpty()) {
             binding.contributorsText.text = buildString {
                 append("Contributors:\n")
@@ -218,7 +190,6 @@ class AboutActivity : AppCompatActivity() {
         } else {
             binding.contributorsText.text = "Special thanks to all contributors"
         }
-
         if (uiState.acknowledgments.isNotEmpty()) {
             binding.acknowledgementsText.text = buildString {
                 append("Acknowledgments:\n")
@@ -230,21 +201,17 @@ class AboutActivity : AppCompatActivity() {
             binding.acknowledgementsText.text = ""
         }
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             android.R.id.home -> {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
-
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
     private fun showError(error: String) {
         Toast.makeText(this, "Error: $error", Toast.LENGTH_LONG).show()
         android.util.Log.e("AboutActivity", error)

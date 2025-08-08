@@ -11,10 +11,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-
 from ..utils.logging_config import get_logger
-
-
 @dataclass
 class BuildResult:
     component: str
@@ -24,8 +21,6 @@ class BuildResult:
     error_message: Optional[str] = None
     build_size_mb: Optional[float] = None
     checksum: Optional[str] = None
-
-
 @dataclass
 class DeploymentPackage:
     version: str
@@ -35,10 +30,7 @@ class DeploymentPackage:
     package_path: str
     checksum: str
     deployment_instructions: List[str]
-
-
 class DeploymentAutomation:
-
     def __init__(self, project_root: str, version: str = None):
         self.project_root = Path(project_root)
         self.version = version or self._generate_version()
@@ -55,11 +47,9 @@ class DeploymentAutomation:
             self.docs_build_dir,
         ]:
             build_subdir.mkdir(exist_ok=True)
-
     def _generate_version(self) -> str:
         timestamp = datetime.now().strftime("%Y.%m.%d.%H%M")
         return f"v{timestamp}"
-
     async def build_all_components(self) -> DeploymentPackage:
         start_time = datetime.now()
         self.logger.info(f"Starting production build for version {self.version}")
@@ -73,7 +63,6 @@ class DeploymentAutomation:
         duration = (end_time - start_time).total_seconds()
         self.logger.info(f"Build completed in {duration:.2f} seconds")
         return package
-
     async def _clean_previous_builds(self):
         self.logger.info("Cleaning previous builds...")
         try:
@@ -91,7 +80,6 @@ class DeploymentAutomation:
                 build_subdir.mkdir(exist_ok=True)
         except Exception as e:
             self.logger.warning(f"Error cleaning previous builds: {e}")
-
     async def _build_android_app(self):
         self.logger.info("Building Android application...")
         start_time = datetime.now()
@@ -154,7 +142,6 @@ class DeploymentAutomation:
                 )
             )
             self.logger.error(f"Android build failed: {e}")
-
     async def _build_debug_apk(self):
         self.logger.info("Building debug APK...")
         try:
@@ -186,7 +173,6 @@ class DeploymentAutomation:
                     self.logger.info(f"Debug APK built: {target_apk.name}")
         except Exception as e:
             self.logger.warning(f"Debug APK build failed: {e}")
-
     async def _build_python_app(self):
         self.logger.info("Building Python application...")
         start_time = datetime.now()
@@ -239,7 +225,6 @@ class DeploymentAutomation:
                 )
             )
             self.logger.error(f"Python build failed: {e}")
-
     async def _create_python_startup_scripts(self, python_dist: Path):
         windows_script = python_dist / "start.bat"
         windows_script.write_text(
@@ -252,7 +237,6 @@ class DeploymentAutomation:
         except (OSError, PermissionError) as e:
             self.logger.warning(f"Could not set executable permissions on script: {e}")
             pass
-
     async def _create_locked_requirements(self, python_dist: Path):
         try:
             requirements_process = await asyncio.create_subprocess_exec(
@@ -268,7 +252,6 @@ class DeploymentAutomation:
                 self.logger.info("Created locked requirements file")
         except Exception as e:
             self.logger.warning(f"Could not create locked requirements: {e}")
-
     async def _build_python_executable(self, python_dist: Path):
         try:
             self.logger.info("Attempting to build Python executable...")
@@ -302,7 +285,6 @@ class DeploymentAutomation:
                         self.logger.warning("Python executable build failed")
         except Exception as e:
             self.logger.warning(f"Could not build Python executable: {e}")
-
     async def _generate_documentation(self):
         self.logger.info("Generating documentation...")
         start_time = datetime.now()
@@ -341,7 +323,6 @@ class DeploymentAutomation:
                 )
             )
             self.logger.error(f"Documentation generation failed: {e}")
-
     async def _generate_api_docs(self):
         try:
             python_src = self.project_root / "PythonApp" / "src"
@@ -353,7 +334,6 @@ class DeploymentAutomation:
             self.logger.info("API documentation generated")
         except Exception as e:
             self.logger.warning(f"API documentation generation failed: {e}")
-
     async def _create_user_manuals(self):
         user_manual = self.docs_build_dir / "USER_MANUAL.md"
         user_manual.write_text(
@@ -435,7 +415,6 @@ or contact the development team.
 """
         )
         self.logger.info("User manual created")
-
     async def _create_deployment_guide(self):
         deployment_guide = self.docs_build_dir / "DEPLOYMENT_GUIDE.md"
         deployment_guide.write_text(
@@ -692,22 +671,18 @@ echo
             self.logger.info("Deployment scripts created")
         except Exception as e:
             self.logger.warning(f"Deployment script creation failed: {e}")
-
     async def _create_zip_archive(self, source_dir: Path, zip_path: Path):
         with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zip_file:
             for file_path in source_dir.rglob("*"):
                 if file_path.is_file():
                     arc_name = file_path.relative_to(source_dir)
                     zip_file.write(file_path, arc_name)
-
     def _calculate_checksum(self, file_path: Path) -> str:
         sha256_hash = hashlib.sha256()
         with open(file_path, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 sha256_hash.update(chunk)
         return sha256_hash.hexdigest()
-
-
 async def main():
     project_root = Path(__file__).parent.parent.parent
     version = sys.argv[1] if len(sys.argv) > 1 else None
@@ -737,9 +712,6 @@ async def main():
     except Exception as e:
         print(f"Deployment failed: {e}")
         import traceback
-
         traceback.print_exc()
-
-
 if __name__ == "__main__":
     asyncio.run(main())
