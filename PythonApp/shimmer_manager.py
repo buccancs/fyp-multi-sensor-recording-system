@@ -2,7 +2,6 @@ import csv
 import logging
 import os
 import queue
-import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -16,36 +15,16 @@ from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSa
 from ..network.pc_server import PCServer
 from ..utils.logging_config import get_logger
 
-sys.path.append(
-    os.path.join(
-        os.path.dirname(__file__), "..", "..", "AndroidApp", "libs", "pyshimmer"
-    )
-)
 try:
     from pyshimmer import DEFAULT_BAUDRATE, DataPacket, ShimmerBluetooth
     from serial import Serial
 
     PYSHIMMER_AVAILABLE = True
-except ImportError as e:
-    logging.warning(f"PyShimmer library not available: {e}")
+except ImportError:
+    from .shimmer_stub import DEFAULT_BAUDRATE, DataPacket, ShimmerBluetooth, Serial
+
+    logging.warning("PyShimmer library not available")
     PYSHIMMER_AVAILABLE = False
-
-    class Serial:
-
-        def __init__(self, *args, **kwargs):
-            pass
-
-    class ShimmerBluetooth:
-
-        def __init__(self, *args, **kwargs):
-            pass
-
-    class DataPacket:
-
-        def __init__(self, *args, **kwargs):
-            pass
-
-    DEFAULT_BAUDRATE = 115200
 
 
 class ConnectionType(Enum):

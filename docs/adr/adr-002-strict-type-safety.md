@@ -99,7 +99,7 @@ Implement **strict MyPy configuration** with 100% type coverage for all public A
 ```toml
 # pyproject.toml
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
