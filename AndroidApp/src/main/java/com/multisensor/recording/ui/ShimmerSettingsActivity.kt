@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui
-
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -23,12 +22,9 @@ import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @AndroidEntryPoint
 class ShimmerSettingsActivity : AppCompatActivity() {
     private val viewModel: ShimmerConfigViewModel by viewModels()
-
-    // UI Components for settings
     private lateinit var deviceStatusIcon: ImageView
     private lateinit var connectionStatusChip: Chip
     private lateinit var batteryLevelText: TextView
@@ -49,10 +45,8 @@ class ShimmerSettingsActivity : AppCompatActivity() {
     private lateinit var deviceInfoText: TextView
     private lateinit var gsrRangeSpinner: Spinner
     private lateinit var accelRangeSpinner: Spinner
-
     @Inject
     lateinit var logger: Logger
-
     private val bluetoothPermissions =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             arrayOf(
@@ -67,15 +61,12 @@ class ShimmerSettingsActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION,
             )
         }
-
     companion object {
         private const val BLUETOOTH_PERMISSION_REQUEST_CODE = 1001
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shimmer_settings)
-
         setupToolbar()
         initializeViews()
         setupClickListeners()
@@ -83,10 +74,8 @@ class ShimmerSettingsActivity : AppCompatActivity() {
         setupSensorCheckboxes()
         observeViewModelState()
         checkBluetoothPermissions()
-
         logger.info("ShimmerSettingsActivity created")
     }
-
     private fun setupToolbar() {
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.apply {
@@ -94,12 +83,10 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
     }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_shimmer_settings, menu)
         return true
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -113,9 +100,7 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
     private fun initializeViews() {
-        // Device status components
         deviceStatusIcon = findViewById(R.id.device_status_icon)
         connectionStatusChip = findViewById(R.id.connection_status_chip)
         batteryLevelText = findViewById(R.id.battery_level_text)
@@ -123,8 +108,6 @@ class ShimmerSettingsActivity : AppCompatActivity() {
         signalStrengthText = findViewById(R.id.signal_strength_text)
         signalProgressBar = findViewById(R.id.signal_progress_bar)
         deviceInfoText = findViewById(R.id.device_info_text)
-        
-        // Configuration components
         samplingRateSpinner = findViewById(R.id.sampling_rate_spinner)
         connectButton = findViewById(R.id.connect_button)
         disconnectButton = findViewById(R.id.disconnect_button)
@@ -137,7 +120,6 @@ class ShimmerSettingsActivity : AppCompatActivity() {
         crcSpinner = findViewById(R.id.crc_spinner)
         gsrRangeSpinner = findViewById(R.id.gsr_range_spinner)
         accelRangeSpinner = findViewById(R.id.accel_range_spinner)
-
         sensorCheckboxes =
             mapOf(
                 SensorChannel.GSR to findViewById(R.id.checkbox_gsr),
@@ -149,23 +131,19 @@ class ShimmerSettingsActivity : AppCompatActivity() {
                 SensorChannel.EMG to findViewById(R.id.checkbox_emg),
             )
     }
-
     private fun setupClickListeners() {
         connectButton.setOnClickListener { viewModel.connectToDevice() }
         disconnectButton.setOnClickListener { viewModel.disconnectFromDevice() }
         scanButton.setOnClickListener { viewModel.scanForDevices() }
-        
         selectDeviceButton.setOnClickListener { 
             showDeviceSelectionDialog()
         }
-
         deviceListView.setOnItemClickListener { _, _, position, _ ->
             val state = viewModel.uiState.value
             if (position < state.availableDevices.size) {
                 viewModel.onDeviceSelected(position)
             }
         }
-
         sensorCheckboxes.forEach { (channel, checkbox) ->
             checkbox.setOnCheckedChangeListener { _, _ ->
                 val enabledSensors = sensorCheckboxes.filter { it.value.isChecked }.keys.map { it.name }.toSet()
@@ -173,7 +151,6 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun observeViewModelState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -183,14 +160,10 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun render(state: ShimmerConfigUiState) {
-        // Update connection controls
         connectButton.isEnabled = state.canConnectToDevice
         disconnectButton.isEnabled = state.canDisconnectDevice
         scanButton.isEnabled = state.canStartScan
-
-        // Update progress indicators
         progressBar.visibility = if (state.isScanning || state.isLoadingConnection) View.VISIBLE else View.GONE
         progressText.visibility = if (state.isScanning || state.isLoadingConnection) View.VISIBLE else View.GONE
         progressText.text = when {
@@ -198,11 +171,7 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             state.isLoadingConnection -> "Connecting to device..."
             else -> ""
         }
-
-        // Update device status
         updateDeviceStatus(state)
-        
-        // Update device list
         val deviceNames = state.availableDevices.map { "${it.name} (${it.macAddress})" }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, deviceNames)
         deviceListView.adapter = adapter
@@ -210,28 +179,18 @@ class ShimmerSettingsActivity : AppCompatActivity() {
         if (state.selectedDeviceIndex >= 0 && state.selectedDeviceIndex < state.availableDevices.size) {
             deviceListView.setItemChecked(state.selectedDeviceIndex, true)
         }
-
-        // Update sensor controls
         sensorCheckboxes.values.forEach { checkbox ->
             checkbox.isEnabled = state.isDeviceConnected && !state.isConfiguring
         }
-        
-        // Update range spinners
         gsrRangeSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
         accelRangeSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
-
-        // Update CRC spinner state
         crcSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
         if (state.isDeviceConnected && state.firmwareVersion.isNotEmpty()) {
             val firmwareVersionCode = state.firmwareVersion.split(".").firstOrNull()?.toIntOrNull() ?: 0
             crcSpinner.isEnabled = firmwareVersionCode >= 8
         }
-        
-        // Update configuration sections visibility
         findViewById<View>(R.id.configuration_section)?.visibility =
             if (state.showConfigurationPanel) View.VISIBLE else View.GONE
-
-        // Handle error messages
         state.errorMessage?.let { message ->
             if (state.showErrorDialog) {
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()
@@ -239,9 +198,7 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             }
         }
     }
-    
     private fun updateDeviceStatus(state: ShimmerConfigUiState) {
-        // Update connection status chip
         when {
             state.isDeviceConnected -> {
                 connectionStatusChip.text = "Connected"
@@ -259,8 +216,6 @@ class ShimmerSettingsActivity : AppCompatActivity() {
                 deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.error_color))
             }
         }
-        
-        // Update battery status
         if (state.batteryLevel >= 0) {
             batteryLevelText.text = "${state.batteryLevel}%"
             batteryProgressBar.progress = state.batteryLevel
@@ -276,12 +231,9 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             batteryLevelText.text = "--"
             batteryProgressBar.progress = 0
         }
-        
-        // Update signal strength
         val signalStrength = state.signalStrength
         if (signalStrength != 0) {
             signalStrengthText.text = "${signalStrength}dBm"
-            // Convert dBm to percentage (rough approximation)
             val signalPercent = when {
                 signalStrength > -50 -> 100
                 signalStrength > -60 -> 80
@@ -303,8 +255,6 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             signalStrengthText.text = "--"
             signalProgressBar.progress = 0
         }
-        
-        // Update device info
         if (state.isDeviceConnected) {
             deviceInfoText.text = buildString {
                 append("Device Information:\n")
@@ -318,14 +268,12 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             deviceInfoText.text = "No device connected\n\nPlease scan and connect a Shimmer device to configure settings."
         }
     }
-
     private fun setupSpinners() {
         val samplingRates = arrayOf("25.6 Hz", "51.2 Hz", "128.0 Hz", "256.0 Hz", "512.0 Hz")
         val samplingRateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, samplingRates)
         samplingRateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         samplingRateSpinner.adapter = samplingRateAdapter
         samplingRateSpinner.setSelection(1)
-
         samplingRateSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -339,15 +287,12 @@ class ShimmerSettingsActivity : AppCompatActivity() {
                         viewModel.updateSamplingRate(samplingRateValues[position].toInt())
                     }
                 }
-
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
         val presets = viewModel.getAvailablePresets().toTypedArray()
         val presetAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, presets)
         presetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         configurationPresetSpinner.adapter = presetAdapter
-
         configurationPresetSpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -359,53 +304,41 @@ class ShimmerSettingsActivity : AppCompatActivity() {
                     val selectedPreset = presets[position]
                     viewModel.applyConfigurationPreset(selectedPreset)
                 }
-
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-            
-        // Setup CRC spinner similar to ShimmerBasicExample
         val crcOptions = arrayOf("Disable CRC", "Enable 1-byte CRC", "Enable 2-byte CRC")
         val crcAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, crcOptions)
         crcAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         crcSpinner.adapter = crcAdapter
-        crcSpinner.isEnabled = false // Disabled until device is connected
-        
+        crcSpinner.isEnabled = false
         crcSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (crcSpinner.isEnabled) {
                     viewModel.updateCrcConfiguration(position)
                 }
             }
-            
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        
-        // Setup GSR Range spinner
         val gsrRanges = arrayOf("40kΩ to 4MΩ", "10kΩ to 1MΩ", "3.2kΩ to 0.32MΩ", "1kΩ to 0.1MΩ", "0.3kΩ to 0.03MΩ")
         val gsrRangeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, gsrRanges)
         gsrRangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         gsrRangeSpinner.adapter = gsrRangeAdapter
-        gsrRangeSpinner.setSelection(4) // Default range 4
+        gsrRangeSpinner.setSelection(4)
         gsrRangeSpinner.isEnabled = false
-        
         gsrRangeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (gsrRangeSpinner.isEnabled) {
                     viewModel.updateGsrRange(position)
                 }
             }
-            
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        
-        // Setup Accelerometer Range spinner
         val accelRanges = arrayOf("±2g", "±4g", "±8g", "±16g")
         val accelRangeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accelRanges)
         accelRangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         accelRangeSpinner.adapter = accelRangeAdapter
-        accelRangeSpinner.setSelection(0) // Default to ±2g
+        accelRangeSpinner.setSelection(0)
         accelRangeSpinner.isEnabled = false
-        
         accelRangeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (accelRangeSpinner.isEnabled) {
@@ -413,23 +346,19 @@ class ShimmerSettingsActivity : AppCompatActivity() {
                     viewModel.updateAccelRange(ranges[position])
                 }
             }
-            
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
-
     private fun setupSensorCheckboxes() {
         sensorCheckboxes[SensorChannel.GSR]?.isChecked = true
         sensorCheckboxes[SensorChannel.PPG]?.isChecked = true
         sensorCheckboxes[SensorChannel.ACCEL]?.isChecked = true
     }
-
     private fun checkBluetoothPermissions() {
         val missingPermissions =
             bluetoothPermissions.filter {
                 ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
             }
-
         if (missingPermissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -440,14 +369,12 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             logger.info("Bluetooth permissions already granted.")
         }
     }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         if (requestCode == BLUETOOTH_PERMISSION_REQUEST_CODE) {
             val allGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
             if (allGranted) {
@@ -461,7 +388,6 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             }
         }
     }
-    
     private fun showDeviceSelectionDialog() {
         val dialog = ShimmerDeviceSelectionDialog.newInstance()
         dialog.setDeviceSelectionListener(object : ShimmerDeviceSelectionDialog.DeviceSelectionListener {
@@ -469,7 +395,6 @@ class ShimmerSettingsActivity : AppCompatActivity() {
                 logger.info("Device selected: $deviceName ($macAddress)")
                 viewModel.connectToSpecificDevice(macAddress, deviceName)
             }
-            
             override fun onSelectionCancelled() {
                 logger.info("Device selection cancelled")
             }

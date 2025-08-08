@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
@@ -38,15 +37,11 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.math.*
 import kotlin.random.Random
-
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
-
     private val viewModel: FileViewViewModel by viewModels()
-
     @Inject
     lateinit var logger: Logger
-
     private lateinit var sessionsRecyclerView: RecyclerView
     private lateinit var filesRecyclerView: RecyclerView
     private lateinit var sessionInfoText: TextView
@@ -55,17 +50,14 @@ class FileViewActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var emptyStateText: TextView
     private lateinit var refreshButton: Button
-
     private lateinit var rgbPreviewBtn: Button
     private lateinit var irPreviewBtn: Button
     private lateinit var rgbPreviewImage: ImageView
     private lateinit var irPreviewImage: ImageView
     private lateinit var rgbPreviewPlaceholder: TextView
     private lateinit var irPreviewPlaceholder: TextView
-
     private lateinit var sessionsAdapter: SessionsAdapter
     private lateinit var filesAdapter: FilesAdapter
-
     private var isRgbPreviewActive = false
     private var isIrPreviewActive = false
     private val cameraPreviewHandler = Handler(Looper.getMainLooper())
@@ -85,56 +77,44 @@ class FileViewActivity : AppCompatActivity() {
             }
         }
     }
-
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-
     companion object {
         private const val AUTHORITY = "com.multisensor.recording.fileprovider"
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_view)
-
         setupActionBar()
         initializeViews()
         setupRecyclerViews()
         setupEventListeners()
         observeUiState()
-
         logger.info("FileViewActivity created with MVVM architecture")
     }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.file_view_menu, menu)
         return true
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.action_refresh -> {
                 viewModel.refreshSessions()
                 true
             }
-
             R.id.action_delete_all -> {
                 showDeleteAllDialog()
                 true
             }
-
             R.id.action_export_all -> {
                 showMessage("Export functionality coming soon")
                 true
             }
-
             android.R.id.home -> {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
-
     private fun setupActionBar() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -142,7 +122,6 @@ class FileViewActivity : AppCompatActivity() {
             title = "File Browser"
         }
     }
-
     private fun initializeViews() {
         sessionsRecyclerView = findViewById(R.id.sessions_recycler_view)
         filesRecyclerView = findViewById(R.id.files_recycler_view)
@@ -152,18 +131,15 @@ class FileViewActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progress_bar)
         emptyStateText = findViewById(R.id.empty_state_text)
         refreshButton = findViewById(R.id.refresh_button)
-
         rgbPreviewBtn = findViewById(R.id.rgb_preview_btn)
         irPreviewBtn = findViewById(R.id.ir_preview_btn)
         rgbPreviewImage = findViewById(R.id.rgb_preview_image)
         irPreviewImage = findViewById(R.id.ir_preview_image)
         rgbPreviewPlaceholder = findViewById(R.id.rgb_preview_placeholder)
         irPreviewPlaceholder = findViewById(R.id.ir_preview_placeholder)
-
         rgbPreviewBtn.setOnClickListener { toggleRgbPreview() }
         irPreviewBtn.setOnClickListener { toggleIrPreview() }
     }
-
     private fun setupRecyclerViews() {
         sessionsAdapter = SessionsAdapter { session ->
             viewModel.selectSession(session)
@@ -172,7 +148,6 @@ class FileViewActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@FileViewActivity)
             adapter = sessionsAdapter
         }
-
         filesAdapter = FilesAdapter { fileItem ->
             handleFileClick(fileItem)
         }
@@ -181,35 +156,28 @@ class FileViewActivity : AppCompatActivity() {
             adapter = filesAdapter
         }
     }
-
     private fun setupEventListeners() {
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.onSearchQueryChanged(s.toString())
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
-
         val filterOptions = arrayOf("All Files", "Video Files", "RAW Images", "Thermal Data", "Recent Sessions")
         val filterAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, filterOptions)
         filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         filterSpinner.adapter = filterAdapter
-
         filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 viewModel.applyFilter(position)
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
         refreshButton.setOnClickListener {
             viewModel.refreshSessions()
         }
     }
-
     private fun observeUiState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -219,28 +187,21 @@ class FileViewActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun render(state: FileViewUiState) {
         progressBar.visibility = if (state.isLoadingSessions || state.isLoadingFiles) View.VISIBLE else View.GONE
-
         emptyStateText.visibility = if (state.showEmptyState) View.VISIBLE else View.GONE
-
         sessionsAdapter.submitList(state.sessions)
-
         filesAdapter.submitList(state.sessionFiles)
-
         state.selectedSession?.let { session ->
             updateSessionInfo(session)
         } ?: run {
             sessionInfoText.text = "No session selected"
         }
-
         state.errorMessage?.let { error ->
             showError(error)
             viewModel.clearError()
         }
     }
-
     private fun updateSessionInfo(session: SessionItem) {
         val info = buildString {
             append("Session: ${session.sessionId}\n")
@@ -258,7 +219,6 @@ class FileViewActivity : AppCompatActivity() {
         }
         sessionInfoText.text = info
     }
-
     private fun handleFileClick(fileItem: FileItem) {
         AlertDialog.Builder(this)
             .setTitle(fileItem.file.name)
@@ -280,7 +240,6 @@ class FileViewActivity : AppCompatActivity() {
             }
             .show()
     }
-
     private fun openFile(fileItem: FileItem) {
         try {
             val uri = FileProvider.getUriForFile(this, AUTHORITY, fileItem.file)
@@ -293,7 +252,6 @@ class FileViewActivity : AppCompatActivity() {
             showError("Failed to open file: ${e.message}")
         }
     }
-
     private fun shareFile(fileItem: FileItem) {
         try {
             val uri = FileProvider.getUriForFile(this, AUTHORITY, fileItem.file)
@@ -307,7 +265,6 @@ class FileViewActivity : AppCompatActivity() {
             showError("Failed to share file: ${e.message}")
         }
     }
-
     private fun confirmDeleteFile(fileItem: FileItem) {
         AlertDialog.Builder(this)
             .setTitle("Delete File")
@@ -318,7 +275,6 @@ class FileViewActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
-
     private fun showDeleteAllDialog() {
         AlertDialog.Builder(this)
             .setTitle("Delete All Sessions")
@@ -329,7 +285,6 @@ class FileViewActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
-
     @SuppressLint("DefaultLocale")
     private fun formatDuration(durationMs: Long): String {
         val seconds = durationMs / 1000
@@ -341,7 +296,6 @@ class FileViewActivity : AppCompatActivity() {
             else -> "${seconds}s"
         }
     }
-
     @SuppressLint("DefaultLocale")
     private fun formatFileSize(bytes: Long): String {
         return when {
@@ -351,7 +305,6 @@ class FileViewActivity : AppCompatActivity() {
             else -> "$bytes B"
         }
     }
-
     private fun getMimeType(fileType: FileType): String {
         return when (fileType) {
             FileType.VIDEO -> "video/*"
@@ -362,13 +315,11 @@ class FileViewActivity : AppCompatActivity() {
             else -> "application/octet-stream"
         }
     }
-
     private fun showMessage(message: String) {
         findViewById<View>(android.R.id.content)?.let { view ->
             Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
         }
     }
-
     private fun showError(message: String) {
         findViewById<View>(android.R.id.content)?.let { view ->
             Snackbar.make(view, message, Snackbar.LENGTH_LONG)
@@ -376,7 +327,6 @@ class FileViewActivity : AppCompatActivity() {
                 .show()
         }
     }
-
     private fun toggleRgbPreview() {
         if (!isRgbPreviewActive) {
             startRgbPreview()
@@ -384,7 +334,6 @@ class FileViewActivity : AppCompatActivity() {
             stopRgbPreview()
         }
     }
-
     private fun toggleIrPreview() {
         if (!isIrPreviewActive) {
             startIrPreview()
@@ -392,99 +341,74 @@ class FileViewActivity : AppCompatActivity() {
             stopIrPreview()
         }
     }
-
     private fun startRgbPreview() {
         isRgbPreviewActive = true
         rgbPreviewBtn.text = "Stop"
         rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_red_dark)
-
         rgbPreviewPlaceholder.visibility = View.GONE
         rgbPreviewImage.visibility = View.VISIBLE
-        
         cameraPreviewHandler.post(rgbPreviewRunnable)
-
         logger.info("RGB camera preview started")
         showMessage("RGB camera preview started")
     }
-
     private fun stopRgbPreview() {
         isRgbPreviewActive = false
         rgbPreviewBtn.text = "Start"
         rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_green_dark)
-
         rgbPreviewImage.visibility = View.GONE
         rgbPreviewPlaceholder.visibility = View.VISIBLE
-
         cameraPreviewHandler.removeCallbacks(rgbPreviewRunnable)
-
         logger.info("RGB camera preview stopped")
         showMessage("RGB camera preview stopped")
     }
-
     private fun startIrPreview() {
         isIrPreviewActive = true
         irPreviewBtn.text = "Stop"
         irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_red_dark)
-
         irPreviewPlaceholder.visibility = View.GONE
         irPreviewImage.visibility = View.VISIBLE
-        
         cameraPreviewHandler.post(irPreviewRunnable)
-
         logger.info("IR camera preview started")
         showMessage("IR camera preview started")
     }
-
     private fun stopIrPreview() {
         isIrPreviewActive = false
         irPreviewBtn.text = "Start"
         irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_orange_dark)
-
         irPreviewImage.visibility = View.GONE
         irPreviewPlaceholder.visibility = View.VISIBLE
-
         cameraPreviewHandler.removeCallbacks(irPreviewRunnable)
-
         logger.info("IR camera preview stopped")
         showMessage("IR camera preview stopped")
     }
-
     private fun updateRgbPreview() {
         try {
-
             val bitmap = generateRgbPreviewBitmap()
             rgbPreviewImage.setImageBitmap(bitmap)
         } catch (e: Exception) {
             logger.error("Error updating RGB preview: ${e.message}")
         }
     }
-
     private fun updateIrPreview() {
         try {
-
             val bitmap = generateThermalPreviewBitmap()
             irPreviewImage.setImageBitmap(bitmap)
         } catch (e: Exception) {
             logger.error("Error updating IR preview: ${e.message}")
         }
     }
-
     private fun generateRgbPreviewBitmap(): Bitmap {
         val width = 320
         val height = 240
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
-
         val time = System.currentTimeMillis() / 100
-        
         paint.color = Color.rgb(50, 50, 80)
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-        
         for (i in 0..10) {
             val x = ((time + i * 30) % (width + 100)).toFloat() - 50
             val y = (height * 0.2f + i * height * 0.05f).toFloat()
-
             paint.color = Color.rgb(
                 (100 + i * 15) % 255,
                 (150 + i * 10) % 255,
@@ -492,72 +416,55 @@ class FileViewActivity : AppCompatActivity() {
             )
             canvas.drawCircle(x, y, 15f, paint)
         }
-        
         paint.color = Color.RED
         paint.textSize = 24f
         canvas.drawText("● LIVE", 10f, 30f, paint)
-        
         paint.color = Color.WHITE
         paint.textSize = 16f
         val timeStr = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
         canvas.drawText(timeStr, 10f, height - 10f, paint)
-
         return bitmap
     }
-
     private fun generateThermalPreviewBitmap(): Bitmap {
         val width = 320
         val height = 240
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
-
         val time = System.currentTimeMillis() / 200.0
-
         for (y in 0 until height) {
             for (x in 0 until width) {
-
                 val centerX = width / 2.0
                 val centerY = height / 2.0
                 val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-
                 val intensity = (127 + 127 * sin(distance * 0.1 + time)).toInt().coerceIn(0, 255)
-                
                 val color = when {
                     intensity < 85 -> Color.rgb(0, 0, intensity * 3)
                     intensity < 170 -> Color.rgb((intensity - 85) * 3, 0, 255 - (intensity - 85) * 2)
                     else -> Color.rgb(255, (intensity - 170) * 3, 0)
                 }
-
                 paint.color = color
                 canvas.drawPoint(x.toFloat(), y.toFloat(), paint)
             }
         }
-        
         paint.color = Color.YELLOW
         for (i in 0..3) {
             val hotX = Random.nextInt(50, width - 50).toFloat()
             val hotY = Random.nextInt(50, height - 50).toFloat()
             canvas.drawCircle(hotX, hotY, 20f, paint)
         }
-        
         paint.color = Color.WHITE
         paint.textSize = 18f
         canvas.drawText("🌡️ THERMAL", 10f, 30f, paint)
-        
         val temp = (20 + Random.nextFloat() * 15).toInt()
         paint.textSize = 14f
         canvas.drawText("${temp}°C", width - 60f, height - 10f, paint)
-
         return bitmap
     }
-
     override fun onDestroy() {
         super.onDestroy()
-        
         stopRgbPreview()
         stopIrPreview()
-
         logger.info("FileViewActivity destroyed")
     }
 }

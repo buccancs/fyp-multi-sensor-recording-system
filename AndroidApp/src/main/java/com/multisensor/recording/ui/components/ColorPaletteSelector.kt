@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui.components
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,11 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.multisensor.recording.util.ThermalColorPalette
-
-/**
- * Professional color palette selector for thermal visualization
- * Provides elegant palette selection with beautiful preview gradients
- */
 @Composable
 fun ColorPaletteSelector(
     currentPalette: ThermalColorPalette,
@@ -41,7 +35,6 @@ fun ColorPaletteSelector(
             modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Header
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -58,8 +51,6 @@ fun ColorPaletteSelector(
                     fontWeight = FontWeight.SemiBold
                 )
             }
-            
-            // Palette selection row
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -74,7 +65,6 @@ fun ColorPaletteSelector(
         }
     }
 }
-
 @Composable
 private fun PalettePreviewCard(
     palette: ThermalColorPalette,
@@ -87,13 +77,11 @@ private fun PalettePreviewCard(
     } else {
         Color.Transparent
     }
-    
     val backgroundColor = if (isSelected) {
         MaterialTheme.colorScheme.primaryContainer
     } else {
         MaterialTheme.colorScheme.surfaceVariant
     }
-    
     Card(
         modifier = modifier
             .width(80.dp)
@@ -110,7 +98,6 @@ private fun PalettePreviewCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Gradient preview
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -125,8 +112,6 @@ private fun PalettePreviewCard(
                         shape = RoundedCornerShape(8.dp)
                     )
             )
-            
-            // Palette name
             Text(
                 text = palette.displayName,
                 style = MaterialTheme.typography.labelMedium,

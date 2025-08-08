@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui.components
-
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.size
@@ -12,11 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
-/**
- * Beautiful animated recording button with smooth transitions and IRCamera-style interactions
- * Features scale animations, color transitions, and pulsing effects when recording
- */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedRecordingButton(
@@ -25,7 +19,6 @@ fun AnimatedRecordingButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    // Smooth scale animation with bouncy effect
     val scale by animateFloatAsState(
         targetValue = if (isRecording) 1.1f else 1.0f,
         animationSpec = spring(
@@ -34,19 +27,15 @@ fun AnimatedRecordingButton(
         ),
         label = "ButtonScale"
     )
-    
-    // Smooth color transition
     val containerColor by animateColorAsState(
         targetValue = when {
             !enabled -> MaterialTheme.colorScheme.surface
-            isRecording -> Color(0xFFE53E3E) // Vibrant red for recording
+            isRecording -> Color(0xFFE53E3E)
             else -> MaterialTheme.colorScheme.primary
         },
         animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
         label = "ButtonColor"
     )
-    
-    // Subtle pulsing effect when recording
     val pulseScale by animateFloatAsState(
         targetValue = 1.0f,
         animationSpec = if (isRecording) {
@@ -59,14 +48,11 @@ fun AnimatedRecordingButton(
         },
         label = "PulseScale"
     )
-    
-    // Enhanced elevation when recording
     val elevation by animateDpAsState(
         targetValue = if (isRecording) 16.dp else 8.dp,
         animationSpec = tween(300, easing = EaseInOutCubic),
         label = "ButtonElevation"
     )
-    
     FloatingActionButton(
         onClick = onClick,
         modifier = modifier

@@ -1,5 +1,4 @@
 package com.multisensor.recording.ui
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.multisensor.recording.recording.ShimmerRecorder
@@ -9,25 +8,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
 class ShimmerConfigViewModel @Inject constructor(
     private val shimmerRecorder: ShimmerRecorder,
     private val logger: Logger,
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(ShimmerConfigUiState())
     val uiState: StateFlow<ShimmerConfigUiState> = _uiState.asStateFlow()
-
     companion object {
         private const val STATUS_UPDATE_INTERVAL_MS = 2000L
     }
-
     init {
         initialize()
         startPeriodicStatusUpdates()
     }
-
     private fun initialize() {
         viewModelScope.launch {
             try {
@@ -44,7 +38,6 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     private fun startPeriodicStatusUpdates() {
         viewModelScope.launch {
             flow {
@@ -59,7 +52,6 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     fun scanForDevices() {
         viewModelScope.launch {
             _uiState.update {
@@ -100,7 +92,6 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     fun connectToDevice() {
         val selectedDevice = _uiState.value.selectedDevice ?: return
         viewModelScope.launch {
@@ -148,7 +139,6 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     fun disconnectFromDevice() {
         viewModelScope.launch {
             try {
@@ -184,7 +174,6 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     fun startStreaming() {
         viewModelScope.launch {
             try {
@@ -216,7 +205,6 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     fun stopStreaming() {
         viewModelScope.launch {
             try {
@@ -248,13 +236,11 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     private fun updateRealTimeData() {
         viewModelScope.launch {
             try {
                 val status = shimmerRecorder.getShimmerStatus()
                 val readings = shimmerRecorder.getCurrentReadings()
-
                 _uiState.update {
                     it.copy(
                         batteryLevel = status.batteryLevel ?: -1,
@@ -268,11 +254,9 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     fun onDeviceSelected(index: Int) {
         _uiState.update { it.copy(selectedDeviceIndex = index) }
     }
-
     fun updateSensorConfiguration(enabledSensors: Set<String>) {
         _uiState.update {
             it.copy(
@@ -280,7 +264,6 @@ class ShimmerConfigViewModel @Inject constructor(
                 isConfiguring = true
             )
         }
-
         viewModelScope.launch {
             try {
                 if (_uiState.value.isDeviceConnected) {
@@ -292,17 +275,14 @@ class ShimmerConfigViewModel @Inject constructor(
                             null
                         }
                     }.toSet()
-
                     val result = _uiState.value.selectedDevice?.let { device ->
                         shimmerRecorder.setEnabledChannels(device.macAddress, sensorChannels)
                     } ?: false
-
                     if (!result) {
                         logger.warning("Failed to update sensor configuration")
                     } else {
                         logger.info("Sensor configuration updated successfully")
                     }
-
                     delay(500)
                 }
                 _uiState.update { it.copy(isConfiguring = false) }
@@ -318,23 +298,19 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     fun updateSamplingRate(samplingRate: Int) {
         _uiState.update { it.copy(samplingRate = samplingRate) }
-
         viewModelScope.launch {
             try {
                 if (_uiState.value.isDeviceConnected) {
                     val result = _uiState.value.selectedDevice?.let { device ->
                         shimmerRecorder.setSamplingRate(device.macAddress, samplingRate.toDouble())
                     } ?: false
-
                     if (!result) {
                         logger.warning("Failed to update sampling rate")
                     } else {
                         logger.info("Sampling rate updated to ${samplingRate}Hz")
                     }
-
                     delay(200)
                 }
             } catch (e: Exception) {
@@ -348,7 +324,6 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
     fun updateBluetoothState(isEnabled: Boolean, hasPermission: Boolean) {
         _uiState.update {
             it.copy(
@@ -357,7 +332,6 @@ class ShimmerConfigViewModel @Inject constructor(
             )
         }
     }
-
     fun onErrorMessageShown() {
         _uiState.update {
             it.copy(
@@ -366,46 +340,36 @@ class ShimmerConfigViewModel @Inject constructor(
             )
         }
     }
-
     fun applyConfigurationPreset(presetName: String) {
         logger.info("Applying configuration preset: $presetName")
-
         val (enabledSensors, samplingRate) = when (presetName) {
             "Default" -> {
                 Pair(setOf("GSR", "PPG", "ACCEL"), 256)
             }
-
             "High Performance" -> {
                 Pair(setOf("GSR", "PPG", "ACCEL", "GYRO", "MAG", "ECG"), 512)
             }
-
             "Low Power" -> {
                 Pair(setOf("GSR", "PPG"), 128)
             }
-
             "Custom" -> {
                 return
             }
-
             else -> {
                 logger.warning("Unknown preset: $presetName")
                 return
             }
         }
-
         _uiState.update {
             it.copy(
                 enabledSensors = enabledSensors,
                 samplingRate = samplingRate
             )
         }
-
         updateSensorConfiguration(enabledSensors)
         updateSamplingRate(samplingRate)
     }
-
     fun getAvailablePresets(): List<String> = listOf("Default", "High Performance", "Low Power", "Custom")
-    
     fun connectToSpecificDevice(macAddress: String, deviceName: String) {
         viewModelScope.launch {
             try {
@@ -416,18 +380,14 @@ class ShimmerConfigViewModel @Inject constructor(
                         errorMessage = null
                     )
                 }
-                
                 logger.info("Connecting to specific device: $deviceName ($macAddress)")
                 val connected = shimmerRecorder.connectSingleDevice(
                     macAddress, 
                     deviceName,
                     com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
                 )
-                
                 if (connected) {
-                    // Get device information after connection
                     val deviceInfo = shimmerRecorder.getDeviceInformation(macAddress)
-                    
                     _uiState.update {
                         it.copy(
                             isLoadingConnection = false,
@@ -465,22 +425,16 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-    
     fun updateCrcConfiguration(crcMode: Int) {
         viewModelScope.launch {
             try {
                 _uiState.update {
                     it.copy(crcMode = crcMode, isConfiguring = true)
                 }
-                
                 val device = _uiState.value.selectedDevice
                 if (device != null) {
                     logger.info("Updating CRC configuration for device ${device.macAddress}: mode $crcMode")
-                    
-                    // Here we would call the actual shimmer SDK method to set CRC mode
-                    // For now, just simulate the configuration
                     delay(500)
-                    
                     _uiState.update {
                         it.copy(isConfiguring = false)
                     }
@@ -505,16 +459,13 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-    
     fun updateGsrRange(rangeIndex: Int) {
         viewModelScope.launch {
             try {
                 _uiState.update { it.copy(isConfiguring = true) }
-                
                 val device = _uiState.value.selectedDevice
                 if (device != null) {
                     logger.info("Updating GSR range for device ${device.macAddress}: range $rangeIndex")
-                    
                     val success = shimmerRecorder.setGSRRange(device.macAddress, rangeIndex)
                     if (success) {
                         logger.info("GSR range updated successfully")
@@ -547,16 +498,13 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-    
     fun updateAccelRange(rangeG: Int) {
         viewModelScope.launch {
             try {
                 _uiState.update { it.copy(isConfiguring = true) }
-                
                 val device = _uiState.value.selectedDevice
                 if (device != null) {
                     logger.info("Updating Accelerometer range for device ${device.macAddress}: ±${rangeG}g")
-                    
                     val success = shimmerRecorder.setAccelRange(device.macAddress, rangeG)
                     if (success) {
                         logger.info("Accelerometer range updated successfully")
@@ -589,6 +537,4 @@ class ShimmerConfigViewModel @Inject constructor(
             }
         }
     }
-
-
 }
