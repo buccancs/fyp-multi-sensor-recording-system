@@ -6,10 +6,20 @@ from typing import Dict, List, Optional, Tuple, Union
 import cv2
 import numpy as np
 
+from ..utils.logging_config import get_logger
+
 
 class CalibrationManager:
+    """
+    Manages camera calibration workflows for multi-modal sensor synchronization.
+    
+    This class handles the complete calibration process including pattern detection,
+    camera parameter estimation, stereo calibration, and quality assessment.
+    """
 
     def __init__(self):
+        """Initialize the calibration manager with default parameters."""
+        self.logger = get_logger(__name__)
         self.rgb_camera_matrix = None
         self.rgb_distortion_coeffs = None
         self.thermal_camera_matrix = None
@@ -25,37 +35,37 @@ class CalibrationManager:
     def capture_calibration_images(
         self, device_client=None, num_images: int = 20
     ) -> bool:
-        print(f"[DEBUG_LOG] Capturing {num_images} calibration image pairs")
+        self.logger.debug(f" Capturing {num_images} calibration image pairs")
         if device_client is None:
-            print(
+            self.logger.info(
                 "[INFO] No device client provided - this method requires device integration"
             )
-            print(
+            self.logger.info(
                 "[INFO] Use load_calibration_images_from_directory() for offline calibration"
             )
             return False
         calibration_images = []
         try:
             for i in range(num_images):
-                print(f"[INFO] Capturing calibration image pair {i + 1}/{num_images}")
+                self.logger.info(f" Capturing calibration image pair {i + 1}/{num_images}")
                 command_data = {
                     "image_id": i,
                     "pattern_type": "chessboard",
                     "pattern_size": self.chessboard_size,
                 }
-                print(f"[INFO] Would send CAPTURE_CALIBRATION command: {command_data}")
+                self.logger.info(f" Would send CAPTURE_CALIBRATION command: {command_data}")
                 progress = (i + 1) / num_images * 100
-                print(f"[INFO] Calibration capture progress: {progress:.1f}%")
-            print(f"[INFO] Calibration capture framework ready for device integration")
+                self.logger.info(f" Calibration capture progress: {progress:.1f}%")
+            self.logger.info(f" Calibration capture framework ready for device integration")
             return True
         except Exception as e:
-            print(f"[ERROR] Error during calibration capture: {e}")
+            self.logger.error(f" Error during calibration capture: {e}")
             return False
 
     def detect_calibration_pattern(
         self, image: np.ndarray, pattern_type: str = "chessboard"
     ) -> Tuple[bool, Optional[np.ndarray]]:
-        print(f"[DEBUG_LOG] Detecting {pattern_type} pattern in image")
+        self.logger.debug(f" Detecting {pattern_type} pattern in image")
         if pattern_type == "chessboard":
             gray = (
                 cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -82,7 +92,7 @@ class CalibrationManager:
             else:
                 return False, None
         else:
-            print(f"[ERROR] Unsupported pattern type: {pattern_type}")
+            self.logger.error(f" Unsupported pattern type: {pattern_type}")
             return False, None
 
     def calibrate_single_camera(
@@ -91,12 +101,12 @@ class CalibrationManager:
         image_points: List[np.ndarray],
         object_points: List[np.ndarray],
     ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], float]:
-        print("[DEBUG_LOG] Performing single camera calibration")
+        self.logger.debug(" Performing single camera calibration")
         if not images or not image_points or not object_points:
-            print("[ERROR] Empty input data for calibration")
+            self.logger.error(" Empty input data for calibration")
             return None, None, float("inf")
         if len(images) != len(image_points) or len(images) != len(object_points):
-            print("[ERROR] Mismatched input data lengths")
+            self.logger.error(" Mismatched input data lengths")
             return None, None, float("inf")
         try:
             image_size = images[0].shape[:2][::-1]
@@ -119,15 +129,15 @@ class CalibrationManager:
                     ) / len(projected_points)
                     total_error += error
                 mean_error = total_error / len(object_points)
-                print(
+                self.logger.info(
                     f"[DEBUG_LOG] Calibration completed with RMS error: {mean_error:.3f}"
                 )
                 return camera_matrix, dist_coeffs, mean_error
             else:
-                print("[ERROR] Camera calibration failed")
+                self.logger.error(" Camera calibration failed")
                 return None, None, float("inf")
         except Exception as e:
-            print(f"[ERROR] Exception during calibration: {e}")
+            self.logger.error(f" Exception during calibration: {e}")
             return None, None, float("inf")
 
     def calibrate_stereo_cameras(
@@ -138,12 +148,12 @@ class CalibrationManager:
         thermal_points: List[np.ndarray],
         object_points: List[np.ndarray],
     ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray], float]:
-        print("[DEBUG_LOG] Performing stereo calibration")
+        self.logger.debug(" Performing stereo calibration")
         if self.rgb_camera_matrix is None or self.thermal_camera_matrix is None:
-            print("[ERROR] Individual camera calibrations must be completed first")
+            self.logger.error(" Individual camera calibrations must be completed first")
             return None, None, float("inf")
         if not rgb_images or not thermal_images:
-            print("[ERROR] Empty image data for stereo calibration")
+            self.logger.error(" Empty image data for stereo calibration")
             return None, None, float("inf")
         try:
             image_size = rgb_images[0].shape[:2][::-1]
@@ -161,15 +171,15 @@ class CalibrationManager:
             if ret:
                 self.rotation_matrix = R
                 self.translation_vector = T
-                print(
+                self.logger.info(
                     f"[DEBUG_LOG] Stereo calibration completed with RMS error: {ret:.3f}"
                 )
                 return R, T, ret
             else:
-                print("[ERROR] Stereo calibration failed")
+                self.logger.error(" Stereo calibration failed")
                 return None, None, float("inf")
         except Exception as e:
-            print(f"[ERROR] Exception during stereo calibration: {e}")
+            self.logger.error(f" Exception during stereo calibration: {e}")
             return None, None, float("inf")
 
     def assess_calibration_quality(
@@ -182,7 +192,7 @@ class CalibrationManager:
         rvecs: List[np.ndarray],
         tvecs: List[np.ndarray],
     ) -> Dict:
-        print("[DEBUG_LOG] Assessing calibration quality")
+        self.logger.debug(" Assessing calibration quality")
         quality_metrics = {
             "mean_reprojection_error": 0.0,
             "max_reprojection_error": 0.0,
@@ -244,16 +254,16 @@ class CalibrationManager:
                 quality_metrics["recommendations"].append(
                     "High error variation - some images may be poor quality"
                 )
-            print(
+            self.logger.info(
                 f"[DEBUG_LOG] Quality assessment complete: {quality_metrics['quality_score']} (error: {mean_error:.3f}px, coverage: {quality_metrics['pattern_coverage']:.1f}%)"
             )
             return quality_metrics
         except Exception as e:
-            print(f"[ERROR] Exception during quality assessment: {e}")
+            self.logger.error(f" Exception during quality assessment: {e}")
             return quality_metrics
 
     def save_calibration_data(self, filename: str) -> bool:
-        print(f"[DEBUG_LOG] Saving calibration data to {filename}")
+        self.logger.debug(f" Saving calibration data to {filename}")
         calibration_data = {
             "rgb_camera_matrix": (
                 self.rgb_camera_matrix.tolist()
@@ -297,17 +307,17 @@ class CalibrationManager:
             os.makedirs(os.path.dirname(filename), exist_ok=True)
             with open(filename, "w") as f:
                 json.dump(calibration_data, f, indent=2)
-            print(f"[DEBUG_LOG] Calibration data saved successfully")
+            self.logger.debug(f" Calibration data saved successfully")
             return True
         except Exception as e:
-            print(f"[ERROR] Error saving calibration data: {e}")
+            self.logger.error(f" Error saving calibration data: {e}")
             return False
 
     def load_calibration_data(self, filename: str) -> bool:
-        print(f"[DEBUG_LOG] Loading calibration data from {filename}")
+        self.logger.debug(f" Loading calibration data from {filename}")
         try:
             if not os.path.exists(filename):
-                print(f"[ERROR] Calibration file does not exist: {filename}")
+                self.logger.error(f" Calibration file does not exist: {filename}")
                 return False
             with open(filename, "r") as f:
                 calibration_data = json.load(f)
@@ -341,10 +351,10 @@ class CalibrationManager:
                 self.calibration_flags = params.get(
                     "calibration_flags", self.calibration_flags
                 )
-            print(f"[DEBUG_LOG] Calibration data loaded successfully")
+            self.logger.debug(f" Calibration data loaded successfully")
             return True
         except Exception as e:
-            print(f"[ERROR] Error loading calibration data: {e}")
+            self.logger.error(f" Error loading calibration data: {e}")
             return False
 
     def load_calibration_images_from_directory(
@@ -362,7 +372,7 @@ class CalibrationManager:
             thermal_files = sorted(
                 glob.glob(os.path.join(directory_path, thermal_pattern))
             )
-            print(
+            self.logger.info(
                 f"[DEBUG_LOG] Found {len(rgb_files)} RGB images and {len(thermal_files)} thermal images"
             )
             for rgb_file in rgb_files:
@@ -370,16 +380,16 @@ class CalibrationManager:
                 if img is not None:
                     rgb_images.append(img)
                 else:
-                    print(f"[WARNING] Could not load RGB image: {rgb_file}")
+                    self.logger.warning(f" Could not load RGB image: {rgb_file}")
             for thermal_file in thermal_files:
                 img = cv2.imread(thermal_file)
                 if img is not None:
                     thermal_images.append(img)
                 else:
-                    print(f"[WARNING] Could not load thermal image: {thermal_file}")
+                    self.logger.warning(f" Could not load thermal image: {thermal_file}")
             return rgb_images, thermal_images
         except Exception as e:
-            print(f"[ERROR] Error loading calibration images: {e}")
+            self.logger.error(f" Error loading calibration images: {e}")
             return [], []
 
     def perform_complete_calibration(
@@ -388,7 +398,7 @@ class CalibrationManager:
         thermal_images: Optional[List[np.ndarray]] = None,
         pattern_type: str = "chessboard",
     ) -> Dict:
-        print("[DEBUG_LOG] Starting complete calibration workflow")
+        self.logger.debug(" Starting complete calibration workflow")
         results = {
             "success": False,
             "rgb_calibration": None,
@@ -411,11 +421,11 @@ class CalibrationManager:
                     rgb_image_points.append(corners)
                     rgb_object_points.append(object_points_3d)
                     valid_rgb_images.append(img)
-                    print(f"[DEBUG_LOG] RGB image {i + 1}: Pattern detected")
+                    self.logger.debug(f" RGB image {i + 1}: Pattern detected")
                 else:
-                    print(f"[WARNING] RGB image {i + 1}: Pattern not detected")
+                    self.logger.warning(f" RGB image {i + 1}: Pattern not detected")
             if len(rgb_image_points) < 10:
-                print(f"[ERROR] Insufficient valid RGB images: {len(rgb_image_points)}")
+                self.logger.error(f" Insufficient valid RGB images: {len(rgb_image_points)}")
                 return results
             rgb_matrix, rgb_dist, rgb_error = self.calibrate_single_camera(
                 valid_rgb_images, rgb_image_points, rgb_object_points
@@ -428,12 +438,12 @@ class CalibrationManager:
                     "distortion_coeffs": rgb_dist,
                     "rms_error": rgb_error,
                 }
-                print(
+                self.logger.info(
                     f"[DEBUG_LOG] RGB camera calibration successful (RMS: {rgb_error:.3f})"
                 )
                 if thermal_images:
                     if not validate_calibration_images(thermal_images):
-                        print(
+                        self.logger.info(
                             "[WARNING] Thermal image validation failed, skipping thermal calibration"
                         )
                     else:
@@ -448,11 +458,11 @@ class CalibrationManager:
                                 thermal_image_points.append(corners)
                                 thermal_object_points.append(object_points_3d)
                                 valid_thermal_images.append(img)
-                                print(
+                                self.logger.info(
                                     f"[DEBUG_LOG] Thermal image {i + 1}: Pattern detected"
                                 )
                             else:
-                                print(
+                                self.logger.info(
                                     f"[WARNING] Thermal image {i + 1}: Pattern not detected"
                                 )
                         if len(thermal_image_points) >= 10:
@@ -471,7 +481,7 @@ class CalibrationManager:
                                     "distortion_coeffs": thermal_dist,
                                     "rms_error": thermal_error,
                                 }
-                                print(
+                                self.logger.info(
                                     f"[DEBUG_LOG] Thermal camera calibration successful (RMS: {thermal_error:.3f})"
                                 )
                                 min_pairs = min(
@@ -491,14 +501,14 @@ class CalibrationManager:
                                             "translation_vector": T,
                                             "rms_error": stereo_error,
                                         }
-                                        print(
+                                        self.logger.info(
                                             f"[DEBUG_LOG] Stereo calibration successful (RMS: {stereo_error:.3f})"
                                         )
                 results["success"] = True
-                print("[DEBUG_LOG] Complete calibration workflow finished successfully")
+                self.logger.debug(" Complete calibration workflow finished successfully")
             return results
         except Exception as e:
-            print(f"[ERROR] Exception during calibration workflow: {e}")
+            self.logger.error(f" Exception during calibration workflow: {e}")
             return results
 
     @property
@@ -515,7 +525,7 @@ class CalibrationManager:
 def create_calibration_pattern_points(
     pattern_size: Tuple[int, int], square_size: float
 ) -> np.ndarray:
-    print(
+    self.logger.info(
         f"[DEBUG_LOG] Creating calibration pattern points {pattern_size} with square size {square_size}mm"
     )
     pattern_points = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
@@ -528,18 +538,18 @@ def create_calibration_pattern_points(
 
 def validate_calibration_images(images: List[np.ndarray], min_images: int = 10) -> bool:
     if len(images) < min_images:
-        print(f"[ERROR] Insufficient calibration images: {len(images)} < {min_images}")
+        self.logger.error(f" Insufficient calibration images: {len(images)} < {min_images}")
         return False
     if not images:
         return False
     first_shape = images[0].shape
     for i, img in enumerate(images[1:], 1):
         if img.shape != first_shape:
-            print(
+            self.logger.info(
                 f"[ERROR] Image shape mismatch at index {i}: {img.shape} != {first_shape}"
             )
             return False
-    print(f"[DEBUG_LOG] Calibration image validation passed: {len(images)} images")
+    self.logger.debug(f" Calibration image validation passed: {len(images)} images")
     return True
 
 

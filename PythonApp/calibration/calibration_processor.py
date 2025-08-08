@@ -3,10 +3,20 @@ from typing import List, Optional, Tuple
 import cv2
 import numpy as np
 
+from ..utils.logging_config import get_logger
+
 
 class CalibrationProcessor:
+    """
+    Handles computer vision-based calibration processing for camera alignment.
+    
+    This class provides methods for detecting chessboard patterns, computing
+    homographies, and performing camera calibration operations.
+    """
 
     def __init__(self):
+        """Initialize the calibration processor with default parameters."""
+        self.logger = get_logger(__name__)
         self.pattern_size = 9, 6
         self.square_size = 25.0
         self.corner_criteria = (
@@ -19,7 +29,7 @@ class CalibrationProcessor:
             | cv2.CALIB_THIN_PRISM_MODEL
             | cv2.CALIB_TILTED_MODEL
         )
-        print("[DEBUG_LOG] CalibrationProcessor initialized")
+        self.logger.debug("CalibrationProcessor initialized")
 
     def detect_chessboard_corners(
         self, image: np.ndarray, pattern_size: Tuple[int, int]
@@ -133,8 +143,18 @@ class CalibrationProcessor:
     def compute_homography(
         self, points1: np.ndarray, points2: np.ndarray
     ) -> Optional[np.ndarray]:
+        """
+        Compute homography matrix between two sets of points.
+        
+        Args:
+            points1: First set of points
+            points2: Second set of points
+            
+        Returns:
+            Homography matrix if successful, None otherwise
+        """
         if len(points1) < 4 or len(points2) < 4:
-            print("[DEBUG_LOG] Insufficient points for homography computation")
+            self.logger.debug("Insufficient points for homography computation")
             return None
         try:
             if points1.shape[1] == 1:
@@ -143,13 +163,13 @@ class CalibrationProcessor:
                 points2 = points2.reshape(-1, 2)
             H, mask = cv2.findHomography(points1, points2, cv2.RANSAC, 5.0)
             if H is not None:
-                print(f"[DEBUG_LOG] Homography computed with {np.sum(mask)} inliers")
+                self.logger.debug(f"Homography computed with {np.sum(mask)} inliers")
                 return H
             else:
-                print("[DEBUG_LOG] Homography computation failed")
+                self.logger.debug("Homography computation failed")
                 return None
         except Exception as e:
-            print(f"[DEBUG_LOG] Homography computation error: {e}")
+            self.logger.debug(f"Homography computation error: {e}")
             return None
 
     def compute_reprojection_error(
@@ -282,13 +302,14 @@ class CalibrationProcessor:
 
 
 if __name__ == "__main__":
-    print("[DEBUG_LOG] Testing CalibrationProcessor...")
+    logger = get_logger(__name__)
+    logger.info("Testing CalibrationProcessor...")
     processor = CalibrationProcessor()
     pattern_size = 9, 6
     square_size = 25.0
     objp = processor.create_object_points(pattern_size, square_size)
-    print(f"Created object points: {objp.shape}")
+    logger.info(f"Created object points: {objp.shape}")
     test_image = np.zeros((480, 640, 3), dtype=np.uint8)
     success, corners = processor.detect_chessboard_corners(test_image, pattern_size)
-    print(f"Chessboard detection: {success}")
-    print("[DEBUG_LOG] CalibrationProcessor test completed")
+    logger.info(f"Chessboard detection: {success}")
+    logger.info("CalibrationProcessor test completed")
