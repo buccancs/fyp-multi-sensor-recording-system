@@ -229,20 +229,25 @@ evaluation:
   like timestamp synchronisation protocols, latency handling, and error
   recovery mechanisms are also described here.
 
-- **Chapter 5 -- Implementation Testing and Validation:** In this
-  chapter, the focus is on evaluating the implemented platform and
-  demonstrating that it meets the thesis objectives. The **evaluation
-  methodology** is first outlined, including the test setup and metrics
-  for assessing synchronisation and data quality. Results from pilot
-  recordings are then presented: for example, timing logs verifying that
-  the disparity between camera frame timestamps and GSR signal
-  timestamps is within acceptable bounds (on the order of milliseconds),
-  and qualitative examples of data (such as parallel plots of GSR peaks
-  alongside thermal video frames during a stress event). The chapter
-  discusses any challenges encountered during testing -- for instance,
-  connectivity issues or drift in clocks -- and how they were resolved
-  or mitigated. We interpret the results to confirm that the system can
-  reliably produce synchronised multi-modal datasets. This validation
+- **Chapter 5 -- Evaluation and Testing:** This chapter provides
+  comprehensive documentation of the testing methodology, implementation,
+  and results analysis for the multi-sensor recording system. The
+  **multi-tiered testing approach** combines unit tests, integration
+  tests, and system-level performance evaluations. A hardware simulation
+  strategy enables repeatable automated testing without requiring
+  physical devices, with architecture-mirrored testing structure covering
+  low-level functions through end-to-end data flows. **Android and PC
+  unit tests** utilize JUnit/Robolectric and pytest/unittest frameworks
+  respectively, with comprehensive error handling validation and security
+  feature verification. **Integration testing** validates multi-device
+  synchronization using DeviceSimulator orchestration and JSON-based
+  message protocol over sockets with optional TLS. **System performance
+  evaluation** includes 8-hour endurance testing, memory leak detection
+  with linear regression analysis, and CPU/throughput monitoring with
+  resource utilization tracking. The **results analysis** demonstrates
+  system fulfillment of functionality, reliability, and performance
+  requirements, confirming research-grade reliability suitable for
+  scientific data collection. This comprehensive validation
   demonstrates the platform's capability to serve as a data collection
   tool for future GSR prediction research. Any limitations observed
   (such as minor synchronisation offsets or sensor noise issues) are
