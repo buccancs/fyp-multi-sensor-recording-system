@@ -359,53 +359,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    @Deprecated("Use specific controller methods instead")
-    fun switchCamera() {
-        logger.warning("switchCamera() is deprecated - functionality moved to DeviceConnectionManager")
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun stopCameraCalibration() {
-        viewModelScope.launch {
-            calibrationManager.stopCalibration()
-        }
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun resetCameraCalibration() {
-        viewModelScope.launch {
-            calibrationManager.resetCalibration(CalibrationManager.CalibrationType.CAMERA)
-        }
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun stopThermalCalibration() {
-        viewModelScope.launch {
-            calibrationManager.stopCalibration()
-        }
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun resetThermalCalibration() {
-        viewModelScope.launch {
-            calibrationManager.resetCalibration(CalibrationManager.CalibrationType.THERMAL)
-        }
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun stopShimmerCalibration() {
-        viewModelScope.launch {
-            calibrationManager.stopCalibration()
-        }
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun resetShimmerCalibration() {
-        viewModelScope.launch {
-            calibrationManager.resetCalibration(CalibrationManager.CalibrationType.SHIMMER)
-        }
-    }
-
     fun openDataFolder() {
         viewModelScope.launch {
             fileManager.openDataFolder()
@@ -428,32 +381,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             calibrationManager.stopCalibration()
         }
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun saveCalibrationData() {
-        viewModelScope.launch {
-            calibrationManager.saveCalibrationData()
-        }
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun loadCalibrationData() {
-        viewModelScope.launch {
-            calibrationManager.loadCalibrationData()
-        }
-    }
-
-    @Deprecated("Use CalibrationManager instead")
-    fun exportCalibrationData() {
-        viewModelScope.launch {
-            calibrationManager.exportCalibrationData()
-        }
-    }
-
-    @Deprecated("Use specific methods instead")
-    fun runDiagnostics() {
-        logger.warning("runDiagnostics() is deprecated - use specific device status checks")
     }
 
 }

@@ -36,6 +36,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+/**
+ * MainActivity is the main entry point for the Multi-Sensor Recording application.
+ * 
+ * This activity manages the overall application flow, handles UI mode switching between
+ * traditional fragments and Jetpack Compose, manages the main navigation, and coordinates
+ * with the MainViewModel for application state management.
+ * 
+ * The activity supports both Fragment-based UI and Compose-based UI, allowing for
+ * a gradual migration to modern Android development practices.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainFragmentsBinding
