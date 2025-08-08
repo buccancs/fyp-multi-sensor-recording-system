@@ -1,10 +1,4 @@
-"""
-Foundation Testing Layer - PC Component Tests
 
-Implements complete integration testing for Python desktop application components
-including calibration system, synchronization engine, and GUI components.
-Tests actual implementation code rather than mocks.
-"""
 import asyncio
 import logging
 import time
@@ -40,7 +34,7 @@ from ..framework.test_results import TestResult, TestStatus, PerformanceMetrics
 from ..framework.test_categories import TestCategory, TestType, TestPriority
 logger = logging.getLogger(__name__)
 class PCComponentTest(BaseTest):
-    """Base class for PC component tests that test real implementation"""
+
     def __init__(self, name: str, description: str = "", timeout: int = 300):
         super().__init__(name, description, timeout)
         self.temp_dir = None
@@ -57,7 +51,7 @@ class PCComponentTest(BaseTest):
         if self.temp_dir and os.path.exists(self.temp_dir):
             shutil.rmtree(self.temp_dir, ignore_errors=True)
 class CalibrationSystemTest(PCComponentTest):
-    """Test real calibration system implementation"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real calibration system test"""
         result = TestResult(
@@ -177,7 +171,7 @@ class CalibrationSystemTest(PCComponentTest):
             logger.error(f"File operations test failed: {e}")
             return False
 class PCServerTest(PCComponentTest):
-    """Test real PC server network functionality"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real PC server test"""
         result = TestResult(
@@ -281,7 +275,7 @@ class PCServerTest(PCComponentTest):
             logger.error(f"Message handling test failed: {e}")
             return False
 class ShimmerManagerTest(PCComponentTest):
-    """Test real Shimmer device manager functionality"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real Shimmer manager test"""
         result = TestResult(
@@ -385,7 +379,7 @@ class ShimmerManagerTest(PCComponentTest):
             logger.error(f"Data handling code test failed: {e}")
             return False
 class NetworkServerTest(PCComponentTest):
-    """Test real network server implementation"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute network server test"""
         result = TestResult(
@@ -521,7 +515,7 @@ class NetworkServerTest(PCComponentTest):
             logger.error(f"Protocol implementation test failed: {e}")
             return False
 class SessionCoordinationTest(PCComponentTest):
-    """Test session coordination and management"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute session coordination test"""
         result = TestResult(
@@ -648,7 +642,7 @@ class SessionCoordinationTest(PCComponentTest):
             logger.error(f"Session persistence test failed: {e}")
             return False
 class SynchronizationEngineTest(PCComponentTest):
-    """Test synchronization engine implementation"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute synchronization engine test"""
         result = TestResult(
@@ -784,7 +778,7 @@ class SynchronizationEngineTest(PCComponentTest):
             logger.error(f"Precision timing test failed: {e}")
             return False
 def create_pc_foundation_suite() -> TestSuite:
-    """Create the PC foundation testing suite with complete real component tests"""
+
     suite = TestSuite(
         name="pc_foundation_real",
         category=TestCategory.FOUNDATION,

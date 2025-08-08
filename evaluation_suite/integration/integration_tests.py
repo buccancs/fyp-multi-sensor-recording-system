@@ -1,10 +1,4 @@
-"""
-Integration Testing Layer - Real Multi-Device Coordination and Network Tests
 
-Implements complete integration testing for multi-device coordination,
-network performance, and synchronization precision validation using actual
-Android and PC application components.
-"""
 import asyncio
 import logging
 import time
@@ -25,27 +19,27 @@ repo_root = current_dir.parent.parent
 android_app_path = repo_root / "AndroidApp"
 python_app_path = repo_root / "PythonApp"
 class RealIntegrationTest(BaseTest):
-    """Base class for real integration tests that test actual components"""
+
     def __init__(self, name: str, description: str = "", timeout: int = 600):
         super().__init__(name, description, timeout)
         self.real_android_available = self._check_android_components()
         self.real_pc_available = self._check_pc_components()
     def _check_android_components(self) -> bool:
-        """Check if real Android components are available"""
+
         required_files = [
             android_app_path / "src" / "main" / "java" / "com" / "multisensor" / "recording" / "MainActivity.kt",
             android_app_path / "src" / "main" / "AndroidManifest.xml"
         ]
         return all(f.exists() for f in required_files)
     def _check_pc_components(self) -> bool:
-        """Check if real PC components are available"""
+
         required_files = [
             python_app_path / "network" / "pc_server.py",
             python_app_path / "calibration" / "calibration_manager.py"
         ]
         return all(f.exists() for f in required_files)
     def setup_real_integration_environment(self, test_env: Dict[str, Any]):
-        """Setup real integration environment using actual components"""
+
         test_env['android_available'] = self.real_android_available
         test_env['pc_available'] = self.real_pc_available
         test_env['repo_root'] = repo_root
@@ -70,7 +64,7 @@ class RealIntegrationTest(BaseTest):
             logger.error(f"Network connectivity test failed: {e}")
             return False, {'error': str(e)}
 class RealMultiDeviceCoordinationTest(RealIntegrationTest):
-    """Real multi-device coordination testing using actual components"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real multi-device coordination test"""
         result = TestResult(
@@ -199,7 +193,7 @@ class RealMultiDeviceCoordinationTest(RealIntegrationTest):
             logger.error(f"Real scalability test failed: {e}")
             return False
 class RealNetworkPerformanceTest(RealIntegrationTest):
-    """Real network performance testing using actual network components"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real network performance test"""
         result = TestResult(
@@ -343,7 +337,7 @@ class RealNetworkPerformanceTest(RealIntegrationTest):
             logger.error(f"Real packet loss test failed: {e}")
             return False
 class RealSynchronizationPrecisionTest(RealIntegrationTest):
-    """Real synchronization precision testing using actual timing components"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real synchronization precision test"""
         result = TestResult(
@@ -470,7 +464,7 @@ class RealSynchronizationPrecisionTest(RealIntegrationTest):
             logger.error(f"Real jitter performance test failed: {e}")
             return False
 class RealEndToEndRecordingTest(RealIntegrationTest):
-    """Real end-to-end recording workflow testing"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real end-to-end recording test"""
         result = TestResult(
@@ -586,7 +580,7 @@ class RealEndToEndRecordingTest(RealIntegrationTest):
             logger.error(f"Real cleanup process test failed: {e}")
             return False
 class RealErrorHandlingRecoveryTest(RealIntegrationTest):
-    """Real error handling and recovery testing"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real error handling and recovery test"""
         result = TestResult(
@@ -721,7 +715,7 @@ class RealErrorHandlingRecoveryTest(RealIntegrationTest):
             logger.error(f"Real automatic recovery test failed: {e}")
             return False
 class RealPerformanceStressTest(RealIntegrationTest):
-    """Real performance stress testing using actual system resources"""
+
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real performance stress test"""
         result = TestResult(
@@ -836,7 +830,7 @@ class RealPerformanceStressTest(RealIntegrationTest):
             logger.error(f"Real concurrent operations test failed: {e}")
             return False
 def create_real_integration_suite() -> TestSuite:
-    """Create the real integration testing suite with actual component tests"""
+
     suite = TestSuite(
         name="real_integration",
         category=TestCategory.INTEGRATION,

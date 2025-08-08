@@ -21,7 +21,6 @@ except ImportError:
     ANDROID_PRIVACY_AVAILABLE = False
     PrivacyManager = None
 
-
 class PrivacyComplianceTests(unittest.TestCase):
     
     def setUp(self):
@@ -235,7 +234,6 @@ class PrivacyComplianceTests(unittest.TestCase):
         expected_types = {'email', 'phone', 'device_id'}
         self.assertTrue(expected_types.issubset(violation_types), "Should detect known violation types")
 
-
 class MockPrivacyManager:
     def __init__(self):
         self.data_store = {}
@@ -344,7 +342,6 @@ class MockPrivacyManager:
     def generate_anonymous_participant_id(self) -> str:
         import uuid
         return f"ANON_{uuid.uuid4().hex[:8].upper()}"
-
 
 if __name__ == "__main__":
     unittest.main()

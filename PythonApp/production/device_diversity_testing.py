@@ -16,14 +16,12 @@ except ImportError:
     def get_logger(name):
         return logging.getLogger(name)
 
-
 class DeviceTier(Enum):
     LOW_END = "low_end"
     MID_RANGE = "mid_range"
     HIGH_END = "high_end"
     FLAGSHIP = "flagship"
     UNKNOWN = "unknown"
-
 
 class PerformanceCategory(Enum):
     CPU_INTENSIVE = "cpu_intensive"
@@ -33,7 +31,6 @@ class PerformanceCategory(Enum):
     NETWORK_THROUGHPUT = "network_throughput"
     STORAGE_IO = "storage_io"
     BATTERY_EFFICIENCY = "battery_efficiency"
-
 
 @dataclass
 class DeviceSpecification:
@@ -123,7 +120,6 @@ class DeviceSpecification:
         else:
             self.tier = DeviceTier.LOW_END
 
-
 @dataclass
 class PerformanceTestResult:
     
@@ -157,7 +153,6 @@ class PerformanceTestResult:
             return "C"
         else:
             return "D"
-
 
 @dataclass
 class DeviceProfile:
@@ -250,7 +245,6 @@ class DeviceProfile:
             self.optimization_recommendations.append(
                 "Moderate RAM available - monitor memory usage closely"
             )
-
 
 class DevicePerformanceTester:
     
@@ -574,7 +568,6 @@ class DevicePerformanceTester:
         self.logger.info(f"DevicePerformanceTester: Test suite completed - Overall Grade: {profile.overall_performance_grade}")
         return profile
 
-
 class DeviceDiversityAnalyzer:
     
     def __init__(self):
@@ -880,7 +873,6 @@ class DeviceDiversityAnalyzer:
             
         self.logger.info(f"DeviceDiversityAnalyzer: Analysis report exported to {output_file}")
 
-
 def main():
     import argparse
     
@@ -945,7 +937,6 @@ def main():
         print(f"Error: {e}")
         import traceback
         traceback.print_exc()
-
 
 if __name__ == "__main__":
     main()

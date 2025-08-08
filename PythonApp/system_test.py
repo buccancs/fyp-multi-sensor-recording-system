@@ -277,7 +277,6 @@ def _create_test_session_metadata():
         },
     }
 
-
 def _test_json_operations(session_metadata):
     import json
     import tempfile
@@ -293,7 +292,6 @@ def _test_json_operations(session_metadata):
     assert loaded_metadata == session_metadata
     print("✓ JSON session metadata export/import works")
     os.unlink(json_file)
-
 
 def _test_csv_operations():
     import csv
@@ -321,7 +319,6 @@ def _test_csv_operations():
     print("✓ CSV sensor data export/import works")
     os.unlink(csv_file)
 
-
 def _test_directory_structure(session_metadata):
     import tempfile
     from pathlib import Path
@@ -338,7 +335,6 @@ def _test_directory_structure(session_metadata):
             assert (session_dir / subdir).exists()
         
         print("✓ Session directory structure creation works")
-
 
 def test_file_operations():
     print("\nTesting file operations...")

@@ -8,17 +8,10 @@ import numpy as np
 
 from ..utils.logging_config import get_logger
 
-
 class CalibrationManager:
-    """
-    Manages camera calibration workflows for multi-modal sensor synchronization.
-    
-    This class handles the complete calibration process including pattern detection,
-    camera parameter estimation, stereo calibration, and quality assessment.
-    """
 
     def __init__(self):
-        """Initialize the calibration manager with default parameters."""
+
         self.logger = get_logger(__name__)
         self.rgb_camera_matrix = None
         self.rgb_distortion_coeffs = None
@@ -521,7 +514,6 @@ class CalibrationManager:
     def save_calibration(self, device_id, filename):
         return self.save_calibration_data(filename)
 
-
 def create_calibration_pattern_points(
     pattern_size: Tuple[int, int], square_size: float
 ) -> np.ndarray:
@@ -534,7 +526,6 @@ def create_calibration_pattern_points(
     ].T.reshape(-1, 2)
     pattern_points *= square_size
     return pattern_points
-
 
 def validate_calibration_images(images: List[np.ndarray], min_images: int = 10) -> bool:
     if len(images) < min_images:
@@ -551,7 +542,6 @@ def validate_calibration_images(images: List[np.ndarray], min_images: int = 10) 
             return False
     self.logger.debug(f" Calibration image validation passed: {len(images)} images")
     return True
-
 
 def draw_calibration_pattern(
     image: np.ndarray,

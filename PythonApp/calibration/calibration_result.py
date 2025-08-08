@@ -9,7 +9,6 @@ from ..utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-
 class CalibrationResult:
 
     def __init__(self, device_id: str):
@@ -286,7 +285,6 @@ class CalibrationResult:
 
     def __repr__(self) -> str:
         return self.__str__()
-
 
 if __name__ == "__main__":
     logger.info("Testing CalibrationResult...")

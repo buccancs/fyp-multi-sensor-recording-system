@@ -23,13 +23,11 @@ except ImportError:
     def get_logger(name):
         return logging.getLogger(name)
 
-
 class PerformanceLevel(Enum):
     OPTIMAL = "optimal"
     GOOD = "good"
     DEGRADED = "degraded"
     CRITICAL = "critical"
-
 
 class DegradationStrategy(Enum):
     FRAME_DROPPING = "frame_dropping"
@@ -40,7 +38,6 @@ class DegradationStrategy(Enum):
     NON_ESSENTIAL_DISABLING = "non_essential_disabling"
     MEMORY_CLEANUP = "memory_cleanup"
     THREAD_REDUCTION = "thread_reduction"
-
 
 @dataclass
 class PerformanceThresholds:
@@ -69,7 +66,6 @@ class PerformanceThresholds:
     response_time_degraded_threshold: float = 500.0
     response_time_critical_threshold: float = 2000.0
 
-
 @dataclass
 class DegradationAction:
     
@@ -86,7 +82,6 @@ class DegradationAction:
     
     custom_action: Optional[Callable[[], None]] = None
 
-
 @dataclass
 class SystemMetrics:
     
@@ -102,7 +97,6 @@ class SystemMetrics:
     frame_processing_rate: float = 0.0
     preview_enabled: bool = True
     thermal_processing_enabled: bool = True
-
 
 class FrameDropManager:
     
@@ -148,7 +142,6 @@ class FrameDropManager:
         self.frames_received = 0
         self.frames_dropped = 0
         self.last_reset = time.time()
-
 
 class AdaptiveQualityManager:
     
@@ -197,7 +190,6 @@ class AdaptiveQualityManager:
         self.current_resolution_factor = 1.0
         self.current_framerate_factor = 1.0
         self.logger.info("AdaptiveQualityManager: Reset to optimal quality")
-
 
 class BackpressureManager:
     
@@ -250,7 +242,6 @@ class BackpressureManager:
         
     def get_queue_status(self) -> Dict[str, int]:
         return {name: queue_obj.qsize() for name, queue_obj in self.monitored_queues.items()}
-
 
 class GracefulDegradationManager:
     
@@ -598,16 +589,13 @@ class GracefulDegradationManager:
     def get_adapted_quality_settings(self, **baseline_settings) -> Dict[str, Any]:
         return self.quality_manager.get_adapted_settings(**baseline_settings)
 
-
 _degradation_manager: Optional[GracefulDegradationManager] = None
-
 
 def get_degradation_manager(thresholds: Optional[PerformanceThresholds] = None) -> GracefulDegradationManager:
     global _degradation_manager
     if _degradation_manager is None:
         _degradation_manager = GracefulDegradationManager(thresholds)
     return _degradation_manager
-
 
 async def main():
     import asyncio
@@ -647,7 +635,6 @@ async def main():
     
     await manager.stop_monitoring()
     print("Degradation manager stopped.")
-
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -17,7 +17,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from PythonApp.network.device_client import DeviceClient
 
-
 class TLSAuthenticationTests(unittest.TestCase):
     
     def setUp(self):
@@ -243,7 +242,6 @@ class TLSAuthenticationTests(unittest.TestCase):
             else:
                 self.assertFalse(is_allowed, f"Connection {i+1} should be rate limited")
 
-
 class SecurityConfigurationTests(unittest.TestCase):
 
     @pytest.mark.security
@@ -312,7 +310,6 @@ class SecurityConfigurationTests(unittest.TestCase):
                 config_text.lower(),
                 f"Default credential pattern '{pattern}' found in configuration"
             )
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -19,7 +19,6 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-
 class TimingLogger:
 
     def __init__(self, log_directory: str = "logs"):
@@ -128,7 +127,6 @@ class TimingLogger:
         except Exception as e:
             print(f"[DEBUG_LOG] Error writing to log file: {e}")
 
-
 class StimulusVideoWidget(QVideoWidget):
 
     space_pressed = pyqtSignal()
@@ -154,7 +152,6 @@ class StimulusVideoWidget(QVideoWidget):
         else:
             self.showFullScreen()
         event.accept()
-
 
 class StimulusController(QWidget):
 

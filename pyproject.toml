@@ -69,7 +69,6 @@ Issues = "https://github.com/buccancs/bucika_gsr/issues"
 where = ["."]
 include = ["PythonApp*"]
 
-
 [tool.black]
 line-length = 88
 target-version = ['py310', 'py311', 'py312']
@@ -90,7 +89,6 @@ extend-exclude = '''
 )/
 '''
 
-
 [tool.isort]
 profile = "black"
 multi_line_output = 3
@@ -98,7 +96,6 @@ line_length = 88
 known_first_party = ["PythonApp"]
 known_third_party = ["PyQt5", "cv2", "numpy", "matplotlib", "requests"]
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-
 
 [tool.mypy]
 python_version = "3.10"
@@ -116,7 +113,6 @@ warn_unreachable = true
 strict_equality = true
 show_error_codes = true
 
-
 [[tool.mypy.overrides]]
 module = [
     "cv2.*",
@@ -126,14 +122,12 @@ module = [
 ]
 ignore_missing_imports = true
 
-
 [tool.bandit]
 exclude_dirs = ["tests", "test_*", "*/tests/*"]
 skips = ["B101", "B601"]
 
 [tool.bandit.assert_used]
 skips = ["*_test.py", "test_*.py"]
-
 
 [tool.coverage.run]
 source = ["PythonApp"]
@@ -168,7 +162,6 @@ precision = 2
 
 [tool.coverage.html]
 directory = "htmlcov"
-
 
 [tool.pytest.ini_options]
 minversion = "7.0"

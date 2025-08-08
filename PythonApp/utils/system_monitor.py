@@ -29,7 +29,6 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-
 class SystemMonitor:
 
     def __init__(self):
@@ -341,9 +340,7 @@ class SystemMonitor:
         self._last_update = current_time
         return status
 
-
 _system_monitor = None
-
 
 def get_system_monitor() -> SystemMonitor:
     global _system_monitor
