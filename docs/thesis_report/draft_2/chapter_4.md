@@ -697,7 +697,7 @@ the timestamp of the first frame of the phone video with the master
 start time to compute an offset, and do the same for the first thermal
 frame and first GSR sample. Minor adjustments (order of tens of
 milliseconds) can be handled by shifting timestamps in software to
-perfect the alignment. This post-processing synchronisation step is
+optimise the alignment. This post-processing synchronisation step is
 important if any device started a fraction of a second late or if there
 was clock drift -- the Synchronisation Engine on the PC assists by
 providing logs of the offset of each device over time, which the
