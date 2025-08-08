@@ -14,14 +14,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.multisensor.recording.ui.MainViewModelRefactored
+import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.components.ColorPaletteSelector
 import com.multisensor.recording.ui.components.EnhancedThermalPreview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThermalPreviewScreen(
     onNavigateBack: () -> Unit = {},
-    viewModel: MainViewModelRefactored = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current

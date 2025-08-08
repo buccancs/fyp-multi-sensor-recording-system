@@ -24,7 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.multisensor.recording.recording.DeviceStatus
 import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.MainViewModelRefactored
+import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.components.AnimatedRecordingButton
 import com.multisensor.recording.ui.components.ColorPaletteSelector
 import com.multisensor.recording.ui.components.EnhancedThermalPreview
@@ -37,7 +37,7 @@ import com.multisensor.recording.ui.theme.RecordingInactive
 @Composable
 fun RecordingScreen(
     onNavigateToPreview: () -> Unit = {},
-    viewModel: MainViewModelRefactored = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
