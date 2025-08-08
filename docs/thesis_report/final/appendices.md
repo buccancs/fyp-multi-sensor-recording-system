@@ -308,11 +308,11 @@ fixes. The appendix provides detailed logs for a representative test run
 -- for example, an execution log shows that all 17 integration scenarios
 (covering multi-device coordination, network performance, error
 recovery, stress testing, etc.) eventually passed 100% after bug
-fixes[\[40\]](evaluation_results/execution_logs.md#L40-L48)[\[41\]](evaluation_results/execution_logs.md#L50-L58).
+fixes[\[40\]](../../results/evaluation_results/execution_logs.md#L40-L48)[\[41\]](../../results/evaluation_results/execution_logs.md#L50-L58).
 This indicates that by the final version, **all integration tests
 succeeded** with no unresolved issues, giving a success rate of 100%
 across the
-board[\[41\]](evaluation_results/execution_logs.md#L50-L58).
+board[\[41\]](../../results/evaluation_results/execution_logs.md#L50-L58).
 
 **Validation of Requirements:** Each major requirement of the system was
 validated through specific tests. The appendix highlights key validation
@@ -341,14 +341,14 @@ notable bugs discovered and how they were fixed. For example, an early
 integration test failure was due to a device discovery message mismatch
 (the test expected different keywords); this was fixed by adjusting the
 discovery pattern in
-code[\[44\]](evaluation_results/execution_logs.md#L62-L70).
+code[\[44\]](../../results/evaluation_results/execution_logs.md#L62-L70).
 Another issue was an incorrect enum value in test code, which was
 corrected to match the
-implementation[\[45\]](evaluation_results/execution_logs.md#L72-L75).
+implementation[\[45\]](../../results/evaluation_results/execution_logs.md#L72-L75).
 All such fixes are logged, showing the iterative process to reach full
 compliance (as summarised in the "All integration test failures
 resolved"
-note[\[46\]](evaluation_results/execution_logs.md#L140-L146)).
+note[\[46\]](../../results/evaluation_results/execution_logs.md#L140-L146)).
 
 Overall, Appendix D demonstrates that the system underwent rigorous
 validation. The detailed test reports give confidence that the
