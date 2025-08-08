@@ -24,7 +24,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.multisensor.recording.databinding.ActivityMainFragmentsBinding
 import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.MainViewModelRefactored
+import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.OnboardingActivity
 import com.multisensor.recording.ui.SettingsActivity
 import com.multisensor.recording.ui.ShimmerSettingsActivity
@@ -36,10 +36,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+/**
+ * MainActivity is the main entry point for the Multi-Sensor Recording application.
+ * 
+ * This activity manages the overall application flow, handles UI mode switching between
+ * traditional fragments and Jetpack Compose, manages the main navigation, and coordinates
+ * with the MainViewModel for application state management.
+ * 
+ * The activity supports both Fragment-based UI and Compose-based UI, allowing for
+ * a gradual migration to modern Android development practices.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainFragmentsBinding
-    private lateinit var viewModel: MainViewModelRefactored
+    private lateinit var viewModel: MainViewModel
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var sharedPreferences: SharedPreferences
     @Inject
@@ -62,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun initializeComposeUI() {
         try {
-            viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
+            viewModel = ViewModelProvider(this)[MainViewModel::class.java]
             setContent {
                 MultiSensorTheme {
                     Surface(
@@ -89,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainFragmentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         try {
-            viewModel = ViewModelProvider(this)[MainViewModelRefactored::class.java]
+            viewModel = ViewModelProvider(this)[MainViewModel::class.java]
             setupNavigation()
             setupUI()
             observeViewModel()

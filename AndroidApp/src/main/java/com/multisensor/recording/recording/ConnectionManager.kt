@@ -7,6 +7,18 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
+/**
+ * ConnectionManager handles device connections and connection policies for the recording system.
+ * 
+ * This manager provides centralized connection management with features including:
+ * - Automatic retry logic with exponential backoff
+ * - Connection health monitoring and persistence
+ * - Device-specific connection policies and statistics
+ * - Concurrent connection handling for multiple devices
+ * 
+ * The manager is designed to work with various device types including cameras,
+ * thermal sensors, and Bluetooth devices like Shimmer sensors.
+ */
 class ConnectionManager(
     private val logger: Logger
 ) {
