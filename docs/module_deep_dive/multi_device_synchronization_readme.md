@@ -1091,7 +1091,11 @@ class MultiDeviceTest:
 1. **Connectivity Testing**:
    ```python
    # Test device connectivity
-   from network_utils import test_device_connectivity
+   # Test device connectivity using Python socket library
+   import socket
+   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+   result = sock.connect_ex(('device_ip', 9000))
+   print('Connected' if result == 0 else 'Connection failed')
    result = test_device_connectivity("192.168.1.101", 9000)
    if not result.success:
        print(f"Connection failed: {result.error}")

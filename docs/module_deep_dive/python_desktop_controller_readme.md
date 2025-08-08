@@ -70,7 +70,7 @@ graph TB
         end
         
         subgraph "Camera Management"
-            WM[WebcamManager<br/>USB Cameras]
+            WM[WebcamCapture<br/>USB Cameras]
             CAM[Camera Control]
             REC[Recording Pipeline]
         end
@@ -133,7 +133,7 @@ graph TB
 
 #### Camera Management Components
 
-- **WebcamManager**: USB camera detection, configuration, and control
+- **WebcamCapture**: USB camera detection, configuration, and control
 - **Camera Control**: Low-level camera operations and parameter management
 - **Recording Pipeline**: Video capture and encoding management
 
@@ -407,7 +407,7 @@ The Python environment uses Conda for dependency management:
 
 ```bash
 # Activate the conda environment
-conda activate thermal-env
+conda activate gsr-env
 
 # Install dependencies
 conda env update -f environment.yml
@@ -421,16 +421,21 @@ conda list
 ```yaml
 # environment.yml
 dependencies:
-  - python=3.8
-  - pyqt5=5.15.7
-  - opencv=4.8.0.74
-  - numpy=1.24.3
+  - python>=3.9,<3.13
+  - pyqt=5.15.*
+  - opencv
+  - pillow
+  - numpy>=1.26.0,<2.0.0
+  - scipy
+  - matplotlib
+  - pandas
+  - requests
+  - websockets
+  - pytest
+  - pytest-cov
+  - flake8
+  - black
   - pip
-  - pip:
-    - requests==2.31.0
-    - websockets==11.0.3
-    - pillow==10.0.0
-    - pyserial==3.5
 ```
 
 ### Build and Execution
@@ -466,42 +471,56 @@ python test_shimmer_implementation.py
 
 ### Integration Components
 
-#### Webcam Manager Implementation
+#### Webcam Capture Implementation
 
 ```python
-class WebcamManager:
-    def __init__(self):
-        self.cameras = {}
-        self.recording_sessions = {}
+class WebcamCapture:
+    def __init__(self, camera_index: int = 0, preview_fps: int = 30):
+        self.camera_index = camera_index
+        self.preview_fps = preview_fps
+        self.cap = None
+        self.video_writer = None
+        self.is_recording = False
+        self.is_previewing = False
     
-    def detect_cameras(self) -> List[CameraInfo]:
-        """Detect available USB cameras"""
-        cameras = []
-        for index in range(10):  # Check first 10 camera indices
-            cap = cv2.VideoCapture(index)
-            if cap.isOpened():
-                cameras.append(CameraInfo(index, cap))
-                cap.release()
-        return cameras
+    def initialize_camera(self) -> bool:
+        """Initialize camera connection"""
+        try:
+            self.cap = cv2.VideoCapture(self.camera_index)
+            if not self.cap.isOpened():
+                return False
+            
+            # Configure camera settings
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.recording_resolution[0])
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.recording_resolution[1])
+            self.cap.set(cv2.CAP_PROP_FPS, self.recording_fps)
+            return True
+        except Exception as e:
+            logger.error(f"Failed to initialize camera: {e}")
+            return False
     
-    def start_recording(self, camera_id: int, output_path: str) -> bool:
-        """Start recording from specified camera"""
-        if camera_id in self.recording_sessions:
+    def start_recording(self, session_id: str) -> bool:
+        """Start recording from camera"""
+        if self.is_recording:
             return False
         
-        cap = cv2.VideoCapture(camera_id)
-        if not cap.isOpened():
-            return False
+        if not self.cap or not self.cap.isOpened():
+            if not self.initialize_camera():
+                return False
         
-        # Configure camera settings
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-        cap.set(cv2.CAP_PROP_FPS, 30)
+        # Configure recording
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"webcam_{session_id}_{timestamp}.mp4"
+        output_path = os.path.join(self.output_directory, filename)
         
-        # Start recording session
-        session = RecordingSession(cap, output_path)
-        self.recording_sessions[camera_id] = session
-        session.start()
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        self.video_writer = cv2.VideoWriter(
+            output_path, fourcc, self.recording_fps, self.recording_resolution
+        )
+        
+        self.is_recording = True
+        self.current_session_id = session_id
+        self.recording_start_time = time.time()
         
         return True
 ```
@@ -621,7 +640,7 @@ class SessionManager:
 1. **Environment Preparation**:
    ```bash
    # Activate Python environment
-   conda activate thermal-env
+   conda activate gsr-env
    
    # Verify installation
    python application.py --version
@@ -1088,7 +1107,7 @@ class SessionTest:
 **Problem**: Application fails to start
 **Solutions**:
 
-1. Verify Python environment activation: `conda activate thermal-env`
+1. Verify Python environment activation: `conda activate gsr-env`
 2. Check dependency installation: `conda list`
 3. Validate PyQt5 installation: `python -c "import PyQt5; print('PyQt5 available')"`
 4. Run with debug mode: `python application.py --debug`
