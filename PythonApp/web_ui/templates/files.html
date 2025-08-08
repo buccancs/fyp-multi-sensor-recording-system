@@ -60,6 +60,48 @@
             align-items: center;
         }
 
+        /* Grid view styles */
+        .file-browser.grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .file-browser.grid-view .file-item {
+            flex-direction: column;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px 10px;
+            background: white;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .file-browser.grid-view .file-icon {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+
+        .file-browser.grid-view .file-details {
+            flex-grow: 0;
+        }
+
+        .file-browser.grid-view .file-details .fw-medium {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            word-wrap: break-word;
+        }
+
+        .file-browser.grid-view .file-size,
+        .file-browser.grid-view .file-date {
+            font-size: 0.8rem;
+        }
+
+        .file-browser.grid-view .file-actions {
+            margin-top: 10px;
+        }
+
         .file-item:hover {
             background-color: #f8f9fa;
         }
@@ -435,6 +477,14 @@
 
     // Initialize file browser
     document.addEventListener('DOMContentLoaded', function() {
+        // Initialize view mode from localStorage
+        const savedViewMode = localStorage.getItem('fileViewMode');
+        if (savedViewMode === 'grid') {
+            isGridView = true;
+            document.getElementById('fileBrowser').classList.add('grid-view');
+            document.getElementById('viewToggleIcon').className = 'fas fa-list';
+        }
+        
         loadFiles(currentPath);
     });
 
@@ -687,9 +737,20 @@
 
     function toggleGridView() {
         isGridView = !isGridView;
+        const fileBrowser = document.getElementById('fileBrowser');
         const icon = document.getElementById('viewToggleIcon');
-        icon.className = isGridView ? 'fas fa-list' : 'fas fa-th';
-        // TODO: Implement grid view layout
+        
+        // Toggle CSS classes
+        if (isGridView) {
+            fileBrowser.classList.add('grid-view');
+            icon.className = 'fas fa-list';
+        } else {
+            fileBrowser.classList.remove('grid-view');
+            icon.className = 'fas fa-th';
+        }
+        
+        // Store preference in localStorage
+        localStorage.setItem('fileViewMode', isGridView ? 'grid' : 'list');
     }
 
     function updateBreadcrumb(path) {
