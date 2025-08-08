@@ -1701,7 +1701,7 @@ class DebugLogger:
 #### IDE Configuration
 
 **Recommended IDEs:**
-- **PyCharm Professional**: Full-featured Python IDE with excellent debugging
+- **PyCharm Professional**: Full-featured Python IDE with effective debugging
 - **Visual Studio Code**: Lightweight with Python extensions
 - **Spyder**: Scientific Python development environment
 

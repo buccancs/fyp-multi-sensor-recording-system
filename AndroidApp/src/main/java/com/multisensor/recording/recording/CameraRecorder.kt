@@ -33,6 +33,22 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+/**
+ * CameraRecorder manages camera operations for the multi-sensor recording system.
+ * 
+ * This class handles complex camera operations including:
+ * - Camera device initialization and configuration
+ * - Video recording with MediaRecorder
+ * - RAW image capture for research purposes
+ * - Preview streaming to remote devices
+ * - Hand segmentation integration for gesture analysis
+ * - Synchronization with other recording components
+ * 
+ * The recorder supports both standard video recording and high-quality RAW capture,
+ * making it suitable for research applications requiring detailed image analysis.
+ * It integrates with the preview streaming system to enable real-time monitoring
+ * from connected devices.
+ */
 @Singleton
 class CameraRecorder
 @Inject

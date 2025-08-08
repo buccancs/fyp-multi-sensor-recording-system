@@ -1,14 +1,8 @@
 package com.multisensor.recording.ui
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -30,18 +24,30 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.multisensor.recording.R
 import com.multisensor.recording.recording.SessionInfo
 import com.multisensor.recording.util.Logger
+import com.multisensor.recording.ui.util.PreviewManager
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.*
-import kotlin.random.Random
+
+/**
+ * FileViewActivity displays recorded sessions and files with preview capabilities.
+ * 
+ * This activity allows users to browse recording sessions, view individual files,
+ * and preview camera/thermal data. It follows MVVM architecture with separated
+ * preview management responsibilities.
+ */
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
     private val viewModel: FileViewViewModel by viewModels()
+    
     @Inject
     lateinit var logger: Logger
+    
+    @Inject
+    lateinit var previewManager: PreviewManager
+    
     private lateinit var sessionsRecyclerView: RecyclerView
     private lateinit var filesRecyclerView: RecyclerView
     private lateinit var sessionInfoText: TextView
@@ -58,25 +64,7 @@ class FileViewActivity : AppCompatActivity() {
     private lateinit var irPreviewPlaceholder: TextView
     private lateinit var sessionsAdapter: SessionsAdapter
     private lateinit var filesAdapter: FilesAdapter
-    private var isRgbPreviewActive = false
-    private var isIrPreviewActive = false
-    private val cameraPreviewHandler = Handler(Looper.getMainLooper())
-    private val rgbPreviewRunnable = object : Runnable {
-        override fun run() {
-            if (isRgbPreviewActive) {
-                updateRgbPreview()
-                cameraPreviewHandler.postDelayed(this, 100)
-            }
-        }
-    }
-    private val irPreviewRunnable = object : Runnable {
-        override fun run() {
-            if (isIrPreviewActive) {
-                updateIrPreview()
-                cameraPreviewHandler.postDelayed(this, 200)
-            }
-        }
-    }
+    
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     companion object {
         private const val AUTHORITY = "com.multisensor.recording.fileprovider"
@@ -84,12 +72,16 @@ class FileViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_view)
+        
+        // Register PreviewManager as lifecycle observer
+        lifecycle.addObserver(previewManager)
+        
         setupActionBar()
         initializeViews()
         setupRecyclerViews()
         setupEventListeners()
         observeUiState()
-        logger.info("FileViewActivity created with MVVM architecture")
+        logger.info("FileViewActivity created with MVVM architecture and PreviewManager")
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.file_view_menu, menu)
@@ -327,144 +319,82 @@ class FileViewActivity : AppCompatActivity() {
                 .show()
         }
     }
+    
     private fun toggleRgbPreview() {
-        if (!isRgbPreviewActive) {
+        if (!previewManager.isRgbPreviewActive()) {
             startRgbPreview()
         } else {
             stopRgbPreview()
         }
     }
+    
     private fun toggleIrPreview() {
-        if (!isIrPreviewActive) {
+        if (!previewManager.isThermalPreviewActive()) {
             startIrPreview()
         } else {
             stopIrPreview()
         }
     }
+    
     private fun startRgbPreview() {
-        isRgbPreviewActive = true
-        rgbPreviewBtn.text = "Stop"
-        rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_red_dark)
-        rgbPreviewPlaceholder.visibility = View.GONE
-        rgbPreviewImage.visibility = View.VISIBLE
-        cameraPreviewHandler.post(rgbPreviewRunnable)
+        previewManager.startRgbPreview(
+            scope = lifecycleScope,
+            imageView = rgbPreviewImage,
+            onPreviewUpdate = { isActive ->
+                rgbPreviewBtn.text = if (isActive) "Stop" else "Start"
+                rgbPreviewBtn.backgroundTintList = getColorStateList(
+                    if (isActive) android.R.color.holo_red_dark else android.R.color.holo_green_dark
+                )
+                rgbPreviewPlaceholder.visibility = if (isActive) View.GONE else View.VISIBLE
+                rgbPreviewImage.visibility = if (isActive) View.VISIBLE else View.GONE
+            }
+        )
         logger.info("RGB camera preview started")
         showMessage("RGB camera preview started")
     }
+    
     private fun stopRgbPreview() {
-        isRgbPreviewActive = false
-        rgbPreviewBtn.text = "Start"
-        rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_green_dark)
-        rgbPreviewImage.visibility = View.GONE
-        rgbPreviewPlaceholder.visibility = View.VISIBLE
-        cameraPreviewHandler.removeCallbacks(rgbPreviewRunnable)
+        previewManager.stopRgbPreview { isActive ->
+            rgbPreviewBtn.text = "Start"
+            rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_green_dark)
+            rgbPreviewImage.visibility = View.GONE
+            rgbPreviewPlaceholder.visibility = View.VISIBLE
+        }
         logger.info("RGB camera preview stopped")
         showMessage("RGB camera preview stopped")
     }
+    
     private fun startIrPreview() {
-        isIrPreviewActive = true
-        irPreviewBtn.text = "Stop"
-        irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_red_dark)
-        irPreviewPlaceholder.visibility = View.GONE
-        irPreviewImage.visibility = View.VISIBLE
-        cameraPreviewHandler.post(irPreviewRunnable)
-        logger.info("IR camera preview started")
-        showMessage("IR camera preview started")
-    }
-    private fun stopIrPreview() {
-        isIrPreviewActive = false
-        irPreviewBtn.text = "Start"
-        irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_orange_dark)
-        irPreviewImage.visibility = View.GONE
-        irPreviewPlaceholder.visibility = View.VISIBLE
-        cameraPreviewHandler.removeCallbacks(irPreviewRunnable)
-        logger.info("IR camera preview stopped")
-        showMessage("IR camera preview stopped")
-    }
-    private fun updateRgbPreview() {
-        try {
-            val bitmap = generateRgbPreviewBitmap()
-            rgbPreviewImage.setImageBitmap(bitmap)
-        } catch (e: Exception) {
-            logger.error("Error updating RGB preview: ${e.message}")
-        }
-    }
-    private fun updateIrPreview() {
-        try {
-            val bitmap = generateThermalPreviewBitmap()
-            irPreviewImage.setImageBitmap(bitmap)
-        } catch (e: Exception) {
-            logger.error("Error updating IR preview: ${e.message}")
-        }
-    }
-    private fun generateRgbPreviewBitmap(): Bitmap {
-        val width = 320
-        val height = 240
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        val paint = Paint()
-        val time = System.currentTimeMillis() / 100
-        paint.color = Color.rgb(50, 50, 80)
-        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-        for (i in 0..10) {
-            val x = ((time + i * 30) % (width + 100)).toFloat() - 50
-            val y = (height * 0.2f + i * height * 0.05f).toFloat()
-            paint.color = Color.rgb(
-                (100 + i * 15) % 255,
-                (150 + i * 10) % 255,
-                (200 + i * 5) % 255
-            )
-            canvas.drawCircle(x, y, 15f, paint)
-        }
-        paint.color = Color.RED
-        paint.textSize = 24f
-        canvas.drawText("● LIVE", 10f, 30f, paint)
-        paint.color = Color.WHITE
-        paint.textSize = 16f
-        val timeStr = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-        canvas.drawText(timeStr, 10f, height - 10f, paint)
-        return bitmap
-    }
-    private fun generateThermalPreviewBitmap(): Bitmap {
-        val width = 320
-        val height = 240
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        val paint = Paint()
-        val time = System.currentTimeMillis() / 200.0
-        for (y in 0 until height) {
-            for (x in 0 until width) {
-                val centerX = width / 2.0
-                val centerY = height / 2.0
-                val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-                val intensity = (127 + 127 * sin(distance * 0.1 + time)).toInt().coerceIn(0, 255)
-                val color = when {
-                    intensity < 85 -> Color.rgb(0, 0, intensity * 3)
-                    intensity < 170 -> Color.rgb((intensity - 85) * 3, 0, 255 - (intensity - 85) * 2)
-                    else -> Color.rgb(255, (intensity - 170) * 3, 0)
-                }
-                paint.color = color
-                canvas.drawPoint(x.toFloat(), y.toFloat(), paint)
+        previewManager.startThermalPreview(
+            scope = lifecycleScope,
+            imageView = irPreviewImage,
+            onPreviewUpdate = { isActive ->
+                irPreviewBtn.text = if (isActive) "Stop" else "Start"
+                irPreviewBtn.backgroundTintList = getColorStateList(
+                    if (isActive) android.R.color.holo_red_dark else android.R.color.holo_orange_dark
+                )
+                irPreviewPlaceholder.visibility = if (isActive) View.GONE else View.VISIBLE
+                irPreviewImage.visibility = if (isActive) View.VISIBLE else View.GONE
             }
-        }
-        paint.color = Color.YELLOW
-        for (i in 0..3) {
-            val hotX = Random.nextInt(50, width - 50).toFloat()
-            val hotY = Random.nextInt(50, height - 50).toFloat()
-            canvas.drawCircle(hotX, hotY, 20f, paint)
-        }
-        paint.color = Color.WHITE
-        paint.textSize = 18f
-        canvas.drawText("🌡️ THERMAL", 10f, 30f, paint)
-        val temp = (20 + Random.nextFloat() * 15).toInt()
-        paint.textSize = 14f
-        canvas.drawText("${temp}°C", width - 60f, height - 10f, paint)
-        return bitmap
+        )
+        logger.info("Thermal camera preview started")
+        showMessage("Thermal camera preview started")
     }
+    
+    private fun stopIrPreview() {
+        previewManager.stopThermalPreview { isActive ->
+            irPreviewBtn.text = "Start"
+            irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_orange_dark)
+            irPreviewImage.visibility = View.GONE
+            irPreviewPlaceholder.visibility = View.VISIBLE
+        }
+        logger.info("Thermal camera preview stopped")
+        showMessage("Thermal camera preview stopped")
+    }
+    
     override fun onDestroy() {
         super.onDestroy()
-        stopRgbPreview()
-        stopIrPreview()
+        // PreviewManager will automatically stop previews via lifecycle observer
         logger.info("FileViewActivity destroyed")
     }
 }

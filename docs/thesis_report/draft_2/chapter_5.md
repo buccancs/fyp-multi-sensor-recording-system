@@ -319,7 +319,7 @@ targets that the system needed to meet or exceed during testing:
 ---
 **Coverage Target Justification:** These coverage targets reflect the
 higher reliability requirements of research software while acknowledging
-practical constraints in achieving perfect coverage across all
+practical constraints in achieving optimal coverage across all
 components[\[13\]](docs/thesis_report/Chapter_5_Testing_and_Results_Evaluation.md#L478-L486).
 The targets prioritise full coverage of critical and high-risk
 components (e.g., 100% interface coverage for integration means every
@@ -1836,7 +1836,7 @@ target was 4+), data integrity (no corrupt packets thanks to robust CRC
 checks in protocol), test suite speed (running the whole test suite took
 about 4.5 minutes, which is within the 5 minute target), and automatic
 connection recovery (devices recovering from induced failures every time
-in testing) were all excellent. Message loss tolerance varied; in
+in testing) were all effective. Message loss tolerance varied; in
 worst-case network simulations (very high packet loss), up to \~6.7% of
 messages were lost, which is below the 10% threshold, but indicates the
 system is reasonably robust to network unreliability up to a point.
@@ -2168,7 +2168,7 @@ tests (which might not hit all branches but does go through the main
 user flows).
 
 These numbers indicate that both the Android and Python sides have \>90%
-coverage in general, which is excellent. The calibration system has
+coverage in general, which is effective. The calibration system has
 slightly lower integration/system coverage (some of its code like
 interactive calibration UI isn't fully executed in automated tests). But
 crucially, all core functionality sees substantial testing.
@@ -2302,7 +2302,7 @@ downtime, which is critical in research (downtime could mean lost data
 opportunities). - Data integrity at 99.98%: effectively no data
 corruption occurred. The slight short of 100% accounts for a minuscule
 fraction of packets lost in extreme tests, but in normal operation data
-integrity was 100%. This is practically perfect, as even the lost data
+integrity was 100%. This is practically optimal, as even the lost data
 was due to test-induced scenarios not expected in normal use. - Sync
 precision better than required ensures that data fusion between
 modalities (like aligning GSR peaks with thermal changes or video
@@ -2592,7 +2592,7 @@ suite, preserving the reliability level achieved.
 ### Conclusion
 
 The evaluation and testing of the Multi-Sensor Recording System
-demonstrate that it achieves exceptional reliability, performance, and
+demonstrate that it achieves suitable reliability, performance, and
 data quality for GSR and thermal-based emotion analysis in research
 settings. With an overall test pass rate of \~99.5% across more than 240
 test cases and all critical issues resolved, the system can be

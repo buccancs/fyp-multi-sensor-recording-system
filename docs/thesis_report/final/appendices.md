@@ -372,7 +372,7 @@ researchers (potentially non-developers), usability is crucial.
 Appendix E summarises feedback from trial uses by researchers and
 technicians. Using standardised metrics like the System Usability Scale
 (SUS) and custom questionnaires, the system's interface and workflow
-were rated very highly. In fact, user feedback indicated a near-perfect
+were rated very highly. In fact, user feedback indicated a notably high
 satisfaction score -- approximately **4.9 out of 5.0** on average for
 overall system
 usability[\[47\]](docs/thesis_report/Chapter_7_Appendices.md#L110-L111).

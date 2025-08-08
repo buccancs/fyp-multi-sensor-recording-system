@@ -187,7 +187,7 @@ below in light of the project results:
   some aspects of the user experience require further refinement. During
   testing, it became apparent that the desktop application's interface
   could become unresponsive in certain scenarios, and the automatic
-  device discovery was not perfectly seamless (sometimes a device would
+  device discovery was not optimally seamless (sometimes a device would
   not appear and needed a manual reconnection attempt). These issues did
   not prevent basic operation but indicate that the learning curve and
   robustness for end-users can be improved. Despite these shortcomings
@@ -223,7 +223,7 @@ below in light of the project results:
   a gap, but it does not diminish the demonstrated capabilities of the
   system; rather, it points to an important next step that lies beyond
   this work. In summary, all technical objectives were met, but the
-  **practical demonstration with end-users remains an outstanding
+  **practical demonstration with end-users remains a significant
   task**. Completing that task in the future will be essential to fully
   validate the system under real operating conditions.
 

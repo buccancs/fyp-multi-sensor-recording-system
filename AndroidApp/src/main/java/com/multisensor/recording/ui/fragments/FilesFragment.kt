@@ -14,7 +14,7 @@ import com.multisensor.recording.ui.MainUiState
 import android.widget.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import com.multisensor.recording.ui.MainViewModelRefactored
+import com.multisensor.recording.ui.MainViewModel
 
 @AndroidEntryPoint
 class FilesFragment : Fragment() {
@@ -22,7 +22,7 @@ class FilesFragment : Fragment() {
     private var _binding: FragmentFilesBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainViewModelRefactored by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

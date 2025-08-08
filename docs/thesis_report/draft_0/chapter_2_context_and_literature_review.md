@@ -706,7 +706,7 @@ these factors and standardising thermal imaging procedures for research applicat
 The spatial resolution and sensitivity of thermal cameras also influence their utility for stress detection
 applications. While consumer-grade thermal cameras have become more accessible, they may lack the spatial resolution and
 temperature sensitivity required for detecting subtle stress-related thermal changes. Professional-grade thermal cameras
-provide superior performance but at significantly higher cost and complexity.
+provide better performance but at significantly higher cost and complexity.
 
 ## 2.7 RGB vs. Thermal Imaging (Machine Learning Hypothesis)
 
@@ -747,7 +747,7 @@ susceptible to environmental factors or individual variations.
 ### Hypothesis Development and Testing Framework
 
 The central hypothesis underlying RGB and thermal imaging comparison for stress detection posits that multi-modal
-approaches will provide superior performance compared to single-modality approaches due to the complementary
+approaches will provide better performance compared to single-modality approaches due to the complementary
 physiological information captured by each imaging modality. This hypothesis can be tested through systematic comparison
 of stress detection accuracy using RGB-only, thermal-only, and combined approaches.
 
@@ -1298,7 +1298,7 @@ diverse research requirements and future extensions.
 **Protocol Buffer Alternative Evaluation**: While JSON was selected for its human-readability and debugging advantages,
 Protocol Buffers were evaluated as an alternative for high-throughput data communication. The evaluation considered
 factors including serialisation efficiency, schema evolution capabilities, cross-platform support, and debugging
-complexity, ultimately selecting JSON for its superior developer experience and research environment requirements.
+complexity, ultimately selecting JSON for its improved developer experience and research environment requirements.
 
 #### Network Security and Encryption
 
@@ -1308,7 +1308,7 @@ protection, secure key management, and digital signature capabilities that ensur
 throughout the research process.
 
 The security implementation includes complete threat modelling for research environments, secure communication
-protocols with perfect forward secrecy, and complete audit logging that supports security compliance and data
+protocols with optimal forward secrecy, and complete audit logging that supports security compliance and data
 protection requirements. The cryptography integration maintains security while preserving the performance
 characteristics essential for real-time research applications.
 
@@ -1386,7 +1386,7 @@ sustainability.
 
 **Android vs. iOS Platform Decision**: The selection of Android as the primary mobile platform reflects systematic
 analysis of multiple factors including hardware diversity, development flexibility, research community adoption, and
-cost considerations. Android provides superior hardware integration capabilities including Camera2 API access,
+cost considerations. Android provides effective hardware integration capabilities including Camera2 API access,
 complete Bluetooth functionality, and USB-C OTG support that are essential for multi-sensor research applications,
 while iOS imposes significant restrictions on low-level hardware access that would compromise research capabilities.
 
