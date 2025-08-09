@@ -677,6 +677,10 @@ This appendix consolidates all figures and code snippets referenced throughout t
 
 *Figure 3.10 – Video Frame Timing Stability: Distribution of inter-frame intervals (ms) for RGB/thermal streams with violin plots and instantaneous FPS timeline. Target 33.3 ms (30 FPS) with outlier detection for frame drops.*
 
+![Figure 3.11: Reliability Timeline](../diagrams/fig_3_11_reliability_timeline.png)
+
+*Figure 3.11 – Reliability Timeline (Session Gantt): Device states versus time showing Connected, Recording, Offline, Reconnected, and Transfer phases. Sync signal markers and outage recovery durations validate fault tolerance requirements.*
+
 ![Figure 3.12: Throughput & Storage](../diagrams/fig_3_12_throughput_storage.png)
 
 *Figure 3.12 – Throughput & Storage: Performance metrics for data throughput and storage management.*
@@ -686,6 +690,28 @@ This appendix consolidates all figures and code snippets referenced throughout t
 *Figure 3.13 – Security Posture Checks: Validation of security measures and encryption protocols.*
 
 ### H.3 Chapter 6 Figures: Evaluation and Results
+
+![Figure F.3: Device discovery and handshake sequence diagram](../diagrams/fig_f_03_device_discovery.png)
+
+*Figure F.3: Device discovery and handshake sequence diagram, showing discovery messages (hello → capabilities → ack), heartbeat cadence, and failure/retry paths.*
+
+![Figure F.4: Synchronized start trigger alignment](../diagrams/fig_f_04_sync_timeline.png)
+
+*Figure F.4: Synchronized start trigger alignment with horizontal timeline showing PC master timestamp vs device local timestamps after offset correction.*
+
+![Figure F.14: Known issues timeline](../diagrams/fig_f_14_issues_timeline.png)
+
+*Figure F.14: Known issues timeline showing device discovery failures, reconnections, and UI freeze events during representative sessions.*
+
+### H.3 Chapter 6 Figures: Evaluation and Results
+
+![Figure F.1: Complete system architecture overview](../diagrams/fig_f_01_system_architecture.png)
+
+*Figure F.1: Complete system architecture overview showing PC controller, Android nodes, connected sensors (RGB, thermal, GSR), and data paths for control, preview, and file transfer.*
+
+![Figure F.2: Recording pipeline and session flow](../diagrams/fig_f_02_recording_pipeline.png)
+
+*Figure F.2: Recording pipeline and session flow from session start through coordinated capture to file transfer.*
 
 ![Figure F.3: Device discovery and handshake sequence diagram](../diagrams/fig_f_03_device_discovery.png)
 
@@ -779,6 +805,26 @@ if self.enable_android_integration:
 ```
 
 *Code Listing H.3: Sensor integration logic demonstrating flexible handling of Android-mediated connections with fallback to direct PC-to-sensor connectivity.*
+
+#### H.4.4 Shimmer GSR Streaming Implementation
+
+From the Shimmer GSR streaming implementation (`PythonApp/shimmer_manager.py`):
+
+```python
+try:
+    from .shimmer.shimmer_imports import (
+        DEFAULT_BAUDRATE,
+        DataPacket,
+        Serial,
+        ShimmerBluetooth,
+        PYSHIMMER_AVAILABLE,
+    )
+except ImportError:
+    logger.warning("PyShimmer not available, shimmer functionality disabled")
+    PYSHIMMER_AVAILABLE = False
+```
+
+*Code Listing H.4: Shimmer GSR streaming implementation showing modular import handling with graceful fallback when PyShimmer library is unavailable.*
 
 ---
 [\[1\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L68)
