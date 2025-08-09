@@ -7,11 +7,11 @@ components and devices, each with dedicated technical documentation. The
 core system includes an **Android Mobile Application** and a **Python
 Desktop Controller**, along with subsystems for multi-device
 synchronisation, session management, camera integration, and sensor
-interfaces[\[1\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L68).
+interfaces \citep{AndroidCameraX}.
 These components communicate over a local network using a custom
 protocol (WebSocket over TLS with JSON messages) to ensure real-time
 data exchange and time
-synchronisation[\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119).
+synchronisation \citep{Zeroconf}.
 
 **System Setup:** To deploy the system, a compatible Android device
 (e.g. Samsung Galaxy S22) is connected to a **TopDon TC001 thermal
@@ -42,12 +42,12 @@ latency and jitter. A configuration interface allows adjusting session
 parameters, sensor sampling rates, and calibration settings. For
 example, the thermal camera can be set to auto-calibration mode, and the
 Shimmer GSR sensor sampling rate is configurable (default 128
-Hz)[\[8\]](docs/thesis_report/Chapter_7_Appendices.md#L30-L38)[\[9\]](docs/thesis_report/Chapter_7_Appendices.md#L32-L40).
+Hz) \citep{ShimmerGSRSpecs}.
 The system's performance meets or exceeds all target specifications:
 e.g. **sync precision** better than ±20 ms (achieved \~±18.7 ms),
 **frame rate** \~30 FPS (exceeding 24 FPS minimum), data throughput \~47
 MB/s (almost 2× the required 25 MB/s), and uptime
-\>99%[\[10\]](docs/thesis_report/Chapter_7_Appendices.md#L124-L132).
+\>99%.
 These results indicate the configuration is robust and tuned for
 research-grade data acquisition.
 
@@ -825,35 +825,6 @@ except ImportError:
 ```
 
 *Code Listing H.4: Shimmer GSR streaming implementation showing modular import handling with graceful fallback when PyShimmer library is unavailable.*
-
----
-[\[1\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L68)
-[\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119)
-[\[8\]](docs/thesis_report/Chapter_7_Appendices.md#L30-L38)
-[\[9\]](docs/thesis_report/Chapter_7_Appendices.md#L32-L40)
-[\[10\]](docs/thesis_report/Chapter_7_Appendices.md#L124-L132)
-[\[11\]](docs/thesis_report/Chapter_7_Appendices.md#L14-L22)
-[\[12\]](docs/thesis_report/Chapter_7_Appendices.md#L139-L147)
-[\[13\]](docs/thesis_report/Chapter_7_Appendices.md#L52-L59)
-[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818)
-[\[19\]](docs/thesis_report/Chapter_7_Appendices.md#L812-L818)
-[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866)
-[\[21\]](docs/thesis_report/Chapter_7_Appendices.md#L54-L62)
-[\[22\]](docs/thesis_report/Chapter_7_Appendices.md#L870-L879)
-[\[23\]](docs/thesis_report/Chapter_7_Appendices.md#L882-L890)
-[\[25\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L64)
-[\[29\]](docs/thesis_report/Chapter_7_Appendices.md#L74-L82)
-[\[30\]](docs/thesis_report/Chapter_7_Appendices.md#L92-L100)
-[\[31\]](docs/thesis_report/Chapter_7_Appendices.md#L96-L99)
-[\[34\]](docs/thesis_report/Chapter_7_Appendices.md#L113-L115)
-[\[39\]](docs/thesis_report/Chapter_7_Appendices.md#L156-L163)
-[\[42\]](docs/thesis_report/Chapter_7_Appendices.md#L8-L11)
-[\[43\]](docs/thesis_report/Chapter_7_Appendices.md#L126-L133)
-[\[47\]](docs/thesis_report/Chapter_7_Appendices.md#L110-L111)
-[\[49\]](docs/thesis_report/Chapter_7_Appendices.md#L38-L45)
-Chapter_7_Appendices.md
-
-<docs/thesis_report/Chapter_7_Appendices.md>
 
 [\[3\]](docs/QUICK_START.md#L5-L13)
 [\[4\]](docs/QUICK_START.md#L14-L17)
