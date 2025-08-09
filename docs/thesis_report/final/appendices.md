@@ -7,11 +7,11 @@ components and devices, each with dedicated technical documentation. The
 core system includes an **Android Mobile Application** and a **Python
 Desktop Controller**, along with subsystems for multi-device
 synchronisation, session management, camera integration, and sensor
-interfaces \citep{AndroidCameraX}.
+interfaces [1].
 These components communicate over a local network using a custom
 protocol (WebSocket over TLS with JSON messages) to ensure real-time
 data exchange and time
-synchronisation \citep{Zeroconf}.
+synchronisation (Zeroconf).
 
 **System Setup:** To deploy the system, a compatible Android device
 (e.g. Samsung Galaxy S22) is connected to a **TopDon TC001 thermal
@@ -42,7 +42,7 @@ latency and jitter. A configuration interface allows adjusting session
 parameters, sensor sampling rates, and calibration settings. For
 example, the thermal camera can be set to auto-calibration mode, and the
 Shimmer GSR sensor sampling rate is configurable (default 128
-Hz) \citep{ShimmerGSRSpecs}.
+Hz) [Shimmer Research].
 The system's performance meets or exceeds all target specifications:
 e.g. **sync precision** better than ±20 ms (achieved \~±18.7 ms),
 **frame rate** \~30 FPS (exceeding 24 FPS minimum), data throughput \~47
@@ -549,7 +549,7 @@ This appendix provides detailed diagnostic figures and performance analysis supp
 
 ### Device Discovery and Connection Reliability
 
-![Figure A.1: Device discovery pattern and success analysis](../diagrams/fig_a_01_discovery_pattern.png)
+![Figure A.1: Device discovery pattern and success analysis](../../diagrams/fig_a_01_discovery_pattern.png)
 
 *Figure A.1: Device discovery pattern and success analysis. Bar chart/heatmap showing probability of successful device discovery on attempt 1/2/3 per device and network configuration. Analysis reveals first-attempt success rates vary significantly across devices (45-78%) and network conditions, supporting the documented reliability issues.*
 
@@ -569,11 +569,11 @@ Stacked bar chart showing storage breakdown: RGB MP4 (68% average), Thermal data
 
 ### System Reliability and Error Analysis
 
-![Figure A.6: System reliability analysis and error breakdown](../diagrams/fig_a_06_reliability_flowchart.png)
+![Figure A.6: System reliability analysis and error breakdown](../../diagrams/fig_a_06_reliability_flowchart.png)
 
 *Figure A.6: System reliability analysis and error breakdown. Pareto chart showing top error classes and occurrence counts. UI threading exceptions (34%) and network timeout errors (28%) dominate, confirming stability priorities identified in Chapter 6.*
 
-![Figure A.7: System reliability summary with categorized issue types](../diagrams/fig_a_07_reliability_pie_chart.png)
+![Figure A.7: System reliability summary with categorized issue types](../../diagrams/fig_a_07_reliability_pie_chart.png)
 
 *Figure A.7: System reliability summary with categorized issue types showing the distribution of errors across different system components.*
 
@@ -615,35 +615,35 @@ This appendix consolidates all figures and code snippets referenced throughout t
 
 ### H.1 Chapter 2 Figures: Background and Literature Review
 
-![Figure 2.1: Emotion/Stress Sensing Modality Landscape](../diagrams/fig_2_1_modalities.png)
+![Figure 2.1: Emotion/Stress Sensing Modality Landscape](../../diagrams/fig_2_1_modalities.png)
 
 *Figure 2.1: Emotion/Stress Sensing Modality Landscape showing both behavioural modalities (RGB facial expression, body pose, speech) and physiological modalities (GSR/EDA, PPG/HRV, thermal imaging).*
 
-![Figure 2.2: Contact vs Contactless Measurement Pipelines](../diagrams/fig_2_2_contact_vs_contactless.png)
+![Figure 2.2: Contact vs Contactless Measurement Pipelines](../../diagrams/fig_2_2_contact_vs_contactless.png)
 
 *Figure 2.2: Contact vs Contactless Measurement Pipelines illustrating the key differences between contact and contactless measurement approaches, including trade-offs in accuracy, intrusiveness, and deployment complexity.*
 
-![Figure 2.3: Stress Response Pathways](../diagrams/fig_2_3_stress_pathways.png)
+![Figure 2.3: Stress Response Pathways](../../diagrams/fig_2_3_stress_pathways.png)
 
 *Figure 2.3: Stress Response Pathways showing the two primary physiological pathways: the SAM (Sympathetic-Adreno-Medullary) axis for immediate responses (seconds) and the HPA (Hypothalamic-Pituitary-Adrenal) axis for sustained responses (tens of minutes).*
 
-![Figure 2.4: GSR vs Cortisol Timeline Response to Acute Stressors](../diagrams/fig_2_4_gsr_cortisol_timeline.png)
+![Figure 2.4: GSR vs Cortisol Timeline Response to Acute Stressors](../../diagrams/fig_2_4_gsr_cortisol_timeline.png)
 
 *Figure 2.4: GSR vs Cortisol Timeline Response to Acute Stressors demonstrating the temporal dynamics of these two stress indicators, with GSR showing immediate stimulus-locked responses while cortisol exhibits a characteristic delayed peak pattern.*
 
-![Figure 2.5: Example GSR Trace with Event Markers](../diagrams/fig_2_5_gsr_trace.png)
+![Figure 2.5: Example GSR Trace with Event Markers](../../diagrams/fig_2_5_gsr_trace.png)
 
 *Figure 2.5: Example GSR Trace with Event Markers showing both tonic levels (SCL) and phasic responses (SCR) that can be linked to specific stressor events, demonstrating the temporal coupling between stimulus and physiological response.*
 
-![Figure 2.6: Thermal Facial Cues for Stress Detection](../diagrams/fig_2_6_thermal_facial_cues.png)
+![Figure 2.6: Thermal Facial Cues for Stress Detection](../../diagrams/fig_2_6_thermal_facial_cues.png)
 
 *Figure 2.6: Thermal Facial Cues for Stress Detection showing facial thermal patterns indicative of stress responses.*
 
-![Figure 2.7: Machine Learning Pipeline for Contactless GSR Prediction](../diagrams/fig_2_7_ml_pipeline.png)
+![Figure 2.7: Machine Learning Pipeline for Contactless GSR Prediction](../../diagrams/fig_2_7_ml_pipeline.png)
 
 *Figure 2.7: Machine Learning Pipeline for Contactless GSR Prediction integrating features from both RGB and thermal modalities through multimodal fusion before training models for continuous GSR prediction and stress classification.*
 
-![Figure 2.8: System Architecture and Synchronization](../diagrams/fig_2_8_system_architecture.png)
+![Figure 2.8: System Architecture and Synchronization](../../diagrams/fig_2_8_system_architecture.png)
 
 *Figure 2.8: System Architecture and Synchronization employing a PC coordinator with master clock synchronization to manage multiple data streams from the Shimmer sensor and Android devices, ensuring temporal alignment across all modalities.*
 
@@ -661,67 +661,67 @@ This appendix consolidates all figures and code snippets referenced throughout t
 
 *Figure 3.6 – Data-Flow Pipeline: Per-modality data paths from capture → timestamping → buffering → storage/transfer → aggregation. Shows GSR CSV pipeline to PC and video MP4 pipeline to device storage with TLS encryption and integrity checkpoints.*
 
-![Figure 3.7: Clock Synchronization Performance](../diagrams/fig_3_07_clock_sync_performance.png)
+![Figure 3.7: Clock Synchronization Performance](../../diagrams/fig_3_07_clock_sync_performance.png)
 
 *Figure 3.7 – Timing Diagram (Clock Offset Over Time): Per-device clock offset versus PC master clock across session duration, showing mean offset and ±jitter bands. Horizontal threshold line at target |offset| ≤ 5 ms demonstrates synchronisation accuracy compliance.*
 
-![Figure 3.8: Synchronization Accuracy Distribution](../diagrams/fig_3_08_sync_accuracy_distribution.png)
+![Figure 3.8: Synchronization Accuracy Distribution](../../diagrams/fig_3_08_sync_accuracy_distribution.png)
 
 *Figure 3.8 – Synchronisation Accuracy (Histogram/CDF): Distribution of absolute time offset across all devices and sessions, reporting median and 95th percentile values. Vertical threshold at 5 ms target validates temporal precision requirements.*
 
-![Figure 3.9: GSR Sampling Health](../diagrams/fig_3_09_gsr_sampling_health.png)
+![Figure 3.9: GSR Sampling Health](../../diagrams/fig_3_09_gsr_sampling_health.png)
 
 *Figure 3.9 – GSR Sampling Health: (a) Time-series of effective sampling rate versus session time; (b) Count of missing/duplicate samples per minute. Target 128 Hz ± tolerance with near-zero missing sample rate demonstrates signal integrity.*
 
-![Figure 3.10: Video Frame Timing Stability](../diagrams/fig_3_10_video_frame_timing.png)
+![Figure 3.10: Video Frame Timing Stability](../../diagrams/fig_3_10_video_frame_timing.png)
 
 *Figure 3.10 – Video Frame Timing Stability: Distribution of inter-frame intervals (ms) for RGB/thermal streams with violin plots and instantaneous FPS timeline. Target 33.3 ms (30 FPS) with outlier detection for frame drops.*
 
-![Figure 3.11: Reliability Timeline](../diagrams/fig_3_11_reliability_timeline.png)
+![Figure 3.11: Reliability Timeline](../../diagrams/fig_3_11_reliability_timeline.png)
 
 *Figure 3.11 – Reliability Timeline (Session Gantt): Device states versus time showing Connected, Recording, Offline, Reconnected, and Transfer phases. Sync signal markers and outage recovery durations validate fault tolerance requirements.*
 
-![Figure 3.12: Throughput & Storage](../diagrams/fig_3_12_throughput_storage.png)
+![Figure 3.12: Throughput & Storage](../../diagrams/fig_3_12_throughput_storage.png)
 
 *Figure 3.12 – Throughput & Storage: Performance metrics for data throughput and storage management.*
 
-![Figure 3.13: Security Posture Checks](../diagrams/fig_3_13_security_posture.png)
+![Figure 3.13: Security Posture Checks](../../diagrams/fig_3_13_security_posture.png)
 
 *Figure 3.13 – Security Posture Checks: Validation of security measures and encryption protocols.*
 
 ### H.3 Chapter 6 Figures: Evaluation and Results
 
-![Figure F.3: Device discovery and handshake sequence diagram](../diagrams/fig_f_03_device_discovery.png)
+![Figure F.3: Device discovery and handshake sequence diagram](../../diagrams/fig_f_03_device_discovery.png)
 
 *Figure F.3: Device discovery and handshake sequence diagram, showing discovery messages (hello → capabilities → ack), heartbeat cadence, and failure/retry paths.*
 
-![Figure F.4: Synchronized start trigger alignment](../diagrams/fig_f_04_sync_timeline.png)
+![Figure F.4: Synchronized start trigger alignment](../../diagrams/fig_f_04_sync_timeline.png)
 
 *Figure F.4: Synchronized start trigger alignment with horizontal timeline showing PC master timestamp vs device local timestamps after offset correction.*
 
-![Figure F.14: Known issues timeline](../diagrams/fig_f_14_issues_timeline.png)
+![Figure F.14: Known issues timeline](../../diagrams/fig_f_14_issues_timeline.png)
 
 *Figure F.14: Known issues timeline showing device discovery failures, reconnections, and UI freeze events during representative sessions.*
 
 ### H.3 Chapter 6 Figures: Evaluation and Results
 
-![Figure F.1: Complete system architecture overview](../diagrams/fig_f_01_system_architecture.png)
+![Figure F.1: Complete system architecture overview](../../diagrams/fig_f_01_system_architecture.png)
 
 *Figure F.1: Complete system architecture overview showing PC controller, Android nodes, connected sensors (RGB, thermal, GSR), and data paths for control, preview, and file transfer.*
 
-![Figure F.2: Recording pipeline and session flow](../diagrams/fig_f_02_recording_pipeline.png)
+![Figure F.2: Recording pipeline and session flow](../../diagrams/fig_f_02_recording_pipeline.png)
 
 *Figure F.2: Recording pipeline and session flow from session start through coordinated capture to file transfer.*
 
-![Figure F.3: Device discovery and handshake sequence diagram](../diagrams/fig_f_03_device_discovery.png)
+![Figure F.3: Device discovery and handshake sequence diagram](../../diagrams/fig_f_03_device_discovery.png)
 
 *Figure F.3: Device discovery and handshake sequence diagram, showing discovery messages (hello → capabilities → ack), heartbeat cadence, and failure/retry paths.*
 
-![Figure F.4: Synchronized start trigger alignment](../diagrams/fig_f_04_sync_timeline.png)
+![Figure F.4: Synchronized start trigger alignment](../../diagrams/fig_f_04_sync_timeline.png)
 
 *Figure F.4: Synchronized start trigger alignment with horizontal timeline showing PC master timestamp vs device local timestamps after offset correction.*
 
-![Figure F.14: Known issues timeline](../diagrams/fig_f_14_issues_timeline.png)
+![Figure F.14: Known issues timeline](../../diagrams/fig_f_14_issues_timeline.png)
 
 *Figure F.14: Known issues timeline showing device discovery failures, reconnections, and UI freeze events during representative sessions.*
 

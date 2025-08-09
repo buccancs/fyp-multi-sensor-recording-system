@@ -1172,8 +1172,8 @@ python sync_network_test.py \
 
 **Technical Documentation**:
 
-- [Network Protocol Specification](../networking-protocol/README.md)
-- [Android Integration Guide](../android-mobile-application/README.md)
+- [Network Protocol Specification](./networking_protocol_readme.md)
+- [Android Integration Guide](./android_mobile_application_readme.md)
 - [System Architecture Overview](../../README.md)
 
 **Diagnostic Tools**:

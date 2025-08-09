@@ -1191,9 +1191,9 @@ python sync_validation_test.py --shimmer-devices 2 --reference-clock pc_master
 
 **Technical Documentation**:
 
-- [Multi-Device Synchronisation](../multi-device-synchronisation/README.md)
-- [Android Integration](../android-mobile-application/README.md)
-- [Signal Processing Fundamentals](../session-management/README.md)
+- [Multi-Device Synchronisation](./multi_device_synchronization_readme.md)
+- [Android Integration](./android_mobile_application_readme.md)
+- [Signal Processing Fundamentals](./session_management_readme.md)
 
 **Diagnostic Tools**:
 
