@@ -31,6 +31,10 @@ def clean_markdown_content(content, chapter_num=None):
     # Fix other relative paths
     content = re.sub(r'\]\(\.\./\.\./diagrams/', '](docs/diagrams/', content)
     
+    # Fix broken references to draft directory
+    content = re.sub(r'\[(\d+)\]\(docs/thesis_report/draft/bibliography\.md#[^)]*\)', r'[Need Citation \1]', content)
+    content = re.sub(r'\[(\d+)\]\(docs/thesis_report/draft/Chapter[^)]*\)', r'[Need Citation \1]', content)
+    
     return content
 
 
@@ -78,6 +82,8 @@ def create_latex_document(markdown_content):
                 '--wrap=none',
                 '--listings',  # Use listings package for code
                 '--number-sections',  # Number sections automatically
+                '--natbib',  # Use natbib for citations
+                '--bibliography=references.bib',  # Use our bibliography file
             ]
         )
     except Exception as e:
@@ -113,6 +119,7 @@ def create_latex_document(markdown_content):
 \\usepackage{{threeparttablex}}
 \\usepackage{{ulem}}
 \\usepackage{{makecell}}
+\\usepackage{{natbib}}
 
 % Page geometry
 \\geometry{{
@@ -148,6 +155,9 @@ def create_latex_document(markdown_content):
     showstringspaces=false,
 }}
 
+% Bibliography style
+\\bibliographystyle{{unsrt}}
+
 \\title{{Multi-Sensor Recording System for Contactless GSR Prediction Research}}
 \\author{{Master's Thesis}}
 \\date{{\\today}}
@@ -161,6 +171,9 @@ def create_latex_document(markdown_content):
 \\newpage
 
 {latex_body}
+
+% Bibliography
+\\bibliography{{references}}
 
 \\end{{document}}
 """
@@ -198,8 +211,27 @@ python3 generate_thesis_tex.py
 
 # Compile with pdflatex (if available)
 if command -v pdflatex &> /dev/null; then
-    echo "Compiling LaTeX to PDF..."
+    echo "Compiling LaTeX to PDF with bibliography..."
+    
+    # First pass
     pdflatex thesis.tex
+    
+    # Process bibliography if bibtex is available
+    if command -v bibtex &> /dev/null; then
+        echo "Processing bibliography..."
+        bibtex thesis
+        
+        # Second pass (resolve citations)
+        pdflatex thesis.tex
+        
+        # Third pass (resolve references)
+        pdflatex thesis.tex
+    else
+        echo "bibtex not available. Bibliography may not be processed correctly."
+        # Just do a second pass for cross-references
+        pdflatex thesis.tex
+    fi
+    
     echo "✓ PDF generated: thesis.pdf"
 else
     echo "pdflatex not available. LaTeX file ready for compilation."
