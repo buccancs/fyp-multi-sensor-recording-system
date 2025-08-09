@@ -582,16 +582,16 @@ Stacked bar chart showing storage breakdown: RGB MP4 (68% average), Thermal data
 **Figure A8: Hand Segmentation Diagnostic Panel** *(Experimental feature - requires implementation)*  
 Multi-panel display showing landmark/mask overlays, frame-level detection rates, and fps impact analysis. Detection accuracy varies (72-94%) with hand positioning, validating experimental feature classification.
 
-**Figure A9: Thermal Sensor Noise Characterization** *(Requires implementation with sensor data)*  
+**Figure A9: Thermal Sensor Noise characterisation** *(Requires implementation with sensor data)*  
 Histogram of pixel noise distribution plus Allan deviation plot showing stability vs averaging time. Noise floor ~0.08°C with drift characteristics suitable for physiological measurements.
 
 **Figure A10: Sync Quality vs Network RTT** *(Requires implementation with session data)*  
-Scatter plot showing relationship between network round-trip time and synchronization quality score. Quality degrades linearly above 50ms RTT, supporting network requirement specifications.
+Scatter plot showing relationship between network round-trip time and synchronisation quality score. Quality degrades linearly above 50ms RTT, supporting network requirement specifications.
 
 ### Operational and Usability Metrics
 
 **Figure A11: Time-on-Task Analysis** *(Requires implementation with usage data)*  
-Bar chart showing operator time breakdown: setup (8.2 min), calibration (12.4 min), recording (variable), export (3.1 min). Results support workflow optimization priorities.
+Bar chart showing operator time breakdown: setup (8.2 min), calibration (12.4 min), recording (variable), export (3.1 min). Results support workflow optimisation priorities.
 
 **Figure A12: Future Pilot Study Placeholders** *(Reserved for pilot study data)*  
 Reserved figures for post-pilot analysis: cross-correlation between thermal features and GSR, Bland-Altman plots for prediction accuracy, and ROC/PR curves for SCR event detection. Placeholders acknowledge missing empirical validation.
@@ -600,7 +600,7 @@ Reserved figures for post-pilot analysis: cross-correlation between thermal feat
 
 These diagnostic figures directly support the success criteria documented in Chapter 6:
 
-- **Temporal synchronization**: Figures A3, A10 quantify offset stability and jitter within target specifications *(require session data implementation)*
+- **Temporal synchronisation**: Figures A3, A10 quantify offset stability and jitter within target specifications *(require session data implementation)*
 - **Throughput/stability**: Figures A4, A5 demonstrate sustained performance within acceptable bands *(require session data implementation)*  
 - **Data integrity**: Figure A4 shows >99% completeness validating reliability claims *(requires session data implementation)*
 - **System reliability**: Figures A2, A6-A7 quantify recovery patterns and error hotspots
@@ -643,9 +643,9 @@ This appendix consolidates all figures and code snippets referenced throughout t
 
 *Figure 2.7: Machine Learning Pipeline for Contactless GSR Prediction integrating features from both RGB and thermal modalities through multimodal fusion before training models for continuous GSR prediction and stress classification.*
 
-![Figure 2.8: System Architecture and Synchronization](../../diagrams/fig_2_8_system_architecture.png)
+![Figure 2.8: System Architecture and synchronisation](../../diagrams/fig_2_8_system_architecture.png)
 
-*Figure 2.8: System Architecture and Synchronization employing a PC coordinator with master clock synchronization to manage multiple data streams from the Shimmer sensor and Android devices, ensuring temporal alignment across all modalities.*
+*Figure 2.8: System Architecture and synchronisation employing a PC coordinator with master clock synchronisation to manage multiple data streams from the Shimmer sensor and Android devices, ensuring temporal alignment across all modalities.*
 
 ### H.2 Chapter 3 Figures: Requirements and Architecture
 
@@ -661,11 +661,11 @@ This appendix consolidates all figures and code snippets referenced throughout t
 
 *Figure 3.6 – Data-Flow Pipeline: Per-modality data paths from capture → timestamping → buffering → storage/transfer → aggregation. Shows GSR CSV pipeline to PC and video MP4 pipeline to device storage with TLS encryption and integrity checkpoints.*
 
-![Figure 3.7: Clock Synchronization Performance](../../diagrams/fig_3_07_clock_sync_performance.png)
+![Figure 3.7: Clock synchronisation Performance](../../diagrams/fig_3_07_clock_sync_performance.png)
 
 *Figure 3.7 – Timing Diagram (Clock Offset Over Time): Per-device clock offset versus PC master clock across session duration, showing mean offset and ±jitter bands. Horizontal threshold line at target |offset| ≤ 5 ms demonstrates synchronisation accuracy compliance.*
 
-![Figure 3.8: Synchronization Accuracy Distribution](../../diagrams/fig_3_08_sync_accuracy_distribution.png)
+![Figure 3.8: synchronisation Accuracy Distribution](../../diagrams/fig_3_08_sync_accuracy_distribution.png)
 
 *Figure 3.8 – Synchronisation Accuracy (Histogram/CDF): Distribution of absolute time offset across all devices and sessions, reporting median and 95th percentile values. Vertical threshold at 5 ms target validates temporal precision requirements.*
 
@@ -695,9 +695,9 @@ This appendix consolidates all figures and code snippets referenced throughout t
 
 *Figure F.3: Device discovery and handshake sequence diagram, showing discovery messages (hello → capabilities → ack), heartbeat cadence, and failure/retry paths.*
 
-![Figure F.4: Synchronized start trigger alignment](../../diagrams/fig_f_04_sync_timeline.png)
+![Figure F.4: synchronised start trigger alignment](../../diagrams/fig_f_04_sync_timeline.png)
 
-*Figure F.4: Synchronized start trigger alignment with horizontal timeline showing PC master timestamp vs device local timestamps after offset correction.*
+*Figure F.4: synchronised start trigger alignment with horizontal timeline showing PC master timestamp vs device local timestamps after offset correction.*
 
 ![Figure F.14: Known issues timeline](../../diagrams/fig_f_14_issues_timeline.png)
 
@@ -717,9 +717,9 @@ This appendix consolidates all figures and code snippets referenced throughout t
 
 *Figure F.3: Device discovery and handshake sequence diagram, showing discovery messages (hello → capabilities → ack), heartbeat cadence, and failure/retry paths.*
 
-![Figure F.4: Synchronized start trigger alignment](../../diagrams/fig_f_04_sync_timeline.png)
+![Figure F.4: synchronised start trigger alignment](../../diagrams/fig_f_04_sync_timeline.png)
 
-*Figure F.4: Synchronized start trigger alignment with horizontal timeline showing PC master timestamp vs device local timestamps after offset correction.*
+*Figure F.4: synchronised start trigger alignment with horizontal timeline showing PC master timestamp vs device local timestamps after offset correction.*
 
 ![Figure F.14: Known issues timeline](../../diagrams/fig_f_14_issues_timeline.png)
 
@@ -751,11 +751,11 @@ try:
     self.sync_thread.start()
     logger.info("Master clock synchronisation system started successfully")
 except Exception as e:
-    logger.error(f"Failed to start synchronization system: {e}")
+    logger.error(f"Failed to start synchronisation system: {e}")
     return False
 ```
 
-*Code Listing H.1: Master clock synchronization startup sequence showing NTP and PC server initialization with error handling and thread management.*
+*Code Listing H.1: Master clock synchronisation startup sequence showing NTP and PC server initialisation with error handling and thread management.*
 
 #### H.4.2 Data Pipeline Code (Physiological Signal Processing)
 
@@ -782,7 +782,7 @@ if len(hr_psd) > 0:
 
 #### H.4.3 Integration Code (Sensor and Device Integration Logic)
 
-From the `ShimmerManager` class showing Android-integrated Shimmer sensor initialization:
+From the `ShimmerManager` class showing Android-integrated Shimmer sensor initialisation:
 
 ```python
 if self.enable_android_integration:

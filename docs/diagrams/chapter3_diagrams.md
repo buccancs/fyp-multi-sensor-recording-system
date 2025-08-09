@@ -154,14 +154,14 @@ sequenceDiagram
     participant SM as Shimmer Manager
     participant TS as Time Sync Service
 
-    Note over PC,TS: Initial Time Synchronization (±5ms target)
+    Note over PC,TS: Initial Time synchronisation (±5ms target)
     PC->>TS: Initialize Master Clock
     TS->>A1: Time Sync Request
     A1->>TS: Clock Offset Response (~2ms)
     TS->>A2: Time Sync Request  
     A2->>TS: Clock Offset Response (~3ms)
     
-    Note over PC,TS: Synchronized Recording Start
+    Note over PC,TS: synchronised Recording Start
     PC->>PC: Create Session ID
     PC->>A1: start_recording(session_id, timestamp)
     PC->>A2: start_recording(session_id, timestamp)
@@ -183,7 +183,7 @@ sequenceDiagram
         SM->>PC: Heartbeat + GSR Status
     end
     
-    Note over PC,TS: Synchronization Signal Broadcasting
+    Note over PC,TS: synchronisation Signal Broadcasting
     PC->>A1: send_sync_signal(timestamp, flash)
     PC->>A2: send_sync_signal(timestamp, buzzer)
     PC->>SM: mark_sync_event(timestamp)
@@ -194,7 +194,7 @@ sequenceDiagram
         SM->>SM: Mark Event in GSR Stream
     end
     
-    Note over PC,TS: Synchronized Recording Stop
+    Note over PC,TS: synchronised Recording Stop
     PC->>A1: stop_recording(timestamp)
     PC->>A2: stop_recording(timestamp)
     PC->>SM: stop_shimmer_recording()
@@ -255,7 +255,7 @@ sequenceDiagram
         SS->>A1: Recording Status Query
     end
     
-    A1->>SS: State Synchronized + Recording Status
+    A1->>SS: State synchronised + Recording Status
     SS->>PC: Device A1 Back Online
     PC->>PC: Log: "Device A1 recovered in 25s"
     
@@ -362,7 +362,7 @@ graph TD
 
 ```mermaid
 xychart-beta
-    title "Clock Synchronization Performance Over Session Duration"
+    title "Clock synchronisation Performance Over Session Duration"
     x-axis ["0min", "5min", "10min", "15min", "20min", "25min", "30min", "35min", "40min", "45min", "50min", "55min", "60min"]
     y-axis "Clock Offset (milliseconds)" -10 10
     line "Device 1 Offset" [2.1, 1.8, 2.3, 1.9, 2.5, 2.1, 1.7, 2.2, 1.9, 2.4, 2.0, 1.8, 2.1]
@@ -371,7 +371,7 @@ xychart-beta
     line "Target -5ms Bound" [-5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5]
 ```
 
-## Figure 3.8 – Synchronization Accuracy (Histogram/CDF)
+## Figure 3.8 – synchronisation Accuracy (Histogram/CDF)
 
 ```mermaid
 xychart-beta
@@ -523,7 +523,7 @@ gitgraph
     checkout main
     merge android-device-manager
     
-    commit id: "FR2: Synchronized Recording"
+    commit id: "FR2: synchronised Recording"
     branch session-sync
     checkout session-sync
     commit id: "SessionManager.py"
@@ -531,7 +531,7 @@ gitgraph
     checkout main
     merge session-sync
     
-    commit id: "FR3: Time Synchronization"
+    commit id: "FR3: Time synchronisation"
     branch time-sync
     checkout time-sync
     commit id: "NTPTimeServer.py"
@@ -626,7 +626,7 @@ graph TB
 
 ```mermaid
 xychart-beta
-    title "Android Device Resource Utilization During Recording Session"
+    title "Android Device Resource utilisation During Recording Session"
     x-axis ["0min", "2min", "4min", "6min", "8min", "10min", "12min", "14min", "16min", "18min", "20min"]
     y-axis "Battery % / Load % / Temp °C" 0 100
     line "Device 1 Battery" [100, 97, 94, 91, 88, 85, 82, 79, 76, 73, 70]

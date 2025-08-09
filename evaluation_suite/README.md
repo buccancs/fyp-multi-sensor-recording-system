@@ -133,7 +133,7 @@ Options:
 
 ### Configuration
 
-Create a configuration file to customis\1 quality thresholds and test parameters:
+Create a configuration file to customise quality thresholds and test parameters:
 
 ```json
 {

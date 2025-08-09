@@ -2,7 +2,7 @@
 
 This file contains all mermaid diagrams used in Chapter 2 of the thesis.
 
-## Figure 2.1: Documentation Organization Structure
+## Figure 2.1: Documentation organisation Structure
 
 ```mermaid
 flowchart TD

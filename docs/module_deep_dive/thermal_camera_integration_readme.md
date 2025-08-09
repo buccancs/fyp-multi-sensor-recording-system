@@ -272,7 +272,7 @@ class ThermalManager {
     },
     "emissivity": 0.95,
     "measurement_mode": "spot",
-    "color_palette": "iron",
+    "colour_palette": "iron",
     "image_format": "radiometric"
   }
 }

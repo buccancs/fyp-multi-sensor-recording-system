@@ -300,7 +300,7 @@ gitgraph
     checkout main
     merge android-device-manager
     
-    commit id: "FR2: Synchronized Recording"
+    commit id: "FR2: synchronised Recording"
     branch session-sync
     checkout session-sync
     commit id: "SessionManager.py"
@@ -308,7 +308,7 @@ gitgraph
     checkout main
     merge session-sync
     
-    commit id: "FR3: Time Synchronization"
+    commit id: "FR3: Time synchronisation"
     branch time-sync
     checkout time-sync
     commit id: "NTPTimeServer.py"
