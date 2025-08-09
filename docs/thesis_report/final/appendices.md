@@ -545,7 +545,7 @@ more in-depth understanding of the codebase.
 
 ## Appendix G: Diagnostic Figures and Performance Analysis
 
-This appendix provides detailed diagnostic figures and performance analysis supporting the system evaluation presented in Chapter 6. These figures offer granular insights into system behavior, reliability patterns, and operational characteristics observed during laboratory testing.
+This appendix provides detailed diagnostic figures and performance analysis supporting the system evaluation presented in Chapter 6. These figures offer granular insights into system behaviour, reliability patterns, and operational characteristics observed during laboratory testing.
 
 ### Device Discovery and Connection Reliability
 
