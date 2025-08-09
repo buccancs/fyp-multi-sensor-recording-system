@@ -1221,6 +1221,7 @@ class NetworkController @Inject constructor() {
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         try {
+                            @Suppress("DEPRECATION")
                             val wifiInfo = wifiManager.connectionInfo
                             val rssi = wifiInfo.rssi
                             val signalLevel = wifiManager.calculateSignalLevel(rssi)

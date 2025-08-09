@@ -989,6 +989,7 @@ constructor(
                     val sensorBitmask = newConfig.getSensorBitmask()
                     logger.debug("Applying sensor bitmask 0x${sensorBitmask.toString(16)} to device ${device.getDisplayName()}")
 
+                    @Suppress("DEPRECATION")
                     shimmer.writeEnabledSensors(sensorBitmask.toLong())
 
                     try {
@@ -1173,10 +1174,12 @@ constructor(
 
                 while (streamingQueue.isNotEmpty()) {
                     val jsonData = streamingQueue.poll()
-                    streamingWriter?.let { writer ->
-                        writer.println(jsonData)
-                        writer.flush()
-                        logger.debug("ShimmerRecorder: Streamed data: ${jsonData.take(100)}...")
+                    if (jsonData != null) {
+                        streamingWriter?.let { writer ->
+                            writer.println(jsonData)
+                            writer.flush()
+                            logger.debug("ShimmerRecorder: Streamed data: ${jsonData.take(100)}...")
+                        }
                     }
                 }
 

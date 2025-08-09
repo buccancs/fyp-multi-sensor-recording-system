@@ -67,7 +67,7 @@ fun SettingsScreen(
                     )
                 }
                 
-                Divider()
+                HorizontalDivider()
                 
                 // Recording Settings
                 Row(

@@ -755,7 +755,7 @@ constructor(
                     continue
                 }
 
-                if (isSamsungS21S22 && rawSizes != null) {
+                if (isSamsungS21S22) {
                     val maxRawSize = rawSizes.maxByOrNull { it.width * it.height }
                     val megapixels = maxRawSize?.let { (it.width * it.height) / 1_000_000 } ?: 0
 
