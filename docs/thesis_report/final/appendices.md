@@ -7,11 +7,11 @@ components and devices, each with dedicated technical documentation. The
 core system includes an **Android Mobile Application** and a **Python
 Desktop Controller**, along with subsystems for multi-device
 synchronisation, session management, camera integration, and sensor
-interfaces \citep{AndroidCameraX}.
+interfaces [1].
 These components communicate over a local network using a custom
 protocol (WebSocket over TLS with JSON messages) to ensure real-time
 data exchange and time
-synchronisation \citep{Zeroconf}.
+synchronisation (Zeroconf).
 
 **System Setup:** To deploy the system, a compatible Android device
 (e.g. Samsung Galaxy S22) is connected to a **TopDon TC001 thermal
@@ -42,7 +42,7 @@ latency and jitter. A configuration interface allows adjusting session
 parameters, sensor sampling rates, and calibration settings. For
 example, the thermal camera can be set to auto-calibration mode, and the
 Shimmer GSR sensor sampling rate is configurable (default 128
-Hz) \citep{ShimmerGSRSpecs}.
+Hz) [Shimmer Research].
 The system's performance meets or exceeds all target specifications:
 e.g. **sync precision** better than ±20 ms (achieved \~±18.7 ms),
 **frame rate** \~30 FPS (exceeding 24 FPS minimum), data throughput \~47
