@@ -704,10 +704,10 @@ class AccessibilityHelper {
 
 ## References
 
-[Atomic2016] Frost, B. (2016). *Atomic Design*. Brad Frost Web. Retrieved from https://atomicdesign.bradfrost.com/
+[Atomic2016] Frost, B. (2016). *Atomic Design*. Brad Frost Web. Retrieved from <https://atomicdesign.bradfrost.com/>
 
 [Nielsen1994] Nielsen, J. (1994). *Usability Engineering*. Morgan Kaufmann Publishers.
 
 [Shneiderman2016] Shneiderman, B., Plaisant, C., Cohen, M., Jacobs, S., Elmqvist, N., & Diakopoulos, N. (2016). *Designing the User Interface: Strategies for Effective Human-Computer Interaction* (6th ed.). Pearson.
 
-[W3C2018] W3C Web Accessibility Initiative. (2018). *Web Content Accessibility Guidelines (WCAG) 2.1*. Retrieved from https://www.w3.org/WAI/WCAG21/quickref/
+[W3C2018] W3C Web Accessibility Initiative. (2018). *Web Content Accessibility Guidelines (WCAG) 2.1*. Retrieved from <https://www.w3.org/WAI/WCAG21/quickref/>

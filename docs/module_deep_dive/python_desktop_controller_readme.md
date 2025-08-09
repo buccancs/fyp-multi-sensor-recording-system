@@ -192,6 +192,7 @@ The primary communication method between the Python Desktop Controller and Andro
 sockets.
 
 **Connection Parameters:**
+
 | Parameter | Value | Description |
 |-----------|-------|-------------|
 | Protocol | TCP | Reliable connection-oriented protocol |
@@ -220,6 +221,7 @@ All communication messages follow a standardised JSON format:
 ```
 
 **Field Descriptions:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `type` | String | Yes | Message type classification |

@@ -214,6 +214,7 @@ All synchronisation messages follow a standardised JSON format:
 ```
 
 **Field Descriptions:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `type` | String | Yes | Message type for protocol routing |

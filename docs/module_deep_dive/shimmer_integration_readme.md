@@ -170,6 +170,7 @@ graph TB
 #### Bluetooth Serial Communication
 
 **Connection Parameters:**
+
 | Parameter | Value | Description |
 |-----------|-------|-------------|
 | Protocol | Bluetooth SPP | Serial Port Profile |
