@@ -36,7 +36,7 @@ high performance. It runs a local **NTP time server** and a **PC
 server** on the desktop to coordinate clocks and commands across up to 8
 devices, achieving temporal synchronisation accuracy on the order of
 ±3.2
-ms[\[7\]](docs/README.md#L2-L5).
+ms[[7]](../../README.md).
 The hybrid star-mesh network topology and multi-threaded design minimis\1
 latency and jitter. A configuration interface allows adjusting session
 parameters, sensor sampling rates, and calibration settings. For
@@ -323,11 +323,11 @@ requirement[\[42\]](docs/thesis_report/Chapter_7_Appendices.md#L8-L11).
 **Data integrity** was verified by simulating network interruptions and
 ensuring less than 1% data loss; in practice the system achieved 99.98%
 data integrity (virtually no loss) across all test
-scenarios[\[7\]](docs/README.md#L2-L5).
+scenarios[[7]](../../README.md).
 **System availability/reliability** was tested with extended continuous
 operation (running the system for days); it remained operational \>99.7%
 of the time without
-crashes[\[7\]](docs/README.md#L2-L5).
+crashes[[7]](../../README.md).
 Performance tests showed the system could handle **12 devices
 simultaneously** (exceeding the goal of 8) and maintain required
 throughput and frame
@@ -839,7 +839,7 @@ except ImportError:
 [[27]](../../test_execution_guide.md) - Data Streaming Setup
 [[28]](../../test_execution_guide.md) - Execution Steps
 
-[\[7\]](docs/README.md#L2-L5)
+[[7]](../../README.md) - Main System Documentation
 [\[35\]](docs/README.md#L83-L88)
 [\[48\]](docs/README.md#L152-L160)
 README.md
