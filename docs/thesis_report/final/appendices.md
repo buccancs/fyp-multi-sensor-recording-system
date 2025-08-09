@@ -608,6 +608,178 @@ These diagnostic figures directly support the success criteria documented in Cha
 - **Known limitations**: Figures A1, A6-A7 transparently document current constraints
 
 These comprehensive diagnostics provide the quantitative foundation supporting the qualitative assessments presented in the main conclusion chapter.
+
+## Appendix H: Consolidated Figures and Code Listings
+
+This appendix consolidates all figures and code snippets referenced throughout the thesis chapters, providing a centralized reference for visual and technical content.
+
+### H.1 Chapter 2 Figures: Background and Literature Review
+
+![Figure 2.1: Emotion/Stress Sensing Modality Landscape](../diagrams/fig_2_1_modalities.png)
+
+*Figure 2.1: Emotion/Stress Sensing Modality Landscape showing both behavioural modalities (RGB facial expression, body pose, speech) and physiological modalities (GSR/EDA, PPG/HRV, thermal imaging).*
+
+![Figure 2.2: Contact vs Contactless Measurement Pipelines](../diagrams/fig_2_2_contact_vs_contactless.png)
+
+*Figure 2.2: Contact vs Contactless Measurement Pipelines illustrating the key differences between contact and contactless measurement approaches, including trade-offs in accuracy, intrusiveness, and deployment complexity.*
+
+![Figure 2.3: Stress Response Pathways](../diagrams/fig_2_3_stress_pathways.png)
+
+*Figure 2.3: Stress Response Pathways showing the two primary physiological pathways: the SAM (Sympathetic-Adreno-Medullary) axis for immediate responses (seconds) and the HPA (Hypothalamic-Pituitary-Adrenal) axis for sustained responses (tens of minutes).*
+
+![Figure 2.4: GSR vs Cortisol Timeline Response to Acute Stressors](../diagrams/fig_2_4_gsr_cortisol_timeline.png)
+
+*Figure 2.4: GSR vs Cortisol Timeline Response to Acute Stressors demonstrating the temporal dynamics of these two stress indicators, with GSR showing immediate stimulus-locked responses while cortisol exhibits a characteristic delayed peak pattern.*
+
+![Figure 2.5: Example GSR Trace with Event Markers](../diagrams/fig_2_5_gsr_trace.png)
+
+*Figure 2.5: Example GSR Trace with Event Markers showing both tonic levels (SCL) and phasic responses (SCR) that can be linked to specific stressor events, demonstrating the temporal coupling between stimulus and physiological response.*
+
+![Figure 2.6: Thermal Facial Cues for Stress Detection](../diagrams/fig_2_6_thermal_facial_cues.png)
+
+*Figure 2.6: Thermal Facial Cues for Stress Detection showing facial thermal patterns indicative of stress responses.*
+
+![Figure 2.7: Machine Learning Pipeline for Contactless GSR Prediction](../diagrams/fig_2_7_ml_pipeline.png)
+
+*Figure 2.7: Machine Learning Pipeline for Contactless GSR Prediction integrating features from both RGB and thermal modalities through multimodal fusion before training models for continuous GSR prediction and stress classification.*
+
+![Figure 2.8: System Architecture and Synchronization](../diagrams/fig_2_8_system_architecture.png)
+
+*Figure 2.8: System Architecture and Synchronization employing a PC coordinator with master clock synchronization to manage multiple data streams from the Shimmer sensor and Android devices, ensuring temporal alignment across all modalities.*
+
+### H.2 Chapter 3 Figures: Requirements and Architecture
+
+*Figure 3.1 – System Architecture (Block Diagram): Star topology with PC as master controller; Android nodes record locally; NTP-based synchronisation shown with dashed arrows. Trust boundaries and data/control flow paths clearly delineated.*
+
+*Figure 3.2 – Deployment Topology (Network/Site Diagram): Physical placement showing PC/laptop, local Wi-Fi AP, Android devices, and Shimmer sensor locations. Offline capability explicitly marked with no upstream internet dependency.*
+
+*Figure 3.3 – Use-Case Diagram (UML): Primary actors (Researcher, Technician) with key use cases including session creation, device configuration, calibration, recording control, and data transfer workflows.*
+
+*Figure 3.4 – Sequence Diagram: Synchronous Start/Stop: Message flow showing initial time sync, start_recording broadcast, acknowledgments, heartbeats, stop_recording, and post-session file transfer with annotated latencies (tens of milliseconds).*
+
+*Figure 3.5 – Sequence Diagram: Device Drop-out and Recovery: Heartbeat loss detection, offline marking, local recording continuation, reconnection, state resynchronisation, and queued command processing with recovery time target under 30 seconds.*
+
+*Figure 3.6 – Data-Flow Pipeline: Per-modality data paths from capture → timestamping → buffering → storage/transfer → aggregation. Shows GSR CSV pipeline to PC and video MP4 pipeline to device storage with TLS encryption and integrity checkpoints.*
+
+![Figure 3.7: Clock Synchronization Performance](../diagrams/fig_3_07_clock_sync_performance.png)
+
+*Figure 3.7 – Timing Diagram (Clock Offset Over Time): Per-device clock offset versus PC master clock across session duration, showing mean offset and ±jitter bands. Horizontal threshold line at target |offset| ≤ 5 ms demonstrates synchronisation accuracy compliance.*
+
+![Figure 3.8: Synchronization Accuracy Distribution](../diagrams/fig_3_08_sync_accuracy_distribution.png)
+
+*Figure 3.8 – Synchronisation Accuracy (Histogram/CDF): Distribution of absolute time offset across all devices and sessions, reporting median and 95th percentile values. Vertical threshold at 5 ms target validates temporal precision requirements.*
+
+![Figure 3.9: GSR Sampling Health](../diagrams/fig_3_09_gsr_sampling_health.png)
+
+*Figure 3.9 – GSR Sampling Health: (a) Time-series of effective sampling rate versus session time; (b) Count of missing/duplicate samples per minute. Target 128 Hz ± tolerance with near-zero missing sample rate demonstrates signal integrity.*
+
+![Figure 3.10: Video Frame Timing Stability](../diagrams/fig_3_10_video_frame_timing.png)
+
+*Figure 3.10 – Video Frame Timing Stability: Distribution of inter-frame intervals (ms) for RGB/thermal streams with violin plots and instantaneous FPS timeline. Target 33.3 ms (30 FPS) with outlier detection for frame drops.*
+
+![Figure 3.12: Throughput & Storage](../diagrams/fig_3_12_throughput_storage.png)
+
+*Figure 3.12 – Throughput & Storage: Performance metrics for data throughput and storage management.*
+
+![Figure 3.13: Security Posture Checks](../diagrams/fig_3_13_security_posture.png)
+
+*Figure 3.13 – Security Posture Checks: Validation of security measures and encryption protocols.*
+
+### H.3 Chapter 6 Figures: Evaluation and Results
+
+![Figure F.3: Device discovery and handshake sequence diagram](../diagrams/fig_f_03_device_discovery.png)
+
+*Figure F.3: Device discovery and handshake sequence diagram, showing discovery messages (hello → capabilities → ack), heartbeat cadence, and failure/retry paths.*
+
+![Figure F.4: Synchronized start trigger alignment](../diagrams/fig_f_04_sync_timeline.png)
+
+*Figure F.4: Synchronized start trigger alignment with horizontal timeline showing PC master timestamp vs device local timestamps after offset correction.*
+
+![Figure F.14: Known issues timeline](../diagrams/fig_f_14_issues_timeline.png)
+
+*Figure F.14: Known issues timeline showing device discovery failures, reconnections, and UI freeze events during representative sessions.*
+
+### H.4 Code Listings
+
+#### H.4.1 Synchronisation Code (Master Clock Coordination)
+
+From the `MasterClockSynchronizer` class in the Python controller:
+
+```python
+try:
+    logger.info("Starting master clock synchronisation system...")
+    if not self.ntp_server.start():
+        logger.error("Failed to start NTP server")
+        return False
+    if not self.pc_server.start():
+        logger.error("Failed to start PC server")
+        self.ntp_server.stop()
+        return False
+    self.is_running = True
+    self.master_start_time = time.time()
+    self.sync_thread = threading.Thread(
+        target=self._sync_monitoring_loop,
+        name="SyncMonitor"
+    )
+    self.sync_thread.daemon = True
+    self.sync_thread.start()
+    logger.info("Master clock synchronisation system started successfully")
+except Exception as e:
+    logger.error(f"Failed to start synchronization system: {e}")
+    return False
+```
+
+*Code Listing H.1: Master clock synchronization startup sequence showing NTP and PC server initialization with error handling and thread management.*
+
+#### H.4.2 Data Pipeline Code (Physiological Signal Processing)
+
+From the data pipeline module (`cv_preprocessing_pipeline.py`) for heart rate computation:
+
+```python
+# Inside PhysiologicalSignal.get_heart_rate_estimate()
+
+freqs, psd = scipy.signal.welch(
+    self.signal_data,
+    fs=self.sampling_rate,
+    nperseg=min(512, len(self.signal_data) // 4),
+)
+hr_mask = (freqs >= freq_range[0]) & (freqs <= freq_range[1])
+hr_freqs = freqs[hr_mask]
+hr_psd = psd[hr_mask]
+if len(hr_psd) > 0:
+    peak_freq = hr_freqs[np.argmax(hr_psd)]
+    heart_rate_bpm = peak_freq * 60.0
+    return heart_rate_bpm
+```
+
+*Code Listing H.2: Heart rate estimation from optical blood volume pulse signal using Fourier transform (Welch's method) to find dominant frequency.*
+
+#### H.4.3 Integration Code (Sensor and Device Integration Logic)
+
+From the `ShimmerManager` class showing Android-integrated Shimmer sensor initialization:
+
+```python
+if self.enable_android_integration:
+    logger.info("Initialising Android device integration...")
+    self.android_device_manager = AndroidDeviceManager(
+        server_port=self.android_server_port,
+        logger=self.logger
+    )
+    self.android_device_manager.add_data_callback(self._on_android_shimmer_data)
+    self.android_device_manager.add_status_callback(self._on_android_device_status)
+    if not self.android_device_manager.initialise():
+        logger.error("Failed to initialise Android device manager")
+        if not PYSHIMMER_AVAILABLE:
+            return False
+        else:
+            logger.warning("Continuing with direct connections only")
+            self.enable_android_integration = False
+    else:
+        logger.info(f"Android device server listening on port {self.android_server_port}")
+```
+
+*Code Listing H.3: Sensor integration logic demonstrating flexible handling of Android-mediated connections with fallback to direct PC-to-sensor connectivity.*
+
 ---
 [\[1\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L68)
 [\[2\]](docs/thesis_report/Chapter_7_Appendices.md#L111-L119)
