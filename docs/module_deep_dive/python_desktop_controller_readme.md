@@ -1247,9 +1247,9 @@ def monitor_resources():
 
 **Technical Documentation**:
 
-- [System Architecture](../multi-device-synchronisation/README.md)
-- [Android Integration](../android-mobile-application/README.md)
-- [Network Protocol](../networking-protocol/README.md)
+- [System Architecture](./multi_device_synchronization_readme.md)
+- [Android Integration](./android_mobile_application_readme.md)
+- [Network Protocol](./networking_protocol_readme.md)
 
 **Community Support**:
 

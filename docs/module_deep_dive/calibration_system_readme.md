@@ -1210,8 +1210,8 @@ python calibration_benchmark.py --iterations 100 --cross-validation
 
 **Technical Documentation**:
 
-- [Computer Vision Fundamentals](../android_mobile_application_readme.md)
-- [Multi-Device Synchronisation](../multi_device_synchronization_readme.md)
+- [Computer Vision Fundamentals](./android_mobile_application_readme.md)
+- [Multi-Device Synchronisation](./multi_device_synchronization_readme.md)
 - [System Integration Guide](../../README.md)
 
 **Diagnostic Tools**:

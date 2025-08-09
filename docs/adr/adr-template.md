@@ -72,10 +72,10 @@ How we will measure if this decision was successful:
 
 ## References
 
-- [Research Paper](link) - Brief description
-- [Technical Standard](link) - Brief description
-- [Related ADR](link) - Brief description
-- [Implementation Guide](link) - Brief description
+- [Research Paper Title](URL) - Brief description
+- [Technical Standard Name](URL) - Brief description
+- [Related ADR Title](./adr-xxx-title.md) - Brief description
+- [Implementation Guide](URL) - Brief description
 
 ## Revision History
 

@@ -57,23 +57,18 @@ Specific implementation details or guidelines.
 
 ## References
 
-- [Research Paper](link)
-- [Technical Standard](link)
-- [Related ADR](link)
+- [Research Paper] - Brief description
+- [Technical Standard] - Brief description  
+- [Related ADR] - Brief description
 ```
 
 ## Existing ADRs
 
 | ADR | Title | Status | Date |
 |-----|-------|--------|------|
-| [001](./ADR-001-reactive-state-management.md) | Reactive State Management with StateFlow | Accepted | 2024-01-15 |
-| [002](./ADR-002-strict-type-safety.md) | Strict Type Safety with MyPy | Accepted | 2024-01-15 |
-| [003](./ADR-003-clean-mvvm-architecture.md) | Clean MVVM Architecture Pattern | Accepted | 2024-02-01 |
-| [004](./ADR-004-distributed-synchronisation.md) | Distributed Device Synchronisation | Accepted | 2024-02-15 |
-| [005](./ADR-005-offline-first-recording.md) | Offline-First Recording Strategy | Accepted | 2024-03-01 |
-| [006](./ADR-006-json-websocket-protocol.md) | JSON WebSocket Communication Protocol | Accepted | 2024-03-10 |
-| [007](./ADR-007-hardware-backed-encryption.md) | Hardware-Backed Encryption for Security | Accepted | 2024-04-01 |
-| [008](./ADR-008-zero-mocking-test-strategy.md) | Zero-Mocking Test Strategy | Accepted | 2024-04-15 |
+| [001](./adr-001-reactive-state-management.md) | Reactive State Management with StateFlow | Accepted | 2024-01-15 |
+| [002](./adr-002-strict-type-safety.md) | Strict Type Safety with MyPy | Accepted | 2024-01-15 |
+| [003](./adr-003-function-decomposition-strategy.md) | Function Decomposition Strategy | Accepted | 2024-02-01 |
 
 ## Creating New ADRs
 
