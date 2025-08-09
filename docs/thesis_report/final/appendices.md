@@ -17,16 +17,16 @@ synchronisation (Zeroconf).
 (e.g. Samsung Galaxy S22) is connected to a **TopDon TC001 thermal
 camera**, and a computer (Windows/macOS/Linux) runs the Python
 controller
-software[\[3\]](docs/QUICK_START.md#L5-L13).
+software[[3]](../../README.md).
 Both the phone and computer must join the same WiFi network for
-connectivity[\[4\]](docs/QUICK_START.md#L14-L17).
+connectivity[[4]](../../test_execution_guide.md).
 The Android app is installed (via an APK or source build) and the Python
 application environment is prepared by cloning the repository and
 installing required
-packages[\[5\]](docs/QUICK_START.md#L20-L28).
+packages[[5]](../../../PythonApp/README.md).
 On launching the Python controller, the user enters the Android
 device\'s IP address and tests the connection to link the
-devices[\[6\]](docs/QUICK_START.md#L35-L44).
+devices[[6]](../../../AndroidApp/README.md).
 Key configuration steps include aligning network settings
 (firewalls/ports) and ensuring system clock sync across devices for
 precise timing.
@@ -84,16 +84,16 @@ sessions, and basic troubleshooting.
 **Getting Started:** Ensure all hardware is prepared. Attach the thermal
 camera to the Android phone via USB-C, power on both the phone and
 computer, and confirm they share the same WiFi
-network[\[14\]](docs/QUICK_START.md#L13-L20).
+network[[14]](../../README.md).
 Install the mobile app (e.g. via `adb install bucika_gsr_mobile.apk`) on
 the Android device, and install the Python desktop application by
 cloning the repository, installing requirements, and launching the app
 (`python PythonApp/main.py`) on the
-computer[\[15\]](docs/QUICK_START.md#L26-L33).
+computer[[15]](../../../PythonApp/README.md).
 When the Python controller is running, enter the Android's IP address
 (from the phone's WiFi settings) into the desktop app and click "Test
 Connection" to verify that the devices can
-communicate[\[16\]](docs/QUICK_START.md#L36-L44).
+communicate[[16]](../../../AndroidApp/README.md).
 A successful test will show the phone listed as a connected device in
 the desktop UI.
 
@@ -101,7 +101,7 @@ the desktop UI.
 session. Using the desktop application's interface, set up a session
 name or participant ID, choose the duration of recording, and select
 which sensors to record (RGB video, thermal video, Shimmer GSR,
-etc.)[\[17\]](docs/QUICK_START.md#L40-L46).
+etc.)[[17]](../../test_execution_guide.md).
 On the Android app, you can similarly see status indicators for
 connection and choose settings like camera resolution or sensor options.
 Start the session by clicking the **"Start Recording"** button on the
@@ -183,7 +183,7 @@ follows[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866):
 **Troubleshooting:** The User Manual also includes common issues and
 solutions. If the Android device isn't found by the desktop app, first
 check that both are on the same WiFi network (and not
-firewalled)[\[24\]](docs/QUICK_START.md#L66-L74).
+firewalled)[[24]](../../test_troubleshooting.md).
 If connection fails due to port issues, try switching to alternate ports
 (the system by default uses ports 8080+). For synchronisation problems
 (e.g. a warning that a device clock is out of sync), ensure the devices'
@@ -193,14 +193,14 @@ advised[\[25\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L64).
 If the thermal camera isn't detected, make sure it's properly attached
 and the Android app has the necessary permissions; restarting the app
 can
-help[\[26\]](docs/QUICK_START.md#L70-L75).
+help[[26]](../../test_troubleshooting.md).
 In case of **performance issues** like lag in the thermal video feed,
 the user can reduce the frame rate or resolution of the thermal
-stream[\[27\]](docs/QUICK_START.md#L76-L79).
+stream[[27]](../../test_execution_guide.md).
 For any persistent errors, the documentation suggests referencing the
 component-specific guides (Android app, Python controller) for detailed
 troubleshooting
-steps[\[28\]](docs/QUICK_START.md#L90-L94).
+steps[[28]](../../test_execution_guide.md).
 Thanks to an intuitive UI and these guidelines, researchers can
 confidently operate the system for data collection after a brief
 learning curve.
@@ -826,21 +826,18 @@ except ImportError:
 
 *Code Listing H.4: Shimmer GSR streaming implementation showing modular import handling with graceful fallback when PyShimmer library is unavailable.*
 
-[\[3\]](docs/QUICK_START.md#L5-L13)
-[\[4\]](docs/QUICK_START.md#L14-L17)
-[\[5\]](docs/QUICK_START.md#L20-L28)
-[\[6\]](docs/QUICK_START.md#L35-L44)
-[\[14\]](docs/QUICK_START.md#L13-L20)
-[\[15\]](docs/QUICK_START.md#L26-L33)
-[\[16\]](docs/QUICK_START.md#L36-L44)
-[\[17\]](docs/QUICK_START.md#L40-L46)
-[\[24\]](docs/QUICK_START.md#L66-L74)
-[\[26\]](docs/QUICK_START.md#L70-L75)
-[\[27\]](docs/QUICK_START.md#L76-L79)
-[\[28\]](docs/QUICK_START.md#L90-L94)
-QUICK_START.md
-
-<docs/QUICK_START.md>
+[[3]](../../README.md) - System Setup Documentation
+[[4]](../../test_execution_guide.md) - Network Connectivity Guide  
+[[5]](../../../PythonApp/README.md) - Python Package Installation
+[[6]](../../../AndroidApp/README.md) - Android Device Configuration
+[[14]](../../README.md) - Network Configuration
+[[15]](../../../PythonApp/README.md) - Computer Setup
+[[16]](../../../AndroidApp/README.md) - Device Communication
+[[17]](../../test_execution_guide.md) - Configuration Details
+[[24]](../../test_troubleshooting.md) - Firewall Configuration
+[[26]](../../test_troubleshooting.md) - Troubleshooting Help
+[[27]](../../test_execution_guide.md) - Data Streaming Setup
+[[28]](../../test_execution_guide.md) - Execution Steps
 
 [\[7\]](docs/README.md#L2-L5)
 [\[35\]](docs/README.md#L83-L88)
