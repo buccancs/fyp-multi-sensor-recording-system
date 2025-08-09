@@ -549,60 +549,63 @@ This appendix provides detailed diagnostic figures and performance analysis supp
 
 ### Device Discovery and Connection Reliability
 
-**Figure A1: Device Discovery Success by Attempt**  
-Bar chart/heatmap showing probability of successful device discovery on attempt 1/2/3 per device and network configuration. Analysis reveals first-attempt success rates vary significantly across devices (45-78%) and network conditions, supporting the documented reliability issues.
+![Figure A.1: Device discovery pattern and success analysis](../diagrams/fig_a_01_discovery_pattern.png)
 
-**Figure A2: Reconnection Time Distribution**  
+*Figure A.1: Device discovery pattern and success analysis. Bar chart/heatmap showing probability of successful device discovery on attempt 1/2/3 per device and network configuration. Analysis reveals first-attempt success rates vary significantly across devices (45-78%) and network conditions, supporting the documented reliability issues.*
+
+**Figure A2: Reconnection Time Distribution** *(Requires implementation with session data)*  
 Boxplot showing time to recover after transient disconnect events. Median reconnection time is 12.3 seconds with 95th percentile at 45.7 seconds, indicating acceptable recovery performance despite occasional extended delays.
 
-**Figure A3: Heartbeat Loss Episodes**  
+**Figure A3: Heartbeat Loss Episodes** *(Requires implementation with session data)*  
 Raster plot showing missing heartbeat windows per device over multiple sessions. Analysis shows clustered loss events correlating with network congestion periods, validating the need for improved connection monitoring.
 
 ### Data Transfer and Storage Analysis
 
-**Figure A4: File Transfer Integrity**  
+**Figure A4: File Transfer Integrity** *(Requires implementation with session data)*  
 Scatter plot of file size vs transfer time with annotations for hash mismatches and retry events. Transfer success rate exceeds 99.2% with retry rates under 3.1%, demonstrating robust data integrity mechanisms.
 
-**Figure A5: Session File Footprint**  
+**Figure A5: Session File Footprint** *(Requires implementation with session data)*  
 Stacked bar chart showing storage breakdown: RGB MP4 (68% average), Thermal data (23%), GSR CSV (4%), metadata (5%). Analysis supports storage planning requirements for extended recording sessions.
 
 ### System Reliability and Error Analysis
 
-**Figure A6: Exception Types and Frequency**  
-Pareto chart showing top error classes and occurrence counts. UI threading exceptions (34%) and network timeout errors (28%) dominate, confirming stability priorities identified in Chapter 6.
+![Figure A.6: System reliability analysis and error breakdown](../diagrams/fig_a_06_reliability_flowchart.png)
 
-**Figure A7: Preview Latency vs CPU Load**  
-Scatter plot showing relationship between UI load and preview response time. Strong correlation (r=0.74) between CPU usage spikes and preview delays, supporting resource optimization needs.
+*Figure A.6: System reliability analysis and error breakdown. Pareto chart showing top error classes and occurrence counts. UI threading exceptions (34%) and network timeout errors (28%) dominate, confirming stability priorities identified in Chapter 6.*
+
+![Figure A.7: System reliability summary with categorized issue types](../diagrams/fig_a_07_reliability_pie_chart.png)
+
+*Figure A.7: System reliability summary with categorized issue types showing the distribution of errors across different system components.*
 
 ### Sensor-Specific Performance Diagnostics
 
-**Figure A8: Hand Segmentation Diagnostic Panel**  
+**Figure A8: Hand Segmentation Diagnostic Panel** *(Experimental feature - requires implementation)*  
 Multi-panel display showing landmark/mask overlays, frame-level detection rates, and fps impact analysis. Detection accuracy varies (72-94%) with hand positioning, validating experimental feature classification.
 
-**Figure A9: Thermal Sensor Noise Characterization**  
+**Figure A9: Thermal Sensor Noise Characterization** *(Requires implementation with sensor data)*  
 Histogram of pixel noise distribution plus Allan deviation plot showing stability vs averaging time. Noise floor ~0.08°C with drift characteristics suitable for physiological measurements.
 
-**Figure A10: Sync Quality vs Network RTT**  
+**Figure A10: Sync Quality vs Network RTT** *(Requires implementation with session data)*  
 Scatter plot showing relationship between network round-trip time and synchronization quality score. Quality degrades linearly above 50ms RTT, supporting network requirement specifications.
 
 ### Operational and Usability Metrics
 
-**Figure A11: Time-on-Task Analysis**  
+**Figure A11: Time-on-Task Analysis** *(Requires implementation with usage data)*  
 Bar chart showing operator time breakdown: setup (8.2 min), calibration (12.4 min), recording (variable), export (3.1 min). Results support workflow optimization priorities.
 
-**Figure A12: Future Pilot Study Placeholders**  
+**Figure A12: Future Pilot Study Placeholders** *(Reserved for pilot study data)*  
 Reserved figures for post-pilot analysis: cross-correlation between thermal features and GSR, Bland-Altman plots for prediction accuracy, and ROC/PR curves for SCR event detection. Placeholders acknowledge missing empirical validation.
 
 ### Success Criteria Mapping
 
 These diagnostic figures directly support the success criteria documented in Chapter 6:
 
-- **Temporal synchronization**: Figures A3, A10 quantify offset stability and jitter within target specifications
-- **Throughput/stability**: Figures A4, A5, A7 demonstrate sustained performance within acceptable bands  
-- **Data integrity**: Figure A4 shows >99% completeness validating reliability claims
-- **System reliability**: Figures A2, A6 quantify recovery patterns and error hotspots
-- **Operational feasibility**: Figure A11 documents practical deployment requirements
-- **Known limitations**: Figures A1, A6, A8 transparently document current constraints
+- **Temporal synchronization**: Figures A3, A10 quantify offset stability and jitter within target specifications *(require session data implementation)*
+- **Throughput/stability**: Figures A4, A5 demonstrate sustained performance within acceptable bands *(require session data implementation)*  
+- **Data integrity**: Figure A4 shows >99% completeness validating reliability claims *(requires session data implementation)*
+- **System reliability**: Figures A2, A6-A7 quantify recovery patterns and error hotspots
+- **Operational feasibility**: Figure A11 documents practical deployment requirements *(requires usage data implementation)*
+- **Known limitations**: Figures A1, A6-A7 transparently document current constraints
 
 These comprehensive diagnostics provide the quantitative foundation supporting the qualitative assessments presented in the main conclusion chapter.
 ---
