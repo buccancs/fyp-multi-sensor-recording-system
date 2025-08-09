@@ -167,7 +167,7 @@ configurations:
   -- this is optional, but can be useful if your app records data with
   the screen off.
 
-In summary, add the following to your AndroidManifest.xml under the
+Add the following to your AndroidManifest.xml under the
 `<manifest>` node:
 
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -485,7 +485,7 @@ on[\[29\]](https://github.com/buccancs/topdon-sdk/blob/83329a9fe4ebc275408c872b0
 For most physiological use-cases (human body temperatures \~30--40 °C),
 the camera will be in high-gain mode for better sensitivity.
 
-In summary, handling data from the SDK involves splitting the frame into
+Handling data from the SDK involves splitting the frame into
 image vs. temperature, converting the image for display (using provided
 conversion functions and applying pseudo-colours if desired), and
 converting temperature data to meaningful values (using the scale or the
@@ -600,7 +600,7 @@ thermal is contact-free -- combining them can validate findings and
 provide backup measurements if one signal is lost or
 noisy[\[38\]](https://www.mdpi.com/1424-8220/22/3/976#:~:text=Thermal%20imaging%20is%20currently%20taking,SNS%29%20branches%20of%20the)[\[36\]](https://www.mdpi.com/1424-8220/22/3/976#:~:text=Thermal%20imaging%20unobtrusively%20monitors%20skin,18).
 
-In summary, within the `bucika_gsr` app, the Topdon camera's role is to
+Within the `bucika_gsr` app, the Topdon camera's role is to
 provide a **thermal imaging stream** that complements the GSR data. The
 integration involves technical steps (initialising the camera via the
 SDK, managing data flow) and conceptual steps (deciding which thermal
