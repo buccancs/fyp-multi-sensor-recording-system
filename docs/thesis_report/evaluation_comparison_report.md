@@ -132,7 +132,7 @@ cd PythonApp && python -m production.endurance_testing --duration 480 --log-leve
 ## British English Standardisation
 
 **Corrections Required:**
-- Line 6: "synchronized" → "synchronised"
+- Line 6: "synchronised" → "synchronised"
 - Line 21: "behaviors" → "behaviours"  
 - Line 28: "behavior" → "behaviour"
 - Line 66: "behavior" → "behaviour"

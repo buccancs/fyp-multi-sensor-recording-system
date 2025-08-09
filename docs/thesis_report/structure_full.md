@@ -235,9 +235,9 @@ Version B: Full Structure
 
   - 5.2.3 Security and Architecture Enforcement Testing
 
-- 5.3 Integration Testing (Multi-Device Synchronization & Networking)
+- 5.3 Integration Testing (Multi-Device synchronisation & Networking)
 
-  - 5.3.1 Multi-Device Synchronization Testing with DeviceSimulator
+  - 5.3.1 Multi-Device synchronisation Testing with DeviceSimulator
 
   - 5.3.2 Networking and Data Exchange Protocol Validation
 
