@@ -1789,7 +1789,7 @@ class RobustErrorHandling:
 
 #### Pull Request Process
 
-1. **Create Feature Branch**: 
+1. **Create Feature Branch**:
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -1858,15 +1858,15 @@ class RobustErrorHandling:
 
 [NumPy2023] Harris, C. R., et al. (2020). Array programming with NumPy. Nature, 585(7825), 357-362.
 
-[OpenCV2023] OpenCV Team. (2023). OpenCV: Open Source Computer Vision Library. Retrieved from https://opencv.org/
+[OpenCV2023] OpenCV Team. (2023). OpenCV: Open Source Computer Vision Library. Retrieved from <https://opencv.org/>
 
 [Picard1997] Picard, R. W. (1997). Affective Computing. MIT Press.
 
-[PyQt2023] Riverbank Computing. (2023). PyQt5 Reference Guide. Retrieved from https://www.riverbankcomputing.com/software/pyqt/
+[PyQt2023] Riverbank Computing. (2023). PyQt5 Reference Guide. Retrieved from <https://www.riverbankcomputing.com/software/pyqt/>
 
-[Python2023] Python Software Foundation. (2023). Python Language Reference. Retrieved from https://docs.python.org/3/
+[Python2023] Python Software Foundation. (2023). Python Language Reference. Retrieved from <https://docs.python.org/3/>
 
-[Shimmer2023] Shimmer Research. (2023). Shimmer3 GSR+ Development Kit User Manual. Retrieved from https://shimmersensing.com/
+[Shimmer2023] Shimmer Research. (2023). Shimmer3 GSR+ Development Kit User Manual. Retrieved from <https://shimmersensing.com/>
 
 [Shneiderman2016] Shneiderman, B., Plaisant, C., Cohen, M., Jacobs, S., Elmqvist, N., & Diakopoulos, N. (2016). Designing the User Interface: Strategies for Effective Human-Computer Interaction. Pearson.
 

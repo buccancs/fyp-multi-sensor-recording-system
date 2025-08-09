@@ -6,7 +6,7 @@ The Thermal Camera Integration System provides complete thermal imaging capabili
 
 ### Research Context and Theoretical Foundation
 
-The Thermal Camera Integration System enables high-precision thermal imaging data collection through TopDon TC001 cameras connected via USB-C OTG to Android devices, providing synchronised thermal data streams essential for contactless physiological monitoring research [Perpetuini2021]. 
+The Thermal Camera Integration System enables high-precision thermal imaging data collection through TopDon TC001 cameras connected via USB-C OTG to Android devices, providing synchronised thermal data streams essential for contactless physiological monitoring research [Perpetuini2021].
 
 The system implementation addresses established principles in thermal physiology and computer vision:
 

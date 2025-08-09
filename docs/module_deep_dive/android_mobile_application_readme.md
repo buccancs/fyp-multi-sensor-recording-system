@@ -398,7 +398,7 @@ class SensorManager @Inject constructor(
    ./gradlew :AndroidApp:assembleDevDebug
    adb install AndroidApp/build/outputs/apk/dev/debug/AndroidApp-dev-debug.apk
    ```
-   
+
    > **Build Status**: All critical compilation errors have been resolved. The Android application now builds successfully without MainViewModel import errors, duplicate method conflicts, or NavController initialisation issues.
 
 3. **Initial Configuration**
@@ -421,9 +421,9 @@ class SensorManager @Inject constructor(
 - Ensure connection to desktop controller is established
 - Navigate to Recording screen
 - Configure recording parameters:
-    - Video resolution (720p, 1080p, 4K)
-    - Frame rate (30fps, 60fps)
-    - Sensor sampling rate
+  - Video resolution (720p, 1080p, 4K)
+  - Frame rate (30fps, 60fps)
+  - Sensor sampling rate
 - Tap "Start Recording" button
 - Monitor real-time sensor data display
 
@@ -940,7 +940,7 @@ implementation, and operational procedures within the Multi-Sensor Recording Sys
 
 [Gamma1994] Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley Professional.
 
-[Google2023] Google. (2023). *Android Developers Guide: Modern Android Development*. Retrieved from https://developer.android.com/modern-android-development
+[Google2023] Google. (2023). *Android Developers Guide: Modern Android Development*. Retrieved from <https://developer.android.com/modern-android-development>
 
 [Martin2008] Martin, R. C. (2008). *Clean Code: A Handbook of Agile Software Craftsmanship*. Prentice Hall.
 

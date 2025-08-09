@@ -1214,7 +1214,7 @@ abstract class RecordingModule {
 
 [Gamma1994] Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley Professional.
 
-[Google2023] Google Inc. (2023). Android Developer Guide. Retrieved from https://developer.android.com/
+[Google2023] Google Inc. (2023). Android Developer Guide. Retrieved from <https://developer.android.com/>
 
 [Gravina2017] Gravina, R., Alinia, P., Ghasemzadeh, H., & Fortino, G. (2017). Multi-sensor fusion in body sensor networks: State-of-the-art and research challenges. Information Fusion, 35, 68-80.
 
@@ -1222,7 +1222,7 @@ abstract class RecordingModule {
 
 [IEEE1588-2008] IEEE Standard for a Precision Clock Synchronisation Protocol for Networked Measurement and Control Systems. (2008). IEEE Std 1588-2008.
 
-[Kotlin2023] JetBrains. (2023). Kotlin Programming Language. Retrieved from https://kotlinlang.org/
+[Kotlin2023] JetBrains. (2023). Kotlin Programming Language. Retrieved from <https://kotlinlang.org/>
 
 [Lamport1978] Lamport, L. (1978). Time, clocks, and the ordering of events in a distributed system. Communications of the ACM, 21(7), 558-565.
 
@@ -1230,15 +1230,15 @@ abstract class RecordingModule {
 
 [McDuff2014] McDuff, D., Gontarek, S., & Picard, R. W. (2014). Remote detection of photoplethysmographic systolic and diastolic peaks using a digital camera. IEEE Transactions on Biomedical Engineering, 61(12), 2948-2954.
 
-[MediaPipe2023] Google Research. (2023). MediaPipe: Cross-platform ML solutions. Retrieved from https://mediapipe.dev/
+[MediaPipe2023] Google Research. (2023). MediaPipe: Cross-platform ML solutions. Retrieved from <https://mediapipe.dev/>
 
 [Mills1991] Mills, D. L. (1991). Internet time synchronisation: the network time protocol. IEEE Transactions on Communications, 39(10), 1482-1493.
 
 [Picard1997] Picard, R. W. (1997). Affective Computing. MIT Press.
 
-[Shimmer2023] Shimmer Research. (2023). Shimmer3 GSR+ Development Kit. Retrieved from https://shimmersensing.com/
+[Shimmer2023] Shimmer Research. (2023). Shimmer3 GSR+ Development Kit. Retrieved from <https://shimmersensing.com/>
 
-[Topdon2023] Topdon Technology. (2023). TC001 Thermal Camera Specifications. Retrieved from https://www.topdon.com/
+[Topdon2023] Topdon Technology. (2023). TC001 Thermal Camera Specifications. Retrieved from <https://www.topdon.com/>
 
 [Wilhelm2010] Wilhelm, F. H., Pfaltz, M. C., & Grossman, P. (2010). Continuous electronic data capture of physiology, behaviour and environment in ambulatory subjects. Behaviour Research Methods, 38(1), 157-165.
 

@@ -590,7 +590,7 @@ jobs:
 
 [Beck2002] Beck, K. (2002). *Test Driven Development: By Example*. Addison-Wesley Professional.
 
-[Fowler2006] Fowler, M., & Foemmel, M. (2006). Continuous integration. *Thought-Works*. Retrieved from https://www.martinfowler.com/articles/continuousIntegration.html
+[Fowler2006] Fowler, M., & Foemmel, M. (2006). Continuous integration. *Thought-Works*. Retrieved from <https://www.martinfowler.com/articles/continuousIntegration.html>
 
 [Myers2011] Myers, G. J., Sandler, C., & Badgett, T. (2011). *The Art of Software Testing* (3rd ed.). John Wiley & Sons.
 

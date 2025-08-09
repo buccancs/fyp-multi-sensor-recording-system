@@ -74,10 +74,10 @@ How we will measure if this decision was successful:
 
 *Replace these examples with actual references:*
 
-- [Example Research Paper](https://example.com/paper) - Brief description of relevance
-- [Example Technical Standard](https://example.com/standard) - Brief description of relevance
+- Research Paper Title - Brief description of relevance
+- Technical Standard Name - Brief description of relevance  
 - [Example Related ADR](./adr-001-reactive-state-management.md) - Brief description of relationship
-- [Example Implementation Guide](https://example.com/guide) - Brief description of relevance
+- Implementation Guide - Brief description of relevance
 
 ## Revision History
 
