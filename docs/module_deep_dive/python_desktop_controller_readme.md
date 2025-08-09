@@ -247,7 +247,7 @@ All communication messages follow a standardised JSON format:
       "session_id": "session_20220101_120000",
       "devices": ["android_01", "android_02"],
       "recording_modes": ["camera", "thermal", "shimmer"],
-      "synchronization_precision": "microsecond",
+      "synchronisation_precision": "microsecond",
       "duration": 300
     }
   }
@@ -894,7 +894,7 @@ class DataProcessor:
     def process_session(self, session_id: str) -> ProcessingResult:
         """Process all data from completed session"""
     
-    def synchronize_streams(self, streams: List[DataStream]) -> SyncResult:
+    def synchronise_streams(self, streams: List[DataStream]) -> SyncResult:
         """Temporally align multiple data streams"""
     
     def export_data(self, session_id: str, format: ExportFormat) -> bool:

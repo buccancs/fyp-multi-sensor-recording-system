@@ -864,12 +864,12 @@ class MemoryOptimizedRecorder {
     private val bufferManager = BufferManager()
     
     fun processFrame(frame: VideoFrame) {
-        val optimizedFrame = memoryPool.acquire()
+        val optimisedFrame = memoryPool.acquire()
         try {
             // Process frame with pooled objects
-            processFrameInternal(frame, optimizedFrame)
+            processFrameInternal(frame, optimisedFrame)
         } finally {
-            memoryPool.release(optimizedFrame)
+            memoryPool.release(optimisedFrame)
         }
     }
 }

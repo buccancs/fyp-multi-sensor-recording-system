@@ -526,8 +526,8 @@ class SignalProcessor:
         phasic_component = np.array(signal_data) - tonic_component
         
         # Analyse components
-        tonic_stats = self._analyze_tonic_component(tonic_component)
-        phasic_stats = self._analyze_phasic_component(phasic_component, sampling_rate)
+        tonic_stats = self._analyse_tonic_component(tonic_component)
+        phasic_stats = self._analyse_phasic_component(phasic_component, sampling_rate)
         
         return SignalComponents(
             tonic=tonic_stats,
@@ -1198,7 +1198,7 @@ python sync_validation_test.py --shimmer-devices 2 --reference-clock pc_master
 **Diagnostic Tools**:
 
 - Shimmer device discovery utility
-- Signal quality analyzer
+- Signal quality analyser
 - Bluetooth connection tester
 - Performance monitoring suite
 

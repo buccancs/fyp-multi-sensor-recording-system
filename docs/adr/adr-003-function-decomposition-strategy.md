@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-During technical debt remediation (August 2025), we identified 47 Python functions exceeding 60 lines, creating maintenance challenges and reducing code readability. Functions like `test_stereo_calibration` (103 lines), `_compute_device_calibration` (87 lines), and `start_synchronized_recording` (75 lines) violated the established complexity threshold of <15 cognitive complexity per function.
+During technical debt remediation (August 2025), we identified 47 Python functions exceeding 60 lines, creating maintenance challenges and reducing code readability. Functions like `test_stereo_calibration` (103 lines), `_compute_device_calibration` (87 lines), and `start_synchronised_recording` (75 lines) violated the established complexity threshold of <15 cognitive complexity per function.
 
 Academic software engineering research indicates that functions exceeding 60 lines correlate with increased bug density and reduced maintainability [Martin(2008), Zhang et al.(2011)]. Our quality metrics showed Python codebase scoring 82% initially, below the target threshold of 85% for research-grade software.
 
@@ -54,7 +54,7 @@ We will systematically decompose long functions using the Extract Method refacto
 - Fowler, M. (2018). *Refactoring: Improving the Design of Existing Code* (2nd ed.)
 
 ## Implementation Progress
-- **Completed**: `test_stereo_calibration`, `_compute_device_calibration`, `start_synchronized_recording`, `test_single_camera_calibration`, `test_file_operations`
+- **Completed**: `test_stereo_calibration`, `_compute_device_calibration`, `start_synchronised_recording`, `test_single_camera_calibration`, `test_file_operations`
 - **Improvement**: Python quality score: 82% → 84% → 85% (target)
 - **Remaining**: 42 functions requiring decomposition (down from 47)
 

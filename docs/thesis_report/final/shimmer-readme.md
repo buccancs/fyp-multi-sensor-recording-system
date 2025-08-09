@@ -22,7 +22,7 @@ needed[\[6\]](https://www.shimmersensing.com/product/shimmer3-gsr-unit/#:~:text=
 All signals can be streamed wirelessly in real time to a host device (or
 logged to an SD card on the Shimmer) for
 analysis[\[7\]](https://www.shimmersensing.com/product/shimmer3-gsr-unit/#:~:text=Real,Storage).
-In summary, the Shimmer3 GSR+ is a compact, battery-powered sensor that
+The Shimmer3 GSR+ is a compact, battery-powered sensor that
 provides high-quality GSR data (skin conductance or resistance) along
 with optional PPG and motion signals, making it suitable for mobile
 psychophysiological research and biometric data collection.
@@ -604,7 +604,7 @@ and on result you get extras like `EXTRA_DEVICE_ADDRESS`. For
 an example of how the SDK provides not just low-level API but also UI
 components to ease integration.
 
-In summary, within the `bucika_gsr` app, the Shimmer3 GSR+ integration
+Within the `bucika_gsr` app, the Shimmer3 GSR+ integration
 is handled by a dedicated component (service/module) that interfaces
 with the Shimmer SDK. This component is started as part of the overall
 recording workflow (likely via dependency injection or explicit service

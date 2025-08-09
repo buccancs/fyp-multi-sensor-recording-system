@@ -335,7 +335,7 @@ graph TB
       "pattern_size": {"width": 9, "height": 6},
       "square_size": 0.025,
       "image_count": 15,
-      "synchronized_capture": true,
+      "synchronised_capture": true,
       "quality_threshold": 0.85
     }
   }
@@ -444,7 +444,7 @@ class CalibrationProcessor:
     
     def __init__(self):
         self.pattern_detector = PatternDetector()
-        self.optimization_processor = OptimizationProcessor()
+        self.optimisation_processor = OptimisationProcessor()
     
     def process_intrinsic_calibration(self, images: List[np.ndarray], pattern_type: str, 
                                     pattern_size: Tuple[int, int], square_size: float) -> CalibrationData:
@@ -822,7 +822,7 @@ calibration_data/
 │   ├── images/                        # Calibration images
 │   │   ├── camera_01/
 │   │   ├── camera_02/
-│   │   └── synchronized_pairs/
+│   │   └── synchronised_pairs/
 │   ├── results/                       # Calibration results
 │   │   ├── intrinsic_camera_01.json
 │   │   ├── intrinsic_camera_02.json
@@ -1073,7 +1073,7 @@ class CalibrationIntegrationTest:
             pattern_type="chessboard",
             pattern_size=(9, 6),
             square_size=0.025,
-            synchronized_capture=True
+            synchronised_capture=True
         )
         
         # Perform stereo calibration
@@ -1217,7 +1217,7 @@ python calibration_benchmark.py --iterations 100 --cross-validation
 **Diagnostic Tools**:
 
 - Pattern detection validator
-- Calibration quality analyzer
+- Calibration quality analyser
 - Parameter confidence estimator
 - Cross-validation framework
 

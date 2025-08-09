@@ -218,11 +218,11 @@ class DeviceCoordinator:
         self.android_devices = {}
         self.usb_cameras = {}
         self.shimmer_sensors = {}
-        self.synchronization_engine = SynchronizationEngine()
+        self.synchronisation_engine = SynchronisationEngine()
     
-    async def start_synchronized_recording(self, config: RecordingConfig):
+    async def start_synchronised_recording(self, config: RecordingConfig):
         """Start recording on all configured devices simultaneously."""
-        start_time = self.synchronization_engine.get_synchronized_time()
+        start_time = self.synchronisation_engine.get_synchronised_time()
         
         # Coordinate all devices with precise timing
         tasks = [
@@ -921,7 +921,7 @@ class DataExporter:
             'video_files': session.video_files,
             'thermal_data': session.thermal_data,
             'gsr_data': session.gsr_data,
-            'synchronization_info': session.sync_info,
+            'synchronisation_info': session.sync_info,
             'calibration_data': session.calibration_data
         }
         
@@ -1240,7 +1240,7 @@ class NetworkProtocol:
 #### Temporal Synchronisation Engine
 
 ```python
-class SynchronizationEngine:
+class SynchronisationEngine:
     """Microsecond-precision temporal synchronisation across devices."""
     
     def __init__(self):
@@ -1248,7 +1248,7 @@ class SynchronizationEngine:
         self.device_clocks = {}
         self.sync_accuracy = 0.001  # 1ms target accuracy
         
-    async def synchronize_device(self, device_id: str) -> SyncResult:
+    async def synchronise_device(self, device_id: str) -> SyncResult:
         """Perform clock synchronisation with specific device."""
         # Cristian's algorithm implementation
         sync_samples = []
