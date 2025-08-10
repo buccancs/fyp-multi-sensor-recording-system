@@ -27,6 +27,36 @@ This file tracks pending items and TODOs identified in the thesis documentation 
 - [ ] **Edge Computing**: Research single-board computer alternatives to replace PC controller
 - [ ] **Production Deployment**: Address technical debt, improve test coverage, and containerisation for easier setup
 
+### Security Implementation
+- [ ] **BL-SEC-001**: Implement TLS encryption for PC-Android communication protocol
+  - Add RSA/AES encryption layer for command and data transmission
+  - Implement certificate-based authentication
+  - Add encrypted file transfer mechanism
+
+### User Interface Enhancements
+- [ ] **BL-UI-003**: Implement Playback & Annotation tab for post-session analysis
+  - Add PyAV integration for video file handling
+  - Implement timeline scrubbing with synchronized sensor data display
+  - Add annotation functionality with sidecar file storage
+- [ ] **BL-UI-004**: Implement Camera Calibration utility
+  - Add OpenCV integration for calibration pattern detection
+  - Implement intrinsic/extrinsic parameter calculation
+  - Add calibration results export for research use
+- [ ] **BL-UI-005**: Implement Data Export functionality
+  - Add MATLAB .mat file export capability
+  - Implement HDF5 export with structured datasets
+  - Add batch processing for multiple sessions
+- [ ] **BL-UI-006**: Add comprehensive benchmarking dashboard
+  - Implement synchronization accuracy metrics visualization
+  - Add performance monitoring for multi-device coordination
+  - Create network latency and jitter analysis tools
+
+### Data Processing
+- [ ] **BL-ANNO-001**: Implement user annotation system
+  - Add marker placement during recording
+  - Implement event timestamp logging
+  - Add annotation export to session metadata
+
 ## Notes
 - Items marked as TODO in thesis documentation should be addressed before final submission
 - Session data collection needed for completing several appendix figures
