@@ -399,15 +399,15 @@ The Multi-Sensor Recording System is designed for research environments where co
 
 ### B.1.1 Ethics Approval and Compliance Framework
 
-This research system operates under the ethics approval granted by the UCLIC Ethics Committee (Project ID: 1428). All research activities using this system must comply with the approved research protocol, which includes:
+This research system operates under the ethics approval granted by the UCLIC Ethics Committee (Project ID: 1428) for the research titled "Investigating AI and physiological computing: App for Camera-based Contactless Sensing of Physiological Signals". Principal Investigator: Prof. Youngjun Cho (youngjun.cho@ucl.ac.uk). Researchers: Duy An Tran, Zikun Quan, and Jitesh Joshi. All research activities using this system must comply with the approved research protocol, which includes:
 
-**Participant Information and Consent**: All participants must receive the approved participant information sheet and provide informed consent before any data collection begins. The information sheet covers the nature of the research, data collection procedures, participant rights, and data handling protocols.
+**Participant Information and Consent**: All participants must receive the approved participant information sheet detailing the 30-minute research sessions involving thermal cameras, RGB video recording, and GSR sensors. Participants must provide informed consent before any data collection begins. The information sheet covers voluntary participation, data collection procedures, participant rights including withdrawal, data anonymisation protocols, and contact information for researchers and ethics committee.
 
-**Risk Assessment Compliance**: The system has undergone comprehensive risk assessment covering technical safety, data protection, and participant welfare. All operational procedures documented in this manual align with the approved risk assessment framework.
+**Risk Assessment Compliance**: The system has undergone comprehensive risk assessment reviewed and approved by supervisor Prof. Youngjun Cho covering technical safety, data protection, participant welfare, and laboratory environment protocols. All operational procedures documented in this manual align with the approved risk assessment framework including equipment safety protocols, emergency procedures, and participant protection measures.
 
-**Data Protection Requirements**: Research conducted with this system must follow the approved data management plan, including participant anonymisation protocols, secure data storage procedures, and data retention/disposal schedules as specified in the ethics approval.
+**Data Protection Requirements**: Research conducted with this system must follow the approved data management plan, including participant anonymisation protocols, secure data storage procedures, GDPR compliance, and data retention/disposal schedules as specified in the ethics approval. Special category data (physiological signals, body movement data, minimal health data) is processed under Scientific Research Purposes lawful basis.
 
-**Approved Research Scope**: The ethics approval covers the specific research methodology and participant populations described in the approved application. Any modifications to research procedures or participant criteria require ethics committee review and approval before implementation.
+**Approved Research Scope**: The ethics approval covers healthy adults aged 18+ able to consent, with exclusions for individuals with cardiovascular or neurological conditions (epilepsy, arrhythmia) or chronic serious illness. Any modifications to research procedures or participant criteria require ethics committee review and approval before implementation.
 
 ### B.2 Initial System Setup and Orientation
 
@@ -431,11 +431,11 @@ Before conducting any research session, complete the following verification step
 - [ ] All sensors detected and responding to test commands
 
 **Documentation Review:**
-- [ ] Research protocol approved and UCLIC Ethics Committee clearance confirmed (Project ID: 1428)
-- [ ] Participant information sheets and consent forms prepared and approved
-- [ ] Risk assessment documentation reviewed and mitigation procedures understood
-- [ ] Data management plan reviewed and storage locations confirmed
-- [ ] Emergency contact information readily accessible
+- [ ] Research protocol approved and UCLIC Ethics Committee clearance confirmed (Project ID: 1428, "Investigating AI and physiological computing: App for Camera-based Contactless Sensing of Physiological Signals")
+- [ ] Participant information sheets and consent forms prepared and approved (including thermal imaging, GSR sensors, 30-minute sessions)
+- [ ] Risk assessment documentation reviewed and mitigation procedures understood (Prof. Youngjun Cho approved)
+- [ ] Data management plan reviewed and storage locations confirmed (GDPR compliance for physiological data)
+- [ ] Emergency contact information readily accessible (Primary: Prof. Youngjun Cho youngjun.cho@ucl.ac.uk, Ethics: ethics@ucl.ac.uk)
 
 #### B.2.2 User Interface Overview
 
@@ -1256,31 +1256,85 @@ Measurement Protocol:
 **Ethics Approval Details:**
 - **Approving Body**: UCLIC Ethics Committee, University College London
 - **Project ID**: 1428
+- **Research Title**: "Investigating AI and physiological computing"
+- **Research Subtitle**: "App for Camera-based Contactless Sensing of Physiological Signals"
+- **Principal Investigator**: Prof. Youngjun Cho (youngjun.cho@ucl.ac.uk)
+- **Researchers**: Duy An Tran, Zikun Quan, Jitesh Joshi
 - **Approval Status**: Approved for research data collection involving human participants
-- **Approval Scope**: Multi-sensor physiological monitoring research using contactless GSR prediction methodology
+- **Approval Scope**: Multi-sensor physiological monitoring research using contactless GSR prediction methodology with thermal imaging and RGB video recording
 
 **Research Protocol Coverage:**
 The ethics approval encompasses the complete research methodology described in this thesis, including:
-- Participant recruitment and selection criteria
-- Data collection procedures using thermal imaging, RGB video, and GSR sensors
-- Data storage, anonymisation, and retention protocols
-- Participant information provision and informed consent procedures
-- Risk assessment covering technical, privacy, and safety considerations
+- Participant recruitment and selection criteria (healthy adults 18+, exclusions for cardiovascular/neurological conditions)
+- Data collection procedures using thermal imaging, RGB video, and GSR sensors in 30-minute sessions
+- Data storage, anonymisation, and retention protocols with GDPR compliance for physiological data
+- Participant information provision and informed consent procedures with voluntary participation emphasis
+- Risk assessment covering technical safety, privacy considerations, and participant welfare protocols
 
 #### C.6.2 Participant Information and Consent Framework
 
 **Approved Information Sheet Elements:**
 The ethics approval includes standardised participant information covering:
-- Research purpose and methodology overview
-- Detailed explanation of sensor types and data collection procedures
-- Data usage, storage duration, and anonymisation protocols
-- Participant rights including withdrawal procedures and data deletion
-- Contact information for researchers and ethics committee
-- Clear statement of voluntary participation and confidentiality protections
+- Research purpose: Development of contactless physiological monitoring technology for stress and wellness assessment
+- Detailed explanation of sensor types and data collection procedures (thermal cameras, GSR sensors, RGB video recording in 30-minute sessions)
+- Data usage, storage duration, and anonymisation protocols with special provisions for physiological sensor data
+- Participant rights including withdrawal procedures, data deletion (5-day window), and voluntary participation emphasis
+- Contact information for researchers (Prof. Youngjun Cho) and ethics committee (ethics@ucl.ac.uk)
+- Clear statement of voluntary participation, confidentiality protections, and exclusion criteria for safety
+- Special provisions for student participants to ensure no academic impact from participation decisions
 
 **Consent Documentation:**
-- Written informed consent required before any data collection
-- Electronic consent recording integrated into system workflow
+- Written informed consent required before any data collection with electronic consent recording integrated into system workflow
+- Separate consent provisions for video recording use in publications and presentations
+- Data sharing consent for non-personally identifiable physiological data with research community
+- Clear withdrawal procedures with 5-day data deletion window and no penalty provisions
+
+#### C.6.3 Risk Assessment and Safety Protocols
+
+**Supervisor-Approved Risk Assessment:**
+Comprehensive risk assessment has been completed and approved by Principal Investigator Prof. Youngjun Cho, covering:
+
+**Laboratory Safety Protocols:**
+- Equipment safety procedures following manufacturer instructions with regular maintenance schedules
+- Laboratory environment safety including emergency procedures and first aid protocols
+- Professional researcher training on equipment use and participant interaction procedures
+- Individual researcher health considerations and vulnerability assessments
+
+**Participant Safety Measures:**
+- Appointment scheduling within normal building hours (Mon-Fri, 9am-6pm) with security notifications for any out-of-hours testing
+- Professional boundaries maintenance with appropriate researcher clothing and conduct standards
+- Physical environment optimization to reduce participant anxiety and ensure accessibility
+- Emergency exit strategies and termination procedures if participant behavior causes concern
+
+**Data Protection and Privacy:**
+- GDPR training completion required for all researchers involved in data collection
+- Secure data storage with encryption and access controls limited to authorized research team
+- Data processing compliance with UK regulations and UCL data protection policies
+- Regular incident monitoring and reporting procedures for data protection concerns
+
+**Session Management Protocols:**
+- Participant escort procedures to prevent unauthorized building access
+- Professional debriefing procedures with opportunity for participant questions
+- Incident reporting requirements for any safety or distress concerns during sessions
+- Supervisor notification and appropriate support provision for any researcher distress
+
+#### C.6.4 Ethics Documentation Repository
+
+**Available Documentation:**
+The complete ethics approval documentation is maintained in the repository at `docs/risk_and_ethics/` and includes:
+
+**Participant Information Sheet** (`docs/risk_and_ethics/information sheet including link to consent form-21.md`):
+- Complete participant information sheet as approved by UCLIC Ethics Committee
+- Detailed explanation of research procedures, data collection methods, and participant rights
+- Consent form template accessible at: https://forms.office.com/e/JQihB2B5TD
+
+**Risk Assessment Documentation** (`docs/risk_and_ethics/risk_assessment_form_july2025_duyan-2.md`):
+- Comprehensive risk assessment checklist as approved by supervisor Prof. Youngjun Cho
+- Laboratory safety protocols, participant safety measures, and data protection procedures
+- Signed declaration confirming no significant risk assessment with appropriate control measures
+
+**Ethics Compliance Framework:**
+All research activities using this system must reference and comply with these approved documentation standards to ensure continued ethics compliance and participant protection throughout the research process.
 - Consent withdrawal procedures documented and technically implemented
 - Consent records maintained separately from research data for audit purposes
 
