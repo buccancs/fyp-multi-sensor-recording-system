@@ -600,7 +600,12 @@ solutions applied to overcome them:
   coarse NTP time, which can be imprecise on mobile). Then, a
   lightweight NTP-like protocol aligns those clocks by calculating the
   offset and delay. This was fine-tuned by taking multiple measurements
-  at connection time and occasionally during recording. Initial testing suggests timing coordination within single-digit milliseconds, though comprehensive validation across different network environments remains to be conducted. **Solution highlights:** use monotonic clock
+  at connection time and occasionally during recording. The result is
+  that all devices maintain a shared notion of time within
+  timing coordination within single-digit milliseconds (pending comprehensive validation). In practice, this means if an event (e.g.
+  an LED flash) is captured by two cameras and a GSR sensor, the
+  timestamps recorded by each device for that event differ by less than
+  1 ms after alignment. **Solution highlights:** use monotonic clock
   APIs on each platform for timestamping and perform a quick clock sync
   handshake for alignment at start (and periodically if needed).
 
