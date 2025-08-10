@@ -33,6 +33,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Chapter 3 Requirements Documentation Academic Compliance Improvements (2025-01-11)**
+  - **AI-Generated Language Humanization**: Addressed formulaic language patterns and unsupported claims
+    - Fixed all broken citation patterns (]4], ]5], ]8]]11] etc.) and mapped to proper references [1]-[24]
+    - Replaced generic claims like "sub-millisecond accuracy" with actual test data: "sub-100ms response times" 
+    - Added concrete hardware specifications: Shimmer3 GSR+ device, 1920×1080 video, 128 Hz sampling
+    - Grounded claims in actual test data from August 2025 sessions: `endurance_20250806_065637_detailed_metrics.json`
+    - Replaced formulaic "laying a foundation" language with specific research context
+  - **Requirements Engineering Improvements**: Enhanced section 3.2 with concrete methodology
+    - Replaced "iterative, research-driven approach" with "iterative development" based on testing
+    - Added specific config references: `protocol/config.json:111-128` for security features
+    - Referenced IEEE 29148 specific standard instead of generic "IEEE guidelines"
+    - Added actual code paths: `PythonApp/ntp_time_server.py:38-50`, `PythonApp/calibration/`
+  - **Functional Requirements Grounding**: Made requirements more concrete and testable
+    - Removed formulaic "system shall do" language, replaced with "system implements/records"
+    - Added specific implementation references: `SessionManager.create_session()`, `ShimmerManager.connect_devices()`
+    - Included actual configuration parameters from protocol/config.json throughout
+    - Referenced specific device models and specifications instead of generic descriptions
+  - **Non-Functional Requirements Enhancement**: Replaced unsupported claims with test evidence
+    - Temporal accuracy: Replaced "**<5 ms**" with "sub-100ms" backed by endurance test data
+    - Security: Added specific config paths for TLS 1.3, authentication tokens, runtime security checker
+    - Scalability: Referenced actual test results and configuration limits (8 devices, 120 minutes)
+    - Removed generic "should/must" language, replaced with "is/implements" based on testing
+  - **Use Case Scenarios Specificity**: Added concrete UI and code references
+    - Added specific UI component names: MainWindow, SessionManager dialog, DevicesFragment
+    - Included actual method calls: `SessionManager.validate_session_name()`, `ShimmerManager.connect_devices()`
+    - Referenced specific file paths: `PythonApp/gui/enhanced_ui_main_window.py`
+    - Added configuration details: session naming format "session_YYYYMMDD_HHMMSS"
+
 - **Critical Formatting Issues**: Resolved major presentation standard violations
   - **Chapter 5 Placeholder Removal**: Removed 80 stray "$$1$$" through "$$80$$" tokens (lines 469-628)
   - **Heading Capitalisation**: Fixed "synchronisation" → "Synchronisation" in Chapter 4.4 heading
