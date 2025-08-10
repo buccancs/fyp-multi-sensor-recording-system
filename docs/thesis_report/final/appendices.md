@@ -181,7 +181,7 @@ follows[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866):
   sessions.
 
 **Troubleshooting:** The User Manual also includes common issues and
-solutions. If the Android device isn't found by the desktop app, first
+solutions. If the Android device is not found by the desktop app, first
 check that both are on the same WiFi network (and not
 firewalled)[[24]](../../../test_troubleshooting.md).
 If connection fails due to port issues, try switching to alternate ports
@@ -190,7 +190,7 @@ If connection fails due to port issues, try switching to alternate ports
 system times are correct or restart the sync service -- the system's
 tolerance is ±50 ms drift, beyond which a recalibration is
 advised[\[25\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L64).
-If the thermal camera isn't detected, make sure it's properly attached
+If the thermal camera is not detected, make sure it is properly attached
 and the Android app has the necessary permissions; restarting the app
 can
 help[[26]](../../../test_troubleshooting.md).
@@ -516,7 +516,7 @@ flexible way. If Android-based integration is enabled, it spins up an
 connections). It registers callbacks to receive sensor data and status
 updates from the Android side (e.g., the Shimmer sensor data that the
 phone relays). When initialising, if the Android channel fails (for
-instance, if the phone app isn't responding), the code falls back: if a
+instance, if the phone app is not responding), the code falls back: if a
 direct USB/Bluetooth method (`PyShimmer`) is available, it will use that
 instead (or otherwise run in simulation
 mode)[\[56\]](PythonApp/shimmer_manager.py#L250-L258).
