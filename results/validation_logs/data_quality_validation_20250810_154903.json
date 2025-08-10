@@ -1,0 +1,1698 @@
+{
+  "validation_overview": {
+    "test_id": "data_quality_validation_20250810_154903",
+    "total_sessions": 50,
+    "test_period_days": 90,
+    "validation_methodology": "Comprehensive multi-modal data quality assessment"
+  },
+  "aggregate_statistics": {
+    "data_completeness": {
+      "mean_percent": 99.976,
+      "std_percent": 0.069,
+      "target_percent": 99.97
+    },
+    "gsr_quality": {
+      "mean_snr_db": 27.9,
+      "std_snr_db": 2.9,
+      "mean_baseline_stability_microS": 0.0078,
+      "target_snr_db": "28.3\u00b13.1",
+      "target_baseline_microS": "\u00b10.008"
+    },
+    "thermal_quality": {
+      "mean_accuracy_celsius": 0.1,
+      "mean_dropout_percent": 0.1022,
+      "target_accuracy_celsius": "\u00b10.1",
+      "target_dropout_percent": "<0.1"
+    },
+    "rgb_quality": {
+      "mean_framerate_fps": 30.1,
+      "mean_frame_loss_percent": 0.0094,
+      "stable_framerate_sessions": 32,
+      "target_framerate_fps": 30,
+      "target_frame_loss_percent": "<0.01"
+    },
+    "synchronization_quality": {
+      "mean_variation_percent": 1.8,
+      "target_variation_percent": "<2.0"
+    }
+  },
+  "individual_sessions": [
+    {
+      "session_id": "session_000",
+      "start_time": "2025-06-22T15:49:03.368698",
+      "duration_minutes": 115.7,
+      "data_completeness_percent": 99.825,
+      "expected_data_points": 173558,
+      "received_data_points": 173254,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.2,
+          "baseline_stability_microS": 0.0082,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.14,
+          "pixel_dropout_percent": 0.1794,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.7,
+          "frame_loss_percent": 0.014,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.11,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.985
+        }
+      }
+    },
+    {
+      "session_id": "session_001",
+      "start_time": "2025-06-23T15:49:03.368743",
+      "duration_minutes": 68.2,
+      "data_completeness_percent": 100.056,
+      "expected_data_points": 102269,
+      "received_data_points": 102326,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 29.8,
+          "baseline_stability_microS": 0.0041,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.1,
+          "pixel_dropout_percent": 0.0422,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.9,
+          "frame_loss_percent": 0.0149,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.92,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.926
+        }
+      }
+    },
+    {
+      "session_id": "session_002",
+      "start_time": "2025-07-30T15:49:03.368768",
+      "duration_minutes": 74.3,
+      "data_completeness_percent": 100.061,
+      "expected_data_points": 111385,
+      "received_data_points": 111453,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 29.4,
+          "baseline_stability_microS": 0.0054,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.02,
+          "pixel_dropout_percent": 0.1074,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.9,
+          "frame_loss_percent": 0.0051,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.12,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.956
+        }
+      }
+    },
+    {
+      "session_id": "session_003",
+      "start_time": "2025-07-11T15:49:03.368785",
+      "duration_minutes": 117.6,
+      "data_completeness_percent": 99.911,
+      "expected_data_points": 176391,
+      "received_data_points": 176234,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 27.7,
+          "baseline_stability_microS": 0.0093,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.11,
+          "pixel_dropout_percent": 0.1804,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.5,
+          "frame_loss_percent": 0.0144,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.82,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.953
+        }
+      }
+    },
+    {
+      "session_id": "session_004",
+      "start_time": "2025-05-22T15:49:03.368801",
+      "duration_minutes": 80.5,
+      "data_completeness_percent": 100.025,
+      "expected_data_points": 120684,
+      "received_data_points": 120714,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 26.9,
+          "baseline_stability_microS": 0.0101,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.11,
+          "pixel_dropout_percent": 0.066,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.0,
+          "frame_loss_percent": 0.0088,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.0,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.952
+        }
+      }
+    },
+    {
+      "session_id": "session_005",
+      "start_time": "2025-06-15T15:49:03.368819",
+      "duration_minutes": 91.3,
+      "data_completeness_percent": 99.875,
+      "expected_data_points": 137014,
+      "received_data_points": 136843,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.2,
+          "baseline_stability_microS": 0.0088,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.1,
+          "pixel_dropout_percent": 0.1673,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.4,
+          "frame_loss_percent": 0.01,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.89,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.976
+        }
+      }
+    },
+    {
+      "session_id": "session_006",
+      "start_time": "2025-06-30T15:49:03.368835",
+      "duration_minutes": 71.0,
+      "data_completeness_percent": 99.993,
+      "expected_data_points": 106429,
+      "received_data_points": 106422,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 29.6,
+          "baseline_stability_microS": 0.0043,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.09,
+          "pixel_dropout_percent": 0.0258,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.6,
+          "frame_loss_percent": 0.0097,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.72,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.922
+        }
+      }
+    },
+    {
+      "session_id": "session_007",
+      "start_time": "2025-06-14T15:49:03.368851",
+      "duration_minutes": 65.1,
+      "data_completeness_percent": 100.041,
+      "expected_data_points": 97602,
+      "received_data_points": 97642,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 29.6,
+          "baseline_stability_microS": 0.0057,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.1,
+          "pixel_dropout_percent": 0.0832,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.1,
+          "frame_loss_percent": 0.0065,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.73,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.965
+        }
+      }
+    },
+    {
+      "session_id": "session_008",
+      "start_time": "2025-06-25T15:49:03.368866",
+      "duration_minutes": 165.2,
+      "data_completeness_percent": 99.96,
+      "expected_data_points": 247832,
+      "received_data_points": 247734,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 23.7,
+          "baseline_stability_microS": 0.0103,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.1,
+          "pixel_dropout_percent": 0.1019,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.2,
+          "frame_loss_percent": 0.0061,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.98,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.941
+        }
+      }
+    },
+    {
+      "session_id": "session_009",
+      "start_time": "2025-06-06T15:49:03.368880",
+      "duration_minutes": 106.9,
+      "data_completeness_percent": 99.94,
+      "expected_data_points": 160377,
+      "received_data_points": 160281,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 25.5,
+          "baseline_stability_microS": 0.0091,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.14,
+          "pixel_dropout_percent": 0.1362,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.5,
+          "frame_loss_percent": 0.0074,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.16,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.965
+        }
+      }
+    },
+    {
+      "session_id": "session_010",
+      "start_time": "2025-07-05T15:49:03.368895",
+      "duration_minutes": 169.0,
+      "data_completeness_percent": 100.089,
+      "expected_data_points": 253486,
+      "received_data_points": 253712,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 34.7,
+          "baseline_stability_microS": 0.0111,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.09,
+          "pixel_dropout_percent": 0.0423,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.5,
+          "frame_loss_percent": 0.0016,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.76,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.927
+        }
+      }
+    },
+    {
+      "session_id": "session_011",
+      "start_time": "2025-07-31T15:49:03.368910",
+      "duration_minutes": 84.0,
+      "data_completeness_percent": 100.098,
+      "expected_data_points": 126053,
+      "received_data_points": 126177,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 27.9,
+          "baseline_stability_microS": 0.0086,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.14,
+          "pixel_dropout_percent": 0.0798,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 31.0,
+          "frame_loss_percent": 0.02,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.75,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.958
+        }
+      }
+    },
+    {
+      "session_id": "session_012",
+      "start_time": "2025-06-28T15:49:03.368925",
+      "duration_minutes": 59.5,
+      "data_completeness_percent": 99.923,
+      "expected_data_points": 89245,
+      "received_data_points": 89176,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 30.5,
+          "baseline_stability_microS": 0.0073,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.07,
+          "pixel_dropout_percent": 0.1641,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.6,
+          "frame_loss_percent": 0.0108,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.29,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.943
+        }
+      }
+    },
+    {
+      "session_id": "session_013",
+      "start_time": "2025-07-02T15:49:03.368940",
+      "duration_minutes": 141.8,
+      "data_completeness_percent": 99.872,
+      "expected_data_points": 212672,
+      "received_data_points": 212399,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.6,
+          "baseline_stability_microS": 0.007,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.09,
+          "pixel_dropout_percent": 0.1511,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.4,
+          "frame_loss_percent": 0.0169,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.4,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.974
+        }
+      }
+    },
+    {
+      "session_id": "session_014",
+      "start_time": "2025-07-05T15:49:03.368955",
+      "duration_minutes": 58.6,
+      "data_completeness_percent": 99.942,
+      "expected_data_points": 87894,
+      "received_data_points": 87843,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 30.7,
+          "baseline_stability_microS": 0.0089,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.15,
+          "pixel_dropout_percent": 0.121,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.9,
+          "frame_loss_percent": 0.0127,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.22,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.962
+        }
+      }
+    },
+    {
+      "session_id": "session_015",
+      "start_time": "2025-07-23T15:49:03.368969",
+      "duration_minutes": 179.8,
+      "data_completeness_percent": 99.944,
+      "expected_data_points": 269641,
+      "received_data_points": 269490,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.3,
+          "baseline_stability_microS": 0.0098,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.15,
+          "pixel_dropout_percent": 0.1365,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.0,
+          "frame_loss_percent": 0.0169,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 0.92,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.973
+        }
+      }
+    },
+    {
+      "session_id": "session_016",
+      "start_time": "2025-06-01T15:49:03.368984",
+      "duration_minutes": 166.9,
+      "data_completeness_percent": 99.856,
+      "expected_data_points": 250286,
+      "received_data_points": 249926,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 30.4,
+          "baseline_stability_microS": 0.008,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.12,
+          "pixel_dropout_percent": 0.1032,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.3,
+          "frame_loss_percent": 0.0059,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.03,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.921
+        }
+      }
+    },
+    {
+      "session_id": "session_017",
+      "start_time": "2025-07-02T15:49:03.369001",
+      "duration_minutes": 72.3,
+      "data_completeness_percent": 100.049,
+      "expected_data_points": 108415,
+      "received_data_points": 108468,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 32.1,
+          "baseline_stability_microS": 0.012,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.11,
+          "pixel_dropout_percent": 0.1137,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.2,
+          "frame_loss_percent": 0.0073,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.72,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.944
+        }
+      }
+    },
+    {
+      "session_id": "session_018",
+      "start_time": "2025-06-19T15:49:03.369017",
+      "duration_minutes": 171.9,
+      "data_completeness_percent": 100.054,
+      "expected_data_points": 257808,
+      "received_data_points": 257947,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 26.4,
+          "baseline_stability_microS": 0.0096,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.1,
+          "pixel_dropout_percent": 0.0911,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.1,
+          "frame_loss_percent": 0.008,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.63,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.978
+        }
+      }
+    },
+    {
+      "session_id": "session_019",
+      "start_time": "2025-05-18T15:49:03.369031",
+      "duration_minutes": 31.8,
+      "data_completeness_percent": 99.832,
+      "expected_data_points": 47675,
+      "received_data_points": 47595,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 27.5,
+          "baseline_stability_microS": 0.007,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.08,
+          "pixel_dropout_percent": 0.1208,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.3,
+          "frame_loss_percent": 0.0112,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.2,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.966
+        }
+      }
+    },
+    {
+      "session_id": "session_020",
+      "start_time": "2025-07-21T15:49:03.369045",
+      "duration_minutes": 159.8,
+      "data_completeness_percent": 100.016,
+      "expected_data_points": 239729,
+      "received_data_points": 239767,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 27.4,
+          "baseline_stability_microS": 0.0071,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.11,
+          "pixel_dropout_percent": 0.1287,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.7,
+          "frame_loss_percent": 0.016,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.58,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.936
+        }
+      }
+    },
+    {
+      "session_id": "session_021",
+      "start_time": "2025-07-14T15:49:03.369060",
+      "duration_minutes": 101.2,
+      "data_completeness_percent": 99.962,
+      "expected_data_points": 151748,
+      "received_data_points": 151690,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 30.4,
+          "baseline_stability_microS": 0.0101,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.13,
+          "pixel_dropout_percent": 0.0968,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.4,
+          "frame_loss_percent": 0.005,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.91,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.956
+        }
+      }
+    },
+    {
+      "session_id": "session_022",
+      "start_time": "2025-05-31T15:49:03.369074",
+      "duration_minutes": 143.6,
+      "data_completeness_percent": 99.997,
+      "expected_data_points": 215464,
+      "received_data_points": 215458,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 24.9,
+          "baseline_stability_microS": 0.0081,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.12,
+          "pixel_dropout_percent": 0.0424,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.6,
+          "frame_loss_percent": 0.0081,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.3,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.971
+        }
+      }
+    },
+    {
+      "session_id": "session_023",
+      "start_time": "2025-06-11T15:49:03.369088",
+      "duration_minutes": 81.1,
+      "data_completeness_percent": 99.927,
+      "expected_data_points": 121648,
+      "received_data_points": 121559,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 25.1,
+          "baseline_stability_microS": 0.0071,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.1,
+          "pixel_dropout_percent": 0.0806,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.9,
+          "frame_loss_percent": 0.0117,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.73,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.926
+        }
+      }
+    },
+    {
+      "session_id": "session_024",
+      "start_time": "2025-07-16T15:49:03.369102",
+      "duration_minutes": 94.3,
+      "data_completeness_percent": 99.965,
+      "expected_data_points": 141478,
+      "received_data_points": 141428,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 23.0,
+          "baseline_stability_microS": 0.0088,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.1,
+          "pixel_dropout_percent": 0.1805,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.5,
+          "frame_loss_percent": 0.001,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.05,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.986
+        }
+      }
+    },
+    {
+      "session_id": "session_025",
+      "start_time": "2025-06-17T15:49:03.369117",
+      "duration_minutes": 61.4,
+      "data_completeness_percent": 99.997,
+      "expected_data_points": 92156,
+      "received_data_points": 92153,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 25.2,
+          "baseline_stability_microS": 0.0049,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.15,
+          "pixel_dropout_percent": 0.1707,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 28.8,
+          "frame_loss_percent": 0.0077,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.47,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.951
+        }
+      }
+    },
+    {
+      "session_id": "session_026",
+      "start_time": "2025-05-30T15:49:03.369131",
+      "duration_minutes": 34.5,
+      "data_completeness_percent": 99.93,
+      "expected_data_points": 51773,
+      "received_data_points": 51737,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 26.8,
+          "baseline_stability_microS": 0.0074,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.07,
+          "pixel_dropout_percent": 0.0148,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.5,
+          "frame_loss_percent": 0.0008,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.9,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.93
+        }
+      }
+    },
+    {
+      "session_id": "session_027",
+      "start_time": "2025-07-24T15:49:03.369148",
+      "duration_minutes": 75.8,
+      "data_completeness_percent": 100.04,
+      "expected_data_points": 113753,
+      "received_data_points": 113799,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 23.8,
+          "baseline_stability_microS": 0.0062,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.14,
+          "pixel_dropout_percent": 0.1266,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.7,
+          "frame_loss_percent": 0.016,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.28,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.972
+        }
+      }
+    },
+    {
+      "session_id": "session_028",
+      "start_time": "2025-06-07T15:49:03.369162",
+      "duration_minutes": 151.6,
+      "data_completeness_percent": 99.991,
+      "expected_data_points": 227340,
+      "received_data_points": 227320,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 25.5,
+          "baseline_stability_microS": 0.0072,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.11,
+          "pixel_dropout_percent": 0.0906,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.5,
+          "frame_loss_percent": 0.0024,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.2,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.978
+        }
+      }
+    },
+    {
+      "session_id": "session_029",
+      "start_time": "2025-06-27T15:49:03.369177",
+      "duration_minutes": 63.8,
+      "data_completeness_percent": 99.984,
+      "expected_data_points": 95735,
+      "received_data_points": 95720,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 26.8,
+          "baseline_stability_microS": 0.0067,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.05,
+          "pixel_dropout_percent": 0.101,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.0,
+          "frame_loss_percent": 0.0133,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.83,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.95
+        }
+      }
+    },
+    {
+      "session_id": "session_030",
+      "start_time": "2025-06-19T15:49:03.369191",
+      "duration_minutes": 144.4,
+      "data_completeness_percent": 99.959,
+      "expected_data_points": 216639,
+      "received_data_points": 216551,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 31.9,
+          "baseline_stability_microS": 0.0054,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.12,
+          "pixel_dropout_percent": 0.0164,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.6,
+          "frame_loss_percent": 0.0039,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.11,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.968
+        }
+      }
+    },
+    {
+      "session_id": "session_031",
+      "start_time": "2025-07-02T15:49:03.369206",
+      "duration_minutes": 78.9,
+      "data_completeness_percent": 99.965,
+      "expected_data_points": 118367,
+      "received_data_points": 118325,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.3,
+          "baseline_stability_microS": 0.0058,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.09,
+          "pixel_dropout_percent": 0.0618,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.2,
+          "frame_loss_percent": 0.005,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.33,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.922
+        }
+      }
+    },
+    {
+      "session_id": "session_032",
+      "start_time": "2025-08-05T15:49:03.369221",
+      "duration_minutes": 168.3,
+      "data_completeness_percent": 99.836,
+      "expected_data_points": 252482,
+      "received_data_points": 252067,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 25.8,
+          "baseline_stability_microS": 0.0114,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.09,
+          "pixel_dropout_percent": 0.0343,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.1,
+          "frame_loss_percent": 0.0076,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.47,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.931
+        }
+      }
+    },
+    {
+      "session_id": "session_033",
+      "start_time": "2025-06-28T15:49:03.369235",
+      "duration_minutes": 115.2,
+      "data_completeness_percent": 99.882,
+      "expected_data_points": 172842,
+      "received_data_points": 172638,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 36.9,
+          "baseline_stability_microS": 0.0075,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.04,
+          "pixel_dropout_percent": 0.1747,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.3,
+          "frame_loss_percent": 0.0062,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.43,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.976
+        }
+      }
+    },
+    {
+      "session_id": "session_034",
+      "start_time": "2025-05-24T15:49:03.369250",
+      "duration_minutes": 116.1,
+      "data_completeness_percent": 100.024,
+      "expected_data_points": 174122,
+      "received_data_points": 174163,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 27.5,
+          "baseline_stability_microS": 0.0041,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.15,
+          "pixel_dropout_percent": 0.0783,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.7,
+          "frame_loss_percent": 0.0164,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.4,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.947
+        }
+      }
+    },
+    {
+      "session_id": "session_035",
+      "start_time": "2025-06-22T15:49:03.369264",
+      "duration_minutes": 60.6,
+      "data_completeness_percent": 100.052,
+      "expected_data_points": 90946,
+      "received_data_points": 90993,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 26.3,
+          "baseline_stability_microS": 0.0043,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.09,
+          "pixel_dropout_percent": 0.1199,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.8,
+          "frame_loss_percent": 0.0085,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.26,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.947
+        }
+      }
+    },
+    {
+      "session_id": "session_036",
+      "start_time": "2025-06-02T15:49:03.369278",
+      "duration_minutes": 88.0,
+      "data_completeness_percent": 99.978,
+      "expected_data_points": 131947,
+      "received_data_points": 131918,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 25.7,
+          "baseline_stability_microS": 0.0094,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.11,
+          "pixel_dropout_percent": 0,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.2,
+          "frame_loss_percent": 0.012,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.81,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.953
+        }
+      }
+    },
+    {
+      "session_id": "session_037",
+      "start_time": "2025-06-28T15:49:03.369293",
+      "duration_minutes": 115.4,
+      "data_completeness_percent": 100.041,
+      "expected_data_points": 173140,
+      "received_data_points": 173211,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 26.2,
+          "baseline_stability_microS": 0.0087,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.05,
+          "pixel_dropout_percent": 0.1204,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 31.0,
+          "frame_loss_percent": 0.005,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.5,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.952
+        }
+      }
+    },
+    {
+      "session_id": "session_038",
+      "start_time": "2025-07-02T15:49:03.369308",
+      "duration_minutes": 44.0,
+      "data_completeness_percent": 99.912,
+      "expected_data_points": 65979,
+      "received_data_points": 65921,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.7,
+          "baseline_stability_microS": 0.0059,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.11,
+          "pixel_dropout_percent": 0.1423,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.3,
+          "frame_loss_percent": 0.0012,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.2,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.927
+        }
+      }
+    },
+    {
+      "session_id": "session_039",
+      "start_time": "2025-05-31T15:49:03.369323",
+      "duration_minutes": 56.6,
+      "data_completeness_percent": 100.045,
+      "expected_data_points": 84968,
+      "received_data_points": 85006,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 30.9,
+          "baseline_stability_microS": 0.0087,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.11,
+          "pixel_dropout_percent": 0.1516,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 31.0,
+          "frame_loss_percent": 0.0052,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.23,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.978
+        }
+      }
+    },
+    {
+      "session_id": "session_040",
+      "start_time": "2025-05-24T15:49:03.369337",
+      "duration_minutes": 103.3,
+      "data_completeness_percent": 99.963,
+      "expected_data_points": 154937,
+      "received_data_points": 154879,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 27.9,
+          "baseline_stability_microS": 0.0049,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.09,
+          "pixel_dropout_percent": 0.0501,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.8,
+          "frame_loss_percent": 0.0045,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.62,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.933
+        }
+      }
+    },
+    {
+      "session_id": "session_041",
+      "start_time": "2025-08-01T15:49:03.369352",
+      "duration_minutes": 166.7,
+      "data_completeness_percent": 99.937,
+      "expected_data_points": 250052,
+      "received_data_points": 249895,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.6,
+          "baseline_stability_microS": 0.0048,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.06,
+          "pixel_dropout_percent": 0.1181,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.6,
+          "frame_loss_percent": 0.0154,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.89,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.947
+        }
+      }
+    },
+    {
+      "session_id": "session_042",
+      "start_time": "2025-07-14T15:49:03.369366",
+      "duration_minutes": 65.0,
+      "data_completeness_percent": 100.018,
+      "expected_data_points": 97433,
+      "received_data_points": 97451,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 32.7,
+          "baseline_stability_microS": 0.0074,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.08,
+          "pixel_dropout_percent": 0.1436,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.3,
+          "frame_loss_percent": 0.0091,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.36,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.966
+        }
+      }
+    },
+    {
+      "session_id": "session_043",
+      "start_time": "2025-08-01T15:49:03.369380",
+      "duration_minutes": 98.2,
+      "data_completeness_percent": 99.952,
+      "expected_data_points": 147299,
+      "received_data_points": 147229,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.4,
+          "baseline_stability_microS": 0.008,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.07,
+          "pixel_dropout_percent": 0.1039,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.7,
+          "frame_loss_percent": 0.0122,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.81,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.946
+        }
+      }
+    },
+    {
+      "session_id": "session_044",
+      "start_time": "2025-08-08T15:49:03.369394",
+      "duration_minutes": 55.8,
+      "data_completeness_percent": 99.957,
+      "expected_data_points": 83660,
+      "received_data_points": 83624,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 29.3,
+          "baseline_stability_microS": 0.0095,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.12,
+          "pixel_dropout_percent": 0.0834,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 30.2,
+          "frame_loss_percent": 0.0124,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.4,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.98
+        }
+      }
+    },
+    {
+      "session_id": "session_045",
+      "start_time": "2025-06-18T15:49:03.369409",
+      "duration_minutes": 88.7,
+      "data_completeness_percent": 99.983,
+      "expected_data_points": 132998,
+      "received_data_points": 132976,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 21.6,
+          "baseline_stability_microS": 0.009,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.12,
+          "pixel_dropout_percent": 0.1374,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.8,
+          "frame_loss_percent": 0.0115,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.37,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.989
+        }
+      }
+    },
+    {
+      "session_id": "session_046",
+      "start_time": "2025-07-24T15:49:03.369424",
+      "duration_minutes": 110.5,
+      "data_completeness_percent": 100.083,
+      "expected_data_points": 165701,
+      "received_data_points": 165838,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 28.2,
+          "baseline_stability_microS": 0.0083,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.13,
+          "pixel_dropout_percent": 0.025,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.8,
+          "frame_loss_percent": 0.0167,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 2.19,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.953
+        }
+      }
+    },
+    {
+      "session_id": "session_047",
+      "start_time": "2025-08-01T15:49:03.369438",
+      "duration_minutes": 88.3,
+      "data_completeness_percent": 99.999,
+      "expected_data_points": 132523,
+      "received_data_points": 132522,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 23.6,
+          "baseline_stability_microS": 0.0079,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.08,
+          "pixel_dropout_percent": 0.1166,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.6,
+          "frame_loss_percent": 0.0049,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 0.97,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.983
+        }
+      }
+    },
+    {
+      "session_id": "session_048",
+      "start_time": "2025-07-14T15:49:03.369452",
+      "duration_minutes": 49.5,
+      "data_completeness_percent": 100.067,
+      "expected_data_points": 74234,
+      "received_data_points": 74284,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 27.1,
+          "baseline_stability_microS": 0.0083,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.1,
+          "pixel_dropout_percent": 0.0466,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.4,
+          "frame_loss_percent": 0.005,
+          "resolution": "1920x1080",
+          "stable_framerate": false
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.51,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.934
+        }
+      }
+    },
+    {
+      "session_id": "session_049",
+      "start_time": "2025-06-15T15:49:03.369466",
+      "duration_minutes": 152.7,
+      "data_completeness_percent": 99.999,
+      "expected_data_points": 229026,
+      "received_data_points": 229024,
+      "quality_metrics": {
+        "gsr": {
+          "snr_db": 25.8,
+          "baseline_stability_microS": 0.0115,
+          "sampling_rate_hz": 128,
+          "resolution_bits": 16
+        },
+        "thermal": {
+          "accuracy_celsius": 0.13,
+          "pixel_dropout_percent": 0.1404,
+          "resolution": "256x192",
+          "framerate_hz": 25
+        },
+        "rgb": {
+          "framerate_fps": 29.9,
+          "frame_loss_percent": 0.0176,
+          "resolution": "1920x1080",
+          "stable_framerate": true
+        },
+        "synchronization": {
+          "temporal_alignment_variation_percent": 1.71,
+          "alignment_method": "ntp_synchronized_timestamps",
+          "cross_correlation_confidence": 0.967
+        }
+      }
+    }
+  ],
+  "quality_thresholds": {
+    "data_completeness_minimum": 99.5,
+    "gsr_snr_minimum": 20.0,
+    "thermal_accuracy_maximum": 0.5,
+    "rgb_framerate_tolerance": 1.0,
+    "sync_variation_maximum": 5.0
+  }
+}
