@@ -1,0 +1,335 @@
+\section{System Overview}
+
+The Multi-Sensor Recording System consists of distributed components working together to capture synchronized physiological and imaging data. This manual provides technical guidance for system administrators and developers responsible for deployment, maintenance, and troubleshooting.
+
+\subsection{Architecture Components}
+
+\begin{itemize}
+\item \textbf{Desktop Controller (Python)}: Central coordination hub managing session control, device communication, and data aggregation
+\item \textbf{Android Sensor Nodes}: Mobile devices capturing video, thermal, and GSR data
+\item \textbf{Shimmer GSR Sensors}: Dedicated physiological sensors providing ground-truth measurements
+\item \textbf{Network Infrastructure}: Local network enabling device discovery and synchronization
+\end{itemize}
+
+\subsection{System Requirements}
+
+\subsubsection{Hardware Requirements}
+
+\textbf{Desktop Controller:}
+\begin{itemize}
+\item CPU: Intel i5-8400 or equivalent (minimum), i7-10700K recommended
+\item RAM: 16GB minimum, 32GB recommended for extended sessions
+\item Storage: 1TB SSD minimum for data storage
+\item Network: Gigabit Ethernet and WiFi 802.11ac capabilities
+\item OS: Windows 10/11, macOS 10.15+, or Ubuntu 20.04+
+\end{itemize}
+
+\textbf{Android Devices:}
+\begin{itemize}
+\item Android 8.0 (API level 26) minimum, Android 11+ recommended
+\item RAM: 4GB minimum, 8GB recommended
+\item Storage: 64GB minimum with 32GB available space
+\item USB-C port with USB host mode support
+\item WiFi 802.11n capability minimum
+\end{itemize}
+
+\textbf{Sensors:}
+\begin{itemize}
+\item Shimmer3 GSR+ sensors with current firmware
+\item Topdon TC001 thermal cameras
+\item USB-C cables and adapters as required
+\end{itemize}
+
+\subsubsection{Software Dependencies}
+
+\textbf{Desktop Controller:}
+\begin{itemize}
+\item Python 3.8+ with pip package manager
+\item PyQt6 for GUI framework
+\item NumPy, Pandas for data processing
+\item Zeroconf for network discovery
+\item WebSocket libraries for communication
+\end{itemize}
+
+\textbf{Android Application:}
+\begin{itemize}
+\item Android Studio for development builds
+\item CameraX library for video capture
+\item Nordic BLE library for sensor communication
+\item UVCCamera library for thermal camera integration
+\end{itemize}
+
+\section{Installation and Setup}
+
+\subsection{Desktop Controller Installation}
+
+\subsubsection{Environment Setup}
+
+1. Install Python 3.8 or later from python.org
+2. Create virtual environment:
+\begin{verbatim}
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+\end{verbatim}
+
+3. Install dependencies:
+\begin{verbatim}
+pip install -r requirements.txt
+\end{verbatim}
+
+\subsubsection{Configuration}
+
+1. Copy \texttt{config/default.json} to \texttt{config/local.json}
+2. Edit configuration parameters:
+\begin{itemize}
+\item Network interface settings
+\item Data storage directories
+\item Synchronization parameters
+\item Device discovery timeouts
+\end{itemize}
+
+3. Verify installation:
+\begin{verbatim}
+python -m pytest tests/
+\end{verbatim}
+
+\subsection{Android Application Deployment}
+
+\subsubsection{Development Build}
+
+1. Install Android Studio with Android SDK
+2. Clone repository and open Android project
+3. Configure signing certificate for debug builds
+4. Build and install APK:
+\begin{verbatim}
+./gradlew assembleDebug
+adb install app/build/outputs/apk/debug/app-debug.apk
+\end{verbatim}
+
+\subsubsection{Production Deployment}
+
+1. Configure release signing in \texttt{build.gradle}
+2. Build signed APK:
+\begin{verbatim}
+./gradlew assembleRelease
+\end{verbatim}
+3. Deploy via Android Device Manager or manual installation
+
+\subsection{Network Configuration}
+
+\subsubsection{Local Network Setup}
+
+1. Configure dedicated WiFi network (5GHz preferred)
+2. Ensure all devices connect to same network subnet
+3. Verify multicast support is enabled
+4. Configure firewall rules for port access:
+\begin{itemize}
+\item TCP 8080: Control protocol
+\item TCP 8081: Data streaming
+\item UDP 5353: mDNS discovery
+\end{itemize}
+
+\subsubsection{Time Synchronization}
+
+1. Enable NTP on desktop controller
+2. Configure Android devices to use local NTP server
+3. Verify synchronization accuracy:
+\begin{verbatim}
+python tools/check_sync.py
+\end{verbatim}
+
+\section{System Administration}
+
+\subsection{User Management}
+
+\subsubsection{Access Control}
+
+1. Configure user authentication in \texttt{config/users.json}
+2. Generate access tokens:
+\begin{verbatim}
+python tools/generate_token.py --user researcher1
+\end{verbatim}
+3. Distribute tokens to authorized users
+
+\subsubsection{Session Management}
+
+1. Monitor active sessions via admin interface
+2. Force session termination if required:
+\begin{verbatim}
+python tools/admin.py --terminate-session SESSION_ID
+\end{verbatim}
+
+\subsection{Data Management}
+
+\subsubsection{Storage Configuration}
+
+1. Configure data retention policies in \texttt{config/storage.json}
+2. Set up automated backup procedures
+3. Monitor disk usage:
+\begin{verbatim}
+python tools/storage_monitor.py --alert-threshold 85
+\end{verbatim}
+
+\subsubsection{Data Archive Procedures}
+
+1. Export completed sessions:
+\begin{verbatim}
+python tools/export_session.py --session SESSION_ID --format zip
+\end{verbatim}
+2. Verify data integrity before archival
+3. Remove local copies after successful backup
+
+\subsection{Maintenance Procedures}
+
+\subsubsection{Regular Maintenance}
+
+\textbf{Daily:}
+\begin{itemize}
+\item Check system status dashboard
+\item Verify network connectivity
+\item Monitor storage usage
+\end{itemize}
+
+\textbf{Weekly:}
+\begin{itemize}
+\item Update software dependencies
+\item Clean temporary files
+\item Backup configuration files
+\end{itemize}
+
+\textbf{Monthly:}
+\begin{itemize}
+\item Update device firmware
+\item Calibrate sensors
+\item Archive old session data
+\end{itemize}
+
+\subsubsection{Sensor Calibration}
+
+1. GSR Sensor Calibration:
+\begin{verbatim}
+python tools/calibrate_gsr.py --sensor SENSOR_ID
+\end{verbatim}
+
+2. Thermal Camera Calibration:
+\begin{verbatim}
+python tools/calibrate_thermal.py --device DEVICE_ID
+\end{verbatim}
+
+3. Verify calibration results and update configuration
+
+\section{Troubleshooting}
+
+\subsection{Common Issues}
+
+\subsubsection{Device Discovery Problems}
+
+\textbf{Symptoms:} Android devices not appearing in device list
+
+\textbf{Solutions:}
+\begin{itemize}
+\item Verify all devices on same network
+\item Check firewall settings
+\item Restart network discovery service
+\item Verify mDNS functionality
+\end{itemize}
+
+\subsubsection{Synchronization Issues}
+
+\textbf{Symptoms:} High synchronization error or drift
+
+\textbf{Solutions:}
+\begin{itemize}
+\item Check network latency: \texttt{ping DEVICE\_IP}
+\item Verify NTP configuration
+\item Restart synchronization service
+\item Check for network congestion
+\end{itemize}
+
+\subsubsection{Data Quality Problems}
+
+\textbf{Symptoms:} Missing data or corruption errors
+
+\textbf{Solutions:}
+\begin{itemize}
+\item Check storage space availability
+\item Verify file permissions
+\item Review error logs
+\item Restart affected components
+\end{itemize}
+
+\subsection{Diagnostic Tools}
+
+\subsubsection{System Health Monitoring}
+
+1. Real-time system status:
+\begin{verbatim}
+python tools/system_monitor.py
+\end{verbatim}
+
+2. Generate diagnostic report:
+\begin{verbatim}
+python tools/diagnostic_report.py --output report.html
+\end{verbatim}
+
+\subsubsection{Log Analysis}
+
+1. View recent system logs:
+\begin{verbatim}
+python tools/log_viewer.py --tail 100
+\end{verbatim}
+
+2. Search for specific errors:
+\begin{verbatim}
+python tools/log_search.py --pattern "ERROR" --since "1 hour"
+\end{verbatim}
+
+\subsection{Performance Optimization}
+
+\subsubsection{Network Optimization}
+
+1. Monitor network performance:
+\begin{verbatim}
+python tools/network_test.py --duration 60
+\end{verbatim}
+
+2. Optimize buffer sizes in configuration
+3. Consider dedicated network infrastructure for large deployments
+
+\subsubsection{Storage Optimization}
+
+1. Enable data compression for archival
+2. Implement data deduplication
+3. Monitor I/O performance and optimize accordingly
+
+\section{Security Considerations}
+
+\subsection{Network Security}
+
+\begin{itemize}
+\item Use WPA3 encryption for WiFi networks
+\item Implement VPN for remote access
+\item Regular security updates for all components
+\item Monitor for unauthorized device connections
+\end{itemize}
+
+\subsection{Data Protection}
+
+\begin{itemize}
+\item Encrypt data at rest using AES-256
+\item Secure data transmission with TLS 1.3
+\item Implement access logging and audit trails
+\item Regular backup verification procedures
+\end{itemize}
+
+\subsection{Privacy Compliance}
+
+\begin{itemize}
+\item Data anonymization procedures
+\item Consent management systems
+\item Data retention policy enforcement
+\item GDPR compliance verification
+\end{itemize}
+
+This system manual provides comprehensive guidance for system administrators to deploy, maintain, and troubleshoot the Multi-Sensor Recording System effectively. Regular updates to this documentation should reflect system evolution and operational experience.

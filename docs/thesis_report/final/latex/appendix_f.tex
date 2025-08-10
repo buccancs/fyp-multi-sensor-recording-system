@@ -1,0 +1,630 @@
+\section{Core System Components}
+
+This appendix provides key code listings that illustrate the implementation of critical system components. Complete source code is available in the project repository.
+
+\subsection{Android Thermal Camera Integration}
+
+\subsubsection{Topdon Thermal Camera Handler}
+
+\begin{lstlisting}[language=Java, caption=Thermal Camera Integration Implementation]
+public class TopdonThermalCamera implements ThermalCamera {
+    private UVCCamera uvcCamera;
+    private USBMonitor usbMonitor;
+    private Surface previewSurface;
+    private boolean isRecording = false;
+    private CSVWriter thermalDataWriter;
+
+    @Override
+    public void initialize(Context context) {
+        usbMonitor = new USBMonitor(context, onDeviceConnectListener);
+        usbMonitor.register();
+    }
+
+    private final USBMonitor.OnDeviceConnectListener onDeviceConnectListener =
+        new USBMonitor.OnDeviceConnectListener() {
+            @Override
+            public void onAttach(UsbDevice device) {
+                if (isTopdonCamera(device)) {
+                    usbMonitor.requestPermission(device);
+                }
+            }
+
+            @Override
+            public void onConnect(UsbDevice device, USBMonitor.UsbControlBlock ctrlBlock,
+                                boolean createNew) {
+                uvcCamera = new UVCCamera();
+                uvcCamera.open(ctrlBlock);
+                configureCamera();
+                startPreview();
+            }
+        };
+
+    private void configureCamera() {
+        // Set thermal camera to radiometric mode
+        uvcCamera.setPreviewSize(256, 192);
+        uvcCamera.setPreviewCallback(thermalFrameCallback);
+    }
+
+    private final IFrameCallback thermalFrameCallback = new IFrameCallback() {
+        @Override
+        public void onFrame(ByteBuffer frame) {
+            if (isRecording) {
+                long timestamp = System.nanoTime();
+                float[] temperatures = extractTemperatureData(frame);
+                logThermalFrame(timestamp, temperatures);
+            }
+        }
+    };
+
+    private float[] extractTemperatureData(ByteBuffer frame) {
+        float[] temperatures = new float[256 * 192];
+        frame.rewind();
+
+        for (int i = 0; i < temperatures.length; i++) {
+            // Convert raw thermal data to temperature values
+            short rawValue = frame.getShort();
+            temperatures[i] = convertToTemperature(rawValue);
+        }
+
+        return temperatures;
+    }
+
+    private float convertToTemperature(short rawValue) {
+        // Apply calibration coefficients
+        return (rawValue * TEMP_SCALE_FACTOR) + TEMP_OFFSET;
+    }
+
+    private void logThermalFrame(long timestamp, float[] temperatures) {
+        String[] csvRow = new String[temperatures.length + 2];
+        csvRow[0] = String.valueOf(timestamp);
+        csvRow[1] = String.valueOf(frameCounter++);
+
+        for (int i = 0; i < temperatures.length; i++) {
+            csvRow[i + 2] = String.format("%.2f", temperatures[i]);
+        }
+
+        thermalDataWriter.writeNext(csvRow);
+    }
+
+    @Override
+    public void startRecording(String sessionPath) {
+        try {
+            File thermalFile = new File(sessionPath, "thermal_data.csv");
+            thermalDataWriter = new CSVWriter(new FileWriter(thermalFile));
+
+            // Write CSV header
+            String[] header = createCSVHeader();
+            thermalDataWriter.writeNext(header);
+
+            isRecording = true;
+            frameCounter = 0;
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to start thermal recording", e);
+        }
+    }
+
+    @Override
+    public void stopRecording() {
+        isRecording = false;
+        if (thermalDataWriter != null) {
+            try {
+                thermalDataWriter.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error closing thermal data file", e);
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+\subsection{Shimmer GSR Integration}
+
+\subsubsection{GSR Sensor Communication Handler}
+
+\begin{lstlisting}[language=Java, caption=Shimmer GSR Sensor Integration]
+public class ShimmerGsrSensor implements PhysiologicalSensor {
+    private Shimmer shimmer;
+    private boolean isStreaming = false;
+    private CSVWriter gsrDataWriter;
+    private final Object streamingLock = new Object();
+
+    public ShimmerGsrSensor(String bluetoothAddress) {
+        shimmer = new Shimmer(bluetoothAddress);
+        shimmer.setShimmerUserAssignedName("GSR_Sensor");
+        setupSensorConfiguration();
+    }
+
+    private void setupSensorConfiguration() {
+        // Configure GSR sensor settings
+        shimmer.enableSensor(Shimmer.SENSOR_GSR);
+        shimmer.enableSensor(Shimmer.SENSOR_ACCEL);
+        shimmer.enableSensor(Shimmer.SENSOR_GYRO);
+
+        // Set sampling rate to 128Hz
+        shimmer.setSamplingRateShimmer(128.0);
+
+        // Configure GSR range and resolution
+        shimmer.setGSRRange(Shimmer.GSR_RANGE_AUTO);
+        shimmer.setAccelRange(Shimmer.ACCEL_RANGE_2G);
+
+        // Set up data callback
+        shimmer.setDataProcessing(dataCallback);
+    }
+
+    private final DataProcessing dataCallback = new DataProcessing() {
+        @Override
+        public void onNewDataAvailable(ObjectCluster objectCluster) {
+            if (isStreaming) {
+                processIncomingData(objectCluster);
+            }
+        }
+    };
+
+    private void processIncomingData(ObjectCluster data) {
+        synchronized (streamingLock) {
+            try {
+                long timestamp = System.nanoTime();
+
+                // Extract GSR data
+                double gsrResistance = getCalData(data, Shimmer.CHANNEL_TYPE.CAL.toString(),
+                                                 "GSR Resistance");
+                double gsrConductance = 1000.0 / gsrResistance; // Convert to μS
+
+                // Extract accelerometer data for motion detection
+                double accelX = getCalData(data, Shimmer.CHANNEL_TYPE.CAL.toString(),
+                                          "Accelerometer X");
+                double accelY = getCalData(data, Shimmer.CHANNEL_TYPE.CAL.toString(),
+                                          "Accelerometer Y");
+                double accelZ = getCalData(data, Shimmer.CHANNEL_TYPE.CAL.toString(),
+                                          "Accelerometer Z");
+
+                // Extract temperature for drift compensation
+                double temperature = getCalData(data, Shimmer.CHANNEL_TYPE.CAL.toString(),
+                                               "Temperature");
+
+                // Log data to CSV
+                logGsrData(timestamp, gsrConductance, temperature, accelX, accelY, accelZ);
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error processing GSR data", e);
+            }
+        }
+    }
+
+    private double getCalData(ObjectCluster data, String dataType, String sensorName) {
+        FormatCluster formatCluster = data.getFormatCluster(dataType, sensorName);
+        return formatCluster != null ? formatCluster.mData : Double.NaN;
+    }
+
+    private void logGsrData(long timestamp, double gsr, double temp,
+                           double accelX, double accelY, double accelZ) {
+        String[] csvRow = {
+            String.valueOf(timestamp),
+            String.format("%.6f", gsr),
+            String.format("%.2f", temp),
+            String.format("%.4f", accelX),
+            String.format("%.4f", accelY),
+            String.format("%.4f", accelZ)
+        };
+
+        gsrDataWriter.writeNext(csvRow);
+    }
+
+    @Override
+    public void startStreaming(String sessionPath) {
+        try {
+            File gsrFile = new File(sessionPath, "gsr_data.csv");
+            gsrDataWriter = new CSVWriter(new FileWriter(gsrFile));
+
+            // Write CSV header
+            String[] header = {"timestamp_ns", "gsr_microsiemens", "temperature_c",
+                              "accel_x", "accel_y", "accel_z"};
+            gsrDataWriter.writeNext(header);
+
+            synchronized (streamingLock) {
+                isStreaming = true;
+            }
+
+            // Start Shimmer streaming
+            shimmer.startStreaming();
+
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to start GSR streaming", e);
+        }
+    }
+
+    @Override
+    public void stopStreaming() {
+        synchronized (streamingLock) {
+            isStreaming = false;
+        }
+
+        shimmer.stopStreaming();
+
+        if (gsrDataWriter != null) {
+            try {
+                gsrDataWriter.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error closing GSR data file", e);
+            }
+        }
+    }
+
+    @Override
+    public void connect() {
+        shimmer.connect();
+    }
+
+    @Override
+    public void disconnect() {
+        shimmer.disconnect();
+    }
+
+    @Override
+    public boolean isConnected() {
+        return shimmer.getShimmerState() == Shimmer.STATE_CONNECTED;
+    }
+}
+\end{lstlisting}
+
+\section{Desktop Controller Implementation}
+
+\subsection{Session Management Core}
+
+\subsubsection{Session Controller}
+
+\begin{lstlisting}[language=Python, caption=Session Management Implementation]
+class SessionController:
+    def __init__(self, config_manager, device_manager):
+        self.config = config_manager
+        self.device_manager = device_manager
+        self.current_session = None
+        self.session_data = {}
+        self.recording_state = RecordingState.IDLE
+
+    def create_session(self, session_info):
+        """Create a new recording session with metadata."""
+        session_id = self._generate_session_id()
+        session_path = self._create_session_directory(session_id)
+
+        self.current_session = {
+            'id': session_id,
+            'path': session_path,
+            'info': session_info,
+            'start_time': None,
+            'end_time': None,
+            'devices': [],
+            'metadata': {}
+        }
+
+        # Initialize session metadata file
+        metadata_file = os.path.join(session_path, 'session_metadata.json')
+        with open(metadata_file, 'w') as f:
+            json.dump(self.current_session, f, indent=2, default=str)
+
+        return session_id
+
+    def start_recording(self):
+        """Start synchronized recording across all devices."""
+        if self.recording_state != RecordingState.IDLE:
+            raise ValueError("Recording already in progress")
+
+        if not self.current_session:
+            raise ValueError("No active session")
+
+        try:
+            # Synchronize clocks before recording
+            self._synchronize_device_clocks()
+
+            # Prepare all devices for recording
+            self._prepare_devices_for_recording()
+
+            # Calculate synchronized start time
+            start_time = time.time_ns() + 2_000_000_000  # 2 seconds from now
+
+            # Send start commands to all devices
+            start_commands = []
+            for device in self.device_manager.get_connected_devices():
+                cmd = {
+                    'type': 'SESSION_START',
+                    'session_id': self.current_session['id'],
+                    'start_time': start_time,
+                    'session_path': f"session_{self.current_session['id']}"
+                }
+                start_commands.append((device, cmd))
+
+            # Send all commands simultaneously
+            self._send_synchronized_commands(start_commands)
+
+            # Update session state
+            self.current_session['start_time'] = start_time
+            self.recording_state = RecordingState.RECORDING
+
+            # Start local data logging if applicable
+            self._start_local_logging()
+
+            logging.info(f"Recording started for session {self.current_session['id']}")
+
+        except Exception as e:
+            logging.error(f"Failed to start recording: {e}")
+            self.recording_state = RecordingState.ERROR
+            raise
+
+    def stop_recording(self):
+        """Stop synchronized recording across all devices."""
+        if self.recording_state != RecordingState.RECORDING:
+            raise ValueError("No recording in progress")
+
+        try:
+            stop_time = time.time_ns()
+
+            # Send stop commands to all devices
+            stop_commands = []
+            for device in self.device_manager.get_connected_devices():
+                cmd = {
+                    'type': 'SESSION_STOP',
+                    'session_id': self.current_session['id'],
+                    'stop_time': stop_time
+                }
+                stop_commands.append((device, cmd))
+
+            self._send_synchronized_commands(stop_commands)
+
+            # Stop local logging
+            self._stop_local_logging()
+
+            # Update session metadata
+            self.current_session['end_time'] = stop_time
+            self.current_session['duration'] = stop_time - self.current_session['start_time']
+
+            # Wait for data transfer completion
+            self._wait_for_data_transfer()
+
+            # Finalize session
+            self._finalize_session()
+
+            self.recording_state = RecordingState.COMPLETED
+            logging.info(f"Recording completed for session {self.current_session['id']}")
+
+        except Exception as e:
+            logging.error(f"Failed to stop recording: {e}")
+            self.recording_state = RecordingState.ERROR
+            raise
+
+    def _synchronize_device_clocks(self):
+        """Synchronize clocks across all connected devices."""
+        sync_requests = []
+
+        for device in self.device_manager.get_connected_devices():
+            # Send time synchronization request
+            sync_cmd = {
+                'type': 'TIME_SYNC',
+                'server_time': time.time_ns(),
+                'sequence': self._get_next_sequence()
+            }
+            sync_requests.append((device, sync_cmd))
+
+        # Send sync requests and collect responses
+        responses = self._send_sync_requests(sync_requests)
+
+        # Calculate clock offsets
+        for device_id, response in responses.items():
+            offset = self._calculate_clock_offset(response)
+            device = self.device_manager.get_device(device_id)
+            device.clock_offset = offset
+
+            logging.debug(f"Device {device_id} clock offset: {offset}ms")
+
+    def _calculate_clock_offset(self, sync_response):
+        """Calculate clock offset using NTP-like algorithm."""
+        t1 = sync_response['t1']  # Client request time
+        t2 = sync_response['t2']  # Server receive time
+        t3 = sync_response['t3']  # Server response time
+        t4 = time.time_ns()       # Client response receive time
+
+        # Calculate round-trip delay and offset
+        delay = (t4 - t1) - (t3 - t2)
+        offset = ((t2 - t1) + (t3 - t4)) / 2
+
+        return {
+            'offset_ns': offset,
+            'delay_ns': delay,
+            'accuracy_ns': delay / 2
+        }
+
+    def _finalize_session(self):
+        """Finalize session with quality assessment and metadata."""
+        # Generate quality report
+        quality_report = self._generate_quality_report()
+
+        # Update session metadata
+        metadata_updates = {
+            'quality_report': quality_report,
+            'file_manifest': self._generate_file_manifest(),
+            'synchronization_report': self._generate_sync_report(),
+            'completion_status': 'SUCCESS'
+        }
+
+        self.current_session.update(metadata_updates)
+
+        # Save final metadata
+        metadata_file = os.path.join(self.current_session['path'], 'session_metadata.json')
+        with open(metadata_file, 'w') as f:
+            json.dump(self.current_session, f, indent=2, default=str)
+
+        # Archive session if configured
+        if self.config.get('auto_archive', False):
+            self._archive_session()
+
+    def _generate_quality_report(self):
+        """Generate comprehensive quality assessment report."""
+        return {
+            'data_completeness': self._assess_data_completeness(),
+            'synchronization_quality': self._assess_sync_quality(),
+            'signal_quality': self._assess_signal_quality(),
+            'error_summary': self._summarize_errors(),
+            'recommendations': self._generate_recommendations()
+        }
+\end{lstlisting}
+
+\subsection{Network Communication Protocol}
+
+\subsubsection{Device Communication Handler}
+
+\begin{lstlisting}[language=Python, caption=Network Communication Implementation]
+class DeviceCommunicationManager:
+    def __init__(self, port=8080):
+        self.port = port
+        self.server = None
+        self.connected_devices = {}
+        self.message_handlers = {}
+        self.sequence_counter = 0
+
+    async def start_server(self):
+        """Start WebSocket server for device communication."""
+        self.server = await websockets.serve(
+            self.handle_device_connection,
+            "0.0.0.0",
+            self.port,
+            ping_interval=10,
+            ping_timeout=5
+        )
+        logging.info(f"Device communication server started on port {self.port}")
+
+    async def handle_device_connection(self, websocket, path):
+        """Handle incoming device connections."""
+        device_id = None
+        try:
+            # Device registration handshake
+            registration_msg = await websocket.recv()
+            registration = json.loads(registration_msg)
+
+            if registration['type'] != 'DEVICE_REGISTER':
+                await websocket.close(code=4001, reason="Invalid registration")
+                return
+
+            device_id = registration['device_id']
+            capabilities = registration['capabilities']
+
+            # Store device connection
+            self.connected_devices[device_id] = {
+                'websocket': websocket,
+                'capabilities': capabilities,
+                'status': 'connected',
+                'last_seen': time.time(),
+                'clock_offset': 0
+            }
+
+            logging.info(f"Device {device_id} registered with capabilities: {capabilities}")
+
+            # Send registration acknowledgment
+            ack_msg = {
+                'type': 'REGISTRATION_ACK',
+                'status': 'success',
+                'server_time': time.time_ns(),
+                'device_id': device_id
+            }
+            await websocket.send(json.dumps(ack_msg))
+
+            # Handle ongoing communication
+            async for message in websocket:
+                await self.process_device_message(device_id, message)
+
+        except websockets.exceptions.ConnectionClosed:
+            logging.info(f"Device {device_id} disconnected")
+        except Exception as e:
+            logging.error(f"Error handling device {device_id}: {e}")
+        finally:
+            if device_id and device_id in self.connected_devices:
+                del self.connected_devices[device_id]
+
+    async def process_device_message(self, device_id, message):
+        """Process incoming messages from devices."""
+        try:
+            msg_data = json.loads(message)
+            msg_type = msg_data['type']
+
+            # Update device last seen time
+            self.connected_devices[device_id]['last_seen'] = time.time()
+
+            # Route message to appropriate handler
+            if msg_type in self.message_handlers:
+                await self.message_handlers[msg_type](device_id, msg_data)
+            else:
+                logging.warning(f"No handler for message type: {msg_type}")
+
+        except json.JSONDecodeError:
+            logging.error(f"Invalid JSON from device {device_id}: {message}")
+        except Exception as e:
+            logging.error(f"Error processing message from {device_id}: {e}")
+
+    async def send_to_device(self, device_id, message):
+        """Send message to specific device."""
+        if device_id not in self.connected_devices:
+            raise ValueError(f"Device {device_id} not connected")
+
+        device = self.connected_devices[device_id]
+        websocket = device['websocket']
+
+        try:
+            # Add message metadata
+            message.update({
+                'timestamp': time.time_ns(),
+                'sequence': self._get_next_sequence(),
+                'source': 'desktop_controller'
+            })
+
+            await websocket.send(json.dumps(message))
+
+        except websockets.exceptions.ConnectionClosed:
+            logging.warning(f"Device {device_id} connection closed during send")
+            del self.connected_devices[device_id]
+            raise
+
+    async def broadcast_to_devices(self, message, device_filter=None):
+        """Broadcast message to all or filtered devices."""
+        target_devices = self.connected_devices.items()
+
+        if device_filter:
+            target_devices = [(id, dev) for id, dev in target_devices
+                            if device_filter(dev)]
+
+        tasks = []
+        for device_id, device in target_devices:
+            task = self.send_to_device(device_id, message.copy())
+            tasks.append(task)
+
+        # Send to all devices concurrently
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Check for failures
+        failed_devices = []
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                device_id = list(dict(target_devices).keys())[i]
+                failed_devices.append((device_id, result))
+                logging.error(f"Failed to send to {device_id}: {result}")
+
+        return failed_devices
+
+    def register_message_handler(self, message_type, handler):
+        """Register handler for specific message types."""
+        self.message_handlers[message_type] = handler
+
+    def get_connected_devices(self):
+        """Get list of currently connected devices."""
+        return list(self.connected_devices.keys())
+
+    def get_device_capabilities(self, device_id):
+        """Get capabilities of specific device."""
+        if device_id in self.connected_devices:
+            return self.connected_devices[device_id]['capabilities']
+        return None
+
+    def _get_next_sequence(self):
+        """Get next sequence number for message ordering."""
+        self.sequence_counter += 1
+        return self.sequence_counter
+\end{lstlisting}
+
+This appendix provides essential code listings demonstrating the core implementation approaches used in the Multi-Sensor Recording System. The complete source code with additional components, error handling, and documentation is available in the project repository.
