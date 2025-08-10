@@ -7,7 +7,7 @@ components and devices, each with dedicated technical documentation. The
 core system includes an **Android Mobile Application** and a **Python
 Desktop Controller**, along with subsystems for multi-device
 synchronisation, session management, camera integration, and sensor
-interfaces [1].
+interfaces [Boucsein(2012)].
 These components communicate over a local network using a custom
 protocol (WebSocket over TLS with JSON messages) to ensure real-time
 data exchange and time
