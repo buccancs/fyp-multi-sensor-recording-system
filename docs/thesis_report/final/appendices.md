@@ -1750,100 +1750,121 @@ how critical aspects of the system are implemented. The following
 listings highlight the synchronisation mechanism, data processing
 pipeline, and sensor integration logic, with inline commentary:
 
-**1. Synchronisation (Master Clock Coordination):** The code below is
-from the `MasterClockSynchronizer` class in the Python controller. It
-starts an NTP time server and the PC server (for network messages) and
-launches a background thread to continually monitor sync status. This
-ensures all connected devices share a common clock reference. If either
-server fails to start, it handles the error
-gracefully[\[50\]](PythonApp/master_clock_synchronizer.py#L86-L94)[\[51\]](PythonApp/master_clock_synchronizer.py#L95-L102):
+### F.1 Chapter 3 Code Reference Catalogue
 
-`python try: logger.info("Starting master clock synchronisation system...") if not self.ntp_server.start(): logger.error("Failed to start NTP server") return False if not self.pc_server.start(): logger.error("Failed to start PC server") self.ntp_server.stop() return False self.is_running = True self.master_start_time = time.time() self.sync_thread = threading.Thread( target=self._sync_monitoring_loop, name="SyncMonitor" ) self.sync_thread.daemon = True self.sync_thread.start() logger.info("Master clock synchronisation system started successfully")`[\[52\]](PythonApp/master_clock_synchronizer.py#L86-L102)
+This section provides detailed code references supporting the requirements documentation in Chapter 3:
 
-In this snippet, after starting the NTP and PC servers, the system
-spawns a thread (`SyncMonitor`) that continuously checks and maintains
-synchronisation. Each Android device periodically syncs with the PC's
-NTP server, and the PC broadcasts timing commands. When a recording
-session starts, the `MasterClockSynchronizer` sends a **start command
-with a master timestamp** to all devices, ensuring they begin recording
-at the same synchronised
-moment[\[53\]](PythonApp/master_clock_synchronizer.py#L164-L172).
-This design achieves tightly coupled timing across devices, which is
-crucial for data alignment.
+**F.1.1 Sensor Management and Integration**
+- **Shimmer Device Connection**: `PythonApp/shimmer_manager.py:234-267` - Multi-device sensor integration with simulation mode fallback
+- **Android Device Manager**: `PythonApp/shimmer_manager.py:241-258` - Android device integration with callback registration for data and status updates
+- **Device Discovery Logic**: `PythonApp/shimmer_manager.py:269-278` and `PythonApp/shimmer_manager.py:280-289` - Bluetooth and network-based device discovery with hybrid operational modes
+- **Connection Management**: `PythonApp/shimmer_manager.py:145-151` - Live data streaming, timestamp synchronisation, and error recovery procedures
 
-**2. Data Pipeline (Physiological Signal Processing):** The system
-processes multi-modal sensor data in real-time. Below is an excerpt from
-the data pipeline module (`cv_preprocessing_pipeline.py`) that computes
-heart rate from an optical blood volume pulse signal (e.g. from face
-video). It uses a Fourier transform (Welch's method) to find the
-dominant frequency corresponding to heart
-rate[\[54\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L72-L80):
+**F.1.2 Session Management and Coordination**
+- **Session Creation**: `SessionManager.create_session()` implemented in `PythonApp/session/session_manager.py:46-50` - Session initialisation with metadata file creation
+- **Session Validation**: `SessionManager.validate_session_name()` - Session name validation with duplicate checking
+- **File Management**: `SessionManager.add_file_to_session()` - Session metadata updates with file tracking and size recording
+- **Session Architecture**: `SessionManager` class provides overall session lifecycle management as documented in `PythonApp/session/session_manager.py`
+
+**F.1.3 Network Synchronisation Services**
+- **Time Synchronisation**: `PythonApp/ntp_time_server.py:38-50` - NTP-based clock synchronisation service running on port 8889
+- **Network Server**: `PythonApp/network/pc_server.py:44-53` and `PythonApp/network/pc_server.py:90-98` - TCP server infrastructure for device communication
+- **Master Clock Coordination**: `PythonApp/master_clock_synchronizer.py:86-102` and `PythonApp/master_clock_synchronizer.py:164-172` - Central timing coordination with start command broadcasting
+
+**F.1.4 User Interface Implementation**
+- **Main Application Window**: `PythonApp/gui/enhanced_ui_main_window.py` - Primary desktop interface with session control panels and device management
+- **Session Configuration**: Session creation dialog with participant ID validation and timestamped session naming format "session_YYYYMMDD_HHMMSS"
+
+**F.1.5 Security and Configuration Management**
+- **Security Configuration**: `protocol/config.json:111-128` - Security settings including data encryption and device fault tolerance
+- **Network Configuration**: `protocol/config.json:7-15` - Network settings for device connectivity and port configuration  
+- **TLS Encryption**: `protocol/config.json:116-117` with `"tls_version": "1.3"` and `"secure_transfer": true` settings
+- **Authentication Tokens**: `"auth_token_min_length": 32` configuration for device authentication security
+- **Runtime Security**: `PythonApp/production/runtime_security_checker.py` - Startup security validation for encryption and authentication
+- **TCP Protocol**: `protocol: "TCP"` configuration for client-server communication model
+
+**F.1.6 Data Processing and Pipeline Architecture**
+- **Physiological Signal Processing**: `PythonApp/webcam/cv_preprocessing_pipeline.py:72-80` - Heart rate estimation using Fourier transform analysis
+- **Android File Transfer**: `AndroidApp/src/main/java/com/multisensor/recording/managers/FileTransferManager.kt` - Post-session file packaging and network transfer
+- **Session Synchronisation**: `PythonApp/session/session_synchronizer.py` - Device state management, offline queuing, and recovery mechanisms
+
+**F.1.7 Test and Validation Infrastructure**
+- **Endurance Testing**: Test results documented in `results/endurance_test_results/endurance_20250806_065637_detailed_metrics.json` - Sub-100ms response times during synchronisation
+### F.2 Core Implementation Examples
+
+This section provides specific code excerpts that demonstrate key implementation patterns referenced in the Chapter 3 requirements catalogue above.
+
+**F.2.1 Synchronisation (Master Clock Coordination):** The code below is
+from the `MasterClockSynchronizer` class in the Python controller (referenced as F.1.3). It
+starts an NTP time server and the PC server for network messages and
+launches a background thread to continually monitor sync status:
+
+```python
+try:
+    logger.info("Starting master clock synchronisation system...")
+    if not self.ntp_server.start():
+        logger.error("Failed to start NTP server")
+        return False
+    if not self.pc_server.start():
+        logger.error("Failed to start PC server")
+        self.ntp_server.stop()
+        return False
+    self.is_running = True
+    self.master_start_time = time.time()
+    self.sync_thread = threading.Thread(
+        target=self._sync_monitoring_loop,
+        name="SyncMonitor"
+    )
+    self.sync_thread.daemon = True
+    self.sync_thread.start()
+    logger.info("Master clock synchronisation system started successfully")
+```
+
+This design achieves tightly coupled timing across devices, essential for data alignment.
+
+**F.2.2 Data Pipeline (Physiological Signal Processing):** From the data pipeline module (referenced as F.1.6), heart rate computation using Fourier transform analysis:
 
 ```python
 # Inside PhysiologicalSignal.get_heart_rate_estimate()
+freqs, psd = scipy.signal.welch(
+    self.signal_data,
+    fs=self.sampling_rate,
+    nperseg=min(512, len(self.signal_data) // 4),
+)
+hr_mask = (freqs >= freq_range[0]) & (freqs <= freq_range[1])
+hr_freqs = freqs[hr_mask]
+hr_psd = psd[hr_mask]
+if len(hr_psd) > 0:
+    peak_freq = hr_freqs[np.argmax(hr_psd)]
+    heart_rate_bpm = peak_freq * 60.0
+    return heart_rate_bpm
+```
 
-freqs, psd = scipy.signal.welch( self.signal_data,
-fs=self.sampling_rate, nperseg=min(512, len(self.signal_data) // 4), )
-hr_mask = (freqs \>= freq_range\[0\]) & (freqs \<= freq_range\[1\])
-hr_freqs = freqs\[hr_mask\] hr_psd = psd\[hr_mask\] if len(hr_psd) \> 0:
-peak_freq = hr_freqs\[np.argmax(hr_psd)\] heart_rate_bpm = peak_freq \*
-60.0 return heart_rate_bpm
-\`\`\`[\[54\]](PythonApp/webcam/cv_preprocessing_pipeline.py#L72-L80)
+This code identifies the peak frequency within a plausible heart rate range and converts it to beats per minute.
 
-This code takes a segment of the physiological signal (for example, an
-rPPG waveform extracted from the video) and computes its power spectral
-density. It then identifies the peak frequency within a plausible heart
-rate range (0.7--4.0 Hz, i.e. 42--240 bpm) and converts it to beats per
-minute. The data pipeline includes multiple such processing steps: ROI
-detection in video frames, signal filtering, feature extraction, etc.
-These are all implemented using efficient libraries (OpenCV, NumPy,
-SciPy) and run in real-time on the captured data streams. The resulting
-metrics (heart rate, GSR features, etc.) are timestamped and stored
-along with raw data for later analysis. This code excerpt exemplifies
-the kind of real-time analysis the system performs on sensor data to
-enable contactless physiological monitoring.
+**F.2.3 Integration (Sensor and Device Integration Logic):** From the `ShimmerManager` class (referenced as F.1.1), showing Android-integrated sensor initialisation:
 
-**3. Integration (Sensor and Device Integration Logic):** The system
-integrates heterogeneous devices (Android phones, thermal cameras,
-Shimmer GSR sensors) into one coordinated framework. The following code
-excerpt from the `ShimmerManager` class (Python controller) shows how an
-Android-integrated Shimmer sensor is initialised and
-managed[\[55\]](PythonApp/shimmer_manager.py#L241-L249)[\[56\]](PythonApp/shimmer_manager.py#L250-L258):
+```python
+if self.enable_android_integration:
+    logger.info("Initialising Android device integration...")
+    self.android_device_manager = AndroidDeviceManager(
+        server_port=self.android_server_port,
+        logger=self.logger
+    )
+    self.android_device_manager.add_data_callback(self._on_android_shimmer_data)
+    self.android_device_manager.add_status_callback(self._on_android_device_status)
+    if not self.android_device_manager.initialise():
+        logger.error("Failed to initialise Android device manager")
+        if not PYSHIMMER_AVAILABLE:
+            return False
+        else:
+            logger.warning("Continuing with direct connections only")
+            self.enable_android_integration = False
+    else:
+        logger.info(f"Android device server listening on port {self.android_server_port}")
+```
 
-`python if self.enable_android_integration: logger.info("Initialising Android device integration...") self.android_device_manager = AndroidDeviceManager( server_port=self.android_server_port, logger=self.logger ) self.android_device_manager.add_data_callback(self._on_android_shimmer_data) self.android_device_manager.add_status_callback(self._on_android_device_status) if not self.android_device_manager.initialise(): logger.error("Failed to initialise Android device manager") if not PYSHIMMER_AVAILABLE: return False else: logger.warning("Continuing with direct connections only") self.enable_android_integration = False else: logger.info(f"Android device server listening on port {self.android_server_port}")`[\[57\]](PythonApp/shimmer_manager.py#L241-L258)
-
-This snippet demonstrates how the system handles sensor integration in a
-flexible way. If Android-based integration is enabled, it spins up an
-`AndroidDeviceManager` (which listens on a port for Android devices'
-connections). It registers callbacks to receive sensor data and status
-updates from the Android side (e.g., the Shimmer sensor data that the
-phone relays). When initialising, if the Android channel fails (for
-instance, if the phone app is not responding), the code falls back: if a
-direct USB/Bluetooth method (`PyShimmer`) is available, it will use that
-instead (or otherwise run in simulation
-mode)[\[56\]](PythonApp/shimmer_manager.py#L250-L258).
-In essence, the integration code supports *multiple operational modes*:
-direct PC-to-sensor connection, Android-mediated wireless connection, or
-a hybrid of
-both[\[58\]](PythonApp/shimmer_manager.py#L134-L143).
-The system can discover devices via Bluetooth or via the Android app,
-and will coordinate data streaming from whichever path is
-active[\[59\]](PythonApp/shimmer_manager.py#L269-L278)[\[60\]](PythonApp/shimmer_manager.py#L280-L289).
-Additional code (not shown here) in the `ShimmerManager` handles the
-live data stream, timestamp synchronisation of sensor samples, and error
-recovery (reconnecting a sensor if the link is
-lost)[\[61\]](PythonApp/shimmer_manager.py#L145-L151).
-
-Through these code excerpts, Appendix F illustrates the implementation
-of the system's key features. The synchronisation code shows how strict
-timing is achieved programmatically; the data pipeline code reveals the
-real-time analysis capabilities; and the integration code highlights the
-system's versatility in accommodating different hardware configurations.
-Each excerpt is drawn directly from the project's source code,
-reflecting the production-ready, well-documented nature of the
-implementation. The full source files include further comments and
-structure, which are referenced in earlier appendices for those seeking
-more in-depth understanding of the codebase.
+This demonstrates flexible sensor integration supporting multiple operational modes with fallback capabilities.
 
 ## Appendix G: Diagnostic Figures and Performance Analysis
 
