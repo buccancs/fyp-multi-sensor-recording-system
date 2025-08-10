@@ -204,7 +204,7 @@ fun AboutScreen(
         )
         
         Text(
-            text = "Version 1.0.0 (Build: ${aboutViewModel.getBuildDate()})",
+            text = "Version 0.1.0-beta (Build: ${aboutViewModel.getBuildDate()})",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
