@@ -1915,6 +1915,63 @@ These diagnostic analyses directly support the success criteria documented in Ch
 
 These comprehensive diagnostics provide the quantitative foundation supporting the qualitative assessments presented in the main conclusion chapter.
 
+## Appendix H: Consolidated Technical Reference
+
+### H.1 Repository Structure and Build Instructions
+
+**Repository Components:**
+
+- Python controller: `PythonApp/src/controller/MainWindow.py` (487 lines)
+- Android app: `AndroidApp/app/src/main/` (Kotlin, minSdk 26, targetSdk 34)
+- Build configuration: `build.gradle` (Gradle 8.2), `environment.yml` (Conda)
+- Documentation: `docs/architecture.md`, `docs/api/` (OpenAPI specs)
+
+**Build Commands:**
+
+Android app:
+```bash
+./gradlew assembleDebug
+```
+*Requires Android SDK 34*
+
+Python environment:
+```bash
+conda env create -f environment.yml
+```
+*Requires Python 3.10+*
+
+### H.2 Hardware Specifications and Configuration Files
+
+**Tested Configuration:**
+- Desktop: ThinkPad T480s, Ubuntu 22.04, 16GB RAM
+- Devices: Samsung Galaxy S10/S21/A52 (Android 12+)
+- Thermal camera: TopDon TC001 (320×240, 25° FOV)
+- GSR sensor: Shimmer3 GSR+ v4.1 firmware
+
+**Configuration Files:**
+- NTP server: `config/chrony.conf` (pool 2.android.pool.ntp.org)
+- Network settings: `config/network_topology.json` (IP ranges, ports)
+- Calibration data: `calibration/camera_params.yaml` (OpenCV format)
+
+### H.3 Test Data and Validation Results
+
+**Sample Datasets (anonymised):**
+- `results/validation_sessions/` (14 timing precision tests)
+- `results/calibration_accuracy/` (checkerboard validation images)
+- `results/network_performance/` (latency measurements, packet loss logs)
+
+### H.4 Reproducibility Verification
+
+**Synchronisation Results Replication:**
+
+To replicate the synchronisation results:
+```bash
+python test_sync_accuracy.py
+```
+
+GPS reference clock setup documented in `docs/test_execution_guide.md`.
+Expected output: ~2.7ms median drift across 4+ devices.
+
 ## Appendix H: Consolidated Figures and Code Listings
 
 ## Appendix H: Consolidated Figure and Code Reference Index
