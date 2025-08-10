@@ -397,6 +397,18 @@ The Multi-Sensor Recording System is designed for research environments where co
 
 **Safety and Ethical Responsibilities**: All users must complete ethics training and understand data protection requirements before operating the system. The equipment must be used only with approved research protocols and proper participant consent. Emergency procedures must be understood before conducting any session involving human participants.
 
+### B.1.1 Ethics Approval and Compliance Framework
+
+This research system operates under the ethics approval granted by the UCLIC Ethics Committee (Project ID: 1428). All research activities using this system must comply with the approved research protocol, which includes:
+
+**Participant Information and Consent**: All participants must receive the approved participant information sheet and provide informed consent before any data collection begins. The information sheet covers the nature of the research, data collection procedures, participant rights, and data handling protocols.
+
+**Risk Assessment Compliance**: The system has undergone comprehensive risk assessment covering technical safety, data protection, and participant welfare. All operational procedures documented in this manual align with the approved risk assessment framework.
+
+**Data Protection Requirements**: Research conducted with this system must follow the approved data management plan, including participant anonymisation protocols, secure data storage procedures, and data retention/disposal schedules as specified in the ethics approval.
+
+**Approved Research Scope**: The ethics approval covers the specific research methodology and participant populations described in the approved application. Any modifications to research procedures or participant criteria require ethics committee review and approval before implementation.
+
 ### B.2 Initial System Setup and Orientation
 
 #### B.2.1 Pre-Use Verification Checklist
@@ -419,8 +431,9 @@ Before conducting any research session, complete the following verification step
 - [ ] All sensors detected and responding to test commands
 
 **Documentation Review:**
-- [ ] Research protocol approved and ethics clearance confirmed
-- [ ] Participant information and consent forms prepared
+- [ ] Research protocol approved and UCLIC Ethics Committee clearance confirmed (Project ID: 1428)
+- [ ] Participant information sheets and consent forms prepared and approved
+- [ ] Risk assessment documentation reviewed and mitigation procedures understood
 - [ ] Data management plan reviewed and storage locations confirmed
 - [ ] Emergency contact information readily accessible
 
@@ -1235,6 +1248,56 @@ Measurement Protocol:
   4. Document linearity, accuracy, and temperature drift
   5. Generate correction factors if required
 ```
+
+### C.6 Ethics Documentation and Compliance Framework
+
+#### C.6.1 UCLIC Ethics Committee Approval
+
+**Ethics Approval Details:**
+- **Approving Body**: UCLIC Ethics Committee, University College London
+- **Project ID**: 1428
+- **Approval Status**: Approved for research data collection involving human participants
+- **Approval Scope**: Multi-sensor physiological monitoring research using contactless GSR prediction methodology
+
+**Research Protocol Coverage:**
+The ethics approval encompasses the complete research methodology described in this thesis, including:
+- Participant recruitment and selection criteria
+- Data collection procedures using thermal imaging, RGB video, and GSR sensors
+- Data storage, anonymisation, and retention protocols
+- Participant information provision and informed consent procedures
+- Risk assessment covering technical, privacy, and safety considerations
+
+#### C.6.2 Participant Information and Consent Framework
+
+**Approved Information Sheet Elements:**
+The ethics approval includes standardised participant information covering:
+- Research purpose and methodology overview
+- Detailed explanation of sensor types and data collection procedures
+- Data usage, storage duration, and anonymisation protocols
+- Participant rights including withdrawal procedures and data deletion
+- Contact information for researchers and ethics committee
+- Clear statement of voluntary participation and confidentiality protections
+
+**Consent Documentation:**
+- Written informed consent required before any data collection
+- Electronic consent recording integrated into system workflow
+- Consent withdrawal procedures documented and technically implemented
+- Consent records maintained separately from research data for audit purposes
+
+#### C.6.3 Risk Assessment Documentation
+
+**Supervisor-Approved Risk Assessment:**
+Comprehensive risk assessment covering:
+- **Technical Risks**: Equipment failure, data loss, synchronisation errors
+- **Safety Risks**: Electrical safety, thermal exposure, participant comfort
+- **Privacy Risks**: Data security, anonymisation failure, unauthorised access
+- **Research Risks**: Protocol deviations, quality assurance failures
+
+**Mitigation Strategies:**
+- Technical redundancy and backup procedures
+- Safety protocols for equipment operation and participant monitoring
+- Encrypted data storage and secure communication protocols
+- Quality assurance checklists and real-time monitoring systems
 
 This comprehensive supporting documentation provides the technical foundation necessary for system replication, validation, and ongoing maintenance of the Multi-Sensor Recording System in research environments.
 
