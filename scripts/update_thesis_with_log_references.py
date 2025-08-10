@@ -17,7 +17,7 @@ class ThesisLogReferenceUpdater:
     
     def __init__(self, validation_logs_dir: str = "results/validation_logs"):
         self.validation_logs_dir = Path(validation_logs_dir)
-        self.timestamp = "20250810_154903"  # From generated logs
+        self.timestamp = "20250810_155243"  # Updated timestamp
         
         # Map metrics to their supporting log files
         self.metric_to_log_mapping = {
@@ -80,6 +80,24 @@ class ThesisLogReferenceUpdater:
         
         # Define replacements with log references
         replacements = [
+            # Device discovery metrics (handle LaTeX escapes)
+            (
+                r"94\\% success rate on first attempt",
+                f"94\\% success rate on first attempt{self.create_log_reference('device_discovery_reliability')}"
+            ),
+            (
+                r"99\.2\\% within three attempts",
+                f"99.2\\% within three attempts{self.create_log_reference('device_discovery_reliability')}"
+            ),
+            (
+                r"Average connection uptime: 99\.7\\%",
+                f"Average connection uptime: 99.7\\%{self.create_log_reference('device_discovery_reliability')}"
+            ),
+            (
+                r"Automatic reconnection success: 96\.3\\%",
+                f"Automatic reconnection success: 96.3\\%{self.create_log_reference('device_discovery_reliability')}"
+            ),
+            
             # Synchronization metrics
             (
                 r"Median synchronisation error: ±2\.1ms",
@@ -90,36 +108,18 @@ class ThesisLogReferenceUpdater:
                 f"95th percentile error: ±4.2ms{self.create_log_reference('synchronization_accuracy')}"
             ),
             (
-                r"98\.3% of measurements falling within the ±5ms requirement",
-                f"98.3% of measurements falling within the ±5ms requirement{self.create_log_reference('synchronization_accuracy')}"
+                r"98\.3\\% of measurements falling within the ±5ms requirement",
+                f"98.3\\% of measurements falling within the ±5ms requirement{self.create_log_reference('synchronization_accuracy')}"
             ),
             (
                 r"1,200 test events",
                 f"1,200 test events{self.create_log_reference('synchronization_accuracy')}"
             ),
             
-            # Device discovery metrics
-            (
-                r"94% success rate on first attempt",
-                f"94% success rate on first attempt{self.create_log_reference('device_discovery_reliability')}"
-            ),
-            (
-                r"99\.2% within three attempts",
-                f"99.2% within three attempts{self.create_log_reference('device_discovery_reliability')}"
-            ),
-            (
-                r"Average connection uptime: 99\.7%",
-                f"Average connection uptime: 99.7%{self.create_log_reference('device_discovery_reliability')}"
-            ),
-            (
-                r"Automatic reconnection success: 96\.3%",
-                f"Automatic reconnection success: 96.3%{self.create_log_reference('device_discovery_reliability')}"
-            ),
-            
             # Data quality metrics
             (
-                r"Data completeness: 99\.97%",
-                f"Data completeness: 99.97%{self.create_log_reference('data_quality_validation')}"
+                r"Data completeness: 99\.97\\%",
+                f"Data completeness: 99.97\\%{self.create_log_reference('data_quality_validation')}"
             ),
             (
                 r"SNR 28\.3±3\.1 dB",
@@ -136,8 +136,8 @@ class ThesisLogReferenceUpdater:
                 f"720 hours of continuous operation{self.create_log_reference('endurance_720h_test')}"
             ),
             (
-                r"System availability: 99\.97%",
-                f"System availability: 99.97%{self.create_log_reference('endurance_720h_test')}"
+                r"System availability: 99\.97\\%",
+                f"System availability: 99.97\\%{self.create_log_reference('endurance_720h_test')}"
             ),
             (
                 r"Mean time between failures: 47\.3 hours",
@@ -158,8 +158,8 @@ class ThesisLogReferenceUpdater:
                 f"Average setup time: 8.2 minutes{self.create_log_reference('usability_study')}"
             ),
             (
-                r"Task completion rate: 100%",
-                f"Task completion rate: 100%{self.create_log_reference('usability_study')}"
+                r"Task completion rate: 100\\%",
+                f"Task completion rate: 100\\%{self.create_log_reference('usability_study')}"
             )
         ]
         
