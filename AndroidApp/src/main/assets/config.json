@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
+  "version": "0.1.0-beta",
   "description": "Shared configuration for synchronized multimodal recording system",
-  "last_updated": "2025-07-30T01:24:00Z",
+  "last_updated": "2025-01-27T01:24:00Z",
   "protocol_version": 1,
   "network": {
     "host": "192.168.0.100",

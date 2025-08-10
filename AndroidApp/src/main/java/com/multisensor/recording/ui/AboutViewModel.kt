@@ -162,7 +162,7 @@ class AboutViewModel @Inject constructor(
             contributors = contributors,
             acknowledgments = acknowledgments,
             thirdPartyLicenses = thirdPartyLicenses,
-            copyrightInfo = "© 2024 Multi-Sensor Recording System\nAll rights reserved",
+            copyrightInfo = "© 2025 Multi-Sensor Recording System\nAll rights reserved",
             licenseInfo = "This project is licensed under the Apache License 2.0\nSee LICENSE file for details"
         )
     }
