@@ -1,6 +1,21 @@
 # Multi-Sensor Recording System Appendices
 
+The following appendices provide comprehensive supporting documentation for the Multi-Sensor Recording System for Contactless GSR Prediction Research. Each appendix serves a specific purpose in supporting the thesis objectives:
+
+- **Appendix A (System Manual)**: Technical setup, configuration, and maintenance documentation for deployment in research environments
+- **Appendix B (User Manual)**: Operational guidance for researchers and technicians conducting studies with the system
+- **Appendix C (Supporting Documentation)**: Technical specifications, communication protocols, calibration data, and ethics documentation
+- **Appendix D (Test Reports)**: Comprehensive testing methodologies, validation results, and quality assurance evidence
+- **Appendix E (Evaluation Data)**: Supplemental evaluation data including user experience studies and performance validation
+- **Appendix F (Code Listings)**: Key implementation excerpts demonstrating critical system functionality
+- **Appendix G (Diagnostic Figures)**: Performance analysis and diagnostic evidence supporting the evaluation
+- **Appendix H (Reference Index)**: Consolidated navigation guide for figures and code throughout the thesis
+
+These appendices collectively demonstrate the system's readiness for research deployment while providing the detailed technical foundation necessary for replication and validation in other research environments.
+
 ## Appendix A: System Manual -- Technical Setup, Configuration, and Maintenance Details
+
+**Purpose and Justification**: This System Manual provides the technical foundation necessary for deploying the Multi-Sensor Recording System in research environments. As one of the thesis objectives was to create a practical, deployable system for contactless GSR research, this appendix demonstrates the achievement of that objective by providing comprehensive technical documentation that enables system replication and operational deployment. The manual addresses the practical implementation aspects that are essential for the system's research utility but too detailed for inclusion in the main thesis chapters.
 
 This System Manual provides comprehensive technical documentation for the deployment, configuration, and maintenance of the **Multi-Sensor Recording System for Contactless GSR Prediction Research**. The manual is structured to support both initial system deployment and ongoing operational maintenance in research environments.
 
@@ -385,6 +400,8 @@ telnet [CONTROLLER_IP] 8080
 This comprehensive System Manual provides the technical foundation necessary for successful deployment and operation of the Multi-Sensor Recording System in research environments, ensuring reliable data collection for contactless GSR prediction studies while maintaining research-grade quality standards.
 ## Appendix B: User Manual -- Comprehensive Guide for Researchers and Research Technicians
 
+**Purpose and Justification**: This User Manual addresses the practical needs of researchers who will operate the Multi-Sensor Recording System. Since the thesis emphasises usability and ease of deployment for non-technical researchers, this appendix provides essential evidence that the system meets research workflow requirements. The manual demonstrates how the technical implementation translates into practical research tools, supporting the thesis claims about system usability and research readiness.
+
 This **User Manual** provides comprehensive operational guidance for researchers and technical staff operating the **Multi-Sensor Recording System for Contactless GSR Prediction Research**. The manual is structured to support users with varying levels of technical expertise, from research scientists conducting studies to laboratory technicians managing equipment.
 
 ### B.1 Introduction and User Roles
@@ -728,6 +745,8 @@ Sessions/
 
 This comprehensive User Manual provides the operational foundation necessary for successful deployment of the Multi-Sensor Recording System in research environments. Following these procedures ensures reliable data collection while maintaining the highest standards of participant safety and research integrity.
 ## Appendix C: Supporting Documentation -- Technical Specifications, Protocols, and Data
+
+**Purpose and Justification**: This appendix provides the detailed technical specifications and supporting data that underpin the system design and implementation claims made in the main thesis. The comprehensive protocol documentation, calibration data, and ethics framework demonstrate the rigour and compliance necessary for research-grade systems. This material supports the thesis arguments about system accuracy, reliability, and ethical compliance while providing the technical detail necessary for system validation and replication.
 
 This appendix provides comprehensive technical specifications, communication protocols, and supporting data that underpin the Multi-Sensor Recording System implementation. The documentation serves as a detailed reference for system replication, validation, and maintenance in research environments.
 
@@ -1357,6 +1376,8 @@ This comprehensive supporting documentation provides the technical foundation ne
 
 ## Appendix D: Test Reports -- Detailed Testing Methodology, Validation Results, and Complete Test Coverage Analysis
 
+**Purpose and Justification**: This appendix provides comprehensive evidence of the systematic testing and validation that supports the thesis claims about system reliability, performance, and research-grade quality. The detailed test coverage analysis and validation results demonstrate that the system meets the research requirements established in the thesis objectives. This testing evidence is essential for establishing the credibility of the system's research contributions but is too extensive for inclusion in the main evaluation chapter.
+
 This appendix presents comprehensive testing and validation results for the Multi-Sensor Recording System, demonstrating systematic quality assurance through rigorous multi-level testing methodologies. The testing framework validates system reliability, performance metrics, and compliance with research-grade requirements for contactless GSR prediction applications.
 
 ### D.1 Testing Framework Overview
@@ -1663,6 +1684,8 @@ Key validation achievements include:
 The testing results provide comprehensive evidence that the Multi-Sensor Recording System is ready for deployment in contactless GSR prediction research environments, with demonstrated reliability, accuracy, and performance suitable for rigorous scientific investigation.
 ## Appendix E: Evaluation Data -- Supplemental Evaluation Data and Analyses
 
+**Purpose and Justification**: This appendix provides additional evaluation evidence that supports the thesis conclusions about system performance and research validation. The user experience evaluations and comparative analyses demonstrate that the system not only functions technically but also meets the practical needs of the research community. This supplemental data strengthens the thesis arguments about the system's contribution to contactless physiological monitoring research.
+
 Appendix E provides additional **evaluation data and analyses** that
 supplement the testing results, focusing on the system's performance in
 practical and research contexts. This includes user experience
@@ -1742,6 +1765,8 @@ ultimate goals: enabling high-quality, contactless physiological data
 collection with ease of use and scientific integrity.
 
 ## Appendix F: Code Listings -- Selected Code Excerpts (Synchronisation, Data Pipeline, Integration)
+
+**Purpose and Justification**: This appendix provides concrete evidence of the technical implementation that supports the thesis claims about system capabilities. The code excerpts demonstrate the practical realisation of the theoretical concepts discussed in the design and implementation chapters. This material enables technical validation of the approach and supports the reproducibility of the research by providing insight into key algorithmic and architectural decisions.
 
 This appendix provides key excerpts from the source code to illustrate
 how critical aspects of the system are implemented. The following
@@ -1845,6 +1870,8 @@ more in-depth understanding of the codebase.
 
 ## Appendix G: Diagnostic Figures and Performance Analysis
 
+**Purpose and Justification**: This appendix provides visual evidence and detailed performance analysis that support the evaluation conclusions presented in Chapter 6. The diagnostic figures offer quantitative validation of system performance claims and demonstrate the thorough analysis underlying the thesis conclusions. This material is essential for understanding system behaviour patterns but too detailed for inclusion in the main evaluation chapter.
+
 This appendix provides detailed diagnostic figures and performance analysis supporting the system evaluation presented in Chapter 6. These figures offer granular insights into system behaviour, reliability patterns, and operational characteristics observed during laboratory testing.
 
 ### G.1 Device Discovery and Connection Reliability
@@ -1891,6 +1918,8 @@ These comprehensive diagnostics provide the quantitative foundation supporting t
 ## Appendix H: Consolidated Figures and Code Listings
 
 ## Appendix H: Consolidated Figure and Code Reference Index
+
+**Purpose and Justification**: This appendix provides a centralised navigation aid for the extensive visual and technical content throughout the thesis. Rather than duplicating figures and code, this index enables efficient cross-referencing and demonstrates the comprehensive nature of the documentation. This consolidation supports the thesis examination process by providing quick access to supporting materials without redundant presentation.
 
 This appendix provides a consolidated reference index for figures and code listings throughout the thesis, enabling quick navigation to visual and technical content without duplication of material presented in the main chapters.
 
