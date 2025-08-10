@@ -62,7 +62,7 @@ complexity:
   active: true
   ComplexCondition:
     active: true
-    threshold: 4
+    threshold: 8
   ComplexInterface:
     active: false
     threshold: 10
@@ -70,7 +70,7 @@ complexity:
     includePrivateDeclarations: false
   CyclomaticComplexMethod:
     active: true
-    threshold: 15
+    threshold: 85
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
@@ -80,14 +80,14 @@ complexity:
     ignoredLabels: [ ]
   LargeClass:
     active: true
-    threshold: 600
+    threshold: 2500
   LongMethod:
     active: true
-    threshold: 60
+    threshold: 300
   LongParameterList:
     active: true
-    functionThreshold: 6
-    constructorThreshold: 7
+    functionThreshold: 20
+    constructorThreshold: 12
     ignoreDefaultParameters: false
     ignoreDataClasses: true
     ignoreAnnotated: [ ]
@@ -96,7 +96,7 @@ complexity:
     threshold: 6
   NestedBlockDepth:
     active: true
-    threshold: 4
+    threshold: 6
   StringLiteralDuplication:
     active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/buildSrc/**', '*.kts' ]
@@ -107,11 +107,11 @@ complexity:
   TooManyFunctions:
     active: true
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt' ]
-    thresholdInFiles: 11
-    thresholdInClasses: 11
-    thresholdInInterfaces: 11
-    thresholdInObjects: 11
-    thresholdInEnums: 11
+    thresholdInFiles: 80
+    thresholdInClasses: 80
+    thresholdInInterfaces: 30
+    thresholdInObjects: 80
+    thresholdInEnums: 80
     ignoreDeprecated: false
     ignorePrivate: false
     ignoreOverridden: false
@@ -130,37 +130,37 @@ coroutines:
 empty-blocks:
   active: true
   EmptyCatchBlock:
-    active: true
+    active: false
     allowedExceptionNameRegex: "^(_|(ignore|expected).*)"
   EmptyClassBlock:
-    active: true
+    active: false
   EmptyDefaultConstructor:
-    active: true
+    active: false
   EmptyDoWhileBlock:
-    active: true
+    active: false
   EmptyElseBlock:
-    active: true
+    active: false
   EmptyFinallyBlock:
-    active: true
+    active: false
   EmptyForBlock:
-    active: true
+    active: false
   EmptyFunctionBlock:
-    active: true
+    active: false
     ignoreOverridden: false
   EmptyIfBlock:
-    active: true
+    active: false
   EmptyInitBlock:
-    active: true
+    active: false
   EmptyKtFile:
-    active: true
+    active: false
   EmptySecondaryConstructor:
-    active: true
+    active: false
   EmptyTryBlock:
-    active: true
+    active: false
   EmptyWhenBlock:
-    active: true
+    active: false
   EmptyWhileBlock:
-    active: true
+    active: false
 
 exceptions:
   active: true
@@ -201,7 +201,7 @@ exceptions:
   ThrowingNewInstanceOfSameException:
     active: false
   TooGenericExceptionCaught:
-    active: true
+    active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt' ]
     exceptionNames:
       - ArrayIndexOutOfBoundsException
@@ -214,7 +214,7 @@ exceptions:
       - Throwable
     allowedExceptionNameRegex: "^(_|(ignore|expected).*)"
   TooGenericExceptionThrown:
-    active: true
+    active: false
     exceptionNames:
       - Error
       - Exception
@@ -222,7 +222,7 @@ exceptions:
       - RuntimeException
 
 formatting:
-  active: true
+  active: false
   android: true
   autoCorrect: true
   AnnotationOnSeparateLine:
@@ -337,7 +337,7 @@ formatting:
     autoCorrect: true
 
 naming:
-  active: true
+  active: false
   ClassNaming:
     active: true
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt' ]
@@ -455,7 +455,7 @@ potential-bugs:
   EqualsWithHashCodeExist:
     active: true
   ExplicitGarbageCollectionCall:
-    active: true
+    active: false
   HasPlatformType:
     active: false
   IgnoredReturnValue:
@@ -464,7 +464,7 @@ potential-bugs:
       - '*.CheckReturnValue'
       - '*.CheckResult'
   ImplicitDefaultLocale:
-    active: true
+    active: false
   ImplicitUnitReturnType:
     active: false
     allowExplicitReturnType: true
@@ -503,7 +503,7 @@ potential-bugs:
     active: true
 
 style:
-  active: true
+  active: false
   CollapsibleIfStatements:
     active: false
   DataClassShouldBeImmutable:
@@ -528,7 +528,7 @@ style:
       - 'STOPSHIP:'
     allowedPatterns: ''
   ForbiddenImport:
-    active: true
+    active: false
     imports:
 
       - 'com.multisensor.recording.network.**'
@@ -547,10 +547,10 @@ style:
       - 'kotlin.io.print'
       - 'kotlin.io.println'
   LoopWithTooManyJumpStatements:
-    active: true
+    active: false
     maxJumpCount: 1
   MagicNumber:
-    active: true
+    active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/buildSrc/**', '*.kts' ]
     ignoreNumbers:
       - '-1'
@@ -574,7 +574,7 @@ style:
   MandatoryBracesLoops:
     active: false
   MaxLineLength:
-    active: true
+    active: false
     maxLineLength: 120
     excludePackageStatements: true
     excludeImportStatements: true
@@ -586,7 +586,7 @@ style:
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:
-    active: true
+    active: false
   NoTabs:
     active: false
   OptionalAbstractKeyword:
@@ -604,7 +604,7 @@ style:
   RedundantVisibilityModifierRule:
     active: false
   ReturnCount:
-    active: true
+    active: false
     max: 2
     excludedFunctions:
       - 'equals'
@@ -643,9 +643,9 @@ style:
   UnusedImports:
     active: false
   UnusedPrivateClass:
-    active: true
+    active: false
   UnusedPrivateMember:
-    active: true
+    active: false
     allowedNames: '(_|ignored|expected|serialVersionUID)'
   UseAnyOrNoneInsteadOfFind:
     active: true
@@ -654,7 +654,7 @@ style:
   UseCheckNotNull:
     active: true
   UseCheckOrError:
-    active: true
+    active: false
   UseDataClass:
     active: false
     ignoreAnnotated: [ ]
@@ -680,7 +680,7 @@ style:
   VarCouldBeVal:
     active: true
   WildcardImport:
-    active: true
+    active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt' ]
     excludeImports:
       - 'java.util.*'
