@@ -381,8 +381,8 @@ class NetworkRecoveryManager @Inject constructor(
 fun JsonSocketClient.reconnect(): Boolean {
     return try {
         disconnect()
-        val result = connect()
-        result is Boolean && result
+        connect()
+        true
     } catch (e: Exception) {
         false
     }
