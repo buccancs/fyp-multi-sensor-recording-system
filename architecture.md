@@ -3,7 +3,7 @@
 
 ## Overview
 
-The Multi-Sensor Recording System implements a sophisticated distributed architecture designed for contactless Galvanic Skin Response (GSR) prediction research. This document consolidates all architectural components, design decisions, and system interactions into a unified reference following established distributed systems principles [Tanenbarayanan2006] and research data management best practices [Wilkinson2016].
+The Multi-Sensor Recording System implements a sophisticated distributed architecture designed for contactless Galvanic Skin Response (GSR) prediction research. This document consolidates all architectural components, design decisions, and system interactions into a unified reference following established distributed systems principles [Tanenbaum2006] and research data management best practices [Wilkinson2016].
 
 ### System Mission and Research Context
 
@@ -733,7 +733,7 @@ graph LR
 - **[Boucsein2012]** Boucsein, W. (2012). *Electrodermal activity*. Springer Science & Business Media.
 - **[Picard1997]** Picard, R. W. (1997). *Affective computing*. MIT Press.
 - **[Wilkinson2016]** Wilkinson, M. D., et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. *Scientific Data*, 3, 160018.
-- **[Tanenbarayanan2006]** Tanenbaum, A. S., & Van Steen, M. (2006). *Distributed systems: principles and paradigms*. Prentice-Hall.
+- **[Tanenbaum2006]** Tanenbaum, A. S., & Van Steen, M. (2006). *Distributed systems: principles and paradigms*. Prentice-Hall.
 
 ### Technical Implementation References
 

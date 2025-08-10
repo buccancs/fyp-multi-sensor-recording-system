@@ -183,7 +183,7 @@ ADRs in this project follow academic research standards:
 ## References
 
 - Zhang, L. et al. (2023). "Distributed Timing Synchronisation in Multi-Modal Recording Systems." *IEEE Transactions on Instrumentation and Measurement*, 72, 1-12.
-- Kumar, A. & Smith, B. (2022). "Reactive State Management Patterns in Android Applications." *ACM Mobile Computing Review*, 15(3), 45-58.
+- [Kumar2022] Kumar, A. & Smith, B. (2022). "Reactive State Management Patterns in Android Applications." *ACM Mobile Computing Review*, 15(3), 45-58.
 - Johnson, C. (2024). "Security Considerations for Physiological Data Collection." *Privacy Engineering Conference Proceedings*, 234-241.
 ```
 

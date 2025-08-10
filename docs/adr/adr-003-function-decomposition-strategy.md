@@ -49,9 +49,9 @@ We will systematically decompose long functions using the Extract Method refacto
 - **Performance Monitoring**: Verify decomposition doesn't impact performance-critical paths
 
 ## References
-- Martin, R.C. (2008). *Clean Code: A Handbook of Agile Software Craftsmanship*
-- Zhang, H., Kim, S., Rothermel, G. (2011). "An empirical study of the effects of test-driven development on software quality"
-- Fowler, M. (2018). *Refactoring: Improving the Design of Existing Code* (2nd ed.)
+- [Martin2008] Martin, R.C. (2008). *Clean Code: A Handbook of Agile Software Craftsmanship*
+- [Zhang2011] Zhang, H., Kim, S., Rothermel, G. (2011). "An empirical study of the effects of test-driven development on software quality"
+- [Fowler2018] Fowler, M. (2018). *Refactoring: Improving the Design of Existing Code* (2nd ed.)
 
 ## Implementation Progress
 - **Completed**: `test_stereo_calibration`, `_compute_device_calibration`, `start_synchronised_recording`, `test_single_camera_calibration`, `test_file_operations`

@@ -158,7 +158,7 @@ fun handleError(error: Throwable) {
 
 - [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) - Official Android documentation
 - [Reactive Programming with Kotlin Flows](https://kotlinlang.org/docs/flow.html) - Kotlin documentation
-- Kumar, A. & Smith, B. (2022). "Reactive State Management Patterns in Android Applications." *ACM Mobile Computing Review*, 15(3), 45-58.
+- [Kumar2022] Kumar, A. & Smith, B. (2022). "Reactive State Management Patterns in Android Applications." *ACM Mobile Computing Review*, 15(3), 45-58.
 - [ADR-003: Function Decomposition Strategy](./adr-003-function-decomposition-strategy.md) - Related architectural decision
 
 ## Revision History
