@@ -245,7 +245,7 @@ class ShimmerConfigViewModel @Inject constructor(
                     it.copy(
                         batteryLevel = status.batteryLevel ?: -1,
                         signalStrength = if (status.isConnected) -50 else -100,
-                        dataPacketsReceived = it.dataPacketsReceived + if (readings != null) 1 else 0,
+                        dataPacketsReceived = it.dataPacketsReceived + if (readings.isNotEmpty()) 1 else 0,
                         recordingDuration = if (it.isRecording) it.recordingDuration + STATUS_UPDATE_INTERVAL_MS else 0L
                     )
                 }

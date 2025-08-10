@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
@@ -41,6 +42,19 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         setupActionButtons()
+        setupBackPressedCallback()
+    }
+
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (hasUnsavedChanges) {
+                    showCancelConfirmationDialog()
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 
     private fun setupActionButtons() {
@@ -161,7 +175,7 @@ class SettingsActivity : AppCompatActivity() {
                 is Int -> editor.putInt(key, value)
                 is Float -> editor.putFloat(key, value)
                 is Long -> editor.putLong(key, value)
-                is Set<*> -> editor.putStringSet(key, value as Set<String>)
+                is Set<*> -> editor.putStringSet(key, value.filterIsInstance<String>().toSet())
             }
         }
 
@@ -200,14 +214,6 @@ class SettingsActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
-
-    override fun onBackPressed() {
-        if (hasUnsavedChanges) {
-            showCancelConfirmationDialog()
-        } else {
-            super.onBackPressed()
-        }
-    }
 
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(
