@@ -71,7 +71,7 @@
                                     android:id="@+id/appVersionText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Version 1.0.0 (1)"
+                                    android:text="Version 0.1.0-beta (1)"
                                     android:textAppearance="?attr/textAppearanceBodyMedium"
                                     android:textColor="?attr/colorOnSurfaceVariant"/>
 
@@ -450,7 +450,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="© 2024 Multi-Sensor Recording System\nAll rights reserved"
+                            android:text="© 2025 Multi-Sensor Recording System\nAll rights reserved"
                             android:textAppearance="?attr/textAppearanceBodyMedium"/>
 
                     <TextView

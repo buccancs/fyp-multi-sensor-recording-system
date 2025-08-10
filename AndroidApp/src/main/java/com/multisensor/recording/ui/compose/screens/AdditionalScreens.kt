@@ -23,12 +23,32 @@ fun SettingsScreen(
     onNavigateBack: () -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Settings") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
         // App Preferences Section
         Card(
             modifier = Modifier
@@ -166,6 +186,7 @@ fun SettingsScreen(
         }
     }
 }
+}
 
 /**
  * About screen that replaces AboutActivity in the single-activity pattern.
@@ -174,15 +195,37 @@ fun SettingsScreen(
 @Composable
 fun AboutScreen(
     onNavigateBack: () -> Unit,
-    viewModel: MainViewModel = hiltViewModel()
+    aboutViewModel: com.multisensor.recording.ui.AboutViewModel = hiltViewModel()
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    val uiState by aboutViewModel.uiState.collectAsState()
+    
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("About") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         Spacer(modifier = Modifier.height(32.dp))
         
         // App Icon/Logo placeholder
@@ -202,13 +245,58 @@ fun AboutScreen(
         )
         
         Text(
-            text = "Version 1.0.0",
+            text = "Version 0.1.0-beta (Build: ${aboutViewModel.getBuildDate()})",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         
         Spacer(modifier = Modifier.height(32.dp))
         
+        // System Information Card
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "System Information",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    if (uiState.isLoading) {
+                        CircularProgressIndicator(modifier = Modifier.size(16.dp))
+                    } else {
+                        IconButton(
+                            onClick = { aboutViewModel.refreshSystemInfo() }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Refresh,
+                                contentDescription = "Refresh",
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                InfoRow("Device", "${uiState.deviceManufacturer} ${uiState.deviceModel}")
+                InfoRow("Android", "${uiState.androidVersion} (API ${uiState.androidApiLevel})")
+                InfoRow("Architecture", uiState.deviceArchitecture)
+                InfoRow("Memory", "${uiState.availableMemory} / ${uiState.totalMemory}")
+                InfoRow("Storage", "${uiState.availableStorage} / ${uiState.totalStorage}")
+                InfoRow("Screen", "${uiState.screenResolution} (${uiState.screenDensity} DPI)")
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // About This App Card
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -232,6 +320,7 @@ fun AboutScreen(
         
         Spacer(modifier = Modifier.height(16.dp))
         
+        // Development Team Card
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -239,30 +328,78 @@ fun AboutScreen(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Architecture",
+                    text = "Development Team",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                
+                uiState.developers.forEach { developer ->
+                    Column(
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
+                        Text(
+                            text = developer.name,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        if (developer.role.isNotEmpty()) {
+                            Text(
+                                text = developer.role,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // Licenses Card
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
                 Text(
-                    text = "• Single-activity MVVM architecture\n" +
-                            "• Jetpack Compose UI\n" +
-                            "• Modular component design\n" +
-                            "• Offline-first local recording\n" +
-                            "• PC master-controller integration",
-                    style = MaterialTheme.typography.bodyMedium
+                    text = "Third-Party Licenses",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                uiState.thirdPartyLicenses.take(5).forEach { license ->
+                    Text(
+                        text = "• $license",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                }
+                
+                if (uiState.thirdPartyLicenses.size > 5) {
+                    Text(
+                        text = "... and ${uiState.thirdPartyLicenses.size - 5} more",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                }
             }
         }
         
         Spacer(modifier = Modifier.height(32.dp))
         
         Text(
-            text = "© 2024 Multi-Sensor Research Team",
+            text = uiState.copyrightInfo,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+}
 }
 
 /**
@@ -274,12 +411,32 @@ fun DiagnosticsScreen(
     onNavigateBack: () -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Diagnostics") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
         // System Status Card
         Card(
             modifier = Modifier
@@ -370,6 +527,7 @@ fun DiagnosticsScreen(
         }
     }
 }
+}
 
 @Composable
 private fun StatusItem(
@@ -433,17 +591,38 @@ private fun MetricItem(
 /**
  * Shimmer Settings screen placeholder.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShimmerSettingsScreen(
     onNavigateBack: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Shimmer Settings") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         Icon(
             imageVector = Icons.Default.Bluetooth,
             contentDescription = null,
@@ -463,21 +642,43 @@ fun ShimmerSettingsScreen(
         )
     }
 }
+}
 
 /**
  * Shimmer Visualization screen placeholder.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShimmerVisualizationScreen(
     onNavigateBack: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Shimmer Visualization") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         Icon(
             imageVector = Icons.Default.Analytics,
             contentDescription = null,
@@ -494,6 +695,31 @@ fun ShimmerVisualizationScreen(
             text = "Real-time Shimmer sensor data visualization",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+}
+
+@Composable
+private fun InfoRow(
+    label: String,
+    value: String
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium
         )
     }
 }
