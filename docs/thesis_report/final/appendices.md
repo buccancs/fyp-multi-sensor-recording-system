@@ -58,7 +58,7 @@ backups and software updates, and monthly calibrations for sensors (e.g.
 using a reference black-body source for the thermal camera). (A detailed
 maintenance schedule is outlined in the documentation, covering daily
 checks, weekly maintenance, monthly calibration, and annual system
-updates -- *placeholder for future maintenance
+updates -- *TODO: placeholder for future maintenance
 doc*[\[11\]](docs/thesis_report/Chapter_7_Appendices.md#L14-L22).)
 The design choices in the technology stack favour maintainability: for
 instance, **Python + FastAPI** was chosen over alternatives for rapid
@@ -553,18 +553,18 @@ This appendix provides detailed diagnostic figures and performance analysis supp
 
 *Figure A.1: Device discovery pattern and success analysis. Bar chart/heatmap showing probability of successful device discovery on attempt 1/2/3 per device and network configuration. Analysis reveals first-attempt success rates vary significantly across devices (45-78%) and network conditions, supporting the documented reliability issues.*
 
-**Figure A2: Reconnection Time Distribution** *(Requires implementation with session data)*  
+**Figure A2: Reconnection Time Distribution** *(TODO: Requires implementation with session data)*  
 Boxplot showing time to recover after transient disconnect events. Median reconnection time is 12.3 seconds with 95th percentile at 45.7 seconds, indicating acceptable recovery performance despite occasional extended delays.
 
-**Figure A3: Heartbeat Loss Episodes** *(Requires implementation with session data)*  
+**Figure A3: Heartbeat Loss Episodes** *(TODO: Requires implementation with session data)*  
 Raster plot showing missing heartbeat windows per device over multiple sessions. Analysis shows clustered loss events correlating with network congestion periods, validating the need for improved connection monitoring.
 
 ### Data Transfer and Storage Analysis
 
-**Figure A4: File Transfer Integrity** *(Requires implementation with session data)*  
+**Figure A4: File Transfer Integrity** *(TODO: Requires implementation with session data)*  
 Scatter plot of file size vs transfer time with annotations for hash mismatches and retry events. Transfer success rate exceeds 99.2% with retry rates under 3.1%, demonstrating robust data integrity mechanisms.
 
-**Figure A5: Session File Footprint** *(Requires implementation with session data)*  
+**Figure A5: Session File Footprint** *(TODO: Requires implementation with session data)*  
 Stacked bar chart showing storage breakdown: RGB MP4 (68% average), Thermal data (23%), GSR CSV (4%), metadata (5%). Analysis supports storage planning requirements for extended recording sessions.
 
 ### System Reliability and Error Analysis
@@ -582,15 +582,15 @@ Stacked bar chart showing storage breakdown: RGB MP4 (68% average), Thermal data
 **Figure A8: Hand Segmentation Diagnostic Panel** *(Experimental feature - requires implementation)*  
 Multi-panel display showing landmark/mask overlays, frame-level detection rates, and fps impact analysis. Detection accuracy varies (72-94%) with hand positioning, validating experimental feature classification.
 
-**Figure A9: Thermal Sensor Noise characterisation** *(Requires implementation with sensor data)*  
+**Figure A9: Thermal Sensor Noise characterisation** *(TODO: Requires implementation with sensor data)*  
 Histogram of pixel noise distribution plus Allan deviation plot showing stability vs averaging time. Noise floor ~0.08°C with drift characteristics suitable for physiological measurements.
 
-**Figure A10: Sync Quality vs Network RTT** *(Requires implementation with session data)*  
+**Figure A10: Sync Quality vs Network RTT** *(TODO: Requires implementation with session data)*  
 Scatter plot showing relationship between network round-trip time and synchronisation quality score. Quality degrades linearly above 50ms RTT, supporting network requirement specifications.
 
 ### Operational and Usability Metrics
 
-**Figure A11: Time-on-Task Analysis** *(Requires implementation with usage data)*  
+**Figure A11: Time-on-Task Analysis** *(TODO: Requires implementation with usage data)*  
 Bar chart showing operator time breakdown: setup (8.2 min), calibration (12.4 min), recording (variable), export (3.1 min). Results support workflow optimisation priorities.
 
 **Figure A12: Future Pilot Study Placeholders** *(Reserved for pilot study data)*  
@@ -703,7 +703,7 @@ This appendix consolidates all figures and code snippets referenced throughout t
 
 *Figure F.14: Known issues timeline showing device discovery failures, reconnections, and UI freeze events during representative sessions.*
 
-### H.3 Chapter 6 Figures: Evaluation and Results
+### H.4 Chapter 6 Additional Figures: System Architecture and Pipeline
 
 ![Figure F.1: Complete system architecture overview](../../diagrams/fig_f_01_system_architecture.png)
 
