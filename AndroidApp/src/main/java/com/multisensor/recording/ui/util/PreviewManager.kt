@@ -6,8 +6,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.widget.ImageView
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +33,7 @@ import kotlin.random.Random
 @ActivityScoped
 class PreviewManager @Inject constructor(
     private val logger: Logger
-) : LifecycleObserver {
+) : LifecycleEventObserver {
 
     private var rgbPreviewJob: Job? = null
     private var thermalPreviewJob: Job? = null
@@ -161,8 +161,14 @@ class PreviewManager @Inject constructor(
      */
     fun isThermalPreviewActive(): Boolean = isThermalPreviewActive
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        when (event) {
+            Lifecycle.Event.ON_PAUSE -> onPause()
+            else -> {}
+        }
+    }
+
+    private fun onPause() {
         stopAllPreviews()
         logger.info("PreviewManager paused - stopped all previews")
     }

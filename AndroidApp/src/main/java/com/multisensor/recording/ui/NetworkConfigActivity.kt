@@ -75,19 +75,19 @@ class NetworkConfigActivity : AppCompatActivity() {
                 return
             }
 
-            if (!networkConfiguration.isValidIpAddress(serverIp)) {
+            if (!NetworkConfiguration.isValidIpAddress(serverIp)) {
                 showError("Invalid IP address format")
                 return
             }
 
             val legacyPort = legacyPortText.toIntOrNull()
-            if (legacyPort == null || !networkConfiguration.isValidPort(legacyPort)) {
+            if (legacyPort == null || !NetworkConfiguration.isValidPort(legacyPort)) {
                 showError("Legacy port must be between 1024 and 65535")
                 return
             }
 
             val jsonPort = jsonPortText.toIntOrNull()
-            if (jsonPort == null || !networkConfiguration.isValidPort(jsonPort)) {
+            if (jsonPort == null || !NetworkConfiguration.isValidPort(jsonPort)) {
                 showError("JSON port must be between 1024 and 65535")
                 return
             }

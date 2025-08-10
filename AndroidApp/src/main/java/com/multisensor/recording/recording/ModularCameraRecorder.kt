@@ -302,6 +302,7 @@ constructor(
                         )
                         cameraDevice!!.createCaptureSession(sessionConfig)
                     } else {
+                        @Suppress("DEPRECATION")
                         cameraDevice!!.createCaptureSession(surfaces, stateCallback, backgroundHandler)
                     }
                 }
