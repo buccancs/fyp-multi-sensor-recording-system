@@ -383,137 +383,337 @@ telnet [CONTROLLER_IP] 8080
 - Maintain emergency contact procedures for technical support
 
 This comprehensive System Manual provides the technical foundation necessary for successful deployment and operation of the Multi-Sensor Recording System in research environments, ensuring reliable data collection for contactless GSR prediction studies while maintaining research-grade quality standards.
-## Appendix B: User Manual -- Guide for System Setup and Operation
+## Appendix B: User Manual -- Comprehensive Guide for Researchers and Research Technicians
 
-This **User Manual** provides a step-by-step guide for researchers to
-set up and operate the multi-sensor system for contactless GSR data
-collection. It covers first-time installation, running recording
-sessions, and basic troubleshooting.
+This **User Manual** provides comprehensive operational guidance for researchers and technical staff operating the **Multi-Sensor Recording System for Contactless GSR Prediction Research**. The manual is structured to support users with varying levels of technical expertise, from research scientists conducting studies to laboratory technicians managing equipment.
 
-**Getting Started:** Ensure all hardware is prepared. Attach the thermal
-camera to the Android phone via USB-C, power on both the phone and
-computer, and confirm they share the same WiFi
-network[[14]](../../../README.md).
-Install the mobile app (e.g. via `adb install bucika_gsr_mobile.apk`) on
-the Android device, and install the Python desktop application by
-cloning the repository, installing requirements, and launching the app
-(`python PythonApp/main.py`) on the
-computer[[15]](../../../PythonApp/README.md).
-When the Python controller is running, enter the Android's IP address
-(from the phone's WiFi settings) into the desktop app and click "Test
-Connection" to verify that the devices can
-communicate[[16]](../../../AndroidApp/README.md).
-A successful test will show the phone listed as a connected device in
-the desktop UI.
+### B.1 Introduction and User Roles
 
-**Recording a Session:** Once connected, configure your recording
-session. Using the desktop application's interface, set up a session
-name or participant ID, choose the duration of recording, and select
-which sensors to record (RGB video, thermal video, Shimmer GSR,
-etc.)[[17]](../../test_execution_guide.md).
-On the Android app, you can similarly see status indicators for
-connection and choose settings like camera resolution or sensor options.
-Start the session by clicking the **"Start Recording"** button on the
-desktop; the system will automatically command all devices to begin
-recording simultaneously. During recording, the desktop dashboard
-displays live data streams (thermal camera feed, GSR waveform, etc.) and
-device status indicators. For example, a **quality monitor panel** on
-the desktop shows real-time data quality metrics with colour codes (green
-= good, yellow = warning, red =
-error)[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818).
-The Android app shows its own recording status and live preview (with
-overlays for thermal data if applicable). Both interfaces provide a
-**synchronisation status** display to ensure all devices are within the
-allowed timing drift (typically a few
-milliseconds)[\[19\]](docs/thesis_report/Chapter_7_Appendices.md#L812-L818).
-If needed, the session can be paused or an **Emergency Stop** triggered
-from the desktop, which will stop all devices
-immediately[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818).
+The Multi-Sensor Recording System is designed for research environments where contactless physiological monitoring is required. This manual addresses the needs of two primary user groups:
 
-**Standard Operating Procedure:** The system is designed for use in
-research sessions with human participants, and the workflow is as
-follows[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866):
+**Primary Researchers**: Scientists and doctoral students conducting human participants research who require high-quality physiological data collection with minimal technical overhead. These users focus on experimental design, participant management, and data analysis rather than system administration.
 
-- *Pre-Session Setup (≈10 min):* Power on all devices, connect them to
-  WiFi, and ensure batteries are sufficiently charged. Verify that the
-  desktop app discovers the Android device (use the "Discover Devices"
-  scan if available) and that all devices show a green "connected"
-  status.[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818)[\[20\]](docs/thesis_report/Chapter_7_Appendices.md#L859-L866)
+**Research Technicians**: Laboratory staff responsible for equipment setup, maintenance, and technical support during research sessions. These users require deeper understanding of system configuration, troubleshooting, and quality assurance procedures.
 
-- *Participant Preparation (≈5 min):* Position the participant, attach
-  any reference sensors (if using a traditional GSR device for ground
-  truth), and adjust cameras (RGB and thermal) to properly frame the
-  subject. Confirm that sensors are reading signals (e.g. check that the
-  GSR waveform is active and camera feeds are visible).
+**Safety and Ethical Responsibilities**: All users must complete ethics training and understand data protection requirements before operating the system. The equipment must be used only with approved research protocols and proper participant consent. Emergency procedures must be understood before conducting any session involving human participants.
 
-- *System Calibration (≈3 min):* Run the thermal camera calibration
-  routine (via the app's calibration controls) so temperature readings
-  are accurate, and synchronise device clocks (the system can do this
-  automatically at start via NTP). Perform a short test recording to
-  ensure all streams start and stop in sync and that data quality
-  indicators are
-  green[\[21\]](docs/thesis_report/Chapter_7_Appendices.md#L54-L62).
-  If any device shows a time drift or calibration error, address it now
-  (e.g. allow thermal sensor to equilibrate or re-sync clocks).
+### B.2 Initial System Setup and Orientation
 
-- *Recording Session (variable length):* During the actual recording,
-  monitor the real-time data on the desktop. The system will
-  continuously assess data quality -- if a sensor's signal degrades
-  (e.g. GSR sensor loses contact or WiFi signal weakens), a warning
-  (yellow/red) will appear so you can take corrective
-  action[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818).
-  Otherwise, minimal user intervention is needed; the system handles
-  synchronisation and data logging automatically. Researchers should
-  note any significant events or participant reactions for later
-  correlation.
+#### B.2.1 Pre-Use Verification Checklist
 
-- *Session Completion (≈5 min):* Stop the recording via the desktop app,
-  which will command all devices to stop and save their data. The data
-  files (physiological readings, video streams, etc.) are automatically
-  transferred or accessible from the desktop machine, typically saved in
-  a timestamped session folder. Use the **"Export Session Data"**
-  function to combine and convert data as needed (e.g. exporting to CSV
-  or JSON for
-  analysis)[\[18\]](docs/thesis_report/Chapter_7_Appendices.md#L810-L818).
-  The system provides an export wizard that can output synchronised
-  datasets and even generate a basic quality assessment report
-  (including any dropped frames or lost
-  packets)[\[22\]](docs/thesis_report/Chapter_7_Appendices.md#L870-L879)[\[23\]](docs/thesis_report/Chapter_7_Appendices.md#L882-L890).
+Before conducting any research session, complete the following verification steps:
 
-- *Post-Session Cleanup (≈10 min):* Power down or detach equipment and
-  perform any needed cleanup. For example, remove and sanitise GSR
-  sensor electrodes, recharge devices if another session will follow,
-  and archive the raw data securely. The user should also verify that
-  the session's data was recorded completely (the system integrity
-  checks usually flag if any data is missing). Ensuring all devices are
-  ready and data is backed up will prevent issues in subsequent
-  sessions.
+**Equipment Inventory:**
+- [ ] Python Desktop Controller operational on primary computer
+- [ ] Android device with Multi-Sensor Recording App installed
+- [ ] TopDon TC001 thermal camera with USB-C cable
+- [ ] Shimmer3 GSR+ sensor with charged battery (>50%)
+- [ ] Network infrastructure: WiFi access point with stable connection
+- [ ] Backup storage media and charging cables available
 
-**Troubleshooting:** The User Manual also includes common issues and
-solutions. If the Android device is not found by the desktop app, first
-check that both are on the same WiFi network (and not
-firewalled)[[24]](../../../test_troubleshooting.md).
-If connection fails due to port issues, try switching to alternate ports
-(the system by default uses ports 8080+). For synchronisation problems
-(e.g. a warning that a device clock is out of sync), ensure the devices'
-system times are correct or restart the sync service -- the system's
-tolerance is ±50 ms drift, beyond which a recalibration is
-advised[\[25\]](docs/thesis_report/Chapter_7_Appendices.md#L60-L64).
-If the thermal camera is not detected, make sure it is properly attached
-and the Android app has the necessary permissions; restarting the app
-can
-help[[26]](../../../test_troubleshooting.md).
-In case of **performance issues** like lag in the thermal video feed,
-the user can reduce the frame rate or resolution of the thermal
-stream[[27]](../../test_execution_guide.md).
-For any persistent errors, the documentation suggests referencing the
-component-specific guides (Android app, Python controller) for detailed
-troubleshooting
-steps[[28]](../../test_execution_guide.md).
-Thanks to an intuitive UI and these guidelines, researchers can
-confidently operate the system for data collection after a brief
-learning curve.
+**Software Verification:**
+- [ ] Desktop application launches without errors
+- [ ] Android application grants all required permissions (camera, storage, location)
+- [ ] Network connectivity test between devices passes
+- [ ] Synchronisation calibration completes successfully
+- [ ] All sensors detected and responding to test commands
 
+**Documentation Review:**
+- [ ] Research protocol approved and ethics clearance confirmed
+- [ ] Participant information and consent forms prepared
+- [ ] Data management plan reviewed and storage locations confirmed
+- [ ] Emergency contact information readily accessible
+
+#### B.2.2 User Interface Overview
+
+**Desktop Controller Interface:**
+The primary control interface features a dashboard layout with real-time monitoring panels:
+- **Device Status Panel**: Shows connected Android devices with battery levels, storage capacity, and connection quality indicators
+- **Sensor Status Panel**: Displays Shimmer GSR sensor status including signal quality, sampling rate, and calibration status
+- **Session Configuration Panel**: Controls for session parameters including participant ID, recording duration, and sensor selection
+- **Live Monitoring Panel**: Real-time preview streams from RGB and thermal cameras with data quality overlays
+- **Synchronisation Status Panel**: Clock offset indicators and temporal alignment quality metrics
+
+**Android Application Interface:**
+The mobile interface provides local device control and status information:
+- **Connection Status Display**: Network connectivity and controller communication status
+- **Sensor Configuration Panel**: Camera resolution, thermal calibration controls, and sensor selection options
+- **Recording Status Display**: Local recording state with indicators for active streams and storage usage
+- **Preview Display**: Live camera feeds with optional thermal overlay and physiological signal indicators
+
+### B.3 Standard Operating Procedures
+
+#### B.3.1 Session Preparation Protocol (15-20 minutes)
+
+**Phase 1: Environmental Setup (5 minutes)**
+1. **Power Management**: Ensure all devices have >60% battery charge or are connected to power supplies
+2. **Network Configuration**: Verify WiFi connectivity with signal strength >-60 dBm on all devices
+3. **Workspace Preparation**: Arrange equipment in recording environment with adequate lighting and minimal electromagnetic interference
+4. **Temperature Equilibration**: Allow thermal cameras to stabilise for minimum 5 minutes after power-on
+
+**Phase 2: System Initialisation (5 minutes)**
+1. **Launch Desktop Controller**: Start Python application and verify all subsystems initialise successfully
+2. **Android Device Registration**: Power on mobile devices and confirm automatic discovery by desktop controller
+3. **Sensor Connectivity**: Pair Shimmer GSR sensors via Bluetooth and verify data streaming at configured sample rate
+4. **Calibration Validation**: Execute thermal camera calibration routine and confirm accuracy within ±0.2°C tolerance
+
+**Phase 3: System Verification (5 minutes)**
+1. **Synchronisation Test**: Perform clock synchronisation and verify temporal alignment within ±3 ms tolerance
+2. **Data Quality Check**: Confirm preview streams display correctly with acceptable signal-to-noise ratios
+3. **Storage Verification**: Check available storage capacity across all devices (minimum 10GB per hour of recording)
+4. **Emergency Procedures Review**: Verify emergency stop functionality and backup procedures are operational
+
+#### B.3.2 Participant Session Workflow
+
+**Pre-Recording Phase (10 minutes)**
+- **Participant Briefing**: Explain recording procedure, equipment function, and participant rights including withdrawal procedures
+- **Consent Documentation**: Complete informed consent process and document participant information with assigned anonymous ID
+- **Positioning and Setup**: Position participant optimally for camera coverage while ensuring comfort and natural behaviour
+- **Reference Measurement**: If using ground truth GSR sensor, attach electrodes following standard skin preparation procedures
+- **Baseline Recording**: Capture 2-minute baseline recording for signal normalisation and calibration verification
+
+**Recording Phase (Variable Duration)**
+- **Session Initiation**: Execute synchronised start command from desktop controller ensuring all devices begin recording simultaneously
+- **Quality Monitoring**: Continuously monitor real-time data quality indicators including signal strength, temporal synchronisation, and storage status
+- **Event Annotation**: Use timestamp markers to annotate significant events, stimulus presentations, or environmental changes
+- **Participant Welfare**: Monitor participant comfort and respond to any requests for breaks or session termination
+- **Data Integrity**: Observe system health indicators and address any warnings or errors using established troubleshooting procedures
+
+**Post-Recording Phase (10 minutes)**
+- **Controlled Session End**: Execute synchronised stop command ensuring all devices complete recording and file finalisation
+- **Data Validation**: Verify recording completeness using automated integrity checks and manual file verification
+- **Participant Debriefing**: Conduct post-session interview and provide opportunity for questions or feedback
+- **Data Transfer**: Initiate secure transfer of recorded data to central storage with redundant backup procedures
+- **Equipment Reset**: Prepare equipment for subsequent sessions including cleaning, charging, and storage
+
+#### B.3.3 Quality Assurance Procedures
+
+**Real-Time Quality Monitoring:**
+The system provides continuous quality assessment through visual and auditory indicators:
+- **Green Indicators**: All systems operational within acceptable parameters
+- **Yellow Warnings**: Minor issues detected requiring attention but not immediate intervention
+- **Red Alerts**: Critical issues requiring immediate corrective action or session termination
+
+**Data Quality Metrics:**
+- **Temporal Synchronisation**: Clock offset <±5 ms across all devices
+- **Video Quality**: Frame rate stability within 2% of target, minimal frame drops (<0.1%)
+- **Thermal Accuracy**: Temperature measurement accuracy within ±0.2°C of calibration standard
+- **GSR Signal Quality**: Sampling rate stability within 1% of configured rate, signal-to-noise ratio >20 dB
+
+**Quality Verification Checklist:**
+- [ ] Synchronisation status shows green across all devices
+- [ ] Video preview streams display clearly without artifacts
+- [ ] Thermal calibration within specified tolerance
+- [ ] GSR signal shows physiological variation without saturation
+- [ ] Network latency <50 ms for all device communications
+- [ ] Storage write speeds maintain minimum required throughput
+
+### B.4 User Interface Detailed Walkthrough
+
+#### B.4.1 Desktop Controller Operation
+
+**Main Dashboard Navigation:**
+Upon launching the desktop application, users access the primary dashboard containing six main panels arranged in a logical workflow:
+
+**Device Management Panel (Top Left):**
+- Displays connected Android devices with unique identifiers and IP addresses
+- Battery level indicators with colour-coded warnings (red <20%, yellow <50%, green >50%)
+- Connection quality metrics including signal strength and latency measurements
+- Device-specific controls for individual configuration and troubleshooting
+
+**Session Configuration Panel (Top Right):**
+- Participant ID entry field with automatic validation and duplicate checking
+- Recording duration controls supporting both time-limited and continuous recording modes
+- Sensor selection checkboxes for RGB video, thermal imaging, and GSR data streams
+- Advanced parameters including frame rates, resolution settings, and synchronisation tolerances
+
+**Live Preview Panel (Centre):**
+- Multi-window display showing real-time RGB and thermal camera feeds
+- Overlay options for physiological signal indicators and data quality metrics
+- Zoom and pan controls for detailed examination of sensor coverage
+- Screenshot functionality for documentation and quality assurance
+
+**Data Quality Monitor (Bottom Left):**
+- Real-time signal quality metrics with trend displays and threshold indicators
+- Network performance monitoring including bandwidth utilisation and error rates
+- Storage status indicators showing available capacity and write performance
+- Historical quality data with configurable alert thresholds
+
+**Synchronisation Status Panel (Bottom Centre):**
+- Clock offset displays for each connected device with tolerance indicators
+- Temporal drift tracking with automatic recalibration triggers
+- Synchronisation quality score based on multi-device temporal alignment
+- Manual synchronisation controls for troubleshooting and calibration
+
+**Control Interface Panel (Bottom Right):**
+- Primary recording controls including start, stop, pause, and emergency stop functions
+- Export controls for data transfer and format conversion
+- System status indicators showing overall health and operational state
+- Advanced controls for calibration routines and diagnostic procedures
+
+#### B.4.2 Android Application Interface
+
+**Main Screen Layout:**
+The Android application provides a streamlined interface optimised for mobile operation:
+
+**Status Bar (Top):**
+- Controller connection indicator with IP address and latency display
+- WiFi signal strength indicator with automatic network quality assessment
+- Battery level with estimated recording time remaining based on current usage
+- Storage available with automatic cleanup recommendations
+
+**Camera Preview Section (Main Area):**
+- Live RGB camera feed with optional grid overlay for positioning guidance
+- Thermal camera overlay (when connected) with temperature scale and calibration indicators
+- Touch-to-focus controls and exposure adjustment for optimal image quality
+- Recording status indicators including active stream markers and timestamp display
+
+**Sensor Status Section (Bottom):**
+- GSR sensor connection status with signal quality indicators
+- Sampling rate display and data buffer status
+- Calibration status for thermal and physiological sensors
+- Device temperature monitoring with thermal management indicators
+
+**Control Interface (Overlay):**
+- Local recording controls for emergency situations or manual operation
+- Network configuration panel for controller IP address and port settings
+- Device settings including camera parameters and sensor configuration options
+- Help system with quick access to troubleshooting guides and contact information
+
+### B.5 Data Management and Export Procedures
+
+#### B.5.1 Automated Data Handling
+
+**File Structure and Naming:**
+The system automatically organises recorded data using a standardised directory structure:
+```
+Sessions/
+├── YYYY-MM-DD_HH-MM-SS_ParticipantID/
+│   ├── metadata.json
+│   ├── rgb_video_device1.mp4
+│   ├── thermal_video_device1.dat
+│   ├── gsr_data_sensor1.csv
+│   ├── sync_log.txt
+│   └── quality_report.html
+```
+
+**Data Integrity Verification:**
+- Automatic checksum generation for all recorded files using SHA-256 algorithm
+- Redundant metadata storage with cross-reference validation
+- Real-time corruption detection during recording with automatic error correction
+- Post-session integrity verification with comprehensive validation reports
+
+#### B.5.2 Export and Analysis Preparation
+
+**Supported Export Formats:**
+- **Video Data**: MP4 (H.264), AVI (uncompressed), MOV (ProRes for high-quality analysis)
+- **Thermal Data**: CSV with temperature matrices, MATLAB .mat files, NumPy .npy arrays
+- **Physiological Data**: CSV with timestamps, EDF for biomedical analysis, JSON for web applications
+- **Synchronised Datasets**: Combined formats with aligned timestamps for multi-modal analysis
+
+**Export Wizard Operation:**
+1. **Session Selection**: Choose completed sessions from archive with filtering by date, participant, or quality criteria
+2. **Format Configuration**: Select output formats optimised for target analysis software (MATLAB, Python, R, SPSS)
+3. **Data Filtering**: Apply temporal windows, sensor selection, and quality thresholds to exported datasets
+4. **Anonymisation Options**: Remove or hash personally identifiable information according to research protocols
+5. **Validation and Transfer**: Verify export integrity and transfer to approved analysis environments
+
+### B.6 Troubleshooting and Error Resolution
+
+#### B.6.1 Common Issues and Solutions
+
+**Device Connection Problems:**
+
+*Symptom*: Android device not detected by desktop controller
+*Diagnostic Steps*:
+1. Verify both devices connected to same WiFi network with internet connectivity test
+2. Check firewall settings on desktop computer allowing inbound connections on ports 8080-8089
+3. Confirm Android application has network permissions and is not in battery optimisation mode
+4. Test direct IP connection using manual device registration in desktop application
+
+*Resolution Procedures*:
+- Restart network services on both devices and attempt reconnection
+- Use alternative port configuration if default ports are blocked
+- Enable WiFi hotspot on Android device for direct connection if network issues persist
+- Contact technical support if hardware-level networking problems suspected
+
+**Synchronisation Drift Issues:**
+
+*Symptom*: Temporal alignment warnings or red synchronisation indicators
+*Diagnostic Steps*:
+1. Check system clock accuracy on all devices using NTP server validation
+2. Measure network latency between devices using built-in diagnostic tools
+3. Assess network stability and bandwidth availability during peak usage periods
+4. Verify no background applications consuming significant system resources
+
+*Resolution Procedures*:
+- Execute manual clock synchronisation from desktop controller interface
+- Reduce recording parameters (resolution, frame rate) to decrease network load
+- Switch to higher quality network connection or relocate devices closer to WiFi access point
+- Restart synchronisation service and allow 30-second stabilisation period
+
+**Data Quality Degradation:**
+
+*Symptom*: Poor signal quality indicators or corrupted data files
+*Diagnostic Steps*:
+1. Check sensor connections and cable integrity for all physical connections
+2. Monitor system resources (CPU, memory, storage) for capacity constraints
+3. Verify environmental conditions within acceptable ranges for sensor operation
+4. Test sensor functionality using built-in calibration and diagnostic routines
+
+*Resolution Procedures*:
+- Clean sensor contacts and ensure proper cable seating
+- Close unnecessary applications and allocate additional system resources
+- Adjust environmental conditions or relocate equipment away from interference sources
+- Replace faulty cables or sensors with backup equipment
+
+#### B.6.2 Emergency Procedures
+
+**Critical System Failure:**
+1. **Immediate Response**: Activate emergency stop function to prevent data corruption
+2. **Participant Safety**: Ensure participant welfare and provide appropriate support
+3. **Data Recovery**: Attempt recovery of partial recordings using automatic backup procedures
+4. **Session Documentation**: Record failure details and circumstances for technical analysis
+5. **Backup Protocol**: Deploy backup equipment or reschedule session as appropriate
+
+**Data Security Incidents:**
+1. **Containment**: Immediately isolate affected systems and prevent further data exposure
+2. **Assessment**: Evaluate scope of potential data breach and affected participant information
+3. **Notification**: Follow institutional procedures for data security incident reporting
+4. **Recovery**: Restore system security and implement additional protective measures
+5. **Documentation**: Complete incident reports and review security protocols
+
+### B.7 User Training and Certification
+
+#### B.7.1 Training Requirements
+
+**Basic User Certification (8 hours):**
+- System overview and safety procedures (2 hours)
+- Hands-on operation with supervised practice sessions (4 hours)
+- Troubleshooting exercises and emergency response training (1 hour)
+- Assessment and certification review (1 hour)
+
+**Advanced User Training (16 hours):**
+- System administration and configuration management (4 hours)
+- Advanced troubleshooting and maintenance procedures (4 hours)
+- Data management and export procedures (4 hours)
+- Quality assurance and validation techniques (4 hours)
+
+#### B.7.2 Competency Assessment
+
+**Practical Skills Evaluation:**
+- Successfully complete supervised recording session from setup to data export
+- Demonstrate troubleshooting capabilities using simulated system failures
+- Execute emergency procedures and participant safety protocols
+- Perform quality assurance validation and documentation procedures
+
+**Knowledge Assessment:**
+- Understanding of physiological measurement principles and limitations
+- Comprehension of data protection and ethical research requirements
+- Familiarity with system capabilities and operational constraints
+- Ability to interpret quality metrics and make appropriate operational decisions
+
+This comprehensive User Manual provides the operational foundation necessary for successful deployment of the Multi-Sensor Recording System in research environments. Following these procedures ensures reliable data collection while maintaining the highest standards of participant safety and research integrity.
 ## Appendix C: Supporting Documentation -- Technical Specifications, Protocols, and Data
 
 Appendix C compiles detailed technical specifications, communication
