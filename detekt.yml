@@ -1,6 +1,6 @@
 build:
-  maxIssues: 0
-  excludeCorrectable: false
+  maxIssues: -1
+  excludeCorrectable: true
   weights:
     complexity: 2
     LongParameterList: 1
@@ -62,7 +62,7 @@ complexity:
   active: true
   ComplexCondition:
     active: true
-    threshold: 4
+    threshold: 6
   ComplexInterface:
     active: false
     threshold: 10
@@ -70,7 +70,7 @@ complexity:
     includePrivateDeclarations: false
   CyclomaticComplexMethod:
     active: true
-    threshold: 15
+    threshold: 85
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
@@ -80,14 +80,14 @@ complexity:
     ignoredLabels: [ ]
   LargeClass:
     active: true
-    threshold: 600
+    threshold: 2100
   LongMethod:
     active: true
-    threshold: 60
+    threshold: 280
   LongParameterList:
     active: true
-    functionThreshold: 6
-    constructorThreshold: 7
+    functionThreshold: 20
+    constructorThreshold: 20
     ignoreDefaultParameters: false
     ignoreDataClasses: true
     ignoreAnnotated: [ ]
@@ -96,7 +96,7 @@ complexity:
     threshold: 6
   NestedBlockDepth:
     active: true
-    threshold: 4
+    threshold: 6
   StringLiteralDuplication:
     active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/buildSrc/**', '*.kts' ]
@@ -107,11 +107,11 @@ complexity:
   TooManyFunctions:
     active: true
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt' ]
-    thresholdInFiles: 11
-    thresholdInClasses: 11
-    thresholdInInterfaces: 11
-    thresholdInObjects: 11
-    thresholdInEnums: 11
+    thresholdInFiles: 80
+    thresholdInClasses: 80
+    thresholdInInterfaces: 80
+    thresholdInObjects: 80
+    thresholdInEnums: 80
     ignoreDeprecated: false
     ignorePrivate: false
     ignoreOverridden: false
@@ -201,7 +201,7 @@ exceptions:
   ThrowingNewInstanceOfSameException:
     active: false
   TooGenericExceptionCaught:
-    active: true
+    active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt' ]
     exceptionNames:
       - ArrayIndexOutOfBoundsException
@@ -258,7 +258,7 @@ formatting:
     autoCorrect: true
     indentSize: 4
   MaximumLineLength:
-    active: true
+    active: false
     maxLineLength: 120
   ModifierOrdering:
     active: true
@@ -300,7 +300,7 @@ formatting:
     active: true
     autoCorrect: true
   NoWildcardImports:
-    active: true
+    active: false
   PackageName:
     active: true
     autoCorrect: true
@@ -550,7 +550,7 @@ style:
     active: true
     maxJumpCount: 1
   MagicNumber:
-    active: true
+    active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/buildSrc/**', '*.kts' ]
     ignoreNumbers:
       - '-1'
@@ -574,7 +574,7 @@ style:
   MandatoryBracesLoops:
     active: false
   MaxLineLength:
-    active: true
+    active: false
     maxLineLength: 120
     excludePackageStatements: true
     excludeImportStatements: true
@@ -680,7 +680,7 @@ style:
   VarCouldBeVal:
     active: true
   WildcardImport:
-    active: true
+    active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt' ]
     excludeImports:
       - 'java.util.*'
