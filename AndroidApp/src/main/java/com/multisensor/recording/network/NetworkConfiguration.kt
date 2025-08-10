@@ -21,6 +21,22 @@ constructor(
         private const val DEFAULT_SERVER_IP = "192.168.0.100"
         private const val DEFAULT_LEGACY_PORT = 8080
         private const val DEFAULT_JSON_PORT = 9000
+
+        fun isValidIpAddress(ip: String): Boolean {
+            return try {
+                val parts = ip.split(".")
+                if (parts.size != 4) return false
+
+                parts.all { part ->
+                    val num = part.toIntOrNull()
+                    num != null && num in 0..255
+                }
+            } catch (e: Exception) {
+                false
+            }
+        }
+
+        fun isValidPort(port: Int): Boolean = port in 1024..65535
     }
 
     private val sharedPreferences: SharedPreferences by lazy {
@@ -84,22 +100,6 @@ constructor(
                 getLegacyPort() != DEFAULT_LEGACY_PORT ||
                 getJsonPort() != DEFAULT_JSON_PORT
 
-    fun isValidIpAddress(ip: String): Boolean {
-        return try {
-            val parts = ip.split(".")
-            if (parts.size != 4) return false
-
-            parts.all { part ->
-                val num = part.toIntOrNull()
-                num != null && num in 0..255
-            }
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    fun isValidPort(port: Int): Boolean = port in 1024..65535
-
     fun getConfigurationSummary(): String {
         val config = getServerConfiguration()
         return "NetworkConfig[IP=${config.serverIp}, Legacy=${config.legacyPort}, JSON=${config.jsonPort}]"
@@ -116,10 +116,9 @@ data class ServerConfiguration(
     fun getJsonAddress(): String = "$serverIp:$jsonPort"
 
     fun isValid(): Boolean {
-        val networkConfig = NetworkConfiguration::class.java.newInstance()
-        return networkConfig.isValidIpAddress(serverIp) &&
-                networkConfig.isValidPort(legacyPort) &&
-                networkConfig.isValidPort(jsonPort)
+        return NetworkConfiguration.isValidIpAddress(serverIp) &&
+                NetworkConfiguration.isValidPort(legacyPort) &&
+                NetworkConfiguration.isValidPort(jsonPort)
     }
 }
 
