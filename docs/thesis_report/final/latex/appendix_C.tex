@@ -7,9 +7,9 @@
 \begin{verbatim}
 This appendix provides comprehensive technical specifications, communication protocols, and supporting data that underpin the Multi-Sensor Recording System implementation. The documentation serves as a detailed reference for system replication, validation, and maintenance in research environments.
 
-## C.1 Hardware Specifications and Calibration Data
+\subsection{C.1 Hardware Specifications and Calibration Data}
 
-### C.1.1 TopDon TC001 Thermal Camera Specifications
+\subsubsection{C.1.1 TopDon TC001 Thermal Camera Specifications}
 
 Technical Specifications:
 - Sensor Type: Uncooled microbolometer array
@@ -21,7 +21,7 @@ Technical Specifications:
 - Frame Rate: 25 Hz
 - Field of View: 56° × 42°
 - Focusing: Fixed focus from 0.15m to infinity
-- Interface: USB-C with UVC (USB Video Class) support [16]
+- Interface: USB-C with UVC (USB Video Class) support \citep{ref16}
 - Power Consumption: <3W (bus-powered via USB-C)
 - Operating Temperature: -10°C to +50°C
 - Dimensions: 30mm × 30mm × 30mm
@@ -29,7 +29,7 @@ Technical Specifications:
 
 Calibration Protocol and Results:
 
-*Calibration Setup:*
+\textit{Calibration Setup:}
 ```
 Reference: Fluke 4180 Precision Infrared Calibrator (±0.02°C accuracy)
 Target Temperature: 37.0°C (physiological baseline)
@@ -37,7 +37,7 @@ Ambient Conditions: 22.5±0.5°C, 45±5% RH
 Stabilisation Time: 15 minutes
 ```
 
-*Calibration Results:*
+\textit{Calibration Results:}
 ```
 Pre-Calibration Accuracy: ±1.8°C
 Post-Calibration Accuracy: ±0.08°C
@@ -46,14 +46,14 @@ Spatial Uniformity: ±0.05°C across FOV
 Temporal Stability: ±0.03°C over 8-hour period
 ```
 
-*Calibration Matrix (3×3 correction coefficients):*
+\textit{Calibration Matrix (3×3 correction coefficients):}
 ```
 [1.0023, -0.0012,  0.0008]
 [0.0009,  0.9987, -0.0015]
 [0.0003,  0.0007,  1.0019]
 ```
 
-### C.1.2 Shimmer3 GSR+ Sensor Specifications
+\subsubsection{C.1.2 Shimmer3 GSR+ Sensor Specifications}
 
 Hardware Configuration:
 - GSR Sensor: Analog Devices AD8232 heart rate monitor IC
@@ -65,7 +65,7 @@ Hardware Configuration:
 - Common Mode Rejection: >60 dB
 - Power Supply: 3.0V lithium polymer battery
 - Battery Life: 12+ hours continuous operation at 128 Hz
-- Wireless Protocol: Bluetooth 2.1+EDR (IEEE 802.15.1) [15]
+- Wireless Protocol: Bluetooth 2.1+EDR (IEEE 802.15.1) \citep{ref15}
 - Range: 10m typical in indoor environment
 - Data Format: 16-bit signed integer, little-endian
 
@@ -86,10 +86,10 @@ timestamp_ms,gsr_raw,gsr_microsiemens,packet_id,battery_pct
 1640995200016,2052,1.252,12347,87
 ```
 
-### C.1.3 Android Device Camera Specifications
+\subsubsection{C.1.3 Android Device Camera Specifications}
 
 RGB Camera Requirements:
-- API Level: Camera2 API (minimum Android 7.0) [13]
+- API Level: Camera2 API (minimum Android 7.0) \citep{ref13}
 - Resolution: 4K UHD (3840×2160) primary requirement
 - Frame Rate: 30 FPS sustained recording
 - Colour Space: sRGB with 8-bit per channel depth
@@ -109,12 +109,12 @@ EIS: Electronic Image Stabilisation
 Supported Codecs: H.264, H.265/HEVC
 ```
 
-## C.2 Network Communication Protocols
+\subsection{C.2 Network Communication Protocols}
 
-### C.2.1 Protocol Stack Architecture
+\subsubsection{C.2.1 Protocol Stack Architecture}
 
 Transport Layer:
-- Primary Protocol: WebSocket (RFC 6455) over TLS 1.3 [21]
+- Primary Protocol: WebSocket (RFC 6455) over TLS 1.3 \citep{ref21}
 - Port Assignment: 8080-8089 (configurable range)
 - Connection Model: Persistent bidirectional streams
 - Heartbeat Interval: 10 seconds with 30-second timeout
@@ -133,11 +133,11 @@ Application Layer Message Format:
 }
 ```
 
-### C.2.2 Message Type Specifications
+\subsubsection{C.2.2 Message Type Specifications}
 
 Device Discovery Messages:
 
-*HelloMessage (Device Registration):*
+\textit{HelloMessage (Device Registration):}
 ```json
 {
   "message_type": "hello",
@@ -156,7 +156,7 @@ Device Discovery Messages:
 }
 ```
 
-*CapabilitiesResponse (Controller Acknowledgment):*
+\textit{CapabilitiesResponse (Controller Acknowledgment):}
 ```json
 {
   "message_type": "capabilities_response",
@@ -179,7 +179,7 @@ Device Discovery Messages:
 
 Status and Monitoring Messages:
 
-*StatusMessage (Periodic Updates):*
+\textit{StatusMessage (Periodic Updates):}
 ```json
 {
   "message_type": "status",
@@ -203,7 +203,7 @@ Status and Monitoring Messages:
 
 Control and Synchronisation Messages:
 
-*SyncMessage (Clock Synchronisation):*
+\textit{SyncMessage (Clock Synchronisation):}
 ```json
 {
   "message_type": "sync",
@@ -219,7 +219,7 @@ Control and Synchronisation Messages:
 }
 ```
 
-*StartRecordingMessage (Session Initiation):*
+\textit{StartRecordingMessage (Session Initiation):}
 ```json
 {
   "message_type": "start_recording",
@@ -241,7 +241,7 @@ Control and Synchronisation Messages:
 }
 ```
 
-### C.2.3 Synchronisation Protocol Implementation
+\subsubsection{C.2.3 Synchronisation Protocol Implementation}
 
 NTP-Based Time Synchronisation:
 ```
@@ -269,9 +269,9 @@ Drift Compensation: Linear prediction with ±0.5 ppm accuracy
 Network Latency Compensation: RTT/2 subtraction
 ```
 
-## C.3 Data Storage Formats and Schemas
+\subsection{C.3 Data Storage Formats and Schemas}
 
-### C.3.1 Session Metadata Schema
+\subsubsection{C.3.1 Session Metadata Schema}
 
 JSON Session Descriptor:
 ```json
@@ -326,12 +326,12 @@ JSON Session Descriptor:
 }
 ```
 
-### C.3.2 Thermal Data Binary Format
+\subsubsection{C.3.2 Thermal Data Binary Format}
 
 File Header (64 bytes):
 ```c
 struct ThermalFileHeader {
-    char magic[8];           // "THERM001"
+    char magic\citep{ref8};           // "THERM001"
     uint32_t version;        // Format version
     uint32_t width;          // 256 pixels
     uint32_t height;         // 192 pixels
@@ -339,8 +339,8 @@ struct ThermalFileHeader {
     uint32_t frame_count;    // Total frames in file
     double start_timestamp;  // Unix timestamp (ms)
     double end_timestamp;    // Unix timestamp (ms)
-    char calibration_id[16]; // Calibration identifier
-    char reserved[16];       // Future expansion
+    char calibration_id\citep{ref16}; // Calibration identifier
+    char reserved\citep{ref16};       // Future expansion
 };
 ```
 
@@ -355,7 +355,7 @@ struct ThermalFrame {
 };
 ```
 
-### C.3.3 GSR Data CSV Format Specification
+\subsubsection{C.3.3 GSR Data CSV Format Specification}
 
 Column Definitions:
 ```csv
@@ -378,9 +378,9 @@ timestamp_ms,gsr_raw_adc,gsr_microsiemens,packet_sequence,battery_percent,device
 1640995305024,16420,1.002,4,87,36.3,0
 ```
 
-## C.4 Configuration Files and Reference Data
+\subsection{C.4 Configuration Files and Reference Data}
 
-### C.4.1 System Configuration Template
+\subsubsection{C.4.1 System Configuration Template}
 
 master_config.json:
 ```json
@@ -419,7 +419,7 @@ master_config.json:
 }
 ```
 
-### C.4.2 Network Performance Benchmarks
+\subsubsection{C.4.2 Network Performance Benchmarks}
 
 Baseline Performance Metrics:
 ```
@@ -446,7 +446,7 @@ Reliability Metrics:
   Error Correction Success: 100%
 ```
 
-### C.4.3 Environmental Operating Conditions
+\subsubsection{C.4.3 Environmental Operating Conditions}
 
 Laboratory Environment Specifications:
 ```
@@ -469,14 +469,14 @@ Acoustic Environment:
   - Isolation: Sound-dampened recording booth
 ```
 
-## C.5 Calibration Procedures and Protocols
+\subsection{C.5 Calibration Procedures and Protocols}
 
-### C.5.1 Thermal Camera Calibration Protocol
+\subsubsection{C.5.1 Thermal Camera Calibration Protocol}
 
 Equipment Required:
 - Fluke 4180 Precision Infrared Calibrator (±0.02°C accuracy)
 - NIST-traceable black-body reference source
-- Environmental monitoring equipment [22]
+- Environmental monitoring equipment \citep{ref22}
 - Calibration software tools
 
 Calibration Procedure:
@@ -511,7 +511,7 @@ Calibration Procedure:
    - Schedule next calibration date (monthly interval)
 ```
 
-### C.5.2 GSR Sensor Validation Protocol
+\subsubsection{C.5.2 GSR Sensor Validation Protocol}
 
 Reference Standard Setup:
 ```
@@ -525,9 +525,9 @@ Measurement Protocol:
   5. Generate correction factors if required
 ```
 
-## C.6 Ethics Documentation and Compliance Framework
+\subsection{C.6 Ethics Documentation and Compliance Framework}
 
-### C.6.1 UCLIC Ethics Committee Approval
+\subsubsection{C.6.1 UCLIC Ethics Committee Approval}
 
 Ethics Approval Details:
 - Approving Body: UCLIC Ethics Committee, University College London
@@ -542,18 +542,18 @@ Ethics Approval Details:
 Research Protocol Coverage:
 The ethics approval encompasses the complete research methodology described in this thesis, including:
 - Participant recruitment and selection criteria (healthy adults 18+, exclusions for cardiovascular/neurological conditions)
-- Data collection procedures using thermal imaging, RGB video, and GSR sensors in 30-minute sessions [1]
-- Data storage, anonymisation, and retention protocols with GDPR compliance for physiological data [3]
+- Data collection procedures using thermal imaging, RGB video, and GSR sensors in 30-minute sessions \citep{ref1}
+- Data storage, anonymisation, and retention protocols with GDPR compliance for physiological data \citep{ref3}
 - Participant information provision and informed consent procedures with voluntary participation emphasis
 - Risk assessment covering technical safety, privacy considerations, and participant welfare protocols
 
-### C.6.2 Participant Information and Consent Framework
+\subsubsection{C.6.2 Participant Information and Consent Framework}
 
 Approved Information Sheet Elements:
 The ethics approval includes standardised participant information covering:
-- Research purpose: Development of contactless physiological monitoring technology for stress and wellness assessment [4]
+- Research purpose: Development of contactless physiological monitoring technology for stress and wellness assessment \citep{ref4}
 - Detailed explanation of sensor types and data collection procedures (thermal cameras, GSR sensors, RGB video recording in 30-minute sessions)
-- Data usage, storage duration, and anonymisation protocols with special provisions for physiological sensor data [3]
+- Data usage, storage duration, and anonymisation protocols with special provisions for physiological sensor data \citep{ref3}
 - Participant rights including withdrawal procedures, data deletion (5-day window), and voluntary participation emphasis
 - Contact information for researchers (Prof. Youngjun Cho) and ethics committee (ethics@ucl.ac.uk)
 - Clear statement of voluntary participation, confidentiality protections, and exclusion criteria for safety
@@ -561,11 +561,11 @@ The ethics approval includes standardised participant information covering:
 
 Consent Documentation:
 - Written informed consent required before any data collection with electronic consent recording integrated into system workflow
-- Separate consent provisions for video recording use in publications and presentations [1]
+- Separate consent provisions for video recording use in publications and presentations \citep{ref1}
 - Data sharing consent for non-personally identifiable physiological data with research community
-- Clear withdrawal procedures with 5-day data deletion window and no penalty provisions [3]
+- Clear withdrawal procedures with 5-day data deletion window and no penalty provisions \citep{ref3}
 
-### C.6.3 Risk Assessment and Safety Protocols
+\subsubsection{C.6.3 Risk Assessment and Safety Protocols}
 
 Supervisor-Approved Risk Assessment:
 Comprehensive risk assessment has been completed and approved by Principal Investigator Prof. Youngjun Cho, covering:
@@ -573,17 +573,17 @@ Comprehensive risk assessment has been completed and approved by Principal Inves
 Laboratory Safety Protocols:
 - Equipment safety procedures following manufacturer instructions with regular maintenance schedules
 - Laboratory environment safety including emergency procedures and first aid protocols
-- Professional researcher training on equipment use and participant interaction procedures [8]
+- Professional researcher training on equipment use and participant interaction procedures \citep{ref8}
 - Individual researcher health considerations and vulnerability assessments
 
 Participant Safety Measures:
 - Appointment scheduling within normal building hours (Mon-Fri, 9am-6pm) with security notifications for any out-of-hours testing
 - Professional boundaries maintenance with appropriate researcher clothing and conduct standards
-- Physical environment optimisation to reduce participant anxiety and ensure accessibility [4]
+- Physical environment optimisation to reduce participant anxiety and ensure accessibility \citep{ref4}
 - Emergency exit strategies and termination procedures if participant behaviour causes concern
 
 Data Protection and Privacy:
-- GDPR training completion required for all researchers involved in data collection [3]
+- GDPR training completion required for all researchers involved in data collection \citep{ref3}
 - Secure data storage with encryption and access controls limited to authorised research team
 - Data processing compliance with UK regulations and UCL data protection policies
 - Regular incident monitoring and reporting procedures for data protection concerns
@@ -594,14 +594,14 @@ Session Management Protocols:
 - Incident reporting requirements for any safety or distress concerns during sessions
 - Supervisor notification and appropriate support provision for any researcher distress
 
-### C.6.4 Ethics Documentation Repository
+\subsubsection{C.6.4 Ethics Documentation Repository}
 
 Available Documentation:
 The complete ethics approval documentation is maintained in the repository at `docs/risk_and_ethics/` and includes:
 
 Participant Information Sheet (`docs/risk_and_ethics/information sheet including link to consent form-21.md`):
 - Complete participant information sheet as approved by UCLIC Ethics Committee
-- Detailed explanation of research procedures, data collection methods, and participant rights [1]
+- Detailed explanation of research procedures, data collection methods, and participant rights \citep{ref1}
 - Consent form template accessible at: https://forms.office.com/e/JQihB2B5TD
 
 Risk Assessment Documentation (`docs/risk_and_ethics/risk_assessment_form_july2025_duyan-2.md`):
@@ -610,7 +610,7 @@ Risk Assessment Documentation (`docs/risk_and_ethics/risk_assessment_form_july20
 - Signed declaration confirming no significant risk assessment with appropriate control measures
 
 Ethics Compliance Framework:
-All research activities using this system must reference and comply with these approved documentation standards to ensure continued ethics compliance and participant protection throughout the research process [3].
+All research activities using this system must reference and comply with these approved documentation standards to ensure continued ethics compliance and participant protection throughout the research process \citep{ref3}.
 - Consent withdrawal procedures documented and technically implemented
 - Consent records maintained separately from research data for audit purposes
 

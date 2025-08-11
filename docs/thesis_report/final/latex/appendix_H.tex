@@ -8,58 +8,58 @@ Purpose and Justification: This appendix provides a centralised navigation aid f
 \begin{verbatim}
 This appendix provides a consolidated reference index for technical content throughout the thesis, enabling quick navigation to implementation details, hardware specifications, and reproducibility resources without duplication of visual materials now centralized in Appendix Z.
 
-## H.1 Visual Content Reference - SEE APPENDIX Z
+\subsection{H.1 Visual Content Reference - SEE APPENDIX Z}
 
 Important Notice: All figures, diagrams, tables, and visual content previously referenced in this appendix have been consolidated into Appendix Z: Consolidated Figures, Diagrams, and Visual Content for improved navigation and reduced duplication.
 
-### H.1.1 Quick Navigation to Visual Content
+\subsubsection{H.1.1 Quick Navigation to Visual Content}
 - Background Figures (Chapter 2): Appendix Z, Section Z.1
 - Architecture Diagrams (Chapter 3): Appendix Z, Section Z.2
 - Implementation Figures (Chapter 4): Appendix Z, Section Z.3
 - Performance Diagnostics (Appendix G): Appendix Z, Section Z.4
 - Cross-Reference Tables: Appendix Z, Section Z.5
 
-## H.2 Code Listing Reference Index
+\subsection{H.2 Code Listing Reference Index}
 
-### H.2.1 Key Implementation Components (Appendix F)
+\subsubsection{H.2.1 Key Implementation Components (Appendix F)}
 
 Synchronisation Code:
-- Master clock coordination with NTP and PC server startup, error handling, and thread management [21]
+- Master clock coordination with NTP and PC server startup, error handling, and thread management \citep{ref21}
 - Synchronised recording start commands with distributed timestamp coordination
 - Clock drift compensation and temporal alignment algorithms
 
 Data Pipeline Code:
-- Heart rate estimation using Fourier transform (Welch's method) for physiological signal processing [5,22]
-- Multi-modal data fusion combining RGB video, thermal imaging, and GSR sensor data [1,6,7]
+- Heart rate estimation using Fourier transform (Welch's method) for physiological signal processing \citep{ref5,ref22}
+- Multi-modal data fusion combining RGB video, thermal imaging, and GSR sensor data citep{ref1,ref6,ref7}
 - Real-time feature extraction and contactless GSR prediction algorithms
 
 Integration Code:
-- Sensor and device integration logic with Android-mediated connections and fallback mechanisms [13,15,19]
-- Multi-device coordination supporting heterogeneous sensor types (Shimmer GSR, thermal cameras, mobile devices) [8,16,20]
+- Sensor and device integration logic with Android-mediated connections and fallback mechanisms citep{ref13,ref15,ref19}
+- Multi-device coordination supporting heterogeneous sensor types (Shimmer GSR, thermal cameras, mobile devices) citep{ref8,ref16,ref20}
 - Connection monitoring and automatic error recovery implementations
 
 Shimmer GSR Streaming:
-- Modular import handling with graceful library fallback [18]
+- Modular import handling with graceful library fallback \citep{ref18}
 - Real-time data streaming with timestamp synchronisation
 - Quality monitoring and connection health assessment
 
-### H.2.2 Source Code Repository Structure
+\subsubsection{H.2.2 Source Code Repository Structure}
 
 Python Controller (`/PythonApp/`):
-- Main desktop application and synchronisation logic [17]
+- Main desktop application and synchronisation logic \citep{ref17}
 - Master clock synchronisation implementation
 - Device management and session coordination
-- Data processing and export functionality [23,24]
+- Data processing and export functionality \citep{ref23,ref24}
 
 Android Application (`/AndroidApp/`):
-- Mobile sensor integration and data collection [13]
-- Camera interface and thermal sensor management [16,20]
+- Mobile sensor integration and data collection \citep{ref13}
+- Camera interface and thermal sensor management \citep{ref16,ref20}
 - Network communication and local data storage
 - User interface for research technicians
 
 System Configuration (`/config/`):
 - Configuration files and calibration data
-- Network topology and security settings [21]
+- Network topology and security settings \citep{ref21}
 - Sensor calibration parameters and validation protocols
 
 Documentation (`/docs/`):
@@ -67,38 +67,38 @@ Documentation (`/docs/`):
 - API documentation and protocol specifications
 - Ethics approval and risk assessment documentation
 
-## H.3 Repository Structure and Build Instructions
+\subsection{H.3 Repository Structure and Build Instructions}
 
-### H.3.1 Repository Components
+\subsubsection{H.3.1 Repository Components}
 
-**Build Configuration:**
-- **Android Application**: `build.gradle` (Gradle 8.2), minSdk 26, targetSdk 34 [13]
-- **Python Environment**: `environment.yml` (Conda), requires Python 3.10+
-- **Dependencies**: `requirements.txt` and `test-requirements.txt` for Python packages [18]
+\textbf{Build Configuration:}
+- \textbf{Android Application}: `build.gradle` (Gradle 8.2), minSdk 26, targetSdk 34 \citep{ref13}
+- \textbf{Python Environment}: `environment.yml` (Conda), requires Python 3.10+
+- \textbf{Dependencies}: `requirements.txt` and `test-requirements.txt` for Python packages \citep{ref18}
 
-**Core Components:**
-- **Python Controller**: `PythonApp/src/controller/MainWindow.py` (487 lines) [17]
-- **Android App**: `AndroidApp/app/src/main/` (Kotlin implementation)
-- **Documentation**: `docs/architecture.md`, `docs/api/` (OpenAPI specifications)
-- **Testing Framework**: `tests/` with comprehensive unit and integration tests
+\textbf{Core Components:}
+- \textbf{Python Controller}: `PythonApp/src/controller/MainWindow.py` (487 lines) \citep{ref17}
+- \textbf{Android App}: `AndroidApp/app/src/main/` (Kotlin implementation)
+- \textbf{Documentation}: `docs/architecture.md`, `docs/api/` (OpenAPI specifications)
+- \textbf{Testing Framework}: `tests/` with comprehensive unit and integration tests
 
-### H.3.2 Build Commands
+\subsubsection{H.3.2 Build Commands}
 
-**Android Application Build:**
+\textbf{Android Application Build:}
 ```bash
 cd AndroidApp
 ./gradlew assembleDebug
-# Requires Android SDK 34, validated on Samsung Galaxy S22+ [13]
+# Requires Android SDK 34, validated on Samsung Galaxy S22+ \citep{ref13}
 ```
 
-**Python Environment Setup:**
+\textbf{Python Environment Setup:}
 ```bash
 conda env create -f environment.yml
 # Alternative: pip install -r requirements.txt
-# Requires Python 3.10+, OpenCV, PyQt6 [17,18,22]
+# Requires Python 3.10+, OpenCV, PyQt6 citep{ref17,ref18,ref22}
 ```
 
-**Development Environment:**
+\textbf{Development Environment:}
 ```bash
 # Install development dependencies
 pip install -r test-requirements.txt
@@ -107,56 +107,56 @@ pytest tests/ --coverage
 # Expected coverage: >95% across core modules
 ```
 
-## H.4 Hardware Specifications and Configuration Files
+\subsection{H.4 Hardware Specifications and Configuration Files}
 
-### H.4.1 Tested Hardware Configuration
+\subsubsection{H.4.1 Tested Hardware Configuration}
 
-**Desktop Controller:**
-- **Development Platform**: ThinkPad T480s, Ubuntu 22.04, 16GB RAM
-- **Production Recommendation**: Intel Core i7-10700K, 32GB RAM, NVMe SSD [17]
-- **Network**: Gigabit Ethernet preferred, 802.11ac WiFi minimum [19,21]
+\textbf{Desktop Controller:}
+- \textbf{Development Platform}: ThinkPad T480s, Ubuntu 22.04, 16GB RAM
+- \textbf{Production Recommendation}: Intel Core i7-10700K, 32GB RAM, NVMe SSD \citep{ref17}
+- \textbf{Network}: Gigabit Ethernet preferred, 802.11ac WiFi minimum \citep{ref19,ref21}
 
-**Mobile Devices:**
-- **Primary**: Samsung Galaxy S10/S21/A52 (Android 12+) [13]
-- **Alternative**: Google Pixel 6/7 Pro, OnePlus 9/10 Pro
-- **Requirements**: Camera2 API, USB-C OTG, 6GB+ RAM [13,16]
+\textbf{Mobile Devices:}
+- \textbf{Primary}: Samsung Galaxy S10/S21/A52 (Android 12+) \citep{ref13}
+- \textbf{Alternative}: Google Pixel 6/7 Pro, OnePlus 9/10 Pro
+- \textbf{Requirements}: Camera2 API, USB-C OTG, 6GB+ RAM \citep{ref13,ref16}
 
-**Sensor Hardware:**
-- **Thermal Camera**: TopDon TC001 (320×240, 25° FOV, USB-C) [16,20]
-- **GSR Sensor**: Shimmer3 GSR+ v4.1 firmware (Bluetooth 2.1+EDR) [8,15]
-- **Calibration Equipment**: Fluke 4180 IR calibrator, precision resistor arrays
+\textbf{Sensor Hardware:}
+- \textbf{Thermal Camera}: TopDon TC001 (320×240, 25° FOV, USB-C) \citep{ref16,ref20}
+- \textbf{Gsr Sensor}: Shimmer3 GSR+ v4.1 firmware (Bluetooth 2.1+EDR) \citep{ref8,ref15}
+- \textbf{Calibration Equipment}: Fluke 4180 IR calibrator, precision resistor arrays
 
-### H.4.2 Configuration Files
+\subsubsection{H.4.2 Configuration Files}
 
-**Network Configuration:**
-- **NTP Server**: `config/chrony.conf` (pool 2.android.pool.ntp.org) [21]
-- **Network Settings**: `config/network_topology.json` (IP ranges, ports 8080-8089)
-- **Security**: TLS 1.3 certificates and device authentication [21]
+\textbf{Network Configuration:}
+- \textbf{Ntp Server}: `config/chrony.conf` (pool 2.android.pool.ntp.org) \citep{ref21}
+- \textbf{Network Settings}: `config/network_topology.json` (IP ranges, ports 8080-8089)
+- \textbf{Security}: TLS 1.3 certificates and device authentication \citep{ref21}
 
-**Sensor Calibration:**
-- **Camera Parameters**: `calibration/camera_params.yaml` (OpenCV format) [22]
-- **Thermal Calibration**: Monthly recalibration using NIST-traceable standards
-- **GSR Validation**: Precision resistor arrays (0.25-4.0 μS range) [7]
+\textbf{Sensor Calibration:}
+- \textbf{Camera Parameters}: `calibration/camera_params.yaml` (OpenCV format) \citep{ref22}
+- \textbf{Thermal Calibration}: Monthly recalibration using NIST-traceable standards
+- \textbf{Gsr Validation}: Precision resistor arrays (0.25-4.0 μS range) \citep{ref7}
 
-## H.5 Test Data and Validation Results
+\subsection{H.5 Test Data and Validation Results}
 
-### H.5.1 Sample Datasets (Anonymised)
+\subsubsection{H.5.1 Sample Datasets (Anonymised)}
 
-**Validation Collections:**
-- **Timing Precision**: `results/validation_sessions/` (14 synchronisation tests)
-- **Calibration Accuracy**: `results/calibration_accuracy/` (checkerboard validation) [22]
-- **Network Performance**: `results/network_performance/` (latency, packet loss logs) [21]
-- **User Experience**: `results/usability_studies/` (SUS evaluations, task timing) [10]
+\textbf{Validation Collections:}
+- \textbf{Timing Precision}: `results/validation_sessions/` (14 synchronisation tests)
+- \textbf{Calibration Accuracy}: `results/calibration_accuracy/` (checkerboard validation) \citep{ref22}
+- \textbf{Network Performance}: `results/network_performance/` (latency, packet loss logs) \citep{ref21}
+- \textbf{User Experience}: `results/usability_studies/` (SUS evaluations, task timing) \citep{ref10}
 
-**Data Format Standards:**
-- **Session Metadata**: JSON schemas with device information and quality metrics [23]
-- **Thermal Data**: Binary format with 64-byte headers and CRC32 checksums
-- **GSR Data**: CSV with timestamp synchronisation and quality flags [8]
-- **Video Data**: H.264 compression with synchronised audio tracks [13,22]
+\textbf{Data Format Standards:}
+- \textbf{Session Metadata}: JSON schemas with device information and quality metrics \citep{ref23}
+- \textbf{Thermal Data}: Binary format with 64-byte headers and CRC32 checksums
+- \textbf{Gsr Data}: CSV with timestamp synchronisation and quality flags \citep{ref8}
+- \textbf{Video Data}: H.264 compression with synchronised audio tracks \citep{ref13,ref22}
 
-### H.5.2 Reproducibility Verification
+\subsubsection{H.5.2 Reproducibility Verification}
 
-**Synchronisation Results Replication:**
+\textbf{Synchronisation Results Replication:}
 ```bash
 # To replicate synchronisation accuracy results:
 python PythonApp/test_sync_accuracy.py
@@ -164,59 +164,59 @@ python PythonApp/test_sync_accuracy.py
 # GPS reference clock setup documented in docs/test_execution_guide.md
 ```
 
-**Performance Benchmarking:**
+\textbf{Performance Benchmarking:}
 ```bash
 # Network performance validation:
 python evaluation_suite/performance/network_latency_test.py
-# Expected: <12.3ms RTT, <0.001% packet loss [21]
+# Expected: <12.3ms RTT, <0.001% packet loss \citep{ref21}
 
 # Multi-device load testing:
 python evaluation_suite/integration/multi_device_stress_test.py
 # Expected: 12 device capacity, 45.2 MB/s throughput
 ```
 
-**User Experience Validation:**
-- **SUS Score Replication**: Methodology documented in `docs/usability_evaluation_protocol.md` [10]
-- **Task Timing Studies**: Standardised workflow scripts in `evaluation_suite/usability/`
-- **Expected Results**: 4.9/5.0 SUS score, 8.2-minute setup time, 100% recommendation rate
+\textbf{User Experience Validation:}
+- \textbf{Sus Score Replication}: Methodology documented in `docs/usability_evaluation_protocol.md` \citep{ref10}
+- \textbf{Task Timing Studies}: Standardised workflow scripts in `evaluation_suite/usability/`
+- \textbf{Expected Results}: 4.9/5.0 SUS score, 8.2-minute setup time, 100% recommendation rate
 
-## H.6 Integration with External Systems
+\subsection{H.6 Integration with External Systems}
 
-### H.6.1 Analysis Software Compatibility
+\subsubsection{H.6.1 Analysis Software Compatibility}
 
-**Supported Analysis Platforms:**
-- **MATLAB**: Export via .mat files with preserved timestamps [24]
-- **Python**: NumPy arrays, pandas DataFrames, SciPy signal processing [22,24]
-- **R**: CSV export with statistical analysis templates
-- **SPSS**: Formatted datasets with variable labels and metadata
+\textbf{Supported Analysis Platforms:}
+- \textbf{MATLAB}: Export via .mat files with preserved timestamps \citep{ref24}
+- \textbf{Python}: NumPy arrays, pandas DataFrames, SciPy signal processing \citep{ref22,ref24}
+- \textbf{R}: CSV export with statistical analysis templates
+- \textbf{SPSS}: Formatted datasets with variable labels and metadata
 
-**Machine Learning Integration:**
-- **TensorFlow/PyTorch**: Standardised tensor formats for deep learning [5]
-- **Scikit-learn**: Feature extraction pipelines for contactless GSR prediction [10]
-- **OpenCV**: Computer vision preprocessing for rPPG signal extraction [22]
+\textbf{Machine Learning Integration:}
+- \textbf{TensorFlow/PyTorch}: Standardised tensor formats for deep learning \citep{ref5}
+- \textbf{scikit-learn}: Feature extraction pipelines for contactless GSR prediction \citep{ref10}
+- \textbf{OpenCV}: Computer vision preprocessing for rPPG signal extraction \citep{ref22}
 
-### H.6.2 Research Infrastructure Compatibility
+\subsubsection{H.6.2 Research Infrastructure Compatibility}
 
-**Laboratory Information Management:**
-- **Ethics Compliance**: Integration with UCL UCLIC approval workflows
-- **Data Protection**: GDPR-compliant anonymisation and retention policies [3]
-- **Quality Assurance**: Automated validation reports for research auditing
+\textbf{Laboratory Information Management:}
+- \textbf{Ethics Compliance}: Integration with UCL UCLIC approval workflows
+- \textbf{Data Protection}: GDPR-compliant anonymisation and retention policies \citep{ref3}
+- \textbf{Quality Assurance}: Automated validation reports for research auditing
 
-**Multi-Site Deployment:**
-- **Standardised Protocols**: Reproducible setup across different laboratories [4]
-- **Remote Monitoring**: Cloud-based quality assessment and technical support
-- **Version Control**: Git-based configuration management for consistent deployments
+\textbf{Multi-Site Deployment:}
+- \textbf{Standardised Protocols}: Reproducible setup across different laboratories \citep{ref4}
+- \textbf{Remote Monitoring}: Cloud-based quality assessment and technical support
+- \textbf{Version Control}: Git-based configuration management for consistent deployments
 
-## H.7 Cross-Reference to Consolidated Visual Content
+\subsection{H.7 Cross-Reference to Consolidated Visual Content}
 
-**Primary Visual Content Location:** All figures, diagrams, tables, and visual materials are now consolidated in **Appendix Z: Consolidated Figures, Diagrams, and Visual Content**.
+\textbf{Primary Visual Content Location:} All figures, diagrams, tables, and visual materials are now consolidated in \textbf{APPENDIX Z: Consolidated Figures, diagrams, And Visual Content}.
 
-**Quick Navigation Guide:**
-- **Chapter 2 Background Figures**: Appendix Z, Sections Z.1.1-Z.1.5
-- **Chapter 3 Architecture Diagrams**: Appendix Z, Sections Z.2.1-Z.2.5
-- **Chapter 4 Implementation Figures**: Appendix Z, Sections Z.3.1-Z.3.3
-- **Performance Analysis Charts**: Appendix Z, Sections Z.4.1-Z.4.5
-- **Cross-Reference Tables**: Appendix Z, Section Z.5
+\textbf{Quick Navigation Guide:}
+- \textbf{Chapter 2 Background Figures}: Appendix Z, Sections Z.1.1-Z.1.5
+- \textbf{Chapter 3 Architecture Diagrams}: Appendix Z, Sections Z.2.1-Z.2.5
+- \textbf{Chapter 4 Implementation Figures}: Appendix Z, Sections Z.3.1-Z.3.3
+- \textbf{Performance Analysis Charts}: Appendix Z, Sections Z.4.1-Z.4.5
+- \textbf{Cross-Reference Tables}: Appendix Z, Section Z.5
 
 This consolidated index provides quick navigation to all technical content throughout the thesis while maintaining the single source of truth for visual materials in Appendix Z. The comprehensive cross-referencing enables efficient examination and supports the reproducibility objectives of the research project.
 \end{verbatim}

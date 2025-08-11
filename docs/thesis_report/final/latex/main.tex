@@ -13,7 +13,9 @@
 \usepackage{verbatim} % for verbatim blocks in appendices
 % Mermaid diagrams rendering
 % Note: Requires Node.js and mermaid-cli or mermaid package support; compile with -shell-escape
-\usepackage{mermaid}
+% If mermaid.sty is unavailable, skip package to avoid build failure.
+\IfFileExists{mermaid.sty}{\usepackage{mermaid}}{}
+\usepackage{textcomp}
 
 % Hyperref setup
 \hypersetup{
@@ -43,8 +45,12 @@
 \input{4}
 \input{5}
 \input{6}
+% Global bibliography
 \clearpage
-\input{references}
+\setcitestyle{square}
+\renewcommand{\bibname}{References}
+\bibliographystyle{abbrvnat}
+\bibliography{references}
 
 % Appendices
 \appendix
