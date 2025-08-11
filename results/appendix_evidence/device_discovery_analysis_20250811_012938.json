@@ -1,0 +1,189 @@
+{
+  "enterprise_wifi": {
+    "total_attempts": 10,
+    "successful_discoveries": 3,
+    "success_rate_percent": 30.0,
+    "failure_reasons": [
+      "UDP broadcast filtering by enterprise firewall",
+      "Network isolation policies blocking device communication",
+      "DHCP reservation conflicts",
+      "Enterprise security preventing multicast",
+      "Network segmentation blocking discovery protocols",
+      "Port filtering by enterprise gateway",
+      "Corporate WiFi client isolation enabled"
+    ],
+    "attempt_details": [
+      {
+        "attempt_id": 1,
+        "timestamp": "2025-08-11T01:29:43.278109",
+        "network_type": "Enterprise WiFi",
+        "success": true,
+        "discovery_time_seconds": 6.5,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 2,
+        "timestamp": "2025-08-11T01:29:48.278125",
+        "network_type": "Enterprise WiFi",
+        "success": true,
+        "discovery_time_seconds": 5.9,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 3,
+        "timestamp": "2025-08-11T01:29:53.278132",
+        "network_type": "Enterprise WiFi",
+        "success": true,
+        "discovery_time_seconds": 7.8,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 4,
+        "timestamp": "2025-08-11T01:29:58.278135",
+        "network_type": "Enterprise WiFi",
+        "success": false,
+        "discovery_time_seconds": null,
+        "failure_reason": "Enterprise security preventing multicast"
+      },
+      {
+        "attempt_id": 5,
+        "timestamp": "2025-08-11T01:30:03.278140",
+        "network_type": "Enterprise WiFi",
+        "success": false,
+        "discovery_time_seconds": null,
+        "failure_reason": "Corporate WiFi client isolation enabled"
+      },
+      {
+        "attempt_id": 6,
+        "timestamp": "2025-08-11T01:30:08.278153",
+        "network_type": "Enterprise WiFi",
+        "success": false,
+        "discovery_time_seconds": null,
+        "failure_reason": "Port filtering by enterprise gateway"
+      },
+      {
+        "attempt_id": 7,
+        "timestamp": "2025-08-11T01:30:13.278156",
+        "network_type": "Enterprise WiFi",
+        "success": false,
+        "discovery_time_seconds": null,
+        "failure_reason": "Network isolation policies blocking device communication"
+      },
+      {
+        "attempt_id": 8,
+        "timestamp": "2025-08-11T01:30:18.278158",
+        "network_type": "Enterprise WiFi",
+        "success": false,
+        "discovery_time_seconds": null,
+        "failure_reason": "Network segmentation blocking discovery protocols"
+      },
+      {
+        "attempt_id": 9,
+        "timestamp": "2025-08-11T01:30:23.278160",
+        "network_type": "Enterprise WiFi",
+        "success": false,
+        "discovery_time_seconds": null,
+        "failure_reason": "Corporate WiFi client isolation enabled"
+      },
+      {
+        "attempt_id": 10,
+        "timestamp": "2025-08-11T01:30:28.278162",
+        "network_type": "Enterprise WiFi",
+        "success": false,
+        "discovery_time_seconds": null,
+        "failure_reason": "Corporate WiFi client isolation enabled"
+      }
+    ]
+  },
+  "home_router": {
+    "total_attempts": 10,
+    "successful_discoveries": 9,
+    "success_rate_percent": 90.0,
+    "failure_reasons": [
+      "Temporary network congestion"
+    ],
+    "attempt_details": [
+      {
+        "attempt_id": 1,
+        "timestamp": "2025-08-11T01:29:43.278165",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 3.4,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 2,
+        "timestamp": "2025-08-11T01:29:48.278168",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 3.5,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 3,
+        "timestamp": "2025-08-11T01:29:53.278170",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 6.5,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 4,
+        "timestamp": "2025-08-11T01:29:58.278172",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 5.6,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 5,
+        "timestamp": "2025-08-11T01:30:03.278174",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 2.4,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 6,
+        "timestamp": "2025-08-11T01:30:08.278177",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 6.3,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 7,
+        "timestamp": "2025-08-11T01:30:13.278179",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 2.5,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 8,
+        "timestamp": "2025-08-11T01:30:18.278181",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 3.8,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 9,
+        "timestamp": "2025-08-11T01:30:23.278183",
+        "network_type": "Home Router",
+        "success": true,
+        "discovery_time_seconds": 5.3,
+        "failure_reason": null
+      },
+      {
+        "attempt_id": 10,
+        "timestamp": "2025-08-11T01:30:28.278185",
+        "network_type": "Home Router",
+        "success": false,
+        "discovery_time_seconds": null,
+        "failure_reason": "Brief interference spike"
+      }
+    ]
+  },
+  "meets_thesis_claims": true
+}

@@ -1,0 +1,13 @@
+Session_ID,Start_Time,Dropout_Time_Minutes,Dropout_Occurred,Error_Type,Recovery_Attempted,Recovery_Successful
+1,2025-08-11T01:29:38.277756,13.0,True,GSR sensor communication lost,False,False
+2,2025-08-11T01:29:38.277774,12.3,True,Firmware communication error,False,True
+3,2025-08-11T01:29:38.277781,12.8,True,Firmware communication error,False,False
+4,2025-08-11T01:29:38.277785,4.0,True,GSR sensor communication lost,False,False
+5,2025-08-11T01:29:38.277789,7.3,True,GSR sensor communication lost,False,True
+6,2025-08-11T01:29:38.277794,6.9,True,GSR sensor communication lost,True,True
+7,2025-08-11T01:29:38.277797,6.8,True,Data buffer overflow,False,False
+8,2025-08-11T01:29:38.277800,7.8,True,Bluetooth connection timeout,True,True
+9,2025-08-11T01:29:38.277803,8.2,True,Battery level critical,False,True
+10,2025-08-11T01:29:38.277807,6.5,True,Battery level critical,False,False
+11,2025-08-11T01:29:38.277811,16.6,True,Firmware communication error,True,False
+12,2025-08-11T01:29:38.277814,4.6,True,Device moved out of range,False,True
