@@ -5,39 +5,31 @@ import threading
 import time
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-
 try:
     from flask import Flask, jsonify, render_template, request, send_from_directory
     from flask_socketio import SocketIO, disconnect, emit
 except ImportError:
     print("Flask not installed. Installing...")
     import subprocess
-
     subprocess.check_call(["pip3", "install", "flask", "flask-socketio", "eventlet"])
     from flask import Flask, render_template, jsonify, request, send_from_directory
     from flask_socketio import SocketIO, emit, disconnect
-
 import sys
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
     from utils.logging_config import get_logger
-
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 try:
     from utils.system_monitor import get_system_monitor
-
     SYSTEM_MONITOR_AVAILABLE = True
 except ImportError:
     logger.warning("System monitor not available")
     SYSTEM_MONITOR_AVAILABLE = False
     get_system_monitor = lambda: None
-
 class WebDashboardServer:
-
     def __init__(
         self,
         host: str = "0.0.0.0",
@@ -91,33 +83,25 @@ class WebDashboardServer:
         self._setup_routes()
         self._setup_socket_handlers()
         logger.info("Web Dashboard Server initialized")
-
     def _setup_routes(self):
-
         @self.app.route("/")
         def dashboard():
             return render_template("dashboard.html")
-
         @self.app.route("/devices")
         def devices():
             return render_template("devices.html")
-
         @self.app.route("/sessions")
         def sessions():
             return render_template("sessions.html")
-
         @self.app.route("/playback")
         def playback():
             return render_template("playback.html")
-
         @self.app.route("/files")
         def files():
             return render_template("files.html")
-
         @self.app.route("/settings")
         def settings():
             return render_template("settings.html")
-
         @self.app.route("/api/status")
         def api_status():
             return jsonify(
@@ -128,15 +112,12 @@ class WebDashboardServer:
                     "timestamp": datetime.now().isoformat(),
                 }
             )
-
         @self.app.route("/api/devices")
         def api_devices():
             return jsonify(self.device_status)
-
         @self.app.route("/api/session")
         def api_session():
             return jsonify(self.session_info)
-
         @self.app.route("/api/session/start", methods=["POST"])
         def api_session_start():
             try:
@@ -185,7 +166,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Failed to start session: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/session/stop", methods=["POST"])
         def api_session_stop():
             try:
@@ -233,7 +213,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Failed to stop session: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/data/realtime")
         def api_realtime_data():
             recent_data = {}
@@ -250,7 +229,6 @@ class WebDashboardServer:
                 else:
                     recent_data[device] = data[-max_points:] if data else []
             return jsonify(recent_data)
-
         @self.app.route("/api/device/connect", methods=["POST"])
         def api_device_connect():
             try:
@@ -305,7 +283,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Device connection error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/device/configure", methods=["POST"])
         def api_device_configure():
             try:
@@ -354,7 +331,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Device configuration error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/webcam/test", methods=["POST"])
         def api_webcam_test():
             try:
@@ -412,7 +388,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Webcam test error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/webcam/configure", methods=["POST"])
         def api_webcam_configure():
             try:
@@ -481,7 +456,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Webcam configuration error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/shimmer/connect", methods=["POST"])
         def api_shimmer_connect():
             try:
@@ -514,7 +488,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Shimmer connection error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/shimmer/configure", methods=["POST"])
         def api_shimmer_configure():
             try:
@@ -553,7 +526,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Shimmer configuration error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/system/status")
         def api_system_status():
             try:
@@ -564,7 +536,6 @@ class WebDashboardServer:
                 else:
                     import platform
                     import time
-
                     status = {
                         "timestamp": time.time(),
                         "system_info": {
@@ -584,7 +555,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"System status error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/sessions/export")
         def api_sessions_export():
             try:
@@ -621,7 +591,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Session export error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/session/<session_id>")
         def api_session_details(session_id):
             try:
@@ -645,7 +614,6 @@ class WebDashboardServer:
             except Exception as e:
                 logger.error(f"Session details error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/session/<session_id>/download")
         def api_session_download(session_id):
             try:
@@ -655,7 +623,6 @@ class WebDashboardServer:
                         response_data = f"""Session data for {session_id}
 Generated at: {datetime.now().isoformat()}"""
                         from flask import make_response
-
                         response = make_response(response_data)
                         response.headers["Content-Type"] = "application/octet-stream"
                         response.headers["Content-Disposition"] = (
@@ -677,7 +644,6 @@ Generated at: {datetime.now().isoformat()}"""
             except Exception as e:
                 logger.error(f"Session download error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/playback/sessions")
         def api_playback_sessions():
             try:
@@ -703,7 +669,6 @@ Generated at: {datetime.now().isoformat()}"""
             except Exception as e:
                 logger.error(f"Playback sessions error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/playback/session/<session_id>")
         def api_playback_session_data(session_id):
             try:
@@ -720,7 +685,6 @@ Generated at: {datetime.now().isoformat()}"""
             except Exception as e:
                 logger.error(f"Playback session data error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/playback/session/<session_id>/videos")
         def api_playback_session_videos(session_id):
             try:
@@ -732,12 +696,10 @@ Generated at: {datetime.now().isoformat()}"""
             except Exception as e:
                 logger.error(f"Playback videos error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/playback/session/<session_id>/sensors")
         def api_playback_session_sensors(session_id):
             try:
                 import random
-
                 time_points = list(range(0, 1800, 5))
                 sensor_data = {
                     "gsr": [
@@ -757,7 +719,6 @@ Generated at: {datetime.now().isoformat()}"""
             except Exception as e:
                 logger.error(f"Playback sensors error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/playback/video/<session_id>/<filename>")
         def api_playback_video(session_id, filename):
             try:
@@ -792,7 +753,6 @@ Generated at: {datetime.now().isoformat()}"""
             except Exception as e:
                 logger.error(f"Video playback error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/playback/export-segment", methods=["POST"])
         def api_playback_export_segment():
             try:
@@ -809,7 +769,6 @@ Generated at: {datetime.now().isoformat()}"""
             except Exception as e:
                 logger.error(f"Export segment error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
-
         @self.app.route("/api/playback/session/<session_id>/report")
         def api_playback_session_report(session_id):
             try:

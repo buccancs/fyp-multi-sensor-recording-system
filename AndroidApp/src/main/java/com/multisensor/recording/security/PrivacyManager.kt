@@ -189,7 +189,7 @@ class PrivacyManager @Inject constructor(
             dataCollectionPurpose = "Multi-sensor physiological research data collection",
             dataTypes = listOf(
                 "Video recordings (RGB)",
-                "Thermal camera data", 
+                "Thermal camera data",
                 "Shimmer sensor data (GSR, accelerometer, etc.)",
                 "Device metadata",
                 "Session timestamps"

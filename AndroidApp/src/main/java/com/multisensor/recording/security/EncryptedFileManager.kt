@@ -244,7 +244,7 @@ class EncryptedFileManager @Inject constructor(
         val totalSize: Long,
         val encryptedSize: Long
     ) {
-        val encryptionPercentage: Float = 
+        val encryptionPercentage: Float =
             if (totalFiles > 0) (encryptedFiles.toFloat() / totalFiles) * 100f else 0f
     }
 }

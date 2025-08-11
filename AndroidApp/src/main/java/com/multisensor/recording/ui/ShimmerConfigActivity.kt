@@ -154,14 +154,14 @@ class ShimmerConfigActivity : AppCompatActivity() {
         connectButton.setOnClickListener { viewModel.connectToDevice() }
         disconnectButton.setOnClickListener { viewModel.disconnectFromDevice() }
         scanButton.setOnClickListener { viewModel.scanForDevices() }
-        startStreamingButton.setOnClickListener { 
+        startStreamingButton.setOnClickListener {
             viewModel.startStreaming()
             dataVisualizationCard.visibility = View.VISIBLE
         }
-        stopStreamingButton.setOnClickListener { 
+        stopStreamingButton.setOnClickListener {
             viewModel.stopStreaming()
         }
-        selectDeviceButton.setOnClickListener { 
+        selectDeviceButton.setOnClickListener {
             showDeviceSelectionDialog()
         }
         exportDataButton.setOnClickListener {

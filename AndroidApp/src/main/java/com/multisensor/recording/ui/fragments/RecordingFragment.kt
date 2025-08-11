@@ -186,7 +186,7 @@ Try restarting the app or checking permissions."""
     }
 
     private fun updateSensorStatusIndicators() {
-        
+
     }
 
     private fun updateSensorStatus(

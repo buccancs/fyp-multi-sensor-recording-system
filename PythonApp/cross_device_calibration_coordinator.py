@@ -7,7 +7,6 @@ import time
 from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
-
 import cv2
 import numpy as np
 from calibration_quality_assessment import (
@@ -16,7 +15,6 @@ from calibration_quality_assessment import (
     PatternType,
 )
 from real_time_calibration_feedback import MultiCameraCalibrationManager
-
 class CalibrationPhase(Enum):
     INITIALIZATION = "initialization"
     PATTERN_DETECTION = "pattern_detection"
@@ -25,7 +23,6 @@ class CalibrationPhase(Enum):
     STEREO_CALIBRATION = "stereo_calibration"
     RESULT_AGGREGATION = "result_aggregation"
     COMPLETION = "completion"
-
 @dataclass
 class DeviceCalibrationInfo:
     device_id: str
@@ -37,7 +34,6 @@ class DeviceCalibrationInfo:
     capabilities: List[str]
     status: str = "disconnected"
     last_seen: float = 0.0
-
 @dataclass
 class CalibrationSession:
     session_id: str
@@ -49,7 +45,6 @@ class CalibrationSession:
     start_time: float = 0.0
     collected_images: Dict[str, List[np.ndarray]] = field(default_factory=dict)
     calibration_results: Dict[str, Any] = field(default_factory=dict)
-
 @dataclass
 class CalibrationCommand:
     command_type: str
@@ -57,7 +52,6 @@ class CalibrationCommand:
     target_device: Optional[str] = None
     parameters: Dict[str, Any] = field(default_factory=dict)
     timestamp: float = 0.0
-
 @dataclass
 class CalibrationResponse:
     response_type: str
@@ -67,9 +61,7 @@ class CalibrationResponse:
     data: Dict[str, Any] = field(default_factory=dict)
     error_message: Optional[str] = None
     timestamp: float = 0.0
-
 class CrossDeviceCalibrationCoordinator:
-
     def __init__(self, logger=None, coordination_port=8910):
         self.logger = logger or logging.getLogger(__name__)
         self.coordination_port = coordination_port
@@ -87,7 +79,6 @@ class CrossDeviceCalibrationCoordinator:
         self.response_queue = queue.Queue()
         self.processing_thread: Optional[threading.Thread] = None
         self.logger.info("CrossDeviceCalibrationCoordinator initialized")
-
     def start_coordination_server(self) -> bool:
         try:
             self.logger.info(
@@ -113,7 +104,6 @@ class CrossDeviceCalibrationCoordinator:
         except Exception as e:
             self.logger.error(f"Failed to start coordination server: {e}")
             return False
-
     def stop_coordination_server(self):
         try:
             self.logger.info("Stopping calibration coordination server")
@@ -134,7 +124,6 @@ class CrossDeviceCalibrationCoordinator:
             self.logger.info("Calibration coordination server stopped")
         except Exception as e:
             self.logger.error(f"Error stopping coordination server: {e}")
-
     def create_calibration_session(
         self,
         session_id: str,
@@ -165,7 +154,6 @@ class CrossDeviceCalibrationCoordinator:
         except Exception as e:
             self.logger.error(f"Error creating calibration session: {e}")
             return False
-
     def start_calibration_session(self, session_id: str) -> bool:
         try:
             if session_id not in self.active_sessions:
@@ -189,7 +177,6 @@ class CrossDeviceCalibrationCoordinator:
         except Exception as e:
             self.logger.error(f"Error starting calibration session: {e}")
             return False
-
     def add_calibration_image(
         self,
         session_id: str,
@@ -220,7 +207,6 @@ class CrossDeviceCalibrationCoordinator:
         except Exception as e:
             self.logger.error(f"Error adding calibration image: {e}")
             return False
-
     def perform_stereo_calibration(
         self, session_id: str, camera_pair: Tuple[str, str]
     ) -> Optional[Dict[str, Any]]:
@@ -229,76 +215,60 @@ class CrossDeviceCalibrationCoordinator:
             if not validation_result:
                 return None
             session, images1, images2 = validation_result
-            
             self.logger.info(f"Performing stereo calibration for {camera_pair}")
-            
             corner_extraction_result = self._extract_stereo_corner_points(session, images1, images2)
             if not corner_extraction_result:
                 return None
             object_points, image_points1, image_points2 = corner_extraction_result
-            
             calibration_matrices = self._perform_individual_camera_calibrations(
                 object_points, image_points1, image_points2, images1[0].shape[:2][::-1]
             )
             if not calibration_matrices:
                 return None
-            
             stereo_params = self._perform_stereo_calculation(
                 object_points, image_points1, image_points2, calibration_matrices
             )
             if not stereo_params:
                 return None
-            
             stereo_result = self._format_stereo_calibration_results(
                 camera_pair, stereo_params, len(object_points)
             )
-            
             camera1_key, camera2_key = camera_pair
             stereo_key = f"stereo_{camera1_key}_{camera2_key}"
             session.calibration_results[stereo_key] = stereo_result
-            
             self.logger.info(
                 f"Stereo calibration completed for {camera_pair}: error={stereo_params['ret']:.4f}, pairs={len(object_points)}"
             )
             return stereo_result
-            
         except Exception as e:
             self.logger.error(f"Error performing stereo calibration: {e}")
             return None
-
     def _validate_stereo_calibration_inputs(
         self, session_id: str, camera_pair: Tuple[str, str]
     ) -> Optional[Tuple[Any, List, List]]:
         if session_id not in self.active_sessions:
             self.logger.error(f"Session {session_id} not found")
             return None
-            
         session = self.active_sessions[session_id]
         camera1_key, camera2_key = camera_pair
-        
-        if (camera1_key not in session.collected_images or 
+        if (camera1_key not in session.collected_images or
             camera2_key not in session.collected_images):
             self.logger.error(f"Missing images for stereo calibration: {camera_pair}")
             return None
-            
         images1 = session.collected_images[camera1_key]
         images2 = session.collected_images[camera2_key]
-        
         if len(images1) != len(images2):
             self.logger.error(
                 f"Mismatched image counts for stereo calibration: {len(images1)} vs {len(images2)}"
             )
             return None
-            
         return session, images1, images2
-
     def _extract_stereo_corner_points(
         self, session: Any, images1: List, images2: List
     ) -> Optional[Tuple[List, List, List]]:
         object_points = []
         image_points1 = []
         image_points2 = []
-        
         if session.pattern_type == PatternType.CHESSBOARD:
             pattern_size = (6, 9)
             objp = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
@@ -308,32 +278,24 @@ class CrossDeviceCalibrationCoordinator:
                 f"Stereo calibration not implemented for pattern type: {session.pattern_type}"
             )
             return None
-        
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-        
         for img1, img2 in zip(images1, images2):
             gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY) if len(img1.shape) == 3 else img1
             gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY) if len(img2.shape) == 3 else img2
-            
             found1, corners1 = cv2.findChessboardCorners(gray1, pattern_size)
             found2, corners2 = cv2.findChessboardCorners(gray2, pattern_size)
-            
             if found1 and found2:
                 corners1 = cv2.cornerSubPix(gray1, corners1, (11, 11), (-1, -1), criteria)
                 corners2 = cv2.cornerSubPix(gray2, corners2, (11, 11), (-1, -1), criteria)
-                
                 object_points.append(objp)
                 image_points1.append(corners1)
                 image_points2.append(corners2)
-        
         if len(object_points) < 10:
             self.logger.error(
                 f"Insufficient valid image pairs for stereo calibration: {len(object_points)}"
             )
             return None
-            
         return object_points, image_points1, image_points2
-
     def _perform_individual_camera_calibrations(
         self, object_points: List, image_points1: List, image_points2: List, img_shape: Tuple
     ) -> Optional[Dict[str, Any]]:
@@ -344,7 +306,6 @@ class CrossDeviceCalibrationCoordinator:
             ret2, mtx2, dist2, rvecs2, tvecs2 = cv2.calibrateCamera(
                 object_points, image_points2, img_shape, None, None
             )
-            
             return {
                 'mtx1': mtx1, 'dist1': dist1,
                 'mtx2': mtx2, 'dist2': dist2,
@@ -353,15 +314,13 @@ class CrossDeviceCalibrationCoordinator:
         except Exception as e:
             self.logger.error(f"Error in individual camera calibrations: {e}")
             return None
-
     def _perform_stereo_calculation(
-        self, object_points: List, image_points1: List, image_points2: List, 
+        self, object_points: List, image_points1: List, image_points2: List,
         calibration_matrices: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
         try:
             flags = cv2.CALIB_FIX_INTRINSIC
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 1e-05)
-            
             ret, mtx1, dist1, mtx2, dist2, R, T, E, F = cv2.stereoCalibrate(
                 object_points, image_points1, image_points2,
                 calibration_matrices['mtx1'], calibration_matrices['dist1'],
@@ -369,11 +328,9 @@ class CrossDeviceCalibrationCoordinator:
                 calibration_matrices['img_shape'],
                 criteria=criteria, flags=flags
             )
-            
             R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(
                 mtx1, dist1, mtx2, dist2, calibration_matrices['img_shape'], R, T
             )
-            
             return {
                 'ret': ret, 'mtx1': mtx1, 'dist1': dist1, 'mtx2': mtx2, 'dist2': dist2,
                 'R': R, 'T': T, 'E': E, 'F': F,
@@ -383,7 +340,6 @@ class CrossDeviceCalibrationCoordinator:
         except Exception as e:
             self.logger.error(f"Error in stereo calibration calculation: {e}")
             return None
-
     def _format_stereo_calibration_results(
         self, camera_pair: Tuple[str, str], stereo_params: Dict[str, Any], num_pairs: int
     ) -> Dict[str, Any]:
@@ -408,7 +364,6 @@ class CrossDeviceCalibrationCoordinator:
             "image_pairs_used": num_pairs,
             "timestamp": time.time(),
         }
-
     def get_session_status(self, session_id: str) -> Optional[Dict[str, Any]]:
         try:
             if session_id not in self.active_sessions:
@@ -441,13 +396,10 @@ class CrossDeviceCalibrationCoordinator:
         except Exception as e:
             self.logger.error(f"Error getting session status: {e}")
             return None
-
     def add_session_callback(self, callback: Callable[[str, CalibrationPhase], None]):
         self.session_callbacks.append(callback)
-
     def add_device_callback(self, callback: Callable[[DeviceCalibrationInfo], None]):
         self.device_callbacks.append(callback)
-
     def _server_loop(self):
         self.logger.info("Calibration coordination server loop started")
         try:
@@ -472,7 +424,6 @@ class CrossDeviceCalibrationCoordinator:
             self.logger.error(f"Fatal error in server loop: {e}")
         finally:
             self.logger.info("Calibration coordination server loop ended")
-
     def _handle_client(
         self, client_socket: socket.socket, client_addr: Tuple[str, int]
     ):
@@ -506,7 +457,6 @@ class CrossDeviceCalibrationCoordinator:
                         self.connected_devices[device_id].status = "disconnected"
             except:
                 pass
-
     def _handle_device_registration(
         self,
         message: Dict[str, Any],
@@ -539,7 +489,6 @@ class CrossDeviceCalibrationCoordinator:
         except Exception as e:
             self.logger.error(f"Error handling device registration: {e}")
             return None
-
     def _handle_calibration_response(self, message: Dict[str, Any]):
         try:
             response = CalibrationResponse(
@@ -554,11 +503,9 @@ class CrossDeviceCalibrationCoordinator:
             self.response_queue.put(response)
         except Exception as e:
             self.logger.error(f"Error handling calibration response: {e}")
-
     def _handle_image_data(self, message: Dict[str, Any]):
         try:
             import base64
-
             image_data = base64.b64decode(message["image_data"])
             image_array = np.frombuffer(image_data, dtype=np.uint8)
             image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
@@ -572,7 +519,6 @@ class CrossDeviceCalibrationCoordinator:
             )
         except Exception as e:
             self.logger.error(f"Error handling image data: {e}")
-
     def _processing_loop(self):
         while self.is_running:
             try:
@@ -584,7 +530,6 @@ class CrossDeviceCalibrationCoordinator:
             except Exception as e:
                 self.logger.error(f"Error in processing loop: {e}")
                 time.sleep(1.0)
-
     def _process_calibration_response(self, response: CalibrationResponse):
         try:
             self.logger.info(
@@ -598,16 +543,12 @@ class CrossDeviceCalibrationCoordinator:
                 self._handle_calibration_completed(response)
         except Exception as e:
             self.logger.error(f"Error processing calibration response: {e}")
-
     def _handle_calibration_started(self, response: CalibrationResponse):
         self.logger.info(f"Calibration started on device: {response.device_id}")
-
     def _handle_image_captured(self, response: CalibrationResponse):
         self.logger.info(f"Image captured on device: {response.device_id}")
-
     def _handle_calibration_completed(self, response: CalibrationResponse):
         self.logger.info(f"Calibration completed on device: {response.device_id}")
-
     def _broadcast_command(self, command: CalibrationCommand):
         try:
             command_json = json.dumps(asdict(command))
@@ -618,7 +559,6 @@ class CrossDeviceCalibrationCoordinator:
                     self.logger.error(f"Error sending command to {device_id}: {e}")
         except Exception as e:
             self.logger.error(f"Error broadcasting command: {e}")
-
     def _check_collection_progress(self, session_id: str):
         try:
             session = self.active_sessions[session_id]
@@ -640,7 +580,6 @@ class CrossDeviceCalibrationCoordinator:
                         self.logger.error(f"Error in session callback: {e}")
         except Exception as e:
             self.logger.error(f"Error checking collection progress: {e}")
-
     def cleanup(self):
         try:
             self.logger.info("Cleaning up CrossDeviceCalibrationCoordinator")
@@ -651,7 +590,6 @@ class CrossDeviceCalibrationCoordinator:
             self.logger.info("CrossDeviceCalibrationCoordinator cleanup completed")
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
-
 if __name__ == "__main__":
     pass
     logging.basicConfig(

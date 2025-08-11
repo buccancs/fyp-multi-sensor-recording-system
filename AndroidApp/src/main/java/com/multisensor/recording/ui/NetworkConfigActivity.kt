@@ -128,4 +128,3 @@ class NetworkConfigActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
-

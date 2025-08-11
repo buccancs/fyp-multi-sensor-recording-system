@@ -135,7 +135,7 @@ class ShimmerSettingsActivity : AppCompatActivity() {
         connectButton.setOnClickListener { viewModel.connectToDevice() }
         disconnectButton.setOnClickListener { viewModel.disconnectFromDevice() }
         scanButton.setOnClickListener { viewModel.scanForDevices() }
-        selectDeviceButton.setOnClickListener { 
+        selectDeviceButton.setOnClickListener {
             showDeviceSelectionDialog()
         }
         deviceListView.setOnItemClickListener { _, _, position, _ ->

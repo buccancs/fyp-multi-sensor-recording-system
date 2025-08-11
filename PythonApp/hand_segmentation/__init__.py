@@ -6,7 +6,6 @@ from .models import (
 from .post_processor import SessionPostProcessor, create_session_post_processor
 from .segmentation_engine import HandSegmentationEngine, create_segmentation_engine
 from .utils import HandRegion, ProcessingResult, SegmentationConfig, SegmentationMethod
-
 __all__ = [
     "HandSegmentationEngine",
     "create_segmentation_engine",

@@ -183,4 +183,3 @@ class NetworkQualityMonitorTest : BaseRobolectricTest() {
         assertThat(currentQuality.bandwidthKbps).isAtLeast(0.0)
     }
 }
-

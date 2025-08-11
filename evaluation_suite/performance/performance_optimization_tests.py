@@ -1,4 +1,3 @@
-
 import asyncio
 import logging
 import time
@@ -13,7 +12,6 @@ from PythonApp.performance_optimizer import PerformanceManager, OptimizationConf
 from PythonApp.production.endurance_test_suite import EnduranceTestSuite, EnduranceTestConfig
 from PythonApp.production.device_capability_detector import DeviceCapabilityDetector
 class PerformanceOptimizationTestSuite(TestSuite):
-
     def __init__(self):
         super().__init__(
             name="performance_optimization",

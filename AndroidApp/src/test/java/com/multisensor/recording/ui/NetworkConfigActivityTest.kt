@@ -279,4 +279,3 @@ class NetworkConfigActivityTest {
         println("[DEBUG_LOG] Reset exception handling test passed")
     }
 }
-

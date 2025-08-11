@@ -114,11 +114,11 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
         realTimeDataText = findViewById(R.id.real_time_data_text)
     }
     private fun setupClickListeners() {
-        startStreamingButton.setOnClickListener { 
+        startStreamingButton.setOnClickListener {
             viewModel.startStreaming()
             dataVisualizationCard.visibility = View.VISIBLE
         }
-        stopStreamingButton.setOnClickListener { 
+        stopStreamingButton.setOnClickListener {
             viewModel.stopStreaming()
         }
         exportDataButton.setOnClickListener {

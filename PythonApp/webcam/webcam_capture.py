@@ -3,23 +3,18 @@ import threading
 import time
 from datetime import datetime
 from typing import Optional
-
 import cv2
 import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap
-
 from ..utils.logging_config import get_logger
-
 logger = get_logger(__name__)
-
 class WebcamCapture(QThread):
     frame_ready = pyqtSignal(QPixmap)
     recording_started = pyqtSignal(str)
     recording_stopped = pyqtSignal(str, float)
     error_occurred = pyqtSignal(str)
     status_changed = pyqtSignal(str)
-
     def __init__(self, camera_index: int = 0, preview_fps: int = 30):
         super().__init__()
         self.camera_index = camera_index
@@ -41,7 +36,6 @@ class WebcamCapture(QThread):
         print(
             f"[DEBUG_LOG] WebcamCapture initialized with camera {camera_index}, preview FPS: {preview_fps}"
         )
-
     def initialize_camera(self) -> bool:
         try:
             self.cap = cv2.VideoCapture(self.camera_index)
@@ -67,7 +61,6 @@ class WebcamCapture(QThread):
             self.error_occurred.emit(error_msg)
             print(f"[DEBUG_LOG] {error_msg}")
             return False
-
     def start_preview(self):
         if not self.cap or not self.cap.isOpened():
             if not self.initialize_camera():
@@ -77,7 +70,6 @@ class WebcamCapture(QThread):
         self.start()
         self.status_changed.emit("Preview started")
         print("[DEBUG_LOG] Webcam preview started")
-
     def stop_preview(self):
         self.is_previewing = False
         self.running = False
@@ -86,7 +78,6 @@ class WebcamCapture(QThread):
             self.wait()
         self.status_changed.emit("Preview stopped")
         print("[DEBUG_LOG] Webcam preview stopped")
-
     def start_recording(self, session_id: str) -> bool:
         if self.is_recording:
             self.error_occurred.emit("Recording already in progress")
@@ -122,7 +113,6 @@ class WebcamCapture(QThread):
             self.error_occurred.emit(error_msg)
             print(f"[DEBUG_LOG] {error_msg}")
             return False
-
     def stop_recording(self) -> Optional[str]:
         if not self.is_recording:
             return None
@@ -151,7 +141,6 @@ class WebcamCapture(QThread):
             self.error_occurred.emit(error_msg)
             print(f"[DEBUG_LOG] {error_msg}")
             return None
-
     def run(self):
         last_frame_time = 0
         while self.running:
@@ -180,7 +169,6 @@ class WebcamCapture(QThread):
                 print(f"[DEBUG_LOG] {error_msg}")
                 break
         print("[DEBUG_LOG] Webcam capture thread ended")
-
     def frame_to_pixmap(
         self, frame: np.ndarray, max_width: int = 640, max_height: int = 480
     ) -> Optional[QPixmap]:
@@ -203,11 +191,9 @@ class WebcamCapture(QThread):
         except Exception as e:
             print(f"[DEBUG_LOG] Error converting frame to pixmap: {str(e)}")
             return None
-
     def get_current_frame(self) -> Optional[np.ndarray]:
         with self.frame_lock:
             return self.last_frame.copy() if self.last_frame is not None else None
-
     def set_recording_parameters(
         self, fps: int = 30, resolution: tuple = (1280, 720), codec: str = "mp4v"
     ):
@@ -217,12 +203,10 @@ class WebcamCapture(QThread):
         print(
             f"[DEBUG_LOG] Recording parameters updated: {fps} FPS, {resolution}, codec: {codec}"
         )
-
     def set_output_directory(self, directory: str):
         self.output_directory = directory
         os.makedirs(directory, exist_ok=True)
         print(f"[DEBUG_LOG] Output directory set to: {directory}")
-
     def cleanup(self):
         try:
             self.running = False
@@ -241,7 +225,6 @@ class WebcamCapture(QThread):
             print("[DEBUG_LOG] WebcamCapture cleanup completed")
         except Exception as e:
             print(f"[DEBUG_LOG] Error during cleanup: {e}")
-
     def __del__(self):
         try:
             if hasattr(self, "cap") and self.cap:
@@ -250,7 +233,6 @@ class WebcamCapture(QThread):
                 self.video_writer.release()
         except Exception:
             pass
-
 def test_webcam_access():
     print("[DEBUG_LOG] Testing webcam access...")
     cap = cv2.VideoCapture(0)
@@ -267,6 +249,5 @@ def test_webcam_access():
         return False
     cap.release()
     return True
-
 if __name__ == "__main__":
     test_webcam_access()

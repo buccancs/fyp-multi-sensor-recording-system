@@ -3,15 +3,12 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import List, Optional, Tuple
-
 import cv2
 import numpy as np
-
 class PatternType(Enum):
     CHESSBOARD = "chessboard"
     CIRCLE_GRID = "circle_grid"
     ASYMMETRIC_CIRCLE_GRID = "asymmetric_circle_grid"
-
 @dataclass
 class PatternDetectionResult:
     pattern_found: bool
@@ -21,28 +18,24 @@ class PatternDetectionResult:
     geometric_distortion: float
     completeness: float
     corners: Optional[np.ndarray] = None
-
 @dataclass
 class SharpnessMetrics:
     laplacian_variance: float
     gradient_magnitude: float
     edge_density: float
     sharpness_score: float
-
 @dataclass
 class ContrastMetrics:
     dynamic_range: int
     histogram_spread: float
     local_contrast: float
     contrast_score: float
-
 @dataclass
 class AlignmentMetrics:
     feature_match_count: int
     alignment_error_pixels: float
     transformation_matrix: Optional[np.ndarray]
     alignment_score: float
-
 @dataclass
 class CalibrationQualityResult:
     overall_quality_score: float
@@ -53,7 +46,6 @@ class CalibrationQualityResult:
     alignment_metrics: Optional[AlignmentMetrics] = None
     recommendations: List[str] = field(default_factory=list)
     processing_time_ms: float = 0.0
-
 class CalibrationQualityAssessment:
     MIN_SHARPNESS_SCORE = 0.3
     MIN_CONTRAST_SCORE = 0.4
@@ -66,26 +58,21 @@ class CalibrationQualityAssessment:
     LAPLACIAN_THRESHOLD = 100.0
     CONTRAST_PERCENTILE = 0.95
     ALIGNMENT_MAX_ERROR = 10.0
-
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(__name__)
         self.orb_detector = cv2.ORB_create(nfeatures=1000)
         self.bf_matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
         self.logger.info("CalibrationQualityAssessment initialized")
-
     def _perform_quality_analysis(
         self, gray_image: np.ndarray, pattern_type: PatternType, reference_image: Optional[np.ndarray]
     ) -> Tuple[PatternDetectionResult, SharpnessMetrics, ContrastMetrics, Optional[AlignmentMetrics]]:
         pattern_result = self._detect_calibration_pattern(gray_image, pattern_type)
         sharpness_metrics = self._analyze_sharpness(gray_image)
         contrast_metrics = self._analyze_contrast(gray_image)
-        
         alignment_metrics = None
         if reference_image is not None:
             alignment_metrics = self._analyze_alignment(gray_image, reference_image)
-        
         return pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
-
     def _create_quality_result(
         self, overall_score: float, pattern_result: PatternDetectionResult,
         sharpness_metrics: SharpnessMetrics, contrast_metrics: ContrastMetrics,
@@ -97,7 +84,6 @@ class CalibrationQualityAssessment:
         recommendations = self._generate_recommendations(
             pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
         )
-        
         return CalibrationQualityResult(
             overall_quality_score=overall_score,
             is_acceptable=is_acceptable,
@@ -108,7 +94,6 @@ class CalibrationQualityAssessment:
             recommendations=recommendations,
             processing_time_ms=processing_time,
         )
-
     def _create_error_result(self, pattern_type: PatternType, start_time: float) -> CalibrationQualityResult:
         return CalibrationQualityResult(
             overall_quality_score=0.0,
@@ -126,7 +111,6 @@ class CalibrationQualityAssessment:
             recommendations=["Error during assessment - please retry"],
             processing_time_ms=(time.time() - start_time) * 1000,
         )
-
     def assess_calibration_quality(
         self,
         image: np.ndarray,
@@ -136,33 +120,26 @@ class CalibrationQualityAssessment:
         start_time = time.time()
         try:
             self.logger.info(f"Starting calibration quality assessment for {pattern_type.value} pattern")
-            
             gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if len(image.shape) == 3 else image
-            
             pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics = (
                 self._perform_quality_analysis(gray_image, pattern_type, reference_image)
             )
-            
             overall_score = self._calculate_overall_quality(
                 pattern_result, sharpness_metrics, contrast_metrics, alignment_metrics
             )
-            
             processing_time = (time.time() - start_time) * 1000
             result = self._create_quality_result(
                 overall_score, pattern_result, sharpness_metrics, contrast_metrics,
                 alignment_metrics, processing_time
             )
-            
             self.logger.info(
                 f"Quality assessment completed: score={overall_score:.3f}, "
                 f"acceptable={result.is_acceptable}, time={processing_time:.1f}ms"
             )
             return result
-            
         except Exception as e:
             self.logger.error(f"Error during calibration quality assessment: {e}")
             return self._create_error_result(pattern_type, start_time)
-
     def _detect_calibration_pattern(
         self, gray_image: np.ndarray, pattern_type: PatternType
     ) -> PatternDetectionResult:
@@ -185,7 +162,6 @@ class CalibrationQualityAssessment:
                 geometric_distortion=1.0,
                 completeness=0.0,
             )
-
     def _detect_chessboard_pattern(
         self, gray_image: np.ndarray
     ) -> PatternDetectionResult:
@@ -225,7 +201,6 @@ class CalibrationQualityAssessment:
                 geometric_distortion=1.0,
                 completeness=0.0,
             )
-
     def _detect_circle_grid_pattern(
         self, gray_image: np.ndarray
     ) -> PatternDetectionResult:
@@ -257,7 +232,6 @@ class CalibrationQualityAssessment:
                 geometric_distortion=1.0,
                 completeness=0.0,
             )
-
     def _detect_asymmetric_circle_grid_pattern(
         self, gray_image: np.ndarray
     ) -> PatternDetectionResult:
@@ -289,7 +263,6 @@ class CalibrationQualityAssessment:
                 geometric_distortion=1.0,
                 completeness=0.0,
             )
-
     def _analyze_sharpness(self, gray_image: np.ndarray) -> SharpnessMetrics:
         try:
             laplacian = cv2.Laplacian(gray_image, cv2.CV_64F)
@@ -309,7 +282,6 @@ class CalibrationQualityAssessment:
         except Exception as e:
             self.logger.error(f"Error analyzing sharpness: {e}")
             return SharpnessMetrics(0.0, 0.0, 0.0, 0.0)
-
     def _analyze_contrast(self, gray_image: np.ndarray) -> ContrastMetrics:
         try:
             dynamic_range = int(gray_image.max()) - int(gray_image.min())
@@ -326,7 +298,6 @@ class CalibrationQualityAssessment:
         except Exception as e:
             self.logger.error(f"Error analyzing contrast: {e}")
             return ContrastMetrics(0, 0.0, 0.0, 0.0)
-
     def _analyze_alignment(
         self, image1: np.ndarray, image2: np.ndarray
     ) -> AlignmentMetrics:
@@ -381,7 +352,6 @@ class CalibrationQualityAssessment:
         except Exception as e:
             self.logger.error(f"Error analyzing alignment: {e}")
             return AlignmentMetrics(0, float("inf"), None, 0.0)
-
     def _calculate_chessboard_quality(
         self, corners: np.ndarray, pattern_size: Tuple[int, int]
     ) -> float:
@@ -410,7 +380,6 @@ class CalibrationQualityAssessment:
         except Exception as e:
             self.logger.error(f"Error calculating chessboard quality: {e}")
             return 0.0
-
     def _calculate_circle_grid_quality(
         self, centers: np.ndarray, pattern_size: Tuple[int, int]
     ) -> float:
@@ -436,7 +405,6 @@ class CalibrationQualityAssessment:
         except Exception as e:
             self.logger.error(f"Error calculating circle grid quality: {e}")
             return 0.0
-
     def _calculate_geometric_distortion(
         self, points: np.ndarray, pattern_size: Tuple[int, int]
     ) -> float:
@@ -455,7 +423,6 @@ class CalibrationQualityAssessment:
         except Exception as e:
             self.logger.error(f"Error calculating geometric distortion: {e}")
             return 1.0
-
     def _calculate_overall_quality(
         self,
         pattern_result: PatternDetectionResult,
@@ -485,7 +452,6 @@ class CalibrationQualityAssessment:
         except Exception as e:
             self.logger.error(f"Error calculating overall quality: {e}")
             return 0.0
-
     def _is_quality_acceptable(
         self,
         overall_score: float,
@@ -512,7 +478,6 @@ class CalibrationQualityAssessment:
         except Exception as e:
             self.logger.error(f"Error determining quality acceptability: {e}")
             return False
-
     def _generate_recommendations(
         self,
         pattern_result: PatternDetectionResult,
@@ -559,7 +524,6 @@ class CalibrationQualityAssessment:
             self.logger.error(f"Error generating recommendations: {e}")
             recommendations.append("Error generating recommendations")
         return recommendations
-
 if __name__ == "__main__":
     pass
     logging.basicConfig(

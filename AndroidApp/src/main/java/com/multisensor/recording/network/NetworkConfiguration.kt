@@ -121,4 +121,3 @@ data class ServerConfiguration(
                 NetworkConfiguration.isValidPort(jsonPort)
     }
 }
-

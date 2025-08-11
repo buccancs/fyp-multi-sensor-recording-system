@@ -5,19 +5,14 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
-
 import cv2
-
 from ..utils.logging_config import get_logger
-
 logger = get_logger(__name__)
-
 class ErrorSeverity(Enum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
-
 class ErrorCategory(Enum):
     CAMERA_HARDWARE = "camera_hardware"
     CAMERA_RESOURCE = "camera_resource"
@@ -27,7 +22,6 @@ class ErrorCategory(Enum):
     FILE_SYSTEM = "file_system"
     CONFIGURATION = "configuration"
     UNKNOWN = "unknown"
-
 @dataclass
 class ErrorEvent:
     timestamp: datetime
@@ -38,15 +32,12 @@ class ErrorEvent:
     recovery_attempted: bool = False
     recovery_successful: bool = False
     retry_count: int = 0
-
 class CameraResourceManager:
-
     def __init__(self):
         self.active_cameras: Dict[int, str] = {}
         self.resource_lock = threading.Lock()
         self.recovery_attempts: Dict[int, int] = {}
         self.max_recovery_attempts = 3
-
     def request_camera_access(
         self, camera_index: int, process_name: str = "webcam_capture"
     ) -> Tuple[bool, Optional[str]]:
@@ -66,7 +57,6 @@ class CameraResourceManager:
             self.active_cameras[camera_index] = process_name
             print(f"[DEBUG_LOG] Camera {camera_index} reserved for {process_name}")
             return True, None
-
     def release_camera_access(
         self, camera_index: int, process_name: str = "webcam_capture"
     ):
@@ -81,7 +71,6 @@ class CameraResourceManager:
                     print(
                         f"[DEBUG_LOG] Warning: {process_name} tried to release camera {camera_index} owned by {self.active_cameras[camera_index]}"
                     )
-
     def _test_camera_availability(
         self, camera_index: int
     ) -> Tuple[bool, Optional[str]]:
@@ -102,7 +91,6 @@ class CameraResourceManager:
         finally:
             if cap:
                 cap.release()
-
     def recover_camera_access(
         self, camera_index: int, process_name: str = "webcam_capture"
     ) -> Tuple[bool, Optional[str]]:
@@ -130,7 +118,6 @@ class CameraResourceManager:
             self.recovery_attempts[camera_index] = 0
             print(f"[DEBUG_LOG] Camera {camera_index} recovery successful")
         return success, error
-
     def get_camera_status(self) -> Dict[str, Any]:
         with self.resource_lock:
             return {
@@ -138,9 +125,7 @@ class CameraResourceManager:
                 "recovery_attempts": self.recovery_attempts.copy(),
                 "total_active": len(self.active_cameras),
             }
-
 class NetworkRecoveryManager:
-
     def __init__(self):
         self.connection_status: Dict[str, bool] = {}
         self.last_sync_time: Dict[str, datetime] = {}
@@ -148,13 +133,11 @@ class NetworkRecoveryManager:
         self.max_sync_failures = 5
         self.sync_timeout = 10.0
         self.recovery_lock = threading.Lock()
-
     def register_device(self, device_id: str):
         with self.recovery_lock:
             self.connection_status[device_id] = False
             self.sync_failures[device_id] = 0
             print(f"[DEBUG_LOG] Device {device_id} registered for network monitoring")
-
     def update_connection_status(self, device_id: str, connected: bool):
         with self.recovery_lock:
             old_status = self.connection_status.get(device_id, False)
@@ -164,7 +147,6 @@ class NetworkRecoveryManager:
                 print(f"[DEBUG_LOG] Device {device_id} connection restored")
             elif not connected and old_status:
                 print(f"[DEBUG_LOG] Device {device_id} connection lost")
-
     def record_sync_attempt(
         self, device_id: str, success: bool, response_time: float = None
     ):
@@ -181,12 +163,10 @@ class NetworkRecoveryManager:
                 print(
                     f"[DEBUG_LOG] Sync failed with {device_id} (failure count: {self.sync_failures[device_id]})"
                 )
-
     def should_attempt_recovery(self, device_id: str) -> bool:
         with self.recovery_lock:
             failure_count = self.sync_failures.get(device_id, 0)
             return failure_count > 0 and failure_count <= self.max_sync_failures
-
     def attempt_sync_recovery(
         self, device_id: str, sync_function: Callable, *args, **kwargs
     ) -> Tuple[bool, Optional[str]]:
@@ -214,7 +194,6 @@ class NetworkRecoveryManager:
         except Exception as e:
             self.record_sync_attempt(device_id, False)
             return False, f"Sync recovery failed: {str(e)}"
-
     def get_sync_status(self) -> Dict[str, Any]:
         with self.recovery_lock:
             current_time = datetime.now()
@@ -232,9 +211,7 @@ class NetworkRecoveryManager:
                     "needs_recovery": self.should_attempt_recovery(device_id),
                 }
             return status
-
 class ErrorRecoveryManager:
-
     def __init__(self):
         self.camera_manager = CameraResourceManager()
         self.network_manager = NetworkRecoveryManager()
@@ -242,7 +219,6 @@ class ErrorRecoveryManager:
         self.recovery_strategies: Dict[ErrorCategory, Callable] = {}
         self.max_history_size = 1000
         self._register_default_strategies()
-
     def _register_default_strategies(self):
         self.recovery_strategies[ErrorCategory.CAMERA_RESOURCE] = (
             self._recover_camera_resource
@@ -256,7 +232,6 @@ class ErrorRecoveryManager:
         self.recovery_strategies[ErrorCategory.CAMERA_HARDWARE] = (
             self._recover_camera_hardware
         )
-
     def classify_error(
         self, error_message: str, context: Dict[str, Any] = None
     ) -> Tuple[ErrorCategory, ErrorSeverity]:
@@ -301,7 +276,6 @@ class ErrorRecoveryManager:
         ):
             return ErrorCategory.CONFIGURATION, ErrorSeverity.LOW
         return ErrorCategory.UNKNOWN, ErrorSeverity.MEDIUM
-
     def handle_error(
         self,
         error_message: str,
@@ -337,7 +311,6 @@ class ErrorRecoveryManager:
                 print(f"[DEBUG_LOG] {recovery_message}")
                 return False, recovery_message
         return False, "No recovery strategy available"
-
     def _recover_camera_resource(self, error_event: ErrorEvent) -> Tuple[bool, str]:
         context = error_event.details
         camera_index = context.get("camera_index", 0)
@@ -349,7 +322,6 @@ class ErrorRecoveryManager:
             return True, f"Camera {camera_index} access recovered"
         else:
             return False, f"Failed to recover camera {camera_index}: {message}"
-
     def _recover_network_sync(self, error_event: ErrorEvent) -> Tuple[bool, str]:
         context = error_event.details
         device_id = context.get("device_id", "unknown")
@@ -362,10 +334,8 @@ class ErrorRecoveryManager:
             device_id, sync_function, *sync_args, **sync_kwargs
         )
         return success, message or "Network sync recovery completed"
-
     def _recover_codec_encoding(self, error_event: ErrorEvent) -> Tuple[bool, str]:
         from config.webcam_config import CodecValidator, VideoCodec
-
         context = error_event.details
         failed_codec = context.get("codec")
         fallback_codecs = context.get(
@@ -375,7 +345,6 @@ class ErrorRecoveryManager:
             if codec.value != failed_codec and CodecValidator.test_codec(codec):
                 return True, f"Switched to fallback codec: {codec.value}"
         return False, "No working fallback codec found"
-
     def _recover_camera_hardware(self, error_event: ErrorEvent) -> Tuple[bool, str]:
         context = error_event.details
         camera_index = context.get("camera_index", 0)
@@ -385,12 +354,10 @@ class ErrorRecoveryManager:
                 if success:
                     return (True, f"Alternative camera found at index {alt_index}")
         return False, "No alternative camera hardware found"
-
     def _add_to_history(self, error_event: ErrorEvent):
         self.error_history.append(error_event)
         if len(self.error_history) > self.max_history_size:
             self.error_history = self.error_history[-self.max_history_size :]
-
     def get_error_statistics(self) -> Dict[str, Any]:
         if not self.error_history:
             return {"total_errors": 0}
@@ -428,20 +395,16 @@ class ErrorRecoveryManager:
             "camera_status": self.camera_manager.get_camera_status(),
             "network_status": self.network_manager.get_sync_status(),
         }
-
     def register_recovery_strategy(
         self, category: ErrorCategory, strategy_func: Callable
     ):
         self.recovery_strategies[category] = strategy_func
         print(f"[DEBUG_LOG] Custom recovery strategy registered for {category.value}")
-
 error_recovery_manager = ErrorRecoveryManager()
-
 def handle_error_with_recovery(
     error_message: str, **context
 ) -> Tuple[bool, Optional[str]]:
     return error_recovery_manager.handle_error(error_message, context)
-
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing Error Handling and Recovery System...")
     print("\n--- Testing Camera Resource Conflict ---")
@@ -452,10 +415,8 @@ if __name__ == "__main__":
     )
     print(f"Recovery result: {success}, Message: {message}")
     print("\n--- Testing Network Synchronization Error ---")
-
     def mock_sync_function():
         return True
-
     success, message = handle_error_with_recovery(
         "Network synchronization timeout with device",
         device_id="test_device",

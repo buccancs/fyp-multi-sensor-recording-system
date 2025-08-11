@@ -31,23 +31,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-/**
- * FileViewActivity displays recorded sessions and files with preview capabilities.
- * 
- * This activity allows users to browse recording sessions, view individual files,
- * and preview camera/thermal data. It follows MVVM architecture with separated
- * preview management responsibilities.
- */
 @AndroidEntryPoint
 class FileViewActivity : AppCompatActivity() {
     private val viewModel: FileViewViewModel by viewModels()
-    
+
     @Inject
     lateinit var logger: Logger
-    
+
     @Inject
     lateinit var previewManager: PreviewManager
-    
+
     private lateinit var sessionsRecyclerView: RecyclerView
     private lateinit var filesRecyclerView: RecyclerView
     private lateinit var sessionInfoText: TextView
@@ -64,7 +57,7 @@ class FileViewActivity : AppCompatActivity() {
     private lateinit var irPreviewPlaceholder: TextView
     private lateinit var sessionsAdapter: SessionsAdapter
     private lateinit var filesAdapter: FilesAdapter
-    
+
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     companion object {
         private const val AUTHORITY = "com.multisensor.recording.fileprovider"
@@ -72,10 +65,9 @@ class FileViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_view)
-        
-        // Register PreviewManager as lifecycle observer
+
         lifecycle.addObserver(previewManager)
-        
+
         setupActionBar()
         initializeViews()
         setupRecyclerViews()
@@ -319,7 +311,7 @@ class FileViewActivity : AppCompatActivity() {
                 .show()
         }
     }
-    
+
     private fun toggleRgbPreview() {
         if (!previewManager.isRgbPreviewActive()) {
             startRgbPreview()
@@ -327,7 +319,7 @@ class FileViewActivity : AppCompatActivity() {
             stopRgbPreview()
         }
     }
-    
+
     private fun toggleIrPreview() {
         if (!previewManager.isThermalPreviewActive()) {
             startIrPreview()
@@ -335,7 +327,7 @@ class FileViewActivity : AppCompatActivity() {
             stopIrPreview()
         }
     }
-    
+
     private fun startRgbPreview() {
         previewManager.startRgbPreview(
             scope = lifecycleScope,
@@ -352,7 +344,7 @@ class FileViewActivity : AppCompatActivity() {
         logger.info("RGB camera preview started")
         showMessage("RGB camera preview started")
     }
-    
+
     private fun stopRgbPreview() {
         previewManager.stopRgbPreview { isActive ->
             rgbPreviewBtn.text = "Start"
@@ -363,7 +355,7 @@ class FileViewActivity : AppCompatActivity() {
         logger.info("RGB camera preview stopped")
         showMessage("RGB camera preview stopped")
     }
-    
+
     private fun startIrPreview() {
         previewManager.startThermalPreview(
             scope = lifecycleScope,
@@ -380,7 +372,7 @@ class FileViewActivity : AppCompatActivity() {
         logger.info("Thermal camera preview started")
         showMessage("Thermal camera preview started")
     }
-    
+
     private fun stopIrPreview() {
         previewManager.stopThermalPreview { isActive ->
             irPreviewBtn.text = "Start"
@@ -391,10 +383,10 @@ class FileViewActivity : AppCompatActivity() {
         logger.info("Thermal camera preview stopped")
         showMessage("Thermal camera preview stopped")
     }
-    
+
     override fun onDestroy() {
         super.onDestroy()
-        // PreviewManager will automatically stop previews via lifecycle observer
+
         logger.info("FileViewActivity destroyed")
     }
 }

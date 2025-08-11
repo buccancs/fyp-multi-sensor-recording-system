@@ -2,13 +2,9 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
-
 from ..utils.logging_config import get_logger
-
 logger = get_logger(__name__)
-
 class SessionManager:
-
     def __init__(self, base_recordings_dir: str = "recordings"):
         self.logger = get_logger(__name__)
         self.base_recordings_dir = Path(base_recordings_dir)
@@ -18,7 +14,6 @@ class SessionManager:
         logger.info(
             f"session manager initialized with base directory: {self.base_recordings_dir}"
         )
-
     @staticmethod
     def validate_session_name(session_name: str) -> bool:
         if not session_name:
@@ -26,11 +21,9 @@ class SessionManager:
         if len(session_name) > 80:
             return False
         import re
-
         if not re.match("^[a-zA-Z0-9\\s\\-_]+$", session_name):
             return False
         return True
-
     @staticmethod
     def generate_device_filename(
         device_id: str,
@@ -42,7 +35,6 @@ class SessionManager:
             timestamp = datetime.now()
         timestamp_str = timestamp.strftime("%Y%m%d_%H%M%S")
         return f"{device_id}_{file_type}_{timestamp_str}.{extension}"
-
     def create_session(self, session_name: Optional[str] = None) -> Dict:
         logger.info(f"creating new session with name: {session_name}")
         timestamp = datetime.now()
@@ -77,7 +69,6 @@ class SessionManager:
         self.current_session = session_info
         logger.info(f"session created: {session_id}")
         return session_info
-
     def end_session(self) -> Optional[Dict]:
         if not self.current_session:
             logger.warning("no active session to end")
@@ -99,7 +90,6 @@ class SessionManager:
         completed_session = self.current_session
         self.current_session = None
         return completed_session
-
     def add_device_to_session(
         self, device_id: str, device_type: str, capabilities: List[str]
     ):
@@ -115,7 +105,6 @@ class SessionManager:
         self.current_session["devices"][device_id] = device_info
         self._update_session_metadata()
         print(f"[DEBUG_LOG] Device added to session: {device_id} ({device_type})")
-
     def add_file_to_session(
         self,
         device_id: str,
@@ -139,7 +128,6 @@ class SessionManager:
         print(
             f"[DEBUG_LOG] File added to session: {device_id} - {file_type} ({file_path})"
         )
-
     def get_session_folder(self, session_id: Optional[str] = None) -> Optional[Path]:
         if session_id is None:
             if self.current_session:
@@ -152,22 +140,17 @@ class SessionManager:
         if self.current_session and self.current_session["session_id"] == session_id:
             return Path(self.current_session["folder_path"])
         return None
-
     def get_current_session(self) -> Optional[Dict]:
         return self.current_session.copy() if self.current_session else None
-
     def has_hand_segmentation_available(self) -> bool:
         try:
             import os
             import sys
-
             sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
             from hand_segmentation import SessionPostProcessor
-
             return True
         except ImportError:
             return False
-
     def trigger_post_session_processing(
         self,
         session_id: Optional[str] = None,
@@ -195,10 +178,8 @@ class SessionManager:
         try:
             import os
             import sys
-
             sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
             from hand_segmentation import create_session_post_processor
-
             processor = create_session_post_processor(str(self.base_recordings_dir))
             target_session = session_id
             if not target_session:
@@ -227,7 +208,6 @@ class SessionManager:
             results["hand_segmentation"]["error"] = error_msg
             print(f"[ERROR] {error_msg}")
         return results
-
     def _update_session_post_processing_status(self, session_id: str, completed: bool):
         try:
             session_folder = self.get_session_folder(session_id)
@@ -235,7 +215,6 @@ class SessionManager:
                 metadata_file = session_folder / "session_metadata.json"
                 if metadata_file.exists():
                     import json
-
                     with open(metadata_file, "r") as f:
                         metadata = json.load(f)
                     metadata["post_processing"] = {
@@ -248,7 +227,6 @@ class SessionManager:
                         json.dump(metadata, f, indent=2)
         except Exception as e:
             print(f"[WARNING] Failed to update post-processing status: {e}")
-
     def _update_session_metadata(self):
         if not self.current_session:
             return
@@ -260,7 +238,6 @@ class SessionManager:
                 json.dump(self.current_session, f, indent=2)
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to update session metadata: {e}")
-
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing SessionManager...")
     manager = SessionManager("test_recordings")

@@ -6,7 +6,6 @@ import threading
 import time
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-
 try:
     import psutil
 except ImportError:
@@ -15,28 +14,22 @@ except ImportError:
     import psutil
 try:
     import cv2
-
     OPENCV_AVAILABLE = True
 except ImportError:
     OPENCV_AVAILABLE = False
 try:
     from utils.logging_config import get_logger
-
     logger = get_logger(__name__)
 except ImportError:
     import logging
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-
 class SystemMonitor:
-
     def __init__(self):
         self.monitoring = False
         self.monitor_thread = None
         self.system_info = self._get_system_info()
         self._last_update = time.time()
-
     def _get_system_info(self) -> Dict[str, Any]:
         try:
             return {
@@ -56,7 +49,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error getting system info: {e}")
             return {}
-
     def get_cpu_usage(self) -> Dict[str, Any]:
         try:
             cpu_percent = psutil.cpu_percent(interval=0.1)
@@ -78,7 +70,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error getting CPU usage: {e}")
             return {"usage_percent": 0}
-
     def get_memory_usage(self) -> Dict[str, Any]:
         try:
             memory = psutil.virtual_memory()
@@ -99,7 +90,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error getting memory usage: {e}")
             return {"total": 0, "used": 0, "percent": 0}
-
     def get_disk_usage(self) -> Dict[str, Any]:
         try:
             disk_info = {}
@@ -138,7 +128,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error getting disk usage: {e}")
             return {}
-
     def get_network_info(self) -> Dict[str, Any]:
         try:
             network_info = {}
@@ -174,7 +163,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error getting network info: {e}")
             return {}
-
     def detect_webcams(self) -> List[Dict[str, Any]]:
         if not OPENCV_AVAILABLE:
             logger.warning("OpenCV not available, cannot detect webcams")
@@ -205,7 +193,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error detecting webcams: {e}")
             return []
-
     def detect_bluetooth_devices(self) -> List[Dict[str, Any]]:
         bluetooth_devices = []
         try:
@@ -269,7 +256,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error detecting Bluetooth devices: {e}")
             return []
-
     def get_process_info(self) -> List[Dict[str, Any]]:
         try:
             processes = []
@@ -300,7 +286,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error getting process info: {e}")
             return []
-
     def get_temperature_info(self) -> Dict[str, Any]:
         try:
             temps = {}
@@ -321,7 +306,6 @@ class SystemMonitor:
         except Exception as e:
             logger.error(f"Error getting temperature info: {e}")
             return {}
-
     def get_complete_status(self) -> Dict[str, Any]:
         current_time = time.time()
         status = {
@@ -339,9 +323,7 @@ class SystemMonitor:
         }
         self._last_update = current_time
         return status
-
 _system_monitor = None
-
 def get_system_monitor() -> SystemMonitor:
     global _system_monitor
     if _system_monitor is None:

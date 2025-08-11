@@ -25,9 +25,9 @@ class ComposeMainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        
+
         enableEdgeToEdge()
 
         try {

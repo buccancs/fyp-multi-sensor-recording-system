@@ -4,20 +4,15 @@ from dataclasses import asdict, dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-
 import cv2
-
 from ..utils.logging_config import get_logger
-
 logger = get_logger(__name__)
-
 class VideoCodec(Enum):
     MP4V = "mp4v"
     XVID = "XVID"
     MJPG = "MJPG"
     H264 = "H264"
     X264 = "X264"
-
 class ResolutionPreset(Enum):
     HD_720P = 1280, 720
     HD_1080P = 1920, 1080
@@ -25,7 +20,6 @@ class ResolutionPreset(Enum):
     VGA = 640, 480
     QVGA = 320, 240
     UHD_4K = 3840, 2160
-
 @dataclass
 class CameraInfo:
     index: int
@@ -35,7 +29,6 @@ class CameraInfo:
     supported_resolutions: List[Tuple[int, int]]
     is_working: bool
     error_message: Optional[str] = None
-
 @dataclass
 class RecordingConfig:
     codec: VideoCodec = VideoCodec.MP4V
@@ -43,7 +36,6 @@ class RecordingConfig:
     fps: int = 30
     quality: int = 80
     file_format: str = "mp4"
-
 @dataclass
 class PreviewConfig:
     max_width: int = 640
@@ -51,7 +43,6 @@ class PreviewConfig:
     fps: int = 30
     enable_scaling: bool = True
     maintain_aspect_ratio: bool = True
-
 @dataclass
 class WebcamConfiguration:
     camera_index: int = 0
@@ -60,7 +51,6 @@ class WebcamConfiguration:
     preview: PreviewConfig = None
     auto_detect_cameras: bool = True
     fallback_codecs: List[VideoCodec] = None
-
     def __post_init__(self):
         if self.recording is None:
             self.recording = RecordingConfig()
@@ -68,13 +58,10 @@ class WebcamConfiguration:
             self.preview = PreviewConfig()
         if self.fallback_codecs is None:
             self.fallback_codecs = [VideoCodec.MP4V, VideoCodec.XVID, VideoCodec.MJPG]
-
 class CameraDetector:
-
     def __init__(self):
         self.detected_cameras: List[CameraInfo] = []
         self.detection_complete = False
-
     def detect_cameras(self, max_cameras: int = 10) -> List[CameraInfo]:
         print(f"[DEBUG_LOG] Detecting cameras (testing up to {max_cameras} indices)...")
         self.detected_cameras = []
@@ -94,7 +81,6 @@ class CameraDetector:
             f"[DEBUG_LOG] Camera detection complete: {len(working_cameras)} working cameras found"
         )
         return self.detected_cameras
-
     def _analyze_camera(self, camera_index: int) -> Optional[CameraInfo]:
         cap = None
         try:
@@ -146,7 +132,6 @@ class CameraDetector:
         finally:
             if cap:
                 cap.release()
-
     def _test_resolutions(self, cap: cv2.VideoCapture) -> List[Tuple[int, int]]:
         test_resolutions = [
             (320, 240),
@@ -174,7 +159,6 @@ class CameraDetector:
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, original_width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, original_height)
         return supported
-
     def _generate_camera_name(self, index: int, width: int, height: int) -> str:
         if index == 0:
             base_name = "Built-in Camera"
@@ -189,18 +173,14 @@ class CameraDetector:
         else:
             quality = "Low"
         return f"{base_name} ({quality} {width}x{height})"
-
     def get_working_cameras(self) -> List[CameraInfo]:
         return [cam for cam in self.detected_cameras if cam.is_working]
-
     def get_camera_by_index(self, index: int) -> Optional[CameraInfo]:
         for cam in self.detected_cameras:
             if cam.index == index:
                 return cam
         return None
-
 class CodecValidator:
-
     @staticmethod
     def test_codec(codec: VideoCodec, resolution: Tuple[int, int] = (640, 480)) -> bool:
         try:
@@ -210,7 +190,6 @@ class CodecValidator:
             if not writer.isOpened():
                 return False
             import numpy as np
-
             test_frame = np.zeros((resolution[1], resolution[0], 3), dtype=np.uint8)
             for _ in range(5):
                 writer.write(test_frame)
@@ -234,7 +213,6 @@ class CodecValidator:
                     os.remove(test_file)
             except (OSError, FileNotFoundError):
                 pass
-
     @staticmethod
     def get_available_codecs() -> List[VideoCodec]:
         available = []
@@ -245,16 +223,13 @@ class CodecValidator:
             else:
                 print(f"[DEBUG_LOG] Codec {codec.value} is not available")
         return available
-
     @staticmethod
     def get_fallback_codec(preferred_codecs: List[VideoCodec]) -> Optional[VideoCodec]:
         for codec in preferred_codecs:
             if CodecValidator.test_codec(codec):
                 return codec
         return None
-
 class WebcamConfigManager:
-
     def __init__(self, config_file: str = "webcam_config.json"):
         self.config_file = Path(config_file)
         self.config = WebcamConfiguration()
@@ -262,7 +237,6 @@ class WebcamConfigManager:
         self.available_cameras: List[CameraInfo] = []
         self.available_codecs: List[VideoCodec] = []
         self.load_config()
-
     def detect_and_configure_cameras(self) -> List[CameraInfo]:
         print("[DEBUG_LOG] Detecting and configuring cameras...")
         self.available_cameras = self.camera_detector.detect_cameras()
@@ -276,7 +250,6 @@ class WebcamConfigManager:
                 )
                 self.config.recording.resolution = best_resolution
         return self.available_cameras
-
     def detect_and_configure_codecs(self) -> List[VideoCodec]:
         print("[DEBUG_LOG] Detecting and configuring codecs...")
         self.available_codecs = CodecValidator.get_available_codecs()
@@ -285,7 +258,6 @@ class WebcamConfigManager:
             if self.config.recording.codec not in self.available_codecs:
                 self.config.recording.codec = self.available_codecs[0]
         return self.available_codecs
-
     def auto_configure(self) -> Dict[str, Any]:
         print("[DEBUG_LOG] Auto-configuring webcam settings...")
         cameras = self.detect_and_configure_cameras()
@@ -308,7 +280,6 @@ class WebcamConfigManager:
             f"[DEBUG_LOG] Auto-configuration complete: {len(working_cameras)} cameras, {len(codecs)} codecs"
         )
         return config_summary
-
     def set_camera(self, camera_index: int) -> bool:
         camera_info = self.camera_detector.get_camera_by_index(camera_index)
         if camera_info and camera_info.is_working:
@@ -326,7 +297,6 @@ class WebcamConfigManager:
             f"[DEBUG_LOG] Failed to set camera index {camera_index}: camera not available"
         )
         return False
-
     def set_recording_config(self, **kwargs) -> bool:
         try:
             if "codec" in kwargs:
@@ -365,7 +335,6 @@ class WebcamConfigManager:
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to update recording configuration: {e}")
             return False
-
     def set_preview_config(self, **kwargs) -> bool:
         try:
             if "max_width" in kwargs:
@@ -386,10 +355,8 @@ class WebcamConfigManager:
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to update preview configuration: {e}")
             return False
-
     def get_config(self) -> WebcamConfiguration:
         return self.config
-
     def get_config_dict(self) -> Dict[str, Any]:
         return {
             "camera_index": self.config.camera_index,
@@ -401,7 +368,6 @@ class WebcamConfigManager:
             "available_cameras": [asdict(cam) for cam in self.available_cameras],
             "available_codecs": [codec.value for codec in self.available_codecs],
         }
-
     def save_config(self):
         try:
             config_dict = {
@@ -425,7 +391,6 @@ class WebcamConfigManager:
             print(f"[DEBUG_LOG] Configuration saved to {self.config_file}")
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to save configuration: {e}")
-
     def load_config(self):
         try:
             if self.config_file.exists():
@@ -472,10 +437,8 @@ class WebcamConfigManager:
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to load configuration: {e}, using defaults")
             self.config = WebcamConfiguration()
-
 def create_default_config() -> WebcamConfiguration:
     return WebcamConfiguration()
-
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing Webcam Configuration System...")
     config_manager = WebcamConfigManager("test_webcam_config.json")
