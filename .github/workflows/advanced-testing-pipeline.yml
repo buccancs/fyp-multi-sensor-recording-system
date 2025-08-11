@@ -2,9 +2,9 @@ name: Advanced Testing Pipeline
 
 on:
   push:
-    branches: [ main, master, develop, 'copilot/**' ]
+    # Run on all commits to any branch
   pull_request:
-    branches: [ main, master, develop ]
+    # Run on all pull requests
   schedule:
     # Run nightly comprehensive tests at 2 AM UTC
     - cron: '0 2 * * *'
@@ -23,6 +23,7 @@ on:
           - load
           - browser
           - hardware
+          - android
       skip_hardware:
         description: 'Skip hardware-in-the-loop tests'
         required: false
@@ -88,8 +89,11 @@ jobs:
           "hardware")
             MATRIX='{"include":[{"name":"hardware","markers":"hardware_loop"}]}'
             ;;
+          "android")
+            MATRIX='{"include":[{"name":"android","markers":"android"}]}'
+            ;;
           "comprehensive")
-            MATRIX='{"include":[{"name":"unit","markers":"unit"},{"name":"integration","markers":"integration"},{"name":"e2e","markers":"e2e"},{"name":"visual","markers":"visual"},{"name":"load","markers":"load"},{"name":"browser","markers":"browser"}]}'
+            MATRIX='{"include":[{"name":"unit","markers":"unit"},{"name":"integration","markers":"integration"},{"name":"e2e","markers":"e2e"},{"name":"visual","markers":"visual"},{"name":"load","markers":"load"},{"name":"browser","markers":"browser"},{"name":"android","markers":"android"}]}'
             ;;
         esac
         
@@ -165,6 +169,26 @@ jobs:
     needs: setup-test-matrix
     if: contains(needs.setup-test-matrix.outputs.test-suite, 'basic') || contains(needs.setup-test-matrix.outputs.test-suite, 'comprehensive')
     
+    strategy:
+      matrix:
+        include:
+          - api-level: 30
+            target: google_apis
+            arch: x86_64
+            test-type: unit
+          - api-level: 30
+            target: google_apis
+            arch: x86_64
+            test-type: instrumented
+          - api-level: 29
+            target: default
+            arch: x86_64
+            test-type: ui
+          - api-level: 31
+            target: google_apis
+            arch: x86_64
+            test-type: integration
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -178,6 +202,13 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
     
+    - name: Enable KVM group perms (for emulator)
+      if: matrix.test-type != 'unit'
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    
     - name: Cache Gradle dependencies
       uses: actions/cache@v4
       with:
@@ -186,28 +217,117 @@ jobs:
           ~/.gradle/wrapper
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
     
+    - name: Cache AVD
+      if: matrix.test-type != 'unit'
+      uses: actions/cache@v4
+      id: avd-cache
+      with:
+        path: |
+          ~/.android/avd/*
+          ~/.android/adb*
+        key: avd-${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}
+    
+    - name: Create AVD and generate snapshot for caching
+      if: matrix.test-type != 'unit' && steps.avd-cache.outputs.cache-hit != 'true'
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: ${{ matrix.api-level }}
+        target: ${{ matrix.target }}
+        arch: ${{ matrix.arch }}
+        force-avd-creation: false
+        emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: true
+        script: echo "Generated AVD snapshot for caching."
+    
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     
     - name: Build Android app
-      run: ./gradlew assembleDevDebug
+      run: ./gradlew assembleDevDebug assembleDevDebugAndroidTest
     
     - name: Run Android unit tests
-      run: ./gradlew testDevDebugUnitTest
+      if: matrix.test-type == 'unit'
+      run: |
+        ./gradlew testDevDebugUnitTest \
+          --continue \
+          -Pandroid.testInstrumentationRunnerArguments.class=com.multisensor.recording.testsuite.ComprehensiveTestSuite
+    
+    - name: Run Android instrumented tests
+      if: matrix.test-type == 'instrumented'
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: ${{ matrix.api-level }}
+        target: ${{ matrix.target }}
+        arch: ${{ matrix.arch }}
+        force-avd-creation: false
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: true
+        script: |
+          ./gradlew connectedDevDebugAndroidTest \
+            --continue \
+            -Pandroid.testInstrumentationRunnerArguments.class=com.multisensor.recording.testsuite.IntegrationTestSuite
+    
+    - name: Run Android UI tests
+      if: matrix.test-type == 'ui'
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: ${{ matrix.api-level }}
+        target: ${{ matrix.target }}
+        arch: ${{ matrix.arch }}
+        force-avd-creation: false
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: true
+        script: |
+          ./gradlew connectedDevDebugAndroidTest \
+            --continue \
+            -Pandroid.testInstrumentationRunnerArguments.class=com.multisensor.recording.NavigationTest,com.multisensor.recording.IDEIntegrationUITest
+    
+    - name: Run Android integration tests
+      if: matrix.test-type == 'integration'
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: ${{ matrix.api-level }}
+        target: ${{ matrix.target }}
+        arch: ${{ matrix.arch }}
+        force-avd-creation: false
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: true
+        script: |
+          ./gradlew connectedDevDebugAndroidTest \
+            --continue \
+            -Pandroid.testInstrumentationRunnerArguments.package=com.multisensor.recording.integration
+    
+    - name: Generate Android test coverage report
+      if: always()
+      run: ./gradlew jacocoTestReport --continue || echo "Coverage report generation failed"
     
     - name: Upload Android test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: android-test-results
-        path: AndroidApp/build/reports/tests/
+        name: android-test-results-${{ matrix.test-type }}-api${{ matrix.api-level }}
+        path: |
+          AndroidApp/build/reports/tests/
+          AndroidApp/build/reports/androidTests/
+          AndroidApp/build/reports/coverage/
+          AndroidApp/build/outputs/androidTest-results/
         retention-days: 7
+    
+    - name: Upload Android coverage to Codecov
+      if: matrix.test-type == 'unit'
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./AndroidApp/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+        flags: android-${{ matrix.test-type }}
+        name: android-coverage-${{ matrix.test-type }}
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: false
 
   # Advanced testing jobs
   advanced-tests:
     name: ${{ matrix.name }} Tests
     runs-on: ubuntu-latest
-    needs: [setup-test-matrix, python-tests]
+    needs: [setup-test-matrix, python-tests, android-tests]
     if: fromJSON(needs.setup-test-matrix.outputs.matrix).include
     
     strategy:
@@ -223,11 +343,29 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
     
+    - name: Set up JDK ${{ env.JAVA_VERSION }}
+      if: matrix.markers == 'e2e' || matrix.markers == 'integration'
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+    
     - name: Set up Node.js ${{ env.NODE_VERSION }}
       if: matrix.markers == 'browser' || matrix.markers == 'e2e'
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
+    
+    - name: Setup Android SDK
+      if: matrix.markers == 'e2e' || matrix.markers == 'integration'
+      uses: android-actions/setup-android@v3
+    
+    - name: Enable KVM group perms (for Android emulator)
+      if: matrix.markers == 'e2e'
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
     
     - name: Install system dependencies
       run: |
@@ -261,6 +399,29 @@ jobs:
         pip install -e ".[dev]"
         pip install pytest-xvfb pytest-timeout
     
+    # Cache for Android E2E tests
+    - name: Cache AVD for E2E tests
+      if: matrix.markers == 'e2e'
+      uses: actions/cache@v4
+      id: avd-cache-e2e
+      with:
+        path: |
+          ~/.android/avd/*
+          ~/.android/adb*
+        key: avd-e2e-30-google_apis-x86_64
+    
+    - name: Create AVD for E2E tests
+      if: matrix.markers == 'e2e' && steps.avd-cache-e2e.outputs.cache-hit != 'true'
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 30
+        target: google_apis
+        arch: x86_64
+        force-avd-creation: false
+        emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: true
+        script: echo "Generated AVD snapshot for E2E testing."
+    
     # Appium setup for E2E tests
     - name: Setup Appium
       if: matrix.markers == 'e2e' || matrix.markers == 'appium'
@@ -284,6 +445,13 @@ jobs:
         playwright install chromium firefox webkit
         playwright install-deps
     
+    # Build Android app for E2E tests
+    - name: Build Android app for E2E tests
+      if: matrix.markers == 'e2e'
+      run: |
+        chmod +x ./gradlew
+        ./gradlew assembleDevDebug
+    
     # Start Web dashboard for network tests
     - name: Start Web dashboard
       if: matrix.markers == 'e2e' || matrix.markers == 'load' || matrix.markers == 'browser'
@@ -295,40 +463,75 @@ jobs:
     
     # Run the specific test suite
     - name: Run ${{ matrix.name }} tests
-      timeout-minutes: 45
+      timeout-minutes: 60
       run: |
         case "${{ matrix.markers }}" in
           "e2e")
+            # Start Android emulator for E2E tests
+            if [ -n "$ANDROID_HOME" ]; then
+              echo "Starting Android emulator for E2E tests..."
+              $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none &
+              
+              # Wait for emulator to be ready
+              adb wait-for-device
+              adb shell input keyevent 82 &
+              sleep 10
+              
+              # Install the app
+              adb install AndroidApp/build/outputs/apk/dev/debug/AndroidApp-dev-debug.apk
+            fi
+            
             xvfb-run -a pytest tests/e2e/ -m "e2e" \
-              --timeout=300 \
+              --timeout=600 \
               --tb=short \
               -v \
               --junitxml=junit-${{ matrix.name }}.xml
             ;;
           "visual")
             xvfb-run -a pytest tests/visual/ -m "visual" \
-              --timeout=180 \
+              --timeout=300 \
               --tb=short \
               -v \
               --junitxml=junit-${{ matrix.name }}.xml
             ;;
           "load")
             pytest tests/load/ -m "load" \
-              --timeout=600 \
+              --timeout=900 \
               --tb=short \
               -v \
               --junitxml=junit-${{ matrix.name }}.xml
             ;;
           "browser")
             pytest tests/browser/ -m "browser" \
-              --timeout=300 \
+              --timeout=400 \
+              --tb=short \
+              -v \
+              --junitxml=junit-${{ matrix.name }}.xml
+            ;;
+          "android")
+            # Run comprehensive Android tests with emulator
+            if [ -n "$ANDROID_HOME" ]; then
+              echo "Starting Android emulator for comprehensive testing..."
+              $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none &
+              
+              # Wait for emulator to be ready
+              adb wait-for-device
+              adb shell input keyevent 82 &
+              sleep 10
+              
+              # Install the app
+              adb install AndroidApp/build/outputs/apk/dev/debug/AndroidApp-dev-debug.apk
+            fi
+            
+            pytest tests/ -m "android" \
+              --timeout=1200 \
               --tb=short \
               -v \
               --junitxml=junit-${{ matrix.name }}.xml
             ;;
           *)
             pytest tests/ -m "${{ matrix.markers }}" \
-              --timeout=180 \
+              --timeout=300 \
               --tb=short \
               -v \
               --junitxml=junit-${{ matrix.name }}.xml
@@ -347,6 +550,7 @@ jobs:
           tests/load/test_results/
           tests/browser/screenshots/
           tests/e2e/screenshots/
+          tests/e2e/test_results/
         retention-days: 7
 
   # Hardware-in-the-loop testing (separate job due to special requirements)

@@ -44,6 +44,7 @@ HEADLESS=true
 VERBOSE=false
 QUICK=false
 CI_MODE=false
+ANDROID_TESTS=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -66,6 +67,10 @@ while [[ $# -gt 0 ]]; do
         --ci)
             CI_MODE=true
             HEADLESS=true
+            shift
+            ;;
+        --android)
+            ANDROID_TESTS=true
             shift
             ;;
         *)
@@ -130,12 +135,19 @@ validate_environment() {
     fi
     
     # Check Java for Android tests
-    if [[ "$TEST_SUITE" == "all" || "$TEST_SUITE" == "integration" ]]; then
+    if [[ "$TEST_SUITE" == "all" || "$TEST_SUITE" == "integration" || "$TEST_SUITE" == "e2e" || "$ANDROID_TESTS" == "true" ]]; then
         if ! command -v java &> /dev/null; then
             log_warning "Java not found - Android tests may fail"
         else
             JAVA_VER=$(java --version 2>&1 | head -n1 | cut -d' ' -f2)
             log_info "Java version: $JAVA_VER"
+        fi
+        
+        # Check Android SDK for Android tests
+        if [[ -n "${ANDROID_HOME:-}" ]]; then
+            log_info "Android SDK found: $ANDROID_HOME"
+        else
+            log_warning "ANDROID_HOME not set - Android emulator tests may fail"
         fi
     fi
     
@@ -174,6 +186,14 @@ install_dependencies() {
             python3 -m pip install pybluez pyusb pyserial || log_warning "Some hardware dependencies failed to install"
             ;;
     esac
+    
+    # Install Android-specific dependencies if needed
+    if [[ "$ANDROID_TESTS" == "true" || "$TEST_SUITE" == "all" || "$TEST_SUITE" == "e2e" ]]; then
+        log_info "Installing Android testing dependencies..."
+        python3 -m pip install Appium-Python-Client selenium
+        python3 -m pip install pillow numpy  # For visual regression
+        python3 -m pip install psutil  # For performance monitoring
+    fi
     
     log_success "Dependencies installed"
 }
@@ -223,21 +243,33 @@ start_services() {
         cd "$PROJECT_ROOT"
     fi
     
-    # Start Appium server for E2E tests
-    if [[ "$TEST_SUITE" == "all" || "$TEST_SUITE" == "e2e" ]]; then
-        if command -v appium &> /dev/null; then
-            log_info "Starting Appium server..."
-            appium server --port 4723 --allow-insecure chromedriver_autodownload &
-            APPIUM_PID=$!
-            sleep 5
+    # Start Android emulator if needed for E2E tests
+    if [[ "$TEST_SUITE" == "all" || "$TEST_SUITE" == "e2e" || "$ANDROID_TESTS" == "true" ]]; then
+        if [[ -n "${ANDROID_HOME:-}" ]]; then
+            log_info "Starting Android emulator for E2E tests..."
             
-            if curl -f http://localhost:4723/wd/hub/status &> /dev/null; then
-                log_success "Appium server started (PID: $APPIUM_PID)"
+            # Check if emulator is already running
+            if ! adb devices | grep -q emulator; then
+                # Start emulator in background
+                $ANDROID_HOME/emulator/emulator -avd test -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none &
+                EMULATOR_PID=$!
+                
+                # Wait for emulator to be ready
+                log_info "Waiting for Android emulator to be ready..."
+                timeout 120 adb wait-for-device
+                
+                # Additional setup time
+                sleep 10
+                
+                # Enable input and disable screen lock
+                adb shell input keyevent 82 &
+                
+                log_success "Android emulator started and ready"
             else
-                log_warning "Appium server may not have started properly"
+                log_info "Android emulator already running"
             fi
         else
-            log_warning "Appium not found - E2E tests may fail"
+            log_warning "ANDROID_HOME not set - Android emulator will not be started"
         fi
     fi
 }
@@ -312,6 +344,11 @@ run_test_suite() {
             markers="hardware_loop"
             test_dir="tests/hardware/"
             timeout="600"
+            ;;
+        "android")
+            markers="android"
+            test_dir="tests/"
+            timeout="900"
             ;;
         *)
             log_error "Unknown test suite: $suite"
@@ -496,6 +533,11 @@ main() {
                 test_suites+=("hardware")
             fi
             
+            # Add Android tests if enabled
+            if [[ "$ANDROID_TESTS" == "true" ]]; then
+                test_suites+=("android")
+            fi
+            
             for suite in "${test_suites[@]}"; do
                 if ! run_test_suite "$suite"; then
                     overall_exit_code=1
@@ -535,6 +577,7 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
     echo "  load        Load and stress tests"
     echo "  browser     Cross-browser compatibility tests"
     echo "  hardware    Hardware-in-the-loop tests"
+    echo "  android     Android-specific comprehensive tests"
     echo ""
     echo "Options:"
     echo "  --headless  Run in headless mode (default)"
@@ -542,12 +585,14 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
     echo "  --verbose   Verbose output"
     echo "  --quick     Quick test run (reduced timeouts)"
     echo "  --ci        CI mode (optimized for CI/CD)"
+    echo "  --android   Enable Android-specific testing"
     echo ""
     echo "Examples:"
     echo "  $0                    # Run all tests in headless mode"
     echo "  $0 e2e --headed      # Run E2E tests with GUI"
     echo "  $0 load --verbose    # Run load tests with verbose output"
     echo "  $0 all --ci          # Run all tests in CI mode"
+    echo "  $0 android --verbose # Run Android-specific tests with verbose output"
     exit 0
 fi
 
