@@ -428,7 +428,7 @@ Error: The operation was canceled
 **Solution**:
 1. Set Python interpreter:
    - Ctrl+Shift+P → "Python: Select Interpreter"
-   - Choose `.venv/bin/python`
+   - Choose `.venv/bin/python` (Linux/macOS) or `.venv\Scripts\python.exe` (Windows)
 2. Update workspace settings:
    ```json
    {
@@ -437,6 +437,59 @@ Error: The operation was canceled
    }
    ```
 3. Reload VS Code window: Ctrl+Shift+P → "Developer: Reload Window"
+
+### Cross-Platform Compatibility
+
+**macOS Specific Issues**:
+```bash
+# Install OpenCV dependencies
+brew install opencv
+
+# If permission issues with setup script
+chmod +x setup_dev_environment.sh
+
+# Use Python 3 explicitly
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+**Windows Specific Issues**:
+```cmd
+# Use Windows-compatible paths in VS Code settings
+{
+  "python.defaultInterpreterPath": "./.venv/Scripts/python.exe"
+}
+
+# Install dependencies with Windows-compatible OpenCV
+pip install opencv-python-headless
+
+# Run setup with PowerShell
+powershell -ExecutionPolicy Bypass -File setup_dev_environment.ps1
+
+# Alternative: Use WSL2 for Linux-like environment
+wsl --install
+```
+
+**Windows PowerShell Setup Script**:
+Create `setup_dev_environment.ps1` for Windows users:
+```powershell
+# Check if Python is available
+if (!(Get-Command python -ErrorAction SilentlyContinue)) {
+    Write-Error "Python not found. Please install Python 3.10 or higher."
+    exit 1
+}
+
+# Create virtual environment
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install --upgrade pip setuptools wheel
+pip install pytest pytest-asyncio pytest-cov psutil numpy opencv-python-headless
+pip install matplotlib pillow
+
+Write-Host "✓ Windows setup complete. Use '.venv\Scripts\Activate.ps1' to activate."
+```
 
 ### Debugging Virtual Devices
 
