@@ -2,10 +2,8 @@ import os
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-
 import cv2
 import numpy as np
-
 from .models import (
     BaseHandSegmentation,
     ColorBasedHandSegmentation,
@@ -21,14 +19,11 @@ from .utils import (
     resize_frame,
     save_processing_metadata,
 )
-
 class HandSegmentationEngine:
-
     def __init__(self, config: SegmentationConfig):
         self.config = config
         self.segmentation_model: Optional[BaseHandSegmentation] = None
         self.is_initialized = False
-
     def initialize(self) -> bool:
         try:
             if self.config.method == SegmentationMethod.MEDIAPIPE:
@@ -51,7 +46,6 @@ class HandSegmentationEngine:
         except Exception as e:
             print(f"[ERROR] Error initializing segmentation engine: {e}")
             return False
-
     def process_video(
         self, input_video_path: str, output_directory: str
     ) -> ProcessingResult:
@@ -143,7 +137,6 @@ class HandSegmentationEngine:
                 writer.release()
             detection_log_path = os.path.join(output_directory, "detection_log.json")
             import json
-
             with open(detection_log_path, "w") as f:
                 json.dump(detection_log, f, indent=2)
             output_files["detection_log"] = detection_log_path
@@ -164,7 +157,6 @@ class HandSegmentationEngine:
             result.error_message = f"Error processing video: {str(e)}"
             print(f"[ERROR] {result.error_message}")
             return result
-
     def process_frame_batch(self, frames: List[np.ndarray]) -> List[List[HandRegion]]:
         if not self.is_initialized:
             return []
@@ -173,17 +165,14 @@ class HandSegmentationEngine:
             hand_regions = self.segmentation_model.process_frame(frame)
             results.append(hand_regions)
         return results
-
     def get_supported_methods(self) -> List[str]:
         return [method.value for method in SegmentationMethod]
-
     def cleanup(self):
         if self.segmentation_model:
             self.segmentation_model.cleanup()
             self.segmentation_model = None
         self.is_initialized = False
         print("[INFO] Hand segmentation engine cleaned up")
-
 def create_segmentation_engine(
     method: str = "mediapipe", **kwargs
 ) -> HandSegmentationEngine:

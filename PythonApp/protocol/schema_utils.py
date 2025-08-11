@@ -2,32 +2,25 @@ import json
 import os
 import time
 from typing import Any, Dict, List, Optional
-
 from ..utils.logging_config import get_logger
-
 try:
     from jsonschema import Draft7Validator, ValidationError
-
     JSONSCHEMA_AVAILABLE = True
 except ImportError:
     JSONSCHEMA_AVAILABLE = False
 logger = get_logger(__name__)
 if not JSONSCHEMA_AVAILABLE:
     logger.warning("jsonschema library not available. Using basic validation only.")
-
 class SchemaManager:
-
     def __init__(self, schema_path: Optional[str] = None):
         self.schema_path = schema_path or self._get_default_schema_path()
         self.schema: Optional[Dict[str, Any]] = None
         self.validator: Optional[Any] = None
         self._load_schema()
-
     def _get_default_schema_path(self) -> str:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))
         return os.path.join(project_root, "protocol", "message_schema.json")
-
     def _load_schema(self) -> None:
         try:
             with open(self.schema_path, "r", encoding="utf-8") as f:
@@ -44,10 +37,8 @@ class SchemaManager:
         except Exception as e:
             logger.error(f"Error loading schema: {e}")
             raise
-
     def reload_schema(self) -> None:
         self._load_schema()
-
     def validate_message(self, message: Dict[str, Any]) -> bool:
         if not self.schema:
             logger.error("Schema not loaded")
@@ -70,7 +61,6 @@ class SchemaManager:
                 return False
         else:
             return self._basic_validate(message)
-
     def _basic_validate(self, message: Dict[str, Any]) -> bool:
         message_type = message.get("type")
         if message_type == "start_record":
@@ -101,7 +91,6 @@ class SchemaManager:
         else:
             logger.warning(f"Unknown message type: {message_type}")
             return True
-
     def get_valid_message_types(self) -> List[str]:
         if not self.schema:
             return []
@@ -115,11 +104,9 @@ class SchemaManager:
                             if "const" in type_def:
                                 message_types.append(type_def["const"])
         return message_types
-
     def create_message(self, message_type: str, **kwargs) -> Dict[str, Any]:
         message = {"type": message_type, "timestamp": int(time.time() * 1000), **kwargs}
         return message
-
     def get_message_template(self, message_type: str) -> Dict[str, Any]:
         templates = {
             "start_record": {"type": "start_record", "timestamp": 0, "session_id": ""},
@@ -162,23 +149,17 @@ class SchemaManager:
             },
         }
         return templates.get(message_type, {"type": message_type, "timestamp": 0})
-
 _schema_manager: Optional[SchemaManager] = None
-
 def get_schema_manager() -> SchemaManager:
     global _schema_manager
     if _schema_manager is None:
         _schema_manager = SchemaManager()
     return _schema_manager
-
 def validate_message(message: Dict[str, Any]) -> bool:
     return get_schema_manager().validate_message(message)
-
 def get_valid_message_types() -> List[str]:
     return get_schema_manager().get_valid_message_types()
-
 def create_message(message_type: str, **kwargs) -> Dict[str, Any]:
     return get_schema_manager().create_message(message_type, **kwargs)
-
 def create_command_message(command_type: str, **kwargs) -> Dict[str, Any]:
     return create_message(command_type, **kwargs)

@@ -268,4 +268,3 @@ public class SchemaManager {
         return schema != null;
     }
 }
-

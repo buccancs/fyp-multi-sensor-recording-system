@@ -249,4 +249,3 @@ data class SensorSample(
         return "SensorSample($deviceId, seq=$sequenceNumber, ${getFormattedTimestamp()}, [$sensorSummary], bat=$batteryLevel%)"
     }
 }
-

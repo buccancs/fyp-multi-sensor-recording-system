@@ -3,7 +3,6 @@ import time
 from collections import deque
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Tuple
-
 import cv2
 import numpy as np
 from calibration_quality_assessment import (
@@ -23,7 +22,6 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 @dataclass
 class CalibrationFeedback:
     timestamp: float
@@ -35,7 +33,6 @@ class CalibrationFeedback:
     sharpness_score: float
     contrast_score: float
     alignment_score: Optional[float] = None
-
 @dataclass
 class CameraFeedConfig:
     camera_id: int
@@ -45,12 +42,10 @@ class CameraFeedConfig:
     resolution: Tuple[int, int] = (640, 480)
     enable_preview: bool = True
     quality_threshold: float = 0.7
-
 class CalibrationFeedbackProcessor(QThread):
     feedback_updated = pyqtSignal(str, CalibrationFeedback)
     frame_processed = pyqtSignal(str, np.ndarray)
     error_occurred = pyqtSignal(str, str)
-
     def __init__(self, config: CameraFeedConfig, logger=None):
         super().__init__()
         self.config = config
@@ -64,14 +59,11 @@ class CalibrationFeedbackProcessor(QThread):
         self.frame_count = 0
         self.start_time = time.time()
         self.processing_times = deque(maxlen=50)
-
     def set_reference_image(self, reference_image: np.ndarray):
         self.reference_image = reference_image.copy()
         self.logger.info(f"Reference image set for {self.config.camera_name}")
-
     def add_feedback_callback(self, callback: Callable[[CalibrationFeedback], None]):
         self.feedback_callbacks.append(callback)
-
     def start_processing(self):
         try:
             self.logger.info(
@@ -90,14 +82,12 @@ class CalibrationFeedbackProcessor(QThread):
             error_msg = f"Error starting camera processing: {e}"
             self.logger.error(error_msg)
             self.error_occurred.emit(self.config.camera_name, error_msg)
-
     def stop_processing(self):
         self.is_running = False
         if self.camera:
             self.camera.release()
         self.wait()
         self.logger.info(f"Stopped calibration feedback for {self.config.camera_name}")
-
     def run(self):
         frame_interval = 1.0 / self.config.target_fps
         last_frame_time = 0
@@ -129,7 +119,6 @@ class CalibrationFeedbackProcessor(QThread):
                 self.logger.error(error_msg)
                 self.error_occurred.emit(self.config.camera_name, error_msg)
                 time.sleep(0.1)
-
     def _process_frame(self, frame: np.ndarray) -> CalibrationFeedback:
         try:
             quality_result = self.quality_assessment.assess_calibration_quality(
@@ -164,7 +153,6 @@ class CalibrationFeedbackProcessor(QThread):
                 sharpness_score=0.0,
                 contrast_score=0.0,
             )
-
     def _identify_primary_issue(self, quality_result: CalibrationQualityResult) -> str:
         if not quality_result.pattern_detection.pattern_found:
             return "Pattern Not Detected"
@@ -183,7 +171,6 @@ class CalibrationFeedbackProcessor(QThread):
             return "Overall Quality Low"
         else:
             return "Quality Acceptable"
-
     def get_performance_stats(self) -> Dict[str, float]:
         current_time = time.time()
         elapsed_time = current_time - self.start_time
@@ -199,9 +186,7 @@ class CalibrationFeedbackProcessor(QThread):
             ),
         }
         return stats
-
 class RealTimeCalibrationWidget(QWidget):
-
     def __init__(self, config: CameraFeedConfig, parent=None):
         super().__init__(parent)
         self.config = config
@@ -209,7 +194,6 @@ class RealTimeCalibrationWidget(QWidget):
         self.current_feedback = None
         self.init_ui()
         self.setup_processor()
-
     def init_ui(self):
         layout = QVBoxLayout(self)
         header_layout = QHBoxLayout()
@@ -270,7 +254,6 @@ class RealTimeCalibrationWidget(QWidget):
         self.capture_button.setEnabled(False)
         button_layout.addWidget(self.capture_button)
         layout.addLayout(button_layout)
-
     def _create_metric_bar(self, label_text: str, parent_layout) -> QProgressBar:
         layout = QHBoxLayout()
         layout.addWidget(QLabel(label_text))
@@ -282,13 +265,11 @@ class RealTimeCalibrationWidget(QWidget):
         layout.addWidget(value_label)
         parent_layout.addLayout(layout)
         return progress
-
     def setup_processor(self):
         self.processor = CalibrationFeedbackProcessor(self.config)
         self.processor.feedback_updated.connect(self.update_feedback)
         self.processor.frame_processed.connect(self.update_preview)
         self.processor.error_occurred.connect(self.handle_error)
-
     def start_feedback(self):
         try:
             self.processor.start_processing()
@@ -299,7 +280,6 @@ class RealTimeCalibrationWidget(QWidget):
             self.status_label.setStyleSheet("color: green;")
         except Exception as e:
             self.handle_error(self.config.camera_name, str(e))
-
     def stop_feedback(self):
         if self.processor:
             self.processor.stop_processing()
@@ -308,14 +288,12 @@ class RealTimeCalibrationWidget(QWidget):
         self.capture_button.setEnabled(False)
         self.status_label.setText("Stopped")
         self.status_label.setStyleSheet("color: red;")
-
     def capture_reference(self):
         if self.processor and self.processor.camera:
             ret, frame = self.processor.camera.read()
             if ret:
                 self.processor.set_reference_image(frame)
                 self.status_label.setText("Reference Captured")
-
     def update_feedback(self, camera_name: str, feedback: CalibrationFeedback):
         if camera_name != self.config.camera_name:
             return
@@ -343,7 +321,6 @@ class RealTimeCalibrationWidget(QWidget):
             [f"• {rec}" for rec in feedback.recommendations]
         )
         self.recommendations_text.setText(recommendations_text)
-
     def update_preview(self, camera_name: str, frame: np.ndarray):
         if camera_name != self.config.camera_name or not self.config.enable_preview:
             return
@@ -360,7 +337,6 @@ class RealTimeCalibrationWidget(QWidget):
             self.preview_label.setPixmap(scaled_pixmap)
         except Exception as e:
             logging.error(f"Error updating preview: {e}")
-
     def handle_error(self, camera_name: str, error_message: str):
         if camera_name == self.config.camera_name:
             self.status_label.setText(f"Error: {error_message}")
@@ -368,21 +344,16 @@ class RealTimeCalibrationWidget(QWidget):
             self.start_button.setEnabled(True)
             self.stop_button.setEnabled(False)
             self.capture_button.setEnabled(False)
-
     def get_current_feedback(self) -> Optional[CalibrationFeedback]:
         return self.current_feedback
-
     def cleanup(self):
         if self.processor:
             self.processor.stop_processing()
-
 class MultiCameraCalibrationManager:
-
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(__name__)
         self.camera_widgets: Dict[str, RealTimeCalibrationWidget] = {}
         self.feedback_history: Dict[str, List[CalibrationFeedback]] = {}
-
     def add_camera(self, config: CameraFeedConfig) -> RealTimeCalibrationWidget:
         widget = RealTimeCalibrationWidget(config)
         self.camera_widgets[config.camera_name] = widget
@@ -394,7 +365,6 @@ class MultiCameraCalibrationManager:
         )
         self.logger.info(f"Added camera for calibration feedback: {config.camera_name}")
         return widget
-
     def _track_feedback(self, camera_name: str, feedback: CalibrationFeedback):
         if camera_name in self.feedback_history:
             self.feedback_history[camera_name].append(feedback)
@@ -402,7 +372,6 @@ class MultiCameraCalibrationManager:
                 self.feedback_history[camera_name] = self.feedback_history[camera_name][
                     -500:
                 ]
-
     def get_overall_quality_status(self) -> Dict[str, Any]:
         status = {"cameras": {}, "overall_acceptable": True, "average_quality": 0.0}
         total_quality = 0.0
@@ -422,18 +391,14 @@ class MultiCameraCalibrationManager:
         if camera_count > 0:
             status["average_quality"] = total_quality / camera_count
         return status
-
     def cleanup(self):
         for widget in self.camera_widgets.values():
             widget.cleanup()
         self.camera_widgets.clear()
         self.feedback_history.clear()
-
 if __name__ == "__main__":
     import sys
-
     from PyQt5.QtWidgets import QApplication
-
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

@@ -4,17 +4,13 @@ import threading
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
-
 from PyQt5.QtCore import QObject, pyqtSignal
-
 from ..utils.logging_config import get_logger
-
 class SessionLogger(QObject):
     log_entry_added = pyqtSignal(str)
     session_started = pyqtSignal(str)
     session_ended = pyqtSignal(str, float)
     error_logged = pyqtSignal(str, str)
-
     def __init__(self, base_sessions_dir: str = "recordings"):
         super().__init__()
         self.base_sessions_dir = Path(base_sessions_dir)
@@ -28,7 +24,6 @@ class SessionLogger(QObject):
         self.logger.info(
             f"SessionLogger initialized with base directory: {self.base_sessions_dir}"
         )
-
     def start_session(
         self, session_name: Optional[str] = None, devices: Optional[List[Dict]] = None
     ) -> Dict:
@@ -80,7 +75,6 @@ class SessionLogger(QObject):
                 "log_file_path": str(self.log_file_path),
                 "session_folder": str(session_folder),
             }
-
     def log_event(self, event_type: str, details: Optional[Dict] = None) -> None:
         if not self.current_session:
             self.logger.warning(
@@ -110,7 +104,6 @@ class SessionLogger(QObject):
                 )
                 self.error_logged.emit(error_type, error_message)
             self.logger.debug(f"Event logged: {event_type} - {ui_message}")
-
     def log_device_connected(
         self,
         device_id: str,
@@ -125,10 +118,8 @@ class SessionLogger(QObject):
                 "capabilities": capabilities or [],
             },
         )
-
     def log_device_disconnected(self, device_id: str, reason: str = "unknown") -> None:
         self.log_event("device_disconnected", {"device": device_id, "reason": reason})
-
     def log_recording_start(
         self, devices: List[str], session_id: Optional[str] = None
     ) -> None:
@@ -144,13 +135,10 @@ class SessionLogger(QObject):
                 ),
             },
         )
-
     def log_recording_stop(self) -> None:
         self.log_event("stop_record")
-
     def log_device_ack(self, device_id: str, command: str = "start_record") -> None:
         self.log_event("device_ack", {"device": device_id, "command": command})
-
     def log_stimulus_play(
         self, media_name: str, media_path: Optional[str] = None
     ) -> None:
@@ -158,16 +146,13 @@ class SessionLogger(QObject):
         if media_path:
             details["media_path"] = media_path
         self.log_event("stimulus_play", details)
-
     def log_stimulus_stop(self, media_name: str) -> None:
         self.log_event("stimulus_stop", {"media": media_name})
-
     def log_marker(self, label: str, stim_time: Optional[str] = None) -> None:
         details = {"label": label}
         if stim_time:
             details["stim_time"] = stim_time
         self.log_event("marker", details)
-
     def log_file_received(
         self,
         device_id: str,
@@ -179,7 +164,6 @@ class SessionLogger(QObject):
         if file_size is not None:
             details["size"] = file_size
         self.log_event("file_received", details)
-
     def log_calibration_capture(self, device_id: str, filename: str) -> None:
         self.log_event("calibration_capture", {"device": device_id, "file": filename})
         if (
@@ -187,13 +171,11 @@ class SessionLogger(QObject):
             and filename not in self.current_session["calibration_files"]
         ):
             self.current_session["calibration_files"].append(filename)
-
     def log_calibration_completed(self, result_file: Optional[str] = None) -> None:
         details = {}
         if result_file:
             details["result_file"] = result_file
         self.log_event("calibration_done", details)
-
     def log_error(
         self, error_type: str, message: str, device_id: Optional[str] = None
     ) -> None:
@@ -201,7 +183,6 @@ class SessionLogger(QObject):
         if device_id:
             details["device"] = device_id
         self.log_event("error", details)
-
     def end_session(self) -> Optional[Dict]:
         if not self.current_session:
             self.logger.debug("No active session to end")
@@ -225,13 +206,10 @@ class SessionLogger(QObject):
             self.session_start_time = None
             self.logger.info(f"Session ended: {session_id} (duration: {duration:.1f}s)")
             return completed_session
-
     def get_current_session(self) -> Optional[Dict]:
         return self.current_session.copy() if self.current_session else None
-
     def is_session_active(self) -> bool:
         return self.current_session is not None
-
     def _flush_to_disk(self) -> None:
         if not self.current_session or not self.log_file_path:
             return
@@ -242,7 +220,6 @@ class SessionLogger(QObject):
                 os.fsync(f.fileno())
         except Exception as e:
             self.logger.error(f"Error writing session log to disk: {e}")
-
     def _format_event_for_ui(self, event_entry: Dict) -> str:
         event_type = event_entry.get("event", "unknown")
         time_str = event_entry.get("time", "unknown")
@@ -312,15 +289,12 @@ class SessionLogger(QObject):
             return f"{time_str} - Session ended"
         else:
             return f"{time_str} - {event_type}: {str(event_entry)}"
-
 _session_logger_instance: Optional[SessionLogger] = None
-
 def get_session_logger() -> SessionLogger:
     global _session_logger_instance
     if _session_logger_instance is None:
         _session_logger_instance = SessionLogger()
     return _session_logger_instance
-
 def reset_session_logger() -> None:
     global _session_logger_instance
     if _session_logger_instance and _session_logger_instance.is_session_active():

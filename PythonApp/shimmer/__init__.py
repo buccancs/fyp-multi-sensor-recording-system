@@ -1,4 +1,3 @@
-
 from .connection_handler import ShimmerConnectionHandler
 from .data_processor import ShimmerDataProcessor
 from .device_models import (
@@ -10,7 +9,6 @@ from .device_models import (
     ShimmerSample,
     ShimmerStatus,
 )
-
 __all__ = [
     "ShimmerConnectionHandler",
     "ShimmerDataProcessor",

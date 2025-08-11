@@ -23,13 +23,6 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-/**
- * PreviewManager handles camera and thermal preview generation for file viewing.
- * 
- * This class manages the lifecycle of preview updates, bitmap generation,
- * and UI state for RGB camera and thermal camera previews. It's designed to be
- * lifecycle-aware and automatically stops previews when the activity is paused.
- */
 @ActivityScoped
 class PreviewManager @Inject constructor(
     private val logger: Logger
@@ -39,9 +32,9 @@ class PreviewManager @Inject constructor(
     private var thermalPreviewJob: Job? = null
     private var isRgbPreviewActive = false
     private var isThermalPreviewActive = false
-    
+
     private val timeFormatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-    
+
     companion object {
         private const val RGB_PREVIEW_DELAY = 100L
         private const val THERMAL_PREVIEW_DELAY = 200L
@@ -49,24 +42,17 @@ class PreviewManager @Inject constructor(
         private const val PREVIEW_HEIGHT = 240
     }
 
-    /**
-     * Starts RGB camera preview updates.
-     * 
-     * @param scope CoroutineScope for managing the preview lifecycle
-     * @param imageView ImageView to display the preview
-     * @param onPreviewUpdate Callback invoked when preview state changes
-     */
     fun startRgbPreview(
         scope: CoroutineScope,
         imageView: ImageView,
         onPreviewUpdate: (isActive: Boolean) -> Unit = {}
     ) {
         if (isRgbPreviewActive) return
-        
+
         isRgbPreviewActive = true
         onPreviewUpdate(true)
         logger.info("Starting RGB preview")
-        
+
         rgbPreviewJob = scope.launch {
             while (isActive && isRgbPreviewActive) {
                 try {
@@ -81,14 +67,9 @@ class PreviewManager @Inject constructor(
         }
     }
 
-    /**
-     * Stops RGB camera preview updates.
-     * 
-     * @param onPreviewUpdate Callback invoked when preview state changes
-     */
     fun stopRgbPreview(onPreviewUpdate: (isActive: Boolean) -> Unit = {}) {
         if (!isRgbPreviewActive) return
-        
+
         isRgbPreviewActive = false
         rgbPreviewJob?.cancel()
         rgbPreviewJob = null
@@ -96,24 +77,17 @@ class PreviewManager @Inject constructor(
         logger.info("Stopped RGB preview")
     }
 
-    /**
-     * Starts thermal camera preview updates.
-     * 
-     * @param scope CoroutineScope for managing the preview lifecycle
-     * @param imageView ImageView to display the preview
-     * @param onPreviewUpdate Callback invoked when preview state changes
-     */
     fun startThermalPreview(
         scope: CoroutineScope,
         imageView: ImageView,
         onPreviewUpdate: (isActive: Boolean) -> Unit = {}
     ) {
         if (isThermalPreviewActive) return
-        
+
         isThermalPreviewActive = true
         onPreviewUpdate(true)
         logger.info("Starting thermal preview")
-        
+
         thermalPreviewJob = scope.launch {
             while (isActive && isThermalPreviewActive) {
                 try {
@@ -128,14 +102,9 @@ class PreviewManager @Inject constructor(
         }
     }
 
-    /**
-     * Stops thermal camera preview updates.
-     * 
-     * @param onPreviewUpdate Callback invoked when preview state changes
-     */
     fun stopThermalPreview(onPreviewUpdate: (isActive: Boolean) -> Unit = {}) {
         if (!isThermalPreviewActive) return
-        
+
         isThermalPreviewActive = false
         thermalPreviewJob?.cancel()
         thermalPreviewJob = null
@@ -143,22 +112,13 @@ class PreviewManager @Inject constructor(
         logger.info("Stopped thermal preview")
     }
 
-    /**
-     * Stops all active previews.
-     */
     fun stopAllPreviews() {
         stopRgbPreview()
         stopThermalPreview()
     }
 
-    /**
-     * Checks if RGB preview is currently active.
-     */
     fun isRgbPreviewActive(): Boolean = isRgbPreviewActive
 
-    /**
-     * Checks if thermal preview is currently active.
-     */
     fun isThermalPreviewActive(): Boolean = isThermalPreviewActive
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
@@ -173,21 +133,15 @@ class PreviewManager @Inject constructor(
         logger.info("PreviewManager paused - stopped all previews")
     }
 
-    /**
-     * Generates a simulated RGB camera preview bitmap.
-     * Creates a dynamic preview with moving elements and timestamp.
-     */
     private fun generateRgbPreviewBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(PREVIEW_WIDTH, PREVIEW_HEIGHT, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
         val time = System.currentTimeMillis() / 100
 
-        // Background
         paint.color = Color.rgb(50, 50, 80)
         canvas.drawRect(0f, 0f, PREVIEW_WIDTH.toFloat(), PREVIEW_HEIGHT.toFloat(), paint)
 
-        // Moving circles to simulate camera feed
         for (i in 0..10) {
             val x = ((time + i * 30) % (PREVIEW_WIDTH + 100)).toFloat() - 50
             val y = (PREVIEW_HEIGHT * 0.2f + i * PREVIEW_HEIGHT * 0.05f).toFloat()
@@ -199,12 +153,10 @@ class PreviewManager @Inject constructor(
             canvas.drawCircle(x, y, 15f, paint)
         }
 
-        // Live indicator
         paint.color = Color.RED
         paint.textSize = 24f
         canvas.drawText("● LIVE", 10f, 30f, paint)
 
-        // Timestamp
         paint.color = Color.WHITE
         paint.textSize = 16f
         val timeStr = timeFormatter.format(Date())
@@ -213,24 +165,19 @@ class PreviewManager @Inject constructor(
         return bitmap
     }
 
-    /**
-     * Generates a simulated thermal camera preview bitmap.
-     * Creates a dynamic thermal visualization with temperature gradients and hot spots.
-     */
     private fun generateThermalPreviewBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(PREVIEW_WIDTH, PREVIEW_HEIGHT, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
         val time = System.currentTimeMillis() / 200.0
 
-        // Generate thermal gradient pattern
         for (y in 0 until PREVIEW_HEIGHT) {
             for (x in 0 until PREVIEW_WIDTH) {
                 val centerX = PREVIEW_WIDTH / 2.0
                 val centerY = PREVIEW_HEIGHT / 2.0
                 val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
                 val intensity = (127 + 127 * sin(distance * 0.1 + time)).toInt().coerceIn(0, 255)
-                
+
                 val color = when {
                     intensity < 85 -> Color.rgb(0, 0, intensity * 3)
                     intensity < 170 -> Color.rgb((intensity - 85) * 3, 0, 255 - (intensity - 85) * 2)
@@ -241,7 +188,6 @@ class PreviewManager @Inject constructor(
             }
         }
 
-        // Add simulated hot spots
         paint.color = Color.YELLOW
         for (i in 0..3) {
             val hotX = Random.nextInt(50, PREVIEW_WIDTH - 50).toFloat()
@@ -249,11 +195,10 @@ class PreviewManager @Inject constructor(
             canvas.drawCircle(hotX, hotY, 20f, paint)
         }
 
-        // Labels and temperature reading
         paint.color = Color.WHITE
         paint.textSize = 18f
         canvas.drawText("🌡️ THERMAL", 10f, 30f, paint)
-        
+
         val temp = (20 + Random.nextFloat() * 15).toInt()
         paint.textSize = 14f
         canvas.drawText("${temp}°C", 10f, PREVIEW_HEIGHT - 10f, paint)

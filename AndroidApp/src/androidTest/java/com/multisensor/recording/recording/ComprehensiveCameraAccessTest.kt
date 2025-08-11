@@ -432,4 +432,3 @@ class ComprehensiveCameraAccessTest {
         println("[DEBUG_LOG] Device hardware verification completed")
     }
 }
-

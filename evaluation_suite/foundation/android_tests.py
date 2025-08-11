@@ -1,4 +1,3 @@
-
 import asyncio
 import logging
 import time
@@ -18,13 +17,11 @@ current_dir = Path(__file__).parent
 repo_root = current_dir.parent.parent
 android_app_path = repo_root / "AndroidApp"
 class AndroidComponentTest(BaseTest):
-
     def __init__(self, name: str, description: str = "", timeout: int = 300):
         super().__init__(name, description, timeout)
         self.temp_dir = None
         self.android_source_available = self._check_android_source()
     def _check_android_source(self) -> bool:
-
         main_activity = android_app_path / "src" / "main" / "java" / "com" / "multisensor" / "recording" / "MainActivity.kt"
         return main_activity.exists()
     async def setup(self, test_env: Dict[str, Any]):
@@ -38,7 +35,6 @@ class AndroidComponentTest(BaseTest):
         if self.temp_dir and os.path.exists(self.temp_dir):
             shutil.rmtree(self.temp_dir, ignore_errors=True)
 class CameraRecordingTest(AndroidComponentTest):
-
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute real camera recording test"""
         result = TestResult(
@@ -59,8 +55,8 @@ class CameraRecordingTest(AndroidComponentTest):
             recording_components_valid = await self._test_recording_components()
             android_manifests_valid = await self._test_android_manifests()
             all_valid = all([
-                source_structure_valid, 
-                camera_implementation_valid, 
+                source_structure_valid,
+                camera_implementation_valid,
                 recording_components_valid,
                 android_manifests_valid
             ])
@@ -116,7 +112,7 @@ class CameraRecordingTest(AndroidComponentTest):
             content = main_activity.read_text()
             camera_indicators = [
                 "camera",
-                "CameraManager", 
+                "CameraManager",
                 "recording",
                 "NavHostFragment"
             ]
@@ -150,7 +146,7 @@ class CameraRecordingTest(AndroidComponentTest):
             content = manifest_path.read_text()
             manifest_indicators = [
                 "CAMERA",
-                "RECORD_AUDIO", 
+                "RECORD_AUDIO",
                 "MainActivity",
                 "application"
             ]
@@ -160,7 +156,6 @@ class CameraRecordingTest(AndroidComponentTest):
             logger.error(f"Android manifests test failed: {e}")
             return False
 class ShimmerGSRTest(AndroidComponentTest):
-
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute Shimmer GSR integration test"""
         result = TestResult(
@@ -182,7 +177,7 @@ class ShimmerGSRTest(AndroidComponentTest):
             gsr_processing_valid = await self._test_gsr_processing()
             all_valid = all([
                 shimmer_implementation_valid,
-                bluetooth_permissions_valid, 
+                bluetooth_permissions_valid,
                 data_recording_valid,
                 gsr_processing_valid
             ])
@@ -223,7 +218,7 @@ class ShimmerGSRTest(AndroidComponentTest):
             content = shimmer_file.read_text()
             required_patterns = [
                 "ShimmerBluetoothManagerAndroid",
-                "ObjectCluster", 
+                "ObjectCluster",
                 "ShimmerBluetooth",
                 "GSR",
                 "sensor",
@@ -289,7 +284,6 @@ class ShimmerGSRTest(AndroidComponentTest):
             logger.error(f"GSR processing test failed: {e}")
             return False
 class NetworkCommunicationTest(AndroidComponentTest):
-
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute network communication test"""
         result = TestResult(
@@ -419,7 +413,6 @@ class NetworkCommunicationTest(AndroidComponentTest):
             logger.error(f"Protocol handling test failed: {e}")
             return False
 class ThermalCameraTest(AndroidComponentTest):
-
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute complete thermal camera test"""
         result = TestResult(
@@ -546,7 +539,6 @@ class ThermalCameraTest(AndroidComponentTest):
             logger.error(f"Thermal calibration test failed: {e}")
             return False
 class SessionManagementTest(AndroidComponentTest):
-
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute session management test"""
         result = TestResult(
@@ -703,7 +695,6 @@ class SessionManagementTest(AndroidComponentTest):
             logger.error(f"Thermal dependencies test failed: {e}")
             return False
 class ShimmerSensorTest(AndroidComponentTest):
-
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute Shimmer sensor test"""
         result = TestResult(
@@ -799,7 +790,6 @@ class ShimmerSensorTest(AndroidComponentTest):
             logger.error(f"Bluetooth permissions test failed: {e}")
             return False
 def create_android_foundation_suite() -> TestSuite:
-
     suite = TestSuite(
         name="android_foundation_real",
         category=TestCategory.FOUNDATION,
@@ -824,7 +814,7 @@ def create_android_foundation_suite() -> TestSuite:
     )
     suite.add_test(shimmer_test)
     network_test = NetworkCommunicationTest(
-        name="android_network_communication_test", 
+        name="android_network_communication_test",
         description="Tests Android network communication and WebSocket integration",
         timeout=90
     )

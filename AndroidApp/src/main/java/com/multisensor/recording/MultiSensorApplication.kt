@@ -11,4 +11,3 @@ class MultiSensorApplication : Application() {
         android.util.Log.i("MultiSensorApp", "Multi-Sensor Recording Application started")
     }
 }
-

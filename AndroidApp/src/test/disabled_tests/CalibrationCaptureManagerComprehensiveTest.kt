@@ -18,9 +18,9 @@ import org.robolectric.annotation.Config
 import java.io.File
 
 @Config(sdk = [28])
-@ExperimentalCoroutinesApi  
+@ExperimentalCoroutinesApi
 class CalibrationCaptureManagerComprehensiveTest {
-    
+
     private lateinit var mockContext: Context
     private lateinit var mockCameraRecorder: CameraRecorder
     private lateinit var mockThermalRecorder: ThermalRecorder
@@ -28,7 +28,7 @@ class CalibrationCaptureManagerComprehensiveTest {
     private lateinit var mockThermalSettings: ThermalCameraSettings
     private lateinit var mockLogger: Logger
     private lateinit var calibrationManager: CalibrationCaptureManager
-    
+
     @BeforeEach
     fun setup() {
         mockContext = mockk(relaxed = true)
@@ -37,38 +37,38 @@ class CalibrationCaptureManagerComprehensiveTest {
         mockSyncClockManager = mockk(relaxed = true)
         mockThermalSettings = mockk(relaxed = true)
         mockLogger = mockk(relaxed = true)
-        
+
         calibrationManager = CalibrationCaptureManager(
-            mockContext, 
-            mockCameraRecorder, 
-            mockThermalRecorder, 
-            mockSyncClockManager, 
-            mockThermalSettings, 
+            mockContext,
+            mockCameraRecorder,
+            mockThermalRecorder,
+            mockSyncClockManager,
+            mockThermalSettings,
             mockLogger
         )
     }
-    
+
     @AfterEach
     fun tearDown() {
         clearAllMocks()
     }
-    
+
     @Test
     fun `calibration manager should be created successfully`() = runTest {
         assertNotNull("CalibrationCaptureManager should be created", calibrationManager)
     }
-    
+
     @Test
     fun `getCalibrationSessions should return empty list initially`() = runTest {
         val sessions = calibrationManager.getCalibrationSessions()
         assertTrue("Initial sessions list should be empty", sessions.isEmpty())
     }
-    
+
     @Test
     fun `getCalibrationStatistics should return valid statistics`() = runTest {
         val stats = calibrationManager.getCalibrationStatistics()
         assertNotNull("Statistics should not be null", stats)
         assertEquals("Initial session count should be 0", 0, stats.totalSessions)
     }
-    
+
 }

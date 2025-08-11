@@ -16,11 +16,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.multisensor.recording.ui.compose.screens.*
 
-/**
- * Enhanced navigation for single-activity pattern.
- * Consolidates all activities into a unified Compose navigation system.
- */
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainNavigation(
@@ -29,7 +24,7 @@ fun MainNavigation(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentScreen = getScreenFromRoute(navBackStackEntry?.destination?.route)
                     Text(currentScreen?.title ?: "Multi-Sensor Recording")
@@ -39,7 +34,7 @@ fun MainNavigation(
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),
                 actions = {
-                    // Settings menu action
+
                     IconButton(
                         onClick = {
                             navController.navigate(Screen.Settings.route)
@@ -57,14 +52,14 @@ fun MainNavigation(
             EnhancedBottomNavigation(navController = navController)
         },
         floatingActionButton = {
-            // Context-aware FAB based on current screen
+
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
-            
+
             when (currentRoute) {
                 Screen.Recording.route -> {
                     FloatingActionButton(
-                        onClick = { /* Start/Stop Recording */ }
+                        onClick = {  }
                     ) {
                         Icon(
                             imageVector = Icons.Default.FiberManualRecord,
@@ -74,7 +69,7 @@ fun MainNavigation(
                 }
                 Screen.Files.route -> {
                     FloatingActionButton(
-                        onClick = { /* Refresh files */ }
+                        onClick = {  }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -90,7 +85,7 @@ fun MainNavigation(
             startDestination = Screen.Recording.route,
             modifier = Modifier.padding(paddingValues)
         ) {
-            // Core recording screens
+
             composable(Screen.Recording.route) {
                 RecordingScreen(
                     onNavigateToPreview = {
@@ -98,7 +93,7 @@ fun MainNavigation(
                     }
                 )
             }
-            
+
             composable(Screen.ThermalPreview.route) {
                 ThermalPreviewScreen(
                     onNavigateBack = {
@@ -106,20 +101,19 @@ fun MainNavigation(
                     }
                 )
             }
-            
+
             composable(Screen.Devices.route) {
                 DevicesScreen()
             }
-            
+
             composable(Screen.Calibration.route) {
                 CalibrationScreen()
             }
-            
+
             composable(Screen.Files.route) {
                 FilesScreen()
             }
-            
-            // Additional screens (previously separate activities)
+
             composable(Screen.Settings.route) {
                 SettingsScreen(
                     onNavigateBack = {
@@ -127,7 +121,7 @@ fun MainNavigation(
                     }
                 )
             }
-            
+
             composable(Screen.About.route) {
                 AboutScreen(
                     onNavigateBack = {
@@ -135,7 +129,7 @@ fun MainNavigation(
                     }
                 )
             }
-            
+
             composable(Screen.Diagnostics.route) {
                 DiagnosticsScreen(
                     onNavigateBack = {
@@ -143,7 +137,7 @@ fun MainNavigation(
                     }
                 )
             }
-            
+
             composable(Screen.ShimmerSettings.route) {
                 ShimmerSettingsScreen(
                     onNavigateBack = {
@@ -151,7 +145,7 @@ fun MainNavigation(
                     }
                 )
             }
-            
+
             composable(Screen.ShimmerVisualization.route) {
                 ShimmerVisualizationScreen(
                     onNavigateBack = {
@@ -172,14 +166,14 @@ private fun EnhancedBottomNavigation(navController: NavHostController) {
         Screen.Files,
         Screen.About
     )
-    
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar {
         items.forEach { screen ->
             NavigationBarItem(
-                icon = { 
+                icon = {
                     Icon(
                         imageVector = screen.icon,
                         contentDescription = screen.title
@@ -189,13 +183,13 @@ private fun EnhancedBottomNavigation(navController: NavHostController) {
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
                     navController.navigate(screen.route) {
-                        // Pop up to the start destination to avoid building up a large stack
+
                         popUpTo(navController.graph.startDestinationId) {
                             saveState = true
                         }
-                        // Avoid multiple copies of the same destination when reselecting the same item
+
                         launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
+
                         restoreState = true
                     }
                 }

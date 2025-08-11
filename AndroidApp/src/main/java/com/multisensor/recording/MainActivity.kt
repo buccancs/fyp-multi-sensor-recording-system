@@ -36,16 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
-/**
- * MainActivity is the main entry point for the Multi-Sensor Recording application.
- * 
- * This activity manages the overall application flow, handles UI mode switching between
- * traditional fragments and Jetpack Compose, manages the main navigation, and coordinates
- * with the MainViewModel for application state management.
- * 
- * The activity supports both Fragment-based UI and Compose-based UI, allowing for
- * a gradual migration to modern Android development practices.
- */
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainFragmentsBinding
@@ -57,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        
+
         if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
@@ -65,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         enableEdgeToEdge()
-        // Always use Compose UI for single-activity pattern
+
         initializeComposeUI()
     }
     private fun initializeComposeUI() {
@@ -135,10 +126,10 @@ class MainActivity : AppCompatActivity() {
                         binding.drawerLayout.closeDrawers()
                         true
                     }
-                    R.id.nav_network_config, 
+                    R.id.nav_network_config,
                     R.id.nav_shimmer_settings,
                     R.id.nav_shimmer_visualization,
-                    R.id.nav_diagnostics, 
+                    R.id.nav_diagnostics,
                     R.id.nav_about -> {
                         binding.drawerLayout.closeDrawers()
                         when (menuItem.itemId) {
@@ -204,7 +195,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     override fun onSupportNavigateUp(): Boolean {
-        // Single activity pattern with Compose navigation handles back navigation differently
+
         return super.onSupportNavigateUp()
     }
     private fun showErrorDialog(title: String, message: String) {

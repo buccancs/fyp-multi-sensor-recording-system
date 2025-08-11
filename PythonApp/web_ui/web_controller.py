@@ -2,74 +2,60 @@ import logging
 import threading
 import time
 from typing import Any, Callable, Dict, List, Optional
-
 try:
     from session.session_manager import SessionManager
-
     SESSION_MANAGER_AVAILABLE = True
 except ImportError:
     SessionManager = None
     SESSION_MANAGER_AVAILABLE = False
 try:
     from shimmer_manager import ShimmerManager
-
     SHIMMER_MANAGER_AVAILABLE = True
 except ImportError:
     ShimmerManager = None
     SHIMMER_MANAGER_AVAILABLE = False
 try:
     from network.android_device_manager import AndroidDeviceManager
-
     ANDROID_DEVICE_MANAGER_AVAILABLE = True
 except ImportError:
     AndroidDeviceManager = None
     ANDROID_DEVICE_MANAGER_AVAILABLE = False
 try:
     from network.device_server import JsonSocketServer
-
     JSON_SOCKET_SERVER_AVAILABLE = True
 except ImportError:
     JsonSocketServer = None
     JSON_SOCKET_SERVER_AVAILABLE = False
 try:
     from webcam.webcam_capture import WebcamCapture
-
     WEBCAM_CAPTURE_AVAILABLE = True
 except ImportError:
     WebcamCapture = None
     WEBCAM_CAPTURE_AVAILABLE = False
 try:
     from utils.logging_config import get_logger
-
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-
 class WebSignal:
-
     def __init__(self):
         self.callbacks = []
-
     def connect(self, callback: Callable):
         if callback not in self.callbacks:
             self.callbacks.append(callback)
-
     def disconnect(self, callback: Callable = None):
         if callback is None:
             self.callbacks.clear()
         elif callback in self.callbacks:
             self.callbacks.remove(callback)
-
     def emit(self, *args, **kwargs):
         for callback in self.callbacks:
             try:
                 callback(*args, **kwargs)
             except Exception as e:
                 logger.error(f"Error in signal callback: {e}")
-
 class WebController:
-
     def __init__(self):
         self.server_status_changed = WebSignal()
         self.webcam_status_changed = WebSignal()
@@ -93,7 +79,6 @@ class WebController:
         self._monitoring_thread = None
         self._running = False
         logger.info("WebController initialized")
-
     def inject_dependencies(
         self,
         session_manager=None,
@@ -109,7 +94,6 @@ class WebController:
         self.webcam_capture = webcam_capture
         self._connect_to_services()
         logger.info("WebController dependencies injected and connected")
-
     def _connect_to_services(self):
         if self.android_device_manager:
             try:
@@ -140,7 +124,6 @@ class WebController:
                 logger.info("Connected to ShimmerManager")
             except Exception as e:
                 logger.error(f"Error connecting to ShimmerManager: {e}")
-
     def start_monitoring(self):
         if self._monitoring_thread and self._monitoring_thread.is_alive():
             return
@@ -150,7 +133,6 @@ class WebController:
         )
         self._monitoring_thread.start()
         logger.info("WebController monitoring started")
-
     def stop_monitoring(self):
         self._running = False
         if self._monitoring_thread:
@@ -162,7 +144,6 @@ class WebController:
             except Exception as e:
                 logger.error(f"Error stopping AndroidDeviceManager: {e}")
         logger.info("WebController monitoring stopped")
-
     def _on_android_device_status(self, device_id: str, android_device):
         try:
             status_data = {
@@ -181,7 +162,6 @@ class WebController:
             logger.debug(f"Real Android device status update: {device_id}")
         except Exception as e:
             logger.error(f"Error processing Android device status: {e}")
-
     def _on_android_sensor_data(self, shimmer_data_sample):
         try:
             sensor_data = {
@@ -199,7 +179,6 @@ class WebController:
             )
         except Exception as e:
             logger.error(f"Error processing Android sensor data: {e}")
-
     def _on_android_session_event(self, session_info):
         try:
             session_active = session_info.end_time is None
@@ -216,7 +195,6 @@ class WebController:
                 )
         except Exception as e:
             logger.error(f"Error processing Android session event: {e}")
-
     def start_recording_session(self, session_id: str) -> bool:
         try:
             if self.android_device_manager:
@@ -243,7 +221,6 @@ class WebController:
         except Exception as e:
             logger.error(f"Error starting recording session: {e}")
             return False
-
     def stop_recording_session(self) -> bool:
         try:
             if self.android_device_manager and self._current_session_id:
@@ -264,7 +241,6 @@ class WebController:
         except Exception as e:
             logger.error(f"Error stopping recording session: {e}")
             return False
-
     def _monitoring_loop(self):
         while self._running:
             try:
@@ -275,7 +251,6 @@ class WebController:
             except Exception as e:
                 logger.error(f"Error in monitoring loop: {e}")
                 time.sleep(5)
-
     def _check_session_status(self):
         if not self.session_manager:
             return
@@ -299,11 +274,9 @@ class WebController:
                     self.session_status_changed.emit(old_session, False)
         except Exception as e:
             logger.error(f"Error checking session status: {e}")
-
     def _check_device_status(self):
         try:
             import random
-
             real_shimmer_devices = {}
             if self.shimmer_manager and hasattr(
                 self.shimmer_manager, "get_all_device_status"
@@ -363,7 +336,6 @@ class WebController:
             real_webcams = []
             try:
                 from utils.system_monitor import get_system_monitor
-
                 system_monitor = get_system_monitor()
                 real_webcams = system_monitor.detect_webcams()
             except:
@@ -392,11 +364,9 @@ class WebController:
                     )
         except Exception as e:
             logger.error(f"Error checking device status: {e}")
-
     def _check_sensor_data(self):
         try:
             import random
-
             real_shimmer_data = {}
             if self.shimmer_manager and hasattr(
                 self.shimmer_manager, "get_all_device_status"
@@ -438,7 +408,6 @@ class WebController:
                     self.sensor_data_received.emit(device_id, data)
         except Exception as e:
             logger.error(f"Error checking sensor data: {e}")
-
     def start_recording(self, session_config: Dict[str, Any] = None) -> bool:
         try:
             session_id = f"web_session_{int(time.time())}"
@@ -465,7 +434,6 @@ class WebController:
             logger.error(f"Error starting recording: {e}")
             self.error_occurred.emit("session", str(e))
             return False
-
     def stop_recording(self) -> bool:
         if not self._current_session_id:
             logger.error("No active session to stop")
@@ -493,7 +461,6 @@ class WebController:
             logger.error(f"Error stopping recording: {e}")
             self.error_occurred.emit("session", str(e))
             return False
-
     def get_device_status(self) -> Dict[str, Any]:
         device_status = {
             "shimmer_devices": {},
@@ -523,7 +490,6 @@ class WebController:
         except Exception as e:
             logger.error(f"Error getting device status: {e}")
         return device_status
-
     def get_session_info(self) -> Dict[str, Any]:
         session_info = {
             "active": self._current_session_id is not None,
@@ -541,7 +507,6 @@ class WebController:
         except Exception as e:
             logger.error(f"Error getting session info: {e}")
         return session_info
-
 def create_web_controller_with_real_components():
     controller = WebController()
     session_manager = None
@@ -583,17 +548,13 @@ def create_web_controller_with_real_components():
     controller.start_monitoring()
     logger.info("WebController created with real components")
     return controller
-
 if __name__ == "__main__":
     print("Testing WebController with real components...")
     controller = create_web_controller_with_real_components()
-
     def on_device_status(device_id, status):
         print(f"Device status update: {device_id} -> {status}")
-
     def on_sensor_data(device_id, data):
         print(f"Sensor data: {device_id} -> {data}")
-
     controller.device_status_received.connect(on_device_status)
     controller.sensor_data_received.connect(on_sensor_data)
     print("Monitoring for 10 seconds...")

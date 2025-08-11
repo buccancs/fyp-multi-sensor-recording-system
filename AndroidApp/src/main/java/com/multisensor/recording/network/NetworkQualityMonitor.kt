@@ -245,4 +245,3 @@ constructor(
             appendLine("  Bandwidth History: ${bandwidthHistory.size} samples")
         }
 }
-

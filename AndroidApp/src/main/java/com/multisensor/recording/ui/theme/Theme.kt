@@ -30,7 +30,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun MultiSensorTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    
+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -43,7 +43,7 @@ fun MultiSensorTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
-    
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

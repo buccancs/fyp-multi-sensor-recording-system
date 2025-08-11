@@ -57,7 +57,7 @@ fun ThermalPreview(
                 temperatureRange = temperatureRange,
                 modifier = Modifier.align(Alignment.TopStart)
             )
-            thermalBitmap?.let { 
+            thermalBitmap?.let {
                 if (isRecording) {
                     RecordingIndicator(
                         modifier = Modifier.align(Alignment.TopEnd)

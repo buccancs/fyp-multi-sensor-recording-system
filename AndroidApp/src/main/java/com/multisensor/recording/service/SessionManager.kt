@@ -15,13 +15,6 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * SessionManager handles the lifecycle and coordination of recording sessions.
- * 
- * This manager focuses on session state management, coordination between components,
- * and business logic while delegating file structure operations to FileStructureManager.
- * It maintains the current session state and provides APIs for session control.
- */
 @Singleton
 class SessionManager
 @Inject
@@ -240,7 +233,6 @@ constructor(
         currentSession?.let { session ->
             fileStructureManager.getSessionFilePaths(session.sessionFolder)
         }
-
 
     private fun writeSessionInfo(session: RecordingSession) {
         try {
@@ -475,4 +467,3 @@ constructor(
         }
 
 }
-

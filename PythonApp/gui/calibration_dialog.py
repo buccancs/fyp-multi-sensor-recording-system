@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (
     QCheckBox,
@@ -21,15 +20,12 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from .calibration.calibration_manager import CalibrationManager
 from .calibration.calibration_result import CalibrationResult
-
 class CalibrationDialog(QDialog):
     calibration_completed = pyqtSignal(str, CalibrationResult)
     overlay_toggled = pyqtSignal(str, bool)
-
     def __init__(self, device_server, parent=None):
         super().__init__(parent)
         self.device_server = device_server
@@ -41,7 +37,6 @@ class CalibrationDialog(QDialog):
         self.resize(800, 600)
         self.setup_ui()
         self.connect_signals()
-
     def setup_ui(self):
         layout = QVBoxLayout(self)
         self.create_instructions_section(layout)
@@ -50,7 +45,6 @@ class CalibrationDialog(QDialog):
         self.create_computation_section(layout)
         self.create_results_section(layout)
         self.create_action_buttons(layout)
-
     def create_instructions_section(self, parent_layout):
         instructions_group = QGroupBox("Calibration Instructions")
         instructions_layout = QVBoxLayout(instructions_group)
@@ -68,12 +62,10 @@ class CalibrationDialog(QDialog):
             - Reprojection Error: {summary.get('rgb_error', 'N/A'):.3f} pixels<br>
             - Focal Length: fx={summary.get('rgb_fx', 'N/A'):.1f}, fy={summary.get('rgb_fy', 'N/A'):.1f}<br>
             - Principal Point: cx={summary.get('rgb_cx', 'N/A'):.1f}, cy={summary.get('rgb_cy', 'N/A'):.1f}<br><br>
-
             <b>Thermal Camera:</b><br>
             - Reprojection Error: {summary.get('thermal_error', 'N/A'):.3f} pixels<br>
             - Focal Length: fx={summary.get('thermal_fx', 'N/A'):.1f}, fy={summary.get('thermal_fy', 'N/A'):.1f}<br>
             - Principal Point: cx={summary.get('thermal_cx', 'N/A'):.1f}, cy={summary.get('thermal_cy', 'N/A'):.1f}<br><br>
-
             <b>Stereo Calibration:</b><br>
             - Stereo Error: {summary.get('stereo_error', 'N/A'):.3f} pixels<br>
             - Translation: {summary.get('translation', 'N/A')}<br>

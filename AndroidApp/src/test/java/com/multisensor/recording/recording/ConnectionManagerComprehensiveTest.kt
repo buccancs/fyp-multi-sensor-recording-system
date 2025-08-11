@@ -55,7 +55,7 @@ class ConnectionManagerComprehensiveTest {
                 "capabilities" to listOf("camera", "gsr", "thermal")
             ),
             mapOf(
-                "device_id" to "android_002", 
+                "device_id" to "android_002",
                 "device_type" to "android",
                 "ip_address" to "192.168.1.101",
                 "port" to 9000,
@@ -76,7 +76,7 @@ class ConnectionManagerComprehensiveTest {
         val androidDevice = discoveredDevices.find { it["device_id"] == "android_001" }
         assertNotNull("Should find android_001 device", androidDevice)
         assertEquals("Device type should be android", "android", androidDevice!!["device_type"])
-        assertTrue("Should have camera capability", 
+        assertTrue("Should have camera capability",
                   (androidDevice["capabilities"] as List<*>).contains("camera"))
     }
     @Test
@@ -108,8 +108,8 @@ class ConnectionManagerComprehensiveTest {
             val sendResult = connectionManager.sendMessage(deviceId, message)
             assertTrue("Message of type ${message["type"]} should be sent successfully", sendResult)
         }
-        verify(exactly = messageTypes.size) { 
-            connectionManager.sendMessage(eq(deviceId), any()) 
+        verify(exactly = messageTypes.size) {
+            connectionManager.sendMessage(eq(deviceId), any())
         }
     }
     @Test
@@ -135,7 +135,7 @@ class ConnectionManagerComprehensiveTest {
         every { connectionManager.isConnected(deviceId) } returns true
         val networkIssues = listOf(
             "CONNECTION_TIMEOUT",
-            "PACKET_LOSS", 
+            "PACKET_LOSS",
             "NETWORK_UNREACHABLE",
             "HOST_DISCONNECTED"
         )
@@ -151,7 +151,7 @@ class ConnectionManagerComprehensiveTest {
     }
     @Test
     fun `connection quality monitoring should track metrics`() = runTest {
-        val deviceId = "pc_master" 
+        val deviceId = "pc_master"
         every { connectionManager.isConnected(deviceId) } returns true
         val qualityMetrics = listOf(
             mapOf("latency" to 25.5, "packet_loss" to 0.01, "bandwidth" to 1000.0),
@@ -235,7 +235,7 @@ class ConnectionManagerComprehensiveTest {
         val poolStats = connectionManager.getConnectionPoolStats()
         assertNotNull("Pool stats should be available", poolStats)
         assertEquals("Pool should be at capacity", maxConnections, poolStats["active_connections"])
-        assertTrue("Pool utilization should be 100%", 
+        assertTrue("Pool utilization should be 100%",
                   poolStats["utilization_percent"] as Double == 100.0)
     }
     @Test

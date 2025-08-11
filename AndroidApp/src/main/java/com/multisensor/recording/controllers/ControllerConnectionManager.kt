@@ -8,18 +8,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-/**
- * Abstraction layer for managing connections to external controllers (e.g., PC desktop).
- * This decouples the core recording functionality from specific communication protocols.
- */
 interface ControllerConnectionManager {
     val connectionState: StateFlow<ConnectionState>
-    
+
     suspend fun connect(connectionConfig: ConnectionConfig): Result<Unit>
     suspend fun disconnect()
     suspend fun sendCommand(command: JsonMessage): Result<Unit>
     suspend fun sendData(data: ByteArray, metadata: Map<String, Any> = emptyMap()): Result<Unit>
-    
+
     fun setCommandCallback(callback: (JsonMessage) -> Unit)
     fun isConnected(): Boolean
 }
@@ -39,34 +35,28 @@ sealed class ConnectionState {
     data class Error(val message: String, val exception: Throwable? = null) : ConnectionState()
 }
 
-/**
- * Default implementation that uses JSON socket communication with PC controller.
- * This can be swapped for other communication methods (cloud, etc.) without affecting
- * the core recording logic.
- */
 @ServiceScoped
 class PcControllerConnectionManager @Inject constructor(
     private val jsonSocketClient: com.multisensor.recording.network.JsonSocketClient,
     private val logger: Logger
 ) : ControllerConnectionManager {
-    
+
     private val _connectionState = kotlinx.coroutines.flow.MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
-    
+
     override val connectionState: StateFlow<ConnectionState>
         get() = _connectionState.asStateFlow()
-    
+
     override suspend fun connect(connectionConfig: ConnectionConfig): Result<Unit> {
         return try {
             _connectionState.value = ConnectionState.Connecting
-            
+
             jsonSocketClient.configure(
                 ip = connectionConfig.serverIp,
                 port = connectionConfig.serverPort
             )
-            
+
             jsonSocketClient.connect()
-            // Note: JsonSocketClient.connect() returns Unit and connects asynchronously
-            // We'll assume success for now; real implementation would need status checking
+
             _connectionState.value = ConnectionState.Connected
             logger.info("Successfully initiated connection to PC controller at ${connectionConfig.serverIp}:${connectionConfig.serverPort}")
             Result.success(Unit)
@@ -77,7 +67,7 @@ class PcControllerConnectionManager @Inject constructor(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun disconnect() {
         try {
             jsonSocketClient.disconnect()
@@ -87,7 +77,7 @@ class PcControllerConnectionManager @Inject constructor(
             logger.error("Error during disconnect: ${e.message}", e)
         }
     }
-    
+
     override suspend fun sendCommand(command: JsonMessage): Result<Unit> {
         return if (isConnected()) {
             try {
@@ -103,13 +93,11 @@ class PcControllerConnectionManager @Inject constructor(
             Result.failure(IllegalStateException(error))
         }
     }
-    
+
     override suspend fun sendData(data: ByteArray, metadata: Map<String, Any>): Result<Unit> {
         return if (isConnected()) {
             try {
-                // Implementation depends on the specific data protocol
-                // For now, this is a placeholder that would need to be implemented
-                // based on the actual data transfer requirements
+
                 logger.debug("Sending ${data.size} bytes of data with metadata: $metadata")
                 Result.success(Unit)
             } catch (e: Exception) {
@@ -122,11 +110,11 @@ class PcControllerConnectionManager @Inject constructor(
             Result.failure(IllegalStateException(error))
         }
     }
-    
+
     override fun setCommandCallback(callback: (JsonMessage) -> Unit) {
         jsonSocketClient.setCommandCallback(callback)
     }
-    
+
     override fun isConnected(): Boolean {
         return _connectionState.value is ConnectionState.Connected
     }

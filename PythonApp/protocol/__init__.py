@@ -24,7 +24,6 @@ from .schema_utils import (
     get_valid_message_types,
     validate_message,
 )
-
 __version__ = "1.0.0"
 __all__ = [
     "SchemaManager",

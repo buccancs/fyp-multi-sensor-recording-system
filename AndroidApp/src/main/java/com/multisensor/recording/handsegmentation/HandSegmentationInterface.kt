@@ -5,21 +5,17 @@ import android.media.Image
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
-/**
- * Interface for hand segmentation processing.
- * This decouples hand segmentation logic from the camera recording system.
- */
 interface HandSegmentationInterface {
     val processingState: StateFlow<ProcessingState>
     val detectionResults: StateFlow<DetectionResults>
-    
+
     suspend fun initialize(config: SegmentationConfig): Result<Unit>
     suspend fun processFrame(image: Image, metadata: FrameMetadata = FrameMetadata()): Result<ProcessingResult>
     suspend fun processBitmap(bitmap: Bitmap, metadata: FrameMetadata = FrameMetadata()): Result<ProcessingResult>
     suspend fun startSession(sessionId: String): Result<Unit>
     suspend fun stopSession(): Result<SessionSummary>
     suspend fun cleanup()
-    
+
     fun isInitialized(): Boolean
     fun isSessionActive(): Boolean
     fun setListener(listener: HandSegmentationListener?)
@@ -89,33 +85,28 @@ interface HandSegmentationListener {
     fun onError(error: String)
 }
 
-/**
- * Adapter implementation that wraps the existing HandSegmentationManager
- * to provide the new modular interface.
- */
 class HandSegmentationAdapter(
     private val handSegmentationManager: HandSegmentationManager
 ) : HandSegmentationInterface {
-    
+
     private val _processingState = kotlinx.coroutines.flow.MutableStateFlow<ProcessingState>(ProcessingState.Idle)
     private val _detectionResults = kotlinx.coroutines.flow.MutableStateFlow(DetectionResults())
-    
+
     override val processingState: StateFlow<ProcessingState> = _processingState
     override val detectionResults: StateFlow<DetectionResults> = _detectionResults
-    
+
     private var currentSessionId: String? = null
     private var isInitializedFlag = false
-    
+
     override suspend fun initialize(config: SegmentationConfig): Result<Unit> {
         return try {
             _processingState.value = ProcessingState.Initializing
-            
-            // Configure the existing manager
+
             val success = handSegmentationManager.initializeForSession(
                 sessionId = "default",
                 listener = createAdapterListener()
             )
-            
+
             if (success) {
                 isInitializedFlag = true
                 _processingState.value = ProcessingState.Ready
@@ -129,26 +120,24 @@ class HandSegmentationAdapter(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun processFrame(image: Image, metadata: FrameMetadata): Result<ProcessingResult> {
         if (!isInitialized()) {
             return Result.failure(IllegalStateException("Hand segmentation not initialized"))
         }
-        
+
         return try {
             _processingState.value = ProcessingState.Processing(metadata.frameNumber)
-            
-            // Convert Image to Bitmap for the existing manager
+
             val bitmap = convertImageToBitmap(image)
             handSegmentationManager.processFrame(bitmap, metadata.timestamp)
-            
-            // Create mock result for now - in real implementation this would come from the manager
+
             val result = ProcessingResult(
                 handsDetected = 1,
                 confidence = 0.85f,
                 processingTimeMs = 10L
             )
-            
+
             _processingState.value = ProcessingState.Ready
             Result.success(result)
         } catch (e: Exception) {
@@ -156,26 +145,25 @@ class HandSegmentationAdapter(
             Result.failure(e)
         }
     }
-    
+
     private fun convertImageToBitmap(image: Image): android.graphics.Bitmap {
-        // This is a simplified conversion - in practice you'd handle different Image formats properly
+
         val buffer = image.planes[0].buffer
         val bytes = ByteArray(buffer.remaining())
         buffer.get(bytes)
-        
-        // For now, create a simple bitmap - real implementation would depend on Image format
+
         return android.graphics.Bitmap.createBitmap(
-            image.width, 
-            image.height, 
+            image.width,
+            image.height,
             android.graphics.Bitmap.Config.ARGB_8888
         )
     }
-    
+
     override suspend fun processBitmap(bitmap: Bitmap, metadata: FrameMetadata): Result<ProcessingResult> {
-        // Implementation would depend on HandSegmentationManager having a bitmap processing method
+
         return Result.failure(UnsupportedOperationException("Bitmap processing not yet implemented"))
     }
-    
+
     override suspend fun startSession(sessionId: String): Result<Unit> {
         currentSessionId = sessionId
         return try {
@@ -189,26 +177,26 @@ class HandSegmentationAdapter(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun stopSession(): Result<SessionSummary> {
         return try {
             handSegmentationManager.cleanup()
-            
+
             val summary = SessionSummary(
                 sessionId = currentSessionId ?: "unknown",
                 totalFramesProcessed = _detectionResults.value.totalFramesProcessed,
                 totalHandsDetected = _detectionResults.value.handsDetectedCount,
-                datasetPath = "", // Would be provided by the manager
+                datasetPath = "",
                 processingDurationMs = 0L
             )
-            
+
             currentSessionId = null
             Result.success(summary)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
+
     override suspend fun cleanup() {
         handSegmentationManager.cleanup()
         isInitializedFlag = false
@@ -216,21 +204,21 @@ class HandSegmentationAdapter(
         _processingState.value = ProcessingState.Idle
         _detectionResults.value = DetectionResults()
     }
-    
+
     override fun isInitialized(): Boolean = isInitializedFlag
-    
+
     override fun isSessionActive(): Boolean = currentSessionId != null
-    
+
     override fun setListener(listener: HandSegmentationListener?) {
-        // The adapter manages the listener internally
+
     }
-    
+
     private fun createAdapterListener() = object : HandSegmentationManager.HandSegmentationListener {
         override fun onHandDetectionStatusChanged(isEnabled: Boolean, handsDetected: Int) {
             val current = _detectionResults.value
             _detectionResults.value = current.copy(handsDetectedCount = handsDetected)
         }
-        
+
         override fun onDatasetProgress(totalSamples: Int, leftHands: Int, rightHands: Int) {
             val current = _detectionResults.value
             _detectionResults.value = current.copy(
@@ -238,11 +226,11 @@ class HandSegmentationAdapter(
                 rightHandDetections = rightHands
             )
         }
-        
+
         override fun onDatasetSaved(datasetPath: String, totalSamples: Int) {
-            // Update state with dataset information
+
         }
-        
+
         override fun onError(error: String) {
             _processingState.value = ProcessingState.Error(error)
         }

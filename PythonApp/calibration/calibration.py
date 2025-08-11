@@ -2,16 +2,11 @@ import json
 import os
 import time
 from typing import Dict, List, Optional, Tuple, Union
-
 import cv2
 import numpy as np
-
 from ..utils.logging_config import get_logger
-
 class CalibrationManager:
-
     def __init__(self):
-
         self.logger = get_logger(__name__)
         self.rgb_camera_matrix = None
         self.rgb_distortion_coeffs = None
@@ -24,7 +19,6 @@ class CalibrationManager:
         self.square_size = 25.0
         self.calibration_flags = cv2.CALIB_RATIONAL_MODEL
         self.criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-
     def capture_calibration_images(
         self, device_client=None, num_images: int = 20
     ) -> bool:
@@ -54,7 +48,6 @@ class CalibrationManager:
         except Exception as e:
             self.logger.error(f" Error during calibration capture: {e}")
             return False
-
     def detect_calibration_pattern(
         self, image: np.ndarray, pattern_type: str = "chessboard"
     ) -> Tuple[bool, Optional[np.ndarray]]:
@@ -87,7 +80,6 @@ class CalibrationManager:
         else:
             self.logger.error(f" Unsupported pattern type: {pattern_type}")
             return False, None
-
     def calibrate_single_camera(
         self,
         images: List[np.ndarray],
@@ -132,7 +124,6 @@ class CalibrationManager:
         except Exception as e:
             self.logger.error(f" Exception during calibration: {e}")
             return None, None, float("inf")
-
     def calibrate_stereo_cameras(
         self,
         rgb_images: List[np.ndarray],
@@ -174,7 +165,6 @@ class CalibrationManager:
         except Exception as e:
             self.logger.error(f" Exception during stereo calibration: {e}")
             return None, None, float("inf")
-
     def assess_calibration_quality(
         self,
         images: List[np.ndarray],
@@ -254,7 +244,6 @@ class CalibrationManager:
         except Exception as e:
             self.logger.error(f" Exception during quality assessment: {e}")
             return quality_metrics
-
     def save_calibration_data(self, filename: str) -> bool:
         self.logger.debug(f" Saving calibration data to {filename}")
         calibration_data = {
@@ -305,7 +294,6 @@ class CalibrationManager:
         except Exception as e:
             self.logger.error(f" Error saving calibration data: {e}")
             return False
-
     def load_calibration_data(self, filename: str) -> bool:
         self.logger.debug(f" Loading calibration data from {filename}")
         try:
@@ -349,7 +337,6 @@ class CalibrationManager:
         except Exception as e:
             self.logger.error(f" Error loading calibration data: {e}")
             return False
-
     def load_calibration_images_from_directory(
         self,
         directory_path: str,
@@ -357,7 +344,6 @@ class CalibrationManager:
         thermal_pattern: str = "*thermal*.jpg",
     ) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         import glob
-
         rgb_images = []
         thermal_images = []
         try:
@@ -384,7 +370,6 @@ class CalibrationManager:
         except Exception as e:
             self.logger.error(f" Error loading calibration images: {e}")
             return [], []
-
     def perform_complete_calibration(
         self,
         rgb_images: List[np.ndarray],
@@ -503,17 +488,13 @@ class CalibrationManager:
         except Exception as e:
             self.logger.error(f" Exception during calibration workflow: {e}")
             return results
-
     @property
     def pattern_size(self):
         return self.chessboard_size
-
     def detect_pattern(self, image, pattern_type="chessboard"):
         return self.detect_calibration_pattern(image, pattern_type)
-
     def save_calibration(self, device_id, filename):
         return self.save_calibration_data(filename)
-
 def create_calibration_pattern_points(
     pattern_size: Tuple[int, int], square_size: float
 ) -> np.ndarray:
@@ -526,7 +507,6 @@ def create_calibration_pattern_points(
     ].T.reshape(-1, 2)
     pattern_points *= square_size
     return pattern_points
-
 def validate_calibration_images(images: List[np.ndarray], min_images: int = 10) -> bool:
     if len(images) < min_images:
         self.logger.error(f" Insufficient calibration images: {len(images)} < {min_images}")
@@ -542,7 +522,6 @@ def validate_calibration_images(images: List[np.ndarray], min_images: int = 10) 
             return False
     self.logger.debug(f" Calibration image validation passed: {len(images)} images")
     return True
-
 def draw_calibration_pattern(
     image: np.ndarray,
     corners: np.ndarray,

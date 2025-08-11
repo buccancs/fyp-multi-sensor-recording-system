@@ -99,7 +99,7 @@ class RecordingViewModelStateTest {
         val updatedState = initialState.copy(
             connectedDevices = mapOf(
                 "Camera" to DeviceStatus.CONNECTED,
-                "Thermal" to DeviceStatus.CONNECTED, 
+                "Thermal" to DeviceStatus.CONNECTED,
                 "GSR" to DeviceStatus.DISCONNECTED,
                 "PC" to DeviceStatus.CONNECTED
             )

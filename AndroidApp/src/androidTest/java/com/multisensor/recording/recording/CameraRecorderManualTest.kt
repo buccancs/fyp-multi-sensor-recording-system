@@ -374,4 +374,3 @@ class CameraRecorderManualTest {
             currentSession = stoppedSession
         }
 }
-

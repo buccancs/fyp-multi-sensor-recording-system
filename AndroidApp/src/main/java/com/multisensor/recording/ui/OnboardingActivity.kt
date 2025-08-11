@@ -36,18 +36,18 @@ import kotlinx.coroutines.launch
 class OnboardingActivity : ComponentActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
-    
+
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-        
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        
+
         setContent {
             MultiSensorTheme {
                 Surface(
@@ -62,20 +62,20 @@ class OnboardingActivity : ComponentActivity() {
             }
         }
     }
-    
+
     private fun completeOnboarding() {
         sharedPreferences.edit()
             .putBoolean("onboarding_completed", true)
             .apply()
-        
+
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
-    
+
     private fun requestPermissions(permissions: List<String>) {
         permissionLauncher.launch(permissions.toTypedArray())
     }
-    
+
     companion object {
         fun shouldShowOnboarding(sharedPreferences: SharedPreferences): Boolean {
             return !sharedPreferences.getBoolean("onboarding_completed", false)
@@ -91,7 +91,7 @@ fun OnboardingFlow(
 ) {
     val pagerState = rememberPagerState(pageCount = { 4 })
     val scope = rememberCoroutineScope()
-    
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -106,7 +106,7 @@ fun OnboardingFlow(
                 3 -> SetupPage()
             }
         }
-        
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -127,7 +127,7 @@ fun OnboardingFlow(
             } else {
                 Spacer(modifier = Modifier.width(64.dp))
             }
-            
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -146,7 +146,7 @@ fun OnboardingFlow(
                     )
                 }
             }
-            
+
             if (pagerState.currentPage < 3) {
                 Button(
                     onClick = {
@@ -183,15 +183,15 @@ fun WelcomePage() {
             modifier = Modifier.size(120.dp),
             tint = MaterialTheme.colorScheme.primary
         )
-        
+
         Spacer(modifier = Modifier.height(32.dp))
-        
+
         Text(
             text = "Welcome to",
             style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center
         )
-        
+
         Text(
             text = "Multi-Sensor Recording",
             style = MaterialTheme.typography.headlineLarge,
@@ -199,9 +199,9 @@ fun WelcomePage() {
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.primary
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         Text(
             text = "Advanced multi-modal sensor recording system for contactless GSR prediction research.",
             style = MaterialTheme.typography.bodyLarge,
@@ -228,7 +228,7 @@ fun FeaturePage() {
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        
+
         val features = listOf(
             Triple(Icons.Filled.Camera, "Multi-Camera Recording", "Synchronous recording from multiple camera sources with precise timing"),
             Triple(Icons.Filled.Thermostat, "Thermal Imaging", "Real-time thermal camera integration for temperature monitoring"),
@@ -237,7 +237,7 @@ fun FeaturePage() {
             Triple(Icons.Filled.Cloud, "Offline-First", "Local recording with optional cloud synchronization"),
             Triple(Icons.Filled.Analytics, "Research Ready", "Built specifically for academic research workflows")
         )
-        
+
         items(features) { (icon, title, description) ->
             FeatureCard(
                 icon = icon,
@@ -270,9 +270,9 @@ fun FeatureCard(
                 modifier = Modifier.size(32.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
-            
+
             Spacer(modifier = Modifier.width(16.dp))
-            
+
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
@@ -300,7 +300,7 @@ fun PermissionsPage(
         Triple(Manifest.permission.BLUETOOTH_SCAN, "Bluetooth", "Required for connecting to Shimmer GSR sensors"),
         Triple(Manifest.permission.POST_NOTIFICATIONS, "Notifications", "For recording status and system alerts")
     )
-    
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -316,7 +316,7 @@ fun PermissionsPage(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        
+
         item {
             Text(
                 text = "The app needs these permissions to function properly:",
@@ -325,7 +325,7 @@ fun PermissionsPage(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        
+
         items(permissions) { (permission, name, description) ->
             PermissionCard(
                 permission = permission,
@@ -333,10 +333,10 @@ fun PermissionsPage(
                 description = description
             )
         }
-        
+
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Button(
                 onClick = {
                     onRequestPermissions(permissions.map { it.first })
@@ -384,9 +384,9 @@ fun PermissionCard(
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
-            
+
             Spacer(modifier = Modifier.width(12.dp))
-            
+
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = name,
@@ -418,9 +418,9 @@ fun SetupPage() {
             modifier = Modifier.size(120.dp),
             tint = MaterialTheme.colorScheme.primary
         )
-        
+
         Spacer(modifier = Modifier.height(32.dp))
-        
+
         Text(
             text = "Setup Complete!",
             style = MaterialTheme.typography.headlineLarge,
@@ -428,25 +428,25 @@ fun SetupPage() {
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.primary
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         Text(
             text = "Your multi-sensor recording system is ready to use. You can now:",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         val setupItems = listOf(
             "Connect and configure your devices",
             "Calibrate cameras and sensors",
             "Start recording sessions",
             "Manage and export your data"
         )
-        
+
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
