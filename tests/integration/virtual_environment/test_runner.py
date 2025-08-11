@@ -102,15 +102,6 @@ class VirtualTestRunner:
         self.device_results: List[DeviceTestResult] = []
         self.performance_monitoring_enabled = True
         self.performance_data: List[Dict[str, Any]] = []
-    @property
-    def metrics(self) -> "VirtualTestMetrics":
-        """Get or create test metrics"""
-        if not hasattr(self, '_metrics'):
-            self._metrics = VirtualTestMetrics(start_time=self._start_time)
-        return self._metrics
-        
-        self.performance_monitoring_enabled = True
-        self.performance_data: List[Dict[str, Any]] = []
         self.performance_monitor: Optional[threading.Thread] = None
         self.stop_event = threading.Event()
         self.thread_pool = ThreadPoolExecutor(max_workers=config.device_count + 5)
@@ -119,6 +110,13 @@ class VirtualTestRunner:
         self.collected_data_samples: List[ShimmerDataSample] = []
         self.session_events: List[Tuple[str, float, Dict[str, Any]]] = []
         self.logger.info(f"VirtualTestRunner initialized for {config.device_count} devices")
+        
+    @property
+    def metrics(self) -> "VirtualTestMetrics":
+        """Get or create test metrics"""
+        if not hasattr(self, '_metrics'):
+            self._metrics = VirtualTestMetrics(start_time=self._start_time)
+        return self._metrics
     def _setup_logger(self) -> logging.Logger:
         """Setup logging for the test runner"""
         logger = logging.getLogger(f"VirtualTestRunner-{self.config.test_name}")
