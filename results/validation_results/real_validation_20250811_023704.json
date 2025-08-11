@@ -1,0 +1,168 @@
+{
+  "validation_metadata": {
+    "execution_id": "9adef572-ba5c-4dc3-86a5-c549744f48b4",
+    "timestamp": "2025-08-11T02:37:03.235040",
+    "duration_seconds": 1.136376142501831,
+    "test_execution_results": {
+      "start_time": "2025-08-11T02:37:03.235272",
+      "end_time": "2025-08-11T02:37:03.353241",
+      "duration_seconds": 0.11796069145202637,
+      "success": false,
+      "exit_code": 1,
+      "stdout": "\n============================================================\ncomplete SYSTEM TEST REPORT\n============================================================\n\n----------------------------------------\nRunning: Python Environment\nTesting Python environment...\n\u2717 OpenCV\n\u2717 NumPy\n\u2717 PyQt5\n\u2713 Requests\n\u2717 WebSockets\n\u2717 Matplotlib\n\u2717 Pandas\n\u2717 SciPy\n\u2717 Pillow (PIL)\n\nDependencies: 1/9 available\nMissing: OpenCV, NumPy, PyQt5, WebSockets, Matplotlib, Pandas, SciPy, Pillow (PIL)\n\u2717 Python Environment: FAILED\n\n----------------------------------------\nRunning: GUI Components\n\nTesting GUI components...\n\u2717 GUI components test failed: No module named 'PyQt5'\n\u2717 GUI Components: FAILED\n\n----------------------------------------\nRunning: OpenCV Functionality\n\nTesting OpenCV functionality...\n\u2717 OpenCV functionality test failed: No module named 'cv2'\n\u2717 OpenCV Functionality: FAILED\n\n----------------------------------------\nRunning: Network Capabilities\n\nTesting network capabilities...\n\u2713 Socket creation works\n\u2713 JSON message serialization works\n\u2713 Socket communication works\n\u2713 Network Capabilities: PASSED\n\n----------------------------------------\nRunning: Data Processing\n\nTesting data processing...\n\u2717 Data processing test failed: No module named 'matplotlib'\n\u2717 Data Processing: FAILED\n\n----------------------------------------\nRunning: File Operations\n\nTesting file operations...\n\u2713 JSON session metadata export/import works\n\u2713 CSV sensor data export/import works\n\u2713 Session directory structure creation works\n\u2713 File Operations: PASSED\n\n----------------------------------------\nRunning: System Integration\n\nTesting system integration...\n\u2713 All devices connected successfully\n\u2713 Synchronized recording start works\n\u2713 Status monitoring works\n\u2713 Synchronized recording stop works\n\u2713 Device disconnection works\n\u2713 System Integration: PASSED\n\n============================================================\nTEST SUMMARY\n============================================================\n\u2717 Python Environment: FAIL\n\u2717 GUI Components: FAIL\n\u2717 OpenCV Functionality: FAIL\n\u2713 Network Capabilities: PASS\n\u2717 Data Processing: FAIL\n\u2713 File Operations: PASS\n\u2713 System Integration: PASS\n\nOverall Result: 3/7 tests passed (42.9%)\n\u26a0\ufe0f  Some tests failed. Review the details above.\n",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 58, in test_gui_components\n    from PyQt5.QtCore import Qt, QTimer\nModuleNotFoundError: No module named 'PyQt5'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 102, in test_opencv_functionality\n    import cv2\nModuleNotFoundError: No module named 'cv2'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 218, in test_data_processing\n    import matplotlib\nModuleNotFoundError: No module named 'matplotlib'\n",
+      "tests_run": 37,
+      "tests_passed": 18,
+      "tests_failed": 19,
+      "success_rate": 48.64864864864865
+    },
+    "memory_measurements": {
+      "baseline_mb": 906.91015625,
+      "peak_mb": 906.91015625,
+      "final_mb": 906.91015625,
+      "max_growth_mb": 0.0,
+      "samples": 1,
+      "duration_seconds": 4.76837158203125e-07
+    },
+    "cpu_measurements": {
+      "average_percent": 0.0,
+      "peak_percent": 0.0,
+      "samples": 1
+    },
+    "network_measurements": {},
+    "timing_measurements": {},
+    "test_coverage_data": {
+      "analysis_timestamp": "2025-08-11T02:37:04.236082",
+      "test_suites_executed": [
+        {
+          "suite_name": "python_tests",
+          "start_time": "2025-08-11T02:37:04.236099",
+          "tests_run": 0,
+          "tests_passed": 0,
+          "tests_failed": 0,
+          "success": false,
+          "output": "",
+          "error": "/usr/bin/python: No module named pytest\n",
+          "end_time": "2025-08-11T02:37:04.253206"
+        },
+        {
+          "suite_name": "system_tests",
+          "start_time": "2025-08-11T02:37:04.253220",
+          "tests_run": 37,
+          "tests_passed": 18,
+          "tests_failed": 19,
+          "success": false,
+          "output": "\n============================================================\ncomplete SYSTEM TEST REPORT\n============================================================\n\n----------------------------------------\nRunning: Python Environment\nTesting Python environment...\n\u2717 OpenCV\n\u2717 NumPy\n\u2717 PyQt5\n\u2713 Requests\n\u2717 WebSockets\n\u2717 Matplotlib\n\u2717 Pandas\n\u2717 SciPy\n\u2717 Pillow (PIL)\n\nDependencies: 1/9 available\nMissing: OpenCV, NumPy, PyQt5, WebSockets, Matplotlib, Pandas, SciPy, Pillow (PIL)\n\u2717 Python Environment: FAILED\n\n----------------------------------------\nRunning: GUI Components\n\nTesting GUI components...\n\u2717 GUI components test failed: No module named 'PyQt5'\n\u2717 GUI Components: FAILED\n\n----------------------------------------\nRunning: OpenCV Functionality\n\nTesting OpenCV functionality...\n\u2717 OpenCV functionality test failed: No module named 'cv2'\n\u2717 OpenCV Functionality: FAILED\n\n----------------------------------------\nRunning: Network Capabilities\n\nTesting network capabilities...\n\u2713 Socket creation works\n\u2713 JSON message serialization works\n\u2713 Socket communication works\n\u2713 Network Capabilities: PASSED\n\n----------------------------------------\nRunning: Data Processing\n\nTesting data processing...\n\u2717 Data processing test failed: No module named 'matplotlib'\n\u2717 Data Processing: FAILED\n\n----------------------------------------\nRunning: File Operations\n\nTesting file operations...\n\u2713 JSON session metadata export/import works\n\u2713 CSV sensor data export/import works\n\u2713 Session directory structure creation works\n\u2713 File Operations: PASSED\n\n----------------------------------------\nRunning: System Integration\n\nTesting system integration...\n\u2713 All devices connected successfully\n\u2713 Synchronized recording start works\n\u2713 Status monitoring works\n\u2713 Synchronized recording stop works\n\u2713 Device disconnection works\n\u2713 System Integration: PASSED\n\n============================================================\nTEST SUMMARY\n============================================================\n\u2717 Python Environment: FAIL\n\u2717 GUI Components: FAIL\n\u2717 OpenCV Functionality: FAIL\n\u2713 Network Capabilities: PASS\n\u2717 Data Processing: FAIL\n\u2713 File Operations: PASS\n\u2713 System Integration: PASS\n\nOverall Result: 3/7 tests passed (42.9%)\n\u26a0\ufe0f  Some tests failed. Review the details above.\n",
+          "error": "Traceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 58, in test_gui_components\n    from PyQt5.QtCore import Qt, QTimer\nModuleNotFoundError: No module named 'PyQt5'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 102, in test_opencv_functionality\n    import cv2\nModuleNotFoundError: No module named 'cv2'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 218, in test_data_processing\n    import matplotlib\nModuleNotFoundError: No module named 'matplotlib'\n",
+          "end_time": "2025-08-11T02:37:04.370905"
+        },
+        {
+          "suite_name": "integration_tests",
+          "start_time": "2025-08-11T02:37:04.370921",
+          "tests_run": 0,
+          "tests_passed": 0,
+          "tests_failed": 0,
+          "success": true,
+          "output": "",
+          "error": "",
+          "end_time": "2025-08-11T02:37:04.371023"
+        }
+      ],
+      "overall_statistics": {
+        "total_tests": 37,
+        "passed_tests": 18,
+        "failed_tests": 19,
+        "success_rate_percentage": 48.6,
+        "meets_thesis_claim": false
+      },
+      "coverage_areas": {},
+      "evidence_files": [],
+      "evidence_file": "results/appendix_evidence/test_coverage_actual_20250811_023704.json"
+    },
+    "evidence_files": {
+      "test_coverage": "results/appendix_evidence/test_coverage_actual_20250811_023704.json",
+      "validation_report": "results/appendix_evidence/real_validation_report_20250811_023704.md"
+    }
+  },
+  "validation_results": {
+    "actual_test_execution": {
+      "start_time": "2025-08-11T02:37:03.235272",
+      "end_time": "2025-08-11T02:37:03.353241",
+      "duration_seconds": 0.11796069145202637,
+      "success": false,
+      "exit_code": 1,
+      "stdout": "\n============================================================\ncomplete SYSTEM TEST REPORT\n============================================================\n\n----------------------------------------\nRunning: Python Environment\nTesting Python environment...\n\u2717 OpenCV\n\u2717 NumPy\n\u2717 PyQt5\n\u2713 Requests\n\u2717 WebSockets\n\u2717 Matplotlib\n\u2717 Pandas\n\u2717 SciPy\n\u2717 Pillow (PIL)\n\nDependencies: 1/9 available\nMissing: OpenCV, NumPy, PyQt5, WebSockets, Matplotlib, Pandas, SciPy, Pillow (PIL)\n\u2717 Python Environment: FAILED\n\n----------------------------------------\nRunning: GUI Components\n\nTesting GUI components...\n\u2717 GUI components test failed: No module named 'PyQt5'\n\u2717 GUI Components: FAILED\n\n----------------------------------------\nRunning: OpenCV Functionality\n\nTesting OpenCV functionality...\n\u2717 OpenCV functionality test failed: No module named 'cv2'\n\u2717 OpenCV Functionality: FAILED\n\n----------------------------------------\nRunning: Network Capabilities\n\nTesting network capabilities...\n\u2713 Socket creation works\n\u2713 JSON message serialization works\n\u2713 Socket communication works\n\u2713 Network Capabilities: PASSED\n\n----------------------------------------\nRunning: Data Processing\n\nTesting data processing...\n\u2717 Data processing test failed: No module named 'matplotlib'\n\u2717 Data Processing: FAILED\n\n----------------------------------------\nRunning: File Operations\n\nTesting file operations...\n\u2713 JSON session metadata export/import works\n\u2713 CSV sensor data export/import works\n\u2713 Session directory structure creation works\n\u2713 File Operations: PASSED\n\n----------------------------------------\nRunning: System Integration\n\nTesting system integration...\n\u2713 All devices connected successfully\n\u2713 Synchronized recording start works\n\u2713 Status monitoring works\n\u2713 Synchronized recording stop works\n\u2713 Device disconnection works\n\u2713 System Integration: PASSED\n\n============================================================\nTEST SUMMARY\n============================================================\n\u2717 Python Environment: FAIL\n\u2717 GUI Components: FAIL\n\u2717 OpenCV Functionality: FAIL\n\u2713 Network Capabilities: PASS\n\u2717 Data Processing: FAIL\n\u2713 File Operations: PASS\n\u2713 System Integration: PASS\n\nOverall Result: 3/7 tests passed (42.9%)\n\u26a0\ufe0f  Some tests failed. Review the details above.\n",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 58, in test_gui_components\n    from PyQt5.QtCore import Qt, QTimer\nModuleNotFoundError: No module named 'PyQt5'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 102, in test_opencv_functionality\n    import cv2\nModuleNotFoundError: No module named 'cv2'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 218, in test_data_processing\n    import matplotlib\nModuleNotFoundError: No module named 'matplotlib'\n",
+      "tests_run": 37,
+      "tests_passed": 18,
+      "tests_failed": 19,
+      "success_rate": 48.64864864864865
+    },
+    "actual_test_coverage": {
+      "analysis_timestamp": "2025-08-11T02:37:04.236082",
+      "test_suites_executed": [
+        {
+          "suite_name": "python_tests",
+          "start_time": "2025-08-11T02:37:04.236099",
+          "tests_run": 0,
+          "tests_passed": 0,
+          "tests_failed": 0,
+          "success": false,
+          "output": "",
+          "error": "/usr/bin/python: No module named pytest\n",
+          "end_time": "2025-08-11T02:37:04.253206"
+        },
+        {
+          "suite_name": "system_tests",
+          "start_time": "2025-08-11T02:37:04.253220",
+          "tests_run": 37,
+          "tests_passed": 18,
+          "tests_failed": 19,
+          "success": false,
+          "output": "\n============================================================\ncomplete SYSTEM TEST REPORT\n============================================================\n\n----------------------------------------\nRunning: Python Environment\nTesting Python environment...\n\u2717 OpenCV\n\u2717 NumPy\n\u2717 PyQt5\n\u2713 Requests\n\u2717 WebSockets\n\u2717 Matplotlib\n\u2717 Pandas\n\u2717 SciPy\n\u2717 Pillow (PIL)\n\nDependencies: 1/9 available\nMissing: OpenCV, NumPy, PyQt5, WebSockets, Matplotlib, Pandas, SciPy, Pillow (PIL)\n\u2717 Python Environment: FAILED\n\n----------------------------------------\nRunning: GUI Components\n\nTesting GUI components...\n\u2717 GUI components test failed: No module named 'PyQt5'\n\u2717 GUI Components: FAILED\n\n----------------------------------------\nRunning: OpenCV Functionality\n\nTesting OpenCV functionality...\n\u2717 OpenCV functionality test failed: No module named 'cv2'\n\u2717 OpenCV Functionality: FAILED\n\n----------------------------------------\nRunning: Network Capabilities\n\nTesting network capabilities...\n\u2713 Socket creation works\n\u2713 JSON message serialization works\n\u2713 Socket communication works\n\u2713 Network Capabilities: PASSED\n\n----------------------------------------\nRunning: Data Processing\n\nTesting data processing...\n\u2717 Data processing test failed: No module named 'matplotlib'\n\u2717 Data Processing: FAILED\n\n----------------------------------------\nRunning: File Operations\n\nTesting file operations...\n\u2713 JSON session metadata export/import works\n\u2713 CSV sensor data export/import works\n\u2713 Session directory structure creation works\n\u2713 File Operations: PASSED\n\n----------------------------------------\nRunning: System Integration\n\nTesting system integration...\n\u2713 All devices connected successfully\n\u2713 Synchronized recording start works\n\u2713 Status monitoring works\n\u2713 Synchronized recording stop works\n\u2713 Device disconnection works\n\u2713 System Integration: PASSED\n\n============================================================\nTEST SUMMARY\n============================================================\n\u2717 Python Environment: FAIL\n\u2717 GUI Components: FAIL\n\u2717 OpenCV Functionality: FAIL\n\u2713 Network Capabilities: PASS\n\u2717 Data Processing: FAIL\n\u2713 File Operations: PASS\n\u2713 System Integration: PASS\n\nOverall Result: 3/7 tests passed (42.9%)\n\u26a0\ufe0f  Some tests failed. Review the details above.\n",
+          "error": "Traceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 58, in test_gui_components\n    from PyQt5.QtCore import Qt, QTimer\nModuleNotFoundError: No module named 'PyQt5'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 102, in test_opencv_functionality\n    import cv2\nModuleNotFoundError: No module named 'cv2'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 218, in test_data_processing\n    import matplotlib\nModuleNotFoundError: No module named 'matplotlib'\n",
+          "end_time": "2025-08-11T02:37:04.370905"
+        },
+        {
+          "suite_name": "integration_tests",
+          "start_time": "2025-08-11T02:37:04.370921",
+          "tests_run": 0,
+          "tests_passed": 0,
+          "tests_failed": 0,
+          "success": true,
+          "output": "",
+          "error": "",
+          "end_time": "2025-08-11T02:37:04.371023"
+        }
+      ],
+      "overall_statistics": {
+        "total_tests": 37,
+        "passed_tests": 18,
+        "failed_tests": 19,
+        "success_rate_percentage": 48.6,
+        "meets_thesis_claim": false
+      },
+      "coverage_areas": {},
+      "evidence_files": [],
+      "evidence_file": "results/appendix_evidence/test_coverage_actual_20250811_023704.json"
+    },
+    "evidence_report": "results/appendix_evidence/real_validation_report_20250811_023704.md"
+  },
+  "evidence_status": {
+    "validation_approach": "actual_test_execution",
+    "fake_data_used": false,
+    "real_tests_executed": true,
+    "evidence_quality": "genuine",
+    "test_execution": {
+      "success": false,
+      "tests_run": 37,
+      "duration_seconds": 0.11796069145202637,
+      "evidence_quality": "limited"
+    },
+    "test_coverage": {
+      "total_tests": 37,
+      "success_rate": 48.6,
+      "comprehensive": true
+    }
+  }
+}
