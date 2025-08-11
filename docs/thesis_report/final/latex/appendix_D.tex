@@ -59,15 +59,24 @@ The Multi-Sensor Recording System employs a comprehensive four-tier testing stra
 
 \textbf{Overall Coverage Achievement: 95.2%}
 
-| Module Category | Test Cases | Coverage | Pass Rate | Critical Issues |
-|---|---|---|---|---|
-| Network Communication | 312 | 97.8% | 100.0% | 0 |
-| Session Management | 287 | 96.1% | 99.7% | 1 resolved |
-| Device Synchronisation | 198 | 94.3% | 100.0% | 0 |
-| Data Processing | 156 | 93.7% | 98.1% | 2 resolved |
-| Calibration Systems | 144 | 92.1% | 97.2% | 1 minor |
-| User Interface | 89 | 91.4% | 100.0% | 0 |
-| Hardware Integration | 61 | 89.8% | 96.7% | 1 resolved |
+\begin{table}[ht]
+\centering
+\caption{A Summary of Test Results Across Various Modules.}
+\label{tab:test_results}
+\begin{tabular}{lcccc}
+\toprule
+Module Category & Test Cases & Coverage & Pass Rate & Critical Issues \\
+\midrule
+Network Communication & 312 & 97.8\% & 100.0\% & 0 \\
+Session Management & 287 & 96.1\% & 99.7\% & 1 resolved \\
+Device Synchronisation & 198 & 94.3\% & 100.0\% & 0 \\
+Data Processing & 156 & 93.7\% & 98.1\% & 2 resolved \\
+Calibration Systems & 144 & 92.1\% & 97.2\% & 1 minor \\
+User Interface & 89 & 91.4\% & 100.0\% & 0 \\
+Hardware Integration & 61 & 89.8\% & 96.7\% & 1 resolved \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \textbf{Coverage Analysis Summary:}
 - \textbf{Lines Covered}: 18,847 of 19,795 total lines (95.2%)
@@ -112,14 +121,23 @@ The Multi-Sensor Recording System employs a comprehensive four-tier testing stra
 
 \textbf{Integration Test Categories (6 primary suites):}
 
-| Test Suite | Scenarios | Pass Rate | Execution Time | Critical Metrics |
-|---|---|---|---|---|
-| Device Discovery | 12 | 100.0% | 0.8s average | 2.1s discovery time |
-| Network Synchronisation | 15 | 100.0% | 1.2s average | ±2.1ms precision |
-| Data Pipeline | 18 | 100.0% | 2.3s average | 99.98% integrity |
-| Error Recovery | 21 | 100.0% | 3.1s average | 0.7s recovery time |
-| Load Testing | 9 | 100.0% | 45.2s average | 12 device capacity |
-| Quality Assurance | 14 | 100.0% | 1.8s average | Real-time validation |
+\begin{table}[ht]
+\centering
+\caption{Performance Metrics for Core Test Suites.}
+\label{tab:performance_metrics}
+\begin{tabular}{lcccl}
+\toprule
+Test Suite & Scenarios & Pass Rate & Execution Time & Critical Metrics \\
+\midrule
+Device Discovery & 12 & 100.0\% & \SI{0.8}{\second} average & \SI{2.1}{\second} discovery time \\
+Network Synchronisation & 15 & 100.0\% & \SI{1.2}{\second} average & $\pm$\SI{2.1}{\milli\second} precision \\
+Data Pipeline & 18 & 100.0\% & \SI{2.3}{\second} average & 99.98\% integrity \\
+Error Recovery & 21 & 100.0\% & \SI{3.1}{\second} average & \SI{0.7}{\second} recovery time \\
+Load Testing & 9 & 100.0\% & \SI{45.2}{\second} average & 12 device capacity \\
+Quality Assurance & 14 & 100.0\% & \SI{1.8}{\second} average & Real-time validation \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \textbf{Synchronisation Precision Validation:}
 - \textbf{Temporal Accuracy}: ±2.1ms across all device types (requirement: ±50ms)
@@ -217,12 +235,21 @@ The Multi-Sensor Recording System employs a comprehensive four-tier testing stra
 
 \textbf{Temporal Synchronisation Validation:}
 
-| Measurement Category | Achieved Performance | Requirement | Validation Method |
-|---|---|---|---|
-| Cross-Device Sync | ±2.1ms | ±50ms | NTP precision measurement |
-| Clock Drift Rate | <0.1ms/minute | <10ms/hour | Extended monitoring |
-| Recovery Time | 0.7 seconds | <5 seconds | Interruption simulation |
-| Accuracy Persistence | >99.9% | >95% | 24-hour validation |
+\begin{table}[ht]
+\centering
+\caption{Validation of Key Performance Requirements.}
+\label{tab:performance_validation}
+\begin{tabular}{llll}
+\toprule
+Measurement Category & Achieved Performance & Requirement & Validation Method \\
+\midrule
+Cross-Device Sync & $\pm$\SI{2.1}{\milli\second} & $\pm$\SI{50}{\milli\second} & NTP precision measurement \\
+Clock Drift Rate & $< \SI{0.1}{\milli\second\per\minute}$ & $< \SI{10}{\milli\second\per\hour}$ & Extended monitoring \\
+Recovery Time & \SI{0.7}{\second} & $< \SI{5}{\second}$ & Interruption simulation \\
+Accuracy Persistence & $>99.9\%$ & $>95\%$ & 24-hour validation \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \textbf{Network Performance Benchmarks:}
 - \textbf{Round-Trip Time}: 12.3ms average (requirement: <100ms) \citep{ref21}

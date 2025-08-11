@@ -11,59 +11,61 @@
 \usepackage{siunitx} % provides \micro symbol via siunitx and robust units
 \usepackage[numbers]{natbib} % TODO: Map numeric citations to BibTeX keys
 \usepackage{verbatim} % for verbatim blocks in appendices
+\usepackage{mermaid}
+\usepackage{booktabs}
 % Mermaid diagrams rendering
 % Note: Requires Node.js and mermaid-cli or mermaid package support; compile with -shell-escape
 % If mermaid.sty is unavailable, skip package to avoid build failure.
-\IfFileExists{mermaid.sty}{\usepackage{mermaid}}{}
+%\IfFileExists{mermaid.sty}{\usepackage{mermaid}}{}
 \usepackage{textcomp}
 
 % Hyperref setup
 \hypersetup{
-  colorlinks=true,
-  linkcolor=blue,
-  citecolor=blue,
-  urlcolor=blue
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
 }
 
 \begin{document}
 
 % Title Page (placeholder)
-\begin{titlepage}
-  \centering
-  {\LARGE Multi-Sensor Recording System Thesis\\[1ex]}
-  {\large Build Integration}\\[2ex]
-  {\large Generated on: \today}
-\end{titlepage}
+    \begin{titlepage}
+        \centering
+        {\LARGE Multi-Sensor Recording System Thesis\\[1ex]}
+        {\large Build Integration}\\[2ex]
+        {\large Generated on: \today}
+    \end{titlepage}
 
-\tableofcontents
-\clearpage
+    \tableofcontents
+    \clearpage
 
 
-\input{1}
-\input{2}
-\input{3}
-\input{4}
-\input{5}
-\input{6}
+    \input{1}
+    \input{2}
+    \input{3}
+    \input{4}
+    \input{5}
+    \input{6}
 % Global bibliography
-\clearpage
-\setcitestyle{square}
-\renewcommand{\bibname}{References}
-\bibliographystyle{abbrvnat}
-\bibliography{references}
+    \clearpage
+    \setcitestyle{square}
+    \renewcommand{\bibname}{References}
+    \bibliographystyle{abbrvnat}
+    \bibliography{references}
 
 % Appendices
-\appendix
-\clearpage
-\input{appendix_A}
-\input{appendix_B}
-\input{appendix_C}
-\input{appendix_D}
-\input{appendix_E}
-\input{appendix_F}
-\input{appendix_G}
-\input{appendix_H}
-\input{appendix_I}
-\input{appendix_Z}
+    \appendix
+    \clearpage
+    \input{appendix_A}
+    \input{appendix_B}
+    \input{appendix_C}
+    \input{appendix_D}
+    \input{appendix_E}
+    \input{appendix_F}
+    \input{appendix_G}
+    \input{appendix_H}
+    \input{appendix_I}
+    \input{appendix_Z}
 
 \end{document}
