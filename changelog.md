@@ -335,3 +335,12 @@ This changelog follows the project's established guidelines:
   - Updated `docs/thesis_report/README.md` with build instructions (use `-shell-escape`, Node.js, and `@mermaid-js/mermaid-cli`).
   - Added Mermaid pipeline diagram: `docs/diagrams/mermaid_latex_integration.mmd` documenting the LaTeX + Mermaid build flow.
   - Notes: Keep `external/` and `docs/generated_docs` excluded from artifacts. Mermaid rendering requires Node + mmdc available on PATH.
+
+
+### Changed (2025-08-11)
+- Migrated thesis references to BibTeX (natbib numeric, abbrvnat). Consolidated entries in `docs/thesis_report/final/latex/references.bib` (keys: ref1–ref24).
+- Updated `docs/thesis_report/final/latex/main.tex` to use a global bibliography block (`\setcitestyle{square}`, `\bibliographystyle{abbrvnat}`, `\bibliography{references}`) and removed `\input{references}`.
+- Replaced hard-coded numeric citations in `docs/thesis_report/final/latex/2.tex` with `\citep{...}` and removed its local References stub.
+- Added `docs/thesis_report/final/latex/README.md` with BibTeX build steps and a Mermaid diagram of the bibliography flow.
+- Updated `architecture.md` with a "Bibliography Flow (BibTeX)" Mermaid diagram.
+- Updated `backlog.md` with follow-ups: convert remaining chapters/appendices to `\cite`, enrich BibTeX metadata, and validate LaTeX build toolchain (Mermaid optional).

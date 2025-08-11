@@ -34,9 +34,9 @@ sequenceDiagram
 \begin{verbatim}
 This appendix provides a unified repository of all visual content for the Multi-Sensor Recording System thesis, organised by category and chapter origin for easy navigation and reference.
 
-## Z.1 Chapter 2 Figures: Background and Literature Review
+\subsection{Z.1 Chapter 2 Figures: Background and Literature Review}
 
-### Z.1.1 Physiological Computing Context
+\subsubsection{Z.1.1 Physiological Computing Context}
 
 Figure 2.1: Emotion/Stress Sensing Modality Landscape
 
@@ -68,7 +68,7 @@ graph TD
     VOICE --> CONTEXTUAL
 ```
 
-*Figure 2.1: Emotion/Stress Sensing Modality Landscape showing the range of behavioral and physiological modalities available for stress detection research. Demonstrates the positioning of the multi-sensor approach within the broader landscape of affective computing technologies [4].*
+\textit{Figure 2.1: Emotion/Stress Sensing Modality Landscape showing the range of behavioral and physiological modalities available for stress detection research. Demonstrates the positioning of the multi-sensor approach within the broader landscape of affective computing technologies \citep{ref4}.}
 
 Figure 2.2: Contact vs Contactless Measurement Pipelines
 
@@ -101,9 +101,9 @@ graph LR
     CONTACT_OUTPUT -.->|Ground Truth<br/>Training Data| CONTACTLESS_ML
 ```
 
-*Figure 2.2: Contact vs Contactless Measurement Pipelines illustrating the trade-offs between accuracy and intrusiveness in physiological monitoring approaches. Shows how contactless methods require machine learning to achieve GSR estimation [1].*
+\textit{Figure 2.2: Contact vs Contactless Measurement Pipelines illustrating the trade-offs between accuracy and intrusiveness in physiological monitoring approaches. Shows how contactless methods require machine learning to achieve GSR estimation \citep{ref1}.}
 
-### Z.1.2 Physiological Response Mechanisms
+\subsubsection{Z.1.2 Physiological Response Mechanisms}
 
 Figure 2.3: Stress Response Pathways
 
@@ -157,7 +157,7 @@ graph TD
 stress response through SAM (Sympathoadrenal Medullary) and HPA
 (Hypothalamic-Pituitary-Adrenal) axes. Demonstrates the temporal
 characteristics of different physiological responses measured by the
-system [1,4].*
+system \citep{ref1,ref4}.*
 
 Figure 2.4: Sensor Technology Characteristics Matrix
 
@@ -179,9 +179,9 @@ graph LR
 *Figure 2.4: Sensor Technology Characteristics Matrix illustrating the
 trade-offs between measurement accuracy and user intrusiveness. Shows the
 positioning of different sensor modalities and the research target zone
-[8,16,20].*
+citep{ref8,ref16,ref20}.*
 
-### Z.1.4 Multi-Modal Integration Rationale
+\subsubsection{Z.1.4 Multi-Modal Integration Rationale}
 
 Figure 2.5: Multi-Modal Data Fusion Concept
 
@@ -225,11 +225,11 @@ graph TD
 *Figure 2.5: Multi-Modal Data Fusion Concept showing how RGB video,
 thermal imaging, and reference GSR data are combined through temporal
 synchronisation and feature fusion to enable contactless GSR prediction.
-Demonstrates the system's core research hypothesis [5,6,22].*
+Demonstrates the system's core research hypothesis citep{ref5,ref6,ref22}.*
 
-## Z.2 Chapter 3 Figures: Requirements and Architecture
+\subsection{Z.2 Chapter 3 Figures: Requirements and Architecture}
 
-### Z.2.1 System Requirements Overview
+\subsubsection{Z.2.1 System Requirements Overview}
 
 Figure 3.1: Functional Requirements Hierarchy
 
@@ -275,7 +275,7 @@ of system requirements into primary functions, supporting functions, and
 quality assurance measures. Demonstrates the comprehensive scope of the
 system requirements defined in Chapter 3.*
 
-### Z.2.2 Non-Functional Requirements Matrix
+\subsubsection{Z.2.2 Non-Functional Requirements Matrix}
 
 Table 3.1: Non-Functional Requirements Specification
 
@@ -302,7 +302,7 @@ Table 3.1: Non-Functional Requirements Specification
 quantitative targets and validation methods for system quality
 attributes. Establishes measurable criteria for system evaluation.*
 
-### Z.2.3 Use Case Scenario Diagrams
+\subsubsection{Z.2.3 Use Case Scenario Diagrams}
 
 Figure 3.2: Primary Use Case: Multi-Modal Recording Session
 
@@ -348,9 +348,9 @@ recording session showing the interaction between researcher, controller,
 devices, and sensors. Demonstrates the coordinated workflow for
 synchronised data collection.*
 
-## Z.3 Chapter 4 Figures: Design and Implementation
+\subsection{Z.3 Chapter 4 Figures: Design and Implementation}
 
-### Z.3.1 System Architecture Diagrams
+\subsubsection{Z.3.1 System Architecture Diagrams}
 
 Figure 4.1: System Architecture Overview
 
@@ -359,7 +359,7 @@ Figure 4.1: System Architecture Overview
 *Figure 4.1: System Architecture Overview showing the distributed
 client-server architecture with PC controller coordinating multiple
 Android sensor nodes. Illustrates the star topology with central
-synchronisation and control [17,19,21].*
+synchronisation and control citep{ref17,ref19,ref21}.*
 
 Figure 4.2: Android Thermal Integration Data Flow
 
@@ -368,7 +368,7 @@ Figure 4.2: Android Thermal Integration Data Flow
 *Figure 4.2: Android Thermal Integration Data Flow showing the complete
 pipeline from USB thermal camera through Android processing to CSV
 storage. Details the frame capture callback system and data formatting
-[16,20].*
+\citep{ref16,ref20}.*
 
 Figure 4.3: Shimmer GSR Integration Architecture
 
@@ -376,9 +376,9 @@ Figure 4.3: Shimmer GSR Integration Architecture
 
 *Figure 4.3: Shimmer GSR Integration Architecture illustrating BLE
 communication protocol and real-time data streaming with calibration and
-CSV logging. Shows the complete sensor-to-storage pipeline [8,15].*
+CSV logging. Shows the complete sensor-to-storage pipeline \citep{ref8,ref15}.*
 
-### Z.3.2 User Interface Design
+\subsubsection{Z.3.2 User Interface Design}
 
 Figure 4.4: Desktop Controller GUI Layout
 
@@ -387,9 +387,9 @@ Figure 4.4: Desktop Controller GUI Layout
 *Figure 4.4: Desktop Controller GUI Layout showing the comprehensive
 dashboard with device management, live preview panels, session controls,
 and synchronisation status indicators. Demonstrates the research-grade
-interface design [17].*
+interface design \citep{ref17}.*
 
-### Z.3.3 Communication and Data Processing
+\subsubsection{Z.3.3 Communication and Data Processing}
 
 Figure 4.5: Network Protocol Sequence
 
@@ -398,7 +398,7 @@ Figure 4.5: Network Protocol Sequence
 *Figure 4.5: Network Protocol Sequence diagram detailing the JSON-based
 communication protocol over WebSocket connections. Shows device
 registration, command distribution, and data synchronisation messaging
-[21].*
+\citep{ref21}.*
 
 Figure 4.6: Data Processing Pipeline
 
@@ -406,11 +406,11 @@ Figure 4.6: Data Processing Pipeline
 
 *Figure 4.6: Data Processing Pipeline illustrating the complete data flow
 from multi-modal capture through storage, transfer, and export. Shows
-concurrent processing streams and temporal alignment mechanisms [22,23].*
+concurrent processing streams and temporal alignment mechanisms \citep{ref22,ref23}.*
 
-## Z.4 Performance and Diagnostic Analysis
+\subsection{Z.4 Performance and Diagnostic Analysis}
 
-### Z.4.1 System Reliability and Error Analysis
+\subsubsection{Z.4.1 System Reliability and Error Analysis}
 
 Figure G.1: Device Discovery Success Patterns
 
@@ -436,7 +436,7 @@ graph LR
 *Figure G.1: Device Discovery Success Patterns showing the relationship
 between network conditions and device discovery reliability.
 Demonstrates the importance of optimal network configuration for system
-deployment [19,21].*
+deployment \citep{ref19,ref21}.*
 
 Figure G.2: Error Classification and Frequency
 
@@ -469,7 +469,7 @@ Figure G.3: Error Recovery Success Rates
 fault tolerance capabilities across different error categories. Shows
 high automatic recovery rates with minimal data loss risk.*
 
-### Z.4.2 Synchronisation Performance
+\subsubsection{Z.4.2 Synchronisation Performance}
 
 Figure 3.7: Temporal Synchronisation Accuracy
 
@@ -518,7 +518,7 @@ graph LR
 linear relationship between network performance and synchronisation
 accuracy. Validates the <100ms network requirement specification.*
 
-### Z.4.3 Data Quality and Sensor Performance
+\subsubsection{Z.4.3 Data Quality and Sensor Performance}
 
 Figure 3.9: GSR Sampling Rate Stability
 
@@ -545,9 +545,9 @@ graph LR
 
 *Figure 3.9: GSR Sampling Rate Stability showing consistent performance
 at the target 128 Hz with minimal sample loss and high signal quality.
-Demonstrates research-grade data acquisition capabilities [8].*
+Demonstrates research-grade data acquisition capabilities \citep{ref8}.*
 
-### Z.4.4 Operational Metrics
+\subsubsection{Z.4.4 Operational Metrics}
 
 Figure 3.10: Session Workflow Timeline
 
@@ -608,7 +608,7 @@ graph LR
 showing stable resource utilisation and sustained performance.
 Demonstrates production-ready system stability.*
 
-### Z.4.5 Network and Storage Performance
+\subsubsection{Z.4.5 Network and Storage Performance}
 
 Figure 3.12: Data Throughput Analysis
 
@@ -635,11 +635,11 @@ graph TD
 
 *Figure 3.12: Data Throughput Analysis showing typical session data
 breakdown and storage performance metrics. RGB video dominates storage
-requirements while maintaining high transfer reliability [23].*
+requirements while maintaining high transfer reliability \citep{ref23}.*
 
-## Z.5 Cross-Reference Tables and Navigation Aids
+\subsection{Z.5 Cross-Reference Tables and Navigation Aids}
 
-### Z.5.1 Figure Cross-Reference Table
+\subsubsection{Z.5.1 Figure Cross-Reference Table}
 
 | Figure Number | Title | Original Location | Content Type | Key Topics |
 |---|---|---|---|---|
@@ -666,14 +666,14 @@ requirements while maintaining high transfer reliability [23].*
 | 3.11 | Reliability Timeline | Appendix G.4 | Endurance Chart | System stability |
 | 3.12 | Throughput Analysis | Appendix G.5 | Performance Chart | Data handling |
 
-### Z.5.2 Table Reference Index
+\subsubsection{Z.5.2 Table Reference Index}
 
 | Table Number | Title | Content | Location |
 |---|---|---|---|
 | 3.1 | Non-Functional Requirements | Quantitative specifications | Section Z.2.2 |
 | G.3 | Error Recovery Rates | Statistical performance data | Section Z.4.1 |
 
-### Z.5.3 Quick Navigation Guide
+\subsubsection{Z.5.3 Quick Navigation Guide}
 
 By Chapter:
 - Chapter 2 Figures: Sections Z.1.1 - Z.1.4 (Background concepts)

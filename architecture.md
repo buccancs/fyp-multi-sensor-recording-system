@@ -750,3 +750,24 @@ graph LR
 ---
 
 **Multi-Sensor Recording System** - Complete architecture enabling advanced physiological research through synchronised multi-modal data collection with research-grade reliability and academic rigor.
+
+
+
+## Documentation — Bibliography Flow (BibTeX)
+This repository's thesis now uses a centralized BibTeX workflow instead of manual thebibliography. The flow below shows how citations are resolved during the LaTeX build.
+
+```mermaid
+flowchart LR
+  A[Chapter .tex with citation keys] --> B[natbib]
+  B --> C[LaTeX pass 1 (main.aux)]
+  C --> D[BibTeX reads references.bib]
+  D --> E[main.bbl generated]
+  E --> F[LaTeX pass 2]
+  F --> G[LaTeX pass 3]
+  G --> H[PDF with numbered citations and References]
+```
+
+Notes:
+- Numeric, square-bracket citations via natbib (\usepackage[numbers]{natbib}; \setcitestyle{square}).
+- Bibliography heading set to "References" in main.tex (report class) with \renewcommand{\bibname}{References}.
+- If the LaTeX Mermaid package is unavailable, generate diagrams externally (e.g., mermaid-cli) and include as images.
