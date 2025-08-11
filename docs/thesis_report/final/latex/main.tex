@@ -1,170 +1,63 @@
-\documentclass[12pt,a4paper,oneside]{report}
+\documentclass[11pt]{report}
 
-% Essential packages
-\usepackage[utf8]{inputenc}
+% Packages
 \usepackage[T1]{fontenc}
-\usepackage[british]{babel}
-\usepackage{amsmath,amsfonts,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
 \usepackage{graphicx}
-\usepackage{float}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
-\usepackage{listings}
-\usepackage{url}
-\usepackage[hidelinks]{hyperref}
-\usepackage{geometry}
-\usepackage{fancyhdr}
-\usepackage{setspace}
-\usepackage{titlesec}
-\usepackage{tocloft}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{siunitx} % provides \micro symbol via siunitx and robust units
+\usepackage[numbers]{natbib} % TODO: Map numeric citations to BibTeX keys
+\usepackage{verbatim} % for verbatim blocks in appendices
+% Mermaid diagrams rendering
+% Note: Requires Node.js and mermaid-cli or mermaid package support; compile with -shell-escape
+\usepackage{mermaid}
 
-% Page geometry - UCL requirements
-\geometry{
-    left=3cm,
-    right=2.5cm,
-    top=2.5cm,
-    bottom=2.5cm
+% Hyperref setup
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
 }
-
-% Line spacing
-\onehalfspacing
-
-% Headers and footers
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[R]{\thepage}
-\fancyhead[L]{\leftmark}
-\renewcommand{\headrulewidth}{0.4pt}
-
-% Chapter and section formatting
-\titleformat{\chapter}[display]
-{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
-\titlespacing*{\chapter}{0pt}{50pt}{40pt}
-
-% Bibliography style
-\usepackage[style=ieee,backend=biber,sorting=none]{biblatex}
-\addbibresource{references.bib}
-
-% Code listing setup
-\lstset{
-    basicstyle=\ttfamily\footnotesize,
-    breaklines=true,
-    frame=single,
-    numbers=left,
-    numberstyle=\tiny,
-    showstringspaces=false,
-    tabsize=2
-}
-
-% Title page information
-\title{Multi-Sensor Recording System for Contactless GSR Prediction Research}
-\author{Your Name}
-\date{\today}
 
 \begin{document}
 
-% Title page
+% Title Page (placeholder)
 \begin{titlepage}
-    \centering
-    \vspace*{2cm}
-
-    {\LARGE University College London\\[0.5cm]}
-    {\large Department of Computer Science\\[2cm]}
-
-    {\Huge\bfseries Multi-Sensor Recording System for Contactless GSR Prediction Research\\[2cm]}
-
-    {\Large A thesis submitted for the degree of\\
-    Master of Engineering in Computer Science\\[2cm]}
-
-    {\large by\\[0.5cm]}
-    {\Large Your Name\\[2cm]}
-
-    {\large Supervisor: Supervisor Name\\[1cm]}
-
-    {\large \today}
-
-    \vfill
+  \centering
+  {\LARGE Multi-Sensor Recording System Thesis\\[1ex]}
+  {\large Build Integration}\\[2ex]
+  {\large Generated on: \today}
 \end{titlepage}
 
-% Abstract
-\chapter*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
-\input{abstract}
-
-% Acknowledgements
-\chapter*{Acknowledgements}
-\addcontentsline{toc}{chapter}{Acknowledgements}
-\input{acknowledgements}
-
-% Table of contents
 \tableofcontents
-\listoffigures
-\listoftables
+\clearpage
 
-% Main chapters
-\chapter{Introduction}
-\input{chapter1}
 
-\chapter{Background and Literature Review}
-\input{chapter2}
-
-\chapter{Requirements and Architecture}
-\input{chapter3}
-
-\chapter{Design and Implementation}
-\input{chapter4}
-
-\chapter{Testing and Evaluation}
-\input{chapter5}
-
-\chapter{Conclusions and Future Work}
-\input{chapter6}
-
-% Bibliography
-\printbibliography[heading=bibintoc,title={References}]
+\input{1}
+\input{2}
+\input{3}
+\input{4}
+\input{5}
+\input{6}
+\clearpage
+\input{references}
 
 % Appendices
 \appendix
-
-\chapter{System Manual}
-\input{appendix_a}
-
-\chapter{User Manual}
-\input{appendix_b}
-
-\chapter{Supporting Documentation}
-\input{appendix_c}
-
-\chapter{Test Reports}
-\input{appendix_d}
-
-\chapter{Evaluation Data}
-\input{appendix_e}
-
-\chapter{Code Listings}
-\input{appendix_f}
-
-\chapter{Diagnostic Figures}
-\input{appendix_g}
-
-\chapter{Reference Index}
-\input{appendix_h}
-
-\chapter{Figures and Diagrams}
-\input{appendix_i}
-
-\chapter{Consolidated Figures}
-\input{appendix_z}
+\clearpage
+\input{appendix_A}
+\input{appendix_B}
+\input{appendix_C}
+\input{appendix_D}
+\input{appendix_E}
+\input{appendix_F}
+\input{appendix_G}
+\input{appendix_H}
+\input{appendix_I}
+\input{appendix_Z}
 
 \end{document}

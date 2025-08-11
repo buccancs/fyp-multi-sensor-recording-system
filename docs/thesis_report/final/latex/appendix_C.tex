@@ -1,7 +1,10 @@
-# Appendix C: Supporting Documentation -- Technical Specifications, Protocols, and Data
+% Appendix C converted from appendix_c_supporting_documentation.md
+\chapter{Supporting Documentation — Technical Specifications, Protocols, and Data}
 
-Purpose and Justification: This appendix provides the detailed technical specifications and supporting data that underpin the system design and implementation claims made in the main thesis. The comprehensive protocol documentation, calibration data, and ethics framework demonstrate the rigour and compliance necessary for research-grade systems. This material supports the thesis arguments about system accuracy, reliability, and ethical compliance while providing the technical detail necessary for system validation and replication.
+\textbf{Purpose and Justification}: This appendix provides the detailed technical specifications and supporting data that underpin the system design and implementation claims made in the main thesis. The comprehensive protocol documentation, calibration data, and ethics framework demonstrate the rigour and compliance necessary for research-grade systems. This material supports the thesis arguments about system accuracy, reliability, and ethical compliance while providing the technical detail necessary for system validation and replication.
 
+% NOTE: Content preserved via verbatim for fidelity. TODO: Map bracketed numeric references [n] to \cite commands in a later pass.
+\begin{verbatim}
 This appendix provides comprehensive technical specifications, communication protocols, and supporting data that underpin the Multi-Sensor Recording System implementation. The documentation serves as a detailed reference for system replication, validation, and maintenance in research environments.
 
 ## C.1 Hardware Specifications and Calibration Data
@@ -46,7 +49,7 @@ Temporal Stability: ±0.03°C over 8-hour period
 *Calibration Matrix (3×3 correction coefficients):*
 ```
 [1.0023, -0.0012,  0.0008]
-[0.0009,  0.9987, -0.0015] 
+[0.0009,  0.9987, -0.0015]
 [0.0003,  0.0007,  1.0019]
 ```
 
@@ -249,7 +252,7 @@ Phase 1: Initial Offset Measurement
   - PC receives response at time t3
   - Round-trip time: RTT = (t3 - t1)
   - Clock offset: offset = ((t2 - t1) + (t2 - t3)) / 2
-  
+
 Phase 2: Continuous Drift Compensation
   - Periodic offset measurements every 30 seconds
   - Linear regression on offset vs time
@@ -331,7 +334,7 @@ struct ThermalFileHeader {
     char magic[8];           // "THERM001"
     uint32_t version;        // Format version
     uint32_t width;          // 256 pixels
-    uint32_t height;         // 192 pixels  
+    uint32_t height;         // 192 pixels
     uint32_t fps;            // 25 frames per second
     uint32_t frame_count;    // Total frames in file
     double start_timestamp;  // Unix timestamp (ms)
@@ -449,7 +452,7 @@ Laboratory Environment Specifications:
 ```
 Temperature Range: 20-25°C (controlled ±1°C)
 Humidity: 40-60% RH (±5%)
-Lighting: 
+Lighting:
   - Ambient: 300-500 lux
   - Colour Temperature: 4000K-5000K (daylight balanced)
   - UV Content: Filtered (<1% UV-A, 0% UV-B/C)
@@ -612,3 +615,4 @@ All research activities using this system must reference and comply with these a
 - Consent records maintained separately from research data for audit purposes
 
 This comprehensive supporting documentation provides the technical foundation necessary for system replication, validation, and ongoing maintenance of the Multi-Sensor Recording System in research environments.
+\end{verbatim}

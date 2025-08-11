@@ -1,6 +1,6 @@
 # Appendix F: Code Listings -- Selected Code Excerpts (Synchronisation, Data Pipeline, Integration)
 
-**Purpose and Justification**: This appendix provides concrete evidence of the technical implementation that supports the thesis claims about system capabilities. The code excerpts demonstrate the practical realisation of the theoretical concepts discussed in the design and implementation chapters. This material enables technical validation of the approach and supports the reproducibility of the research by providing insight into key algorithmic and architectural decisions.
+Purpose and Justification: This appendix provides concrete evidence of the technical implementation that supports the thesis claims about system capabilities. The code excerpts demonstrate the practical realisation of the theoretical concepts discussed in the design and implementation chapters. This material enables technical validation of the approach and supports the reproducibility of the research by providing insight into key algorithmic and architectural decisions.
 
 This appendix provides key excerpts from the source code to illustrate how critical aspects of the system are implemented. The following listings highlight the synchronisation mechanism, data processing pipeline, and sensor integration logic, with inline commentary and references to the complete implementation.
 
@@ -10,7 +10,7 @@ This appendix provides key excerpts from the source code to illustrate how criti
 
 The following Kotlin code demonstrates the thermal camera integration on Android, showing how temperature data is captured and logged to CSV format:
 
-**Listing F.1:** Kotlin code for thermal camera frame callback and CSV logging.
+Listing F.1: Kotlin code for thermal camera frame callback and CSV logging.
 
 ```kotlin
 // Thermal camera frame callback implementation
@@ -51,7 +51,7 @@ This implementation captures 49,152 temperature values per frame (256×192 pixel
 
 The following Kotlin code shows the Bluetooth Low Energy implementation for Shimmer GSR sensor communication:
 
-**Listing F.2:** Kotlin code for Shimmer GSR sensor BLE streaming and logging.
+Listing F.2: Kotlin code for Shimmer GSR sensor BLE streaming and logging.
 
 ```kotlin
 // BLE GATT callback for Shimmer GSR sensor data
@@ -99,7 +99,7 @@ This code implements the complete BLE communication protocol for Shimmer GSR sen
 
 The following Python code demonstrates the Qt-based desktop controller's asynchronous messaging system:
 
-**Listing F.3:** Python (PyQt) code snippet illustrating the signal-slot mechanism for preview frames.
+Listing F.3: Python (PyQt) code snippet illustrating the signal-slot mechanism for preview frames.
 
 ```python
 # WorkerThread signal declaration and usage
@@ -219,7 +219,7 @@ The synchronisation system implements a custom NTP-based protocol [21] that achi
 
 ### F.1.2 Synchronised Recording Start Command
 
-When a recording session starts, the `MasterClockSynchronizer` sends a **start command with a master timestamp** to all devices, ensuring they begin recording at the same synchronised moment:
+When a recording session starts, the `MasterClockSynchronizer` sends a start command with a master timestamp to all devices, ensuring they begin recording at the same synchronised moment:
 
 ```python
 def send_synchronised_start_command(self, session_id, participant_id, duration_seconds=1800):
@@ -521,7 +521,7 @@ This demonstrates how the system maintains live data streams with timestamp sync
 
 The following Python code demonstrates the session management logic referenced in Chapter 3:
 
-**Listing F.4:** Python code for session management and device coordination.
+Listing F.4: Python code for session management and device coordination.
 
 ```python
 class SessionManager:
@@ -577,7 +577,7 @@ class SessionManager:
 
 ### F.4.2 Android Device Manager Implementation
 
-**Listing F.5:** Python code for Android device management and data callbacks.
+Listing F.5: Python code for Android device management and data callbacks.
 
 ```python
 class AndroidDeviceManager:
@@ -642,11 +642,11 @@ class AndroidDeviceManager:
 
 Through these code excerpts, Appendix F illustrates the implementation of the system's key features:
 
-- **Synchronisation Code**: Shows how strict timing is achieved programmatically using NTP-based protocols [21]
-- **Data Pipeline Code**: Reveals the real-time analysis capabilities for multi-modal physiological signal processing [5,22]
-- **Integration Code**: Highlights the system's versatility in accommodating different hardware configurations and sensor types [8,13,14,15]
-- **Session Management Code**: Demonstrates the logic for managing recording sessions and coordinating data storage [this chapter]
-- **Android Device Management Code**: Details the handling of data and commands for Android-connected devices [this chapter]
+- Synchronisation Code: Shows how strict timing is achieved programmatically using NTP-based protocols [21]
+- Data Pipeline Code: Reveals the real-time analysis capabilities for multi-modal physiological signal processing [5,22]
+- Integration Code: Highlights the system's versatility in accommodating different hardware configurations and sensor types [8,13,14,15]
+- Session Management Code: Demonstrates the logic for managing recording sessions and coordinating data storage [this chapter]
+- Android Device Management Code: Details the handling of data and commands for Android-connected devices [this chapter]
 
 Each excerpt is drawn directly from the project's source code, reflecting the production-ready, well-documented nature of the implementation. The complete source files include further architectural details, error handling, and configuration management that support the robust operation demonstrated in the testing and evaluation results.
 
