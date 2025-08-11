@@ -193,7 +193,7 @@ class SocketIOLoadGenerator:
             print(f"Client {client_id} connection failed: {e}")
             return False, connection_time
     
-    async def simulate_device_messages(self, client: socketio.AsyncClient, device_id: str, duration_seconds: int):
+    async def simulate_device_messages(self, client, device_id: str, duration_seconds: int):
         """Simulate device sending messages through Socket.IO."""
         end_time = time.time() + duration_seconds
         message_count = 0

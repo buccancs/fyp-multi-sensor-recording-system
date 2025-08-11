@@ -45,11 +45,15 @@ def main_window(qapp, qtbot):
 class TestMainWindowConstruction:
     """Test main window construction and basic functionality."""
     
+    @pytest.mark.gui
+    @pytest.mark.gui
     def test_window_creates_successfully(self, main_window):
         """FR6: Test that main window creates without errors."""
         assert main_window is not None
         assert main_window.windowTitle() != ""
     
+    @pytest.mark.gui
+    @pytest.mark.gui
     def test_menu_bar_exists(self, main_window):
         """FR6: Test that menu bar is present with expected menus."""
         menu_bar = main_window.menuBar()
@@ -62,6 +66,8 @@ class TestMainWindowConstruction:
         for expected_menu in expected_menus:
             assert any(expected_menu in name for name in menu_names), f"Menu '{expected_menu}' not found"
     
+    @pytest.mark.gui
+    @pytest.mark.gui
     def test_status_bar_exists(self, main_window):
         """FR6: Test that status bar is present and functional."""
         status_bar = main_window.statusBar()
@@ -76,6 +82,8 @@ class TestMainWindowConstruction:
 class TestDeviceManagement:
     """Test device management functionality (FR1, FR8)."""
     
+    @pytest.mark.gui
+    @pytest.mark.gui
     def test_device_panel_exists(self, main_window):
         """FR1: Test that device management panel is available."""
         # Check if device panel or related widgets exist
@@ -88,6 +96,7 @@ class TestDeviceManagement:
         assert len(device_widgets) >= 0  # Allow for missing device panel in test environment
     
     @patch('PythonApp.gui.enhanced_ui_main_window.QMessageBox')
+    @pytest.mark.gui
     def test_connect_devices_button(self, mock_msgbox, main_window, qtbot):
         """FR1: Test device connection functionality."""
         # Look for connect/disconnect buttons
@@ -102,6 +111,7 @@ class TestDeviceManagement:
             # Test should not crash - basic functionality test
             assert True
     
+    @pytest.mark.gui
     def test_device_status_indicators(self, main_window):
         """FR6, FR8: Test device status indicators are present."""
         # Look for status-related widgets
@@ -120,6 +130,7 @@ class TestSessionManagement:
     """Test session management functionality (FR4)."""
     
     @patch('PythonApp.gui.enhanced_ui_main_window.QFileDialog.getSaveFileName')
+    @pytest.mark.gui
     def test_session_menu_actions(self, mock_file_dialog, main_window, qtbot):
         """FR4: Test session management menu actions."""
         mock_file_dialog.return_value = ("/tmp/test_session.json", "JSON Files (*.json)")
@@ -146,6 +157,7 @@ class TestSessionManagement:
                 # Test should not crash
                 assert True
     
+    @pytest.mark.gui
     def test_session_status_display(self, main_window):
         """FR4: Test session status is displayed."""
         # Look for session-related labels or displays
@@ -163,6 +175,7 @@ class TestSessionManagement:
 class TestRecordingControls:
     """Test recording controls functionality (FR2, FR5)."""
     
+    @pytest.mark.gui
     def test_recording_buttons_exist(self, main_window):
         """FR2: Test recording control buttons are present."""
         recording_buttons = []
@@ -175,6 +188,7 @@ class TestRecordingControls:
         # Should have recording control buttons
         assert len(recording_buttons) > 0, "No recording control buttons found"
     
+    @pytest.mark.gui
     def test_recording_button_functionality(self, main_window, qtbot):
         """FR2: Test basic recording button functionality."""
         recording_buttons = []
@@ -195,6 +209,7 @@ class TestRecordingControls:
             # Test should not crash and button state may change
             assert True
     
+    @pytest.mark.gui
     def test_playback_controls(self, main_window, qtbot):
         """FR6: Test media playback controls if available."""
         playback_buttons = []
@@ -217,6 +232,7 @@ class TestMenusAndCalibration:
     """Test menu functionality and calibration features (FR9)."""
     
     @patch('PythonApp.gui.enhanced_ui_main_window.QMessageBox.information')
+    @pytest.mark.gui
     def test_help_menu_actions(self, mock_info, main_window, qtbot):
         """FR6: Test help menu actions."""
         menu_bar = main_window.menuBar()
@@ -237,6 +253,7 @@ class TestMenusAndCalibration:
                     assert True
     
     @patch('PythonApp.gui.enhanced_ui_main_window.QMessageBox.information')
+    @pytest.mark.gui
     def test_calibration_menu(self, mock_info, main_window, qtbot):
         """FR9: Test calibration-related menu actions."""
         menu_bar = main_window.menuBar()
@@ -265,6 +282,7 @@ class TestMenusAndCalibration:
 class TestSystemMonitoring:
     """Test system monitoring functionality (FR6, NFR1)."""
     
+    @pytest.mark.gui
     def test_progress_bars_exist(self, main_window):
         """NFR1: Test system monitoring progress bars."""
         progress_bars = main_window.findChildren(QProgressBar)
@@ -272,6 +290,7 @@ class TestSystemMonitoring:
         # Should have monitoring progress bars
         assert len(progress_bars) >= 0  # Allow for flexible implementation
     
+    @pytest.mark.gui
     def test_monitoring_updates(self, main_window, qtbot):
         """NFR1: Test that monitoring elements can be updated."""
         # Find labels that might show monitoring info
@@ -289,6 +308,7 @@ class TestSystemMonitoring:
             assert label.text() == "Test Update"
             label.setText(original_text)  # Restore original text
     
+    @pytest.mark.gui
     def test_timer_functionality(self, main_window, qtbot):
         """NFR1: Test timer-based updates work."""
         # Look for QTimer objects
@@ -310,6 +330,7 @@ class TestErrorHandling:
     """Test error handling and reliability (FR8, NFR3)."""
     
     @patch('PythonApp.gui.enhanced_ui_main_window.QMessageBox.critical')
+    @pytest.mark.gui
     def test_error_dialog_handling(self, mock_critical, main_window):
         """NFR3: Test error handling displays proper dialogs."""
         # Simulate an error condition
@@ -321,6 +342,7 @@ class TestErrorHandling:
             QMessageBox.critical(main_window, "Test Error", "Test error message")
             mock_critical.assert_called()
     
+    @pytest.mark.gui
     def test_window_close_handling(self, main_window, qtbot):
         """NFR3: Test graceful window closing."""
         # Test that window can be closed without errors
@@ -339,6 +361,8 @@ class TestErrorHandling:
     "device_unavailable", 
     "network_error"
 ])
+
+@pytest.mark.gui
 def test_error_scenarios(main_window, test_scenario):
     """NFR3: Test various error scenarios."""
     # This is a placeholder for more specific error scenario testing

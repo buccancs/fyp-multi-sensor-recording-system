@@ -693,7 +693,7 @@ class TestAndroidNetworkLoadStress:
             driver.quit()
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def save_load_test_results(request, android_load_tester):
     """Save load test results after all tests complete."""
     yield
