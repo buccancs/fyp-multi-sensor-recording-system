@@ -1,0 +1,103 @@
+================================================================================
+CONTENT COMPARISON REPORT: Markdown vs LaTeX Files
+================================================================================
+
+Summary:
+  Total file pairs: 16
+  Files with differences: 16
+  Files with errors: 0
+  Files in sync: 0
+
+Similarity distribution:
+  High similarity (>95%): 4
+  Medium similarity (85-95%): 10
+  Low similarity (<85%): 2
+
+⚠️  FILES REQUIRING IMMEDIATE ATTENTION:
+  🔴 2.md ↔ 2.tex: Very low similarity (27.0%)
+  🔴 appendix_f_code_listings.md ↔ appendix_F.tex: Very low similarity (0.2%)
+
+1. 1.md ↔ 1.tex
+   Similarity: 86.47% 🟡
+   Content lengths: MD=13780, LaTeX=13602
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+2. 2.md ↔ 2.tex
+   Similarity: 27.00% 🔴
+   Content lengths: MD=32313, LaTeX=15408
+   📏 Significant length difference: 52.3%
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+3. 3.md ↔ 3.tex
+   Similarity: 88.24% 🟡
+   Content lengths: MD=39459, LaTeX=38385
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+4. 4.md ↔ 4.tex
+   Similarity: 90.35% 🟡
+   Content lengths: MD=45821, LaTeX=46082
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+5. 5.md ↔ 5.tex
+   Similarity: 91.55% 🟡
+   Content lengths: MD=28816, LaTeX=27464
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+6. 6.md ↔ 6.tex
+   Similarity: 89.30% 🟡
+   Content lengths: MD=16357, LaTeX=16871
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+7. appendix_a_system_manual.md ↔ appendix_A.tex
+   Similarity: 98.92% ✅
+   Content lengths: MD=17773, LaTeX=17826
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+8. appendix_b_user_manual.md ↔ appendix_B.tex
+   Similarity: 96.35% ✅
+   Content lengths: MD=22361, LaTeX=22218
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+9. appendix_c_supporting_documentation.md ↔ appendix_C.tex
+   Similarity: 95.38% ✅
+   Content lengths: MD=20456, LaTeX=20670
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+10. appendix_d_test_reports.md ↔ appendix_D.tex
+   Similarity: 87.05% 🟡
+   Content lengths: MD=15146, LaTeX=13483
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+11. appendix_e_evaluation_data.md ↔ appendix_E.tex
+   Similarity: 89.58% 🟡
+   Content lengths: MD=14698, LaTeX=13329
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+12. appendix_f_code_listings.md ↔ appendix_F.tex
+   Similarity: 0.23% 🔴
+   Content lengths: MD=24074, LaTeX=433
+   📏 Significant length difference: 98.2%
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+13. appendix_g_diagnostic_figures.md ↔ appendix_G.tex
+   Similarity: 86.93% 🟡
+   Content lengths: MD=10306, LaTeX=8652
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+14. appendix_h_reference_index.md ↔ appendix_H.tex
+   Similarity: 97.96% ✅
+   Content lengths: MD=9411, LaTeX=9576
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+15. appendix_i_figures_and_diagrams.md ↔ appendix_I.tex
+   Similarity: 90.57% 🟡
+   Content lengths: MD=3538, LaTeX=2930
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+16. appendix_z_consolidated_figures.md ↔ appendix_Z.tex
+   Similarity: 88.90% 🟡
+   Content lengths: MD=22037, LaTeX=22302
+   ⚠️  CONTENT DIFFERENCES DETECTED
+
+
+📄 HTML report generated: /home/runner/work/bucika_gsr/bucika_gsr/docs/thesis_report/final/comparison_report.html
