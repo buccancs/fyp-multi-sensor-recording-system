@@ -1876,7 +1876,7 @@ class RobustErrorHandling:
 
 ## Licence
 
-This project is licenced under the MIT Licence - see the [LICENSE](../LICENSE) file for details.
+This project is licenced under the MIT Licence - see the [LICENCE](../LICENCE) file for details.
 
 ## Acknowledgments
 

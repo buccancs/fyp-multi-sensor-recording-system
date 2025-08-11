@@ -99,12 +99,12 @@ class RecordingControllerDemo {
             println("  $key: $value")
         }
 
-        val optimizations = recordingController.optimizeRecordingSession(context)
-        println("\nSession Optimization Recommendations:")
-        if (optimizations.containsKey("analytics_disabled")) {
+        val optimisations = recordingController.optimizeRecordingSession(context)
+        println("\nSession Optimisation Recommendations:")
+        if (optimisations.containsKey("analytics_disabled")) {
             println("  Analytics is disabled")
         } else {
-            optimizations.forEach { (key, value) ->
+            optimisations.forEach { (key, value) ->
                 println("  $key: $value")
             }
         }

@@ -210,7 +210,7 @@ class RealTimeCalibrationWidget(QWidget):
             self.preview_label = QLabel()
             self.preview_label.setMinimumSize(320, 240)
             self.preview_label.setStyleSheet(
-                "border: 1px solid gray; background-color: black;"
+                "border: 1px solid grey; background-colour: black;"
             )
             self.preview_label.setAlignment(Qt.AlignCenter)
             self.preview_label.setText("No Preview")
@@ -277,7 +277,7 @@ class RealTimeCalibrationWidget(QWidget):
             self.stop_button.setEnabled(True)
             self.capture_button.setEnabled(True)
             self.status_label.setText("Running")
-            self.status_label.setStyleSheet("color: green;")
+            self.status_label.setStyleSheet("colour: green;")
         except Exception as e:
             self.handle_error(self.config.camera_name, str(e))
     def stop_feedback(self):
@@ -287,7 +287,7 @@ class RealTimeCalibrationWidget(QWidget):
         self.stop_button.setEnabled(False)
         self.capture_button.setEnabled(False)
         self.status_label.setText("Stopped")
-        self.status_label.setStyleSheet("color: red;")
+        self.status_label.setStyleSheet("colour: red;")
     def capture_reference(self):
         if self.processor and self.processor.camera:
             ret, frame = self.processor.camera.read()
@@ -303,15 +303,15 @@ class RealTimeCalibrationWidget(QWidget):
         self.quality_value_label.setText(f"{quality_percent}%")
         if feedback.is_acceptable:
             self.quality_progress.setStyleSheet(
-                "QProgressBar::chunk { background-color: green; }"
+                "QProgressBar::chunk { background-colour: green; }"
             )
         elif feedback.quality_score > 0.5:
             self.quality_progress.setStyleSheet(
-                "QProgressBar::chunk { background-color: orange; }"
+                "QProgressBar::chunk { background-colour: orange; }"
             )
         else:
             self.quality_progress.setStyleSheet(
-                "QProgressBar::chunk { background-color: red; }"
+                "QProgressBar::chunk { background-colour: red; }"
             )
         self.sharpness_progress.setValue(int(feedback.sharpness_score * 100))
         self.contrast_progress.setValue(int(feedback.contrast_score * 100))
@@ -340,7 +340,7 @@ class RealTimeCalibrationWidget(QWidget):
     def handle_error(self, camera_name: str, error_message: str):
         if camera_name == self.config.camera_name:
             self.status_label.setText(f"Error: {error_message}")
-            self.status_label.setStyleSheet("color: red;")
+            self.status_label.setStyleSheet("colour: red;")
             self.start_button.setEnabled(True)
             self.stop_button.setEnabled(False)
             self.capture_button.setEnabled(False)

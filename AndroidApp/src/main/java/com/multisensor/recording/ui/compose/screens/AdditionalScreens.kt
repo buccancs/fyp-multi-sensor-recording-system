@@ -32,7 +32,7 @@ fun SettingsScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colours = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -74,7 +74,7 @@ fun SettingsScreen(
                         Text(
                             "Enable automatic data anonymization",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            colour = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Switch(
@@ -97,7 +97,7 @@ fun SettingsScreen(
                         Text(
                             "Start recording when devices connect",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            colour = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Switch(
@@ -201,7 +201,7 @@ fun AboutScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colours = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -236,7 +236,7 @@ fun AboutScreen(
         Text(
             text = "Version 0.1.0-beta (Build: ${aboutViewModel.getBuildDate()})",
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            colour = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -298,7 +298,7 @@ fun AboutScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "A comprehensive multi-sensor recording system for contactless GSR prediction research. " +
-                            "This application enables synchronized recording from multiple sensor modalities including " +
+                            "This application enables synchronised recording from multiple sensor modalities including " +
                             "camera, thermal imaging, and Shimmer devices.",
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -333,7 +333,7 @@ fun AboutScreen(
                             Text(
                                 text = developer.role,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                colour = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -350,17 +350,17 @@ fun AboutScreen(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Third-Party Licenses",
+                    text = "Third-Party Licences",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                uiState.thirdPartyLicenses.take(5).forEach { license ->
+                uiState.thirdPartyLicenses.take(5).forEach { licence ->
                     Text(
-                        text = "• $license",
+                        text = "• $licence",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        colour = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(vertical = 2.dp)
                     )
                 }
@@ -369,7 +369,7 @@ fun AboutScreen(
                     Text(
                         text = "... and ${uiState.thirdPartyLicenses.size - 5} more",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        colour = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(vertical = 2.dp)
                     )
                 }
@@ -381,7 +381,7 @@ fun AboutScreen(
         Text(
             text = uiState.copyrightInfo,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            colour = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -405,7 +405,7 @@ fun DiagnosticsScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colours = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -539,7 +539,7 @@ private fun StatusItem(
             Text(
                 text = status,
                 style = MaterialTheme.typography.bodySmall,
-                color = if (isHealthy) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                colour = if (isHealthy) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
             )
         }
     }
@@ -585,7 +585,7 @@ fun ShimmerSettingsScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colours = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -597,7 +597,7 @@ fun ShimmerSettingsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Centre,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
         Icon(
@@ -615,7 +615,7 @@ fun ShimmerSettingsScreen(
         Text(
             text = "Configure Shimmer devices and connections",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            colour = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -629,7 +629,7 @@ fun ShimmerVisualizationScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Shimmer Visualization") },
+                title = { Text("Shimmer Visualisation") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
@@ -638,7 +638,7 @@ fun ShimmerVisualizationScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colours = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -650,7 +650,7 @@ fun ShimmerVisualizationScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Centre,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
         Icon(
@@ -661,14 +661,14 @@ fun ShimmerVisualizationScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Shimmer Data Visualization",
+            text = "Shimmer Data Visualisation",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold
         )
         Text(
-            text = "Real-time Shimmer sensor data visualization",
+            text = "Real-time Shimmer sensor data visualisation",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            colour = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -688,7 +688,7 @@ private fun InfoRow(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            colour = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
             text = value,

@@ -71,7 +71,7 @@ class MasterClockSynchronizer:
         self.logger.info("MasterClockSynchronizer initialized")
     def start(self) -> bool:
         try:
-            self.logger.info("Starting master clock synchronization system...")
+            self.logger.info("Starting master clock synchronisation system...")
             if not self.ntp_server.start():
                 self.logger.error("Failed to start NTP server")
                 return False
@@ -86,14 +86,14 @@ class MasterClockSynchronizer:
             )
             self.sync_thread.daemon = True
             self.sync_thread.start()
-            self.logger.info("Master clock synchronization system started successfully")
+            self.logger.info("Master clock synchronisation system started successfully")
             return True
         except Exception as e:
-            self.logger.error(f"Failed to start synchronization system: {e}")
+            self.logger.error(f"Failed to start synchronisation system: {e}")
             return False
     def stop(self):
         try:
-            self.logger.info("Stopping master clock synchronization system...")
+            self.logger.info("Stopping master clock synchronisation system...")
             self.is_running = False
             for session_id in list(self.active_sessions.keys()):
                 self.stop_synchronized_recording(session_id)
@@ -102,9 +102,9 @@ class MasterClockSynchronizer:
             if self.sync_thread and self.sync_thread.is_alive():
                 self.sync_thread.join(timeout=5.0)
             self.thread_pool.shutdown(wait=True)
-            self.logger.info("Master clock synchronization system stopped")
+            self.logger.info("Master clock synchronisation system stopped")
         except Exception as e:
-            self.logger.error(f"Error stopping synchronization system: {e}")
+            self.logger.error(f"Error stopping synchronisation system: {e}")
     def get_master_timestamp(self) -> float:
         return time.time()
     def _validate_recording_session(self, session_id: str, target_devices: Optional[List[str]]) -> Tuple[bool, List[str]]:
@@ -187,11 +187,11 @@ class MasterClockSynchronizer:
             )
             self._trigger_sync_callbacks(master_timestamp, session_id, session)
             self.logger.info(
-                f"Synchronized recording started: session {session_id}, timestamp {master_timestamp}, devices: {target_devices}"
+                f"Synchronised recording started: session {session_id}, timestamp {master_timestamp}, devices: {target_devices}"
             )
             return True
         except Exception as e:
-            self.logger.error(f"Error starting synchronized recording: {e}")
+            self.logger.error(f"Error starting synchronised recording: {e}")
             return False
     def stop_synchronized_recording(self, session_id: str) -> bool:
         try:
@@ -220,11 +220,11 @@ class MasterClockSynchronizer:
             session.is_active = False
             duration = master_timestamp - session.start_timestamp
             self.logger.info(
-                f"Synchronized recording stopped: session {session_id}, duration {duration:.1f}s"
+                f"Synchronised recording stopped: session {session_id}, duration {duration:.1f}s"
             )
             return True
         except Exception as e:
-            self.logger.error(f"Error stopping synchronized recording: {e}")
+            self.logger.error(f"Error stopping synchronised recording: {e}")
             return False
     def add_webcam_sync_callback(self, callback: Callable[[float], None]):
         self.webcam_sync_callbacks.append(callback)
@@ -357,7 +357,7 @@ if __name__ == "__main__":
     sync_manager = MasterClockSynchronizer()
     try:
         if sync_manager.start():
-            logger.info("Synchronization system started successfully")
+            logger.info("Synchronisation system started successfully")
             time.sleep(60)
     except KeyboardInterrupt:
         logger.info("Shutting down...")

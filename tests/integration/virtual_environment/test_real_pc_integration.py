@@ -168,7 +168,7 @@ class TestRealPCAppIntegration:
             await pc_server.stop()
 @pytest.mark.skipif(PC_APP_AVAILABLE, reason="Testing import failure path")
 class TestPCAppUnavailable:
-    """Test behavior when PC app components are not available"""
+    """Test behaviour when PC app components are not available"""
     def test_graceful_degradation_without_pc_app(self):
         """Test that virtual environment works without PC app components"""
         data_generator = SyntheticDataGenerator(seed=789)

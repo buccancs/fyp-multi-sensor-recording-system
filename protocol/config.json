@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Shared configuration for synchronized multimodal recording system",
+  "description": "Shared configuration for synchronised multimodal recording system",
   "last_updated": "2025-07-30T01:24:00Z",
   "protocol_version": 1,
   "network": {

@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 MultiSensorTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                        colour = MaterialTheme.colorScheme.background
                     ) {
                         MainNavigation()
                     }

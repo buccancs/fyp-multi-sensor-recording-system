@@ -53,28 +53,28 @@ class CalibrationManager:
     ) -> Tuple[bool, Optional[np.ndarray]]:
         self.logger.debug(f" Detecting {pattern_type} pattern in image")
         if pattern_type == "chessboard":
-            gray = (
+            grey = (
                 cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                 if len(image.shape) == 3
                 else image
             )
-            ret, corners = cv2.findChessboardCorners(gray, self.chessboard_size, None)
+            ret, corners = cv2.findChessboardCorners(grey, self.chessboard_size, None)
             if ret:
                 corners = cv2.cornerSubPix(
-                    gray, corners, (11, 11), (-1, -1), self.criteria
+                    grey, corners, (11, 11), (-1, -1), self.criteria
                 )
                 return True, corners
             else:
                 return False, None
         elif pattern_type == "circles":
-            gray = (
+            grey = (
                 cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                 if len(image.shape) == 3
                 else image
             )
-            ret, centers = cv2.findCirclesGrid(gray, self.chessboard_size, None)
+            ret, centres = cv2.findCirclesGrid(grey, self.chessboard_size, None)
             if ret:
-                return True, centers
+                return True, centres
             else:
                 return False, None
         else:

@@ -277,7 +277,7 @@ jobs:
           --duration 5.0 \
           --verbose
           
-    - name: Analyze performance results
+    - name: Analyse performance results
       run: |
         cd tests/integration/virtual_environment
         if [ -f test_results/*_report.json ]; then

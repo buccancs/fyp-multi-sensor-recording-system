@@ -12,7 +12,7 @@ logger = get_logger(__name__)
 class SessionSyncState(Enum):
     IDLE = "idle"
     SYNCING = "syncing"
-    SYNCHRONIZED = "synchronized"
+    SYNCHRONISED = "synchronised"
     DISCONNECTED = "disconnected"
     RECOVERING = "recovering"
     ERROR = "error"
@@ -70,12 +70,12 @@ class SessionSynchronizer:
         self.is_running = True
         self.sync_thread = threading.Thread(target=self._sync_loop, daemon=True)
         self.sync_thread.start()
-        logger.info("[SessionSynchronizer] Background synchronization started")
+        logger.info("[SessionSynchronizer] Background synchronisation started")
     def stop_synchronization(self):
         self.is_running = False
         if self.sync_thread:
             self.sync_thread.join(timeout=5.0)
-        logger.info("[SessionSynchronizer] Background synchronization stopped")
+        logger.info("[SessionSynchronizer] Background synchronisation stopped")
     def register_device(self, device_id: str):
         with self.sync_lock:
             if device_id not in self.sync_states:
@@ -106,10 +106,10 @@ class SessionSynchronizer:
                 self.session_states[device_id] = session_state
                 if device_id in self.offline_devices:
                     del self.offline_devices[device_id]
-                self.sync_states[device_id] = SessionSyncState.SYNCHRONIZED
+                self.sync_states[device_id] = SessionSyncState.SYNCHRONISED
                 self.sync_successes += 1
                 logger.info(
-                    "[SessionSynchronizer] Session state synchronized for device: %s",
+                    "[SessionSynchronizer] Session state synchronised for device: %s",
                     device_id,
                 )
                 logger.debug("[SessionSynchronizer] State: %s", session_state)
@@ -155,7 +155,7 @@ class SessionSynchronizer:
                 self.sync_states[device_id] = SessionSyncState.RECOVERING
                 last_state = self.session_states.get(device_id)
                 self._deliver_queued_messages(device_id)
-                self.sync_states[device_id] = SessionSyncState.SYNCHRONIZED
+                self.sync_states[device_id] = SessionSyncState.SYNCHRONISED
                 logger.info(
                     "[SessionSynchronizer] Session recovery completed for %s", device_id
                 )

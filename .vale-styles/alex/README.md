@@ -3,7 +3,7 @@ Based on [alex](https://github.com/get-alex/alex).
 > Catch insensitive, inconsiderate writing
 
 ```
-(The MIT License)
+(The MIT Licence)
 
 Copyright (c) 2015 Titus Wormer <tituswormer@gmail.com>
 

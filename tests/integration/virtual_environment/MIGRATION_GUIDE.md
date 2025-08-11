@@ -41,8 +41,8 @@ python -c "from tests.integration.virtual_environment import VirtualTestConfig; 
 | **GSR Data** | Real sensor readings | Synthetic with realistic patterns | ⚠️ **Deterministic simulation** |
 | **Video Data** | Real camera feeds | Procedural RGB generation | ⚠️ **Synthetic content** |
 | **Thermal Data** | Real thermal cameras | Simulated heat patterns | ⚠️ **Pattern-based simulation** |
-| **Network Behavior** | Real network conditions | Configurable latency/delays | ✅ **Controllable conditions** |
-| **Synchronization** | Hardware-dependent timing | Deterministic timing | ✅ **More reliable** |
+| **Network Behaviour** | Real network conditions | Configurable latency/delays | ✅ **Controllable conditions** |
+| **Synchronisation** | Hardware-dependent timing | Deterministic timing | ✅ **More reliable** |
 | **Data Integrity** | Real-world variations | Consistent patterns | ✅ **Reproducible results** |
 | **Setup Time** | 15-30 minutes | 2-5 minutes | ✅ **Faster** |
 | **Reproducibility** | Variable conditions | Identical results | ✅ **Perfect reproducibility** |
@@ -227,7 +227,7 @@ class TestConfigMigration:
             gsr_sampling_rate_hz=physical_config.gsr_sampling_rate,
             rgb_fps=physical_config.camera_fps,
             thermal_fps=physical_config.thermal_fps,
-            # Virtual-specific optimizations
+            # Virtual-specific optimisations
             simulate_file_transfers=True,
             enable_stress_events=True,
             headless_mode=True,
@@ -349,7 +349,7 @@ config = VirtualTestConfig(
 ### Continuous Improvement
 - Collect feedback on virtual vs physical differences
 - Enhance synthetic data patterns based on real-world data
-- Optimize performance based on usage patterns
+- Optimise performance based on usage patterns
 
 ### Migration Success Metrics
 - Reduced test setup time by >80%

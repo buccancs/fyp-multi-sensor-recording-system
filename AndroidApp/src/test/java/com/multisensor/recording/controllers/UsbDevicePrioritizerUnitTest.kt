@@ -116,7 +116,7 @@ class UsbDevicePrioritizerUnitTest {
     }
 
     @Test
-    fun `should optimize device selection for single device`() {
+    fun `should optimise device selection for single device`() {
         val deviceKey1 = "device_001"
         val assessment1 = UsbDevicePrioritizer.DevicePriorityAssessment(
             deviceKey = deviceKey1,
@@ -142,7 +142,7 @@ class UsbDevicePrioritizerUnitTest {
     }
 
     @Test
-    fun `should optimize device selection for multiple devices`() {
+    fun `should optimise device selection for multiple devices`() {
         val assessment1 =
             createMockAssessment("device_001", mockDevice1, 0.92, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
         val assessment2 = createMockAssessment("device_002", mockDevice2, 0.85, UsbDevicePrioritizer.PriorityLevel.HIGH)
@@ -162,7 +162,7 @@ class UsbDevicePrioritizerUnitTest {
         assertTrue("Total quality should be high", metrics.totalQualityScore > 0.8)
         assertTrue("Expected reliability should be high", metrics.expectedReliability > 0.7)
         assertTrue("Resource efficiency should be positive", metrics.resourceEfficiency > 0.0)
-        assertTrue("Optimization confidence should be reasonable", metrics.optimizationConfidence > 0.0)
+        assertTrue("Optimisation confidence should be reasonable", metrics.optimizationConfidence > 0.0)
     }
 
     @Test
@@ -234,7 +234,7 @@ class UsbDevicePrioritizerUnitTest {
     }
 
     @Test
-    fun `should implement diversity optimization in secondary device selection`() {
+    fun `should implement diversity optimisation in secondary device selection`() {
         val assessment1 = createMockAssessment("device_001", mockDevice1, 0.85, UsbDevicePrioritizer.PriorityLevel.HIGH)
         val assessment2 = createMockAssessment("device_002", mockDevice2, 0.84, UsbDevicePrioritizer.PriorityLevel.HIGH)
         val assessment3 = createMockAssessment("device_003", mockDevice1, 0.83, UsbDevicePrioritizer.PriorityLevel.HIGH)
@@ -282,7 +282,7 @@ class UsbDevicePrioritizerUnitTest {
     }
 
     @Test
-    fun `should handle mathematical edge cases in optimization metrics`() {
+    fun `should handle mathematical edge cases in optimisation metrics`() {
         val assessment =
             createMockAssessment("single_device", mockDevice1, 1.0, UsbDevicePrioritizer.PriorityLevel.CRITICAL)
 

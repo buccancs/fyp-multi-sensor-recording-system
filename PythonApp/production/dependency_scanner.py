@@ -260,7 +260,7 @@ class DependencySecurityScanner:
         if severity_counts["high"] > 0:
             recommendations.append(
                 f"⚠️ HIGH: {severity_counts['high']} high-severity vulnerabilities found - "
-                "prioritize updates"
+                "prioritise updates"
             )
         if total_vulns == 0:
             recommendations.append("✅ No known vulnerabilities found in dependencies")

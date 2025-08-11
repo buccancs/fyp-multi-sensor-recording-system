@@ -454,10 +454,10 @@ class ShimmerRecorderManualTest {
     @Test
     fun test09_MultiDeviceSynchronization() =
         runBlocking {
-            println("[DEBUG_LOG] === Test 9: Multi-Device Synchronization ===")
+            println("[DEBUG_LOG] === Test 9: Multi-Device Synchronisation ===")
 
             if (connectedDevices.size < 2) {
-                println("[DEBUG_LOG] Skipping synchronization test - requires at least 2 devices")
+                println("[DEBUG_LOG] Skipping synchronisation test - requires at least 2 devices")
                 return@runBlocking
             }
 
@@ -491,12 +491,12 @@ class ShimmerRecorderManualTest {
                         val timeDifference = Math.abs(timestamp1 - timestamp2)
                         println("[DEBUG_LOG] Timestamp difference between devices: ${timeDifference}ms")
 
-                        assertTrue("Devices should be synchronized within 1 second", timeDifference < 1000)
+                        assertTrue("Devices should be synchronised within 1 second", timeDifference < 1000)
                     }
                 }
             }
 
-            println("[DEBUG_LOG] Test 9 PASSED: Multi-device synchronization validated")
+            println("[DEBUG_LOG] Test 9 PASSED: Multi-device synchronisation validated")
         }
 
     @Test

@@ -120,7 +120,7 @@ class AppLoggerEnhancedTest {
         assertTrue("Timestamp should be reasonable", snapshot.timestamp > 0)
     }
     @Test
-    fun `test specialized logging methods`() {
+    fun `test specialised logging methods`() {
         val tag = "SpecializedTest"
         val context = mapOf("test_phase" to "specialized_logging")
         AppLogger.logLifecycle(tag, "onCreate", "MainActivity", context)
@@ -131,9 +131,9 @@ class AppLoggerEnhancedTest {
         AppLogger.logFile(tag, "save", "failed.mp4", null, 100L, false, context)
         AppLogger.logStateChange(tag, "Camera", "IDLE", "RECORDING", context)
         AppLogger.logThreadInfo(tag, "Test Thread Info")
-        val testError = RuntimeException("Test error for specialized logging")
+        val testError = RuntimeException("Test error for specialised logging")
         AppLogger.logError(tag, "test_operation", testError, context)
-        assertTrue("Specialized logging should complete", true)
+        assertTrue("Specialised logging should complete", true)
     }
     @Test
     fun `test extension functions`() {
@@ -183,7 +183,7 @@ class AppLoggerEnhancedTest {
                         AppLogger.logNetwork(tag, "API call", "test.com", "200", 50L, context)
                     }
                 } catch (e: Exception) {
-                    synchronized(exceptions) {
+                    synchronised(exceptions) {
                         exceptions.add(e)
                     }
                 } finally {

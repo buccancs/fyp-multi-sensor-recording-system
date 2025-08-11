@@ -1,16 +1,16 @@
 # Virtual Test Environment for GSR Recording System
 
-This directory contains a comprehensive virtual test environment that simulates multiple Android devices connecting to the PC controller, generating realistic sensor data streams to test system performance, synchronization, and data handling without requiring physical hardware.
+This directory contains a comprehensive virtual test environment that simulates multiple Android devices connecting to the PC controller, generating realistic sensor data streams to test system performance, synchronisation, and data handling without requiring physical hardware.
 
 ## Overview
 
-The virtual test environment implements socket-based mock Android devices that mimic the behavior of real smartphones running the GSR recording app. It provides:
+The virtual test environment implements socket-based mock Android devices that mimic the behaviour of real smartphones running the GSR recording app. It provides:
 
 - **Multiple Virtual Devices**: Simulate 3-6 (or more) Android devices simultaneously
 - **Realistic Sensor Data**: Generate synthetic GSR, RGB video, and thermal data at proper rates
 - **Complete Protocol Support**: Full implementation of the PC-Android communication protocol
 - **Performance Monitoring**: Track system resource usage and validate performance thresholds
-- **Automated Validation**: Verify data integrity, synchronization accuracy, and throughput
+- **Automated Validation**: Verify data integrity, synchronisation accuracy, and throughput
 - **CI/CD Integration**: Docker support and GitHub Actions workflows for automated testing
 
 ## Architecture
@@ -21,7 +21,7 @@ The virtual test environment implements socket-based mock Android devices that m
    - Simulates an Android device connecting via TCP socket
    - Implements the complete JSON message protocol
    - Handles recording commands, sync signals, and file transfers
-   - Generates realistic response delays and heartbeat behavior
+   - Generates realistic response delays and heartbeat behaviour
 
 2. **SyntheticDataGenerator** (`synthetic_data_generator.py`)
    - Generates realistic sensor data streams:
@@ -111,12 +111,12 @@ python -c "from tests.integration.virtual_environment import VirtualTestConfig; 
 - **Data**: Full sensor suite (GSR 128Hz, RGB 30fps, Thermal 9fps)
 - **Use Case**: Performance validation, load testing
 
-#### Synchronization Test
+#### Synchronisation Test
 - **Purpose**: Validate multi-device timing accuracy
 - **Duration**: 10 minutes  
 - **Devices**: 5
 - **Data**: Clean GSR data for timing analysis
-- **Use Case**: Synchronization algorithm validation
+- **Use Case**: Synchronisation algorithm validation
 
 #### CI Test
 - **Purpose**: Conservative test for CI pipelines
@@ -142,7 +142,7 @@ The test environment supports configuration via environment variables:
 export GSR_TEST_DEVICE_COUNT=5          # Number of virtual devices
 export GSR_TEST_DURATION_MINUTES=10.0   # Test duration
 export GSR_TEST_SERVER_PORT=9000        # PC server port
-export GSR_TEST_CI_MODE=true            # Enable CI optimizations
+export GSR_TEST_CI_MODE=true            # Enable CI optimisations
 export GSR_TEST_OUTPUT_DIR=/tmp/results # Output directory
 export GSR_TEST_LOG_LEVEL=INFO          # Logging level
 export GSR_TEST_HEADLESS=true           # Disable GUI components
@@ -202,7 +202,7 @@ python test_runner.py --config custom_config.json
 The test environment continuously monitors:
 
 - **Memory Usage**: RSS, VMS, and available memory
-- **CPU Usage**: Process and system CPU utilization
+- **CPU Usage**: Process and system CPU utilisation
 - **Network Throughput**: Data transfer rates and message counts
 - **File Descriptors**: Open file count monitoring
 - **Thread Count**: Active thread monitoring
@@ -223,7 +223,7 @@ Default thresholds (configurable):
 - Validates file transfer completeness
 - Checks for data corruption or loss
 
-### Synchronization Validation  
+### Synchronisation Validation  
 - Measures timing accuracy between devices
 - Validates sync signal response times
 - Checks for clock drift and jitter
@@ -466,7 +466,7 @@ These benchmarks help validate system performance and detect regressions.
 
 Planned improvements:
 
-- **Real-time visualization dashboard** for test monitoring
+- **Real-time visualisation dashboard** for test monitoring
 - **Automated performance regression detection**
 - **Integration with external monitoring tools** (Prometheus, Grafana)
 - **Support for additional sensor types** (EEG, ECG)
@@ -505,7 +505,7 @@ Planned improvements:
 ### ✅ **Pytest Integration Fixed**
 - All async tests run without hanging issues
 - Proper cleanup and error handling implemented
-- Custom pytest markers for test organization
+- Custom pytest markers for test organisation
 - Deterministic data generation for reproducible results
 
 ### ✅ **Real PC App Integration**
@@ -524,7 +524,7 @@ Planned improvements:
 - Automated setup scripts for all platforms (Linux, macOS, Windows)
 - VS Code integration with launch configurations and debugging profiles
 - Comprehensive troubleshooting guide with 30+ solutions
-- Cross-platform compatibility with platform-specific optimizations
+- Cross-platform compatibility with platform-specific optimisations
 
 ### ✅ **Production-Ready Infrastructure**
 - Docker support with multi-stage builds and health checks

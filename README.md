@@ -4,7 +4,7 @@
 [![Performance Tests](https://github.com/buccancs/bucika_gsr/workflows/Performance%20Monitoring/badge.svg)](https://github.com/buccancs/bucika_gsr/actions/workflows/performance-monitoring.yml)
 [![Code Quality](https://github.com/buccancs/bucika_gsr/workflows/Enhanced%20Code%20Quality/badge.svg)](https://github.com/buccancs/bucika_gsr/actions/workflows/enhanced_code_quality.yml)
 
-A comprehensive research platform for contactless Galvanic Skin Response (GSR) prediction using multi-sensor data fusion, featuring synchronized Android mobile applications and PC-based data recording with real-time analysis capabilities.
+A comprehensive research platform for contactless Galvanic Skin Response (GSR) prediction using multi-sensor data fusion, featuring synchronised Android mobile applications and PC-based data recording with real-time analysis capabilities.
 
 ## 🚀 Quick Start (30 seconds)
 
@@ -34,13 +34,13 @@ pytest tests/integration/virtual_environment/test_pytest_integration.py -v
 
 ## 📱 System Overview
 
-This research platform enables contactless GSR prediction through synchronized multi-sensor data collection:
+This research platform enables contactless GSR prediction through synchronised multi-sensor data collection:
 
 - **📱 Android Mobile Application**: Real-time RGB video and thermal imaging capture
-- **🖥️ PC Controller Application**: Centralized data recording and synchronization
+- **🖥️ PC Controller Application**: Centralized data recording and synchronisation
 - **📊 Shimmer GSR Sensors**: Ground truth physiological measurements
 - **🧪 Virtual Test Environment**: Complete system simulation without hardware
-- **⚡ Real-time Processing**: Live data analysis and visualization
+- **⚡ Real-time Processing**: Live data analysis and visualisation
 
 ## ✨ Key Features
 
@@ -51,9 +51,9 @@ This research platform enables contactless GSR prediction through synchronized m
 - **No Physical Dependencies**: Test entire system without hardware
 
 ### 📊 Multi-Sensor Data Fusion
-- **Synchronized Recording**: Precise timestamp alignment across all sensors
+- **Synchronised Recording**: Precise timestamp alignment across all sensors
 - **Multiple Data Streams**: GSR, RGB video, thermal imaging, device metadata
-- **Real-time Visualization**: Live data monitoring and analysis
+- **Real-time Visualisation**: Live data monitoring and analysis
 - **Data Export**: CSV, JSON, and binary formats for research analysis
 
 ### 🌐 Network Communication
@@ -138,7 +138,7 @@ For actual data collection with physical devices:
 | `quick`  | 1 min    | 2       | Fast validation |
 | `ci`     | 3 min    | 3       | Continuous integration |
 | `stress` | 30 min   | 6       | Performance testing |
-| `sync`   | 5 min    | 4       | Synchronization validation |
+| `sync`   | 5 min    | 4       | Synchronisation validation |
 
 ### GitHub Actions Integration
 
@@ -175,7 +175,7 @@ python test_performance_benchmarks.py --profile
 - **Data Throughput**: 128 GSR samples/sec, 30 RGB frames/sec, 9 thermal frames/sec
 - **Memory Usage**: <200MB for 3-device tests, <500MB for stress tests
 - **CPU Usage**: <50% average, <80% peak during multi-device operation
-- **Synchronization**: <10ms timing accuracy between devices
+- **Synchronisation**: <10ms timing accuracy between devices
 
 ### Test Coverage
 - **✅ Protocol Validation**: Complete JSON message exchange testing
@@ -351,9 +351,9 @@ pytest tests/integration/virtual_environment/ -v
 python tests/integration/virtual_environment/test_performance_benchmarks.py
 ```
 
-## 📄 License
+## 📄 Licence
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT Licence - see the [LICENCE](LICENCE) file for details.
 
 ## 🙏 Acknowledgments
 

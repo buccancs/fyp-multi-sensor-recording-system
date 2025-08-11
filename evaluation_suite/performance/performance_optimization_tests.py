@@ -16,11 +16,11 @@ class PerformanceOptimizationTestSuite(TestSuite):
         super().__init__(
             name="performance_optimization",
             category="PERFORMANCE",
-            description="Performance optimization and endurance testing capabilities"
+            description="Performance optimisation and endurance testing capabilities"
         )
         self.logger = logging.getLogger(__name__)
     async def run_all_tests(self) -> List[TestResult]:
-        """Run all performance optimization tests"""
+        """Run all performance optimisation tests"""
         results = []
         test_methods = [
             ("test_graceful_degradation", "Graceful degradation mechanisms"),
@@ -414,7 +414,7 @@ if __name__ == "__main__":
     async def run_tests():
         suite = PerformanceOptimizationTestSuite()
         results = await suite.run_all_tests()
-        print(f"\nPerformance Optimization Test Results:")
+        print(f"\nPerformance Optimisation Test Results:")
         print(f"Tests run: {len(results)}")
         passed = sum(1 for r in results if r.success)
         print(f"Passed: {passed}/{len(results)} ({passed/len(results)*100:.1f}%)")

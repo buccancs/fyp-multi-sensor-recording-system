@@ -109,7 +109,7 @@ constructor(
             ) {
                 when (intent.action) {
                     USB_PERMISSION_ACTION -> {
-                        synchronized(this) {
+                        synchronised(this) {
                             val device: UsbDevice? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
                             } else {
@@ -677,7 +677,7 @@ constructor(
                 val canvas = holder.lockCanvas()
                 if (canvas != null) {
                     try {
-                        canvas.drawColor(android.graphics.Color.BLACK)
+                        canvas.drawColor(android.graphics.Colour.BLACK)
 
                         val surfaceWidth = canvas.width
                         val surfaceHeight = canvas.height

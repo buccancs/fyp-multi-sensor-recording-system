@@ -49,14 +49,14 @@ class StimulusControlPanel(QGroupBox):
         self.start_recording_play_btn = QPushButton("Start Recording and Play")
         self.start_recording_play_btn.setEnabled(False)
         self.start_recording_play_btn.setStyleSheet(
-            "QPushButton { background-color: #4CAF50; color: white; font-weight: bold; }"
+            "QPushButton { background-colour: #4CAF50; colour: white; font-weight: bold; }"
         )
         self.start_recording_play_btn.clicked.connect(self.handle_start_recording_play)
         stim_layout.addWidget(self.start_recording_play_btn)
         self.mark_event_btn = QPushButton("Mark Event")
         self.mark_event_btn.setEnabled(False)
         self.mark_event_btn.setStyleSheet(
-            "QPushButton { background-color: #FF9800; color: white; font-weight: bold; }"
+            "QPushButton { background-colour: #FF9800; colour: white; font-weight: bold; }"
         )
         self.mark_event_btn.clicked.connect(self.handle_mark_event)
         stim_layout.addWidget(self.mark_event_btn)
@@ -115,7 +115,7 @@ class StimulusControlPanel(QGroupBox):
         self.start_recording_play_requested.emit()
         if self.parent_window and hasattr(self.parent_window, "statusBar"):
             self.parent_window.statusBar().showMessage(
-                "Starting synchronized recording and stimulus playback..."
+                "Starting synchronised recording and stimulus playback..."
             )
     def handle_mark_event(self):
         self.mark_event_requested.emit()

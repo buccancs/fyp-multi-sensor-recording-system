@@ -209,7 +209,7 @@ class UsbPerformanceAnalytics {
             append("Quality Interpretation:\n")
             when {
                 quality.overallQuality >= 0.9 -> append("🟢 EXCELLENT - System performing optimally")
-                quality.overallQuality >= 0.75 -> append("🟡 GOOD - Minor optimization possible")
+                quality.overallQuality >= 0.75 -> append("🟡 GOOD - Minor optimisation possible")
                 quality.overallQuality >= 0.5 -> append("🟠 FAIR - Performance issues detected")
                 else -> append("🔴 POOR - Immediate attention required")
             }
@@ -317,7 +317,7 @@ class UsbPerformanceAnalytics {
 
         val avgResponseTime = qualityMetrics.values.map { it.averageResponseTime }.average()
         if (avgResponseTime > RESPONSE_TIME_THRESHOLD_MS * 2) {
-            recommendations.add("High response times detected - consider system optimization")
+            recommendations.add("High response times detected - consider system optimisation")
         }
 
         if (recommendations.isEmpty()) {
@@ -336,7 +336,7 @@ class UsbPerformanceAnalytics {
 
     private fun getActionRecommendations(action: QualityAction): String = when (action) {
         QualityAction.MONITOR -> "• Increase monitoring frequency\n• Watch for performance trends"
-        QualityAction.OPTIMIZE_SCANNING -> "• Reduce scanning interval\n• Optimize resource usage"
+        QualityAction.OPTIMIZE_SCANNING -> "• Reduce scanning interval\n• Optimise resource usage"
         QualityAction.CHECK_CONNECTIONS -> "• Verify physical USB connections\n• Check cable integrity"
         QualityAction.RESTART_REQUIRED -> "• Restart application\n• Consider device reconnection"
         else -> "• System is operating optimally"

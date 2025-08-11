@@ -105,7 +105,7 @@ class EdgeCaseStressTest {
         verify { mockLogger.info("Reducing sampling rate to manage memory", null) }
     }
     @Test
-    fun `should handle timestamp synchronization issues`() = runTest {
+    fun `should handle timestamp synchronisation issues`() = runTest {
         val timestampDrift = 5000L
         mockLogger.warning("Timestamp drift detected: ${timestampDrift}ms", null)
         mockLogger.info("Resynchronizing timestamps", null)

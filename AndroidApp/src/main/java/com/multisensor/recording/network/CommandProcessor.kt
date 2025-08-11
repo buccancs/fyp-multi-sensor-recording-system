@@ -427,7 +427,7 @@ constructor(
         durationMs: Long,
     ) {
         try {
-            val syncDir = File(context.getExternalFilesDir(null), "synchronization")
+            val syncDir = File(context.getExternalFilesDir(null), "synchronisation")
             syncDir.mkdirs()
 
             val syncFile = File(syncDir, "flash_sync_${syncId}_${System.currentTimeMillis()}.txt")
@@ -453,7 +453,7 @@ constructor(
         volume: Float,
     ) {
         try {
-            val syncDir = File(context.getExternalFilesDir(null), "synchronization")
+            val syncDir = File(context.getExternalFilesDir(null), "synchronisation")
             syncDir.mkdirs()
 
             val syncFile = File(syncDir, "beep_sync_${syncId}_${System.currentTimeMillis()}.txt")
@@ -533,7 +533,7 @@ constructor(
 
     private fun createSynchronizationMarker(stimulusTime: Long) {
         try {
-            val syncDir = File(context.getExternalFilesDir(null), "synchronization")
+            val syncDir = File(context.getExternalFilesDir(null), "synchronisation")
             syncDir.mkdirs()
 
             val syncFile = File(syncDir, "stimulus_sync_${System.currentTimeMillis()}.txt")
@@ -545,9 +545,9 @@ constructor(
                         "recording_active=$isRecording\n",
             )
 
-            logger.debug("Created synchronization marker: ${syncFile.absolutePath}")
+            logger.debug("Created synchronisation marker: ${syncFile.absolutePath}")
         } catch (e: Exception) {
-            logger.error("Failed to create synchronization marker", e)
+            logger.error("Failed to create synchronisation marker", e)
         }
     }
 
@@ -636,7 +636,7 @@ constructor(
                 jsonSocketClient?.sendAck("sync_time", true, resultMessage)
                 logger.info("[DEBUG_LOG] $resultMessage")
             } else {
-                val errorMessage = "Clock synchronization failed - invalid PC timestamp or sync error"
+                val errorMessage = "Clock synchronisation failed - invalid PC timestamp or sync error"
                 jsonSocketClient?.sendAck("sync_time", false, "Clock sync failed: $errorMessage")
                 logger.error("Clock sync failed: $errorMessage")
             }

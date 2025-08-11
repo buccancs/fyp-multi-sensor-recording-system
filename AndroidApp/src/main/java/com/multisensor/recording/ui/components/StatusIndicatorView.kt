@@ -36,13 +36,13 @@ class StatusIndicatorView @JvmOverloads constructor(
             ).apply {
                 marginEnd = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 6
             }
-            setBackgroundColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
+            setBackgroundColor(ContextCompat.getColor(context, android.R.colour.holo_red_light))
         }
 
         statusText = TextView(context).apply {
             layoutParams = LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f)
             text = "Status: Disconnected"
-            setTextColor(ContextCompat.getColor(context, android.R.color.white))
+            setTextColor(ContextCompat.getColor(context, android.R.colour.white))
             textSize = 14f
         }
 
@@ -54,12 +54,12 @@ class StatusIndicatorView @JvmOverloads constructor(
         statusText.text = text
 
         val colorRes = when (status) {
-            StatusType.CONNECTED -> android.R.color.holo_green_light
-            StatusType.DISCONNECTED -> android.R.color.holo_red_light
-            StatusType.RECORDING -> android.R.color.holo_green_dark
-            StatusType.STOPPED -> android.R.color.darker_gray
-            StatusType.WARNING -> android.R.color.holo_orange_light
-            StatusType.ERROR -> android.R.color.holo_red_dark
+            StatusType.CONNECTED -> android.R.colour.holo_green_light
+            StatusType.DISCONNECTED -> android.R.colour.holo_red_light
+            StatusType.RECORDING -> android.R.colour.holo_green_dark
+            StatusType.STOPPED -> android.R.colour.darker_gray
+            StatusType.WARNING -> android.R.colour.holo_orange_light
+            StatusType.ERROR -> android.R.colour.holo_red_dark
         }
 
         indicatorView.setBackgroundColor(ContextCompat.getColor(context, colorRes))

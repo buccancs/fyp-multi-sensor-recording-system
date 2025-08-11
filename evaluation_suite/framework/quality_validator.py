@@ -116,7 +116,7 @@ class QualityValidator:
             ),
             ValidationRule(
                 name="sync_precision",
-                description="Synchronization precision must be <1ms",
+                description="Synchronisation precision must be <1ms",
                 threshold=1.0,
                 comparison="lte",
                 weight=2.0,
@@ -361,7 +361,7 @@ class QualityValidator:
         ]
         if performance_issues:
             recommendations.append(
-                "Consider performance optimization for CPU/memory usage and network latency"
+                "Consider performance optimisation for CPU/memory usage and network latency"
             )
         coverage_issues = [
             issue for issue in validation_report.quality_issues

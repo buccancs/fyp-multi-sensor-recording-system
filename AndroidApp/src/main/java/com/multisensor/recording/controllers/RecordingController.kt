@@ -1302,11 +1302,11 @@ class RecordingController @Inject constructor() {
     }
 
     fun optimizeRecordingSession(context: Context): Map<String, Any> {
-        val optimizations = mutableMapOf<String, Any>()
+        val optimisations = mutableMapOf<String, Any>()
 
         if (!isAnalyticsEnabled) {
-            optimizations["analytics_disabled"] = true
-            return optimizations
+            optimisations["analytics_disabled"] = true
+            return optimisations
         }
 
         val trendAnalysis = analytics.performTrendAnalysis()
@@ -1314,20 +1314,20 @@ class RecordingController @Inject constructor() {
         val currentMetrics = getCurrentPerformanceMetrics()
 
         if (resourceStats.meanMemoryUsage > 512) {
-            optimizations["memory_optimization"] = "Consider reducing quality or closing background apps"
+            optimisations["memory_optimization"] = "Consider reducing quality or closing background apps"
         }
 
         if (resourceStats.meanCpuUsage > 70) {
-            optimizations["cpu_optimization"] = "High CPU usage detected - consider lowering frame rate"
+            optimisations["cpu_optimization"] = "High CPU usage detected - consider lowering frame rate"
         }
 
         if (resourceStats.storageEfficiency < 0.8f) {
-            optimizations["storage_optimization"] = "Storage write efficiency low - check available space"
+            optimisations["storage_optimization"] = "Storage write efficiency low - check available space"
         }
 
         val (recommendedQuality, reasoning) = getIntelligentQualityRecommendation(context)
         if (recommendedQuality != currentQuality) {
-            optimizations["quality_optimization"] = mapOf(
+            optimisations["quality_optimization"] = mapOf(
                 "current_quality" to currentQuality.displayName,
                 "recommended_quality" to recommendedQuality.displayName,
                 "reasoning" to reasoning
@@ -1335,12 +1335,12 @@ class RecordingController @Inject constructor() {
         }
 
         if (trendAnalysis.performanceTrend == RecordingAnalytics.Trend.DEGRADING) {
-            optimizations["performance_trend_warning"] = "Performance degrading - consider session restart"
+            optimisations["performance_trend_warning"] = "Performance degrading - consider session restart"
         }
 
-        optimizations["optimization_timestamp"] = System.currentTimeMillis()
-        optimizations["optimization_confidence"] = trendAnalysis.trendStrength
+        optimisations["optimization_timestamp"] = System.currentTimeMillis()
+        optimisations["optimization_confidence"] = trendAnalysis.trendStrength
 
-        return optimizations
+        return optimisations
     }
 }

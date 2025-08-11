@@ -100,7 +100,7 @@ class StimulusWindow(QMainWindow):
         font = QFont()
         font.setPointSize(self.config.font_size)
         label.setFont(font)
-        label.setStyleSheet("color: white;")
+        label.setStyleSheet("colour: white;")
         layout.addWidget(label)
     def setup_pattern_content(self, layout):
         label = QLabel("● TEST PATTERN ●")
@@ -109,7 +109,7 @@ class StimulusWindow(QMainWindow):
         font.setPointSize(72)
         font.setBold(True)
         label.setFont(font)
-        label.setStyleSheet("color: white;")
+        label.setStyleSheet("colour: white;")
         layout.addWidget(label)
     def start_presentation(self):
         if self.media_player and self.config.stimulus_type == "video":
@@ -245,7 +245,7 @@ class StimulusManager:
         try:
             if not configs:
                 return False
-            self.logger.info(f"Presenting {len(configs)} synchronized stimuli")
+            self.logger.info(f"Presenting {len(configs)} synchronised stimuli")
             windows = []
             for config in configs:
                 if config.monitor_id >= len(self.available_monitors):
@@ -276,7 +276,7 @@ class StimulusManager:
                 timer.start(max_duration)
             return True
         except Exception as e:
-            self.logger.error(f"Error presenting synchronized stimuli: {e}")
+            self.logger.error(f"Error presenting synchronised stimuli: {e}")
             return False
     def add_event_callback(self, callback: Callable[[StimulusEvent], None]) -> None:
         self.event_callbacks.append(callback)

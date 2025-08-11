@@ -178,7 +178,7 @@ class VLCVideoWidget(QWidget):
     error_occurred = pyqtSignal(str)
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet("background-color: black;")
+        self.setStyleSheet("background-colour: black;")
         if not VLC_AVAILABLE:
             self.vlc_instance = None
             self.media_player = None
@@ -275,7 +275,7 @@ class EnhancedStimulusController(QWidget):
         self.status_label.setAlignment(Qt.AlignCenter)
         info_layout.addWidget(self.status_label)
         self.backend_label = QLabel("Backend: None")
-        self.backend_label.setStyleSheet("QLabel { color: #666; font-size: 10px; }")
+        self.backend_label.setStyleSheet("QLabel { colour: #666; font-size: 10px; }")
         info_layout.addWidget(self.backend_label)
         layout.addLayout(info_layout)
         self.performance_bar = QProgressBar()

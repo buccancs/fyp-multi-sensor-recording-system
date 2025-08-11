@@ -118,7 +118,7 @@ class MemoryOptimizer:
             "cleanup_callbacks_run": len(self.cleanup_callbacks),
         }
         self.logger.info(
-            f"Memory optimization completed: freed {optimization_result['memory_freed_mb']:.2f}MB"
+            f"Memory optimisation completed: freed {optimization_result['memory_freed_mb']:.2f}MB"
         )
         return optimization_result
     def register_cleanup_callback(self, callback: Callable[[], None]):
@@ -157,7 +157,7 @@ class CPUOptimizer:
         )
         self.thread_pools[name] = pool
         self.logger.info(
-            f"Created optimized thread pool '{name}' with {max_workers} workers"
+            f"Created optimised thread pool '{name}' with {max_workers} workers"
         )
         return pool
     def get_cpu_metrics(self) -> Dict[str, Any]:
@@ -173,7 +173,7 @@ class CPUOptimizer:
         }
     def optimize_cpu_usage(self) -> Dict[str, Any]:
         initial_metrics = self.get_cpu_metrics()
-        optimizations = []
+        optimisations = []
         for name, pool in self.thread_pools.items():
             if hasattr(pool, "_max_workers"):
                 current_workers = pool._max_workers
@@ -181,7 +181,7 @@ class CPUOptimizer:
                     initial_metrics["overall_percent"]
                 )
                 if optimal_workers != current_workers:
-                    optimizations.append(
+                    optimisations.append(
                         {
                             "pool": name,
                             "current_workers": current_workers,
@@ -192,14 +192,14 @@ class CPUOptimizer:
         if initial_metrics["overall_percent"] > 80:
             try:
                 current_process.nice(1)
-                optimizations.append({"action": "lowered_process_priority"})
+                optimisations.append({"action": "lowered_process_priority"})
             except:
                 pass
         final_metrics = self.get_cpu_metrics()
         return {
             "initial_cpu_percent": initial_metrics["overall_percent"],
             "final_cpu_percent": final_metrics["overall_percent"],
-            "optimizations": optimizations,
+            "optimisations": optimisations,
         }
     def _calculate_optimal_workers(self, cpu_percent: float) -> int:
         base_workers = psutil.cpu_count(logical=False)
@@ -333,7 +333,7 @@ class GracefulDegradationManager:
         else:
             if self.degradation_state["frame_dropping_enabled"]:
                 self.degradation_state["frame_dropping_enabled"] = False
-                self.logger.info("Frame dropping disabled - system load normalized")
+                self.logger.info("Frame dropping disabled - system load normalised")
                 self._trigger_callbacks("frame_drop", False)
         self.total_frames += 1
         return should_drop
@@ -348,7 +348,7 @@ class GracefulDegradationManager:
             self._trigger_callbacks("quality_reduce", True)
         elif not should_reduce and self.degradation_state["quality_reduced"]:
             self.degradation_state["quality_reduced"] = False
-            self.logger.info("Restoring quality - system load normalized")
+            self.logger.info("Restoring quality - system load normalised")
             self._trigger_callbacks("quality_reduce", False)
         return should_reduce
     def should_disable_preview(self, cpu_percent: float, memory_percent: float) -> bool:
@@ -362,7 +362,7 @@ class GracefulDegradationManager:
             self._trigger_callbacks("preview_disable", True)
         elif not should_disable and self.degradation_state["preview_disabled"]:
             self.degradation_state["preview_disabled"] = False
-            self.logger.info("Re-enabling preview - system load normalized")
+            self.logger.info("Re-enabling preview - system load normalised")
             self._trigger_callbacks("preview_disable", False)
         return should_disable
     def _trigger_callbacks(self, event_type: str, enabled: bool):
@@ -607,7 +607,7 @@ class ProfilingIntegrationManager:
                 )
             elif per_call > 0.01:
                 recommendations.append(
-                    f"Optimize {func_name} - high per-call time ({per_call:.4f}s per call)"
+                    f"Optimise {func_name} - high per-call time ({per_call:.4f}s per call)"
                 )
             elif hotspot["call_count"] > 10000:
                 recommendations.append(
@@ -727,10 +727,10 @@ class PerformanceMonitor:
         self.logger.warning(f"Performance violation detected: {violation_type}")
         if violation_type == "memory" and self.config.enable_memory_optimization:
             result = self.memory_optimizer.optimize_memory_usage()
-            self.logger.info(f"Memory optimization result: {result}")
+            self.logger.info(f"Memory optimisation result: {result}")
         elif violation_type == "cpu" and self.config.enable_cpu_optimization:
             result = self.cpu_optimizer.optimize_cpu_usage()
-            self.logger.info(f"CPU optimization result: {result}")
+            self.logger.info(f"CPU optimisation result: {result}")
         for callback in self.alert_callbacks:
             try:
                 callback(violation_type, metrics)
@@ -792,7 +792,7 @@ class PerformanceMonitor:
             )
         if avg_cpu > self.config.max_cpu_percent * 0.7:
             recommendations.append(
-                "Consider reducing processing frequency or optimizing algorithms"
+                "Consider reducing processing frequency or optimising algorithms"
             )
         if len(recent_metrics) > 5:
             memory_trend = recent_metrics[-1].memory_mb - recent_metrics[-5].memory_mb
@@ -915,9 +915,9 @@ if __name__ == "__main__":
                             f"CPU: {current.get('cpu_percent', 0):.1f}%, Memory: {current.get('memory_mb', 0):.1f}MB"
                         )
                         if current.get("memory_mb", 0) > 500:
-                            print("Triggering optimization...")
+                            print("Triggering optimisation...")
                             result = manager.optimize_now()
-                            print(f"Optimization result: {result}")
+                            print(f"Optimisation result: {result}")
     except KeyboardInterrupt:
         print("\nShutting down performance manager...")
     finally:

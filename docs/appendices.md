@@ -36,7 +36,7 @@ The modular documentation approach enables efficient navigation while maintainin
 [2] Neural Sense, "Galvanic Skin Response Technology," 2024. [Online]. Available: https://www.neuralsense.com/tech
 [3] A. Jangra, S. Dwivedi, S. Sriram, and S. Krishnamurthy, "Galvanic skin response in psychology, physiology, and free-will in humans: A systematic review," *Int. J. Psychology*, PMC, 2021.
 [4] S. Chen, L. Williams, and R. Martinez, "Neural mechanisms of stress susceptibility and resilience," *Scientific Reports*, vol. 9, article 41172, 2019.
-[5] Y. Zhang, A. Kumar, and M. Thompson, "Human Stress Recognition from Facial Thermal Images," *Computer Modeling in Engineering and Sciences*, vol. 130, no. 2, pp. 889-912, Tech Science Press, 2021.
+[5] Y. Zhang, A. Kumar, and M. Thompson, "Human Stress Recognition from Facial Thermal Images," *Computer Modelling in Engineering and Sciences*, vol. 130, no. 2, pp. 889-912, Tech Science Press, 2021.
 [6] RTI International, "Using Thermal Imaging to Measure Mental Effort: The Nose Knows," 2024. [Online]. Available: https://www.rti.org/rti-press-publication/using-thermal-imaging-measure-mental-effort-nose-know
 [7] M. Patel, K. Johnson, and D. Lee, "Electrodermal Activity and Physiological Responses: A Comprehensive Review," *Journal of Biomedical Engineering*, vol. 45, no. 3, pp. 245-267, 2024.
 [8] Shimmer Sensing, "Shimmer3 GSR+ Unit Specifications," 2024. [Online]. Available: https://www.shimmersensing.com/product/shimmer3-gsr-unit/

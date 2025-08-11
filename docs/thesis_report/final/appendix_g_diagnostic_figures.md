@@ -6,7 +6,7 @@ This appendix provides detailed diagnostic analysis and performance interpretati
 
 ## G.1 Device Discovery and Connection Reliability Analysis
 
-Diagnostic Data Reference: See Figure G.1 in Appendix Z, Section Z.4.1 for device discovery pattern visualization.
+Diagnostic Data Reference: See Figure G.1 in Appendix Z, Section Z.4.1 for device discovery pattern visualisation.
 
 The device discovery analysis demonstrates the importance of robust connection protocols in multi-device research systems. Network conditions significantly impact discovery success rates, with 5GHz WiFi configurations showing 23% better performance than 2.4GHz networks [19,21]. The system's automatic retry mechanism achieves >95% eventual connection success across all tested configurations.
 

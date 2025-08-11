@@ -167,7 +167,7 @@ jobs:
           
       - name: Run Gradle dependency analysis
         run: |
-          echo "🔍 Analyzing Gradle dependencies..."
+          echo "🔍 Analysing Gradle dependencies..."
           cd AndroidApp
           ./gradlew dependencies --configuration releaseRuntimeClasspath > gradle-dependencies.txt
           
@@ -219,7 +219,7 @@ jobs:
           
           ## 📱 Android Dependency Status
           
-          - **Gradle Dependencies**: Analyzed for updates
+          - **Gradle Dependencies**: Analysed for updates
           - **Build Tools**: Validated and checked
           - **Status**: ${{ needs.android-dependency-health.result }}
           

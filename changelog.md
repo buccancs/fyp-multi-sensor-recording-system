@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added tests `tests/docs/test_references_tex.py` to ensure presence and inclusion
   - TODO: Migrate to BibTeX (`references.bib`) and map chapter citations; tracked in `backlog.md`
 
-- **LaTeX Chapter 2 Location Normalization (2025-08-11)**
+- **LaTeX Chapter 2 Location Normalisation (2025-08-11)**
   - Created include-ready `docs/thesis_report/final/2.tex` to align with chapters 1, 3, 4, 6
   - Added unit test `tests/docs/test_chapter2_tex.py` to verify presence and structure
   - TODO: Reconcile duplication with `docs/thesis_report/final/latex/chapter2.tex` and standardize chapter locations
@@ -51,8 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Note: Requires textcomp or siunitx packages in master preamble for \textmu and \texttimes
   - No code logic changes; documentation only
 
-- **LaTeX Chapter 5 Normalization (2025-08-11)**
-  - Normalized `docs/thesis_report/final/latex/chapter5.tex` and integrated figure inputs (`chapter5_sync_accuracy`, `chapter5_scalability`, `chapter5_extended_operation`, `chapter5_correlation`)
+- **LaTeX Chapter 5 Normalisation (2025-08-11)**
+  - Normalised `docs/thesis_report/final/latex/chapter5.tex` and integrated figure inputs (`chapter5_sync_accuracy`, `chapter5_scalability`, `chapter5_extended_operation`, `chapter5_correlation`)
   - Included TikZ/PGFPlots packages in `docs/thesis_report/final/latex/main.tex` for Chapter 5 figures
   - Fixed malformed figure environment in `latex/figures/chapter5_extended_operation.tex`
   - Added Mermaid diagram `docs/diagrams/mermaid_chapter5_conversion.md`
@@ -60,7 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **LaTeX Chapter 2 Conversion (2025-08-11)**
   - Converted `docs/thesis_report/final/2.md` to LaTeX at `docs/thesis_report/final/latex/chapter2.tex`
-  - Replaced available bracketed references with `\citep{...}` using existing BibTeX keys; added TODOs for missing keys (Chen2019, Patel2024, Zhang2021, RFC793, pandas, h5py)
+  - Replaced available bracketed references with `\cite{...}` using existing BibTeX keys; added TODOs for missing keys (Chen2019, Patel2024, Zhang2021, RFC793, pandas, h5py)
   - Added Mermaid diagram `docs/diagrams/mermaid_chapter2_conversion.md`
   - Added TODO note in `chapter2.tex` for integration with a main.tex include
 
@@ -104,7 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Sensor characterisation figures (A9)
 - **Reference Quality Improvements**: Enhanced academic referencing standards in references.md
   - Fixed [4]: Replaced "Various Authors" with proper author list for Scientific Reports paper
-  - Fixed [5]: Added complete author information for Computer Modeling paper
+  - Fixed [5]: Added complete author information for Computer Modelling paper
   - Fixed [7]: Converted ScienceDirect placeholder to proper journal citation
   - Maintained IEEE citation format consistency throughout
 
@@ -112,7 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - **LaTeX Chapter Conversion**: Converted `docs/thesis_report/final/1.md` to proper LaTeX format as `1.tex`
         - Converted Markdown headers to LaTeX chapter/section commands (\chapter{}, \section{})
         - Transformed bold/italic text to LaTeX formatting (\textbf{}, \textit{})
-        - Fixed citation formats to natbib style using \citep{} commands
+        - Fixed citation formats to natbib style using \cite{} commands
         - Converted bullet lists to proper LaTeX itemize environments
         - Maintained academic thesis structure with proper sectioning
         - Preserved all content integrity while improving LaTeX compatibility
@@ -340,7 +340,33 @@ This changelog follows the project's established guidelines:
 ### Changed (2025-08-11)
 - Migrated thesis references to BibTeX (natbib numeric, abbrvnat). Consolidated entries in `docs/thesis_report/final/latex/references.bib` (keys: ref1–ref24).
 - Updated `docs/thesis_report/final/latex/main.tex` to use a global bibliography block (`\setcitestyle{square}`, `\bibliographystyle{abbrvnat}`, `\bibliography{references}`) and removed `\input{references}`.
-- Replaced hard-coded numeric citations in `docs/thesis_report/final/latex/2.tex` with `\citep{...}` and removed its local References stub.
+- Replaced hard-coded numeric citations in `docs/thesis_report/final/latex/2.tex` with `\cite{...}` and removed its local References stub.
 - Added `docs/thesis_report/final/latex/README.md` with BibTeX build steps and a Mermaid diagram of the bibliography flow.
 - Updated `architecture.md` with a "Bibliography Flow (BibTeX)" Mermaid diagram.
 - Updated `backlog.md` with follow-ups: convert remaining chapters/appendices to `\cite`, enrich BibTeX metadata, and validate LaTeX build toolchain (Mermaid optional).
+
+### Changed (2025-08-11 13:30)
+- Synchronised Chapter 2 LaTeX with Markdown source:
+  - Updated docs/thesis_report/final/latex/2.tex to mirror docs/thesis_report/final/2.md (Sections 2.1–2.8), including full 2.7 hypothesis details and 2.8 sensor device selection rationale.
+  - Preserved numeric citations by mapping [n] to \cite{refn} placeholders where applicable (ref1, ref3, ref4, ref5, ref6, ref7, ref8, ref10, ref11, ref15, ref16, ref20, ref21, ref22).
+  - Escaped LaTeX-sensitive symbols (%, ×, μ, ±, °) and kept units/values consistent with the Markdown text.
+  - Added a brief References note at end to match Markdown.
+  - Note: No architectural changes; no code logic affected. See backlog for citation mapping to BibTeX and LaTeX main integration.
+
+
+### Changed (2025-08-11 14:16)
+- Synchronised Chapter 3 LaTeX with Markdown source:
+  - Updated docs/thesis_report/final/latex/3.tex to mirror docs/thesis_report/final/3.md (Sections 3.1–3.7) and align text content.
+  - Fixed internal cross-reference to System Analysis and added a label (\label{sec:system-analysis}).
+  - Escaped LaTeX-sensitive symbols and units (× -> $\times$, ~ -> $\sim$, \mu as $\mu$) and verified key values/units.
+  - Added a References note at end of chapter to match Markdown.
+  - Note: No architectural changes; Mermaid source for Fig. 3.1 retained as TODO. Citation mapping to BibTeX for Chapter 3 remains tracked in backlog.
+
+
+### Changed (2025-08-11 14:41)
+- Synchronised Chapter 4 LaTeX with Markdown source:
+  - Verified docs/thesis_report/final/latex/4.tex mirrors docs/thesis_report/final/4.md (Sections 4.1–4.7) and aligned text content.
+  - Added a References note at the end of 4.tex to match Markdown.
+  - Verified symbol/unit formatting consistency (× -> $\times$, ~ -> $\sim$, \mu as $\mu$ where applicable); no structural changes needed.
+  - Figure 4.6 duplication retained to mirror Markdown; assets to be verified.
+  - No architectural changes; citation mapping to BibTeX and figure asset checks remain tracked in backlog.

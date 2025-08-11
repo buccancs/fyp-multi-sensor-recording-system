@@ -51,7 +51,7 @@ fun DevicesScreen(
                 Text(
                     text = "${uiState.totalConnectedDevices} device(s) connected",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (uiState.totalConnectedDevices > 0)
+                    colour = if (uiState.totalConnectedDevices > 0)
                         MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -59,7 +59,7 @@ fun DevicesScreen(
                     Text(
                         text = "All devices healthy",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary
+                        colour = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -178,7 +178,7 @@ fun DevicesScreen(
                             text = result,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(vertical = 2.dp),
-                            color = if (result.contains("PASSED"))
+                            colour = if (result.contains("PASSED"))
                                 MaterialTheme.colorScheme.primary
                             else MaterialTheme.colorScheme.error
                         )
@@ -224,7 +224,7 @@ fun CalibrationScreen(
                 Text(
                     text = "$calibratedCount of 3 devices calibrated",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (calibratedCount == 3)
+                    colour = if (calibratedCount == 3)
                         MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -243,7 +243,7 @@ fun CalibrationScreen(
                         Text(
                             text = "System ready for recording",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary
+                            colour = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else if (uiState.validationErrors.isNotEmpty()) {
@@ -262,7 +262,7 @@ fun CalibrationScreen(
                                 Text(
                                     text = error,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.error
+                                    colour = MaterialTheme.colorScheme.error
                                 )
                             }
                         }
@@ -339,7 +339,7 @@ fun CalibrationScreen(
                     if (uiState.isValidating) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
-                            color = MaterialTheme.colorScheme.onPrimary
+                            colour = MaterialTheme.colorScheme.onPrimary
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                     }
@@ -418,7 +418,7 @@ fun FilesScreen(
                         Text(
                             text = "${uiState.totalFileCount} files total",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            colour = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -436,7 +436,7 @@ fun FilesScreen(
                             Text(
                                 text = "Storage Low",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.error
+                                colour = MaterialTheme.colorScheme.error
                             )
                         }
                     }
@@ -446,7 +446,7 @@ fun FilesScreen(
                 LinearProgressIndicator(
                     progress = uiState.storageUsagePercentage,
                     modifier = Modifier.fillMaxWidth(),
-                    color = if (uiState.showStorageWarning)
+                    colour = if (uiState.showStorageWarning)
                         MaterialTheme.colorScheme.error
                     else MaterialTheme.colorScheme.primary
                 )
@@ -477,7 +477,7 @@ fun FilesScreen(
                 if (uiState.isLoadingSessions) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(16.dp),
-                        color = MaterialTheme.colorScheme.onPrimary
+                        colour = MaterialTheme.colorScheme.onPrimary
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
@@ -488,7 +488,7 @@ fun FilesScreen(
                 onClick = { fileViewModel.deleteAllSessions() },
                 modifier = Modifier.weight(1f),
                 enabled = uiState.sessions.isNotEmpty() && !uiState.isLoadingSessions,
-                colors = ButtonDefaults.outlinedButtonColors(
+                colours = ButtonDefaults.outlinedButtonColors(
                     contentColor = MaterialTheme.colorScheme.error
                 )
             ) {
@@ -518,14 +518,14 @@ fun FilesScreen(
                     Text(
                         text = "No sessions found",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        colour = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = if (uiState.searchQuery.isNotEmpty())
                             "Try adjusting your search"
                         else "Record a session to see files here",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        colour = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -573,7 +573,7 @@ private fun SessionCard(
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = backgroundColor)
+        colours = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -602,12 +602,12 @@ private fun SessionCard(
                     Text(
                         text = "Duration: ${session.formattedDuration}",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        colour = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = "Files: ${session.fileCount}",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        colour = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -615,13 +615,13 @@ private fun SessionCard(
                     Text(
                         text = formatFileSize(session.totalSize),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        colour = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault())
                             .format(Date(session.startTime)),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        colour = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -651,7 +651,7 @@ private fun SessionCard(
 
 @Composable
 private fun SessionStatusChip(status: SessionStatus) {
-    val (color, text) = when (status) {
+    val (colour, text) = when (status) {
         SessionStatus.COMPLETED -> MaterialTheme.colorScheme.primary to "Completed"
         SessionStatus.INTERRUPTED -> MaterialTheme.colorScheme.error to "Interrupted"
         SessionStatus.CORRUPTED -> MaterialTheme.colorScheme.error to "Corrupted"
@@ -664,7 +664,7 @@ private fun SessionStatusChip(status: SessionStatus) {
             Text(
                 text,
                 style = MaterialTheme.typography.labelSmall,
-                color = color
+                colour = colour
             )
         },
         modifier = Modifier.height(24.dp)
@@ -724,7 +724,7 @@ private fun CalibrationCard(
                             else -> "Not calibrated"
                         },
                         style = MaterialTheme.typography.bodySmall,
-                        color = if (isCalibrated) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        colour = if (isCalibrated) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -738,7 +738,7 @@ private fun CalibrationCard(
                 Text(
                     text = "$progress%",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    colour = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -747,7 +747,7 @@ private fun CalibrationCard(
             Text(
                 text = details,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                colour = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -764,7 +764,7 @@ private fun CalibrationCard(
                     if (isCalibrating) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
-                            color = MaterialTheme.colorScheme.onPrimary
+                            colour = MaterialTheme.colorScheme.onPrimary
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                     }
@@ -826,7 +826,7 @@ private fun DeviceCard(
                     Text(
                         text = status,
                         style = MaterialTheme.typography.bodySmall,
-                        color = if (isConnected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                        colour = if (isConnected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                     )
                 }
             }
@@ -836,7 +836,7 @@ private fun DeviceCard(
             Text(
                 text = details,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                colour = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -849,7 +849,7 @@ private fun DeviceCard(
                     Button(
                         onClick = onDisconnect,
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
+                        colours = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error
                         )
                     ) {
@@ -864,7 +864,7 @@ private fun DeviceCard(
                         if (isConnecting) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(16.dp),
-                                color = MaterialTheme.colorScheme.onPrimary
+                                colour = MaterialTheme.colorScheme.onPrimary
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                         }
@@ -880,7 +880,7 @@ private fun DeviceCard(
                     if (isTesting) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
-                            color = MaterialTheme.colorScheme.primary
+                            colour = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                     }

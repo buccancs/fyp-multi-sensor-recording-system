@@ -435,7 +435,7 @@ class UsbDevicePrioritizer(private val performanceAnalytics: UsbPerformanceAnaly
         metrics: SelectionOptimizationMetrics
     ): String {
         return buildString {
-            append("Device Selection Optimization Results:\n")
+            append("Device Selection Optimisation Results:\n")
             append("• Primary Device: ${primary?.deviceKey ?: "None"} ")
             append("(Score: ${"%.3f".format(primary?.priorityScore ?: 0.0)})\n")
             append("• Secondary Devices: ${secondary.size}\n")

@@ -35,10 +35,10 @@ def test_pattern_detection():
         )
         if ret and corners is not None:
             print("✓ Chessboard corner detection works")
-            gray = chessboard.copy()
+            grey = chessboard.copy()
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
             corners_refined = cv2.cornerSubPix(
-                gray, corners, (11, 11), (-1, -1), criteria
+                grey, corners, (11, 11), (-1, -1), criteria
             )
             print("✓ Sub-pixel corner refinement works")
             return True

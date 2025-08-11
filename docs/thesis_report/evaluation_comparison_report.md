@@ -133,9 +133,9 @@ cd PythonApp && python -m production.endurance_testing --duration 480 --log-leve
 
 **Corrections Required:**
 - Line 6: "synchronised" → "synchronised"
-- Line 21: "behaviors" → "behaviours"  
-- Line 28: "behavior" → "behaviour"
-- Line 66: "behavior" → "behaviour"
+- Line 21: "behaviours" → "behaviours"  
+- Line 28: "behaviour" → "behaviour"
+- Line 66: "behaviour" → "behaviour"
 
 ## Assessment Verdict
 

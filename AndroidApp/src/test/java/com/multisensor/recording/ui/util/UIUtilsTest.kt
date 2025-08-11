@@ -39,34 +39,34 @@ class UIUtilsTest {
     }
 
     @Test
-    fun `updateConnectionIndicator should set connected color when connected`() {
+    fun `updateConnectionIndicator should set connected colour when connected`() {
         UIUtils.updateConnectionIndicator(context, mockView, true)
 
-        verify { ContextCompat.getColor(context, R.color.statusIndicatorConnected) }
+        verify { ContextCompat.getColor(context, R.colour.statusIndicatorConnected) }
         verify { mockView.setBackgroundColor(any()) }
     }
 
     @Test
-    fun `updateConnectionIndicator should set disconnected color when not connected`() {
+    fun `updateConnectionIndicator should set disconnected colour when not connected`() {
         UIUtils.updateConnectionIndicator(context, mockView, false)
 
-        verify { ContextCompat.getColor(context, R.color.statusIndicatorDisconnected) }
+        verify { ContextCompat.getColor(context, R.colour.statusIndicatorDisconnected) }
         verify { mockView.setBackgroundColor(any()) }
     }
 
     @Test
-    fun `updateRecordingIndicator should set active color when recording`() {
+    fun `updateRecordingIndicator should set active colour when recording`() {
         UIUtils.updateRecordingIndicator(context, mockView, true)
 
-        verify { ContextCompat.getColor(context, R.color.recordingActive) }
+        verify { ContextCompat.getColor(context, R.colour.recordingActive) }
         verify { mockView.setBackgroundColor(any()) }
     }
 
     @Test
-    fun `updateRecordingIndicator should set inactive color when not recording`() {
+    fun `updateRecordingIndicator should set inactive colour when not recording`() {
         UIUtils.updateRecordingIndicator(context, mockView, false)
 
-        verify { ContextCompat.getColor(context, R.color.recordingInactive) }
+        verify { ContextCompat.getColor(context, R.colour.recordingInactive) }
         verify { mockView.setBackgroundColor(any()) }
     }
 
@@ -191,7 +191,7 @@ class UIUtilsTest {
     fun `styleButton should apply primary button style`() {
         UIUtils.styleButton(context, mockView, UIUtils.ButtonType.PRIMARY, true)
 
-        verify { ContextCompat.getColor(context, R.color.colorSecondary) }
+        verify { ContextCompat.getColor(context, R.colour.colorSecondary) }
         verify { mockView.setBackgroundColor(any()) }
         verify { mockView.isEnabled = true }
         verify { mockView.alpha = 1.0f }
@@ -201,7 +201,7 @@ class UIUtilsTest {
     fun `styleButton should apply success button style`() {
         UIUtils.styleButton(context, mockView, UIUtils.ButtonType.SUCCESS, true)
 
-        verify { ContextCompat.getColor(context, R.color.colorPrimary) }
+        verify { ContextCompat.getColor(context, R.colour.colorPrimary) }
         verify { mockView.setBackgroundColor(any()) }
         verify { mockView.isEnabled = true }
         verify { mockView.alpha = 1.0f }
@@ -211,7 +211,7 @@ class UIUtilsTest {
     fun `styleButton should apply danger button style`() {
         UIUtils.styleButton(context, mockView, UIUtils.ButtonType.DANGER, true)
 
-        verify { ContextCompat.getColor(context, R.color.recordingActive) }
+        verify { ContextCompat.getColor(context, R.colour.recordingActive) }
         verify { mockView.setBackgroundColor(any()) }
         verify { mockView.isEnabled = true }
         verify { mockView.alpha = 1.0f }
@@ -221,7 +221,7 @@ class UIUtilsTest {
     fun `styleButton should apply secondary button style`() {
         UIUtils.styleButton(context, mockView, UIUtils.ButtonType.SECONDARY, true)
 
-        verify { ContextCompat.getColor(context, R.color.textColorSecondary) }
+        verify { ContextCompat.getColor(context, R.colour.textColorSecondary) }
         verify { mockView.setBackgroundColor(any()) }
         verify { mockView.isEnabled = true }
         verify { mockView.alpha = 1.0f }

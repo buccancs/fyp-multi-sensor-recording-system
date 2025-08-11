@@ -211,7 +211,7 @@ class RecordingAnalytics {
             return statistics
 
         } catch (e: Exception) {
-            android.util.Log.e("RecordingAnalytics", "Error analyzing resource utilization: ${e.message}")
+            android.util.Log.e("RecordingAnalytics", "Error analysing resource utilisation: ${e.message}")
             return ResourceStatistics()
         }
     }

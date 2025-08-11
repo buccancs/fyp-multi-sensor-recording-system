@@ -266,8 +266,8 @@ class PerformanceBenchmarkSuite:
                 images_processed = 0
                 for i in range(100):
                     image = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
-                    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                    blurred = cv2.GaussianBlur(gray, (15, 15), 0)
+                    grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                    blurred = cv2.GaussianBlur(grey, (15, 15), 0)
                     edges = cv2.Canny(blurred, 50, 150)
                     resized = cv2.resize(image, (320, 240))
                     images_processed += 1
@@ -600,7 +600,7 @@ class PerformanceBenchmarkSuite:
         recommendations = []
         successful_tests = [r for r in self.results if r.success]
         if not successful_tests:
-            return ["No successful tests to analyze"]
+            return ["No successful tests to analyse"]
         avg_memory = statistics.mean([r.memory_usage_mb for r in successful_tests])
         if avg_memory > 1000:
             recommendations.append(
@@ -609,14 +609,14 @@ class PerformanceBenchmarkSuite:
         avg_cpu = statistics.mean([r.cpu_usage_percent for r in successful_tests])
         if avg_cpu > 80:
             recommendations.append(
-                f"High CPU usage detected (avg: {avg_cpu:.1f}%). Consider optimizing CPU-intensive operations or using multiprocessing."
+                f"High CPU usage detected (avg: {avg_cpu:.1f}%). Consider optimising CPU-intensive operations or using multiprocessing."
             )
         throughputs = [r.throughput_ops_per_sec for r in successful_tests]
         if throughputs:
             min_throughput = min(throughputs)
             if min_throughput < 10:
                 recommendations.append(
-                    f"Low throughput detected (min: {min_throughput:.1f} ops/sec). Consider optimizing slow operations or implementing caching."
+                    f"Low throughput detected (min: {min_throughput:.1f} ops/sec). Consider optimising slow operations or implementing caching."
                 )
         failed_tests = [r for r in self.results if not r.success]
         if failed_tests:

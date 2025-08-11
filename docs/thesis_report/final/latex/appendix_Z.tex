@@ -42,7 +42,7 @@ Figure 2.1: Emotion/Stress Sensing Modality Landscape
 
 ```mermaid
 graph TD
-    subgraph "Behavioral Modalities"
+    subgraph "Behavioural Modalities"
         FACE[Facial Expression Analysis]
         VOICE[Voice Stress Analysis]
         GESTURE[Body Language & Gestures]
@@ -58,7 +58,7 @@ graph TD
 
     subgraph "Hybrid Approaches"
         MULTIMODAL[Multi-Modal Fusion<br/>RGB + Thermal + GSR]
-        CONTEXTUAL[Contextual Integration<br/>Environment + Behavior]
+        CONTEXTUAL[Contextual Integration<br/>Environment + Behaviour]
     end
 
     FACE --> MULTIMODAL
@@ -68,7 +68,7 @@ graph TD
     VOICE --> CONTEXTUAL
 ```
 
-\textit{Figure 2.1: Emotion/Stress Sensing Modality Landscape showing the range of behavioral and physiological modalities available for stress detection research. Demonstrates the positioning of the multi-sensor approach within the broader landscape of affective computing technologies \citep{ref4}.}
+\textit{Figure 2.1: Emotion/Stress Sensing Modality Landscape showing the range of behavioural and physiological modalities available for stress detection research. Demonstrates the positioning of the multi-sensor approach within the broader landscape of affective computing technologies \cite{ref4}.}
 
 Figure 2.2: Contact vs Contactless Measurement Pipelines
 
@@ -101,7 +101,7 @@ graph LR
     CONTACT_OUTPUT -.->|Ground Truth<br/>Training Data| CONTACTLESS_ML
 ```
 
-\textit{Figure 2.2: Contact vs Contactless Measurement Pipelines illustrating the trade-offs between accuracy and intrusiveness in physiological monitoring approaches. Shows how contactless methods require machine learning to achieve GSR estimation \citep{ref1}.}
+\textit{Figure 2.2: Contact vs Contactless Measurement Pipelines illustrating the trade-offs between accuracy and intrusiveness in physiological monitoring approaches. Shows how contactless methods require machine learning to achieve GSR estimation \cite{ref1}.}
 
 \subsubsection{Z.1.2 Physiological Response Mechanisms}
 
@@ -113,7 +113,7 @@ graph TD
 
     subgraph "Neural Processing"
         AMYGDALA[Amygdala<br/>Threat Detection]
-        HYPOTHALAMUS[Hypothalamus<br/>Integration Center]
+        HYPOTHALAMUS[Hypothalamus<br/>Integration Centre]
     end
 
     subgraph "SAM Axis (Rapid Response)"
@@ -157,7 +157,7 @@ graph TD
 stress response through SAM (Sympathoadrenal Medullary) and HPA
 (Hypothalamic-Pituitary-Adrenal) axes. Demonstrates the temporal
 characteristics of different physiological responses measured by the
-system \citep{ref1,ref4}.*
+system \cite{ref1,ref4}.*
 
 Figure 2.4: Sensor Technology Characteristics Matrix
 
@@ -179,7 +179,7 @@ graph LR
 *Figure 2.4: Sensor Technology Characteristics Matrix illustrating the
 trade-offs between measurement accuracy and user intrusiveness. Shows the
 positioning of different sensor modalities and the research target zone
-citep{ref8,ref16,ref20}.*
+cite{ref8,ref16,ref20}.*
 
 \subsubsection{Z.1.4 Multi-Modal Integration Rationale}
 
@@ -225,7 +225,7 @@ graph TD
 *Figure 2.5: Multi-Modal Data Fusion Concept showing how RGB video,
 thermal imaging, and reference GSR data are combined through temporal
 synchronisation and feature fusion to enable contactless GSR prediction.
-Demonstrates the system's core research hypothesis citep{ref5,ref6,ref22}.*
+Demonstrates the system's core research hypothesis cite{ref5,ref6,ref22}.*
 
 \subsection{Z.2 Chapter 3 Figures: Requirements and Architecture}
 
@@ -359,7 +359,7 @@ Figure 4.1: System Architecture Overview
 *Figure 4.1: System Architecture Overview showing the distributed
 client-server architecture with PC controller coordinating multiple
 Android sensor nodes. Illustrates the star topology with central
-synchronisation and control citep{ref17,ref19,ref21}.*
+synchronisation and control cite{ref17,ref19,ref21}.*
 
 Figure 4.2: Android Thermal Integration Data Flow
 
@@ -368,7 +368,7 @@ Figure 4.2: Android Thermal Integration Data Flow
 *Figure 4.2: Android Thermal Integration Data Flow showing the complete
 pipeline from USB thermal camera through Android processing to CSV
 storage. Details the frame capture callback system and data formatting
-\citep{ref16,ref20}.*
+\cite{ref16,ref20}.*
 
 Figure 4.3: Shimmer GSR Integration Architecture
 
@@ -376,7 +376,7 @@ Figure 4.3: Shimmer GSR Integration Architecture
 
 *Figure 4.3: Shimmer GSR Integration Architecture illustrating BLE
 communication protocol and real-time data streaming with calibration and
-CSV logging. Shows the complete sensor-to-storage pipeline \citep{ref8,ref15}.*
+CSV logging. Shows the complete sensor-to-storage pipeline \cite{ref8,ref15}.*
 
 \subsubsection{Z.3.2 User Interface Design}
 
@@ -387,7 +387,7 @@ Figure 4.4: Desktop Controller GUI Layout
 *Figure 4.4: Desktop Controller GUI Layout showing the comprehensive
 dashboard with device management, live preview panels, session controls,
 and synchronisation status indicators. Demonstrates the research-grade
-interface design \citep{ref17}.*
+interface design \cite{ref17}.*
 
 \subsubsection{Z.3.3 Communication and Data Processing}
 
@@ -398,7 +398,7 @@ Figure 4.5: Network Protocol Sequence
 *Figure 4.5: Network Protocol Sequence diagram detailing the JSON-based
 communication protocol over WebSocket connections. Shows device
 registration, command distribution, and data synchronisation messaging
-\citep{ref21}.*
+\cite{ref21}.*
 
 Figure 4.6: Data Processing Pipeline
 
@@ -406,7 +406,7 @@ Figure 4.6: Data Processing Pipeline
 
 *Figure 4.6: Data Processing Pipeline illustrating the complete data flow
 from multi-modal capture through storage, transfer, and export. Shows
-concurrent processing streams and temporal alignment mechanisms \citep{ref22,ref23}.*
+concurrent processing streams and temporal alignment mechanisms \cite{ref22,ref23}.*
 
 \subsection{Z.4 Performance and Diagnostic Analysis}
 
@@ -436,7 +436,7 @@ graph LR
 *Figure G.1: Device Discovery Success Patterns showing the relationship
 between network conditions and device discovery reliability.
 Demonstrates the importance of optimal network configuration for system
-deployment \citep{ref19,ref21}.*
+deployment \cite{ref19,ref21}.*
 
 Figure G.2: Error Classification and Frequency
 
@@ -545,7 +545,7 @@ graph LR
 
 *Figure 3.9: GSR Sampling Rate Stability showing consistent performance
 at the target 128 Hz with minimal sample loss and high signal quality.
-Demonstrates research-grade data acquisition capabilities \citep{ref8}.*
+Demonstrates research-grade data acquisition capabilities \cite{ref8}.*
 
 \subsubsection{Z.4.4 Operational Metrics}
 
@@ -635,7 +635,7 @@ graph TD
 
 *Figure 3.12: Data Throughput Analysis showing typical session data
 breakdown and storage performance metrics. RGB video dominates storage
-requirements while maintaining high transfer reliability \citep{ref23}.*
+requirements while maintaining high transfer reliability \cite{ref23}.*
 
 \subsection{Z.5 Cross-Reference Tables and Navigation Aids}
 

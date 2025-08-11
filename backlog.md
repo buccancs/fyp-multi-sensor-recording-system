@@ -18,7 +18,7 @@ This file tracks pending items and TODOs identified in the thesis documentation 
 - [ ] **Figure 4.6 Duplication Validation**: Confirm whether Figure 4.6 should appear twice; if not, remove duplicate include and update references accordingly
 - [ ] **Chapter 2 Citation Mapping**: Replace bracketed numeric references [4], [5], [7], [21] in `docs/thesis_report/final/latex/chapter2.tex` with proper \cite{...} keys in `references.bib`; add missing entries for Chen2019, Patel2024, Zhang2021, RFC793, pandas, h5py
 - [ ] **Chapter 2 LaTeX Integration**: Include `docs/thesis_report/final/2.tex` in the thesis master once available; reconcile duplication with `docs/thesis_report/final/latex/chapter2.tex`; verify compilation
-- [ ] **Chapter 2 Location Normalization**: Standardize chapter file locations (prefer `docs/thesis_report/final/*.tex`); remove duplicate `final/latex/chapter2.tex` after integration and update includes accordingly
+- [ ] **Chapter 2 Location Normalisation**: Standardize chapter file locations (prefer `docs/thesis_report/final/*.tex`); remove duplicate `final/latex/chapter2.tex` after integration and update includes accordingly
 
 - [ ] **Chapter 5 Citation Mapping**: Audit Chapter 5 for bracketed numeric references and replace with proper \cite{...} keys in `docs/thesis_report/final/latex/references.bib`
 - [ ] **Chapter 5 Figure Integration Verification**: Confirm TikZ/pgfplots figures compile and render correctly (sync accuracy, scalability, extended operation, correlation)

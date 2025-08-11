@@ -246,7 +246,7 @@ class MultiSensorCoordinationTest {
                 Math.abs(rawTimestamp - thermalTimestamp) < 50,
             )
 
-            logger.info("[DEBUG_LOG] Data synchronization verified with timestamps")
+            logger.info("[DEBUG_LOG] Data synchronisation verified with timestamps")
         }
 
     @Test

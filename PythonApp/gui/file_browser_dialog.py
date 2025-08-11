@@ -110,7 +110,7 @@ Click 'Open' to open with external application.
         self.preview_label.setText(f"❌ {message}")
         self.preview_label.setAlignment(Qt.AlignCenter)
         self.preview_label.setFont(QFont("Arial", 10))
-        self.preview_label.setStyleSheet("QLabel { color: #d32f2f; }")
+        self.preview_label.setStyleSheet("QLabel { colour: #d32f2f; }")
     def clear_preview(self):
         self.preview_label.setPixmap(QPixmap())
         self.preview_label.setText("Select a file to preview")
@@ -195,7 +195,7 @@ class FileBrowserDialog(QDialog):
         splitter.setSizes([400, 600])
         layout.addWidget(splitter)
         self.status_label = QLabel("Ready")
-        self.status_label.setStyleSheet("QLabel { color: #666; padding: 5px; }")
+        self.status_label.setStyleSheet("QLabel { colour: #666; padding: 5px; }")
         layout.addWidget(self.status_label)
         button_layout = QHBoxLayout()
         self.open_btn = QPushButton("Open")

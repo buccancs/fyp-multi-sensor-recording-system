@@ -257,8 +257,8 @@ class CalibrationControllerTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         verify { mockCallback.showToast(match { it.contains("Clock sync successful") }, Toast.LENGTH_LONG) }
-        verify { mockCallback.onSyncTestCompleted(true, match { it.contains("Clock synchronized with offset") }) }
-        verify { mockCallback.updateStatusText(match { it.contains("Clock synchronized - Offset: 50ms") }) }
+        verify { mockCallback.onSyncTestCompleted(true, match { it.contains("Clock synchronised with offset") }) }
+        verify { mockCallback.updateStatusText(match { it.contains("Clock synchronised - Offset: 50ms") }) }
 
         println("[DEBUG_LOG] Clock sync test passed")
     }
@@ -279,7 +279,7 @@ class CalibrationControllerTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         verify { mockCallback.showToast("❌ Clock sync test failed", Toast.LENGTH_LONG) }
-        verify { mockCallback.onSyncTestCompleted(false, "Clock synchronization failed") }
+        verify { mockCallback.onSyncTestCompleted(false, "Clock synchronisation failed") }
 
         println("[DEBUG_LOG] Clock sync test failure passed")
     }
@@ -370,7 +370,7 @@ class CalibrationControllerTest {
 
         verify {
             mockCallback.showToast(match {
-                it.contains("Clock Synchronization Status") &&
+                it.contains("Clock Synchronisation Status") &&
                         it.contains("✅ Yes") &&
                         it.contains("25ms")
             }, Toast.LENGTH_LONG)
@@ -400,7 +400,7 @@ class CalibrationControllerTest {
 
         val status = calibrationController.getCalibrationStatus()
 
-        assertTrue("Status should contain clock sync info", status.contains("Clock Synchronized: true"))
+        assertTrue("Status should contain clock sync info", status.contains("Clock Synchronised: true"))
         assertTrue("Status should contain offset info", status.contains("Clock Offset: 30ms"))
         assertTrue("Status should contain sync validity", status.contains("Sync Valid: true"))
         assertTrue("Status should contain calibration count", status.contains("Total Calibrations: 3"))
@@ -561,11 +561,11 @@ class CalibrationControllerTest {
         assertNotNull("Statistical validation should be available", validation)
         assertTrue("Should have confidence level", validation.confidenceLevel >= 0.0f)
 
-        val optimization = calibrationController.analyzePatternOptimization()
-        assertNotNull("Pattern optimization should be available", optimization)
+        val optimisation = calibrationController.analyzePatternOptimization()
+        assertNotNull("Pattern optimisation should be available", optimisation)
         assertTrue(
             "Efficiency should be valid",
-            optimization.patternEfficiency >= 0.0f && optimization.patternEfficiency <= 1.0f
+            optimisation.patternEfficiency >= 0.0f && optimisation.patternEfficiency <= 1.0f
         )
 
         println("[DEBUG_LOG] Advanced quality assessment test passed")
@@ -684,7 +684,7 @@ class CalibrationControllerTest {
         assertEquals("Should track total calibrations", 5, report.totalCalibrations)
         assertTrue("Average quality should be valid", report.averageQuality >= 0.0f && report.averageQuality <= 1.0f)
         assertTrue("Quality std dev should be valid", report.qualityStandardDeviation >= 0.0f)
-        assertNotNull("Should include pattern optimization", report.patternOptimization)
+        assertNotNull("Should include pattern optimisation", report.patternOptimization)
         assertNotNull("Should include statistical validation", report.statisticalValidation)
         assertNotNull("Should include quality trend", report.qualityTrend)
         assertTrue("Should have recommendations", report.systemRecommendations.isNotEmpty())
@@ -741,42 +741,42 @@ class CalibrationControllerTest {
 
     @Test
     fun testPatternOptimizationAnalysis() {
-        println("[DEBUG_LOG] Testing pattern optimization analysis")
+        println("[DEBUG_LOG] Testing pattern optimisation analysis")
 
         CalibrationController.CalibrationPattern.values().forEach { pattern ->
             calibrationController.setCalibrationPattern(pattern)
 
-            val optimization = calibrationController.analyzePatternOptimization()
+            val optimisation = calibrationController.analyzePatternOptimization()
 
-            assertNotNull("Optimization should be available", optimization)
+            assertNotNull("Optimisation should be available", optimisation)
             assertTrue(
                 "Pattern efficiency should be valid",
-                optimization.patternEfficiency >= 0.0f && optimization.patternEfficiency <= 1.0f
+                optimisation.patternEfficiency >= 0.0f && optimisation.patternEfficiency <= 1.0f
             )
             assertTrue(
                 "Convergence rate should be valid",
-                optimization.convergenceRate >= 0.0f && optimization.convergenceRate <= 1.0f
+                optimisation.convergenceRate >= 0.0f && optimisation.convergenceRate <= 1.0f
             )
             assertTrue(
                 "Spatial coverage should be valid",
-                optimization.spatialCoverage >= 0.0f && optimization.spatialCoverage <= 1.0f
+                optimisation.spatialCoverage >= 0.0f && optimisation.spatialCoverage <= 1.0f
             )
             assertTrue(
                 "Redundancy analysis should be valid",
-                optimization.redundancyAnalysis >= 0.0f && optimization.redundancyAnalysis <= 1.0f
+                optimisation.redundancyAnalysis >= 0.0f && optimisation.redundancyAnalysis <= 1.0f
             )
-            assertNotNull("Should recommend a pattern", optimization.recommendedPattern)
+            assertNotNull("Should recommend a pattern", optimisation.recommendedPattern)
 
             println(
                 "[DEBUG_LOG] Pattern ${pattern.displayName}: Efficiency=${
                     String.format(
                         "%.3f",
-                        optimization.patternEfficiency
+                        optimisation.patternEfficiency
                     )
-                }, Coverage=${String.format("%.3f", optimization.spatialCoverage)}"
+                }, Coverage=${String.format("%.3f", optimisation.spatialCoverage)}"
             )
         }
 
-        println("[DEBUG_LOG] Pattern optimization analysis test passed")
+        println("[DEBUG_LOG] Pattern optimisation analysis test passed")
     }
 }

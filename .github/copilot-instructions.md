@@ -68,8 +68,8 @@ consistent with UCL's expectations:
   writing[\[1\]](https://www.sjsu.edu/writingcenter/docs/handouts/First%20Person%20Usage%20in%20Academic%20Writing.pdf#:~:text=In%20most%20academic%20writing%2C%20first,is%20a%20lab%20report%2C%20the).
 - **Active Voice and Clarity:** Prefer the **active voice** for clarity
   and directness, but without using "I/we". For example, write "The
-  system design addresses the need for synchronization" rather than "The
-  need for synchronization is addressed by the system design." Active
+  system design addresses the need for synchronisation" rather than "The
+  need for synchronisation is addressed by the system design." Active
   voice makes explanations clearer and more concise. However, if
   avoiding first-person makes active voice awkward, a neutral
   construction is acceptable. Strive for **clear, concise sentences**,
@@ -83,13 +83,13 @@ consistent with UCL's expectations:
 - **No Contractions or Slang:** Write in full, formal English. **Do not
   use contractions** ("don't" → "do not") or colloquial expressions.
   Ensure spelling follows British English standards (e.g. "behaviour"
-  not "behavior", "optimisation" not "optimization") for consistency.
+  not "behaviour", "optimisation" not "optimisation") for consistency.
 - **Grammatical Precision:** Ensure grammar and punctuation are correct.
   Use tools or proofreading to eliminate errors. Each sentence should be
   complete and unambiguous. Avoid run-on sentences and overly complex
   structures -- clarity is more important than literary flourish in
   technical writing.
-- **Paragraph Structure:** Organize writing into **coherent
+- **Paragraph Structure:** Organise writing into **coherent
   paragraphs**, each focusing on a single idea or topic. Typically, a
   paragraph in the thesis or report should be \~3--5 sentences long. Use
   **logical transitions** between paragraphs to maintain a smooth flow
@@ -97,7 +97,7 @@ consistent with UCL's expectations:
   guiding the reader from background material into methods, results, and
   conclusions seamlessly.
 
-## Document Structure and Content Organization
+## Document Structure and Content Organisation
 
 Each document should have a **clear, logical structure** that meets
 academic and project requirements. The **MEng thesis** in particular
@@ -109,7 +109,7 @@ handbook (with appropriate adjustments for this specific project):
   Clearly state the **research problem, aim, and objectives** in this
   section[\[2\]](https://github.com/buccancs/bucika_gsr/blob/9d2d760e8228aa01eb67f66154debebb9cdf462a/docs/thesis_report/structure_full.md#L5-L13).
   Also outline the scope of the work and an overview of the thesis
-  structure (how subsequent chapters are organized).
+  structure (how subsequent chapters are organised).
 
 - **Literature Review / Background (Chapter 2):** A comprehensive review
   of relevant literature, theories, and existing technologies. This
@@ -124,7 +124,7 @@ handbook (with appropriate adjustments for this specific project):
 - **Requirements and Analysis (Chapter 3):** Define the **engineering
   requirements** for the system based on the problem analysis. This may
   include functional requirements (e.g. number of sensors,
-  synchronization precision, data types) and non-functional requirements
+  synchronisation precision, data types) and non-functional requirements
   (e.g. usability,
   reliability)[\[4\]](https://github.com/buccancs/bucika_gsr/blob/9d2d760e8228aa01eb67f66154debebb9cdf462a/docs/thesis_report/structure_full.md#L80-L88)[\[5\]](https://github.com/buccancs/bucika_gsr/blob/9d2d760e8228aa01eb67f66154debebb9cdf462a/docs/thesis_report/structure_full.md#L90-L98).
   Include any analysis of alternatives or design considerations, and
@@ -142,11 +142,11 @@ handbook (with appropriate adjustments for this specific project):
   structure. Also describe the **methodological approach** -- how you
   plan to validate the system, any experimental design, and any specific
   engineering methods or algorithms developed. If Architecture Decision
-  Records were used, summarize key decisions here (and reference the
+  Records were used, summarise key decisions here (and reference the
   full ADRs).
 
 - **Implementation (could be part of Design or separate Chapter 5):**
-  Provide technical details of how the design was realized. This can
+  Provide technical details of how the design was realised. This can
   include descriptions of the **hardware components** (sensors, devices
   used), the **software implementation** (e.g. Android app development,
   Python desktop application, libraries and frameworks used), and any
@@ -165,7 +165,7 @@ handbook (with appropriate adjustments for this specific project):
   and any simulation or tooling used to generate test data. Present the
   **results** of experiments or performance evaluations in a clear
   manner (graphs, tables, metrics), and narrate the findings. For
-  example, if measuring GSR data quality or synchronization accuracy,
+  example, if measuring GSR data quality or synchronisation accuracy,
   report those quantitative results here. Include analysis of whether
   requirements were met and discuss any observed limitations. This
   chapter should also cover **results analysis and discussion** --
@@ -180,11 +180,11 @@ handbook (with appropriate adjustments for this specific project):
   of GSR measurement or what are its practical limitations? You may also
   discuss any trade-offs in the design and how they were addressed.
 
-- **Conclusions (Final Chapter):** Summarize the project's achievements
+- **Conclusions (Final Chapter):** Summarise the project's achievements
   and **how the objectives were
   met**[\[12\]](https://github.com/buccancs/bucika_gsr/blob/9d2d760e8228aa01eb67f66154debebb9cdf462a/docs/thesis_report/structure_full.md#L266-L274).
   State clearly the **contributions** of the work (e.g. development of a
-  novel multisensor system, new synchronization algorithm, etc.).
+  novel multisensor system, new synchronisation algorithm, etc.).
   Include a frank statement of **limitations** of the project and
   suggestions for **future
   work**[\[13\]](https://github.com/buccancs/bucika_gsr/blob/9d2d760e8228aa01eb67f66154debebb9cdf462a/docs/thesis_report/structure_full.md#L298-L306).
@@ -202,7 +202,7 @@ handbook (with appropriate adjustments for this specific project):
   example:
 
 - *User Manual or System Manual:* Detailed instructions on setting up
-  and using the system, which may be summarized in the main text but
+  and using the system, which may be summarised in the main text but
   given in full in an
   appendix[\[14\]](https://github.com/buccancs/bucika_gsr/blob/9d2d760e8228aa01eb67f66154debebb9cdf462a/docs/thesis_report/structure_full.md#L310-L318).
 
@@ -210,7 +210,7 @@ handbook (with appropriate adjustments for this specific project):
   schematics, or snippets of code (or algorithm pseudo-code) can be
   placed here so as not to break the flow of the main
   text[\[15\]](https://github.com/buccancs/bucika_gsr/blob/9d2d760e8228aa01eb67f66154debebb9cdf462a/docs/thesis_report/structure_full.md#L354-L361).
-  Each appendix should be labeled (Appendix A, B, etc.) and referred to
+  Each appendix should be labelled (Appendix A, B, etc.) and referred to
   from the main chapters when relevant.
 
 - *Raw Data or Test Logs:* If applicable, include samples of raw data,
@@ -237,7 +237,7 @@ handbook (with appropriate adjustments for this specific project):
 - *Technical Design Documents:* follow a logical structure (e.g.,
   Introduction, Architecture Overview, Component Details, etc.). Align
   these with the thesis design chapter, expanding on details as needed.
-  If using a modular documentation site or wiki, organize sections so
+  If using a modular documentation site or wiki, organise sections so
   that readers can find information easily (consider a table of contents
   or hyperlinks between sections).
 
@@ -251,7 +251,7 @@ handbook (with appropriate adjustments for this specific project):
   documented decisions.
 
 By following a well-defined structure in every document, you ensure the
-**content is organized and accessible**. A reader (or examiner) should
+**content is organised and accessible**. A reader (or examiner) should
 be able to navigate your thesis or documentation easily via the headings
 and subheadings. Using a consistent structure across documents also
 reinforces the modular documentation approach (each piece has its place
@@ -282,7 +282,7 @@ duplication:
   more information. This ensures there is a **single source of truth**
   for each aspect of the project, which reduces inconsistency and
   errors.
-- **Cross-Referencing Practice:** Utilize cross-references within and
+- **Cross-Referencing Practice:** Utilise cross-references within and
   between documents. In the thesis, use section references ("see Chapter
   4 for design details") or appendix references ("see Appendix B for the
   full user manual"). In the repository docs, provide links to thesis
@@ -303,7 +303,7 @@ duplication:
   file.
 - If the project includes diagrams (UML diagrams, system block
   diagrams), ensure they reflect the actual code structure and are
-  updated when the code changes. Each figure should be labeled and
+  updated when the code changes. Each figure should be labelled and
   referred to in the text for explanation.
 - Keep the documentation updated alongside code changes. If a feature is
   modified or a new version of hardware is used, update the relevant
@@ -337,7 +337,7 @@ forgetting the big picture, and readers can get targeted information
 without wading through irrelevant
 details[\[20\]](https://opensource.com/article/17/9/modular-documentation#:~:text=,less%20daunting%20for%20new%20colleagues)[\[18\]](https://opensource.com/article/17/9/modular-documentation#:~:text=,overhead%20of%20formatting%20and%20structuring).
 This approach aligns with modern documentation best practices and will
-help keep the project documents well-organized and consistent over time.
+help keep the project documents well-organised and consistent over time.
 
 ## Referencing and Citation Standards
 
@@ -509,7 +509,7 @@ in your writing and documentation practices:
   phrases or bibliography entries) are usually fine, but substantive
   matches with other texts are not.
 - **Ethical Use of Source Code:** If you incorporate open-source code or
-  hardware schematics into your project, make sure the license allows it
+  hardware schematics into your project, make sure the licence allows it
   and **credit the source** (for example, in a code comment and in the
   dissertation text if it's a significant portion). Do not present
   borrowed code as solely your own creation. Even if the code is public
@@ -714,7 +714,7 @@ decisions and outcomes.
 ## Clarity, Layout, and Presentation Standards
 
 Clear language and a reader-friendly layout are essential to maximize
-the impact of your documentation. UCL's guidelines often emphasize not
+the impact of your documentation. UCL's guidelines often emphasise not
 just what you write, but how you present it. Ensure the following
 presentation standards are met in all documents:
 
@@ -727,7 +727,7 @@ presentation standards are met in all documents:
   at an appropriate size (11 or 12 pt for body text).
 - 1.5 line spacing or as required (to ensure readability and room for
   annotations).
-- Page numbering (usually centered or right-bottom; make sure front
+- Page numbering (usually centred or right-bottom; make sure front
   matter is numbered in Roman numerals and main chapters in Arabic, if
   required by thesis format).
 - Consistent alignment and justification (often left-aligned or
@@ -745,16 +745,16 @@ presentation standards are met in all documents:
   include a Table of Contents (with chapter and section titles and page
   numbers). If there are many figures and tables, include a List of
   Figures and List of Tables. This helps the reader quickly find
-  information and demonstrates good organization.
+  information and demonstrates good organisation.
 - **Figure and Table Presentation:** All figures and tables should be
-  **neatly presented, labeled, and referenced**.
+  **neatly presented, labelled, and referenced**.
 - Give each figure/table a **number and a descriptive caption**. For
   example, "Figure 4.2 -- Block diagram of the multi-sensor system
   architecture."
 - Refer to every figure/table in the text (e.g., "as shown in Figure
   4.2, the system includes\...").
 - Position figures/tables near the relevant text, but not before their
-  first mention. Typically, figures are centered on the page. Tables
+  first mention. Typically, figures are centred on the page. Tables
   should have a consistent style (e.g., visible borders or not, as long
   as they are clean and readable).
 - If you adapted or took a figure from an external source, **cite the
@@ -805,7 +805,7 @@ presentation standards are met in all documents:
   binding requirements (often, soft bound for initial submission, hard
   bound after approval). Ensure that page margins are sufficient for
   binding. It's wise to check UCL's specifications (e.g., some require a
-  certain color cover or spine text for hardbound theses -- these
+  certain colour cover or spine text for hardbound theses -- these
   specifics might apply more to doctoral theses, but be aware of any
   undergrad/MEng guidelines). Mentioning binding in documentation isn't
   needed, but from a planning perspective, leave time for
@@ -864,7 +864,7 @@ technically accurate**. Ensure the following to support this:
   documentation[\[26\]](https://esajournals.onlinelibrary.wiley.com/doi/10.1002/bes2.1801#:~:text=A%20Beginner%27s%20Guide%20to%20Conducting,original%20data%2C%20code%2C%20and%20documentation)**
   -- strive for this ideal.
 - **Availability of Code and Data:** Make sure the project's code is
-  well-organized and **available** (to examiners, at least). If the code
+  well-organised and **available** (to examiners, at least). If the code
   is hosted in a repository, provide a link in the documentation. If
   it's not public, include it in an appendix or as a submitted artifact.
   Similarly, key datasets or examples of recorded data should be
@@ -888,11 +888,11 @@ technically accurate**. Ensure the following to support this:
   honestly in the thesis than to ignore it.
 - **Validation and Testing Information:** To support reproducibility,
   include information on **how you validated the system and tested its
-  performance**. For instance, provide details like "the synchronization
+  performance**. For instance, provide details like "the synchronisation
   accuracy was tested by generating a known signal and measuring timing
   error between devices" with results. Also mention how many trials or
   samples your results are based on (e.g., "results are averaged over 5
-  runs" or "10 participants' data were analyzed"). This helps others
+  runs" or "10 participants' data were analysed"). This helps others
   understand the statistical significance and how to replicate tests. If
   applicable, include a note on random seed or randomness handling (for
   experiments with random elements, stating "a fixed random seed was
@@ -902,7 +902,7 @@ technically accurate**. Ensure the following to support this:
   describing the analysis steps in detail. For example, "GSR data was
   filtered with a 4th order Butterworth low-pass filter at 2 Hz, then
   peaks were detected using algorithm X (parameters\...); stress events
-  were labeled as per Y criteria." These specifics allow another
+  were labelled as per Y criteria." These specifics allow another
   researcher to apply the same analysis to new data or verify your
   analysis on your data.
 - **Technical Accuracy in Writing:** In your explanations, be precise.
@@ -945,7 +945,7 @@ an investment in the long-term impact and integrity of your project.
 By following all the above guidelines, the documentation for the
 *Multi-Sensor Recording System for Contactless GSR Prediction Research*
 project will meet UCL's MEng academic requirements. The writing will be
-formal and clear, the structure well-organized, the references properly
+formal and clear, the structure well-organised, the references properly
 cited, and important aspects like ethics and reproducibility will be
 well addressed. This not only fulfills academic obligations but also
 produces a body of work that you and future readers can trust and build
