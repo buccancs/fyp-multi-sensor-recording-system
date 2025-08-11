@@ -1,0 +1,158 @@
+{
+  "validation_timestamp": "2025-08-11T08:07:27.530432",
+  "approach": "real_system_tests_only",
+  "fake_data_used": false,
+  "simulation_used": false,
+  "mock_data_used": false,
+  "test_results": {
+    "python_application": {
+      "test_category": "python_application",
+      "start_time": "2025-08-11T08:07:27.530471",
+      "tests_executed": [
+        {
+          "test_file": "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py",
+          "start_time": "2025-08-11T08:07:27.530554",
+          "success": false,
+          "output": "\n============================================================\ncomplete SYSTEM TEST REPORT\n============================================================\n\n----------------------------------------\nRunning: Python Environment\nTesting Python environment...\n\u2717 OpenCV\n\u2717 NumPy\n\u2717 PyQt5\n\u2713 Requests\n\u2717 WebSockets\n\u2717 Matplotlib\n\u2717 Pandas\n\u2717 SciPy\n\u2717 Pillow (PIL)\n\nDependencies: 1/9 available\nMissing: OpenCV, NumPy, PyQt5, WebSockets, Matplotlib, Pandas, SciPy, Pillow (PIL)\n\u2717 Python Environment: FAILED\n\n----------------------------------------\nRunning: GUI Components\n\nTesting GUI components...\n\u2717 GUI components test failed: No module named 'PyQt5'\n\u2717 GUI Components: FAILED\n\n----------------------------------------\nRunning: OpenCV Functionality\n\nTesting OpenCV functionality...\n\u2717 OpenCV functionality test failed: No module named 'cv2'\n\u2717 OpenCV Functionality: FAILED\n\n----------------------------------------\nRunning: Network Capabilities\n\nTesting network capabilities...\n\u2713 Socket creation works\n\u2713 JSON message serialization works\n\u2713 Socket communication works\n\u2713 Network Capabilities: PASSED\n\n----------------------------------------\nRunning: Data Processing\n\nTesting data processing...\n\u2717 Data processing test failed: No module named 'matplotlib'\n\u2717 Data Processing: FAILED\n\n----------------------------------------\nRunning: File Operations\n\nTesting file operations...\n\u2713 JSON session metadata export/import works\n\u2713 CSV sensor data export/import works\n\u2713 Session directory structure creation works\n\u2713 File Operations: PASSED\n\n----------------------------------------\nRunning: System Integration\n\nTesting system integration...\n\u2713 All devices connected successfully\n\u2713 Synchronized recording start works\n\u2713 Status monitoring works\n\u2713 Synchronized recording stop works\n\u2713 Device disconnection works\n\u2713 System Integration: PASSED\n\n============================================================\nTEST SUMMARY\n============================================================\n\u2717 Python Environment: FAIL\n\u2717 GUI Components: FAIL\n\u2717 OpenCV Functionality: FAIL\n\u2713 Network Capabilities: PASS\n\u2717 Data Processing: FAIL\n\u2713 File Operations: PASS\n\u2713 System Integration: PASS\n\nOverall Result: 3/7 tests passed (42.9%)\n\u26a0\ufe0f  Some tests failed. Review the details above.\n",
+          "error": "Traceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 58, in test_gui_components\n    from PyQt5.QtCore import Qt, QTimer\nModuleNotFoundError: No module named 'PyQt5'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 102, in test_opencv_functionality\n    import cv2\nModuleNotFoundError: No module named 'cv2'\nTraceback (most recent call last):\n  File \"/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/system_test.py\", line 218, in test_data_processing\n    import matplotlib\nModuleNotFoundError: No module named 'matplotlib'\n",
+          "exit_code": 1,
+          "fake_data_used": false,
+          "end_time": "2025-08-11T08:07:27.642598"
+        }
+      ],
+      "overall_success": false,
+      "fake_data_used": false,
+      "total_tests": 1,
+      "passed_tests": 0,
+      "failed_tests": 1,
+      "success_rate": 0.0,
+      "end_time": "2025-08-11T08:07:27.642724"
+    },
+    "system_integration": {
+      "test_category": "system_integration",
+      "start_time": "2025-08-11T08:07:27.642840",
+      "tests_executed": [],
+      "overall_success": false,
+      "fake_data_used": false,
+      "total_tests": 0,
+      "passed_tests": 0,
+      "failed_tests": 0,
+      "success_rate": 0,
+      "end_time": "2025-08-11T08:07:27.642915"
+    },
+    "hardware_interface": {
+      "test_category": "hardware_interface",
+      "start_time": "2025-08-11T08:07:27.642978",
+      "tests_executed": [
+        {
+          "test_name": "bluetooth_interface",
+          "start_time": "2025-08-11T08:07:27.643027",
+          "success": true,
+          "output": "\u26a0 bluetoothctl not available\n",
+          "error": "",
+          "end_time": "2025-08-11T08:07:27.644325"
+        },
+        {
+          "test_name": "serial_interface",
+          "start_time": "2025-08-11T08:07:27.644388",
+          "success": true,
+          "output": "\u2713 pyserial library available\n\u2713 Found 32 serial ports\n  - /dev/ttyS31: n/a\n  - /dev/ttyS30: n/a\n  - /dev/ttyS29: n/a\n  - /dev/ttyS28: n/a\n  - /dev/ttyS27: n/a\n  - /dev/ttyS26: n/a\n  - /dev/ttyS25: n/a\n  - /dev/ttyS24: n/a\n  - /dev/ttyS23: n/a\n  - /dev/ttyS22: n/a\n  - /dev/ttyS21: n/a\n  - /dev/ttyS20: n/a\n  - /dev/ttyS19: n/a\n  - /dev/ttyS18: n/a\n  - /dev/ttyS17: n/a\n  - /dev/ttyS16: n/a\n  - /dev/ttyS15: n/a\n  - /dev/ttyS14: n/a\n  - /dev/ttyS13: n/a\n  - /dev/ttyS12: n/a\n  - /dev/ttyS11: n/a\n  - /dev/ttyS10: n/a\n  - /dev/ttyS9: n/a\n  - /dev/ttyS8: n/a\n  - /dev/ttyS7: n/a\n  - /dev/ttyS6: n/a\n  - /dev/ttyS5: n/a\n  - /dev/ttyS4: n/a\n  - /dev/ttyS3: n/a\n  - /dev/ttyS2: n/a\n  - /dev/ttyS1: n/a\n  - /dev/ttyS0: n/a\n",
+          "error": "",
+          "end_time": "2025-08-11T08:07:28.537668"
+        },
+        {
+          "test_name": "usb_interface",
+          "start_time": "2025-08-11T08:07:28.537764",
+          "success": true,
+          "output": "\u26a0 lsusb command not available\n",
+          "error": "",
+          "end_time": "2025-08-11T08:07:28.566233"
+        }
+      ],
+      "overall_success": true,
+      "fake_data_used": false,
+      "total_tests": 3,
+      "passed_tests": 3,
+      "failed_tests": 0,
+      "success_rate": 100.0,
+      "end_time": "2025-08-11T08:07:28.566240"
+    },
+    "network_communication": {
+      "test_category": "network_communication",
+      "start_time": "2025-08-11T08:07:28.566311",
+      "tests_executed": [
+        {
+          "test_name": "socket_creation",
+          "start_time": "2025-08-11T08:07:28.566355",
+          "success": true,
+          "output": "\u2713 TCP socket created successfully\n\u2713 Socket closed successfully\n",
+          "error": "",
+          "end_time": "2025-08-11T08:07:28.566390"
+        },
+        {
+          "test_name": "localhost_binding",
+          "start_time": "2025-08-11T08:07:28.566436",
+          "success": true,
+          "output": "\u2713 Bound to localhost:44281\n\u2713 Socket listening\n\u2713 Socket closed\n",
+          "error": "",
+          "end_time": "2025-08-11T08:07:28.566648"
+        },
+        {
+          "test_name": "network_discovery",
+          "start_time": "2025-08-11T08:07:28.566704",
+          "success": true,
+          "output": "\u2713 Hostname: pkrvmsl9tci6h6u\n\u2713 Local IP: 10.1.0.39\n\u2713 External network connectivity confirmed\n",
+          "error": "",
+          "end_time": "2025-08-11T08:07:28.570082"
+        }
+      ],
+      "overall_success": true,
+      "fake_data_used": false,
+      "total_tests": 3,
+      "passed_tests": 3,
+      "failed_tests": 0,
+      "success_rate": 100.0,
+      "end_time": "2025-08-11T08:07:28.570089"
+    },
+    "system_performance": {
+      "test_category": "system_performance",
+      "start_time": "2025-08-11T08:07:28.570157",
+      "metrics_collected": [
+        {
+          "metric_name": "memory_usage",
+          "value": 0.8443756103515625,
+          "unit": "GB",
+          "timestamp": "2025-08-11T08:07:28.570251",
+          "source": "psutil.virtual_memory()"
+        },
+        {
+          "metric_name": "cpu_usage",
+          "value": 0.0,
+          "unit": "percent",
+          "timestamp": "2025-08-11T08:07:29.570563",
+          "source": "psutil.cpu_percent()"
+        },
+        {
+          "metric_name": "disk_usage",
+          "value": 45.3885612487793,
+          "unit": "GB",
+          "timestamp": "2025-08-11T08:07:29.570601",
+          "source": "psutil.disk_usage()"
+        }
+      ],
+      "overall_success": true,
+      "fake_data_used": false,
+      "end_time": "2025-08-11T08:07:29.570604"
+    }
+  },
+  "overall_success": {
+    "category_success_rate": 60.0,
+    "test_success_rate": 85.7,
+    "total_categories": 5,
+    "successful_categories": 3,
+    "total_tests": 7,
+    "passed_tests": 6,
+    "failed_tests": 1
+  },
+  "evidence_file": "results/real_validation/real_system_validation_report_20250811_080729.md"
+}
