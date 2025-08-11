@@ -19,7 +19,7 @@ sys.path.insert(0, str(project_root))
 from tests.integration.virtual_environment import (
     VirtualTestConfig,
     VirtualTestRunner,
-    TestScenario,
+    VirtualTestScenario,
     SyntheticDataGenerator
 )
 
@@ -72,8 +72,8 @@ class TestVirtualEnvironmentIntegration:
     def test_predefined_scenarios(self):
         """Test predefined test scenarios"""
         scenarios = [
-            TestScenario.create_quick_test(),
-            TestScenario.create_ci_test(),
+            VirtualTestScenario.create_quick_test(),
+            VirtualTestScenario.create_ci_test(),
         ]
         
         for scenario in scenarios:

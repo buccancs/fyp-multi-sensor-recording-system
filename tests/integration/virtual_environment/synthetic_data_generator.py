@@ -38,9 +38,13 @@ class SyntheticDataGenerator:
         Args:
             seed: Random seed for reproducible data generation
         """
+        # Create isolated random generators for deterministic behavior
         if seed is not None:
-            random.seed(seed)
-            np.random.seed(seed)
+            self.random_generator = np.random.Generator(np.random.PCG64(seed))
+            self.py_random = random.Random(seed)
+        else:
+            self.random_generator = np.random.default_rng()
+            self.py_random = random.Random()
         
         # GSR simulation parameters
         self.gsr_baseline = 0.8  # μS (microsiemens) - typical baseline
@@ -66,8 +70,9 @@ class SyntheticDataGenerator:
         self.thermal_base_temp = 25.0  # Celsius
         self.thermal_hotspot_temp = 35.0  # Peak temperature
         
-        # Timing
-        self.start_time = time.time()
+        # Use deterministic timing for reproducible results
+        self.start_time = 0.0  # Use relative time instead of actual time
+        self.current_time = 0.0
         
     def generate_gsr_sample(self) -> float:
         """
@@ -82,14 +87,16 @@ class SyntheticDataGenerator:
         Returns:
             float: GSR value in microsiemens (μS)
         """
-        current_time = time.time() - self.start_time
+        # Use deterministic time progression for reproducible results
+        sample_interval = 1.0 / 128.0  # 128Hz sampling rate
+        self.current_time += sample_interval
         
         # Baseline drift (very slow changes)
-        drift = math.sin(current_time * 0.01) * self.gsr_baseline_drift_rate
+        drift = math.sin(self.current_time * 0.01) * self.gsr_baseline_drift_rate
         self.gsr_current_baseline = self.gsr_baseline + drift
         
         # Random noise (simulates measurement noise and small physiological variations)
-        noise = random.gauss(0, self.gsr_noise_amplitude)
+        noise = self.random_generator.normal(0, self.gsr_noise_amplitude)
         
         # Stress event simulation
         stress_component = 0.0
@@ -104,19 +111,19 @@ class SyntheticDataGenerator:
                 self.gsr_stress_amplitude = 0.0
         else:
             # Check for new stress event
-            if random.random() < self.gsr_stress_spike_probability:
+            if self.random_generator.random() < self.gsr_stress_spike_probability:
                 # Start new stress event
                 self.gsr_stress_event_timer = 0.01
-                self.gsr_stress_amplitude = random.uniform(0.3, 1.0)  # Variable stress intensity
+                self.gsr_stress_amplitude = self.random_generator.uniform(0.3, 1.0)  # Variable stress intensity
                 stress_component = self.gsr_stress_amplitude
         
         # Breathing artifact (subtle periodic component)
         breathing_rate = 0.25  # Hz (15 breaths per minute)
-        breathing_component = 0.02 * math.sin(2 * math.pi * breathing_rate * current_time)
+        breathing_component = 0.02 * math.sin(2 * math.pi * breathing_rate * self.current_time)
         
         # Heart rate artifact (very subtle)
         heart_rate = 1.17  # Hz (70 BPM)
-        heart_component = 0.005 * math.sin(2 * math.pi * heart_rate * current_time)
+        heart_component = 0.005 * math.sin(2 * math.pi * heart_rate * self.current_time)
         
         # Combine all components
         gsr_value = (self.gsr_current_baseline + 
@@ -159,7 +166,7 @@ class SyntheticDataGenerator:
             # Create a synthetic image using numpy
             frame = np.zeros((self.video_height, self.video_width, 3), dtype=np.uint8)
             
-            current_time = time.time() - self.start_time
+            current_time = self.current_time
             self.video_frame_counter += 1
             
             # Create moving gradient pattern
@@ -226,7 +233,7 @@ class SyntheticDataGenerator:
             bytes: Raw thermal data (temperature values)
         """
         try:
-            current_time = time.time() - self.start_time
+            current_time = self.current_time
             self.thermal_frame_counter += 1
             
             # Create thermal image array (temperatures in Celsius)
@@ -234,7 +241,7 @@ class SyntheticDataGenerator:
                                  self.thermal_base_temp, dtype=np.float32)
             
             # Add noise
-            noise = np.random.normal(0, 0.5, (self.thermal_height, self.thermal_width))
+            noise = self.random_generator.normal(0, 0.5, (self.thermal_height, self.thermal_width))
             thermal_data += noise
             
             # Moving hotspot
@@ -274,7 +281,7 @@ class SyntheticDataGenerator:
         except Exception as e:
             # Fallback: return dummy thermal data
             dummy_size = self.thermal_width * self.thermal_height * 2  # 2 bytes per pixel
-            dummy_thermal = bytes([random.randint(0, 255) for _ in range(dummy_size)])
+            dummy_thermal = bytes([self.random_generator.integers(0, 256) for _ in range(dummy_size)])
             return dummy_thermal
     
     def generate_thermal_frame_base64(self) -> str:

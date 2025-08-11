@@ -19,7 +19,7 @@ sys.path.insert(0, str(project_root))
 from tests.integration.virtual_environment import (
     VirtualTestConfig,
     VirtualTestRunner, 
-    TestScenario,
+    VirtualTestScenario,
     VirtualDeviceClient,
     VirtualDeviceConfig,
     SyntheticDataGenerator
@@ -87,7 +87,7 @@ async def test_quick_scenario():
     logger = logging.getLogger("QuickTest")
     
     # Create a minimal test scenario
-    scenario = TestScenario.create_quick_test()
+    scenario = VirtualTestScenario.create_quick_test()
     
     # Override for even quicker test
     scenario.config.test_duration_minutes = 0.2

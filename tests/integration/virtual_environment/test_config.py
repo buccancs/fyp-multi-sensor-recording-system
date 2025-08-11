@@ -238,7 +238,7 @@ class VirtualTestConfig:
 
 
 @dataclass
-class TestScenario:
+class VirtualTestScenario:
     """
     Predefined test scenario with specific configuration.
     
@@ -250,7 +250,7 @@ class TestScenario:
     expected_outcomes: Dict[str, Any] = field(default_factory=dict)
     
     @classmethod
-    def create_quick_test(cls) -> "TestScenario":
+    def create_quick_test(cls) -> "VirtualTestScenario":
         """Create a quick test scenario (1 minute, 2 devices)"""
         config = VirtualTestConfig(
             test_name="quick_test",
@@ -276,7 +276,7 @@ class TestScenario:
         )
     
     @classmethod
-    def create_stress_test(cls) -> "TestScenario":
+    def create_stress_test(cls) -> "VirtualTestScenario":
         """Create a stress test scenario (30 minutes, 6 devices)"""
         config = VirtualTestConfig(
             test_name="stress_test",
@@ -307,7 +307,7 @@ class TestScenario:
         )
     
     @classmethod
-    def create_endurance_test(cls) -> "TestScenario":
+    def create_endurance_test(cls) -> "VirtualTestScenario":
         """Create an endurance test scenario (2 hours, 4 devices)"""
         config = VirtualTestConfig(
             test_name="endurance_test",
@@ -338,7 +338,7 @@ class TestScenario:
         )
     
     @classmethod
-    def create_synchronization_test(cls) -> "TestScenario":
+    def create_synchronization_test(cls) -> "VirtualTestScenario":
         """Create a synchronization validation test"""
         config = VirtualTestConfig(
             test_name="sync_test",
@@ -366,7 +366,7 @@ class TestScenario:
         )
     
     @classmethod
-    def create_ci_test(cls) -> "TestScenario":
+    def create_ci_test(cls) -> "VirtualTestScenario":
         """Create a CI-friendly test scenario"""
         config = VirtualTestConfig(
             test_name="ci_test",
@@ -440,7 +440,7 @@ def load_config_from_env() -> VirtualTestConfig:
     return config
 
 
-def create_test_matrix() -> List[TestScenario]:
+def create_test_matrix() -> List[VirtualTestScenario]:
     """
     Create a matrix of test scenarios for comprehensive validation.
     
@@ -448,11 +448,11 @@ def create_test_matrix() -> List[TestScenario]:
         List of test scenarios covering different aspects
     """
     return [
-        TestScenario.create_quick_test(),
-        TestScenario.create_stress_test(),
-        TestScenario.create_synchronization_test(),
-        TestScenario.create_ci_test(),
-        # TestScenario.create_endurance_test(),  # Comment out for normal testing
+        VirtualTestScenario.create_quick_test(),
+        VirtualTestScenario.create_stress_test(),
+        VirtualTestScenario.create_synchronization_test(),
+        VirtualTestScenario.create_ci_test(),
+        # VirtualTestScenario.create_endurance_test(),  # Comment out for normal testing
     ]
 
 

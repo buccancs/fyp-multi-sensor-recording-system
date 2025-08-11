@@ -36,11 +36,11 @@ from PythonApp.network.pc_server import PCServer
 
 from .virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
 from .synthetic_data_generator import SyntheticDataGenerator, estimate_data_volume
-from .test_config import VirtualTestConfig, TestScenario
+from .test_config import VirtualTestConfig, VirtualTestScenario
 
 
 @dataclass
-class TestMetrics:
+class VirtualVirtualTestMetrics:
     """Metrics collected during test execution"""
     
     # Test timing
@@ -124,7 +124,7 @@ class VirtualTestRunner:
         # Test state
         self.is_running = False
         self.start_time: Optional[datetime] = None
-        self.metrics = TestMetrics(start_time=datetime.now())
+        self.metrics = VirtualTestMetrics(start_time=datetime.now())
         self.device_results: List[DeviceTestResult] = []
         
         # Monitoring
@@ -175,12 +175,12 @@ class VirtualTestRunner:
         
         return logger
     
-    async def run_test(self) -> TestMetrics:
+    async def run_test(self) -> "VirtualTestMetrics":
         """
         Execute the complete virtual test.
         
         Returns:
-            TestMetrics with complete test results
+            VirtualTestMetrics with complete test results
         """
         try:
             self.logger.info(f"Starting virtual test: {self.config.test_name}")
@@ -726,7 +726,7 @@ class VirtualTestRunner:
 
 # Convenience functions for running tests
 
-async def run_test_scenario(scenario: TestScenario, logger: Optional[logging.Logger] = None) -> TestMetrics:
+async def run_test_scenario(scenario: VirtualTestScenario, logger: Optional[logging.Logger] = None) -> "VirtualTestMetrics":
     """
     Run a specific test scenario.
     
@@ -735,13 +735,13 @@ async def run_test_scenario(scenario: TestScenario, logger: Optional[logging.Log
         logger: Optional logger instance
         
     Returns:
-        TestMetrics with results
+        VirtualTestMetrics with results
     """
     runner = VirtualTestRunner(scenario.config, logger)
     return await runner.run_test()
 
 
-async def run_test_matrix(scenarios: List[TestScenario], logger: Optional[logging.Logger] = None) -> List[TestMetrics]:
+async def run_test_matrix(scenarios: List[VirtualTestScenario], logger: Optional[logging.Logger] = None) -> List["VirtualTestMetrics"]:
     """
     Run multiple test scenarios sequentially.
     
@@ -750,7 +750,7 @@ async def run_test_matrix(scenarios: List[TestScenario], logger: Optional[loggin
         logger: Optional logger instance
         
     Returns:
-        List of TestMetrics, one per scenario
+        List of VirtualTestMetrics, one per scenario
     """
     results = []
     
@@ -771,7 +771,7 @@ async def run_test_matrix(scenarios: List[TestScenario], logger: Optional[loggin
                 logger.error(f"Scenario {scenario.name} failed with exception: {e}")
             
             # Create failed metrics
-            failed_metrics = TestMetrics(
+            failed_metrics = VirtualTestMetrics(
                 start_time=datetime.now(),
                 end_time=datetime.now(),
                 overall_passed=False,
@@ -813,10 +813,10 @@ if __name__ == "__main__":
         else:
             # Use predefined scenario
             scenario_map = {
-                "quick": TestScenario.create_quick_test(),
-                "stress": TestScenario.create_stress_test(),
-                "sync": TestScenario.create_synchronization_test(),
-                "ci": TestScenario.create_ci_test(),
+                "quick": VirtualTestScenario.create_quick_test(),
+                "stress": VirtualTestScenario.create_stress_test(),
+                "sync": VirtualTestScenario.create_synchronization_test(),
+                "ci": VirtualTestScenario.create_ci_test(),
             }
             scenario = scenario_map[args.scenario]
             config = scenario.config
