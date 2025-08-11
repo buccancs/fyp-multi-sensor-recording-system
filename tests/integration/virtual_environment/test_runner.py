@@ -40,7 +40,7 @@ from .test_config import VirtualTestConfig, VirtualTestScenario
 
 
 @dataclass
-class VirtualVirtualTestMetrics:
+class VirtualTestMetrics:
     """Metrics collected during test execution"""
     
     # Test timing

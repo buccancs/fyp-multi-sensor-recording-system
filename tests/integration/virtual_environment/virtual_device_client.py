@@ -166,21 +166,37 @@ class VirtualDeviceClient:
         try:
             self.logger.info("Disconnecting from server")
             self.is_running = False
+            self.is_recording = False
             self.stop_event.set()
             
-            # Wait for background threads
+            # Wait for background threads with timeout
             for thread in self.background_threads:
-                thread.join(timeout=5.0)
+                try:
+                    thread.join(timeout=2.0)  # Reduced timeout to prevent hanging
+                    if thread.is_alive():
+                        self.logger.warning(f"Thread {thread.name} did not terminate within timeout")
+                except Exception as e:
+                    self.logger.warning(f"Error joining thread {thread.name}: {e}")
+                
+            # Clear the thread list
+            self.background_threads.clear()
                 
             if self.socket:
-                self.socket.close()
-                self.socket = None
-                
+                try:
+                    self.socket.close()
+                except Exception as e:
+                    self.logger.warning(f"Error closing socket: {e}")
+                finally:
+                    self.socket = None
+                    
             self.is_connected = False
             self.logger.info("Disconnected successfully")
             
         except Exception as e:
             self.logger.error(f"Error during disconnect: {e}")
+            # Ensure we mark as disconnected even if there are errors
+            self.is_connected = False
+            self.is_running = False
     
     async def _send_message(self, message: JsonMessage) -> bool:
         """
@@ -296,20 +312,38 @@ class VirtualDeviceClient:
     
     def _message_receiver_loop(self) -> None:
         """Background loop to receive and process messages from server"""
-        asyncio.set_event_loop(asyncio.new_event_loop())
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         
         try:
             while self.is_running and not self.stop_event.is_set():
-                message = loop.run_until_complete(self._receive_message())
-                if message:
-                    loop.run_until_complete(self._handle_received_message(message))
-                elif not self.is_connected:
-                    break
+                try:
+                    message = loop.run_until_complete(self._receive_message())
+                    if message:
+                        loop.run_until_complete(self._handle_received_message(message))
+                    elif not self.is_connected:
+                        break
+                except Exception as e:
+                    self.logger.error(f"Error receiving message: {e}")
+                    if not self.is_connected or not self.is_running:
+                        break
+                    # Continue loop on transient errors
+                    
         except Exception as e:
             self.logger.error(f"Error in message receiver loop: {e}")
         finally:
-            loop.close()
+            try:
+                # Cancel all pending tasks before closing the loop
+                pending = asyncio.all_tasks(loop)
+                if pending:
+                    for task in pending:
+                        task.cancel()
+                    # Give tasks a chance to clean up
+                    loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            except Exception as e:
+                self.logger.debug(f"Error during loop cleanup: {e}")
+            finally:
+                loop.close()
     
     async def _handle_received_message(self, message: JsonMessage) -> None:
         """Process a received message and respond appropriately"""
@@ -474,31 +508,47 @@ class VirtualDeviceClient:
         data_generator = SyntheticDataGenerator()
         sample_interval = 1.0 / self.config.gsr_sampling_rate_hz
         
-        asyncio.set_event_loop(asyncio.new_event_loop())
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         
         try:
             while self.is_running and self.is_recording and not self.stop_event.is_set():
-                # Generate GSR sample
-                gsr_value = data_generator.generate_gsr_sample()
-                
-                # Create sensor data message
-                sensor_msg = SensorDataMessage(
-                    values={"GSR": gsr_value},
-                    timestamp=time.time()
-                )
-                
-                # Send message
-                loop.run_until_complete(self._send_message(sensor_msg))
-                self.data_samples_sent += 1
-                
-                # Wait for next sample
-                self.stop_event.wait(sample_interval)
-                
+                try:
+                    # Generate GSR sample
+                    gsr_value = data_generator.generate_gsr_sample()
+                    
+                    # Create sensor data message
+                    sensor_msg = SensorDataMessage(
+                        values={"GSR": gsr_value},
+                        timestamp=time.time()
+                    )
+                    
+                    # Send message
+                    loop.run_until_complete(self._send_message(sensor_msg))
+                    self.data_samples_sent += 1
+                    
+                    # Wait for next sample
+                    self.stop_event.wait(sample_interval)
+                except Exception as e:
+                    self.logger.error(f"Error sending GSR sample: {e}")
+                    if not self.is_connected or not self.is_running:
+                        break
+                        
         except Exception as e:
             self.logger.error(f"Error in sensor data loop: {e}")
         finally:
-            loop.close()
+            try:
+                # Cancel all pending tasks before closing the loop
+                pending = asyncio.all_tasks(loop)
+                if pending:
+                    for task in pending:
+                        task.cancel()
+                    # Give tasks a chance to clean up
+                    loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            except Exception as e:
+                self.logger.debug(f"Error during sensor loop cleanup: {e}")
+            finally:
+                loop.close()
     
     def _start_video_recording_simulation(self) -> None:
         """Start simulating video recording and file transfer"""

@@ -102,7 +102,7 @@ class TestRealPCAppIntegration:
     async def test_android_device_manager_with_virtual_devices(self, test_logger):
         """Test AndroidDeviceManager with virtual devices"""
         # Initialize real AndroidDeviceManager
-        device_manager = AndroidDeviceManager(port=9002)
+        device_manager = AndroidDeviceManager(server_port=9002)
         
         try:
             # Start device manager
@@ -196,7 +196,7 @@ class TestRealPCAppIntegration:
         assert server.port == 9999
         
         # Test AndroidDeviceManager
-        manager = AndroidDeviceManager(port=9998)
+        manager = AndroidDeviceManager(server_port=9998)
         assert manager is not None
 
     @pytest.mark.asyncio

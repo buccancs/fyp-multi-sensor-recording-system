@@ -18,7 +18,7 @@ __author__ = "GSR Research Team"
 
 from .virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
 from .synthetic_data_generator import SyntheticDataGenerator
-from .test_runner import VirtualTestRunner
+from .test_runner import VirtualTestRunner, VirtualTestMetrics
 from .test_config import VirtualTestConfig, VirtualTestScenario
 
 __all__ = [
@@ -26,6 +26,7 @@ __all__ = [
     "VirtualDeviceConfig", 
     "SyntheticDataGenerator", 
     "VirtualTestRunner",
+    "VirtualTestMetrics",
     "VirtualTestConfig",
     "VirtualTestScenario",
 ]
