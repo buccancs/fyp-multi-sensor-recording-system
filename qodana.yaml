@@ -91,7 +91,6 @@ exclude:
       - .gradle/
       - node_modules/
       - .idea/
-      -
       - __pycache__/
       - venv/
       - env/
