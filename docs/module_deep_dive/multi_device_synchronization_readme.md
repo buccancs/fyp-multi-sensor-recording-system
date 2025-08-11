@@ -1180,7 +1180,7 @@ python sync_network_test.py \
 **Diagnostic Tools**:
 
 - Network connectivity tester
-- Synchronisation quality analyzer
+- Synchronisation quality analyser
 - Drift compensation validator
 - Performance benchmarking suite
 

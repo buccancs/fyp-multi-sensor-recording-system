@@ -26,7 +26,7 @@ abstract class SessionStateDatabase : RoomDatabase() {
         private const val DATABASE_NAME = "session_state_database"
 
         fun getDatabase(context: Context): SessionStateDatabase {
-            return INSTANCE ?: synchronized(this) {
+            return INSTANCE ?: synchronised(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     SessionStateDatabase::class.java,

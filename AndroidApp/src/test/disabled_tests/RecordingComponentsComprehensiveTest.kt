@@ -284,7 +284,7 @@ class RecordingComponentsComprehensiveTest {
     }
 
     @Test
-    fun `test shimmer device synchronization`() {
+    fun `test shimmer device synchronisation`() {
         val masterTimestamp = System.currentTimeMillis()
 
         whenever(mockShimmerDevice.synchronizeClock(masterTimestamp))
@@ -342,7 +342,7 @@ class RecordingComponentsComprehensiveTest {
     }
 
     @Test
-    fun `test synchronized multi-modal recording`() = runTest {
+    fun `test synchronised multi-modal recording`() = runTest {
         val recordingSession = MultiModalRecordingSession(
             sessionId = "session_001",
             outputDirectory = File(mockContext.filesDir, "multi_modal"),
@@ -378,7 +378,7 @@ class RecordingComponentsComprehensiveTest {
     }
 
     @Test
-    fun `test recording timestamp synchronization`() {
+    fun `test recording timestamp synchronisation`() {
         val masterTimestamp = System.currentTimeMillis()
         val synchronizer = RecordingTimestampSynchronizer()
 

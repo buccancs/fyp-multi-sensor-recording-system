@@ -89,12 +89,12 @@ Successfully created **10 high-resolution thesis figures** with true 4K quality 
 - **Base canvas**: 3840 × 2160 (4K)
 - **Scale factor**: 3× for enhanced clarity
 - **Background**: White (academic standard)
-- **Format**: PNG with 8-bit RGB color depth
+- **Format**: PNG with 8-bit RGB colour depth
 - **Browser engine**: Puppeteer with no-sandbox configuration
 
 ### Quality Standards Met
 ✅ **4K+ Resolution**: All diagrams exceed 2K and most achieve true 4K dimensions  
-✅ **Professional Styling**: Consistent color schemes and typography  
+✅ **Professional Styling**: Consistent colour schemes and typography  
 ✅ **Academic Standards**: Formal technical language and precise terminology  
 ✅ **High Detail**: Complex system relationships clearly visible at any zoom level  
 ✅ **Print Quality**: Suitable for high-resolution printing and digital publication  
@@ -117,11 +117,11 @@ Successfully created **10 high-resolution thesis figures** with true 4K quality 
 The original browser sandbox limitations were successfully overcome using:
 - **Puppeteer configuration**: Custom JSON with `--no-sandbox` and related flags
 - **Mermaid CLI installation**: Global npm package installation
-- **Optimized rendering**: Multiple resolution strategies with automatic fallback
+- **Optimised rendering**: Multiple resolution strategies with automatic fallback
 
 ### Automation Process
 1. **Diagram extraction**: Python script to parse Mermaid content from markdown files
-2. **Quality optimization**: Multiple rendering strategies to achieve best quality
+2. **Quality optimisation**: Multiple rendering strategies to achieve best quality
 3. **Batch processing**: Automated rendering of all 10 diagrams
 4. **Validation**: File size and resolution verification for quality assurance
 
@@ -159,7 +159,7 @@ All 4K diagrams are now located in:
 ### Performance Metrics
 - **Rendering time**: ~2 minutes per diagram
 - **Total processing time**: <30 minutes for complete set
-- **Success rate**: 100% with optimized configuration
+- **Success rate**: 100% with optimised configuration
 - **Quality validation**: All files >100KB ensuring high detail retention
 
 ## Impact on Thesis Quality

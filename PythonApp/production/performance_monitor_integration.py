@@ -217,7 +217,7 @@ class PerformanceMonitorIntegration:
         elif current_level == "degraded":
             recommendations.append(
                 "Performance degradation detected. Monitor system resources and consider "
-                "optimizing recording parameters."
+                "optimising recording parameters."
             )
         frame_stats = status.get("frame_drop_stats", {})
         if frame_stats.get("drop_rate_actual", 0) > 0:
@@ -299,7 +299,7 @@ class PerformanceMonitorIntegration:
         if stability_score < 70:
             recommendations.append(
                 "System stability is below optimal levels. Consider hardware upgrades, "
-                "software optimization, or workload reduction."
+                "software optimisation, or workload reduction."
             )
         if degradation_rate > 0.3:
             recommendations.append(

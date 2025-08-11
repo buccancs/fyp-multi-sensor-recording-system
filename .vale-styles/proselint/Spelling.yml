@@ -4,14 +4,14 @@ level: error
 ignorecase: true
 either:
   advisor: adviser
-  centre: center
-  colour: color
-  emphasise: emphasize
+  centre: centre
+  colour: colour
+  emphasise: emphasise
   finalise: finalize
   focussed: focused
-  labour: labor
+  labour: labour
   learnt: learned
-  organise: organize
-  organised: organized
-  organising: organizing
+  organise: organise
+  organised: organised
+  organising: organising
   recognise: recognize

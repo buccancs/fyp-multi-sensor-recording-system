@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added tests `tests/docs/test_references_tex.py` to ensure presence and inclusion
   - TODO: Migrate to BibTeX (`references.bib`) and map chapter citations; tracked in `backlog.md`
 
-- **LaTeX Chapter 2 Location Normalization (2025-08-11)**
+- **LaTeX Chapter 2 Location Normalisation (2025-08-11)**
   - Created include-ready `docs/thesis_report/final/2.tex` to align with chapters 1, 3, 4, 6
   - Added unit test `tests/docs/test_chapter2_tex.py` to verify presence and structure
   - TODO: Reconcile duplication with `docs/thesis_report/final/latex/chapter2.tex` and standardize chapter locations
@@ -51,8 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Note: Requires textcomp or siunitx packages in master preamble for \textmu and \texttimes
   - No code logic changes; documentation only
 
-- **LaTeX Chapter 5 Normalization (2025-08-11)**
-  - Normalized `docs/thesis_report/final/latex/chapter5.tex` and integrated figure inputs (`chapter5_sync_accuracy`, `chapter5_scalability`, `chapter5_extended_operation`, `chapter5_correlation`)
+- **LaTeX Chapter 5 Normalisation (2025-08-11)**
+  - Normalised `docs/thesis_report/final/latex/chapter5.tex` and integrated figure inputs (`chapter5_sync_accuracy`, `chapter5_scalability`, `chapter5_extended_operation`, `chapter5_correlation`)
   - Included TikZ/PGFPlots packages in `docs/thesis_report/final/latex/main.tex` for Chapter 5 figures
   - Fixed malformed figure environment in `latex/figures/chapter5_extended_operation.tex`
   - Added Mermaid diagram `docs/diagrams/mermaid_chapter5_conversion.md`
@@ -104,7 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Sensor characterisation figures (A9)
 - **Reference Quality Improvements**: Enhanced academic referencing standards in references.md
   - Fixed [4]: Replaced "Various Authors" with proper author list for Scientific Reports paper
-  - Fixed [5]: Added complete author information for Computer Modeling paper
+  - Fixed [5]: Added complete author information for Computer Modelling paper
   - Fixed [7]: Converted ScienceDirect placeholder to proper journal citation
   - Maintained IEEE citation format consistency throughout
 
@@ -346,7 +346,7 @@ This changelog follows the project's established guidelines:
 - Updated `backlog.md` with follow-ups: convert remaining chapters/appendices to `\cite`, enrich BibTeX metadata, and validate LaTeX build toolchain (Mermaid optional).
 
 ### Changed (2025-08-11 13:30)
-- Synchronized Chapter 2 LaTeX with Markdown source:
+- Synchronised Chapter 2 LaTeX with Markdown source:
   - Updated docs/thesis_report/final/latex/2.tex to mirror docs/thesis_report/final/2.md (Sections 2.1–2.8), including full 2.7 hypothesis details and 2.8 sensor device selection rationale.
   - Preserved numeric citations by mapping [n] to \cite{refn} placeholders where applicable (ref1, ref3, ref4, ref5, ref6, ref7, ref8, ref10, ref11, ref15, ref16, ref20, ref21, ref22).
   - Escaped LaTeX-sensitive symbols (%, ×, μ, ±, °) and kept units/values consistent with the Markdown text.
@@ -355,7 +355,7 @@ This changelog follows the project's established guidelines:
 
 
 ### Changed (2025-08-11 14:16)
-- Synchronized Chapter 3 LaTeX with Markdown source:
+- Synchronised Chapter 3 LaTeX with Markdown source:
   - Updated docs/thesis_report/final/latex/3.tex to mirror docs/thesis_report/final/3.md (Sections 3.1–3.7) and align text content.
   - Fixed internal cross-reference to System Analysis and added a label (\label{sec:system-analysis}).
   - Escaped LaTeX-sensitive symbols and units (× -> $\times$, ~ -> $\sim$, \mu as $\mu$) and verified key values/units.
@@ -364,7 +364,7 @@ This changelog follows the project's established guidelines:
 
 
 ### Changed (2025-08-11 14:41)
-- Synchronized Chapter 4 LaTeX with Markdown source:
+- Synchronised Chapter 4 LaTeX with Markdown source:
   - Verified docs/thesis_report/final/latex/4.tex mirrors docs/thesis_report/final/4.md (Sections 4.1–4.7) and aligned text content.
   - Added a References note at the end of 4.tex to match Markdown.
   - Verified symbol/unit formatting consistency (× -> $\times$, ~ -> $\sim$, \mu as $\mu$ where applicable); no structural changes needed.

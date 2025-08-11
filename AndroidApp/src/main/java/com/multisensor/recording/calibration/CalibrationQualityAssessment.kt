@@ -189,7 +189,7 @@ constructor(
         }
 
     private fun detectChessboardPattern(image: Bitmap): PatternDetectionResult {
-        logger.debug("[DEBUG_LOG] Analyzing chessboard pattern in image (${image.width}x${image.height})")
+        logger.debug("[DEBUG_LOG] Analysing chessboard pattern in image (${image.width}x${image.height})")
 
         val expectedCorners = (CHESSBOARD_ROWS - 1) * (CHESSBOARD_COLS - 1)
 
@@ -232,7 +232,7 @@ constructor(
     }
 
     private fun detectCircleGridPattern(image: Bitmap): PatternDetectionResult {
-        logger.debug("[DEBUG_LOG] Analyzing circle grid pattern in image (${image.width}x${image.height})")
+        logger.debug("[DEBUG_LOG] Analysing circle grid pattern in image (${image.width}x${image.height})")
 
         val expectedCircles = CIRCLE_GRID_ROWS * CIRCLE_GRID_COLS
 
@@ -273,7 +273,7 @@ constructor(
     }
 
     private fun analyzeSharpness(image: Bitmap): SharpnessMetrics {
-        logger.debug("[DEBUG_LOG] Analyzing image sharpness")
+        logger.debug("[DEBUG_LOG] Analysing image sharpness")
 
         val pixels = IntArray(image.width * image.height)
         image.getPixels(pixels, 0, image.width, 0, 0, image.width, image.height)
@@ -397,7 +397,7 @@ constructor(
     }
 
     private fun analyzeContrast(image: Bitmap): ContrastMetrics {
-        logger.debug("[DEBUG_LOG] Analyzing image contrast")
+        logger.debug("[DEBUG_LOG] Analysing image contrast")
 
         val pixels = IntArray(image.width * image.height)
         image.getPixels(pixels, 0, image.width, 0, 0, image.width, image.height)
@@ -508,7 +508,7 @@ constructor(
         rgbImage: Bitmap,
         thermalImage: Bitmap,
     ): AlignmentMetrics {
-        logger.debug("[DEBUG_LOG] Analyzing RGB-thermal alignment - RGB: ${rgbImage.width}x${rgbImage.height}, Thermal: ${thermalImage.width}x${thermalImage.height}")
+        logger.debug("[DEBUG_LOG] Analysing RGB-thermal alignment - RGB: ${rgbImage.width}x${rgbImage.height}, Thermal: ${thermalImage.width}x${thermalImage.height}")
 
         try {
             val rgbFeatures = extractKeyFeatures(rgbImage)
@@ -651,8 +651,8 @@ constructor(
                 val r = (pixel shr 16) and 0xFF
                 val g = (pixel shr 8) and 0xFF
                 val b = pixel and 0xFF
-                val gray = (0.299 * r + 0.587 * g + 0.114 * b).toInt()
-                val grayPixel = (0xFF shl 24) or (gray shl 16) or (gray shl 8) or gray
+                val grey = (0.299 * r + 0.587 * g + 0.114 * b).toInt()
+                val grayPixel = (0xFF shl 24) or (grey shl 16) or (grey shl 8) or grey
                 grayBitmap.setPixel(x, y, grayPixel)
             }
         }
@@ -685,9 +685,9 @@ constructor(
                 for (i in -1..1) {
                     for (j in -1..1) {
                         val pixel = bitmap.getPixel(x + j, y + i)
-                        val gray = pixel and 0xFF
-                        gx += gray * sobelX[i + 1][j + 1]
-                        gy += gray * sobelY[i + 1][j + 1]
+                        val grey = pixel and 0xFF
+                        gx += grey * sobelX[i + 1][j + 1]
+                        gy += grey * sobelY[i + 1][j + 1]
                     }
                 }
 

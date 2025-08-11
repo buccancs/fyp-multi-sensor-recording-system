@@ -605,7 +605,7 @@ class UsbControllerUnitTest {
     }
 
     @Test
-    fun `should optimize device selection for multi-device scenarios`() {
+    fun `should optimise device selection for multi-device scenarios`() {
         val device1 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x3901, deviceName = "/dev/bus/usb/001/001")
         val device2 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5840, deviceName = "/dev/bus/usb/001/002")
         val device3 = createMockUsbDevice(vendorId = 0x0BDA, productId = 0x5830, deviceName = "/dev/bus/usb/001/003")
@@ -667,7 +667,7 @@ class UsbControllerUnitTest {
             "CPU efficiency should be valid",
             report.cpuEfficiencyScore >= 0.0 && report.cpuEfficiencyScore <= 1.0
         )
-        assertTrue("Memory utilization should be valid", report.memoryUtilization >= 0L)
+        assertTrue("Memory utilisation should be valid", report.memoryUtilization >= 0L)
         assertTrue("Event throughput should be valid", report.eventThroughput >= 0.0)
         assertTrue("Should have system recommendations", report.systemRecommendations.isNotEmpty())
     }
@@ -737,7 +737,7 @@ class UsbControllerUnitTest {
     }
 
     @Test
-    fun `should get resource utilization metrics`() {
+    fun `should get resource utilisation metrics`() {
         val resourceMetrics = usbController.getResourceUtilizationMetrics()
 
         assertTrue("Should contain CPU usage", resourceMetrics.containsKey("cpu_usage"))

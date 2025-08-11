@@ -22,17 +22,17 @@ class CalibrationProcessor:
         self, image: np.ndarray, pattern_size: Tuple[int, int]
     ) -> Tuple[bool, Optional[np.ndarray]]:
         if len(image.shape) == 3:
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         else:
-            gray = image.copy()
+            grey = image.copy()
         ret, corners = cv2.findChessboardCorners(
-            gray,
+            grey,
             pattern_size,
             cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_NORMALIZE_IMAGE,
         )
         if ret:
             corners = cv2.cornerSubPix(
-                gray, corners, (11, 11), (-1, -1), self.corner_criteria
+                grey, corners, (11, 11), (-1, -1), self.corner_criteria
             )
             return True, corners
         else:
@@ -41,13 +41,13 @@ class CalibrationProcessor:
         self, image: np.ndarray, pattern_size: Tuple[int, int]
     ) -> Tuple[bool, Optional[np.ndarray]]:
         if len(image.shape) == 3:
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         else:
-            gray = image.copy()
-        ret, centers = cv2.findCirclesGrid(
-            gray, pattern_size, cv2.CALIB_CB_SYMMETRIC_GRID
+            grey = image.copy()
+        ret, centres = cv2.findCirclesGrid(
+            grey, pattern_size, cv2.CALIB_CB_SYMMETRIC_GRID
         )
-        return ret, centers if ret else None
+        return ret, centres if ret else None
     def find_calibration_corners(self, image: np.ndarray) -> dict:
         try:
             success, corners = self.detect_chessboard_corners(image, self.pattern_size)
@@ -61,13 +61,13 @@ class CalibrationProcessor:
         self, image: np.ndarray, dictionary_id: int = cv2.aruco.DICT_6X6_250
     ) -> Tuple[bool, List[np.ndarray]]:
         if len(image.shape) == 3:
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         else:
-            gray = image.copy()
+            grey = image.copy()
         aruco_dict = cv2.aruco.Dictionary_get(dictionary_id)
         parameters = cv2.aruco.DetectorParameters_create()
         corners, ids, rejected = cv2.aruco.detectMarkers(
-            gray, aruco_dict, parameters=parameters
+            grey, aruco_dict, parameters=parameters
         )
         if ids is not None and len(corners) > 0:
             return True, corners

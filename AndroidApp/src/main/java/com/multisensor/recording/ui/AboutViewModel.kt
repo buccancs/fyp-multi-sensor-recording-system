@@ -147,14 +147,14 @@ class AboutViewModel @Inject constructor(
         )
 
         val thirdPartyLicenses = listOf(
-            "Android Jetpack - Apache License 2.0",
-            "Material Design Components - Apache License 2.0",
-            "Hilt Dependency Injection - Apache License 2.0",
-            "Kotlin Coroutines - Apache License 2.0",
-            "OkHttp - Apache License 2.0",
-            "Gson - Apache License 2.0",
-            "Shimmer for Android - BSD 3-Clause License",
-            "OpenCV - Apache License 2.0"
+            "Android Jetpack - Apache Licence 2.0",
+            "Material Design Components - Apache Licence 2.0",
+            "Hilt Dependency Injection - Apache Licence 2.0",
+            "Kotlin Coroutines - Apache Licence 2.0",
+            "OkHttp - Apache Licence 2.0",
+            "Gson - Apache Licence 2.0",
+            "Shimmer for Android - BSD 3-Clause Licence",
+            "OpenCV - Apache Licence 2.0"
         )
 
         _uiState.value = _uiState.value.copy(
@@ -163,7 +163,7 @@ class AboutViewModel @Inject constructor(
             acknowledgments = acknowledgments,
             thirdPartyLicenses = thirdPartyLicenses,
             copyrightInfo = "© 2025 Multi-Sensor Recording System\nAll rights reserved",
-            licenseInfo = "This project is licensed under the Apache License 2.0\nSee LICENSE file for details"
+            licenseInfo = "This project is licensed under the Apache Licence 2.0\nSee LICENCE file for details"
         )
     }
 

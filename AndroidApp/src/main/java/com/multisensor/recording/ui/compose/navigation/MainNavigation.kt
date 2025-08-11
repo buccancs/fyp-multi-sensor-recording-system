@@ -29,7 +29,7 @@ fun MainNavigation(
                     val currentScreen = getScreenFromRoute(navBackStackEntry?.destination?.route)
                     Text(currentScreen?.title ?: "Multi-Sensor Recording")
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colours = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),

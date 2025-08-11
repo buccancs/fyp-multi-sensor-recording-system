@@ -75,7 +75,7 @@ class MainActivityUITest {
         ActivityScenario.launch(MainActivity::class.java)
         onView(withContentDescription("Open navigation drawer")).perform(click())
         onView(withId(R.id.nav_shimmer_visualization)).perform(click())
-        onView(withText("Shimmer Visualization")).check(matches(isDisplayed()))
+        onView(withText("Shimmer Visualisation")).check(matches(isDisplayed()))
     }
     @Test
     fun settingsToggles_areInteractive() {

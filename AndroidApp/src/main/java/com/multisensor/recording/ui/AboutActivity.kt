@@ -90,7 +90,7 @@ class AboutActivity : AppCompatActivity() {
                     Intent(Intent.ACTION_VIEW, Uri.parse("https:
                 startActivity(intent)
             } catch (e: Exception) {
-                showError("Failed to open license: ${e.message}")
+                showError("Failed to open licence: ${e.message}")
             }
         }
         binding.privacyPolicyButton.setOnClickListener {
@@ -166,7 +166,7 @@ class AboutActivity : AppCompatActivity() {
             binding.thirdPartyLicensesText.text =
                 "Third-party Libraries:\n${uiState.thirdPartyLicenses.joinToString("\n") { "• $it" }}"
         } else {
-            binding.thirdPartyLicensesText.text = "No third-party licenses to display"
+            binding.thirdPartyLicensesText.text = "No third-party licences to display"
         }
     }
     private fun updateCredits(uiState: AboutUiState) {

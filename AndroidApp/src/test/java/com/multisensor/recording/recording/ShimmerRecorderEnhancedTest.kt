@@ -166,7 +166,7 @@ class ShimmerRecorderEnhancedTest {
     @Test
     fun `enableClockSync should handle non-existent device gracefully`() =
         runTest {
-            println("[DEBUG_LOG] Testing clock synchronization")
+            println("[DEBUG_LOG] Testing clock synchronisation")
 
             val deviceId = "non_existent_device"
 

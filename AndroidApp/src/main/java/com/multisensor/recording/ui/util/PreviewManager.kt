@@ -2,7 +2,7 @@ package com.multisensor.recording.ui.util
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
+import android.graphics.Colour
 import android.graphics.Paint
 import android.widget.ImageView
 import androidx.lifecycle.Lifecycle
@@ -139,13 +139,13 @@ class PreviewManager @Inject constructor(
         val paint = Paint()
         val time = System.currentTimeMillis() / 100
 
-        paint.color = Color.rgb(50, 50, 80)
+        paint.colour = Colour.rgb(50, 50, 80)
         canvas.drawRect(0f, 0f, PREVIEW_WIDTH.toFloat(), PREVIEW_HEIGHT.toFloat(), paint)
 
         for (i in 0..10) {
             val x = ((time + i * 30) % (PREVIEW_WIDTH + 100)).toFloat() - 50
             val y = (PREVIEW_HEIGHT * 0.2f + i * PREVIEW_HEIGHT * 0.05f).toFloat()
-            paint.color = Color.rgb(
+            paint.colour = Colour.rgb(
                 (100 + i * 15) % 255,
                 (150 + i * 10) % 255,
                 (200 + i * 5) % 255
@@ -153,11 +153,11 @@ class PreviewManager @Inject constructor(
             canvas.drawCircle(x, y, 15f, paint)
         }
 
-        paint.color = Color.RED
+        paint.colour = Colour.RED
         paint.textSize = 24f
         canvas.drawText("● LIVE", 10f, 30f, paint)
 
-        paint.color = Color.WHITE
+        paint.colour = Colour.WHITE
         paint.textSize = 16f
         val timeStr = timeFormatter.format(Date())
         canvas.drawText(timeStr, 10f, PREVIEW_HEIGHT - 10f, paint)
@@ -178,24 +178,24 @@ class PreviewManager @Inject constructor(
                 val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
                 val intensity = (127 + 127 * sin(distance * 0.1 + time)).toInt().coerceIn(0, 255)
 
-                val color = when {
-                    intensity < 85 -> Color.rgb(0, 0, intensity * 3)
-                    intensity < 170 -> Color.rgb((intensity - 85) * 3, 0, 255 - (intensity - 85) * 2)
-                    else -> Color.rgb(255, (intensity - 170) * 3, 0)
+                val colour = when {
+                    intensity < 85 -> Colour.rgb(0, 0, intensity * 3)
+                    intensity < 170 -> Colour.rgb((intensity - 85) * 3, 0, 255 - (intensity - 85) * 2)
+                    else -> Colour.rgb(255, (intensity - 170) * 3, 0)
                 }
-                paint.color = color
+                paint.colour = colour
                 canvas.drawPoint(x.toFloat(), y.toFloat(), paint)
             }
         }
 
-        paint.color = Color.YELLOW
+        paint.colour = Colour.YELLOW
         for (i in 0..3) {
             val hotX = Random.nextInt(50, PREVIEW_WIDTH - 50).toFloat()
             val hotY = Random.nextInt(50, PREVIEW_HEIGHT - 50).toFloat()
             canvas.drawCircle(hotX, hotY, 20f, paint)
         }
 
-        paint.color = Color.WHITE
+        paint.colour = Colour.WHITE
         paint.textSize = 18f
         canvas.drawText("🌡️ THERMAL", 10f, 30f, paint)
 

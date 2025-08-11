@@ -98,7 +98,7 @@ graph TB
             
             LAB_SYSTEMS["Laboratory Systems<br/>🔬 High-end equipment<br/>🔬 Stationary setup<br/>🔬 Expert operation<br/>🔬 Limited scalability"]
             
-            COMMERCIAL_TOOLS["Commercial Tools<br/>💼 Proprietary software<br/>💼 Expensive licenses<br/>💼 Vendor lock-in<br/>💼 Limited customisation"]
+            COMMERCIAL_TOOLS["Commercial Tools<br/>💼 Proprietary software<br/>💼 Expensive licences<br/>💼 Vendor lock-in<br/>💼 Limited customisation"]
             
             RESEARCH_PROTOTYPES["Research Prototypes<br/>🧪 Academic projects<br/>🧪 Limited scope<br/>🧪 Proof of concept<br/>🧪 Not production-ready"]
         end

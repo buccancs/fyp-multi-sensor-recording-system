@@ -1,7 +1,7 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
-import android.graphics.Color
+import android.graphics.Colour
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
@@ -30,28 +30,28 @@ class CardSectionLayout @JvmOverloads constructor(
     fun setCardStyle(style: CardStyle) {
         when (style) {
             CardStyle.DEFAULT -> {
-                setBackgroundColor(ContextCompat.getColor(context, android.R.color.white))
+                setBackgroundColor(ContextCompat.getColor(context, android.R.colour.white))
                 setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16))
                 elevation = dpToPx(2).toFloat()
                 setMargins(0, 0, 0, dpToPx(16))
             }
 
             CardStyle.COMPACT -> {
-                setBackgroundColor(ContextCompat.getColor(context, android.R.color.white))
+                setBackgroundColor(ContextCompat.getColor(context, android.R.colour.white))
                 setPadding(dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12))
                 elevation = dpToPx(2).toFloat()
                 setMargins(0, 0, 0, dpToPx(8))
             }
 
             CardStyle.FLAT -> {
-                setBackgroundColor(ContextCompat.getColor(context, android.R.color.white))
+                setBackgroundColor(ContextCompat.getColor(context, android.R.colour.white))
                 setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16))
                 elevation = 0f
                 setMargins(0, 0, 0, dpToPx(16))
             }
 
             CardStyle.DARK -> {
-                setBackgroundColor(ContextCompat.getColor(context, android.R.color.black))
+                setBackgroundColor(ContextCompat.getColor(context, android.R.colour.black))
                 setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16))
                 elevation = dpToPx(2).toFloat()
                 setMargins(0, 0, 0, dpToPx(16))
@@ -114,21 +114,21 @@ class CardSectionLayout @JvmOverloads constructor(
 
     private fun extractBackgroundColor(): Int {
         return when (val bg = background) {
-            is ColorDrawable -> bg.color
+            is ColorDrawable -> bg.colour
             is GradientDrawable -> {
-                Color.WHITE
+                Colour.WHITE
             }
 
             else -> {
-                Color.WHITE
+                Colour.WHITE
             }
         }
     }
 
-    private fun isColorDark(color: Int): Boolean {
-        val red = Color.red(color)
-        val green = Color.green(color)
-        val blue = Color.blue(color)
+    private fun isColorDark(colour: Int): Boolean {
+        val red = Colour.red(colour)
+        val green = Colour.green(colour)
+        val blue = Colour.blue(colour)
 
         val luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255.0
 

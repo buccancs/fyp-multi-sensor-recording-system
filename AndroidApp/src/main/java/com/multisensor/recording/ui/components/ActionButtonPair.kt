@@ -29,7 +29,7 @@ class ActionButtonPair @JvmOverloads constructor(
             layoutParams = LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f).apply {
                 marginEnd = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 6
             }
-            setTextColor(ContextCompat.getColor(context, android.R.color.white))
+            setTextColor(ContextCompat.getColor(context, android.R.colour.white))
             setPadding(
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
@@ -42,7 +42,7 @@ class ActionButtonPair @JvmOverloads constructor(
             layoutParams = LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f).apply {
                 marginStart = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 6
             }
-            setTextColor(ContextCompat.getColor(context, android.R.color.white))
+            setTextColor(ContextCompat.getColor(context, android.R.colour.white))
             setPadding(
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
                 resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 4,
@@ -86,10 +86,10 @@ class ActionButtonPair @JvmOverloads constructor(
 
     private fun getColorForStyle(style: ButtonStyle): Int {
         return when (style) {
-            ButtonStyle.PRIMARY -> android.R.color.holo_green_dark
-            ButtonStyle.SECONDARY -> android.R.color.holo_red_dark
-            ButtonStyle.NEUTRAL -> android.R.color.darker_gray
-            ButtonStyle.WARNING -> android.R.color.holo_orange_dark
+            ButtonStyle.PRIMARY -> android.R.colour.holo_green_dark
+            ButtonStyle.SECONDARY -> android.R.colour.holo_red_dark
+            ButtonStyle.NEUTRAL -> android.R.colour.darker_gray
+            ButtonStyle.WARNING -> android.R.colour.holo_orange_dark
         }
     }
 }

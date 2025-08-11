@@ -261,10 +261,10 @@ class VirtualTestScenario:
         )
     @classmethod
     def create_synchronization_test(cls) -> "VirtualTestScenario":
-        """Create a synchronization validation test"""
+        """Create a synchronisation validation test"""
         config = VirtualTestConfig(
             test_name="sync_test",
-            test_description="Test multi-device synchronization accuracy",
+            test_description="Test multi-device synchronisation accuracy",
             test_duration_minutes=10.0,
             recording_duration_minutes=8.0,
             device_count=5,
@@ -275,8 +275,8 @@ class VirtualTestScenario:
             simulate_file_transfers=False,
         )
         return cls(
-            name="Synchronization Test",
-            description="Validate timing synchronization between devices",
+            name="Synchronisation Test",
+            description="Validate timing synchronisation between devices",
             config=config,
             expected_outcomes={
                 "devices_connected": 5,

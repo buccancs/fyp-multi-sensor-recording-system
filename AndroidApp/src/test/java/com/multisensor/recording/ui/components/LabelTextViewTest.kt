@@ -84,7 +84,7 @@ class LabelTextViewTest {
 
     @Test
     fun testSetLabelTextColorWithResource() {
-        labelTextView.setLabelTextColor(android.R.color.holo_blue_light)
+        labelTextView.setLabelTextColor(android.R.colour.holo_blue_light)
 
         assertNotNull(labelTextView)
     }

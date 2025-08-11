@@ -243,8 +243,8 @@ jobs:
             **Overall Quality Score:** ${qualityData.overall_score.toFixed(1)}/10.0
             
             ### 📊 Key Metrics
-            - **Python Code:** ${qualityData.python_metrics ? '✅ Analyzed' : '❌ No metrics'}
-            - **Kotlin Code:** ${qualityData.kotlin_metrics ? '✅ Analyzed' : '❌ No metrics'}
+            - **Python Code:** ${qualityData.python_metrics ? '✅ Analysed' : '❌ No metrics'}
+            - **Kotlin Code:** ${qualityData.kotlin_metrics ? '✅ Analysed' : '❌ No metrics'}
             - **Complexity Compliance:** ${qualityData.overall_score > 7 ? '✅ PASS' : '⚠️ NEEDS REVIEW'}
             
             ### 🎯 Recommendations

@@ -202,18 +202,18 @@ class ShimmerSettingsActivity : AppCompatActivity() {
         when {
             state.isDeviceConnected -> {
                 connectionStatusChip.text = "Connected"
-                connectionStatusChip.setChipBackgroundColorResource(R.color.success_color)
-                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.success_color))
+                connectionStatusChip.setChipBackgroundColorResource(R.colour.success_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.colour.success_color))
             }
             state.isLoadingConnection -> {
                 connectionStatusChip.text = "Connecting..."
-                connectionStatusChip.setChipBackgroundColorResource(R.color.warning_color)
-                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.warning_color))
+                connectionStatusChip.setChipBackgroundColorResource(R.colour.warning_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.colour.warning_color))
             }
             else -> {
                 connectionStatusChip.text = "Disconnected"
-                connectionStatusChip.setChipBackgroundColorResource(R.color.error_color)
-                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.error_color))
+                connectionStatusChip.setChipBackgroundColorResource(R.colour.error_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.colour.error_color))
             }
         }
         if (state.batteryLevel >= 0) {
@@ -222,9 +222,9 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             batteryProgressBar.progressTintList = ContextCompat.getColorStateList(
                 this,
                 when {
-                    state.batteryLevel > 50 -> R.color.success_color
-                    state.batteryLevel > 20 -> R.color.warning_color
-                    else -> R.color.error_color
+                    state.batteryLevel > 50 -> R.colour.success_color
+                    state.batteryLevel > 20 -> R.colour.warning_color
+                    else -> R.colour.error_color
                 }
             )
         } else {
@@ -246,9 +246,9 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             signalProgressBar.progressTintList = ContextCompat.getColorStateList(
                 this,
                 when {
-                    signalPercent > 60 -> R.color.success_color
-                    signalPercent > 30 -> R.color.warning_color
-                    else -> R.color.error_color
+                    signalPercent > 60 -> R.colour.success_color
+                    signalPercent > 30 -> R.colour.warning_color
+                    else -> R.colour.error_color
                 }
             )
         } else {

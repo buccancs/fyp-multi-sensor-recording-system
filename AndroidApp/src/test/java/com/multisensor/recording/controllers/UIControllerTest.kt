@@ -368,7 +368,7 @@ class UIControllerTest {
     }
 
     @Test
-    fun `battery level display should use correct colors based on level`() {
+    fun `battery level display should use correct colours based on level`() {
         uiController.setCallback(mockCallback)
 
         val highBatteryState = MainUiState(statusText = "Test", batteryLevel = 75)

@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 enum class PowerSaveMode {
     NORMAL,
-    OPTIMIZED,
+    OPTIMISED,
     AGGRESSIVE
 }
 
@@ -40,7 +40,7 @@ class PowerManager @Inject constructor(
     }
 
     fun startOptimization() {
-        logger.info("PowerManager: Starting power optimization")
+        logger.info("PowerManager: Starting power optimisation")
 
         monitoringJob = scope.launch {
             while (isActive) {
@@ -64,7 +64,7 @@ class PowerManager @Inject constructor(
     }
 
     fun stopOptimization() {
-        logger.info("PowerManager: Stopping power optimization")
+        logger.info("PowerManager: Stopping power optimisation")
         monitoringJob?.cancel()
         monitoringJob = null
     }
@@ -115,7 +115,7 @@ class PowerManager @Inject constructor(
     private fun optimizePowerSettings() {
         val newPowerSaveMode = when {
             currentBatteryLevel <= 20 && !isCharging -> PowerSaveMode.AGGRESSIVE
-            currentBatteryLevel <= 50 && !isCharging -> PowerSaveMode.OPTIMIZED
+            currentBatteryLevel <= 50 && !isCharging -> PowerSaveMode.OPTIMISED
             else -> PowerSaveMode.NORMAL
         }
 
@@ -135,7 +135,7 @@ class PowerManager @Inject constructor(
                 backgroundProcessingOptimized = false
             }
 
-            PowerSaveMode.OPTIMIZED -> {
+            PowerSaveMode.OPTIMISED -> {
                 adaptiveFrameRateEnabled = true
                 backgroundProcessingOptimized = true
                 optimizeBackgroundProcessing()
@@ -153,9 +153,9 @@ class PowerManager @Inject constructor(
     }
 
     private fun optimizeBackgroundProcessing() {
-        logger.info("PowerManager: Optimizing background processing")
+        logger.info("PowerManager: Optimising background processing")
 
-        logger.debug("PowerManager: Background processing optimized for power save mode: $powerSaveMode")
+        logger.debug("PowerManager: Background processing optimised for power save mode: $powerSaveMode")
     }
 
     private fun implementAdaptiveFrameRates() {
@@ -184,7 +184,7 @@ class PowerManager @Inject constructor(
                 reducedProcessing = false
             )
 
-            PowerSaveMode.OPTIMIZED -> PowerRecommendations(
+            PowerSaveMode.OPTIMISED -> PowerRecommendations(
                 recommendedFrameRate = 3.0f,
                 recommendedQuality = 70,
                 enablePreview = true,

@@ -60,7 +60,7 @@ class VirtualDeviceConfig:
             self.device_id = f"virtual_device_{uuid.uuid4().hex[:8]}"
 class VirtualDeviceClient:
     """
-    Virtual Android device that connects to PC server and simulates device behavior.
+    Virtual Android device that connects to PC server and simulates device behaviour.
     
     This class implements the complete device protocol, including:
     - Socket connection with length-prefixed JSON messages

@@ -3,14 +3,14 @@ Virtual Test Environment for GSR Recording System
 
 This module provides a comprehensive virtual test environment that can simulate
 multiple Android devices connecting to the PC controller, generating realistic
-sensor data streams to test system performance, synchronization, and data handling
+sensor data streams to test system performance, synchronisation, and data handling
 without requiring physical hardware.
 
 Key components:
-- VirtualDeviceClient: Simulates Android device connection and behavior
+- VirtualDeviceClient: Simulates Android device connection and behaviour
 - SyntheticDataGenerator: Generates realistic sensor data streams
 - TestRunner: Orchestrates multi-device test scenarios
-- MetricsCollector: Monitors performance and validates system behavior
+- MetricsCollector: Monitors performance and validates system behaviour
 """
 __version__ = "1.0.0"
 __author__ = "GSR Research Team"

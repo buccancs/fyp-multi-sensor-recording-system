@@ -342,7 +342,7 @@ class DeploymentAutomation:
 Version: {self.version}
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-The Multi-Sensor Recording System is a complete solution for synchronized recording
+The Multi-Sensor Recording System is a complete solution for synchronised recording
 across multiple devices including Android cameras, Shimmer sensors, and thermal cameras.
 
 - Windows 10/11, macOS 10.15+, or Linux Ubuntu 18.04+
@@ -374,16 +374,16 @@ across multiple devices including Android cameras, Shimmer sensors, and thermal 
 5. Tap "Connect" to establish connection
 6. Use the PC interface to start/stop recordings
 
-- Synchronized video recording across multiple Android devices
+- Synchronised video recording across multiple Android devices
 - Shimmer sensor data collection
 - Thermal camera integration
-- Automatic file organization and metadata
+- Automatic file organisation and metadata
 
 - Camera calibration using chessboard patterns
 - Real-time calibration feedback
 - Calibration result validation
 
-- Session-based recording organization
+- Session-based recording organisation
 - Automatic session recovery after crashes
 - Session metadata and logging
 
@@ -423,7 +423,7 @@ Version: {self.version}
 
 1. **Production APK**: `MultiSensorRecording-{self.version}.apk`
    - Signed with release key
-   - Optimized and obfuscated
+   - Optimised and obfuscated
    - Ready for distribution
 
 2. **Debug APK**: `MultiSensorRecording-{self.version}-debug.apk`

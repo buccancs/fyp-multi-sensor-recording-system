@@ -119,7 +119,7 @@ class SyntheticDataGenerator:
         Creates a procedural image with moving patterns to simulate video content.
         The frame includes:
         - Moving geometric patterns
-        - Color gradients
+        - Colour gradients
         - Pseudo-random elements to simulate scene changes
         
         Returns:

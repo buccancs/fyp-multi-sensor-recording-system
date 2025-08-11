@@ -8,20 +8,20 @@ data class TemperatureRange(
     }
     val span: Float get() = max - min
     fun contains(temperature: Float): Boolean = temperature in min..max
-    fun normalize(temperature: Float): Float {
+    fun normalise(temperature: Float): Float {
         if (span == 0f) return 0f
         return ((temperature - min) / span).coerceIn(0f, 1f)
     }
-    fun fromNormalized(normalized: Float): Float {
-        return min + (normalized.coerceIn(0f, 1f) * span)
+    fun fromNormalized(normalised: Float): Float {
+        return min + (normalised.coerceIn(0f, 1f) * span)
     }
     companion object {
         val BODY_TEMPERATURE = TemperatureRange(30f, 40f)
         val ENVIRONMENT = TemperatureRange(0f, 50f)
         val GENERAL = TemperatureRange(-20f, 120f)
-        fun centered(center: Float, span: Float): TemperatureRange {
+        fun centred(centre: Float, span: Float): TemperatureRange {
             val halfSpan = span / 2f
-            return TemperatureRange(center - halfSpan, center + halfSpan)
+            return TemperatureRange(centre - halfSpan, centre + halfSpan)
         }
     }
 }

@@ -507,9 +507,9 @@ class DualWebcamCapture(QThread):
             try:
                 sync_strategy = SynchronizationStrategy(strategy)
                 self.synchronizer.set_strategy(sync_strategy)
-                logger.info(f"Synchronization strategy changed to: {strategy}")
+                logger.info(f"Synchronisation strategy changed to: {strategy}")
             except ValueError:
-                logger.error(f"Invalid synchronization strategy: {strategy}")
+                logger.error(f"Invalid synchronisation strategy: {strategy}")
                 logger.info(
                     f"Valid strategies: {[s.value for s in SynchronizationStrategy]}"
                 )
@@ -524,7 +524,7 @@ class DualWebcamCapture(QThread):
             "dropped_frames": 0,
             "average_processing_time_ms": 0.0,
         }
-        logger.info("Synchronization metrics reset")
+        logger.info("Synchronisation metrics reset")
     def export_synchronization_data(self, filepath: str) -> bool:
         try:
             import json
@@ -564,10 +564,10 @@ class DualWebcamCapture(QThread):
             }
             with open(filepath, "w") as f:
                 json.dump(export_data, f, indent=2, default=str)
-            logger.info(f"Synchronization data exported to: {filepath}")
+            logger.info(f"Synchronisation data exported to: {filepath}")
             return True
         except Exception as e:
-            logger.error(f"Failed to export synchronization data: {e}")
+            logger.error(f"Failed to export synchronisation data: {e}")
             return False
     def _process_advanced_synchronization(
         self,
@@ -593,7 +593,7 @@ class DualWebcamCapture(QThread):
                 self._process_physiological_monitoring(frame1)
             return frame_data
         except Exception as e:
-            logger.error(f"Advanced synchronization processing failed: {e}")
+            logger.error(f"Advanced synchronisation processing failed: {e}")
             sync_diff_ms = abs(timestamp1 - timestamp2) * 1000
             sync_quality = max(0.0, 1.0 - sync_diff_ms / self.sync_threshold_ms)
             return DualFrameData(

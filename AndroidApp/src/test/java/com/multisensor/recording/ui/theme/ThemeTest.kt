@@ -3,7 +3,7 @@ package com.multisensor.recording.ui.theme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Colour
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.*
 import org.junit.Test
@@ -23,16 +23,16 @@ class ThemeTest {
 
     @Test
     fun customColors_haveCorrectValues() {
-        assertEquals(Color(0xFFE57373), RecordingActive)
-        assertEquals(Color(0xFF9E9E9E), RecordingInactive)
-        assertEquals(Color(0xFF4CAF50), ConnectionGreen)
-        assertEquals(Color(0xFFF44336), DisconnectedRed)
-        assertEquals(Color(0xFF2196F3), CalibrationBlue)
+        assertEquals(Colour(0xFFE57373), RecordingActive)
+        assertEquals(Colour(0xFF9E9E9E), RecordingInactive)
+        assertEquals(Colour(0xFF4CAF50), ConnectionGreen)
+        assertEquals(Colour(0xFFF44336), DisconnectedRed)
+        assertEquals(Colour(0xFF2196F3), CalibrationBlue)
     }
 
     @Test
     fun material3Colors_areCorrect() {
-        assertEquals(Color(0xFFD0BCFF), Purple80)
-        assertEquals(Color(0xFF6650a4), Purple40)
+        assertEquals(Colour(0xFFD0BCFF), Purple80)
+        assertEquals(Colour(0xFF6650a4), Purple40)
     }
 }

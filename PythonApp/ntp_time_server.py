@@ -112,7 +112,7 @@ class NTPTimeServer:
         return int(self.get_precise_timestamp() * 1000)
     def synchronize_with_ntp(self) -> bool:
         try:
-            self.logger.info("Synchronizing with NTP servers...")
+            self.logger.info("Synchronising with NTP servers...")
             successful_syncs = []
             for ntp_server in self.ntp_servers:
                 try:
@@ -151,19 +151,19 @@ class NTPTimeServer:
                 self.status.time_accuracy_ms = self.time_precision_ms
                 self.last_ntp_sync_time = time.time()
                 self.logger.info(
-                    "NTP synchronization successful: offset=%.3fms, precision=%.3fms",
+                    "NTP synchronisation successful: offset=%.3fms, precision=%.3fms",
                     self.reference_time_offset * 1000,
                     self.time_precision_ms,
                 )
                 return True
             else:
-                self.logger.error("All NTP synchronization attempts failed")
+                self.logger.error("All NTP synchronisation attempts failed")
                 self.status.is_synchronized = False
                 self.status.reference_source = "system"
                 self.time_precision_ms = 10.0
                 return False
         except Exception as e:
-            self.logger.error("Error during NTP synchronization: %s", e)
+            self.logger.error("Error during NTP synchronisation: %s", e)
             return False
     def _parse_sync_request(self, data: bytes, client_addr: str) -> Optional[Dict]:
         try:

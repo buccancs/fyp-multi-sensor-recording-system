@@ -667,7 +667,7 @@ constructor(
                     deviceModel.contains("S21") || deviceModel.contains("S22")
 
             if (isSamsungS21S22) {
-                logger.info("Samsung S21/S22 device detected: $deviceModel - Applying optimizations")
+                logger.info("Samsung S21/S22 device detected: $deviceModel - Applying optimisations")
             }
 
             for (cameraId in cameraManager.cameraIdList) {
@@ -1204,7 +1204,7 @@ constructor(
             rawCaptureCount++
             val dngFile = generateRawFilePath(sessionInfo.sessionId, rawCaptureCount)
 
-            logger.info("Processing Samsung-optimized RAW image to DNG: ${dngFile.name}")
+            logger.info("Processing Samsung-optimised RAW image to DNG: ${dngFile.name}")
 
             val deviceModel = android.os.Build.MODEL.uppercase()
             val isSamsungS21S22 =
@@ -1242,7 +1242,7 @@ constructor(
                     closeMethod.invoke(dngCreator)
 
                     sessionInfo.addRawFile(dngFile.absolutePath)
-                    logger.info("Samsung-optimized DNG file created successfully: ${dngFile.absolutePath}")
+                    logger.info("Samsung-optimised DNG file created successfully: ${dngFile.absolutePath}")
                     logger.debug("Total RAW images in session: ${sessionInfo.getRawImageCount()}")
 
                     if (isSamsungS21S22) {
@@ -1311,7 +1311,7 @@ constructor(
                 }
             }
 
-            logger.info("Samsung-optimized DNG metadata configuration completed")
+            logger.info("Samsung-optimised DNG metadata configuration completed")
         } catch (e: Exception) {
             logger.warning("Error configuring Samsung DNG metadata", e)
         }

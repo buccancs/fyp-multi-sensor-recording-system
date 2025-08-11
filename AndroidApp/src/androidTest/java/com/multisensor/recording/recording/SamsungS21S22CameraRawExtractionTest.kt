@@ -112,7 +112,7 @@ class SamsungS21S22CameraRawExtractionTest {
         }
 
         if (isSamsungS21S22) {
-            println("[SAMSUNG_TEST] ✓ Samsung S21/S22 device detected - proceeding with specialized tests")
+            println("[SAMSUNG_TEST] ✓ Samsung S21/S22 device detected - proceeding with specialised tests")
         } else {
             println("[SAMSUNG_TEST] INFO: Not S21/S22 specifically, but will test Samsung camera capabilities")
         }
@@ -327,7 +327,7 @@ class SamsungS21S22CameraRawExtractionTest {
             val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
 
             if (facing == CameraCharacteristics.LENS_FACING_BACK) {
-                println("[SAMSUNG_TEST] Analyzing main camera: $cameraId")
+                println("[SAMSUNG_TEST] Analysing main camera: $cameraId")
 
                 val hardwareLevel = characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
                 val isLevel3 = hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3

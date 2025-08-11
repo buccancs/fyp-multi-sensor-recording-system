@@ -1,7 +1,7 @@
 package com.multisensor.recording.ui
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Color
+import android.graphics.Colour
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -204,13 +204,13 @@ class ShimmerConfigActivity : AppCompatActivity() {
         chartTabLayout.addTab(chartTabLayout.newTab().setText("PPG"))
         chartTabLayout.addTab(chartTabLayout.newTab().setText("Accel"))
         chartTabLayout.addTab(chartTabLayout.newTab().setText("Gyro"))
-        configureChart(gsrChart, "GSR (µS)", Color.rgb(63, 81, 181))
-        configureChart(ppgChart, "PPG", Color.rgb(233, 30, 99))
-        configureChart(accelChart, "Accelerometer (g)", Color.rgb(76, 175, 80))
-        configureChart(gyroChart, "Gyroscope (°/s)", Color.rgb(255, 152, 0))
+        configureChart(gsrChart, "GSR (µS)", Colour.rgb(63, 81, 181))
+        configureChart(ppgChart, "PPG", Colour.rgb(233, 30, 99))
+        configureChart(accelChart, "Accelerometer (g)", Colour.rgb(76, 175, 80))
+        configureChart(gyroChart, "Gyroscope (°/s)", Colour.rgb(255, 152, 0))
         showChart(gsrChart)
     }
-    private fun configureChart(chart: LineChart, label: String, color: Int) {
+    private fun configureChart(chart: LineChart, label: String, colour: Int) {
         chart.apply {
             description.isEnabled = false
             setTouchEnabled(true)
@@ -226,14 +226,14 @@ class ShimmerConfigActivity : AppCompatActivity() {
             }
             axisLeft.apply {
                 setDrawGridLines(true)
-                gridColor = Color.LTGRAY
+                gridColor = Colour.LTGRAY
                 gridLineWidth = 0.5f
             }
             axisRight.isEnabled = false
             legend.isEnabled = true
             val dataSet = LineDataSet(mutableListOf(), label).apply {
-                this.color = color
-                setCircleColor(color)
+                this.colour = colour
+                setCircleColor(colour)
                 lineWidth = 2f
                 circleRadius = 3f
                 setDrawCircleHole(false)
@@ -300,18 +300,18 @@ class ShimmerConfigActivity : AppCompatActivity() {
         when {
             state.isDeviceConnected -> {
                 connectionStatusChip.text = "Connected"
-                connectionStatusChip.setChipBackgroundColorResource(R.color.success_color)
-                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.success_color))
+                connectionStatusChip.setChipBackgroundColorResource(R.colour.success_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.colour.success_color))
             }
             state.isLoadingConnection -> {
                 connectionStatusChip.text = "Connecting..."
-                connectionStatusChip.setChipBackgroundColorResource(R.color.warning_color)
-                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.warning_color))
+                connectionStatusChip.setChipBackgroundColorResource(R.colour.warning_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.colour.warning_color))
             }
             else -> {
                 connectionStatusChip.text = "Disconnected"
-                connectionStatusChip.setChipBackgroundColorResource(R.color.error_color)
-                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.error_color))
+                connectionStatusChip.setChipBackgroundColorResource(R.colour.error_color)
+                deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.colour.error_color))
             }
         }
         if (state.batteryLevel >= 0) {
@@ -320,9 +320,9 @@ class ShimmerConfigActivity : AppCompatActivity() {
             batteryProgressBar.progressTintList = ContextCompat.getColorStateList(
                 this,
                 when {
-                    state.batteryLevel > 50 -> R.color.success_color
-                    state.batteryLevel > 20 -> R.color.warning_color
-                    else -> R.color.error_color
+                    state.batteryLevel > 50 -> R.colour.success_color
+                    state.batteryLevel > 20 -> R.colour.warning_color
+                    else -> R.colour.error_color
                 }
             )
         } else {
@@ -344,9 +344,9 @@ class ShimmerConfigActivity : AppCompatActivity() {
             signalProgressBar.progressTintList = ContextCompat.getColorStateList(
                 this,
                 when {
-                    signalPercent > 60 -> R.color.success_color
-                    signalPercent > 30 -> R.color.warning_color
-                    else -> R.color.error_color
+                    signalPercent > 60 -> R.colour.success_color
+                    signalPercent > 30 -> R.colour.warning_color
+                    else -> R.colour.error_color
                 }
             )
         } else {
@@ -370,7 +370,7 @@ class ShimmerConfigActivity : AppCompatActivity() {
         dataVisualizationCard.visibility = if (state.isRecording) View.VISIBLE else View.GONE
         recordingStatusChip.text = if (state.isRecording) "Recording" else "Stopped"
         recordingStatusChip.setChipBackgroundColorResource(
-            if (state.isRecording) R.color.success_color else R.color.error_color
+            if (state.isRecording) R.colour.success_color else R.colour.error_color
         )
         packetsReceivedText.text = state.dataPacketsReceived.toString()
         val duration = state.recordingDuration / 1000

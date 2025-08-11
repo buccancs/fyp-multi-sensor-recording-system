@@ -205,7 +205,7 @@ class UsbPerformanceAnalyticsUnitTest {
     }
 
     @Test
-    fun `should calculate resource utilization metrics`() {
+    fun `should calculate resource utilisation metrics`() {
         val resourceMetrics = performanceAnalytics.getResourceUtilization()
 
         assertTrue("Should contain CPU usage", resourceMetrics.containsKey("cpu_usage"))

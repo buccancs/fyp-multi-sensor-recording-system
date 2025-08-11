@@ -256,7 +256,7 @@ class ErrorRecoveryManager:
             keyword in error_lower
             for keyword in ["connection", "network", "timeout", "unreachable"]
         ):
-            if "sync" in error_lower or "synchronization" in error_lower:
+            if "sync" in error_lower or "synchronisation" in error_lower:
                 return (ErrorCategory.NETWORK_SYNCHRONIZATION, ErrorSeverity.MEDIUM)
             else:
                 return ErrorCategory.NETWORK_CONNECTION, ErrorSeverity.HIGH
@@ -414,11 +414,11 @@ if __name__ == "__main__":
         process_name="test_process",
     )
     print(f"Recovery result: {success}, Message: {message}")
-    print("\n--- Testing Network Synchronization Error ---")
+    print("\n--- Testing Network Synchronisation Error ---")
     def mock_sync_function():
         return True
     success, message = handle_error_with_recovery(
-        "Network synchronization timeout with device",
+        "Network synchronisation timeout with device",
         device_id="test_device",
         sync_function=mock_sync_function,
         sync_args=[],

@@ -683,7 +683,7 @@ class UsbController @Inject constructor(
             append("• Average Response Time: ${"%.2f".format(performanceReport.averageResponseTime)}ms\n")
             append("• 95th Percentile Response: ${performanceReport.percentile95ResponseTime}ms\n")
             append("• CPU Efficiency Score: ${"%.3f".format(performanceReport.cpuEfficiencyScore)}\n")
-            append("• Memory Utilization: ${performanceReport.memoryUtilization / 1024}KB\n")
+            append("• Memory Utilisation: ${performanceReport.memoryUtilization / 1024}KB\n")
             append("• Event Throughput: ${"%.2f".format(performanceReport.eventThroughput)} events/sec\n\n")
 
             append("DEVICE PRIORITIZATION:\n")

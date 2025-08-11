@@ -106,7 +106,7 @@ class EnhancedMainWindow(QMainWindow):
         toolbar.addWidget(backend_label)
         self.backend_status_label = QLabel("Qt")
         self.backend_status_label.setStyleSheet(
-            "QLabel { color: #0066cc; font-weight: bold; }"
+            "QLabel { colour: #0066cc; font-weight: bold; }"
         )
         toolbar.addWidget(self.backend_status_label)
         toolbar.addSeparator()
@@ -138,13 +138,13 @@ class EnhancedMainWindow(QMainWindow):
             f"VLC Backend: {'Available' if VLC_AVAILABLE else 'Not Available'}"
         )
         self.vlc_status_label.setStyleSheet(
-            f"QLabel {{ color: {'#00aa00' if VLC_AVAILABLE else '#aa0000'}; font-size: 10px; }}"
+            f"QLabel {{ colour: {'#00aa00' if VLC_AVAILABLE else '#aa0000'}; font-size: 10px; }}"
         )
         status_layout.addWidget(self.vlc_status_label)
         status_layout.addStretch()
         self.timing_precision_label = QLabel("Timing: Calibrating...")
         self.timing_precision_label.setStyleSheet(
-            "QLabel { color: #666; font-size: 10px; }"
+            "QLabel { colour: #666; font-size: 10px; }"
         )
         status_layout.addWidget(self.timing_precision_label)
         main_layout.addLayout(status_layout)
@@ -275,7 +275,7 @@ class EnhancedMainWindow(QMainWindow):
         try:
             screen_index = self.stimulus_panel.get_selected_screen()
             self.log_message(
-                "Starting enhanced synchronized recording and stimulus playback...",
+                "Starting enhanced synchronised recording and stimulus playback...",
                 "Stimulus",
             )
             if self.server_running and self.json_server.connected_clients:
@@ -292,7 +292,7 @@ class EnhancedMainWindow(QMainWindow):
                 self.log_message("Failed to start enhanced stimulus playback", "Errors")
         except Exception as e:
             self.log_message(
-                f"Error starting enhanced synchronized experiment: {str(e)}", "Errors"
+                f"Error starting enhanced synchronised experiment: {str(e)}", "Errors"
             )
             QMessageBox.critical(
                 self,
@@ -399,7 +399,7 @@ PsychoPy-Inspired Improvements:
 • Frame-accurate timing control
 • Hardware-accelerated video playback
 • Robust codec support and fallback mechanisms
-• Professional-grade synchronization accuracy
+• Professional-grade synchronisation accuracy
 
 Author: Multi-Sensor Recording System Team
 Date: 2025-07-29

@@ -271,7 +271,7 @@ docker: Error response from daemon: container crashed
    python -m cProfile -o profile.out test_runner.py
    python -c "import pstats; pstats.Stats('profile.out').sort_stats('cumulative').print_stats(20)"
    ```
-2. Optimize configuration:
+2. Optimise configuration:
    ```python
    config = VirtualTestConfig(
        gsr_sampling_rate_hz=32,  # Reduce sampling rate
@@ -399,7 +399,7 @@ Error: Process completed with exit code 1
 **Problem**: CI environment runs out of resources
 ```
 ERROR: Operation timed out
-Error: The operation was canceled
+Error: The operation was cancelled
 ```
 
 **Solution**:
@@ -493,7 +493,7 @@ Write-Host "✓ Windows setup complete. Use '.venv\Scripts\Activate.ps1' to acti
 
 ### Debugging Virtual Devices
 
-**Problem**: Difficult to debug virtual device behavior
+**Problem**: Difficult to debug virtual device behaviour
 
 **Solution**:
 1. Enable detailed logging:
@@ -579,4 +579,4 @@ When reporting issues, include:
 
 3. Complete error message and stack trace
 4. Configuration used
-5. Expected vs actual behavior
+5. Expected vs actual behaviour

@@ -52,7 +52,7 @@ class OnboardingActivity : ComponentActivity() {
             MultiSensorTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    colour = MaterialTheme.colorScheme.background
                 ) {
                     OnboardingFlow(
                         onComplete = { completeOnboarding() },
@@ -175,7 +175,7 @@ fun WelcomePage() {
             .fillMaxSize()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Centre
     ) {
         Icon(
             imageVector = Icons.Filled.Sensors,
@@ -189,15 +189,15 @@ fun WelcomePage() {
         Text(
             text = "Welcome to",
             style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Centre
         )
 
         Text(
             text = "Multi-Sensor Recording",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.primary
+            textAlign = TextAlign.Centre,
+            colour = MaterialTheme.colorScheme.primary
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -205,8 +205,8 @@ fun WelcomePage() {
         Text(
             text = "Advanced multi-modal sensor recording system for contactless GSR prediction research.",
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            textAlign = TextAlign.Centre,
+            colour = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -224,7 +224,7 @@ fun FeaturePage() {
                 text = "Powerful Features",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Centre,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -234,7 +234,7 @@ fun FeaturePage() {
             Triple(Icons.Filled.Thermostat, "Thermal Imaging", "Real-time thermal camera integration for temperature monitoring"),
             Triple(Icons.Filled.Sensors, "GSR Sensing", "Galvanic skin response measurement via Shimmer devices"),
             Triple(Icons.Filled.Computer, "PC Integration", "Seamless communication with master controller systems"),
-            Triple(Icons.Filled.Cloud, "Offline-First", "Local recording with optional cloud synchronization"),
+            Triple(Icons.Filled.Cloud, "Offline-First", "Local recording with optional cloud synchronisation"),
             Triple(Icons.Filled.Analytics, "Research Ready", "Built specifically for academic research workflows")
         )
 
@@ -282,7 +282,7 @@ fun FeatureCard(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    colour = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -295,7 +295,7 @@ fun PermissionsPage(
 ) {
     val permissions = listOf(
         Triple(Manifest.permission.CAMERA, "Camera", "Required for video recording and computer vision processing"),
-        Triple(Manifest.permission.RECORD_AUDIO, "Microphone", "Optional for audio synchronization with video streams"),
+        Triple(Manifest.permission.RECORD_AUDIO, "Microphone", "Optional for audio synchronisation with video streams"),
         Triple(Manifest.permission.ACCESS_FINE_LOCATION, "Location", "Required for Bluetooth device discovery and connection"),
         Triple(Manifest.permission.BLUETOOTH_SCAN, "Bluetooth", "Required for connecting to Shimmer GSR sensors"),
         Triple(Manifest.permission.POST_NOTIFICATIONS, "Notifications", "For recording status and system alerts")
@@ -312,7 +312,7 @@ fun PermissionsPage(
                 text = "Permissions Required",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Centre,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -321,8 +321,8 @@ fun PermissionsPage(
             Text(
                 text = "The app needs these permissions to function properly:",
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                textAlign = TextAlign.Centre,
+                colour = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -396,7 +396,7 @@ fun PermissionCard(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    colour = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -410,7 +410,7 @@ fun SetupPage() {
             .fillMaxSize()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Centre
     ) {
         Icon(
             imageVector = Icons.Filled.CheckCircle,
@@ -425,8 +425,8 @@ fun SetupPage() {
             text = "Setup Complete!",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.primary
+            textAlign = TextAlign.Centre,
+            colour = MaterialTheme.colorScheme.primary
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -434,8 +434,8 @@ fun SetupPage() {
         Text(
             text = "Your multi-sensor recording system is ready to use. You can now:",
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            textAlign = TextAlign.Centre,
+            colour = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(24.dp))

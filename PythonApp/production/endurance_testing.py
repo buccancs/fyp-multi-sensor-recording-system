@@ -456,7 +456,7 @@ class EnduranceTestRunner:
         if memory_degradation > self.config.memory_degradation_threshold:
             recommendations.append(
                 f"Memory usage increased by {memory_degradation:.1f}%: Implement streaming "
-                "data processing, add memory usage monitoring, and optimize data structures."
+                "data processing, add memory usage monitoring, and optimise data structures."
             )
         if error_count > 0:
             recommendations.append(
