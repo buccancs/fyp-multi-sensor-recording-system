@@ -297,7 +297,7 @@ The workflow `.github/workflows/virtual-test-environment.yml` provides:
     ./run_virtual_test.sh --ci --scenario ci --devices 3
     
 - name: Upload Results
-  uses: actions/upload-artifact@v3
+  uses: actions/upload-artifact@v4
   with:
     name: gsr-virtual-test-results
     path: tests/integration/virtual_environment/test_results/
