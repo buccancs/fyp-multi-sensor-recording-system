@@ -108,14 +108,9 @@ class VirtualTestRunner:
         if not hasattr(self, '_metrics'):
             self._metrics = VirtualTestMetrics(start_time=self._start_time)
         return self._metrics
+        
         self.performance_monitoring_enabled = True
         self.performance_data: List[Dict[str, Any]] = []
-    @property
-    def metrics(self) -> "VirtualTestMetrics":
-        """Get or create test metrics"""
-        if not hasattr(self, '_metrics'):
-            self._metrics = VirtualTestMetrics(start_time=self._start_time)
-        return self._metrics
         self.performance_monitor: Optional[threading.Thread] = None
         self.stop_event = threading.Event()
         self.thread_pool = ThreadPoolExecutor(max_workers=config.device_count + 5)
@@ -537,7 +532,10 @@ class VirtualTestRunner:
             if self.performance_monitor and self.performance_monitor.is_alive():
                 self.stop_event.set()
                 self.performance_monitor.join(timeout=5.0)
-            self.thread_pool.shutdown(wait=True)
+            try:
+                self.thread_pool.shutdown(wait=True)
+            except Exception as e:
+                self.logger.debug(f"ThreadPoolExecutor already shut down: {e}")
             self.logger.info("Cleanup completed")
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
