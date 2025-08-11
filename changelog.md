@@ -9,6 +9,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **References Conversion to LaTeX (2025-08-11)**
+  - Converted `docs/thesis_report/final/references.md` to LaTeX at `docs/thesis_report/final/latex/references.tex` using thebibliography; preserved DOIs/URLs
+  - Integrated into `docs/thesis_report/final/latex/main.tex` via `\input{references}` before appendices
+  - Added Mermaid diagram `docs/diagrams/mermaid_references_integration.md`
+  - Added tests `tests/docs/test_references_tex.py` to ensure presence and inclusion
+  - TODO: Migrate to BibTeX (`references.bib`) and map chapter citations; tracked in `backlog.md`
+
+- **LaTeX Chapter 2 Location Normalization (2025-08-11)**
+  - Created include-ready `docs/thesis_report/final/2.tex` to align with chapters 1, 3, 4, 6
+  - Added unit test `tests/docs/test_chapter2_tex.py` to verify presence and structure
+  - TODO: Reconcile duplication with `docs/thesis_report/final/latex/chapter2.tex` and standardize chapter locations
+  - Documentation-only change; no runtime code affected
+
+
+
+
+- **LaTeX Chapter 4 Conversion Update (2025-08-11)**
+  - Converted `docs/thesis_report/final/4.md` to LaTeX at `docs/thesis_report/final/4.tex`
+  - Added figure environments for Figures 4.3–4.6 (Figure 4.6 appears twice to mirror source); TODO to confirm duplication
+  - Escaped special characters, wrapped code identifiers in \texttt{}, and converted simple formulas/units
+  - Added backlog TODOs to integrate into LaTeX build, ensure preamble packages (`graphicx`, `textcomp`, `amsmath`, `hyperref`), and migrate numeric refs to BibTeX
+  - Reconcile prior changelog entry referencing `docs/thesis_report/final/latex/chapter4.tex`
+
+- **LaTeX Chapter 3 Conversion (2025-08-11)**
+  - Converted `docs/thesis_report/final/3.md` to LaTeX at `docs/thesis_report/final/3.tex`
+  - Added Mermaid diagram source `docs/thesis_report/final/fig_3_1_architecture.mmd` for Figure 3.1
+  - Added pytest to verify presence and key markers in `3.tex` and Mermaid source
+  - TODO: Map numeric citations [n] to BibTeX keys or align with centralized references; integrate Mermaid rendering (CLI/Kroki) into LaTeX build pipeline
+
+- **LaTeX Chapter 1 Conversion (2025-08-11)**
+  - Converted `docs/thesis_report/final/1.md` to LaTeX at `docs/thesis_report/final/1.tex`
+  - Preserved numeric citations [n]; TODO: map to BibTeX keys in a future pass
+  - Added lightweight unit test to assert presence and structure of `1.tex`
+  - Documentation-only change; no runtime code affected
+
+- **LaTeX Chapter 6 Conversion (2025-08-11)**
+  - Converted `docs/thesis_report/final/6.md` to LaTeX at `docs/thesis_report/final/6.tex`
+  - Added TODO note for BibTeX citation mapping; retained numeric references pending mapping
+  - Added Mermaid diagram `docs/diagrams/mermaid_chapter6_conversion.md`
+  - Note: Requires textcomp or siunitx packages in master preamble for \textmu and \texttimes
+  - No code logic changes; documentation only
+
+- **LaTeX Chapter 5 Normalization (2025-08-11)**
+  - Normalized `docs/thesis_report/final/latex/chapter5.tex` and integrated figure inputs (`chapter5_sync_accuracy`, `chapter5_scalability`, `chapter5_extended_operation`, `chapter5_correlation`)
+  - Included TikZ/PGFPlots packages in `docs/thesis_report/final/latex/main.tex` for Chapter 5 figures
+  - Fixed malformed figure environment in `latex/figures/chapter5_extended_operation.tex`
+  - Added Mermaid diagram `docs/diagrams/mermaid_chapter5_conversion.md`
+  - Added TODO header and parity review notes in Chapter 5 source
+
+- **LaTeX Chapter 2 Conversion (2025-08-11)**
+  - Converted `docs/thesis_report/final/2.md` to LaTeX at `docs/thesis_report/final/latex/chapter2.tex`
+  - Replaced available bracketed references with `\citep{...}` using existing BibTeX keys; added TODOs for missing keys (Chen2019, Patel2024, Zhang2021, RFC793, pandas, h5py)
+  - Added Mermaid diagram `docs/diagrams/mermaid_chapter2_conversion.md`
+  - Added TODO note in `chapter2.tex` for integration with a main.tex include
+
+- **LaTeX Chapter 4 Conversion (2025-08-10)**
+  - Converted `docs/thesis_report/final/4.md` to LaTeX at `docs/thesis_report/final/latex/chapter4.tex` and integrated with `main.tex`
+  - Added conditional figure includes with TODO placeholders for missing assets (Figures 4.3–4.6)
+  - Added Mermaid diagram `docs/diagrams/mermaid_chapter4_conversion.md`
+  - Updated backlog with citation mapping and figure asset verification tasks
+
 - **Thesis Documentation Academic Compliance Improvements (2025-01-11)**
   - **Ethics & Data Handling Section**: Added comprehensive ethics section to Chapter 4 (4.7) covering UCL requirements
     - Ethics approval requirements and procedures for future human participant studies
@@ -214,3 +275,63 @@ This changelog follows the project's established guidelines:
 - Build verification performed on Windows PowerShell environment
 - Android compilation tested with Gradle 8.11.1
 - LaTeX document processing verified with PowerShell text processing tools
+
+
+### Added (Unreleased update - 2025-08-11)
+- Converted docs/thesis_report/final/5.md to LaTeX at docs/thesis_report/final/latex/chapter5.tex.
+  - Escaped LaTeX special characters; replaced Unicode arrows and checkmarks (requires amssymb in preamble) [TODO].
+  - No architectural changes; documentation-only change.
+  - Added a small pytest to verify presence and key markers in chapter5.tex.
+  - Added Mermaid doc for the conversion pipeline.
+
+
+### Added (Unreleased update - 2025-08-11)
+- LaTeX Thesis Main Integration and Test Discovery Update
+  - Updated `docs/thesis_report/final/latex/main.tex` to include `\input{chapter5}` ensuring Chapter 5 is part of the build pipeline.
+  - Adjusted `pytest.ini` to include the top-level `tests` directory and simplified addopts for local execution in this environment.
+  - Added tests: `tests/test_thesis_main_tex.py` to validate `main.tex` includes and required packages; retained `tests/test_thesis_chapter5_tex.py`.
+  - Documentation: Added Mermaid diagram `docs/diagrams/mermaid_thesis_main_includes.md` to illustrate LaTeX build inclusion flow.
+  - Note: The test runner in this tool may be silent; tests are filesystem assertions and should pass under standard pytest.
+
+
+### Added
+
+- **Appendices LaTeX Conversion (2025-08-11)**
+  - Converted Markdown appendices to LaTeX under `docs/thesis_report/final/latex/`:
+    - A (`appendix_A.tex`), B (`appendix_B.tex`), D (`appendix_D.tex`), E (`appendix_E.tex`), G (`appendix_G.tex`), H (`appendix_H.tex`), I (`appendix_I.tex`)
+    - Added placeholders with TODOs: C (`appendix_C.tex`), F (`appendix_F.tex`), Z (`appendix_Z.tex`)
+  - Updated LaTeX master `main.tex`:
+    - Fixed `\input{...}` syntax
+    - Added `\usepackage{verbatim}` for interim inclusion
+    - Inserted `\appendix` and `\input{appendix_*}` entries
+  - Added Mermaid diagram documenting LaTeX structure and appendix linkage: `docs/diagrams/mermaid_thesis_appendices.mmd`
+  - Updated `docs/thesis_report/README.md` with appendix build notes and file list
+  - Documentation-only change; excluded `external/` and `docs/generated_docs` per policy
+
+
+### Changed
+- **Appendix C LaTeX Conversion (2025-08-11)**
+  - Replaced placeholder `docs/thesis_report/final/latex/appendix_C.tex` with full conversion wrapping the Markdown source in a verbatim block under a proper chapter heading.
+  - Updated documentation: `docs/thesis_report/README.md` (removed placeholder note), Mermaid diagram `docs/diagrams/mermaid_thesis_appendices.mmd` (removed TODO label for Appendix C).
+  - Updated backlog: marked Appendix C conversion as completed (2025-08-11).
+  - Added lightweight pytest `tests/docs/test_appendix_c_tex.py` to assert file presence, structure, and non-placeholder status.
+  - Documentation-only change; no code logic affected; excludes `external/` and `docs/generated_docs` per policy.
+
+
+### Changed
+- **Appendix Z LaTeX Conversion (2025-08-11)**
+  - Replaced placeholder `docs/thesis_report/final/latex/appendix_Z.tex` with full conversion wrapping the Markdown source in a verbatim block under a proper chapter heading and purpose line.
+  - Updated documentation: `docs/thesis_report/README.md` (removed placeholder note), Mermaid diagram `docs/diagrams/mermaid_thesis_appendices.mmd` (removed TODO label for Appendix Z).
+  - Updated backlog: marked Appendix Z conversion as completed (2025-08-11).
+  - Added lightweight pytest `tests/docs/test_appendix_z_tex.py` to assert file presence, structure, and non-placeholder status.
+  - Documentation-only change; no code logic affected; excludes `external/` and `docs/generated_docs` per policy.
+
+
+### Added
+- **Mermaid in LaTeX Integration (2025-08-11)**
+  - Enabled Mermaid rendering via `\usepackage{mermaid}` in `docs/thesis_report/final/latex/main.tex`.
+  - Inserted compiled Mermaid examples (flowchart + sequence) in `appendix_Z.tex` under a new "Rendered Mermaid Diagrams (LaTeX)" section while retaining existing verbatim content for completeness.
+  - Added tests: `tests/docs/test_mermaid_integration.py` to verify the preamble and presence of `\begin{mermaid}` in Appendix Z.
+  - Updated `docs/thesis_report/README.md` with build instructions (use `-shell-escape`, Node.js, and `@mermaid-js/mermaid-cli`).
+  - Added Mermaid pipeline diagram: `docs/diagrams/mermaid_latex_integration.mmd` documenting the LaTeX + Mermaid build flow.
+  - Notes: Keep `external/` and `docs/generated_docs` excluded from artifacts. Mermaid rendering requires Node + mmdc available on PATH.

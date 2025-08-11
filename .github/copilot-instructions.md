@@ -10,6 +10,19 @@ guidelines will produce professional, consistent documentation that
 meets academic requirements and supports the reproducibility and
 integrity of the research.
 
+## Testing and Evaluation
+- **NEVER USE FAKE DATA/LOGS OR MOCK DATA/LOGS**
+- **Testing:** The system must be tested in a controlled environment
+  (e.g. lab, field, etc.) to ensure it meets the requirements. This
+  includes **unit tests**, **integration tests**, and **system tests**
+  (e.g. performance, usability, etc.).
+- **Evaluation:** The system must be evaluated in a controlled
+  environment to ensure it meets the requirements. This includes
+  **quantitative evaluation** (e.g. accuracy, reliability,
+  performance, etc.) and **qualitative evaluation** (e.g. usability,
+  user experience, etc.).
+- **Reproducibility:** The system must be reproducible to ensure that
+
 ## Scope and Applicability
 
 - **Thesis/Dissertation:** The final report of the project must follow
