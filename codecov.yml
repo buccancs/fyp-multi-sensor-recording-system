@@ -63,7 +63,7 @@ ignore:
 
 comment:
   layout: "reach,diff,flags,files,footer"
-  behavior: default
+  behaviour: default
   require_changes: false
 
 github_checks:

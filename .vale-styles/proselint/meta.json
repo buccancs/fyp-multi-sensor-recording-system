@@ -6,7 +6,7 @@
   "url": "https://github.com/errata-ai/proselint/releases/latest/download/proselint.zip",
   "feed": "https://github.com/errata-ai/proselint/releases.atom",
   "issues": "https://github.com/errata-ai/proselint/issues/new",
-  "license": "BSD-3-Clause",
+  "licence": "BSD-3-Clause",
   "name": "proselint",
   "sources": [
     "https://github.com/amperser/proselint"

@@ -12,7 +12,7 @@ Figure 2.1: Emotion/Stress Sensing Modality Landscape
 
 ```mermaid
 graph TD
-    subgraph "Behavioral Modalities"
+    subgraph "Behavioural Modalities"
         FACE[Facial Expression Analysis]
         VOICE[Voice Stress Analysis]
         GESTURE[Body Language & Gestures]
@@ -28,7 +28,7 @@ graph TD
     
     subgraph "Hybrid Approaches"
         MULTIMODAL[Multi-Modal Fusion<br/>RGB + Thermal + GSR]
-        CONTEXTUAL[Contextual Integration<br/>Environment + Behavior]
+        CONTEXTUAL[Contextual Integration<br/>Environment + Behaviour]
     end
     
     FACE --> MULTIMODAL
@@ -38,7 +38,7 @@ graph TD
     VOICE --> CONTEXTUAL
 ```
 
-*Figure 2.1: Emotion/Stress Sensing Modality Landscape showing the range of behavioral and physiological modalities available for stress detection research. Demonstrates the positioning of the multi-sensor approach within the broader landscape of affective computing technologies [4].*
+*Figure 2.1: Emotion/Stress Sensing Modality Landscape showing the range of behavioural and physiological modalities available for stress detection research. Demonstrates the positioning of the multi-sensor approach within the broader landscape of affective computing technologies [4].*
 
 Figure 2.2: Contact vs Contactless Measurement Pipelines
 
@@ -83,7 +83,7 @@ graph TD
     
     subgraph "Neural Processing"
         AMYGDALA[Amygdala<br/>Threat Detection]
-        HYPOTHALAMUS[Hypothalamus<br/>Integration Center]
+        HYPOTHALAMUS[Hypothalamus<br/>Integration Centre]
     end
     
     subgraph "SAM Axis (Rapid Response)"

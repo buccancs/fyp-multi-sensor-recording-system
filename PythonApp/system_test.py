@@ -83,9 +83,9 @@ def test_opencv_functionality():
         print(f"✓ OpenCV version: {cv2.__version__}")
         test_img = np.zeros((480, 640, 3), dtype=np.uint8)
         test_img[100:380, 100:540] = [0, 255, 0]
-        gray = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
-        print("✓ Color conversion works")
-        edges = cv2.Canny(gray, 50, 150)
+        grey = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
+        print("✓ Colour conversion works")
+        edges = cv2.Canny(grey, 50, 150)
         print("✓ Edge detection works")
         pattern_size = (9, 6)
         square_size = 1.0
@@ -320,7 +320,7 @@ def test_system_integration():
             assert device.start_recording() == True
         statuses = [device.get_status() for device in devices]
         assert all(status["recording"] for status in statuses)
-        print("✓ Synchronized recording start works")
+        print("✓ Synchronised recording start works")
         for status in statuses:
             assert status["connected"] == True
             assert status["recording"] == True
@@ -330,7 +330,7 @@ def test_system_integration():
             assert device.stop_recording() == True
         statuses = [device.get_status() for device in devices]
         assert all(not status["recording"] for status in statuses)
-        print("✓ Synchronized recording stop works")
+        print("✓ Synchronised recording stop works")
         for device in devices:
             assert device.disconnect() == True
         statuses = [device.get_status() for device in devices]

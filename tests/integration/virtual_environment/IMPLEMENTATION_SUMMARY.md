@@ -15,7 +15,7 @@ All requirements from the problem statement have been successfully implemented:
 - Implements complete JSON message protocol (Hello, Status, SensorData, Ack, FileInfo, FileChunk, FileEnd)
 - Each virtual device has unique device_id and configurable capabilities
 - Supports up to 20+ concurrent virtual devices (tested with 6)
-- Realistic response delays and heartbeat behavior
+- Realistic response delays and heartbeat behaviour
 - Proper connection lifecycle management
 
 **Device Coordination** ✅ IMPLEMENTED  
@@ -35,7 +35,7 @@ All requirements from the problem statement have been successfully implemented:
 - Batch generation for performance testing
 
 **RGB Camera (30 FPS)** ✅ IMPLEMENTED
-- Procedural video content with moving patterns and colors
+- Procedural video content with moving patterns and colours
 - 30fps timing with ~33ms intervals
 - Simulated file transfer via chunked protocol
 - Configurable compression and frame size
@@ -48,11 +48,11 @@ All requirements from the problem statement have been successfully implemented:
 - 16-bit temperature values
 - Raw thermal data file simulation
 
-**Timing and Synchronization** ✅ IMPLEMENTED
+**Timing and Synchronisation** ✅ IMPLEMENTED
 - Precise timing control using asyncio
 - Configurable clock drift simulation
 - Sync signal handling (flash_sync, beep_sync)
-- Synchronization validation and jitter measurement
+- Synchronisation validation and jitter measurement
 - Sub-50ms sync accuracy validation
 
 ### ✅ Headless PC Controller in Test Mode
@@ -97,7 +97,7 @@ All requirements from the problem statement have been successfully implemented:
 **Docker Integration** ✅ IMPLEMENTED
 - Multi-stage Dockerfile with all dependencies
 - Health checks and volume mounting
-- CI-optimized configuration
+- CI-optimised configuration
 - Docker Compose with multiple profiles
 - Container orchestration support
 
@@ -119,7 +119,7 @@ All requirements from the problem statement have been successfully implemented:
 
 **Validation Outputs** ✅ IMPLEMENTED
 - Data integrity validation (expected vs received samples)
-- Synchronization accuracy measurement
+- Synchronisation accuracy measurement
 - Timing drift analysis
 - File transfer completeness verification
 - Performance threshold compliance
@@ -155,7 +155,7 @@ All requirements from the problem statement have been successfully implemented:
    - 1,100+ lines of production-quality code
    - Complete socket-based device simulation
    - Async/await architecture for concurrent operation
-   - Realistic behavioral patterns
+   - Realistic behavioural patterns
 
 2. **SyntheticDataGenerator** (`synthetic_data_generator.py`)
    - 850+ lines of sophisticated data generation
@@ -232,7 +232,7 @@ docker run --rm -v $(pwd)/results:/app/test_results \
 - **Memory Usage**: ~250MB peak for 6-device stress test
 - **CPU Usage**: ~65% peak on 4-core system
 - **Data Throughput**: Up to 4.8 MB/s simulated data streams
-- **Timing Accuracy**: <50ms synchronization jitter achieved
+- **Timing Accuracy**: <50ms synchronisation jitter achieved
 
 ## Benefits Achieved
 

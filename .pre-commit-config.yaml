@@ -109,7 +109,7 @@ repos:
     hooks:
       - id: complexity-check
         name: Check code complexity
-        entry: python scripts/analyze_complexity.py --root PythonApp --threshold 15 --analyze-only
+        entry: python scripts/analyze_complexity.py --root PythonApp --threshold 15 --analyse-only
         language: system
         files: '^PythonApp/.*\.py$'
         verbose: true

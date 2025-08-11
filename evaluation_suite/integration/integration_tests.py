@@ -106,7 +106,7 @@ class RealMultiDeviceCoordinationTest(RealIntegrationTest):
             logger.error(f"Error in real multi-device coordination test: {e}")
         return result
     async def _test_real_device_discovery(self) -> bool:
-        """Test real device discovery by analyzing network components"""
+        """Test real device discovery by analysing network components"""
         try:
             logger.info("Testing real device discovery capabilities...")
             device_manager_file = python_app_path / "network" / "android_device_manager.py"
@@ -297,7 +297,7 @@ class RealNetworkPerformanceTest(RealIntegrationTest):
                 content = network_file.read_text().lower()
                 efficiency_patterns = [
                     "compression",
-                    "optimize",
+                    "optimise",
                     "efficient",
                     "buffer",
                     "batch"
@@ -331,10 +331,10 @@ class RealNetworkPerformanceTest(RealIntegrationTest):
             return False
 class RealSynchronizationPrecisionTest(RealIntegrationTest):
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
-        """Execute real synchronization precision test"""
+        """Execute real synchronisation precision test"""
         result = TestResult(
             test_name=self.name,
-            test_type=TestType.SYNCHRONIZATION,
+            test_type=TestType.SYNCHRONISATION,
             test_category=TestCategory.INTEGRATION,
             priority=TestPriority.CRITICAL
         )
@@ -365,17 +365,17 @@ class RealSynchronizationPrecisionTest(RealIntegrationTest):
                 measurement_accuracy=0.92 if all_valid else 0.68
             )
             if not all_valid:
-                result.error_message = "One or more real synchronization precision tests failed"
+                result.error_message = "One or more real synchronisation precision tests failed"
         except Exception as e:
             result.success = False
             result.status = TestStatus.ERROR
-            result.error_message = f"Real synchronization precision test error: {str(e)}"
-            logger.error(f"Error in real synchronization precision test: {e}")
+            result.error_message = f"Real synchronisation precision test error: {str(e)}"
+            logger.error(f"Error in real synchronisation precision test: {e}")
         return result
     async def _test_real_clock_synchronization(self) -> bool:
-        """Test real clock synchronization implementation"""
+        """Test real clock synchronisation implementation"""
         try:
-            logger.info("Testing real clock synchronization...")
+            logger.info("Testing real clock synchronisation...")
             sync_file = python_app_path / "master_clock_synchronizer.py"
             if not sync_file.exists():
                 return False
@@ -390,7 +390,7 @@ class RealSynchronizationPrecisionTest(RealIntegrationTest):
             patterns_found = sum(1 for pattern in sync_patterns if pattern in content)
             return patterns_found >= 3
         except Exception as e:
-            logger.error(f"Real clock synchronization test failed: {e}")
+            logger.error(f"Real clock synchronisation test failed: {e}")
             return False
     async def _test_real_cross_platform_timing(self) -> bool:
         """Test real cross-platform timing coordination"""
@@ -420,9 +420,9 @@ class RealSynchronizationPrecisionTest(RealIntegrationTest):
             logger.error(f"Real cross-platform timing test failed: {e}")
             return False
     async def _test_real_synchronization_precision(self) -> bool:
-        """Test real synchronization precision capabilities"""
+        """Test real synchronisation precision capabilities"""
         try:
-            logger.info("Testing real synchronization precision...")
+            logger.info("Testing real synchronisation precision...")
             precision_measurements = []
             for i in range(10):
                 start = time.time_ns()
@@ -433,7 +433,7 @@ class RealSynchronizationPrecisionTest(RealIntegrationTest):
             avg_precision_error = statistics.mean(precision_measurements)
             return avg_precision_error < 1.0
         except Exception as e:
-            logger.error(f"Real synchronization precision test failed: {e}")
+            logger.error(f"Real synchronisation precision test failed: {e}")
             return False
     async def _test_real_jitter_performance(self) -> bool:
         """Test real jitter performance"""
@@ -765,9 +765,9 @@ class RealPerformanceStressTest(RealIntegrationTest):
             logger.error(f"Real system resilience test failed: {e}")
             return False
     async def _test_real_resource_utilization(self) -> bool:
-        """Test real resource utilization monitoring"""
+        """Test real resource utilisation monitoring"""
         try:
-            logger.info("Testing real resource utilization...")
+            logger.info("Testing real resource utilisation...")
             memory_test_data = []
             for i in range(10):
                 data = [0] * (1024 * 1024 // 8)
@@ -776,10 +776,10 @@ class RealPerformanceStressTest(RealIntegrationTest):
             del memory_test_data
             return True
         except MemoryError:
-            logger.error("Memory allocation failed during resource utilization test")
+            logger.error("Memory allocation failed during resource utilisation test")
             return False
         except Exception as e:
-            logger.error(f"Real resource utilization test failed: {e}")
+            logger.error(f"Real resource utilisation test failed: {e}")
             return False
     async def _test_real_throughput_under_load(self) -> bool:
         """Test real throughput under load"""
@@ -838,7 +838,7 @@ def create_real_integration_suite() -> TestSuite:
     suite.add_test(network_test)
     sync_test = RealSynchronizationPrecisionTest(
         name="real_synchronization_precision_test",
-        description="Tests real synchronization precision and timing",
+        description="Tests real synchronisation precision and timing",
         timeout=200
     )
     suite.add_test(sync_test)

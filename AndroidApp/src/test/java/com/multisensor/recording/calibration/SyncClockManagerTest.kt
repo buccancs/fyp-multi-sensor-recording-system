@@ -54,7 +54,7 @@ class SyncClockManagerTest {
                 syncAge = 5000L,
             )
 
-        assertTrue("Should be synchronized", syncStatus.isSynchronized)
+        assertTrue("Should be synchronised", syncStatus.isSynchronized)
         assertEquals("Clock offset should match", 1500L, syncStatus.clockOffsetMs)
         assertTrue("Last sync timestamp should be positive", syncStatus.lastSyncTimestamp > 0)
         assertTrue("PC reference time should be positive", syncStatus.pcReferenceTime > 0)
@@ -66,11 +66,11 @@ class SyncClockManagerTest {
     @Test
     fun testInitialSyncState() =
         runTest {
-            println("[DEBUG_LOG] Testing initial synchronization state")
+            println("[DEBUG_LOG] Testing initial synchronisation state")
 
             val syncStatus = syncClockManager.getSyncStatus()
 
-            assertFalse("Should not be synchronized initially", syncStatus.isSynchronized)
+            assertFalse("Should not be synchronised initially", syncStatus.isSynchronized)
             assertEquals("Initial offset should be zero", 0L, syncStatus.clockOffsetMs)
             assertEquals("Initial last sync should be zero", 0L, syncStatus.lastSyncTimestamp)
             assertEquals("Initial PC reference should be zero", 0L, syncStatus.pcReferenceTime)
@@ -83,17 +83,17 @@ class SyncClockManagerTest {
     @Test
     fun testSuccessfulClockSynchronization() =
         runTest {
-            println("[DEBUG_LOG] Testing successful clock synchronization")
+            println("[DEBUG_LOG] Testing successful clock synchronisation")
 
             val pcTimestamp = System.currentTimeMillis() + 2000L
             val syncId = "test_sync_001"
 
             val success = syncClockManager.synchronizeWithPc(pcTimestamp, syncId)
 
-            assertTrue("Synchronization should succeed", success)
+            assertTrue("Synchronisation should succeed", success)
 
             val syncStatus = syncClockManager.getSyncStatus()
-            assertTrue("Should be synchronized after sync", syncStatus.isSynchronized)
+            assertTrue("Should be synchronised after sync", syncStatus.isSynchronized)
             assertTrue("Clock offset should be positive (PC ahead)", syncStatus.clockOffsetMs > 0)
             assertEquals("PC reference time should match", pcTimestamp, syncStatus.pcReferenceTime)
             assertTrue(
@@ -102,29 +102,29 @@ class SyncClockManagerTest {
             )
             assertTrue("Sync should be valid", syncClockManager.isSyncValid())
 
-            verify { mockLogger.info(match { it.contains("Clock synchronized successfully") }) }
+            verify { mockLogger.info(match { it.contains("Clock synchronised successfully") }) }
 
-            println("[DEBUG_LOG] Successful clock synchronization test passed")
+            println("[DEBUG_LOG] Successful clock synchronisation test passed")
         }
 
     @Test
     fun testClockSynchronizationWithNegativeOffset() =
         runTest {
-            println("[DEBUG_LOG] Testing clock synchronization with negative offset")
+            println("[DEBUG_LOG] Testing clock synchronisation with negative offset")
 
             val pcTimestamp = System.currentTimeMillis() - 1500L
             val syncId = "test_sync_002"
 
             val success = syncClockManager.synchronizeWithPc(pcTimestamp, syncId)
 
-            assertTrue("Synchronization should succeed", success)
+            assertTrue("Synchronisation should succeed", success)
 
             val syncStatus = syncClockManager.getSyncStatus()
-            assertTrue("Should be synchronized", syncStatus.isSynchronized)
+            assertTrue("Should be synchronised", syncStatus.isSynchronized)
             assertTrue("Clock offset should be negative (PC behind)", syncStatus.clockOffsetMs < 0)
             assertEquals("PC reference time should match", pcTimestamp, syncStatus.pcReferenceTime)
 
-            println("[DEBUG_LOG] Negative offset synchronization test passed")
+            println("[DEBUG_LOG] Negative offset synchronisation test passed")
         }
 
     @Test
@@ -137,10 +137,10 @@ class SyncClockManagerTest {
 
             val success = syncClockManager.synchronizeWithPc(invalidTimestamp, syncId)
 
-            assertFalse("Synchronization should fail with invalid timestamp", success)
+            assertFalse("Synchronisation should fail with invalid timestamp", success)
 
             val syncStatus = syncClockManager.getSyncStatus()
-            assertFalse("Should not be synchronized", syncStatus.isSynchronized)
+            assertFalse("Should not be synchronised", syncStatus.isSynchronized)
             assertEquals("Offset should remain zero", 0L, syncStatus.clockOffsetMs)
 
             verify { mockLogger.error(match { it.contains("Invalid PC timestamp") }) }
@@ -199,9 +199,9 @@ class SyncClockManagerTest {
             val deviceTime = System.currentTimeMillis()
             val syncedTime = syncClockManager.getSyncedTimestamp(deviceTime)
 
-            assertEquals("Should return device time when not synchronized", deviceTime, syncedTime)
+            assertEquals("Should return device time when not synchronised", deviceTime, syncedTime)
 
-            verify { mockLogger.warning("Clock not synchronized, using device timestamp") }
+            verify { mockLogger.warning("Clock not synchronised, using device timestamp") }
 
             println("[DEBUG_LOG] Unsynchronized timestamp test passed")
         }
@@ -225,25 +225,25 @@ class SyncClockManagerTest {
     @Test
     fun testResetSynchronization() =
         runTest {
-            println("[DEBUG_LOG] Testing synchronization reset")
+            println("[DEBUG_LOG] Testing synchronisation reset")
 
             val pcTimestamp = System.currentTimeMillis() + 2000L
             syncClockManager.synchronizeWithPc(pcTimestamp, "test_sync_006")
 
-            assertTrue("Should be synchronized before reset", syncClockManager.isSyncValid())
+            assertTrue("Should be synchronised before reset", syncClockManager.isSyncValid())
 
             syncClockManager.resetSync()
 
             val syncStatus = syncClockManager.getSyncStatus()
-            assertFalse("Should not be synchronized after reset", syncStatus.isSynchronized)
+            assertFalse("Should not be synchronised after reset", syncStatus.isSynchronized)
             assertEquals("Offset should be zero after reset", 0L, syncStatus.clockOffsetMs)
             assertEquals("Last sync should be zero after reset", 0L, syncStatus.lastSyncTimestamp)
             assertEquals("PC reference should be zero after reset", 0L, syncStatus.pcReferenceTime)
             assertFalse("Sync should not be valid after reset", syncClockManager.isSyncValid())
 
-            verify { mockLogger.info(match { it.contains("Resetting clock synchronization") }) }
+            verify { mockLogger.info(match { it.contains("Resetting clock synchronisation") }) }
 
-            println("[DEBUG_LOG] Synchronization reset test passed")
+            println("[DEBUG_LOG] Synchronisation reset test passed")
         }
 
     @Test
@@ -297,8 +297,8 @@ class SyncClockManagerTest {
             val statistics = syncClockManager.getSyncStatistics()
 
             assertNotNull("Statistics should not be null", statistics)
-            assertTrue("Statistics should contain sync info", statistics.contains("Clock Synchronization Statistics"))
-            assertTrue("Statistics should show synchronized state", statistics.contains("Synchronized: true"))
+            assertTrue("Statistics should contain sync info", statistics.contains("Clock Synchronisation Statistics"))
+            assertTrue("Statistics should show synchronised state", statistics.contains("Synchronised: true"))
             assertTrue("Statistics should show clock offset", statistics.contains("Clock Offset:"))
             assertTrue("Statistics should show last sync", statistics.contains("Last Sync:"))
             assertTrue("Statistics should show PC reference time", statistics.contains("PC Reference Time:"))
@@ -335,13 +335,13 @@ class SyncClockManagerTest {
 
             var isHealthy = syncClockManager.validateSyncHealth()
             assertFalse("Should not be healthy when unsynchronized", isHealthy)
-            verify { mockLogger.warning("Clock synchronization not established") }
+            verify { mockLogger.warning("Clock synchronisation not established") }
 
             val pcTimestamp = System.currentTimeMillis() + 2000L
             syncClockManager.synchronizeWithPc(pcTimestamp, "test_sync_010")
 
             isHealthy = syncClockManager.validateSyncHealth()
-            assertTrue("Should be healthy when synchronized", isHealthy)
+            assertTrue("Should be healthy when synchronised", isHealthy)
 
             println("[DEBUG_LOG] Sync health validation test passed")
         }
@@ -349,7 +349,7 @@ class SyncClockManagerTest {
     @Test
     fun testConcurrentSynchronization() =
         runTest {
-            println("[DEBUG_LOG] Testing concurrent synchronization operations")
+            println("[DEBUG_LOG] Testing concurrent synchronisation operations")
 
             val jobs = mutableListOf<Job>()
 
@@ -365,9 +365,9 @@ class SyncClockManagerTest {
             jobs.joinAll()
 
             val syncStatus = syncClockManager.getSyncStatus()
-            assertTrue("Should be synchronized after concurrent operations", syncStatus.isSynchronized)
+            assertTrue("Should be synchronised after concurrent operations", syncStatus.isSynchronized)
             assertTrue("Should have valid sync after concurrent operations", syncClockManager.isSyncValid())
 
-            println("[DEBUG_LOG] Concurrent synchronization test passed")
+            println("[DEBUG_LOG] Concurrent synchronisation test passed")
         }
 }

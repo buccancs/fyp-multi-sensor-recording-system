@@ -148,9 +148,9 @@ class AdvancedROIDetector:
             logger.error(f"ROI detection failed: {e}")
             return None
     def _detect_cascade(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = self.face_cascade.detectMultiScale(
-            gray, scaleFactor=1.1, minNeighbors=5, minSize=(80, 80)
+            grey, scaleFactor=1.1, minNeighbors=5, minSize=(80, 80)
         )
         if len(faces) > 0:
             largest_face = max(faces, key=lambda f: f[2] * f[3])
@@ -221,9 +221,9 @@ class AdvancedROIDetector:
     def _calculate_stability_metrics(self):
         if len(self.roi_history) < 2:
             return
-        centers = [(x + w // 2, y + h // 2) for x, y, w, h in self.roi_history]
-        center_x = [c[0] for c in centers]
-        center_y = [c[1] for c in centers]
+        centres = [(x + w // 2, y + h // 2) for x, y, w, h in self.roi_history]
+        center_x = [c[0] for c in centres]
+        center_y = [c[1] for c in centres]
         if len(center_x) > 1:
             self.roi_metrics.position_variance = (
                 np.var(center_x) + np.var(center_y)
@@ -233,8 +233,8 @@ class AdvancedROIDetector:
             self.roi_metrics.size_variance = np.var(areas)
         motion_scores = []
         for i in range(1, len(self.roi_history)):
-            prev_center = centers[i - 1]
-            curr_center = centers[i]
+            prev_center = centres[i - 1]
+            curr_center = centres[i]
             motion = np.sqrt(
                 (curr_center[0] - prev_center[0]) ** 2
                 + (curr_center[1] - prev_center[1]) ** 2
@@ -478,7 +478,7 @@ class PhysiologicalSignalExtractor:
                 f"extraction_method_{self.method.value}",
                 "bandpass_filtering",
                 "detrending",
-                "normalization",
+                "normalisation",
             ]
             phys_signal.spectral_features = self._calculate_spectral_features(signal)
         except Exception as e:

@@ -182,7 +182,7 @@ class ConnectionManagerComprehensiveTest {
             mapOf("type" to "status", "priority" to "LOW", "message" to "Routine status update"),
             mapOf("type" to "emergency", "priority" to "CRITICAL", "message" to "System failure detected"),
             mapOf("type" to "command", "priority" to "NORMAL", "message" to "Start recording"),
-            mapOf("type" to "sync", "priority" to "HIGH", "message" to "Time synchronization")
+            mapOf("type" to "sync", "priority" to "HIGH", "message" to "Time synchronisation")
         )
         priorityMessages.forEach { message ->
             connectionManager.queuePriorityMessage(deviceId, message)
@@ -235,7 +235,7 @@ class ConnectionManagerComprehensiveTest {
         val poolStats = connectionManager.getConnectionPoolStats()
         assertNotNull("Pool stats should be available", poolStats)
         assertEquals("Pool should be at capacity", maxConnections, poolStats["active_connections"])
-        assertTrue("Pool utilization should be 100%",
+        assertTrue("Pool utilisation should be 100%",
                   poolStats["utilization_percent"] as Double == 100.0)
     }
     @Test
@@ -261,7 +261,7 @@ class ConnectionManagerComprehensiveTest {
         assertEquals("Decrypted data should match original", plainText, decrypted)
     }
     @Test
-    fun `performance optimization should work`() = runTest {
+    fun `performance optimisation should work`() = runTest {
         val deviceId = "performance_test_device"
         val performanceConfig = mapOf(
             "compression_enabled" to true,

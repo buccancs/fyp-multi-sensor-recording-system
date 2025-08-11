@@ -103,7 +103,7 @@ class PerformanceMonitor:
         with cls._lock:
             return cls._timing_data.copy()
 class ColoredFormatter(logging.Formatter):
-    COLORS = {
+    COLOURS = {
         "DEBUG": "\x1b[36m",
         "INFO": "\x1b[32m",
         "WARNING": "\x1b[33m",
@@ -113,8 +113,8 @@ class ColoredFormatter(logging.Formatter):
     }
     def format(self, record):
         original_levelname = record.levelname
-        if record.levelname in self.COLORS:
-            record.levelname = f"{self.COLORS[record.levelname]}{record.levelname}{self.COLORS['RESET']}"
+        if record.levelname in self.COLOURS:
+            record.levelname = f"{self.COLOURS[record.levelname]}{record.levelname}{self.COLOURS['RESET']}"
         formatted = super().format(record)
         record.levelname = original_levelname
         return formatted

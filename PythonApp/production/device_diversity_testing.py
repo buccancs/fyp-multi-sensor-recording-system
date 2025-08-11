@@ -655,7 +655,7 @@ class DeviceDiversityAnalyzer:
         if low_end_percentage > 30:
             recommendations.append(
                 "High percentage of low-end devices detected. Implement conservative default "
-                "settings and provide performance optimization options."
+                "settings and provide performance optimisation options."
             )
         category_analysis = self._analyze_category_performance()
         high_variance_categories = []
@@ -742,8 +742,8 @@ class DeviceDiversityAnalyzer:
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Device Diversity Testing and Analysis")
-    parser.add_argument("--analyze-sample", action="store_true",
-                       help="Analyze sample device profiles")
+    parser.add_argument("--analyse-sample", action="store_true",
+                       help="Analyse sample device profiles")
     parser.add_argument("--test-device", type=str,
                        help="Test specific device (ADB device ID)")
     parser.add_argument("--output", type=str, default="device_diversity_report.json",
@@ -756,15 +756,15 @@ def main():
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
     try:
-        analyzer = DeviceDiversityAnalyzer()
+        analyser = DeviceDiversityAnalyzer()
         if args.analyze_sample:
-            print("Creating and analyzing sample device profiles...")
-            profiles = analyzer.create_sample_device_profiles()
+            print("Creating and analysing sample device profiles...")
+            profiles = analyser.create_sample_device_profiles()
             print(f"\nGenerated {len(profiles)} device profiles:")
             for profile in profiles:
                 print(f"  - {profile.device_spec.device_model} ({profile.device_spec.tier.value}): "
                       f"Grade {profile.overall_performance_grade}")
-            analysis = analyzer.analyze_device_diversity()
+            analysis = analyser.analyze_device_diversity()
             print(f"\nDevice Diversity Analysis:")
             print(f"  Total Devices: {analysis['total_devices']}")
             print(f"  Tier Distribution: {analysis['tier_distribution']['distribution']}")
@@ -776,13 +776,13 @@ def main():
             tester = DevicePerformanceTester()
             device_spec = tester.detect_device_specifications(args.test_device)
             profile = tester.run_complete_test_suite(device_spec)
-            analyzer.add_device_profile(profile)
+            analyser.add_device_profile(profile)
             print(f"\nDevice Test Results:")
             print(f"  Device: {profile.device_spec.device_model}")
             print(f"  Tier: {profile.device_spec.tier.value}")
             print(f"  Performance Score: {profile.device_spec.performance_score:.1f}")
             print(f"  Overall Grade: {profile.overall_performance_grade}")
-        analyzer.export_analysis_report(args.output)
+        analyser.export_analysis_report(args.output)
         print(f"\nAnalysis report saved to: {args.output}")
     except Exception as e:
         print(f"Error: {e}")

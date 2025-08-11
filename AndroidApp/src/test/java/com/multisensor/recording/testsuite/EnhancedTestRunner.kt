@@ -208,11 +208,11 @@ class EnhancedTestRunner : RunListener() {
             appendLine("body { font-family: Arial, sans-serif; margin: 20px; }")
             appendLine("table { border-collapse: collapse; width: 100%; }")
             appendLine("th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }")
-            appendLine("th { background-color: #f2f2f2; }")
-            appendLine(".passed { color: green; }")
-            appendLine(".failed { color: red; }")
-            appendLine(".skipped { color: orange; }")
-            appendLine(".performance-warning { background-color: #fff3cd; }")
+            appendLine("th { background-colour: #f2f2f2; }")
+            appendLine(".passed { colour: green; }")
+            appendLine(".failed { colour: red; }")
+            appendLine(".skipped { colour: orange; }")
+            appendLine(".performance-warning { background-colour: #fff3cd; }")
             appendLine("</style></head><body>")
 
             appendLine("<h1>Enhanced Android Test Suite Report</h1>")
@@ -337,7 +337,7 @@ class EnhancedTestRunner : RunListener() {
         println("💾 Memory Usage Analysis:")
         println("   Average memory usage: ${avgMemory.format(0)}MB")
         println("   Peak memory usage: ${maxMemory}MB")
-        println("   Memory efficiency: ${if (avgMemory < MEMORY_THRESHOLD_MB) "GOOD" else "NEEDS OPTIMIZATION"}")
+        println("   Memory efficiency: ${if (avgMemory < MEMORY_THRESHOLD_MB) "GOOD" else "NEEDS OPTIMISATION"}")
     }
 
     private fun exportResultsToJson() {

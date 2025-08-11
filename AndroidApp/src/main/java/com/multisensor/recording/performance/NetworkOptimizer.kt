@@ -33,7 +33,7 @@ class NetworkOptimizer @Inject constructor(
     }
 
     fun startOptimization() {
-        logger.info("NetworkOptimizer: Starting network optimization")
+        logger.info("NetworkOptimizer: Starting network optimisation")
 
         monitoringJob = scope.launch {
             while (isActive) {
@@ -57,7 +57,7 @@ class NetworkOptimizer @Inject constructor(
     }
 
     fun stopOptimization() {
-        logger.info("NetworkOptimizer: Stopping network optimization")
+        logger.info("NetworkOptimizer: Stopping network optimisation")
         monitoringJob?.cancel()
         monitoringJob = null
     }

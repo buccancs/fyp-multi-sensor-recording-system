@@ -167,7 +167,7 @@ class MainWindow(QMainWindow):
             widget = self.device_status_widgets[device_id]
             widget.battery_label.setText(f"Battery: {status.get('battery', 'Unknown')}%")
             widget.recording_indicator.setStyleSheet(
-                "background-color: green" if status.get('recording') else "background-color: red"
+                "background-colour: green" if status.get('recording') else "background-colour: red"
             )
 ```
 
@@ -319,7 +319,7 @@ class MultiModalProcessor:
     
     def process_frame_batch(self, rgb_frame, thermal_frame, gsr_samples, timestamp):
         """
-        Process synchronized batch of multi-modal sensor data.
+        Process synchronised batch of multi-modal sensor data.
         
         Args:
             rgb_frame: RGB camera frame (numpy array)
@@ -474,7 +474,7 @@ Additional code in the `ShimmerManager` handles live data streaming, timestamp s
 
 ```python
 def start_data_streaming(self, device_list):
-    """Start synchronized data streaming from all connected devices."""
+    """Start synchronised data streaming from all connected devices."""
     streaming_devices = []
     
     for device_id in device_list:

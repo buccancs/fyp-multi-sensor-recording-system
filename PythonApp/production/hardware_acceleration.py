@@ -102,9 +102,9 @@ class HardwareAccelerationDetector:
                 performance_score=0.7,
                 recommended_usage="Multi-threaded processing, vectorized operations"
             ))
-            self.logger.info(f"HardwareAccelerationDetector: CPU optimization available - {cpu_count} cores")
+            self.logger.info(f"HardwareAccelerationDetector: CPU optimisation available - {cpu_count} cores")
         except Exception as e:
-            self.logger.error(f"HardwareAccelerationDetector: Error detecting CPU optimizations: {e}")
+            self.logger.error(f"HardwareAccelerationDetector: Error detecting CPU optimisations: {e}")
     def _detect_opencv_accelerations(self):
         if not OPENCV_AVAILABLE:
             return
@@ -217,10 +217,10 @@ class HardwareAccelerationDetector:
                         available=True,
                         device_info="Intel Integrated Performance Primitives",
                         performance_score=0.75,
-                        recommended_usage="Optimized image processing operations",
-                        limitations=["Intel processors only", "Limited to IPP-optimized functions"]
+                        recommended_usage="Optimised image processing operations",
+                        limitations=["Intel processors only", "Limited to IPP-optimised functions"]
                     ))
-                    self.logger.info("HardwareAccelerationDetector: Intel IPP optimization available")
+                    self.logger.info("HardwareAccelerationDetector: Intel IPP optimisation available")
                 if intel_tbb:
                     self.detected_capabilities.append(HardwareCapability(
                         acceleration_type=AccelerationType.INTEL_TBB,
@@ -230,9 +230,9 @@ class HardwareAccelerationDetector:
                         recommended_usage="Parallel processing acceleration",
                         limitations=["Intel processors optimal", "May benefit other processors"]
                     ))
-                    self.logger.info("HardwareAccelerationDetector: Intel TBB optimization available")
+                    self.logger.info("HardwareAccelerationDetector: Intel TBB optimisation available")
         except Exception as e:
-            self.logger.error(f"HardwareAccelerationDetector: Error detecting Intel optimizations: {e}")
+            self.logger.error(f"HardwareAccelerationDetector: Error detecting Intel optimisations: {e}")
     def get_capability_by_type(self, acceleration_type: AccelerationType) -> Optional[HardwareCapability]:
         for capability in self.detected_capabilities:
             if capability.acceleration_type == acceleration_type:
@@ -332,7 +332,7 @@ class HardwareAccelerationOptimizer:
             reduce_precision=True
         )
     def apply_optimization_profile(self, profile: OptimizationProfile) -> Dict[str, Any]:
-        self.logger.info(f"HardwareAccelerationOptimizer: Applying optimization profile: {profile.profile_name}")
+        self.logger.info(f"HardwareAccelerationOptimizer: Applying optimisation profile: {profile.profile_name}")
         results = {
             "profile_applied": profile.profile_name,
             "optimizations_applied": [],
@@ -342,13 +342,13 @@ class HardwareAccelerationOptimizer:
             if OPENCV_AVAILABLE:
                 self._apply_opencv_optimizations(profile, results)
             else:
-                results["errors"].append("OpenCV not available for optimization")
+                results["errors"].append("OpenCV not available for optimisation")
             self._apply_threading_optimizations(profile, results)
             if profile.memory_optimization:
                 self._apply_memory_optimizations(profile, results)
             self.current_profile = profile
         except Exception as e:
-            error_msg = f"Error applying optimization profile: {e}"
+            error_msg = f"Error applying optimisation profile: {e}"
             self.logger.error(f"HardwareAccelerationOptimizer: {error_msg}")
             results["errors"].append(error_msg)
         return results
@@ -378,21 +378,21 @@ class HardwareAccelerationOptimizer:
                 except:
                     results["errors"].append("CUDA requested but not supported")
         except Exception as e:
-            results["errors"].append(f"OpenCV optimization error: {e}")
+            results["errors"].append(f"OpenCV optimisation error: {e}")
     def _apply_threading_optimizations(self, profile: OptimizationProfile, results: Dict[str, Any]):
         try:
             if NUMPY_AVAILABLE and profile.vectorized_operations:
                 results["optimizations_applied"].append("Vectorized operations enabled")
         except Exception as e:
-            results["errors"].append(f"Threading optimization error: {e}")
+            results["errors"].append(f"Threading optimisation error: {e}")
     def _apply_memory_optimizations(self, profile: OptimizationProfile, results: Dict[str, Any]):
         try:
             import gc
             if profile.memory_optimization:
                 gc.set_threshold(700, 10, 10)
-                results["optimizations_applied"].append("Memory optimization enabled")
+                results["optimizations_applied"].append("Memory optimisation enabled")
         except Exception as e:
-            results["errors"].append(f"Memory optimization error: {e}")
+            results["errors"].append(f"Memory optimisation error: {e}")
     def benchmark_acceleration(self, test_duration_seconds: float = 30.0) -> Dict[str, Any]:
         self.logger.info("HardwareAccelerationOptimizer: Starting acceleration benchmark")
         if not OPENCV_AVAILABLE or not NUMPY_AVAILABLE:
@@ -434,8 +434,8 @@ class HardwareAccelerationOptimizer:
         start_time = time.time()
         frame_count = 0
         while time.time() - start_time < duration:
-            gray = cv2.cvtColor(test_image, cv2.COLOR_BGR2GRAY)
-            blurred = cv2.GaussianBlur(gray, (15, 15), 0)
+            grey = cv2.cvtColor(test_image, cv2.COLOR_BGR2GRAY)
+            blurred = cv2.GaussianBlur(grey, (15, 15), 0)
             edges = cv2.Canny(blurred, 50, 150)
             resized = cv2.resize(test_image, (640, 480))
             frame_count += 1
@@ -457,17 +457,17 @@ class HardwareAccelerationOptimizer:
         hardware_codec_available = any(cap.acceleration_type == AccelerationType.HARDWARE_CODEC for cap in capabilities)
         if cuda_available:
             recommendations.append(
-                "CUDA acceleration detected. Consider using aggressive or maximum optimization "
+                "CUDA acceleration detected. Consider using aggressive or maximum optimisation "
                 "profiles for best performance in image processing tasks."
             )
         elif opencl_available:
             recommendations.append(
-                "OpenCL acceleration available. Balanced or aggressive optimization profiles "
+                "OpenCL acceleration available. Balanced or aggressive optimisation profiles "
                 "recommended for improved performance."
             )
         else:
             recommendations.append(
-                "No GPU acceleration detected. Focus on CPU optimizations and consider "
+                "No GPU acceleration detected. Focus on CPU optimisations and consider "
                 "hardware upgrade for better performance."
             )
         if hardware_codec_available:
@@ -477,7 +477,7 @@ class HardwareAccelerationOptimizer:
             )
         if not recommendations:
             recommendations.append(
-                "Limited acceleration options detected. Consider conservative optimization "
+                "Limited acceleration options detected. Consider conservative optimisation "
                 "profile and monitor system performance."
             )
         return recommendations
@@ -496,7 +496,7 @@ def main():
     parser.add_argument("--benchmark", action="store_true", help="Benchmark acceleration performance")
     parser.add_argument("--duration", type=float, default=30.0, help="Benchmark duration in seconds")
     parser.add_argument("--profile", type=str, choices=["conservative", "balanced", "aggressive", "maximum"],
-                       help="Create optimization profile")
+                       help="Create optimisation profile")
     parser.add_argument("--output", type=str, help="Output file for results")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     args = parser.parse_args()
@@ -529,11 +529,11 @@ def main():
                 } for cap in capabilities
             ]
         if args.profile:
-            print(f"\nCreating {args.profile} optimization profile...")
+            print(f"\nCreating {args.profile} optimisation profile...")
             optimizer = HardwareAccelerationOptimizer()
             profile = optimizer.create_optimization_profile(args.profile)
             print(f"Profile: {profile.profile_name}")
-            print(f"  CPU Optimization: {profile.cpu_optimization}")
+            print(f"  CPU Optimisation: {profile.cpu_optimization}")
             print(f"  GPU Acceleration: {profile.gpu_acceleration}")
             print(f"  Hardware Codec: {profile.hardware_codec}")
             print(f"  OpenCL: {profile.opencv_use_opencl}")

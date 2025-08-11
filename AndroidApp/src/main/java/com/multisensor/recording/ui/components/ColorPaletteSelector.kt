@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Colour
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.multisensor.recording.util.ThermalColorPalette
@@ -27,7 +27,7 @@ fun ColorPaletteSelector(
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(
+        colours = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
@@ -46,7 +46,7 @@ fun ColorPaletteSelector(
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = "Color Palette",
+                    text = "Colour Palette",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -75,7 +75,7 @@ private fun PalettePreviewCard(
     val borderColor = if (isSelected) {
         MaterialTheme.colorScheme.primary
     } else {
-        Color.Transparent
+        Colour.Transparent
     }
     val backgroundColor = if (isSelected) {
         MaterialTheme.colorScheme.primaryContainer
@@ -86,7 +86,7 @@ private fun PalettePreviewCard(
         modifier = modifier
             .width(80.dp)
             .clickable { onClick() },
-        colors = CardDefaults.cardColors(
+        colours = CardDefaults.cardColors(
             containerColor = backgroundColor
         ),
         elevation = CardDefaults.cardElevation(
@@ -104,18 +104,18 @@ private fun PalettePreviewCard(
                     .clip(RoundedCornerShape(8.dp))
                     .border(
                         width = if (isSelected) 2.dp else 1.dp,
-                        color = borderColor,
+                        colour = borderColor,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .background(
-                        brush = Brush.horizontalGradient(palette.colors),
+                        brush = Brush.horizontalGradient(palette.colours),
                         shape = RoundedCornerShape(8.dp)
                     )
             )
             Text(
                 text = palette.displayName,
                 style = MaterialTheme.typography.labelMedium,
-                color = if (isSelected) {
+                colour = if (isSelected) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant

@@ -1,7 +1,7 @@
 package com.multisensor.recording.controllers
 
 import android.content.Context
-import android.graphics.Color
+import android.graphics.Colour
 import android.media.MediaActionSound
 import android.os.Handler
 import android.os.Looper
@@ -255,7 +255,7 @@ class CalibrationController @Inject constructor(
     private fun triggerScreenFlash() {
         callback?.getContentView()?.let { contentView ->
             val flashOverlay = View(contentView.context).apply {
-                setBackgroundColor(Color.WHITE)
+                setBackgroundColor(Colour.WHITE)
                 alpha = 0.8f
             }
 
@@ -352,7 +352,7 @@ class CalibrationController @Inject constructor(
     }
 
     fun testClockSync(lifecycleScope: LifecycleCoroutineScope) {
-        android.util.Log.d("CalibrationController", "[DEBUG_LOG] Testing clock synchronization")
+        android.util.Log.d("CalibrationController", "[DEBUG_LOG] Testing clock synchronisation")
 
         lifecycleScope.launch {
             try {
@@ -368,7 +368,7 @@ class CalibrationController @Inject constructor(
                             "✅ Clock sync successful!\nOffset: ${syncStatus.clockOffsetMs}ms\nSync ID: $syncId"
                         callback?.showToast(statusMessage, Toast.LENGTH_LONG)
 
-                        callback?.updateStatusText("Clock synchronized - Offset: ${syncStatus.clockOffsetMs}ms")
+                        callback?.updateStatusText("Clock synchronised - Offset: ${syncStatus.clockOffsetMs}ms")
 
                         android.util.Log.d(
                             "CalibrationController",
@@ -376,12 +376,12 @@ class CalibrationController @Inject constructor(
                         )
                         callback?.onSyncTestCompleted(
                             true,
-                            "Clock synchronized with offset: ${syncStatus.clockOffsetMs}ms"
+                            "Clock synchronised with offset: ${syncStatus.clockOffsetMs}ms"
                         )
                     } else {
                         callback?.showToast("❌ Clock sync test failed", Toast.LENGTH_LONG)
                         android.util.Log.e("CalibrationController", "[DEBUG_LOG] Clock sync test failed")
-                        callback?.onSyncTestCompleted(false, "Clock synchronization failed")
+                        callback?.onSyncTestCompleted(false, "Clock synchronisation failed")
                     }
                 }
             } catch (e: Exception) {
@@ -399,8 +399,8 @@ class CalibrationController @Inject constructor(
         val statistics = syncClockManager.getSyncStatistics()
 
         val statusMessage = buildString {
-            appendLine("🕐 Clock Synchronization Status")
-            appendLine("Synchronized: ${if (syncStatus.isSynchronized) "✅ Yes" else "❌ No"}")
+            appendLine("🕐 Clock Synchronisation Status")
+            appendLine("Synchronised: ${if (syncStatus.isSynchronized) "✅ Yes" else "❌ No"}")
             appendLine("Offset: ${syncStatus.clockOffsetMs}ms")
             appendLine("Last Sync: ${if (syncStatus.syncAge >= 0) "${syncStatus.syncAge}ms ago" else "Never"}")
             appendLine("Valid: ${if (syncClockManager.isSyncValid()) "✅ Yes" else "❌ No"}")
@@ -416,7 +416,7 @@ class CalibrationController @Inject constructor(
 
         return buildString {
             append("Calibration System Status:\n")
-            append("- Clock Synchronized: ${syncStatus.isSynchronized}\n")
+            append("- Clock Synchronised: ${syncStatus.isSynchronized}\n")
             append("- Clock Offset: ${syncStatus.clockOffsetMs}ms\n")
             append("- Sync Valid: ${syncClockManager.isSyncValid()}\n")
             append("- Last Calibration: $lastCalibrationInfo\n")
@@ -905,9 +905,9 @@ class CalibrationController @Inject constructor(
         statisticalMetrics: StatisticalMetrics?
     ) {
         when {
-            syncAccuracy < 0.5f -> messages.add("⚠️ Poor synchronization quality - consider recalibrating clock sync")
+            syncAccuracy < 0.5f -> messages.add("⚠️ Poor synchronisation quality - consider recalibrating clock sync")
             syncAccuracy < 0.7f -> messages.add("⚡ Moderate sync quality - monitor for drift")
-            syncAccuracy > 0.95f -> messages.add("✅ Excellent synchronization achieved!")
+            syncAccuracy > 0.95f -> messages.add("✅ Excellent synchronisation achieved!")
         }
 
         when {
@@ -924,7 +924,7 @@ class CalibrationController @Inject constructor(
                 messages.add("📈 Quality distribution shows non-normal characteristics")
             }
             if (stats.standardDeviation > 0.2f) {
-                messages.add("📉 High variability in quality scores - consider pattern optimization")
+                messages.add("📉 High variability in quality scores - consider pattern optimisation")
             }
         }
 
@@ -985,7 +985,7 @@ class CalibrationController @Inject constructor(
         val issues = mutableListOf<String>()
 
         if (!syncClockManager.isSyncValid()) {
-            issues.add("Clock synchronization is not valid")
+            issues.add("Clock synchronisation is not valid")
         } else {
             val syncStatus = syncClockManager.getSyncStatus()
             val offsetMs = abs(syncStatus.clockOffsetMs)

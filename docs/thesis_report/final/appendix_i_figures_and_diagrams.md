@@ -56,8 +56,8 @@ For immediate navigation to consolidated content:
 | Appendix I, Section I.4 | Appendix Z, Section Z.2 | Requirements Architecture Diagrams |
 | Appendix I, Section I.5 | Appendix Z, Section Z.4 | Performance Analysis Models |
 
-Complete Visual Content Navigation: Please refer to Appendix Z: Consolidated Figures, Diagrams, and Visual Content for all thesis visual materials with comprehensive cross-referencing and improved organization.
+Complete Visual Content Navigation: Please refer to Appendix Z: Consolidated Figures, Diagrams, and Visual Content for all thesis visual materials with comprehensive cross-referencing and improved organisation.
 
 ---
 
-*This appendix remains for reference but all active content has been moved to Appendix Z for improved thesis organization and reduced redundancy.*
+*This appendix remains for reference but all active content has been moved to Appendix Z for improved thesis organisation and reduced redundancy.*

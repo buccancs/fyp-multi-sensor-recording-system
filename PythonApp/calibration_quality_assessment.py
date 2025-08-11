@@ -205,23 +205,23 @@ class CalibrationQualityAssessment:
         self, gray_image: np.ndarray
     ) -> PatternDetectionResult:
         pattern_size = self.CIRCLE_GRID_COLS, self.CIRCLE_GRID_ROWS
-        found, centers = cv2.findCirclesGrid(
+        found, centres = cv2.findCirclesGrid(
             gray_image, pattern_size, cv2.CALIB_CB_SYMMETRIC_GRID
         )
-        if found and centers is not None:
-            pattern_score = self._calculate_circle_grid_quality(centers, pattern_size)
+        if found and centres is not None:
+            pattern_score = self._calculate_circle_grid_quality(centres, pattern_size)
             geometric_distortion = self._calculate_geometric_distortion(
-                centers, pattern_size
+                centres, pattern_size
             )
-            completeness = len(centers) / (pattern_size[0] * pattern_size[1])
+            completeness = len(centres) / (pattern_size[0] * pattern_size[1])
             return PatternDetectionResult(
                 pattern_found=True,
                 pattern_type=PatternType.CIRCLE_GRID,
-                corner_count=len(centers),
+                corner_count=len(centres),
                 pattern_score=pattern_score,
                 geometric_distortion=geometric_distortion,
                 completeness=completeness,
-                corners=centers,
+                corners=centres,
             )
         else:
             return PatternDetectionResult(
@@ -236,23 +236,23 @@ class CalibrationQualityAssessment:
         self, gray_image: np.ndarray
     ) -> PatternDetectionResult:
         pattern_size = self.CIRCLE_GRID_COLS, self.CIRCLE_GRID_ROWS
-        found, centers = cv2.findCirclesGrid(
+        found, centres = cv2.findCirclesGrid(
             gray_image, pattern_size, cv2.CALIB_CB_ASYMMETRIC_GRID
         )
-        if found and centers is not None:
-            pattern_score = self._calculate_circle_grid_quality(centers, pattern_size)
+        if found and centres is not None:
+            pattern_score = self._calculate_circle_grid_quality(centres, pattern_size)
             geometric_distortion = self._calculate_geometric_distortion(
-                centers, pattern_size
+                centres, pattern_size
             )
-            completeness = len(centers) / (pattern_size[0] * pattern_size[1])
+            completeness = len(centres) / (pattern_size[0] * pattern_size[1])
             return PatternDetectionResult(
                 pattern_found=True,
                 pattern_type=PatternType.ASYMMETRIC_CIRCLE_GRID,
-                corner_count=len(centers),
+                corner_count=len(centres),
                 pattern_score=pattern_score,
                 geometric_distortion=geometric_distortion,
                 completeness=completeness,
-                corners=centers,
+                corners=centres,
             )
         else:
             return PatternDetectionResult(
@@ -280,7 +280,7 @@ class CalibrationQualityAssessment:
                 sharpness_score=sharpness_score,
             )
         except Exception as e:
-            self.logger.error(f"Error analyzing sharpness: {e}")
+            self.logger.error(f"Error analysing sharpness: {e}")
             return SharpnessMetrics(0.0, 0.0, 0.0, 0.0)
     def _analyze_contrast(self, gray_image: np.ndarray) -> ContrastMetrics:
         try:
@@ -296,7 +296,7 @@ class CalibrationQualityAssessment:
                 contrast_score=contrast_score,
             )
         except Exception as e:
-            self.logger.error(f"Error analyzing contrast: {e}")
+            self.logger.error(f"Error analysing contrast: {e}")
             return ContrastMetrics(0, 0.0, 0.0, 0.0)
     def _analyze_alignment(
         self, image1: np.ndarray, image2: np.ndarray
@@ -350,7 +350,7 @@ class CalibrationQualityAssessment:
                 alignment_score=0.0,
             )
         except Exception as e:
-            self.logger.error(f"Error analyzing alignment: {e}")
+            self.logger.error(f"Error analysing alignment: {e}")
             return AlignmentMetrics(0, float("inf"), None, 0.0)
     def _calculate_chessboard_quality(
         self, corners: np.ndarray, pattern_size: Tuple[int, int]
@@ -381,12 +381,12 @@ class CalibrationQualityAssessment:
             self.logger.error(f"Error calculating chessboard quality: {e}")
             return 0.0
     def _calculate_circle_grid_quality(
-        self, centers: np.ndarray, pattern_size: Tuple[int, int]
+        self, centres: np.ndarray, pattern_size: Tuple[int, int]
     ) -> float:
         try:
-            if len(centers) != pattern_size[0] * pattern_size[1]:
+            if len(centres) != pattern_size[0] * pattern_size[1]:
                 return 0.0
-            centers_flat = centers.reshape(-1, 2)
+            centers_flat = centres.reshape(-1, 2)
             distances = []
             for i in range(len(centers_flat)):
                 for j in range(i + 1, len(centers_flat)):

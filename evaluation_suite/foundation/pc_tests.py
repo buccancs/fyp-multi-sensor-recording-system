@@ -636,7 +636,7 @@ class SessionCoordinationTest(PCComponentTest):
             return False
 class SynchronizationEngineTest(PCComponentTest):
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
-        """Execute synchronization engine test"""
+        """Execute synchronisation engine test"""
         result = TestResult(
             test_name=self.name,
             test_type=TestType.UNIT_PC,
@@ -680,15 +680,15 @@ class SynchronizationEngineTest(PCComponentTest):
                 data_quality_score=0.92 if all_valid else 0.69
             )
             if not all_valid:
-                result.error_message = "One or more synchronization engine tests failed"
+                result.error_message = "One or more synchronisation engine tests failed"
         except Exception as e:
             result.success = False
             result.status = TestStatus.ERROR
-            result.error_message = f"Synchronization engine test error: {str(e)}"
-            logger.error(f"Error in synchronization engine test: {e}")
+            result.error_message = f"Synchronisation engine test error: {str(e)}"
+            logger.error(f"Error in synchronisation engine test: {e}")
         return result
     async def _test_clock_synchronization(self) -> bool:
-        """Test clock synchronization implementation"""
+        """Test clock synchronisation implementation"""
         try:
             sync_file = python_app_path / "master_clock_synchronizer.py"
             if not sync_file.exists():
@@ -704,7 +704,7 @@ class SynchronizationEngineTest(PCComponentTest):
             patterns_found = sum(1 for pattern in sync_patterns if pattern.lower() in content.lower())
             return patterns_found >= 3
         except Exception as e:
-            logger.error(f"Clock synchronization test failed: {e}")
+            logger.error(f"Clock synchronisation test failed: {e}")
             return False
     async def _test_ntp_server(self) -> bool:
         """Test NTP server implementation"""
@@ -807,7 +807,7 @@ def create_pc_foundation_suite() -> TestSuite:
     suite.add_test(session_test)
     sync_test = SynchronizationEngineTest(
         name="pc_synchronization_engine_test",
-        description="Tests synchronization engine and precision timing",
+        description="Tests synchronisation engine and precision timing",
         timeout=100
     )
     suite.add_test(sync_test)

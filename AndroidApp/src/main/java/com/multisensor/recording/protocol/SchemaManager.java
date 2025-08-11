@@ -27,7 +27,7 @@ public class SchemaManager {
         loadSchema();
     }
 
-    public static synchronized SchemaManager getInstance(Context context) {
+    public static synchronised SchemaManager getInstance(Context context) {
         if (instance == null) {
             instance = new SchemaManager(context);
         }

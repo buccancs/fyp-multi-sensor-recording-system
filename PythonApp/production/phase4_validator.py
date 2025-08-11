@@ -447,7 +447,7 @@ class Phase4Validator:
         print()
         print("Key achievements:")
         print("  • complete production monitoring and analytics")
-        print("  • Advanced performance benchmarking and optimization")
+        print("  • Advanced performance benchmarking and optimisation")
         print("  • Multi-layer security assessment and vulnerability management")
         print("  • Automated deployment pipeline with cross-platform support")
         print("  • Complete documentation and user guides")

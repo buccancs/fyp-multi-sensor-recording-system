@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Synchronized Multimodal Recording System Message Schema",
+  "title": "Synchronised Multimodal Recording System Message Schema",
   "description": "Unified JSON schema for communication between Python PC application and Android device",
   "version": "1.0.0",
   "definitions": {

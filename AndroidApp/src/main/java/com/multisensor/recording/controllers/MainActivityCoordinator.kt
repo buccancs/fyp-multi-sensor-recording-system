@@ -393,7 +393,7 @@ class MainActivityCoordinator @Inject constructor(
 
     private fun setupStatusDisplayController() {
         statusDisplayController.setCallback(object : StatusDisplayController.StatusDisplayCallback {
-            override fun onBatteryLevelChanged(level: Int, color: Int) {
+            override fun onBatteryLevelChanged(level: Int, colour: Int) {
             }
 
             override fun onConnectionStatusChanged(type: StatusDisplayController.ConnectionType, connected: Boolean) {

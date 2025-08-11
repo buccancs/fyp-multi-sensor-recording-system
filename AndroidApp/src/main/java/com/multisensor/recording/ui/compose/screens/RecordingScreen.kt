@@ -12,7 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Colour
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -118,10 +118,10 @@ private fun ThermalPreviewCard(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            colour = MaterialTheme.colorScheme.surfaceVariant,
                             shape = RoundedCornerShape(12.dp)
                         ),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Centre
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,7 +136,7 @@ private fun ThermalPreviewCard(
                         Text(
                             text = "Tap to View Thermal Preview",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
+                            colour = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -147,7 +147,7 @@ private fun ThermalPreviewCard(
                         .align(Alignment.TopEnd)
                         .padding(8.dp)
                         .background(
-                            color = RecordingActive.copy(alpha = 0.9f),
+                            colour = RecordingActive.copy(alpha = 0.9f),
                             shape = RoundedCornerShape(4.dp)
                         )
                         .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -155,7 +155,7 @@ private fun ThermalPreviewCard(
                     Text(
                         text = "REC",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color.White,
+                        colour = Colour.White,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -165,7 +165,7 @@ private fun ThermalPreviewCard(
                     .align(Alignment.BottomEnd)
                     .padding(8.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                        colour = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
                         shape = RoundedCornerShape(4.dp)
                     )
                     .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -183,7 +183,7 @@ private fun ThermalPreviewCard(
                     Text(
                         text = "Full View",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface
+                        colour = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

@@ -72,7 +72,7 @@ class SessionReviewDialog(QDialog):
         summary_label = QLabel(
             f"Started: {start_time} | Duration: {duration_str} | Status: {status}"
         )
-        summary_label.setStyleSheet("color: #666666; font-size: 10pt;")
+        summary_label.setStyleSheet("colour: #666666; font-size: 10pt;")
         header_layout.addWidget(summary_label)
         parent_layout.addWidget(header_frame)
     def create_main_content(self, parent_layout):

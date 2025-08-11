@@ -234,13 +234,13 @@ class AdaptiveSynchronizer:
         old_strategy = self.current_strategy
         self.current_strategy = strategy
         logger.info(
-            f"Synchronization strategy changed: {old_strategy.value} -> {strategy.value}"
+            f"Synchronisation strategy changed: {old_strategy.value} -> {strategy.value}"
         )
 def test_dual_camera_sync(
     camera1_index: int = 0, camera2_index: int = 1, duration_seconds: int = 10
 ) -> Dict:
     logger.info(
-        f"Starting dual camera synchronization test (cameras {camera1_index}, {camera2_index})"
+        f"Starting dual camera synchronisation test (cameras {camera1_index}, {camera2_index})"
     )
     synchronizer = AdaptiveSynchronizer(
         target_fps=30.0, strategy=SynchronizationStrategy.ADAPTIVE_HYBRID
@@ -299,11 +299,11 @@ def test_dual_camera_sync(
             },
         }
         logger.info(
-            f"Synchronization test completed: {frame_count} frames, avg quality: {test_results['quality_statistics']['mean_quality']:.3f}"
+            f"Synchronisation test completed: {frame_count} frames, avg quality: {test_results['quality_statistics']['mean_quality']:.3f}"
         )
         return test_results
     except Exception as e:
-        logger.error(f"Synchronization test failed: {e}")
+        logger.error(f"Synchronisation test failed: {e}")
         return {"error": str(e), "success": False}
 if __name__ == "__main__":
     results = test_dual_camera_sync()

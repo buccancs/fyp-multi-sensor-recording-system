@@ -39,7 +39,7 @@ fun ThermalPreviewScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colours = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
@@ -80,7 +80,7 @@ fun ThermalPreviewScreen(
                     Text(
                         text = "Temperature Range",
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        colour = MaterialTheme.colorScheme.onSurface
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -90,36 +90,36 @@ fun ThermalPreviewScreen(
                             Text(
                                 text = "Min",
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                colour = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
                                 text = "${uiState.temperatureRange.min.toInt()}°C",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.primary
+                                colour = MaterialTheme.colorScheme.primary
                             )
                         }
                         Column {
                             Text(
                                 text = "Max",
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                colour = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
                                 text = "${uiState.temperatureRange.max.toInt()}°C",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.primary
+                                colour = MaterialTheme.colorScheme.primary
                             )
                         }
                         Column {
                             Text(
                                 text = "Range",
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                colour = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
                                 text = "${(uiState.temperatureRange.max - uiState.temperatureRange.min).toInt()}°C",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.primary
+                                colour = MaterialTheme.colorScheme.primary
                             )
                         }
                     }

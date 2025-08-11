@@ -451,7 +451,7 @@ class ShimmerManager @Inject constructor(
         try {
             val configOptions = arrayOf(
                 "Device Information",
-                "Clock Synchronization",
+                "Clock Synchronisation",
                 "Data Logging Settings",
                 "Bluetooth Configuration",
                 "Factory Reset",
@@ -501,10 +501,10 @@ class ShimmerManager @Inject constructor(
 
     private fun showClockSyncSettings(activity: Activity, callback: ShimmerCallback) {
         AlertDialog.Builder(activity)
-            .setTitle("Clock Synchronization")
-            .setMessage("Synchronize device clock with system time?")
+            .setTitle("Clock Synchronisation")
+            .setMessage("Synchronise device clock with system time?")
             .setPositiveButton("Sync Now") { _, _ ->
-                Toast.makeText(activity, "Clock synchronized", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Clock synchronised", Toast.LENGTH_SHORT).show()
                 callback.onConfigurationComplete()
             }
             .setNegativeButton("Cancel") { _, _ -> }

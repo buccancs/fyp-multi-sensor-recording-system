@@ -64,7 +64,7 @@ class CardSectionLayoutTest {
 
     @Test
     fun testSetCardBackgroundColor() {
-        cardSectionLayout.setCardBackgroundColor(android.R.color.holo_blue_light)
+        cardSectionLayout.setCardBackgroundColor(android.R.colour.holo_blue_light)
 
         assertNotNull(cardSectionLayout)
     }
@@ -186,7 +186,7 @@ class CardSectionLayoutTest {
     @Test
     fun testCustomizationCombination() {
         cardSectionLayout.setCardStyle(CardSectionLayout.CardStyle.DEFAULT)
-        cardSectionLayout.setCardBackgroundColor(android.R.color.holo_green_light)
+        cardSectionLayout.setCardBackgroundColor(android.R.colour.holo_green_light)
         cardSectionLayout.setCardPadding(24)
         cardSectionLayout.setCardElevation(4)
         cardSectionLayout.addHeader("Customized Section")

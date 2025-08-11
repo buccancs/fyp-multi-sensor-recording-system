@@ -114,8 +114,8 @@ class SimulatedWorkload:
             while self.is_running:
                 frame = np.random.randint(0, 255,
                     (*self.workload_params["resolution"], 3), dtype=np.uint8)
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+                grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                blurred = cv2.GaussianBlur(grey, (5, 5), 0)
                 _, encoded = cv2.imencode('.jpg', frame,
                     [cv2.IMWRITE_JPEG_QUALITY, 80])
                 self.metrics["frames_processed"] += 1
@@ -482,7 +482,7 @@ class EnduranceTestSuite:
         if cpu_degradation > 10:
             recommendations.append(
                 f"CPU performance degraded by {cpu_degradation:.1f}%. "
-                "Consider optimizing algorithms or implementing performance throttling."
+                "Consider optimising algorithms or implementing performance throttling."
             )
         if final_metrics.thread_count > 50:
             recommendations.append(
@@ -494,7 +494,7 @@ class EnduranceTestSuite:
             )
         if final_metrics.gpu_usage_percent and final_metrics.gpu_usage_percent > 80:
             recommendations.append(
-                "High GPU usage detected. Consider GPU-based optimizations or workload distribution."
+                "High GPU usage detected. Consider GPU-based optimisations or workload distribution."
             )
         if not recommendations:
             recommendations.append("System performed well during endurance testing. No major issues detected.")

@@ -81,7 +81,7 @@ class SecurityScanner:
                 await self._check_sql_injection(file_path, line_num, line)
                 await self._check_insecure_random(file_path, line_num, line)
         except Exception as e:
-            self.logger.warning(f"Error analyzing Python file {file_path}: {e}")
+            self.logger.warning(f"Error analysing Python file {file_path}: {e}")
     async def _check_dangerous_python_patterns(
         self, file_path: Path, line_num: int, line: str
     ):
@@ -152,7 +152,7 @@ class SecurityScanner:
                         description=f"SQL injection vulnerability: {description}",
                         file_path=str(file_path),
                         line_number=line_num,
-                        recommendation="Use parameterized queries or prepared statements",
+                        recommendation="Use parameterised queries or prepared statements",
                     )
                 )
     async def _check_insecure_random(self, file_path: Path, line_num: int, line: str):
@@ -191,7 +191,7 @@ class SecurityScanner:
                 await self._check_insecure_storage(file_path, line_num, line)
                 await self._check_network_security_issues(file_path, line_num, line)
         except Exception as e:
-            self.logger.warning(f"Error analyzing Android file {file_path}: {e}")
+            self.logger.warning(f"Error analysing Android file {file_path}: {e}")
     async def _check_dangerous_android_patterns(
         self, file_path: Path, line_num: int, line: str
     ):
@@ -306,7 +306,7 @@ class SecurityScanner:
                         )
                     )
         except Exception as e:
-            self.logger.warning(f"Error analyzing config file {file_path}: {e}")
+            self.logger.warning(f"Error analysing config file {file_path}: {e}")
     async def _scan_network_security(self):
         self.logger.info("Scanning network security configuration...")
         config_file = self.project_root / "protocol" / "config.json"
@@ -340,7 +340,7 @@ class SecurityScanner:
                         )
                     )
             except Exception as e:
-                self.logger.warning(f"Error analyzing network config: {e}")
+                self.logger.warning(f"Error analysing network config: {e}")
     async def _scan_dependencies(self):
         self.logger.info("Scanning dependencies for vulnerabilities...")
         requirements_files = list(self.project_root.rglob("requirements*.txt"))
@@ -523,7 +523,7 @@ class SecurityScanner:
                         )
                     )
         except Exception as e:
-            self.logger.warning(f"Error analyzing Android manifest: {e}")
+            self.logger.warning(f"Error analysing Android manifest: {e}")
     async def _analyze_proguard_config(self, proguard_path: Path):
         try:
             content = proguard_path.read_text()
@@ -539,7 +539,7 @@ class SecurityScanner:
                     )
                 )
         except Exception as e:
-            self.logger.warning(f"Error analyzing ProGuard config: {e}")
+            self.logger.warning(f"Error analysing ProGuard config: {e}")
     def _generate_report(self, duration: float) -> SecurityReport:
         critical_count = len([i for i in self.issues if i.severity == "critical"])
         high_count = len([i for i in self.issues if i.severity == "high"])

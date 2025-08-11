@@ -71,7 +71,7 @@ class RecordingAnalyticsTest {
     }
 
     @Test
-    fun `test resource utilization analysis`() {
+    fun `test resource utilisation analysis`() {
         analytics.initializeSession(mockContext, "test_session")
 
         repeat(10) {
@@ -192,7 +192,7 @@ class RecordingAnalyticsTest {
         val metadata = report["metadata"] as Map<*, *>
         assertTrue("Metadata should contain timestamp", metadata.containsKey("report_timestamp"))
         assertTrue(
-            "Metadata should contain data points analyzed",
+            "Metadata should contain data points analysed",
             metadata.containsKey("data_points_analyzed")
         )
     }

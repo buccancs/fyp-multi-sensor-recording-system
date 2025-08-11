@@ -12,7 +12,7 @@ class TestType(Enum):
     ALGORITHM_VALIDATION = auto()
     MULTI_DEVICE = auto()
     NETWORK_PERFORMANCE = auto()
-    SYNCHRONIZATION = auto()
+    SYNCHRONISATION = auto()
     ERROR_HANDLING = auto()
     END_TO_END = auto()
     DATA_INTEGRITY = auto()

@@ -46,7 +46,7 @@ class CameraPreviewWidget(QFrame):
         layout.addWidget(self.preview_label, 1)
         status_layout = QHBoxLayout()
         self.status_label = QLabel("Disconnected")
-        self.status_label.setStyleSheet("color: red; font-weight: bold;")
+        self.status_label.setStyleSheet("colour: red; font-weight: bold;")
         status_layout.addWidget(QLabel("Status:"))
         status_layout.addWidget(self.status_label)
         status_layout.addStretch()
@@ -63,10 +63,10 @@ class CameraPreviewWidget(QFrame):
     def update_status(self, connected: bool, fps: float = 0.0):
         if connected:
             self.status_label.setText("Connected")
-            self.status_label.setStyleSheet("color: green; font-weight: bold;")
+            self.status_label.setStyleSheet("colour: green; font-weight: bold;")
         else:
             self.status_label.setText("Disconnected")
-            self.status_label.setStyleSheet("color: red; font-weight: bold;")
+            self.status_label.setStyleSheet("colour: red; font-weight: bold;")
         self.fps_label.setText(f"{fps:.1f} FPS")
 class DualWebcamSettingsPanel(QGroupBox):
     settings_changed = pyqtSignal(dict)

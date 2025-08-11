@@ -44,14 +44,14 @@ class PreviewPanel(QTabWidget):
         rgb_label = QLabel("RGB Camera Feed")
         rgb_label.setMinimumSize(320, 240)
         rgb_label.setStyleSheet(
-            "background-color: black; color: white; border: 1px solid gray;"
+            "background-colour: black; colour: white; border: 1px solid grey;"
         )
         rgb_label.setAlignment(Qt.AlignCenter)
         device_layout.addWidget(rgb_label)
         thermal_label = QLabel("Thermal Camera Feed")
         thermal_label.setMinimumSize(320, 240)
         thermal_label.setStyleSheet(
-            "background-color: black; color: white; border: 1px solid gray;"
+            "background-colour: black; colour: white; border: 1px solid grey;"
         )
         thermal_label.setAlignment(Qt.AlignCenter)
         device_layout.addWidget(thermal_label)
@@ -65,7 +65,7 @@ class PreviewPanel(QTabWidget):
         webcam_label = QLabel("PC RGB Camera Feed")
         webcam_label.setMinimumSize(640, 480)
         webcam_label.setStyleSheet(
-            "background-color: black; color: white; border: 1px solid gray;"
+            "background-colour: black; colour: white; border: 1px solid grey;"
         )
         webcam_label.setAlignment(Qt.AlignCenter)
         webcam_layout.addWidget(webcam_label)
@@ -87,13 +87,13 @@ class PreviewPanel(QTabWidget):
         ir_label = QLabel('PC IR Camera Feed\n\nClick "Start IR Preview" to begin')
         ir_label.setMinimumSize(640, 480)
         ir_label.setStyleSheet(
-            "background-color: #1a1a2e; color: #eee; border: 2px solid #16213e; "
+            "background-colour: #1a1a2e; colour: #eee; border: 2px solid #16213e; "
             "border-radius: 8px; font-size: 14px;"
         )
         ir_label.setAlignment(Qt.AlignCenter)
         ir_layout.addWidget(ir_label)
         self.ir_status_label = QLabel("IR Camera: Ready")
-        self.ir_status_label.setStyleSheet("color: #666; padding: 5px;")
+        self.ir_status_label.setStyleSheet("colour: #666; padding: 5px;")
         ir_layout.addWidget(self.ir_status_label)
         ir_layout.addStretch(1)
         ir_widget.ir_label = ir_label

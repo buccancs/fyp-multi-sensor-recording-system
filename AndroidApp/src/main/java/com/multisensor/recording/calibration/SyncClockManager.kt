@@ -83,7 +83,7 @@ constructor(
     ): Boolean =
         mutex.withLock {
             return try {
-                logger.info("[DEBUG_LOG] Enhanced NTP-style synchronization requested")
+                logger.info("[DEBUG_LOG] Enhanced NTP-style synchronisation requested")
                 syncId?.let { logger.info("[DEBUG_LOG] Sync ID: $it") }
 
                 val syncResult = performNTPStyleSync(pcTimestamp)
@@ -111,11 +111,11 @@ constructor(
                     logger.info("[DEBUG_LOG] Enhanced sync complete - Offset: ${clockOffsetMs}ms, Quality: $syncQualityScore")
                     true
                 } else {
-                    logger.error("NTP-style synchronization failed: ${syncResult.error}")
+                    logger.error("NTP-style synchronisation failed: ${syncResult.error}")
                     false
                 }
             } catch (e: Exception) {
-                logger.error("Error during enhanced clock synchronization", e)
+                logger.error("Error during enhanced clock synchronisation", e)
                 false
             }
         }
@@ -124,7 +124,7 @@ constructor(
         if (isSynchronized) {
             deviceTimestamp + clockOffsetMs
         } else {
-            logger.warning("Clock not synchronized, using device timestamp")
+            logger.warning("Clock not synchronised, using device timestamp")
             deviceTimestamp
         }
 
@@ -152,7 +152,7 @@ constructor(
 
     suspend fun resetSync(): Unit =
         mutex.withLock {
-            logger.info("[DEBUG_LOG] Resetting clock synchronization")
+            logger.info("[DEBUG_LOG] Resetting clock synchronisation")
             clockOffsetMs = 0L
             lastSyncTimestamp = 0L
             pcReferenceTime = 0L
@@ -166,8 +166,8 @@ constructor(
     fun getSyncStatistics(): String {
         val status = getSyncStatus()
         return buildString {
-            appendLine("Clock Synchronization Statistics:")
-            appendLine("  Synchronized: ${status.isSynchronized}")
+            appendLine("Clock Synchronisation Statistics:")
+            appendLine("  Synchronised: ${status.isSynchronized}")
             appendLine("  Clock Offset: ${status.clockOffsetMs}ms")
             appendLine("  Last Sync: ${if (status.lastSyncTimestamp > 0) "${status.syncAge}ms ago" else "Never"}")
             appendLine("  PC Reference Time: ${status.pcReferenceTime}")
@@ -194,18 +194,18 @@ constructor(
 
     fun validateSyncHealth(): Boolean {
         if (!isSynchronized) {
-            logger.warning("Clock synchronization not established")
+            logger.warning("Clock synchronisation not established")
             return false
         }
 
         if (!isSyncValid()) {
-            logger.warning("Clock synchronization expired - re-sync recommended")
+            logger.warning("Clock synchronisation expired - re-sync recommended")
             return false
         }
 
         val syncAge = System.currentTimeMillis() - lastSyncTimestamp
         if (syncAge > SYNC_VALIDITY_DURATION_MS / 2) {
-            logger.info("Clock synchronization aging - consider re-sync soon")
+            logger.info("Clock synchronisation aging - consider re-sync soon")
         }
 
         return true

@@ -53,11 +53,11 @@ class StatusIndicator(QWidget):
             )
     def update_appearance(self):
         if self.is_connected:
-            self.indicator.setStyleSheet("color: #4CAF50;")
-            self.status_label.setStyleSheet("color: #2E7D32;")
+            self.indicator.setStyleSheet("colour: #4CAF50;")
+            self.status_label.setStyleSheet("colour: #2E7D32;")
         else:
-            self.indicator.setStyleSheet("color: #f44336;")
-            self.status_label.setStyleSheet("color: #C62828;")
+            self.indicator.setStyleSheet("colour: #f44336;")
+            self.status_label.setStyleSheet("colour: #C62828;")
         self.status_label.setText(self.status_text)
 class ModernButton(QPushButton):
     def __init__(self, text, button_type="primary", parent=None):
@@ -85,32 +85,32 @@ class ModernButton(QPushButton):
                 opacity: 0.6;
             }
                 QPushButton {
-                    background-color:
-                    color: white;
+                    background-colour:
+                    colour: white;
                 }
                 QPushButton:hover {
-                    background-color:
+                    background-colour:
                 }
                 QPushButton {
-                    background-color:
-                    color: white;
+                    background-colour:
+                    colour: white;
                 }
                 QPushButton:hover {
-                    background-color:
+                    background-colour:
                 }
                 QPushButton {
-                    background-color:
-                    color: white;
+                    background-colour:
+                    colour: white;
                 }
                 QPushButton:hover {
-                    background-color:
+                    background-colour:
                 }
                 QPushButton {
-                    background-color:
-                    color: white;
+                    background-colour:
+                    colour: white;
                 }
                 QPushButton:hover {
-                    background-color:
+                    background-colour:
                 }
             QGroupBox {
                 font-weight: 600;
@@ -119,28 +119,28 @@ class ModernButton(QPushButton):
                 border-radius: 8px;
                 margin-top: 10px;
                 padding-top: 10px;
-                background-color:
+                background-colour:
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 8px 0 8px;
-                color:
-                background-color:
+                colour:
+                background-colour:
             }
             QProgressBar {
                 border: 2px solid
                 border-radius: 5px;
-                text-align: center;
-                background-color:
+                text-align: centre;
+                background-colour:
             }
             QProgressBar::chunk {
-                background-color:
+                background-colour:
                 border-radius: 3px;
             }
             QPlainTextEdit {
-                background-color:
-                color:
+                background-colour:
+                colour:
                 border: 1px solid
                 border-radius: 4px;
                 font-family: 'Consolas', 'Monaco', monospace;

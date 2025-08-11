@@ -77,14 +77,14 @@ class StatusIndicator(QWidget):
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
-        colors = {
+        colours = {
             "connected": "#107c10",
             "disconnected": "#d13438",
             "warning": "#ff8c00",
             "unknown": "#8a8886",
         }
-        color = QColor(colors.get(self.status, colors["unknown"]))
-        painter.setBrush(color)
+        colour = QColor(colours.get(self.status, colours["unknown"]))
+        painter.setBrush(colour)
         painter.setPen(Qt.NoPen)
         painter.drawEllipse(0, 0, 12, 12)
     def set_status(self, status):
@@ -345,7 +345,7 @@ class EnhancedMainWindow(QMainWindow):
         status = self.statusBar()
         status.showMessage("Multi-Sensor Recording System - Ready")
         self.connection_status = QLabel("Disconnected")
-        self.connection_status.setStyleSheet("color: #d13438; font-weight: bold;")
+        self.connection_status.setStyleSheet("colour: #d13438; font-weight: bold;")
         status.addPermanentWidget(self.connection_status)
     def setup_connections(self):
         self.update_timer = QTimer()
@@ -361,13 +361,13 @@ class EnhancedMainWindow(QMainWindow):
             indicator.set_status("connected")
         self.log_message("All devices connected")
         self.connection_status.setText("Connected")
-        self.connection_status.setStyleSheet("color: #107c10; font-weight: bold;")
+        self.connection_status.setStyleSheet("colour: #107c10; font-weight: bold;")
     def disconnect_all_devices(self):
         for device_name, indicator in self.device_indicators.items():
             indicator.set_status("disconnected")
         self.log_message("All devices disconnected")
         self.connection_status.setText("Disconnected")
-        self.connection_status.setStyleSheet("color: #d13438; font-weight: bold;")
+        self.connection_status.setStyleSheet("colour: #d13438; font-weight: bold;")
     def start_calibration(self):
         self.log_message("Starting calibration process...")
     def load_stimulus_file(self):

@@ -2,7 +2,7 @@
 
 ```mermaid
 flowchart TD
-    A[docs/thesis_report/final/5.md (Markdown)] -->|Normalize/Convert| B[docs/thesis_report/final/latex/chapter5.tex]
+    A[docs/thesis_report/final/5.md (Markdown)] -->|Normalise/Convert| B[docs/thesis_report/final/latex/chapter5.tex]
     B --> C{main.tex includes \input{chapter5}}
     C --> D[PDF build]
     subgraph Figures

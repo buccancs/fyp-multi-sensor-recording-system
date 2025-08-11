@@ -421,7 +421,7 @@ master_config.json:
 Baseline Performance Metrics:
 ```
 Network Configuration: 802.11ac (5 GHz), 40 MHz channel width
-Distance: 3 meters line-of-sight
+Distance: 3 metres line-of-sight
 Interference: Minimal (controlled laboratory environment)
 
 Latency Measurements:

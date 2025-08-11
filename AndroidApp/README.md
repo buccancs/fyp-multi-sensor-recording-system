@@ -556,7 +556,7 @@ The application integrates with research workflows through standardised APIs and
 
 1. **Experiment Design**: Configure recording parameters based on research requirements
 2. **Participant Setup**: Position devices and establish sensor connections
-3. **Baseline Recording**: Capture baseline data for normalization
+3. **Baseline Recording**: Capture baseline data for normalisation
 4. **Stimulus Presentation**: Coordinate with PC controller for stimulus timing
 5. **Data Collection**: Synchronised recording across all sensor modalities
 6. **Quality Assessment**: Real-time validation of data quality and completeness
@@ -1246,7 +1246,7 @@ abstract class RecordingModule {
 
 ## Licence
 
-This project is licenced under the MIT Licence - see the [LICENSE](../LICENSE) file for details.
+This project is licenced under the MIT Licence - see the [LICENCE](../LICENCE) file for details.
 
 ## Acknowledgments
 

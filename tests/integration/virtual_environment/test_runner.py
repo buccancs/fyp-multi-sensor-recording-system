@@ -9,7 +9,7 @@ Key responsibilities:
 - Start/stop PC server in headless test mode
 - Spawn and coordinate multiple virtual device clients
 - Monitor system performance and collect metrics
-- Validate data integrity and synchronization
+- Validate data integrity and synchronisation
 - Generate comprehensive test reports
 """
 import asyncio

@@ -8,7 +8,7 @@
 
 [4] S. Chen, L. Williams, and R. Martinez, "Neural mechanisms of stress susceptibility and resilience," *Scientific Reports*, vol. 9, article 41172, 2019. DOI: 10.1038/s41598-019-41172-7
 
-[5] Y. Zhang, A. Kumar, and M. Thompson, "Human Stress Recognition from Facial Thermal Images," *Computer Modeling in Engineering and Sciences*, vol. 130, no. 2, pp. 889-912, Tech Science Press, 2021. [Online]. Available: https://www.techscience.com/cmes/v130n2/45961
+[5] Y. Zhang, A. Kumar, and M. Thompson, "Human Stress Recognition from Facial Thermal Images," *Computer Modelling in Engineering and Sciences*, vol. 130, no. 2, pp. 889-912, Tech Science Press, 2021. [Online]. Available: https://www.techscience.com/cmes/v130n2/45961
 
 [6] RTI International, "Using Thermal Imaging to Measure Mental Effort: The Nose Knows," 2025. [Online]. Available: https://www.rti.org/insights/using-thermal-imaging-measure-mental-effort-nose-knows
 

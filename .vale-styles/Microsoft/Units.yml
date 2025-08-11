@@ -5,9 +5,9 @@ level: error
 raw:
   - '[a-zA-Z]+\s'
 tokens:
-  - '(?:centi|milli)?meters'
+  - '(?:centi|milli)?metres'
   - '(?:kilo)?grams'
-  - '(?:kilo)?meters'
+  - '(?:kilo)?metres'
   - '(?:mega)?pixels'
   - cm
   - inches
