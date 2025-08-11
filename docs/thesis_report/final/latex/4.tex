@@ -33,7 +33,7 @@ Every GSR/PPG sample is immediately written to a CSV file by the app. The \textt
 The complete Shimmer GSR sensor BLE streaming and logging implementation is provided in Appendix F.2 (see Listing F.2 for the detailed code).
 
 \begin{figure}[htbp]
-    \centring
+    \centering
     \includegraphics[width=\textwidth]{../../diagrams/fig_4_03_shimmer_gsr_integration.png}
     \caption{Shimmer GSR Integration illustrating the desktop controller application architecture.}
     \label{fig:4_03_shimmer_gsr_integration}
@@ -56,7 +56,7 @@ A standout feature of the PC controller is its native C++ backend for time-sensi
 Beyond live monitoring, the desktop app includes tools for post-session analysis. The Playback \& Annotation tab (Figure~4.4) is designed to load the recorded video files (RGB and thermal) in synchronised fashion. Internally, the controller uses libraries like OpenCV and pandas to process the data along a unified timeline; the app will display the video frame at the selected time and the corresponding point on the GSR plot, maintaining alignment via timestamps. Annotation functionality enables adding notes at specific times -- these can be saved in a sidecar file or embedded in session metadata. Another part of the PC software is a Calibration utility, which helps calibrate cameras after recordings. Using OpenCV \cite{ref22}, it can detect calibration patterns (chessboards or ChArUco markers) in the raw RGB frames to calculate each camera's intrinsic parameters, and if multiple cameras (e.g., a phone's RGB and thermal, or a phone and PC webcam) observed the same pattern, it can compute the extrinsic calibration between them. The results (camera matrices, distortion coefficients, transformation matrices) are saved for use in data processing. The controller can also export the data (often downsampled or compressed as needed) into a single file per session for convenient distribution or analysis. The desktop controller thus provides both live coordination capabilities during data acquisition and comprehensive post-processing tools, implemented as a unified PyQt6 application with modular tab-based architecture.
 
 \begin{figure}[htbp]
-    \centring
+    \centering
     \includegraphics[width=\textwidth]{../../diagrams/fig_4_04_desktop_gui_layout.png}
     \caption{Desktop GUI Layout illustrating the playback and annotation interface described above.}
     \label{fig:4_04_desktop_gui_layout}
@@ -77,7 +77,7 @@ One notable aspect of synchronisation is how the Lab Streaming Layer (LSL) is le
 Finally, when stopping a recording and collecting files, the protocol ensures a coordinated shutdown. The PC issues \texttt{stop\_recording} to all devices; each device stops and closes its files, then sends back an acknowledgment (or a message like \texttt{"recording\_stopped"} with a summary). The PC can then send a \texttt{"transfer\_files"} command to each device. Upon this request, the Android app compresses its session folder into a ZIP archive (using \texttt{FileTransferManager.zipSession()}) and responds with a message containing the file name and size when ready. The actual file data transfer is done out-of-band (to avoid clogging the control channel): the phone opens a new socket to the PC's waiting file receiver on a specified port and streams the file bytes directly. During this transfer, the PC may pause other commands or use a separate thread to handle the incoming file. Once the file is received and its checksum verified, the PC sends a final acknowledgment, and the device can optionally delete its local data. This concludes the session's active phase and hands off to the data processing stage.
 
 \begin{figure}[htbp]
-    \centring
+    \centering
     \includegraphics[width=\textwidth]{../../diagrams/fig_4_05_protocol_sequence.png}
     \caption{Protocol Sequence illustrating the messaging sequence between PC and Android devices.}
     \label{fig:4_05_protocol_sequence}
@@ -100,7 +100,7 @@ Once the PC issues a stop command, each Android device closes its files. The nex
 After collection, the PC holds all data from all devices. Post-processing can then proceed. The PC controller's analysis modules operate on the data in these session archives. For instance, the playback module will unzip or directly access the video file and sensor CSVs to replay the session. Because every piece of data has an accurate timestamp, aligning streams is straightforward: the GSR plot is rendered on a time axis (seconds or milliseconds), and video frames are displayed at their corresponding timestamps (the controller can use video file frame timestamps or infer them from raw image filenames). The annotation tool overlays markers on the timeline and can also allow notes to be associated with video frames.
 
 \begin{figure}[htbp]
-    \centring
+    \centering
     \includegraphics[width=\textwidth]{../../diagrams/fig_4_06_data_processing_pipeline.png}
     \caption{Data Processing Pipeline providing an overview of the data processing pipeline from capture through to data export.}
     \label{fig:4_06_data_processing_pipeline}
@@ -111,7 +111,7 @@ For research use cases, exporting data is important. The pipeline ends with an e
 The pipeline ensures that from capture to archive, data is kept synchronised and well-labelled, and from archive to analysis, data is easily accessible and interpretable. The automated zipping and transferring remove manual steps, and the structured session directories prevent any mix-ups between sessions or devices.
 
 \begin{figure}[htbp]
-    \centring
+    \centering
     \includegraphics[width=\textwidth]{../../diagrams/fig_4_06_data_processing_pipeline.png}
     \caption{Data Processing Pipeline providing an overview of the data processing pipeline from capture through to data export.}
     \label{fig:4_06_data_processing_pipeline_repeat}
