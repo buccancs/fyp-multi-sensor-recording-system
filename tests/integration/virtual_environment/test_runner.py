@@ -27,11 +27,16 @@ import traceback
 import sys
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
+
+# Add the virtual_environment directory to the path for direct imports
+virtual_env_path = Path(__file__).parent
+sys.path.insert(0, str(virtual_env_path))
+
 from PythonApp.network.android_device_manager import AndroidDeviceManager, ShimmerDataSample, SessionInfo
 from PythonApp.network.pc_server import PCServer
-from .virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
-from .synthetic_data_generator import SyntheticDataGenerator, estimate_data_volume
-from .test_config import VirtualTestConfig, VirtualTestScenario
+from virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
+from synthetic_data_generator import SyntheticDataGenerator, estimate_data_volume
+from test_config import VirtualTestConfig, VirtualTestScenario
 @dataclass
 class VirtualTestMetrics:
     """Metrics collected during test execution"""
