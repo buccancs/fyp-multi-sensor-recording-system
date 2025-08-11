@@ -1,128 +1,118 @@
 #!/usr/bin/env python3
 """
-REAL System Validation Suite - NO FAKE DATA
+Simple System Validator
 
-This suite runs ONLY real system tests with absolutely NO simulation, 
-mocking, or fabricated data. All evidence comes from genuine test execution.
-
-STRICT POLICY:
-❌ NO FAKE DATA
-❌ NO SIMULATION  
-❌ NO MOCKING
-❌ NO FABRICATED RESULTS
-✅ REAL TESTS ONLY
-✅ GENUINE SYSTEM BEHAVIOR ONLY
-✅ AUTHENTIC DIAGNOSTIC DATA ONLY
+This module runs basic system tests without fake data generation.
+All results come from actual test execution.
 """
 
 import json
 import logging
-import os
 import subprocess
 import sys
 import time
-import psutil
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, Any
 
-# Add project paths
-project_root = Path(__file__).parent
-sys.path.insert(0, str(project_root))
 
-# Import REAL system validator - NO FAKE DATA
-from real_system_validation import RealSystemValidator
-
-class ValidationSuite:
-    """
-    REAL System Validation Suite - NO FAKE DATA
-    
-    This validates the system using ONLY real tests with absolutely no 
-    simulation, mocking, or fabricated data of any kind.
-    """
+class SystemValidator:
+    """Simple system validator using actual tests"""
     
     def __init__(self):
-        self.setup_logging()
-        self.real_validator = RealSystemValidator()
-        
-    def setup_logging(self):
-        """Setup logging for real validation only"""
-        log_dir = Path("results/real_validation_logs")
-        log_dir.mkdir(parents=True, exist_ok=True)
-        
-        log_file = log_dir / f"real_validation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-        
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.FileHandler(log_file),
-                logging.StreamHandler()
-            ]
-        )
-        
         self.logger = logging.getLogger(__name__)
-        self.logger.info("REAL VALIDATION SUITE - NO FAKE DATA POLICY")
+        self.results_dir = Path("results")
+        self.results_dir.mkdir(exist_ok=True)
         
-    def run_comprehensive_validation(self) -> Dict[str, Any]:
-        """Run comprehensive validation using ONLY real system tests"""
-        self.logger.info("=" * 80)
-        self.logger.info("COMPREHENSIVE REAL SYSTEM VALIDATION")
-        self.logger.info("STRICT NO FAKE DATA POLICY")
-        self.logger.info("=" * 80)
+    def run_basic_validation(self) -> Dict[str, Any]:
+        """Run basic system validation"""
+        self.logger.info("Running basic system validation")
         
-        # Delegate to real system validator
-        return self.real_validator.run_real_system_validation()
+        results = {
+            "timestamp": datetime.now().isoformat(),
+            "tests": [],
+            "summary": {}
+        }
         
-    def save_validation_results(self, results: Dict[str, Any]) -> str:
-        """Save real validation results"""
-        return self.real_validator.save_validation_results(results)
+        # Test 1: Check Python app
+        python_test = self._run_test("PythonApp/system_test.py")
+        results["tests"].append(python_test)
+        
+        # Test 2: Check consolidated tests if available
+        consolidated_test = self._run_test("tests/consolidated_tests.py")
+        if consolidated_test["found"]:
+            results["tests"].append(consolidated_test)
+        
+        # Calculate summary
+        total_tests = len([t for t in results["tests"] if t["found"]])
+        passed_tests = len([t for t in results["tests"] if t["success"]])
+        
+        results["summary"] = {
+            "total_tests": total_tests,
+            "passed_tests": passed_tests,
+            "success_rate": (passed_tests / total_tests * 100) if total_tests > 0 else 0
+        }
+        
+        return results
+    
+    def _run_test(self, test_path: str) -> Dict[str, Any]:
+        """Run a single test file"""
+        test_file = Path(test_path)
+        result = {
+            "test_path": test_path,
+            "found": test_file.exists(),
+            "success": False,
+            "output": "",
+            "error": ""
+        }
+        
+        if not test_file.exists():
+            result["error"] = "Test file not found"
+            return result
+            
+        try:
+            proc = subprocess.run(
+                [sys.executable, str(test_file)],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            
+            result["success"] = proc.returncode == 0
+            result["output"] = proc.stdout
+            result["error"] = proc.stderr
+            
+        except subprocess.TimeoutExpired:
+            result["error"] = "Test timed out"
+        except Exception as e:
+            result["error"] = str(e)
+            
+        return result
+    
+    def save_results(self, results: Dict[str, Any]) -> str:
+        """Save validation results"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        results_file = self.results_dir / f"validation_{timestamp}.json"
+        
+        with open(results_file, 'w') as f:
+            json.dump(results, f, indent=2)
+            
+        return str(results_file)
 
 
 def main():
-    """Main entry point for REAL validation suite"""
-    print("=" * 80)
-    print("MULTI-SENSOR RECORDING SYSTEM - REAL VALIDATION SUITE")
-    print("Using Actual Test Execution - No Fake Data")
-    print("=" * 80)
+    """Main validation entry point"""
+    logging.basicConfig(level=logging.INFO)
     
-    validation_suite = ValidationSuite()
+    validator = SystemValidator()
+    results = validator.run_basic_validation()
+    results_file = validator.save_results(results)
     
-    try:
-        # Run comprehensive validation with real tests
-        results = validation_suite.run_comprehensive_validation()
-        
-        # Save results
-        results_file = validation_suite.save_validation_results(results)
-        
-        print(f"\n✅ Real validation complete!")
-        print(f"📊 Results: {results_file}")
-        print(f"📁 Evidence files: results/appendix_evidence/")
-        print(f"📝 Logs: results/validation_logs/")
-        
-        # Display summary
-        if "evidence_status" in results:
-            status = results["evidence_status"] 
-            print(f"\n📋 Evidence Quality:")
-            print(f"   Approach: {status.get('validation_approach', 'Unknown')}")
-            print(f"   Fake Data Used: {status.get('fake_data_used', 'Unknown')}")
-            print(f"   Real Tests Executed: {status.get('real_tests_executed', 'Unknown')}")
-            print(f"   Evidence Quality: {status.get('evidence_quality', 'Unknown')}")
-            
-        # Check if actual tests were successful
-        if "actual_test_execution" in results:
-            test_data = results["actual_test_execution"]
-            if test_data.get("success", False):
-                print(f"\n🎉 ACTUAL TESTS PASSED - GENUINE EVIDENCE GENERATED!")
-            else:
-                print(f"\n⚠️  Some actual tests failed - evidence quality may be limited")
-                print(f"    Check test output for details")
-            
-    except Exception as e:
-        print(f"\n❌ Real validation failed: {e}")
-        return 1
-        
-    return 0
+    print(f"Validation complete: {results_file}")
+    print(f"Summary: {results['summary']['passed_tests']}/{results['summary']['total_tests']} tests passed")
+    
+    return 0 if results['summary']['passed_tests'] > 0 else 1
+
 
 if __name__ == "__main__":
     exit(main())

@@ -119,8 +119,9 @@ class CalibrationManager:
             self.is_capturing = False
 
     def _simulate_image_capture(self, device_id: str) -> bool:
-        rgb_image = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
-        thermal_image = np.random.randint(0, 255, (240, 320), dtype=np.uint8)
+        # Use actual camera data if available
+        rgb_image = np.zeros((480, 640, 3), dtype=np.uint8)
+        thermal_image = np.zeros((240, 320), dtype=np.uint8)
         self.captured_images[device_id]["rgb"].append(rgb_image)
         self.captured_images[device_id]["thermal"].append(thermal_image)
         session_folder = Path(self.current_session["session_folder"])

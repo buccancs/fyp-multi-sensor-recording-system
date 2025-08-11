@@ -130,7 +130,7 @@ WebSocket Communication Validation:
 - Peak Message Rate: 1,247 messages/second sustained
 - Average Latency: 12.3ms round-trip time [21]
 - Reliability: >99.99% message delivery success rate
-- Error Recovery: 100% automatic reconnection success within 2 seconds
+- Error Recovery: High automatic reconnection success within 2 seconds
 
 *Multi-Device Load Testing:*
 - Maximum Device Count: 12 simultaneous devices validated (exceeds 8-device requirement)
@@ -145,9 +145,9 @@ WebSocket Communication Validation:
 Full System Test Scenarios (89 validation scenarios):
 
 *Research Session Workflows:*
-- Session Initialisation: 100% success rate (89/89 scenarios)
+- Session Initialisation: High success rate across test scenarios
 - Multi-Modal Recording: 98.9% success rate (88/89 scenarios, 1 minor sensor timeout)
-- Data Export: 100% success rate (89/89 scenarios) [23]
+- Data Export: Consistent success rate across test scenarios
 - Quality Verification: 97.8% met research-grade quality thresholds
 
 *Performance Under Research Conditions:*
@@ -247,7 +247,7 @@ Issue #001: Network Discovery Message Format
 - Description: Device discovery protocol mismatch between Android and desktop components
 - Impact: 15% device discovery failure rate during integration testing
 - Resolution: Standardised JSON message format with backward compatibility [19]
-- Validation: 100% discovery success rate achieved post-resolution
+- Validation: High discovery success rate achieved post-resolution
 - Resolution Time: 2.3 hours
 
 Issue #002: GSR Sensor Calibration Drift

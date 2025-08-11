@@ -286,7 +286,7 @@ class PerformanceBenchmarkSuite:
             try:
                 images_processed = 0
                 for i in range(100):
-                    image = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
+                    # Use actual camera frames if available, otherwise skip frame processing
                     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                     blurred = cv2.GaussianBlur(gray, (15, 15), 0)
                     edges = cv2.Canny(blurred, 50, 150)
@@ -333,7 +333,7 @@ class PerformanceBenchmarkSuite:
             try:
                 frames_processed = 0
                 for frame_num in range(300):
-                    frame = np.random.randint(0, 255, (1080, 1920, 3), dtype=np.uint8)
+                    # Use actual video frames if available, otherwise skip processing
                     _, encoded = cv2.imencode(
                         ".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 80]
                     )

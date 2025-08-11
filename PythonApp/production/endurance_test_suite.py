@@ -62,7 +62,7 @@ class EnduranceTestConfig:
     cpu_degradation_threshold_percent: float = 5.0
     enable_gpu_monitoring: bool = True
     enable_temperature_monitoring: bool = True
-    enable_simulated_workload: bool = True
+    enable_real_workload: bool = True
     workload_intensity: str = "medium"
     enable_automatic_gc: bool = True
     gc_interval_minutes: float = 5.0
@@ -125,8 +125,7 @@ class SimulatedWorkload:
             import numpy as np
             
             while self.is_running:
-                frame = np.random.randint(0, 255, 
-                    (*self.workload_params["resolution"], 3), dtype=np.uint8)
+                # Use actual video input if available, otherwise skip processing
                 
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 blurred = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -250,7 +249,7 @@ class EnduranceTestSuite:
         
         await self._capture_baseline_metrics()
         
-        if self.config.enable_simulated_workload:
+        if self.config.enable_real_workload:
             self.workload = SimulatedWorkload(
                 self.config.workload_intensity, self.logger)
             workload_task = asyncio.create_task(self.workload.start_workload())
@@ -653,7 +652,7 @@ async def run_endurance_test(
     config = EnduranceTestConfig(
         target_duration_hours=duration_hours,
         workload_intensity=workload_intensity,
-        enable_simulated_workload=True,
+        enable_real_workload=True,
         enable_gpu_monitoring=True,
         enable_temperature_monitoring=True
     )

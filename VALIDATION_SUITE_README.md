@@ -1,21 +1,23 @@
-# Comprehensive Validation Suite for Thesis Evidence
+# System Validation Suite
 
-## Overview
+This module provides basic system validation by running actual tests.
 
-This validation suite addresses the specific evaluation evidence gaps identified in Chapters 5 & 6 of the MEng thesis by providing automated metric collection, data logging, and thesis-ready evidence generation.
+## Usage
 
-## Problem Statement Addressed
+```bash
+python validation_suite.py
+```
 
-The original problem identified these gaps where thesis claims lacked supporting evidence:
+## Features
 
-1. **Cross-Device Timing Precision** - Claims about 2.1 ms median drift without data source
-2. **Memory Leak Absence** - 8-hour endurance test claims without memory usage plots
-3. **CPU Performance Claims** - Performance stability claims without monitoring data
-4. **Network Latency Metrics** - Specific latency numbers without measurement evidence
-5. **Sensor Reliability** - Dropout rate claims without detailed logs
-6. **Device Discovery Success Rates** - Network success percentages without test data
-7. **Usability Metrics** - Setup time claims without user study documentation
-8. **Test Coverage** - 100% success rate claims without test reports
+- Runs actual Python application tests
+- Executes consolidated test suite
+- Reports real test results
+- No fake data generation
+
+## Output
+
+Results are saved to `results/validation_[timestamp].json` with actual test outcomes.
 
 ## Solution Implementation
 

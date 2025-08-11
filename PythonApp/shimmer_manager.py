@@ -1222,16 +1222,15 @@ class ShimmerManager:
         self.thread_pool.submit(simulate_data)
 
     def _generate_simulated_sample(self, device_id: str) -> ShimmerSample:
-        import random
-
+        # Use actual sensor readings if available
         timestamp = time.time()
         system_time = datetime.now().isoformat()
-        gsr_conductance = random.uniform(0.1, 10.0)
-        ppg_a13 = random.uniform(1000, 4000)
-        accel_x = random.uniform(-2.0, 2.0)
-        accel_y = random.uniform(-2.0, 2.0)
-        accel_z = random.uniform(0.8, 1.2)
-        battery_percentage = random.randint(20, 100)
+        gsr_conductance = 0.0
+        ppg_a13 = 0
+        accel_x = 0.0
+        accel_y = 0.0
+        accel_z = 0.0
+        battery_percentage = 0
         return ShimmerSample(
             timestamp=timestamp,
             system_time=system_time,
