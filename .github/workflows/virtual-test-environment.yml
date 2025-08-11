@@ -55,17 +55,17 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     timeout-minutes: 10
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
-        
+
     - name: Install system dependencies
       run: |
         sudo apt-get update
@@ -76,20 +76,20 @@ jobs:
           libpng-dev \
           libfreetype6-dev \
           xvfb
-          
+
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
         pip install -e .
         pip install pytest pytest-asyncio psutil numpy opencv-python-headless
-        
+
     - name: Run quick virtual test
       run: |
         cd tests/integration/virtual_environment
         python test_runner.py --scenario quick --devices 2 --duration 0.5 --verbose
-        
+
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: quick-test-results
@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     timeout-minutes: 15
-    
+
     strategy:
       matrix:
         scenario: [ci, quick]
@@ -110,17 +110,17 @@ jobs:
         exclude:
           - scenario: quick
             device_count: 5
-            
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
-        
+
     - name: Install system dependencies
       run: |
         sudo apt-get update
@@ -131,13 +131,13 @@ jobs:
           libpng-dev \
           libfreetype6-dev \
           xvfb
-          
+
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
         pip install -e .
         pip install pytest pytest-asyncio psutil numpy opencv-python-headless
-        
+
     - name: Set test parameters
       run: |
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -149,7 +149,7 @@ jobs:
           echo "DEVICE_COUNT=${{ matrix.device_count }}" >> $GITHUB_ENV
           echo "DURATION_MINUTES=2.0" >> $GITHUB_ENV
         fi
-        
+
     - name: Run virtual test with xvfb
       run: |
         cd tests/integration/virtual_environment
@@ -159,7 +159,7 @@ jobs:
           --devices $DEVICE_COUNT \
           --duration $DURATION_MINUTES \
           --verbose
-          
+
     - name: Validate test results
       run: |
         cd tests/integration/virtual_environment
@@ -167,7 +167,7 @@ jobs:
         if [ -f test_results/*_report.json ]; then
           echo "Test report found:"
           cat test_results/*_report.json | jq '.summary'
-          
+
           # Check if test passed
           PASSED=$(cat test_results/*_report.json | jq -r '.summary.overall_passed')
           if [ "$PASSED" != "true" ]; then
@@ -178,9 +178,9 @@ jobs:
           echo "No test report found"
           exit 1
         fi
-        
+
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: ci-test-results-${{ matrix.scenario }}-${{ matrix.device_count }}
@@ -193,19 +193,19 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     timeout-minutes: 20
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-      
+
     - name: Build Docker image
       run: |
         cd tests/integration/virtual_environment
         docker build -t gsr-virtual-test:ci -f Dockerfile ../../..
-        
+
     - name: Run Docker test
       run: |
         cd tests/integration/virtual_environment
@@ -216,14 +216,14 @@ jobs:
           -e GSR_TEST_LOG_LEVEL=INFO \
           gsr-virtual-test:ci \
           --scenario ci --devices 3 --duration 2.0 --verbose
-          
+
     - name: Validate Docker test results
       run: |
         cd tests/integration/virtual_environment
         if [ -f test_results/*_report.json ]; then
           echo "Docker test report:"
           cat test_results/*_report.json | jq '.summary'
-          
+
           PASSED=$(cat test_results/*_report.json | jq -r '.summary.overall_passed')
           if [ "$PASSED" != "true" ]; then
             echo "Docker test failed"
@@ -233,9 +233,9 @@ jobs:
           echo "No Docker test report found"
           exit 1
         fi
-        
+
     - name: Upload Docker test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: docker-test-results
@@ -248,17 +248,17 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     timeout-minutes: 25
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
-        
+
     - name: Install dependencies
       run: |
         sudo apt-get update
@@ -266,7 +266,7 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         pip install -e .
         pip install pytest pytest-asyncio psutil numpy opencv-python-headless
-        
+
     - name: Run performance test
       run: |
         cd tests/integration/virtual_environment
@@ -276,33 +276,33 @@ jobs:
           --devices 5 \
           --duration 5.0 \
           --verbose
-          
+
     - name: Analyse performance results
       run: |
         cd tests/integration/virtual_environment
         if [ -f test_results/*_report.json ]; then
           echo "Performance test results:"
           cat test_results/*_report.json | jq '.performance'
-          
+
           # Check performance thresholds
           MEMORY_MB=$(cat test_results/*_report.json | jq -r '.performance.peak_memory_mb')
           CPU_PERCENT=$(cat test_results/*_report.json | jq -r '.performance.peak_cpu_percent')
-          
+
           echo "Peak memory usage: ${MEMORY_MB}MB"
           echo "Peak CPU usage: ${CPU_PERCENT}%"
-          
+
           # Performance thresholds for CI
           if (( $(echo "$MEMORY_MB > 500" | bc -l) )); then
             echo "WARNING: High memory usage: ${MEMORY_MB}MB"
           fi
-          
+
           if (( $(echo "$CPU_PERCENT > 80" | bc -l) )); then
             echo "WARNING: High CPU usage: ${CPU_PERCENT}%"
           fi
         fi
-        
+
     - name: Upload performance results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: performance-test-results
@@ -315,38 +315,38 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quick-test, ci-test]
     if: always()
-    
+
     steps:
     - name: Download all test results
       uses: actions/download-artifact@v3
       with:
         path: all-test-results
-        
+
     - name: Generate test summary
       run: |
         echo "# Virtual Test Environment Summary" > summary.md
         echo "" >> summary.md
         echo "## Test Results" >> summary.md
         echo "" >> summary.md
-        
+
         for result_dir in all-test-results/*/; do
           if [ -d "$result_dir" ]; then
             artifact_name=$(basename "$result_dir")
             echo "### $artifact_name" >> summary.md
-            
+
             report_file=$(find "$result_dir" -name "*_report.json" | head -1)
             if [ -f "$report_file" ]; then
               overall_passed=$(jq -r '.summary.overall_passed' "$report_file")
               devices=$(jq -r '.summary.devices_connected' "$report_file")
               samples=$(jq -r '.summary.data_samples_collected' "$report_file")
               errors=$(jq -r '.summary.error_count' "$report_file")
-              
+
               if [ "$overall_passed" = "true" ]; then
                 echo "- Status: ✅ PASSED" >> summary.md
               else
                 echo "- Status: ❌ FAILED" >> summary.md
               fi
-              
+
               echo "- Devices: $devices" >> summary.md
               echo "- Data samples: $samples" >> summary.md
               echo "- Errors: $errors" >> summary.md
@@ -356,9 +356,9 @@ jobs:
             echo "" >> summary.md
           fi
         done
-        
+
         cat summary.md
-        
+
     - name: Comment on PR
       if: github.event_name == 'pull_request'
       uses: actions/github-script@v6
@@ -366,7 +366,7 @@ jobs:
         script: |
           const fs = require('fs');
           const summary = fs.readFileSync('summary.md', 'utf8');
-          
+
           github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,

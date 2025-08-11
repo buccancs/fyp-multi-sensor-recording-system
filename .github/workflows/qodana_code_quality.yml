@@ -10,15 +10,15 @@ jobs:
   qodana:
     name: Qodana Analysis
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    
+
     - name: Qodana Scan
-      uses: JetBrains/qodana-action@v2024.2
+      uses: JetBrains/qodana-action@v2025.1
       with:
         args: --baseline,qodana.sarif.json
       env:
