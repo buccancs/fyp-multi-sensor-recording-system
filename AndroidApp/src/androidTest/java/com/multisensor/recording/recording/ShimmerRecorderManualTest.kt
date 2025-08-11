@@ -580,4 +580,3 @@ class ShimmerRecorderManualTest {
             }
         }
 }
-

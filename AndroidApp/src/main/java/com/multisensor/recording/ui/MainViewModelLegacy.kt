@@ -26,10 +26,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
-/**
- * Legacy MainViewModel - kept for reference during transition.
- * @deprecated Use the new MainViewModel instead
- */
 @HiltViewModel
 class MainViewModelLegacy
 @Inject
@@ -862,16 +858,16 @@ constructor(
                         isConnecting = true
                     )
                 }
-                
+
                 val serverConfig = networkConfiguration.getServerConfiguration()
                 jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
-                
+
                 jsonSocketClient.connect()
-                
+
                 kotlinx.coroutines.delay(2000)
-                
+
                 val isConnected = jsonSocketClient.isConnected()
-                
+
                 if (isConnected) {
                     updateUiState { currentState ->
                         currentState.copy(
@@ -900,7 +896,7 @@ constructor(
                     }
                     logger.error("Failed to connect to PC server at ${serverConfig.getJsonAddress()}")
                 }
-                
+
             } catch (e: Exception) {
                 logger.error("Error connecting to PC", e)
                 updateUiState { currentState ->
@@ -929,9 +925,9 @@ constructor(
                         isConnecting = true
                     )
                 }
-                
+
                 jsonSocketClient.disconnect()
-                
+
                 updateUiState { currentState ->
                     currentState.copy(
                         isPcConnected = false,
@@ -1528,21 +1524,21 @@ constructor(
                         isNetworkConnected = networkConnected,
                         thermalPreviewAvailable = thermalAvailable,
                         systemHealth = currentState.systemHealth.copy(
-                            thermalCamera = if (thermalAvailable) 
-                                SystemHealthStatus.HealthStatus.CONNECTED 
-                            else 
+                            thermalCamera = if (thermalAvailable)
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED,
-                            shimmerConnection = if (shimmerConnected) 
-                                SystemHealthStatus.HealthStatus.CONNECTED 
-                            else 
+                            shimmerConnection = if (shimmerConnected)
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED,
-                            pcConnection = if (pcConnected) 
-                                SystemHealthStatus.HealthStatus.CONNECTED 
-                            else 
+                            pcConnection = if (pcConnected)
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED,
-                            networkConnection = if (networkConnected) 
-                                SystemHealthStatus.HealthStatus.CONNECTED 
-                            else 
+                            networkConnection = if (networkConnected)
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED
                         )
                     )
@@ -1609,11 +1605,11 @@ constructor(
                         isConnecting = true
                     )
                 }
-                
+
                 var successCount = 0
                 var totalAttempts = 0
                 val connectionResults = mutableListOf<String>()
-                
+
                 totalAttempts++
                 try {
                     val cameraConnected = cameraRecorder.isConnected
@@ -1629,7 +1625,7 @@ constructor(
                     connectionResults.add("Camera: Error - ${e.message}")
                     logger.error("Camera status check error", e)
                 }
-                
+
                 totalAttempts++
                 try {
                     val discoveredDevices = shimmerRecorder.scanAndPairDevices()
@@ -1651,15 +1647,15 @@ constructor(
                     connectionResults.add("Shimmer: Error - ${e.message}")
                     logger.error("Shimmer connection error", e)
                 }
-                
+
                 totalAttempts++
                 try {
                     val serverConfig = networkConfiguration.getServerConfiguration()
                     jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
                     jsonSocketClient.connect()
-                    
+
                     kotlinx.coroutines.delay(1000)
-                    
+
                     val pcConnected = jsonSocketClient.isConnected()
                     if (pcConnected) {
                         successCount++
@@ -1688,7 +1684,7 @@ constructor(
                     connectionResults.add("Thermal: Error - ${e.message}")
                     logger.error("Thermal camera check error", e)
                 }
-                
+
                 val statusMessage = "Device connections: $successCount/$totalAttempts successful"
                 updateUiState { currentState ->
                     currentState.copy(
@@ -1704,7 +1700,7 @@ constructor(
                             else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED,
                             thermalCamera = if (connectionResults.any { it.startsWith("Thermal: Available") })
-                                SystemHealthStatus.HealthStatus.CONNECTED  
+                                SystemHealthStatus.HealthStatus.CONNECTED
                             else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED,
                             rgbCamera = if (connectionResults.any { it.startsWith("Camera: Available") })
@@ -1722,10 +1718,10 @@ constructor(
                         )
                     )
                 }
-                
+
                 logger.info("Device connection completed: $statusMessage")
                 logger.info("Connection details: ${connectionResults.joinToString(", ")}")
-                
+
             } catch (e: Exception) {
                 logger.error("Error connecting devices", e)
                 updateUiState { currentState ->
@@ -1749,9 +1745,9 @@ constructor(
                         isScanning = true
                     )
                 }
-                
+
                 var devicesFound = 0
-                
+
                 val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
                 try {
                     val cameraIds = cameraManager.cameraIdList
@@ -1762,25 +1758,25 @@ constructor(
                 } catch (e: Exception) {
                     logger.warning("Camera scan failed: ${e.message}")
                 }
-                
+
                 scanForShimmerDevicesEnhanced { shimmerDevices ->
                     devicesFound += shimmerDevices.size
                     logger.info("Found ${shimmerDevices.size} Shimmer device(s)")
                 }
-                
+
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "Scan complete: found $devicesFound device(s)",
                         isScanning = false,
                         systemHealth = currentState.systemHealth.copy(
-                            shimmerConnection = if (devicesFound > 0) 
-                                SystemHealthStatus.HealthStatus.CONNECTED 
-                            else 
+                            shimmerConnection = if (devicesFound > 0)
+                                SystemHealthStatus.HealthStatus.CONNECTED
+                            else
                                 SystemHealthStatus.HealthStatus.DISCONNECTED
                         )
                     )
                 }
-                
+
                 logger.info("Device scan completed: $devicesFound devices found")
             } catch (e: Exception) {
                 logger.error("Error scanning devices", e)
@@ -1836,7 +1832,7 @@ constructor(
                 if (!recordingsDir.exists()) {
                     recordingsDir.mkdirs()
                 }
-                
+
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "File browser opened - ${recordingsDir.absolutePath}",
@@ -1844,7 +1840,7 @@ constructor(
                         totalDataSize = formatFileSize(getDirSize(recordingsDir))
                     )
                 }
-                
+
                 logger.info("File browser opened: ${recordingsDir.absolutePath}")
             } catch (e: Exception) {
                 logger.error("Error browsing files", e)
@@ -1868,7 +1864,7 @@ constructor(
                         isTransferring = true
                     )
                 }
-                
+
                 val recordingsDir = File(context.getExternalFilesDir(null), "recordings")
                 if (!recordingsDir.exists() || recordingsDir.listFiles()?.isEmpty() == true) {
                     updateUiState { currentState ->
@@ -1880,26 +1876,26 @@ constructor(
                     }
                     return@launch
                 }
-                
+
                 val fileCount = recordingsDir.walkTopDown().count { it.isFile }
                 val totalSize = getDirSize(recordingsDir)
-                
+
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "Exporting $fileCount files (${formatFileSize(totalSize)})...",
                         isTransferring = true
                     )
                 }
-                
+
                 kotlinx.coroutines.delay(2000)
-                
+
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "Export completed: $fileCount files exported",
                         isTransferring = false
                     )
                 }
-                
+
                 logger.info("Data export completed: $fileCount files from ${recordingsDir.absolutePath}")
             } catch (e: Exception) {
                 logger.error("Error exporting data", e)
@@ -1924,7 +1920,7 @@ constructor(
                         isTransferring = true
                     )
                 }
-                
+
                 val currentSession = sessionManager.getCurrentSession()
                 if (currentSession == null) {
                     updateUiState { currentState ->
@@ -1936,7 +1932,7 @@ constructor(
                     }
                     return@launch
                 }
-                
+
                 val sessionDir = File(context.getExternalFilesDir(null), "recordings/${currentSession.sessionId}")
                 val deletedFiles = if (sessionDir.exists()) {
                     val fileCount = sessionDir.walkTopDown().count { it.isFile }
@@ -1945,9 +1941,9 @@ constructor(
                 } else {
                     0
                 }
-                
+
                 sessionManager.finalizeCurrentSession()
-                
+
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "Session deleted: $deletedFiles files removed",
@@ -1956,7 +1952,7 @@ constructor(
                         totalSessions = currentState.totalSessions - 1
                     )
                 }
-                
+
                 logger.info("Current session deleted: $deletedFiles files removed")
             } catch (e: Exception) {
                 logger.error("Error deleting session", e)
@@ -1979,7 +1975,7 @@ constructor(
                 if (!recordingsDir.exists()) {
                     recordingsDir.mkdirs()
                 }
-                
+
                 updateUiState { currentState ->
                     currentState.copy(
                         statusText = "Data folder: ${recordingsDir.absolutePath}",
@@ -1987,7 +1983,7 @@ constructor(
                         totalDataSize = formatFileSize(getDirSize(recordingsDir))
                     )
                 }
-                
+
                 logger.info("Data folder opened: ${recordingsDir.absolutePath}")
             } catch (e: Exception) {
                 logger.error("Error opening data folder", e)
@@ -2000,7 +1996,7 @@ constructor(
             }
         }
     }
-    
+
     private fun getSessionCount(directory: File): Int {
         return try {
             if (!directory.exists()) 0
@@ -2010,11 +2006,11 @@ constructor(
             0
         }
     }
-    
+
     private fun getDirSize(directory: File): Long {
         return try {
             if (!directory.exists()) return 0L
-            
+
             var size = 0L
             directory.walkTopDown().forEach { file ->
                 if (file.isFile) {
@@ -2027,7 +2023,7 @@ constructor(
             0L
         }
     }
-    
+
     private fun formatFileSize(bytes: Long): String {
         return when {
             bytes < 1024 -> "$bytes B"
@@ -2037,4 +2033,3 @@ constructor(
         }
     }
 }
-

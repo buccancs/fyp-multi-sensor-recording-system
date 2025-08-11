@@ -18,7 +18,7 @@ class BasicInfrastructureTest {
 
     @Test
     fun `kotlin coroutines should be available`() {
-        
+
         val result = kotlinx.coroutines.runBlocking {
             "coroutines working"
         }

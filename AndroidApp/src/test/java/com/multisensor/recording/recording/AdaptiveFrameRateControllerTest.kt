@@ -340,4 +340,3 @@ class AdaptiveFrameRateControllerTest {
         println("[DEBUG_LOG] Concurrent operations test passed")
     }
 }
-

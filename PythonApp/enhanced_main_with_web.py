@@ -1,21 +1,17 @@
 import os
 import sys
 import webbrowser
-
 from PyQt5.QtCore import Qt, QTimer, qVersion
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
-
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     from utils.logging_config import AppLogger, get_logger
-
     log_level = os.environ.get("MSR_LOG_LEVEL", "INFO")
     AppLogger.set_level(log_level)
     logger = get_logger(__name__)
 except ImportError:
     import logging
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 try:
@@ -25,7 +21,6 @@ except ImportError:
     EnhancedMainWindow = None
 try:
     from gui.main_controller import MainController
-
     MAIN_CONTROLLER_AVAILABLE = True
 except ImportError:
     logger.warning("MainController not available")
@@ -33,7 +28,6 @@ except ImportError:
     MAIN_CONTROLLER_AVAILABLE = False
 try:
     from session.session_manager import SessionManager
-
     SESSION_MANAGER_AVAILABLE = True
 except ImportError:
     logger.warning("SessionManager not available")
@@ -41,7 +35,6 @@ except ImportError:
     SESSION_MANAGER_AVAILABLE = False
 try:
     from shimmer_manager import ShimmerManager
-
     SHIMMER_MANAGER_AVAILABLE = True
 except ImportError:
     logger.warning("ShimmerManager not available")
@@ -49,7 +42,6 @@ except ImportError:
     SHIMMER_MANAGER_AVAILABLE = False
 try:
     from network.android_device_manager import AndroidDeviceManager
-
     ANDROID_DEVICE_MANAGER_AVAILABLE = True
 except ImportError:
     logger.warning("AndroidDeviceManager not available")
@@ -57,7 +49,6 @@ except ImportError:
     ANDROID_DEVICE_MANAGER_AVAILABLE = False
 try:
     from network.device_server import JsonSocketServer
-
     JSON_SOCKET_SERVER_AVAILABLE = True
 except ImportError:
     logger.warning("JsonSocketServer not available")
@@ -65,7 +56,6 @@ except ImportError:
     JSON_SOCKET_SERVER_AVAILABLE = False
 try:
     from webcam.webcam_capture import WebcamCapture
-
     WEBCAM_CAPTURE_AVAILABLE = True
 except ImportError:
     logger.warning("WebcamCapture not available")
@@ -73,7 +63,6 @@ except ImportError:
     WEBCAM_CAPTURE_AVAILABLE = False
 try:
     from gui.stimulus_controller import StimulusController
-
     STIMULUS_CONTROLLER_AVAILABLE = True
 except ImportError:
     logger.warning("StimulusController not available")
@@ -81,15 +70,12 @@ except ImportError:
     STIMULUS_CONTROLLER_AVAILABLE = False
 try:
     from web_ui.integration import WebDashboardIntegration
-
     WEB_UI_AVAILABLE = True
 except ImportError:
     logger.warning("Web UI components not available")
     WebDashboardIntegration = None
     WEB_UI_AVAILABLE = False
-
 class EnhancedApplicationWithWebUI:
-
     def __init__(self):
         self.app = None
         self.main_window = None
@@ -102,7 +88,6 @@ class EnhancedApplicationWithWebUI:
         self.webcam_capture = None
         self.stimulus_controller = None
         logger.info("Enhanced Application with Web UI initialized")
-
     def setup_application(self):
         logger.info(
             "=== Multi-Sensor Recording System Controller Starting (Enhanced UI + Web Dashboard) ==="
@@ -117,7 +102,6 @@ class EnhancedApplicationWithWebUI:
         self.app.setApplicationVersion("2.0")
         self.app.setOrganizationName("Multi-Sensor Recording Team")
         logger.info("QApplication created and configured")
-
     def setup_backend_services(self):
         logger.info("Setting up backend services...")
         try:
@@ -163,7 +147,6 @@ class EnhancedApplicationWithWebUI:
         except Exception as e:
             logger.error(f"Failed to setup backend services: {e}")
             return False
-
     def setup_desktop_ui(self):
         if EnhancedMainWindow is None:
             logger.error("No desktop UI components available")
@@ -180,7 +163,6 @@ class EnhancedApplicationWithWebUI:
         except Exception as e:
             logger.error(f"Failed to initialize desktop UI: {e}")
             return False
-
     def setup_web_dashboard(self):
         if not WEB_UI_AVAILABLE:
             logger.warning("Web UI not available, skipping web dashboard setup")
@@ -206,7 +188,6 @@ class EnhancedApplicationWithWebUI:
         except Exception as e:
             logger.error(f"Error setting up web dashboard: {e}")
             return False
-
     def _add_web_dashboard_integration(self):
         if not hasattr(self.main_window, "menuBar"):
             return
@@ -225,7 +206,6 @@ class EnhancedApplicationWithWebUI:
             logger.info("Web dashboard menu items added to desktop UI")
         except Exception as e:
             logger.error(f"Failed to add web dashboard integration to UI: {e}")
-
     def _connect_web_integration(self):
         if not self.web_integration:
             return
@@ -233,14 +213,12 @@ class EnhancedApplicationWithWebUI:
         self.status_timer.timeout.connect(self._update_web_dashboard_status)
         self.status_timer.start(5000)
         logger.info("Web dashboard integration connected to desktop application")
-
     def _update_web_dashboard_status(self):
         if not self.web_integration:
             return
         try:
             try:
                 import psutil
-
                 pc_status = {
                     "status": "running",
                     "cpu_usage": psutil.cpu_percent(interval=0.1),
@@ -269,7 +247,6 @@ class EnhancedApplicationWithWebUI:
                 )
         except Exception as e:
             logger.error(f"Failed to update web dashboard status: {e}")
-
     def _open_web_dashboard(self):
         if not self.web_integration:
             QMessageBox.warning(
@@ -284,7 +261,6 @@ class EnhancedApplicationWithWebUI:
             QMessageBox.warning(
                 self.main_window, "Web Dashboard", "Web dashboard is not running"
             )
-
     def _show_dashboard_url(self):
         if not self.web_integration:
             QMessageBox.information(
@@ -304,7 +280,6 @@ class EnhancedApplicationWithWebUI:
             QMessageBox.information(
                 self.main_window, "Web Dashboard", "Web dashboard is not running"
             )
-
     def _toggle_web_dashboard(self, enabled):
         if not WEB_UI_AVAILABLE:
             QMessageBox.warning(
@@ -320,7 +295,6 @@ class EnhancedApplicationWithWebUI:
                 self.web_integration.start_web_dashboard()
         elif self.web_integration:
             self.web_integration.stop_web_dashboard()
-
     def run(self):
         self.setup_application()
         if not self.setup_backend_services():
@@ -354,7 +328,6 @@ The web interface is connected to the same data sources as the desktop applicati
             )
         logger.info("Starting PyQt event loop")
         return self.app.exec_()
-
     def cleanup(self):
         logger.info("Cleaning up application resources...")
         if self.web_integration:
@@ -387,7 +360,6 @@ The web interface is connected to the same data sources as the desktop applicati
             except Exception as e:
                 logger.error(f"Error stopping WebcamCapture: {e}")
         logger.info("Application cleanup completed")
-
 def main():
     app = EnhancedApplicationWithWebUI()
     try:
@@ -400,6 +372,5 @@ def main():
         return 1
     finally:
         app.cleanup()
-
 if __name__ == "__main__":
     sys.exit(main())

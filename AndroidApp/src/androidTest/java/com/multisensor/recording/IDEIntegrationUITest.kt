@@ -121,7 +121,7 @@ class IDEIntegrationUITest {
 
         val bottomNavItems = listOf(
             R.id.nav_recording to "Record",
-            R.id.nav_devices to "Monitor", 
+            R.id.nav_devices to "Monitor",
             R.id.nav_calibration to "Calibrate"
         )
 

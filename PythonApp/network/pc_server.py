@@ -9,7 +9,6 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
-
 @dataclass
 class ConnectedDevice:
     device_id: str
@@ -19,22 +18,17 @@ class ConnectedDevice:
     status: Dict[str, Any]
     socket: socket.socket
     address: tuple
-
 @dataclass
 class JsonMessage:
     type: str = ""
     timestamp: float = None
-
     def __post_init__(self):
         if self.timestamp is None:
             self.timestamp = time.time()
-
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
-
     def to_json(self) -> str:
         return json.dumps(self.to_dict())
-
     @classmethod
     def from_json(cls, json_str: str) -> Optional["JsonMessage"]:
         try:
@@ -61,19 +55,16 @@ class JsonMessage:
         except (json.JSONDecodeError, KeyError, TypeError) as e:
             logging.error(f"Error parsing JSON message: {e}")
             return None
-
 @dataclass
 class HelloMessage(JsonMessage):
     device_id: str = ""
     capabilities: List[str] = None
-
     def __post_init__(self):
         if not hasattr(self, "type") or not self.type:
             self.type = "hello"
         super().__post_init__()
         if self.capabilities is None:
             self.capabilities = []
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "HelloMessage":
         return cls(
@@ -82,7 +73,6 @@ class HelloMessage(JsonMessage):
             capabilities=data.get("capabilities", []),
             timestamp=data.get("timestamp"),
         )
-
 @dataclass
 class StatusMessage(JsonMessage):
     battery: Optional[int] = None
@@ -90,12 +80,10 @@ class StatusMessage(JsonMessage):
     temperature: Optional[float] = None
     recording: bool = False
     connected: bool = True
-
     def __post_init__(self):
         if not hasattr(self, "type") or not self.type:
             self.type = "status"
         super().__post_init__()
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "StatusMessage":
         return cls(
@@ -107,18 +95,15 @@ class StatusMessage(JsonMessage):
             connected=data.get("connected", True),
             timestamp=data.get("timestamp"),
         )
-
 @dataclass
 class SensorDataMessage(JsonMessage):
     values: Dict[str, float] = None
-
     def __post_init__(self):
         if not hasattr(self, "type") or not self.type:
             self.type = "sensor_data"
         super().__post_init__()
         if self.values is None:
             self.values = {}
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "SensorDataMessage":
         return cls(
@@ -126,7 +111,6 @@ class SensorDataMessage(JsonMessage):
             values=data.get("values", {}),
             timestamp=data.get("timestamp"),
         )
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "SensorDataMessage":
         return cls(
@@ -134,18 +118,15 @@ class SensorDataMessage(JsonMessage):
             values=data.get("values", {}),
             timestamp=data.get("timestamp"),
         )
-
 @dataclass
 class AckMessage(JsonMessage):
     cmd: str = ""
     status: str = "ok"
     message: Optional[str] = None
-
     def __post_init__(self):
         if not hasattr(self, "type") or not self.type:
             self.type = "ack"
         super().__post_init__()
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "AckMessage":
         return cls(
@@ -155,17 +136,14 @@ class AckMessage(JsonMessage):
             message=data.get("message"),
             timestamp=data.get("timestamp"),
         )
-
 @dataclass
 class FileInfoMessage(JsonMessage):
     name: str = ""
     size: int = 0
-
     def __post_init__(self):
         if not hasattr(self, "type") or not self.type:
             self.type = "file_info"
         super().__post_init__()
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "FileInfoMessage":
         return cls(
@@ -174,17 +152,14 @@ class FileInfoMessage(JsonMessage):
             size=data.get("size", 0),
             timestamp=data.get("timestamp"),
         )
-
 @dataclass
 class FileChunkMessage(JsonMessage):
     seq: int = 0
     data: str = ""
-
     def __post_init__(self):
         if not hasattr(self, "type") or not self.type:
             self.type = "file_chunk"
         super().__post_init__()
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "FileChunkMessage":
         return cls(
@@ -193,16 +168,13 @@ class FileChunkMessage(JsonMessage):
             data=data.get("data", ""),
             timestamp=data.get("timestamp"),
         )
-
 @dataclass
 class FileEndMessage(JsonMessage):
     name: str = ""
-
     def __post_init__(self):
         if not hasattr(self, "type") or not self.type:
             self.type = "file_end"
         super().__post_init__()
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "FileEndMessage":
         return cls(
@@ -210,47 +182,37 @@ class FileEndMessage(JsonMessage):
             name=data.get("name", ""),
             timestamp=data.get("timestamp"),
         )
-
 @dataclass
 class StartRecordCommand(JsonMessage):
     session_id: str = ""
     record_video: bool = True
     record_thermal: bool = True
     record_shimmer: bool = False
-
     def __post_init__(self):
         super().__post_init__()
         self.type = "start_record"
-
 @dataclass
 class StopRecordCommand(JsonMessage):
-
     def __post_init__(self):
         super().__post_init__()
         self.type = "stop_record"
-
 @dataclass
 class FlashSyncCommand(JsonMessage):
     duration_ms: int = 200
     sync_id: Optional[str] = None
-
     def __post_init__(self):
         super().__post_init__()
         self.type = "flash_sync"
-
 @dataclass
 class BeepSyncCommand(JsonMessage):
     frequency_hz: int = 1000
     duration_ms: int = 200
     volume: float = 0.8
     sync_id: Optional[str] = None
-
     def __post_init__(self):
         super().__post_init__()
         self.type = "beep_sync"
-
 class PCServer:
-
     def __init__(self, port: int = 9000, logger: Optional[logging.Logger] = None):
         self.port = port
         self.logger = logger or logging.getLogger(__name__)
@@ -268,7 +230,6 @@ class PCServer:
         self.message_buffer_size = 4096
         self.max_message_size = 1024 * 1024
         self.logger.info(f"PCServer initialized for port {port}")
-
     def start(self) -> bool:
         try:
             if self.is_running:
@@ -292,7 +253,6 @@ class PCServer:
             self.logger.error(f"Failed to start PC server: {e}")
             self.is_running = False
             return False
-
     def stop(self) -> None:
         try:
             self.logger.info("Stopping PC server...")
@@ -308,7 +268,6 @@ class PCServer:
             self.logger.info("PC server stopped successfully")
         except Exception as e:
             self.logger.error(f"Error stopping PC server: {e}")
-
     def send_message(self, device_id: str, message: JsonMessage) -> bool:
         if device_id not in self.connected_devices:
             self.logger.error(f"Device not connected: {device_id}")
@@ -325,30 +284,24 @@ class PCServer:
             self.logger.error(f"Error sending message to {device_id}: {e}")
             self._disconnect_device(device_id)
             return False
-
     def broadcast_message(self, message: JsonMessage) -> int:
         success_count = 0
         for device_id in list(self.connected_devices.keys()):
             if self.send_message(device_id, message):
                 success_count += 1
         return success_count
-
     def get_connected_devices(self) -> Dict[str, ConnectedDevice]:
         return self.connected_devices.copy()
-
     def add_message_callback(
         self, callback: Callable[[str, JsonMessage], None]
     ) -> None:
         self.message_callbacks.append(callback)
-
     def add_device_callback(
         self, callback: Callable[[str, ConnectedDevice], None]
     ) -> None:
         self.device_callbacks.append(callback)
-
     def add_disconnect_callback(self, callback: Callable[[str], None]) -> None:
         self.disconnect_callbacks.append(callback)
-
     def _server_loop(self) -> None:
         try:
             while self.is_running:
@@ -370,7 +323,6 @@ class PCServer:
             self.logger.error(f"Error in server loop: {e}")
         finally:
             self.is_running = False
-
     def _handle_client(self, client_socket: socket.socket, address: tuple) -> None:
         device_id = None
         try:
@@ -433,7 +385,6 @@ class PCServer:
                     client_socket.close()
                 except:
                     pass
-
     def _recv_exact(self, sock: socket.socket, length: int) -> Optional[bytes]:
         data = b""
         while len(data) < length:
@@ -442,7 +393,6 @@ class PCServer:
                 return None
             data += chunk
         return data
-
     def _disconnect_device(self, device_id: str) -> None:
         if device_id not in self.connected_devices:
             return
@@ -460,7 +410,6 @@ class PCServer:
                     self.logger.error(f"Error in disconnect callback: {e}")
         except Exception as e:
             self.logger.error(f"Error disconnecting device {device_id}: {e}")
-
     def _heartbeat_monitor(self) -> None:
         while self.is_running:
             try:
@@ -478,24 +427,19 @@ class PCServer:
             except Exception as e:
                 self.logger.error(f"Error in heartbeat monitor: {e}")
                 time.sleep(5.0)
-
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
-
     def on_message(device_id: str, message: JsonMessage):
         print(f"Message from {device_id}: {message.type}")
         if isinstance(message, SensorDataMessage):
             print(f"  Sensor data: {message.values}")
-
     def on_device_connected(device_id: str, device: ConnectedDevice):
         print(f"Device connected: {device_id} with capabilities: {device.capabilities}")
-
     def on_device_disconnected(device_id: str):
         print(f"Device disconnected: {device_id}")
-
     server = PCServer(port=9000)
     server.add_message_callback(on_message)
     server.add_device_callback(on_device_connected)

@@ -7,9 +7,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Callable, Dict, List, Optional
-
 import ntplib
-
 @dataclass
 class TimeServerStatus:
     is_running: bool = False
@@ -20,13 +18,11 @@ class TimeServerStatus:
     client_count: int = 0
     requests_served: int = 0
     average_response_time_ms: float = 0.0
-
 @dataclass
 class TimeSyncRequest:
     client_id: str
     request_timestamp: float
     sequence_number: int = 0
-
 @dataclass
 class TimeSyncResponse:
     server_timestamp: float
@@ -34,9 +30,7 @@ class TimeSyncResponse:
     response_timestamp: float
     server_precision_ms: float
     sequence_number: int = 0
-
 class NTPTimeServer:
-
     def __init__(self, logger=None, port=8889):
         self.logger = logger or logging.getLogger(__name__)
         self.port = port
@@ -58,7 +52,6 @@ class NTPTimeServer:
         self.stop_event = threading.Event()
         self.stats_lock = threading.Lock()
         self.logger.info("NTPTimeServer initialized on port %d", self.port)
-
     def start_server(self) -> bool:
         try:
             if self.is_running:
@@ -85,7 +78,6 @@ class NTPTimeServer:
         except Exception as e:
             self.logger.error("Failed to start NTP time server: %s", e)
             return False
-
     def stop_server(self) -> None:
         try:
             if not self.is_running:
@@ -105,7 +97,6 @@ class NTPTimeServer:
             self.logger.info("NTP time server stopped")
         except Exception as e:
             self.logger.error("Error stopping NTP time server: %s", e)
-
     def get_precise_timestamp(self) -> float:
         try:
             current_time = time.time()
@@ -117,10 +108,8 @@ class NTPTimeServer:
         except Exception as e:
             self.logger.error("Error getting precise timestamp: %s", e)
             return time.time()
-
     def get_timestamp_milliseconds(self) -> int:
         return int(self.get_precise_timestamp() * 1000)
-
     def synchronize_with_ntp(self) -> bool:
         try:
             self.logger.info("Synchronizing with NTP servers...")
@@ -176,25 +165,20 @@ class NTPTimeServer:
         except Exception as e:
             self.logger.error("Error during NTP synchronization: %s", e)
             return False
-
     def _parse_sync_request(self, data: bytes, client_addr: str) -> Optional[Dict]:
         try:
             request_data = json.loads(data.decode("utf-8"))
         except json.JSONDecodeError:
             self.logger.error("Invalid JSON in sync request from %s", client_addr)
             return None
-        
         if request_data.get("type") != "time_sync_request":
             return None
-        
         return request_data
-
     def _create_sync_response(self, request_data: Dict, request_receive_time: float) -> Dict:
         client_id = request_data.get("client_id")
         request_timestamp = request_data.get("timestamp", 0)
         sequence_number = request_data.get("sequence", 0)
         response_send_time = self.get_precise_timestamp()
-        
         return {
             "type": "time_sync_response",
             "server_timestamp": response_send_time,
@@ -205,22 +189,17 @@ class NTPTimeServer:
             "sequence": sequence_number,
             "server_time_ms": self.get_timestamp_milliseconds(),
         }, client_id, sequence_number, response_send_time
-
     def _update_server_statistics(self, client_id: str, request_receive_time: float, response_send_time: float) -> None:
         with self.stats_lock:
             self.status.requests_served += 1
             self.connected_clients[client_id] = time.time()
             self.status.client_count = len(self.connected_clients)
-            
             response_time = (response_send_time - request_receive_time) * 1000
             self.response_times.append(response_time)
-            
             if len(self.response_times) > self.max_response_time_history:
                 self.response_times.pop(0)
-            
             if self.response_times:
                 self.status.average_response_time_ms = statistics.mean(self.response_times)
-
     def _trigger_sync_callbacks(self, response_data: Dict, sequence_number: int) -> None:
         sync_response = TimeSyncResponse(
             server_timestamp=response_data["server_timestamp"],
@@ -229,36 +208,28 @@ class NTPTimeServer:
             server_precision_ms=self.time_precision_ms,
             sequence_number=sequence_number,
         )
-        
         for callback in self.sync_callbacks:
             try:
                 callback(sync_response)
             except Exception as e:
                 self.logger.error("Error in sync callback: %s", e)
-
     def handle_sync_request(self, client_socket: socket.socket, client_addr: str) -> None:
         try:
             data = client_socket.recv(4096)
             if not data:
                 return
-            
             request_receive_time = self.get_precise_timestamp()
             request_data = self._parse_sync_request(data, client_addr)
             if not request_data:
                 return
-            
             response_data, client_id, sequence_number, response_send_time = (
                 self._create_sync_response(request_data, request_receive_time)
             )
-            
             response_json = json.dumps(response_data)
             client_socket.send(response_json.encode("utf-8"))
-            
             self._update_server_statistics(client_id, request_receive_time, response_send_time)
             self._trigger_sync_callbacks(response_data, sequence_number)
-            
             self.logger.debug("Served time sync request from %s (seq=%d)", client_id, sequence_number)
-            
         except Exception as e:
             self.logger.error("Error handling sync request from %s: %s", client_addr, e)
         finally:
@@ -266,7 +237,6 @@ class NTPTimeServer:
                 client_socket.close()
             except:
                 pass
-
     def get_server_status(self) -> TimeServerStatus:
         with self.stats_lock:
             current_time = time.time()
@@ -287,10 +257,8 @@ class NTPTimeServer:
                 requests_served=self.status.requests_served,
                 average_response_time_ms=self.status.average_response_time_ms,
             )
-
     def add_sync_callback(self, callback: Callable[[TimeSyncResponse], None]) -> None:
         self.sync_callbacks.append(callback)
-
     def _server_loop(self) -> None:
         self.logger.info("NTP time server loop started")
         try:
@@ -316,9 +284,7 @@ class NTPTimeServer:
             self.logger.error("Fatal error in server loop: %s", e)
         finally:
             self.logger.info("NTP time server loop ended")
-
     def _start_ntp_sync_thread(self) -> None:
-
         def ntp_sync_loop():
             self.synchronize_with_ntp()
             while not self.stop_event.is_set():
@@ -330,17 +296,13 @@ class NTPTimeServer:
                     self.logger.error("Error in NTP sync loop: %s", e)
                     if self.stop_event.wait(60.0):
                         break
-
         sync_thread = threading.Thread(target=ntp_sync_loop, name="NTPSync")
         sync_thread.daemon = True
         sync_thread.start()
-
 class TimeServerManager:
-
     def __init__(self, logger=None):
         self.logger = logger or logging.getLogger(__name__)
         self.time_server: Optional[NTPTimeServer] = None
-
     def initialize(self, port=8889) -> bool:
         try:
             self.time_server = NTPTimeServer(logger=self.logger, port=port)
@@ -348,26 +310,21 @@ class TimeServerManager:
         except Exception as e:
             self.logger.error("Failed to initialize time server: %s", e)
             return False
-
     def start(self) -> bool:
         if self.time_server:
             return self.time_server.start_server()
         return False
-
     def stop(self) -> None:
         if self.time_server:
             self.time_server.stop_server()
-
     def get_status(self) -> Optional[TimeServerStatus]:
         if self.time_server:
             return self.time_server.get_server_status()
         return None
-
     def get_timestamp_ms(self) -> int:
         if self.time_server:
             return self.time_server.get_timestamp_milliseconds()
         return int(time.time() * 1000)
-
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
@@ -377,12 +334,10 @@ if __name__ == "__main__":
     try:
         if server.start_server():
             print("NTP time server started successfully")
-
             def sync_callback(response):
                 print(
                     f"Sync request served: precision={response.server_precision_ms:.2f}ms"
                 )
-
             server.add_sync_callback(sync_callback)
             print("Server running... Press Ctrl+C to stop")
             while True:

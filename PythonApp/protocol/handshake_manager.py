@@ -2,21 +2,16 @@ import json
 import platform
 import socket
 from typing import Any, Dict, Tuple
-
 from ..utils.logging_config import get_logger
 from .config_loader import get_config_manager
 from .schema_utils import get_schema_manager
-
 logger = get_logger(__name__)
-
 class HandshakeManager:
-
     def __init__(self):
         self.config_manager = get_config_manager()
         self.schema_manager = get_schema_manager()
         self.protocol_version = self.config_manager.get("protocol_version", 1)
         self.app_version = self.config_manager.get("version", "1.0.0")
-
     def send_handshake(self, sock: socket.socket) -> bool:
         try:
             handshake_message = self._create_handshake_message()
@@ -29,7 +24,6 @@ class HandshakeManager:
         except Exception as e:
             logger.error(f"Failed to send handshake: {e}")
             return False
-
     def process_handshake(self, handshake_message: Dict[str, Any]) -> Tuple[bool, str]:
         try:
             if not self.schema_manager.validate_message(handshake_message):
@@ -60,7 +54,6 @@ class HandshakeManager:
             error_msg = f"Error processing handshake: {e}"
             logger.error(error_msg)
             return False, error_msg
-
     def send_handshake_ack(
         self, sock: socket.socket, compatible: bool, message: str = ""
     ) -> bool:
@@ -75,7 +68,6 @@ class HandshakeManager:
         except Exception as e:
             logger.error(f"Failed to send handshake acknowledgment: {e}")
             return False
-
     def process_handshake_ack(self, ack_message: Dict[str, Any]) -> bool:
         try:
             if not self.schema_manager.validate_message(ack_message):
@@ -107,7 +99,6 @@ class HandshakeManager:
         except Exception as e:
             logger.error(f"Error processing handshake acknowledgment: {e}")
             return False
-
     def _create_handshake_message(self) -> Dict[str, Any]:
         return self.schema_manager.create_message(
             "handshake",
@@ -116,7 +107,6 @@ class HandshakeManager:
             app_version=self.app_version,
             device_type="pc",
         )
-
     def _create_handshake_ack(
         self, compatible: bool, message: str = ""
     ) -> Dict[str, Any]:
@@ -129,36 +119,28 @@ class HandshakeManager:
         if message:
             ack_data["message"] = message
         return self.schema_manager.create_message("handshake_ack", **ack_data)
-
     def _get_device_name(self) -> str:
         try:
             return f"{platform.system()} {platform.node()}"
         except Exception:
             return "Python PC"
-
     def _are_versions_compatible(
         self, client_version: int, server_version: int
     ) -> bool:
         return client_version == server_version
-
 _handshake_manager = None
-
 def get_handshake_manager() -> HandshakeManager:
     global _handshake_manager
     if _handshake_manager is None:
         _handshake_manager = HandshakeManager()
     return _handshake_manager
-
 def send_handshake(sock: socket.socket) -> bool:
     return get_handshake_manager().send_handshake(sock)
-
 def process_handshake(handshake_message: Dict[str, Any]) -> Tuple[bool, str]:
     return get_handshake_manager().process_handshake(handshake_message)
-
 def send_handshake_ack(
     sock: socket.socket, compatible: bool, message: str = ""
 ) -> bool:
     return get_handshake_manager().send_handshake_ack(sock, compatible, message)
-
 def process_handshake_ack(ack_message: Dict[str, Any]) -> bool:
     return get_handshake_manager().process_handshake_ack(ack_message)

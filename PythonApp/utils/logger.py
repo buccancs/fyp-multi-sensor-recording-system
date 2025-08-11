@@ -1,14 +1,11 @@
 from enum import Enum
-
 class LogLevel(Enum):
     DEBUG = "DEBUG"
     INFO = "INFO"
     WARNING = "WARNING"
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
-
 class LoggerManager:
-
     def __init__(self, log_directory="logs", max_file_size_mb=10, backup_count=5):
         self.log_directory = log_directory
         self.max_file_size_mb = max_file_size_mb
@@ -17,10 +14,8 @@ class LoggerManager:
         self.log_handlers = {}
         self.setup_logging_directory()
         self.setup_default_loggers()
-
     def setup_logging_directory(self):
         import os
-
         try:
             os.makedirs(self.log_directory, exist_ok=True)
             os.makedirs(os.path.join(self.log_directory, "application"), exist_ok=True)
@@ -29,10 +24,8 @@ class LoggerManager:
             os.makedirs(os.path.join(self.log_directory, "performance"), exist_ok=True)
         except Exception as e:
             print(f"Error creating log directories: {e}")
-
     def setup_default_loggers(self):
         import logging
-
         print("[DEBUG_LOG] Setting up default loggers")
         logger_configs = {
             "application": {
@@ -58,12 +51,10 @@ class LoggerManager:
         }
         for logger_name, config in logger_configs.items():
             self.create_logger(logger_name, config)
-
     def create_logger(self, name, config):
         import logging
         import os
         from logging.handlers import RotatingFileHandler
-
         try:
             if not hasattr(self, "loggers"):
                 self.loggers = {}
@@ -89,10 +80,8 @@ class LoggerManager:
         except Exception as e:
             print(f"Error creating logger '{name}': {e}")
             return None
-
     def get_logger(self, name):
         import logging
-
         if not hasattr(self, "loggers"):
             self.loggers = {}
         if name in self.loggers:
@@ -104,12 +93,10 @@ class LoggerManager:
                 "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             }
             return self.create_logger(name, default_config)
-
     def log_structured(self, logger_name, level, message, **kwargs):
         import json
         import threading
         from datetime import datetime
-
         logger = self.get_logger(logger_name)
         if logger:
             structured_data = {
@@ -133,14 +120,11 @@ class LoggerManager:
                 logger.critical(json_message)
         else:
             print(f"[{level.value}] {logger_name}: {message}")
-
     def log_performance(self, operation, duration_ms, **metadata):
         from datetime import datetime
-
         try:
             try:
                 import psutil
-
                 memory_usage_mb = psutil.Process().memory_info().rss / 1024 / 1024
                 cpu_percent = psutil.Process().cpu_percent()
             except ImportError:
@@ -164,10 +148,8 @@ class LoggerManager:
             print(
                 f"[PERFORMANCE] {operation} took {duration_ms}ms (logging error: {e})"
             )
-
     def log_network_event(self, event_type, device_id, **details):
         from datetime import datetime
-
         try:
             network_data = {
                 "event_type": event_type,
@@ -180,10 +162,8 @@ class LoggerManager:
             )
         except Exception as e:
             print(f"[NETWORK] {event_type} for device {device_id} (logging error: {e})")
-
     def log_calibration_event(self, event_type, **details):
         from datetime import datetime
-
         try:
             calibration_data = {
                 "event_type": event_type,
@@ -198,14 +178,12 @@ class LoggerManager:
             )
         except Exception as e:
             print(f"[CALIBRATION] {event_type} (logging error: {e})")
-
     def export_logs(self, start_date, end_date, output_format="json"):
         import csv
         import gzip
         import json
         import os
         from datetime import datetime
-
         try:
             exports_dir = os.path.join(self.log_directory, "exports")
             os.makedirs(exports_dir, exist_ok=True)
@@ -271,13 +249,11 @@ class LoggerManager:
         except Exception as e:
             print(f"Error exporting logs: {e}")
             return ""
-
     def cleanup_old_logs(self, retention_days=30):
         import gzip
         import os
         import shutil
         from datetime import datetime, timedelta
-
         cleanup_report = {
             "removed_files": [],
             "compressed_files": [],
@@ -332,21 +308,17 @@ class LoggerManager:
             cleanup_report["errors"].append(error_msg)
             print(error_msg)
             return cleanup_report
-
 logger_manager = None
-
 def get_logger_manager():
     global logger_manager
     if logger_manager is None:
         try:
             import os
-
             config_path = os.path.join(
                 os.path.dirname(__file__), "..", "..", "config", "logging.json"
             )
             if os.path.exists(config_path):
                 import json
-
                 with open(config_path, "r") as f:
                     config = json.load(f)
                 logger_manager = LoggerManager(
@@ -360,21 +332,16 @@ def get_logger_manager():
             print(f"Warning: Error loading logger configuration: {e}. Using defaults.")
             logger_manager = LoggerManager()
     return logger_manager
-
 def log_info(logger_name, message, **kwargs):
     get_logger_manager().log_structured(logger_name, LogLevel.INFO, message, **kwargs)
-
 def log_error(logger_name, message, **kwargs):
     get_logger_manager().log_structured(logger_name, LogLevel.ERROR, message, **kwargs)
-
 def log_debug(logger_name, message, **kwargs):
     get_logger_manager().log_structured(logger_name, LogLevel.DEBUG, message, **kwargs)
-
 def log_warning(logger_name, message, **kwargs):
     get_logger_manager().log_structured(
         logger_name, LogLevel.WARNING, message, **kwargs
     )
-
 def log_critical(logger_name, message, **kwargs):
     get_logger_manager().log_structured(
         logger_name, LogLevel.CRITICAL, message, **kwargs

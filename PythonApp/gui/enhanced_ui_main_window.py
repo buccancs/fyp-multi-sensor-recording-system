@@ -458,11 +458,11 @@ class EnhancedMainWindow(QMainWindow):
                 {"name": "Shimmer GSR Sensor", "type": "gsr", "status": "available"},
                 {"name": "Android Device", "type": "android", "status": "connected"}
             ]
-            device_list = "\n".join([f"- {d['name']} ({d['type']}): {d['status']}" 
+            device_list = "\n".join([f"- {d['name']} ({d['type']}): {d['status']}"
                                    for d in discovered_devices])
             QMessageBox.information(
-                self, 
-                "Device Scan Complete", 
+                self,
+                "Device Scan Complete",
                 f"Found {len(discovered_devices)} devices:\n\n{device_list}"
             )
             self.log_message(f"Device scan completed: {len(discovered_devices)} devices found")
@@ -473,8 +473,8 @@ class EnhancedMainWindow(QMainWindow):
         try:
             self.log_message("Refreshing device status...")
             QMessageBox.information(
-                self, 
-                "Status Refreshed", 
+                self,
+                "Status Refreshed",
                 "Device status has been refreshed.\n\nAll connected devices are reporting normal operation."
             )
             self.log_message("Device status refresh completed")
@@ -500,8 +500,8 @@ class EnhancedMainWindow(QMainWindow):
                 if len(files) > 5:
                     file_list += f"\n... and {len(files) - 5} more files"
                 QMessageBox.information(
-                    self, 
-                    "Files Selected", 
+                    self,
+                    "Files Selected",
                     f"Selected {len(files)} file(s):\n\n{file_list}"
                 )
                 self.log_message(f"Selected {len(files)} files from file browser")
@@ -540,15 +540,15 @@ class EnhancedMainWindow(QMainWindow):
                 subprocess.run(["xdg-open", target_dir])
             self.log_message(f"Opened data folder: {target_dir}")
             QMessageBox.information(
-                self, 
-                "Data Folder Opened", 
+                self,
+                "Data Folder Opened",
                 f"Opened recordings folder:\n{target_dir}"
             )
         except Exception as e:
             self.log_message(f"Error opening data folder: {e}")
             QMessageBox.information(
-                self, 
-                "Data Folder", 
+                self,
+                "Data Folder",
                 f"Data folder location:\n{target_dir if 'target_dir' in locals() else 'Not found'}\n\nNote: Could not open automatically: {str(e)}"
             )
 def main():

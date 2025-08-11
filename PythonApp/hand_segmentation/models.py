@@ -1,46 +1,35 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple
-
 import cv2
 import numpy as np
-
 from .utils import (
     HandRegion,
     SegmentationConfig,
     create_bounding_box_from_landmarks,
     create_hand_mask_from_landmarks,
 )
-
 class BaseHandSegmentation(ABC):
-
     def __init__(self, config: SegmentationConfig):
         self.config = config
         self.is_initialized = False
-
     @abstractmethod
     def initialize(self) -> bool:
         pass
-
     @abstractmethod
     def process_frame(self, frame: np.ndarray) -> List[HandRegion]:
         pass
-
     @abstractmethod
     def cleanup(self):
         pass
-
 class MediaPipeHandSegmentation(BaseHandSegmentation):
-
     def __init__(self, config: SegmentationConfig):
         super().__init__(config)
         self.hands = None
         self.mp_hands = None
         self.mp_draw = None
-
     def initialize(self) -> bool:
         try:
             import mediapipe as mp
-
             self.mp_hands = mp.solutions.hands
             self.mp_draw = mp.solutions.drawing_utils
             self.hands = self.mp_hands.Hands(
@@ -54,7 +43,6 @@ class MediaPipeHandSegmentation(BaseHandSegmentation):
         except Exception as e:
             print(f"[ERROR] Failed to initialize MediaPipe hands: {e}")
             return False
-
     def process_frame(self, frame: np.ndarray) -> List[HandRegion]:
         if not self.is_initialized:
             return []
@@ -93,22 +81,17 @@ class MediaPipeHandSegmentation(BaseHandSegmentation):
                 )
                 hand_regions.append(hand_region)
         return hand_regions
-
     def cleanup(self):
         if self.hands:
             self.hands.close()
             self.hands = None
         self.is_initialized = False
-
 class ColorBasedHandSegmentation(BaseHandSegmentation):
-
     def __init__(self, config: SegmentationConfig):
         super().__init__(config)
-
     def initialize(self) -> bool:
         self.is_initialized = True
         return True
-
     def process_frame(self, frame: np.ndarray) -> List[HandRegion]:
         if not self.is_initialized:
             return []
@@ -148,19 +131,14 @@ class ColorBasedHandSegmentation(BaseHandSegmentation):
                 hand_regions.append(hand_region)
         hand_regions.sort(key=lambda x: x.confidence, reverse=True)
         return hand_regions[: self.config.max_num_hands]
-
     def cleanup(self):
         self.is_initialized = False
-
 class ContourBasedHandSegmentation(BaseHandSegmentation):
-
     def __init__(self, config: SegmentationConfig):
         super().__init__(config)
-
     def initialize(self) -> bool:
         self.is_initialized = True
         return True
-
     def process_frame(self, frame: np.ndarray) -> List[HandRegion]:
         if not self.is_initialized:
             return []
@@ -208,6 +186,5 @@ class ContourBasedHandSegmentation(BaseHandSegmentation):
                     hand_regions.append(hand_region)
         hand_regions.sort(key=lambda x: x.confidence, reverse=True)
         return hand_regions[: self.config.max_num_hands]
-
     def cleanup(self):
         self.is_initialized = False

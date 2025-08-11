@@ -109,4 +109,3 @@ class FileItemDiffCallback : DiffUtil.ItemCallback<FileItem>() {
         return oldItem == newItem
     }
 }
-

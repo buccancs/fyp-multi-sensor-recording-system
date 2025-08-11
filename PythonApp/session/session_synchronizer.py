@@ -7,11 +7,8 @@ from datetime import datetime, timedelta
 from enum import Enum
 from queue import Empty, Queue
 from typing import Any, Callable, Dict, List, Optional
-
 from ..utils.logging_config import get_logger
-
 logger = get_logger(__name__)
-
 class SessionSyncState(Enum):
     IDLE = "idle"
     SYNCING = "syncing"
@@ -19,13 +16,11 @@ class SessionSyncState(Enum):
     DISCONNECTED = "disconnected"
     RECOVERING = "recovering"
     ERROR = "error"
-
 class MessagePriority(Enum):
     LOW = 1
     NORMAL = 2
     HIGH = 3
     CRITICAL = 4
-
 @dataclass
 class SessionState:
     session_id: str
@@ -38,7 +33,6 @@ class SessionState:
     calibration_status: Dict[str, str]
     sync_timestamp: datetime
     metadata: Dict[str, Any]
-
 @dataclass
 class QueuedMessage:
     device_id: str
@@ -48,9 +42,7 @@ class QueuedMessage:
     timestamp: datetime
     retry_count: int = 0
     max_retries: int = 3
-
 class SessionSynchronizer:
-
     def __init__(self, message_sender: Optional[Callable] = None):
         self.message_sender = message_sender
         self.session_states: Dict[str, SessionState] = {}
@@ -71,7 +63,6 @@ class SessionSynchronizer:
             "[SessionSynchronizer] Initialized with sync interval: %ss",
             self.sync_interval,
         )
-
     def start_synchronization(self):
         if self.is_running:
             logger.warning("[SessionSynchronizer] Already running")
@@ -80,20 +71,17 @@ class SessionSynchronizer:
         self.sync_thread = threading.Thread(target=self._sync_loop, daemon=True)
         self.sync_thread.start()
         logger.info("[SessionSynchronizer] Background synchronization started")
-
     def stop_synchronization(self):
         self.is_running = False
         if self.sync_thread:
             self.sync_thread.join(timeout=5.0)
         logger.info("[SessionSynchronizer] Background synchronization stopped")
-
     def register_device(self, device_id: str):
         with self.sync_lock:
             if device_id not in self.sync_states:
                 self.sync_states[device_id] = SessionSyncState.IDLE
                 self.message_queues[device_id] = Queue()
                 logger.info("[SessionSynchronizer] Device registered: %s", device_id)
-
     def unregister_device(self, device_id: str):
         with self.sync_lock:
             if device_id in self.sync_states:
@@ -104,7 +92,6 @@ class SessionSynchronizer:
                 if device_id in self.offline_devices:
                     del self.offline_devices[device_id]
                 logger.info("[SessionSynchronizer] Device unregistered: %s", device_id)
-
     def sync_session_state(self, android_state: Dict[str, Any]) -> bool:
         try:
             device_id = android_state.get("device_id")
@@ -144,7 +131,6 @@ class SessionSynchronizer:
                     self.sync_states[device_id] = SessionSyncState.ERROR
                     self.sync_failures += 1
             return False
-
     def handle_android_disconnect(self, device_id: str):
         with self.sync_lock:
             if device_id in self.sync_states:
@@ -154,7 +140,6 @@ class SessionSynchronizer:
                     "[SessionSynchronizer] Device disconnected: %s", device_id
                 )
                 self._start_message_queuing(device_id)
-
     def recover_session_on_reconnect(self, device_id: str) -> Optional[SessionState]:
         with self.sync_lock:
             if device_id in self.offline_devices:
@@ -181,7 +166,6 @@ class SessionSynchronizer:
                     device_id,
                 )
                 return self.session_states.get(device_id)
-
     def queue_message(
         self,
         device_id: str,
@@ -206,10 +190,8 @@ class SessionSynchronizer:
             message_type,
             priority.name,
         )
-
     def get_session_state(self, device_id: str) -> Optional[SessionState]:
         return self.session_states.get(device_id)
-
     def get_sync_status(self) -> Dict[str, Any]:
         with self.sync_lock:
             current_time = datetime.now()
@@ -253,7 +235,6 @@ class SessionSynchronizer:
                 "online_devices": len(self.sync_states) - len(self.offline_devices),
                 "offline_devices": len(self.offline_devices),
             }
-
     def _sync_loop(self):
         logger.info("[SessionSynchronizer] Sync loop started")
         while self.is_running:
@@ -265,7 +246,6 @@ class SessionSynchronizer:
                 logger.error("[SessionSynchronizer] Error in sync loop: %s", str(e))
                 time.sleep(1.0)
         logger.info("[SessionSynchronizer] Sync loop stopped")
-
     def _convert_android_state(self, android_state: Dict[str, Any]) -> SessionState:
         return SessionState(
             session_id=android_state.get("session_id", ""),
@@ -281,7 +261,6 @@ class SessionSynchronizer:
             sync_timestamp=datetime.now(),
             metadata=android_state.get("metadata", {}),
         )
-
     def _parse_datetime(self, dt_str: Optional[str]) -> Optional[datetime]:
         if not dt_str:
             return None
@@ -289,7 +268,6 @@ class SessionSynchronizer:
             return datetime.fromisoformat(dt_str)
         except (ValueError, TypeError):
             return None
-
     def _has_significant_changes(
         self, old_state: SessionState, new_state: SessionState
     ) -> bool:
@@ -299,7 +277,6 @@ class SessionSynchronizer:
             or abs(old_state.file_count - new_state.file_count) > 0
             or old_state.calibration_status != new_state.calibration_status
         )
-
     def _notify_state_change(self, device_id: str, state: SessionState):
         logger.info(
             "[SessionSynchronizer] State change notification for %s: recording=%s, files=%d",
@@ -307,13 +284,11 @@ class SessionSynchronizer:
             state.recording_active,
             state.file_count,
         )
-
     def _start_message_queuing(self, device_id: str):
         logger.info(
             "[SessionSynchronizer] Started message queuing for offline device: %s",
             device_id,
         )
-
     def _deliver_queued_messages(self, device_id: str):
         if device_id not in self.message_queues:
             return
@@ -350,7 +325,6 @@ class SessionSynchronizer:
             delivered_count,
             device_id,
         )
-
     def _send_message(self, message: QueuedMessage) -> bool:
         try:
             if self.message_sender:
@@ -362,7 +336,6 @@ class SessionSynchronizer:
         except Exception as e:
             logger.error("[SessionSynchronizer] Failed to send message: %s", str(e))
             return False
-
     def _cleanup_stale_devices(self):
         current_time = datetime.now()
         stale_devices = []
@@ -377,7 +350,6 @@ class SessionSynchronizer:
                 "[SessionSynchronizer] Removing stale offline device: %s", device_id
             )
             self.unregister_device(device_id)
-
     def _process_message_queues(self):
         for device_id in list(self.message_queues.keys()):
             if device_id not in self.offline_devices:
@@ -391,21 +363,16 @@ class SessionSynchronizer:
                         device_id,
                         str(e),
                     )
-
 session_synchronizer = SessionSynchronizer()
-
 def get_session_synchronizer() -> SessionSynchronizer:
     return session_synchronizer
-
 if __name__ == "__main__":
     print("[DEBUG_LOG] Testing Session Synchronizer...")
-
     def mock_message_sender(
         device_id: str, message_type: str, payload: Dict[str, Any]
     ) -> bool:
         print(f"[DEBUG_LOG] Sending {message_type} to {device_id}: {payload}")
         return True
-
     sync = SessionSynchronizer(mock_message_sender)
     sync.start_synchronization()
     try:

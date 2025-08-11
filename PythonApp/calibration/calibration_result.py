@@ -2,15 +2,10 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
-
 import numpy as np
-
 from ..utils.logging_config import get_logger
-
 logger = get_logger(__name__)
-
 class CalibrationResult:
-
     def __init__(self, device_id: str):
         self.device_id = device_id
         self.calibration_timestamp = None
@@ -32,7 +27,6 @@ class CalibrationResult:
         self.square_size = 25.0
         self.num_images_used = 0
         logger.debug(f"CalibrationResult initialized for device: {device_id}")
-
     def is_valid(self) -> bool:
         rgb_valid = (
             self.rgb_camera_matrix is not None
@@ -50,7 +44,6 @@ class CalibrationResult:
             and self.stereo_rms_error is not None
         )
         return rgb_valid and thermal_valid and stereo_valid
-
     def get_calibration_summary(self) -> Dict[str, Any]:
         summary = {
             "device_id": self.device_id,
@@ -78,12 +71,9 @@ class CalibrationResult:
             "quality_assessment": self.quality_assessment,
         }
         return summary
-
     def to_dict(self) -> Dict[str, Any]:
-
         def numpy_to_list(arr):
             return arr.tolist() if arr is not None else None
-
         data = {
             "device_id": self.device_id,
             "calibration_timestamp": self.calibration_timestamp,
@@ -108,13 +98,10 @@ class CalibrationResult:
             "created_by": "Multi-Sensor Recording System v3.4",
         }
         return data
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "CalibrationResult":
-
         def list_to_numpy(lst):
             return np.array(lst) if lst is not None else None
-
         result = cls(data["device_id"])
         result.calibration_timestamp = data.get("calibration_timestamp")
         result.pattern_type = data.get("pattern_type", "chessboard")
@@ -137,7 +124,6 @@ class CalibrationResult:
         result.homography_matrix = list_to_numpy(data.get("homography_matrix"))
         result.quality_assessment = data.get("quality_assessment", {})
         return result
-
     def save_to_file(self, filepath: str) -> bool:
         try:
             Path(filepath).parent.mkdir(parents=True, exist_ok=True)
@@ -149,7 +135,6 @@ class CalibrationResult:
         except Exception as e:
             logger.error(f"Failed to save calibration result: {e}")
             return False
-
     @classmethod
     def load_from_file(cls, filepath: str) -> Optional["CalibrationResult"]:
         try:
@@ -161,7 +146,6 @@ class CalibrationResult:
         except Exception as e:
             logger.error(f"Failed to load calibration result: {e}")
             return None
-
     def get_rgb_camera_info(self) -> Dict[str, Any]:
         if self.rgb_camera_matrix is None:
             return {"calibrated": False}
@@ -180,7 +164,6 @@ class CalibrationResult:
                 else None
             ),
         }
-
     def get_thermal_camera_info(self) -> Dict[str, Any]:
         if self.thermal_camera_matrix is None:
             return {"calibrated": False}
@@ -199,14 +182,12 @@ class CalibrationResult:
                 else None
             ),
         }
-
     def get_stereo_info(self) -> Dict[str, Any]:
         if self.rotation_matrix is None or self.translation_vector is None:
             return {"calibrated": False}
         baseline = np.linalg.norm(self.translation_vector)
         try:
             import cv2
-
             rvec, _ = cv2.Rodrigues(self.rotation_matrix)
             euler_angles = np.degrees(rvec.flatten())
         except (cv2.error, ValueError, TypeError) as e:
@@ -227,7 +208,6 @@ class CalibrationResult:
             },
             "rms_error": self.stereo_rms_error,
         }
-
     def validate_integrity(self) -> Dict[str, Any]:
         validation = {"valid": True, "issues": [], "warnings": []}
         if self.rgb_camera_matrix is not None:
@@ -278,14 +258,11 @@ class CalibrationResult:
                 validation["valid"] = False
                 validation["issues"].append("Translation vector has incorrect shape")
         return validation
-
     def __str__(self) -> str:
         summary = self.get_calibration_summary()
         return f"CalibrationResult(device={self.device_id}, valid={summary['is_valid']}, rgb_error={self.rgb_rms_error:.3f if self.rgb_rms_error else 'N/A'}, thermal_error={self.thermal_rms_error:.3f if self.thermal_rms_error else 'N/A'}, stereo_error={self.stereo_rms_error:.3f if self.stereo_rms_error else 'N/A'})"
-
     def __repr__(self) -> str:
         return self.__str__()
-
 if __name__ == "__main__":
     logger.info("Testing CalibrationResult...")
     result = CalibrationResult("test_device")

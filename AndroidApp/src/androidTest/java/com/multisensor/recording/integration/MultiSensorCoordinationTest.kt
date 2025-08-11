@@ -317,4 +317,3 @@ class MultiSensorCoordinationTest {
             logger.info("[DEBUG_LOG] Error handling verified across multiple sensors")
         }
 }
-

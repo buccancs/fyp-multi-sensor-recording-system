@@ -5,7 +5,7 @@ enum class ThermalColorPalette(
     val colors: List<Color>
 ) {
     IRON(
-        "Iron", 
+        "Iron",
         listOf(
             Color(0xFF000000),
             Color(0xFF800080),
@@ -16,7 +16,7 @@ enum class ThermalColorPalette(
         )
     ),
     RAINBOW(
-        "Rainbow", 
+        "Rainbow",
         listOf(
             Color(0xFF000080),
             Color(0xFF0000FF),
@@ -27,7 +27,7 @@ enum class ThermalColorPalette(
         )
     ),
     GRAYSCALE(
-        "Grayscale", 
+        "Grayscale",
         listOf(
             Color(0xFF000000),
             Color(0xFF404040),
@@ -37,7 +37,7 @@ enum class ThermalColorPalette(
         )
     ),
     INFERNO(
-        "Inferno", 
+        "Inferno",
         listOf(
             Color(0xFF000004),
             Color(0xFF3B0F70),
@@ -48,7 +48,7 @@ enum class ThermalColorPalette(
         )
     ),
     VIRIDIS(
-        "Viridis", 
+        "Viridis",
         listOf(
             Color(0xFF440154),
             Color(0xFF31688E),

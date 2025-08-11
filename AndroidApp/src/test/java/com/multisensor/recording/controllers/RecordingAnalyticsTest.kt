@@ -28,7 +28,7 @@ class RecordingAnalyticsTest {
         val metrics = analytics.currentMetrics.value
         assertNotNull("Performance metrics should be initialized", metrics)
         val currentTime = System.currentTimeMillis()
-        assertTrue("Initial timestamp should be recent", 
+        assertTrue("Initial timestamp should be recent",
             Math.abs(currentTime - metrics.timestamp) < 5000)
     }
 

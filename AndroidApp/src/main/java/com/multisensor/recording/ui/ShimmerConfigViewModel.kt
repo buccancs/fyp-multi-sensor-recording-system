@@ -382,7 +382,7 @@ class ShimmerConfigViewModel @Inject constructor(
                 }
                 logger.info("Connecting to specific device: $deviceName ($macAddress)")
                 val connected = shimmerRecorder.connectSingleDevice(
-                    macAddress, 
+                    macAddress,
                     deviceName,
                     com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
                 )

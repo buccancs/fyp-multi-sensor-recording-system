@@ -10,9 +10,7 @@ from datetime import datetime
 from functools import wraps
 from pathlib import Path
 from typing import Any, Dict, Optional
-
 class StructuredFormatter(logging.Formatter):
-
     def format(self, record):
         log_entry = {
             "timestamp": datetime.fromtimestamp(record.created).isoformat(),
@@ -63,11 +61,9 @@ class StructuredFormatter(logging.Formatter):
         if extra_fields:
             log_entry["extra"] = extra_fields
         return json.dumps(log_entry, default=str)
-
 class PerformanceMonitor:
     _timing_data = {}
     _lock = threading.Lock()
-
     @classmethod
     def start_timer(cls, operation: str, context: str = None) -> str:
         timer_id = f"{operation}_{int(time.time() * 1000000)}"
@@ -81,7 +77,6 @@ class PerformanceMonitor:
                 "thread": threading.current_thread().name,
             }
         return timer_id
-
     @classmethod
     def end_timer(cls, timer_id: str, logger: logging.Logger = None) -> float:
         with cls._lock:
@@ -103,12 +98,10 @@ class PerformanceMonitor:
                 extra=extra_info,
             )
         return duration
-
     @classmethod
     def get_active_timers(cls) -> Dict[str, Dict[str, Any]]:
         with cls._lock:
             return cls._timing_data.copy()
-
 class ColoredFormatter(logging.Formatter):
     COLORS = {
         "DEBUG": "\x1b[36m",
@@ -118,7 +111,6 @@ class ColoredFormatter(logging.Formatter):
         "CRITICAL": "\x1b[35m",
         "RESET": "\x1b[0m",
     }
-
     def format(self, record):
         original_levelname = record.levelname
         if record.levelname in self.COLORS:
@@ -126,13 +118,11 @@ class ColoredFormatter(logging.Formatter):
         formatted = super().format(record)
         record.levelname = original_levelname
         return formatted
-
 class AppLogger:
     _initialized = False
     _root_logger = None
     _log_dir = None
     _performance_monitor = PerformanceMonitor()
-
     @classmethod
     def initialize(
         cls,
@@ -195,27 +185,22 @@ class AppLogger:
         logger.info(f"Console output: {console_output}")
         logger.info(f"File output: {file_output}")
         logger.info(f"Structured logging: {structured_logging}")
-
     @classmethod
     def get_logger(cls, name: str) -> logging.Logger:
         if not cls._initialized:
             cls.initialize()
         return logging.getLogger(name)
-
     @classmethod
     def start_performance_timer(cls, operation: str, context: str = None) -> str:
         return cls._performance_monitor.start_timer(operation, context)
-
     @classmethod
     def end_performance_timer(cls, timer_id: str, logger_name: str = None) -> float:
         logger = cls.get_logger(logger_name or "PerformanceMonitor")
         return cls._performance_monitor.end_timer(timer_id, logger)
-
     @classmethod
     def log_memory_usage(cls, context: str, logger_name: str = None) -> None:
         try:
             import psutil
-
             process = psutil.Process()
             memory_info = process.memory_info()
             logger = cls.get_logger(logger_name or "MemoryMonitor")
@@ -235,7 +220,6 @@ class AppLogger:
         except Exception as e:
             logger = cls.get_logger(logger_name or "MemoryMonitor")
             logger.error(f"Error getting memory usage: {e}")
-
     @classmethod
     def set_level(cls, level: str) -> None:
         if cls._root_logger:
@@ -246,15 +230,12 @@ class AppLogger:
                     and handler.stream == sys.stdout
                 ):
                     handler.setLevel(getattr(logging, level.upper()))
-
     @classmethod
     def get_log_dir(cls) -> Optional[Path]:
         return cls._log_dir
-
     @classmethod
     def get_active_timers(cls) -> Dict[str, Dict[str, Any]]:
         return cls._performance_monitor.get_active_timers()
-
     @classmethod
     def export_logs(
         cls, start_date: datetime, end_date: datetime, output_format: str = "json"
@@ -263,7 +244,6 @@ class AppLogger:
         import gzip
         import json
         import os
-
         if not cls._log_dir:
             raise RuntimeError("Logging not initialized")
         try:
@@ -331,13 +311,11 @@ class AppLogger:
             logger = cls.get_logger("LogExport")
             logger.error(f"Error exporting logs: {e}")
             return ""
-
     @classmethod
     def cleanup_old_logs(cls, retention_days: int = 30) -> Dict[str, Any]:
         import gzip
         import shutil
         from datetime import timedelta
-
         if not cls._log_dir:
             raise RuntimeError("Logging not initialized")
         cleanup_report = {
@@ -382,14 +360,10 @@ class AppLogger:
             logger = cls.get_logger("LogCleanup")
             logger.error(error_msg)
             return cleanup_report
-
 def get_logger(name: str) -> logging.Logger:
     return AppLogger.get_logger(name)
-
 def performance_timer(operation_name: str = None, context: str = None):
-
     def decorator(func):
-
         @wraps(func)
         def wrapper(*args, **kwargs):
             op_name = operation_name or func.__name__
@@ -401,13 +375,9 @@ def performance_timer(operation_name: str = None, context: str = None):
             except Exception as e:
                 AppLogger.end_performance_timer(timer_id, func.__module__)
                 raise
-
         return wrapper
-
     return decorator
-
 def log_function_entry(func):
-
     @wraps(func)
     def wrapper(*args, **kwargs):
         logger = get_logger(func.__module__)
@@ -424,11 +394,8 @@ def log_function_entry(func):
                 exc_info=True,
             )
             raise
-
     return wrapper
-
 def log_method_entry(method):
-
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         logger = get_logger(self.__class__.__module__)
@@ -449,32 +416,22 @@ def log_method_entry(method):
                 exc_info=True,
             )
             raise
-
     return wrapper
-
 def log_exception_context(logger_name: str = None):
-
     class ExceptionLogger:
-
         def __init__(self, logger_name):
             self.logger = get_logger(logger_name or __name__)
-
         def __enter__(self):
             return self
-
         def __exit__(self, exc_type, exc_val, exc_tb):
             if exc_type is not None:
                 self.logger.error(
                     f"Exception occurred: {exc_type.__name__}: {exc_val}", exc_info=True
                 )
             return False
-
     return ExceptionLogger(logger_name)
-
 def log_memory_usage(context: str, logger_name: str = None):
-
     def decorator(func):
-
         @wraps(func)
         def wrapper(*args, **kwargs):
             AppLogger.log_memory_usage(
@@ -491,9 +448,6 @@ def log_memory_usage(context: str, logger_name: str = None):
                     f"{context} - after {func.__name__} (exception)", logger_name
                 )
                 raise
-
         return wrapper
-
     return decorator
-
 AppLogger.initialize()

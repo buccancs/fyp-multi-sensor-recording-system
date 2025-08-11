@@ -6,15 +6,10 @@ import struct
 import threading
 import time
 from typing import Any, Dict, List, Optional
-
 from PyQt5.QtCore import QThread, pyqtSignal
-
 from ..utils.logging_config import get_logger
-
 logger = get_logger(__name__)
-
 class RemoteDevice:
-
     def __init__(
         self, device_id: str, capabilities: List[str], client_socket: socket.socket
     ):
@@ -43,14 +38,12 @@ class RemoteDevice:
         logger.info(
             f"RemoteDevice created: {device_id} with capabilities: {capabilities}"
         )
-
     def update_status(self, status_data: Dict[str, Any]):
         self.status.update(status_data)
         self.status["last_update"] = time.time()
         self.last_seen = time.time()
         self.connection_stats["last_activity"] = time.time()
         logger.debug(f"Device {self.device_id} status updated: {status_data}")
-
     def increment_message_count(self, message_type: str = "received"):
         if message_type == "received":
             self.connection_stats["messages_received"] += 1
@@ -58,13 +51,10 @@ class RemoteDevice:
             self.connection_stats["messages_sent"] += 1
         self.connection_stats["last_activity"] = time.time()
         self.last_seen = time.time()
-
     def is_alive(self, timeout_seconds: int = 30) -> bool:
         return time.time() - self.last_seen < timeout_seconds
-
     def get_connection_duration(self) -> float:
         return time.time() - self.connection_stats["connected_at"]
-
     def get_device_info(self) -> Dict[str, Any]:
         return {
             "device_id": self.device_id,
@@ -76,7 +66,6 @@ class RemoteDevice:
             "connection_duration": self.get_connection_duration(),
             "is_alive": self.is_alive(),
         }
-
     def disconnect(self):
         self.connected = False
         if self.client_socket:
@@ -87,7 +76,6 @@ class RemoteDevice:
         logger.info(
             f"RemoteDevice {self.device_id} disconnected after {self.get_connection_duration():.1f} seconds"
         )
-
 class JsonSocketServer(QThread):
     device_connected = pyqtSignal(str, list)
     device_disconnected = pyqtSignal(str)
@@ -97,7 +85,6 @@ class JsonSocketServer(QThread):
     sensor_data_received = pyqtSignal(str, dict)
     notification_received = pyqtSignal(str, str, dict)
     error_occurred = pyqtSignal(str, str)
-
     def __init__(
         self,
         host: str = "0.0.0.0",
@@ -121,7 +108,6 @@ class JsonSocketServer(QThread):
         logger.info(
             f"JsonSocketServer initialized for {host}:{port} using {protocol_type} JSON protocol"
         )
-
     def run(self):
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -149,7 +135,6 @@ class JsonSocketServer(QThread):
             self.error_occurred.emit("server", f"Server error: {str(e)}")
         finally:
             self.cleanup()
-
     def handle_json_client(self, client_socket: socket.socket, address: tuple):
         client_addr = f"{address[0]}:{address[1]}"
         device_id = None
@@ -197,7 +182,6 @@ class JsonSocketServer(QThread):
             else:
                 client_socket.close()
             logger.info(f"JSON client disconnected: {client_addr}")
-
     def recv_exact(self, sock: socket.socket, length: int) -> Optional[bytes]:
         data = b""
         while len(data) < length:
@@ -206,7 +190,6 @@ class JsonSocketServer(QThread):
                 return None
             data += chunk
         return data
-
     def process_json_message(
         self, client_socket: socket.socket, client_addr: str, message: Dict[str, Any]
     ) -> Optional[str]:
@@ -393,13 +376,11 @@ class JsonSocketServer(QThread):
                 f"Unknown message type '{message_type}' from {device_id or client_addr}"
             )
         return self.find_device_id(client_socket)
-
     def find_device_id(self, client_socket: socket.socket) -> Optional[str]:
         for device_id, device in self.devices.items():
             if device.client_socket == client_socket:
                 return device_id
         return None
-
     def send_command(self, device_id: str, command_dict: Dict[str, Any]) -> bool:
         if device_id not in self.devices:
             logger.warning(f"Device {device_id} not connected")
@@ -418,7 +399,6 @@ class JsonSocketServer(QThread):
             logger.error(f"Error sending command to {device_id}: {e}")
             self.error_occurred.emit(device_id, f"Command send error: {str(e)}")
             return False
-
     def broadcast_command(self, command_dict: Dict[str, Any]) -> int:
         success_count = 0
         for device_id in list(self.devices.keys()):
@@ -426,16 +406,12 @@ class JsonSocketServer(QThread):
                 success_count += 1
         logger.info(f"Broadcast command to {success_count}/{len(self.devices)} devices")
         return success_count
-
     def get_connected_devices(self) -> List[str]:
         return list(self.clients.keys())
-
     def get_device_count(self) -> int:
         return len(self.clients)
-
     def is_device_connected(self, device_id: str) -> bool:
         return device_id in self.clients
-
     def stop_server(self):
         logger.info("Stopping JSON socket server...")
         self.running = False
@@ -452,7 +428,6 @@ class JsonSocketServer(QThread):
                 pass
         self.clients.clear()
         logger.info("JSON socket server stopped")
-
     def get_session_directory(self) -> Optional[str]:
         try:
             if self.session_manager:
@@ -470,7 +445,6 @@ class JsonSocketServer(QThread):
             base_dir = os.path.join(os.getcwd(), "sessions")
             os.makedirs(base_dir, exist_ok=True)
             import datetime
-
             session_name = datetime.datetime.now().strftime("session_%Y%m%d_%H%M%S")
             session_dir = os.path.join(base_dir, session_name)
             os.makedirs(session_dir, exist_ok=True)
@@ -479,7 +453,6 @@ class JsonSocketServer(QThread):
         except Exception as e:
             logger.error(f"Failed to get session directory: {e}")
             return None
-
     def request_file_from_device(
         self, device_id: str, filepath: str, filetype: str = None
     ) -> bool:
@@ -503,7 +476,6 @@ class JsonSocketServer(QThread):
         except Exception as e:
             logger.error(f"Error requesting file from device {device_id}: {e}")
             return False
-
     def request_all_session_files(self, session_id: str) -> int:
         success_count = 0
         for device_id, device in self.devices.items():
@@ -515,7 +487,6 @@ class JsonSocketServer(QThread):
                     if self.request_file_from_device(device_id, filepath):
                         success_count += 1
                         import time
-
                         time.sleep(0.1)
             except Exception as e:
                 logger.error(f"Error requesting files from device {device_id}: {e}")
@@ -523,7 +494,6 @@ class JsonSocketServer(QThread):
             f"Requested session files from {success_count} device file combinations"
         )
         return success_count
-
     def get_expected_files_for_device(
         self, device_id: str, session_id: str, capabilities: List[str]
     ) -> List[str]:
@@ -537,7 +507,6 @@ class JsonSocketServer(QThread):
             expected_files.append(f"{base_path}/{session_id}_{device_id}_sensors.csv")
         logger.debug(f"Expected files for {device_id}: {expected_files}")
         return expected_files
-
     def cleanup(self):
         if self.server_socket:
             try:
@@ -549,7 +518,6 @@ class JsonSocketServer(QThread):
                 thread.join(timeout=1.0)
         self.client_threads.clear()
         logger.info("JSON socket server cleanup completed")
-
 def decode_base64_image(base64_data: str) -> Optional[bytes]:
     try:
         if base64_data.startswith("data:image/"):
@@ -558,10 +526,8 @@ def decode_base64_image(base64_data: str) -> Optional[bytes]:
     except Exception as e:
         logger.error(f"Error decoding base64 image: {e}")
         return None
-
 def create_command_message(command_type: str, **kwargs) -> Dict[str, Any]:
     import time
-
     command = {
         "type": "command",
         "command": command_type,

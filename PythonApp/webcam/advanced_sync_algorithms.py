@@ -5,20 +5,15 @@ from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Callable, Dict, List, Optional, Tuple
-
 import cv2
 import numpy as np
-
 from ..utils.logging_config import get_logger, performance_timer
-
 logger = get_logger(__name__)
-
 class SynchronizationStrategy(Enum):
     MASTER_SLAVE = "master_slave"
     CROSS_CORRELATION = "cross_corr"
     HARDWARE_SYNC = "hardware_sync"
     ADAPTIVE_HYBRID = "adaptive_hybrid"
-
 @dataclass
 class TimingMetrics:
     capture_interval_ms: float = 0.0
@@ -33,7 +28,6 @@ class TimingMetrics:
     frames_processed: int = 0
     sync_violations: int = 0
     recovery_time_ms: float = 0.0
-
 @dataclass
 class SyncFrame:
     timestamp: float
@@ -45,14 +39,11 @@ class SyncFrame:
     software_capture_ts: float = field(default_factory=time.time)
     sync_quality: float = 0.0
     processing_latency_ms: float = 0.0
-
     def get_sync_offset_ms(self) -> float:
         if self.camera1_hardware_ts and self.camera2_hardware_ts:
             return abs(self.camera1_hardware_ts - self.camera2_hardware_ts) * 1000
         return 0.0
-
 class AdaptiveSynchronizer:
-
     def __init__(
         self,
         target_fps: float = 30.0,
@@ -78,7 +69,6 @@ class AdaptiveSynchronizer:
         logger.info(
             f"AdaptiveSynchronizer initialized: {target_fps}fps, threshold={sync_threshold_ms}ms, strategy={strategy.value}"
         )
-
     @performance_timer("synchronize_frames")
     def synchronize_frames(
         self,
@@ -114,7 +104,6 @@ class AdaptiveSynchronizer:
             self._adapt_parameters()
         sync_frame.processing_latency_ms = (time.time() - process_start) * 1000
         return sync_frame
-
     def _master_slave_sync(self, sync_frame: SyncFrame) -> SyncFrame:
         if sync_frame.camera1_hardware_ts and sync_frame.camera2_hardware_ts:
             offset = sync_frame.camera1_hardware_ts - sync_frame.camera2_hardware_ts
@@ -123,7 +112,6 @@ class AdaptiveSynchronizer:
             1.0, 1.0 - abs(self.master_clock_offset) / self.sync_threshold_ms
         )
         return sync_frame
-
     def _cross_correlation_sync(self, sync_frame: SyncFrame) -> SyncFrame:
         try:
             gray1 = cv2.cvtColor(sync_frame.camera1_frame, cv2.COLOR_BGR2GRAY)
@@ -141,7 +129,6 @@ class AdaptiveSynchronizer:
             logger.warning(f"Cross-correlation sync failed: {e}")
             sync_frame.sync_quality = 0.5
         return sync_frame
-
     def _hardware_sync(self, sync_frame: SyncFrame) -> SyncFrame:
         if sync_frame.camera1_hardware_ts and sync_frame.camera2_hardware_ts:
             offset_ms = sync_frame.get_sync_offset_ms()
@@ -154,7 +141,6 @@ class AdaptiveSynchronizer:
                 0.0, 1.0 - software_offset / self.sync_threshold_ms
             )
         return sync_frame
-
     def _adaptive_hybrid_sync(self, sync_frame: SyncFrame) -> SyncFrame:
         if sync_frame.camera1_hardware_ts and sync_frame.camera2_hardware_ts:
             sync_frame = self._hardware_sync(sync_frame)
@@ -164,7 +150,6 @@ class AdaptiveSynchronizer:
         if sync_frame.sync_quality < 0.6:
             sync_frame = self._master_slave_sync(sync_frame)
         return sync_frame
-
     def _calculate_sync_quality(self, offset_ms: float) -> float:
         if offset_ms <= self.adaptive_threshold:
             return 1.0
@@ -172,7 +157,6 @@ class AdaptiveSynchronizer:
             return 1.0 - (offset_ms - self.adaptive_threshold) / self.adaptive_threshold
         else:
             return 0.0
-
     def _update_metrics(self, sync_frame: SyncFrame, offset_ms: float):
         self.offset_history.append(offset_ms)
         self.quality_history.append(sync_frame.sync_quality)
@@ -188,7 +172,6 @@ class AdaptiveSynchronizer:
         if len(self.offset_history) >= 3:
             recent_offsets = list(self.offset_history)[-3:]
             self.metrics.jitter_ms = statistics.stdev(recent_offsets)
-
     def _adapt_parameters(self):
         if len(self.quality_history) < 10:
             return
@@ -212,7 +195,6 @@ class AdaptiveSynchronizer:
                 drift_slope = np.polyfit(x, y, 1)[0]
                 self.drift_compensation += drift_slope * self.adaptation_rate
                 self.metrics.drift_rate_ppm = drift_slope * 1000
-
     def get_diagnostics(self) -> Dict:
         with self._lock:
             return {
@@ -238,7 +220,6 @@ class AdaptiveSynchronizer:
                     "current_quality": self.metrics.quality_score,
                 },
             }
-
     def reset_metrics(self):
         with self._lock:
             self.timing_buffer.clear()
@@ -249,14 +230,12 @@ class AdaptiveSynchronizer:
             self.drift_compensation = 0.0
             self.adaptive_threshold = self.sync_threshold_ms
         logger.info("Synchronizer metrics reset")
-
     def set_strategy(self, strategy: SynchronizationStrategy):
         old_strategy = self.current_strategy
         self.current_strategy = strategy
         logger.info(
             f"Synchronization strategy changed: {old_strategy.value} -> {strategy.value}"
         )
-
 def test_dual_camera_sync(
     camera1_index: int = 0, camera2_index: int = 1, duration_seconds: int = 10
 ) -> Dict:
@@ -326,7 +305,6 @@ def test_dual_camera_sync(
     except Exception as e:
         logger.error(f"Synchronization test failed: {e}")
         return {"error": str(e), "success": False}
-
 if __name__ == "__main__":
     results = test_dual_camera_sync()
     print(f"Test Results: {results}")

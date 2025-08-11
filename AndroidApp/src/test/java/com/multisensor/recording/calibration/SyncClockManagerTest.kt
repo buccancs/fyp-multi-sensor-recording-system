@@ -371,4 +371,3 @@ class SyncClockManagerTest {
             println("[DEBUG_LOG] Concurrent synchronization test passed")
         }
 }
-

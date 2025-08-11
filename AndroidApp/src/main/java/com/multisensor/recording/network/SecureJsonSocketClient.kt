@@ -122,7 +122,7 @@ constructor(
             try {
                 val jsonString = JsonMessage.toJson(message)
                 val sanitizedJson = securityUtils.sanitizeForLogging(jsonString)
-                
+
                 val jsonBytes = jsonString.toByteArray(Charsets.UTF_8)
 
                 val lengthHeader =
@@ -162,10 +162,10 @@ constructor(
             authCallback?.invoke(false)
             return
         }
-        
+
         val authMessage = AuthenticateMessage(token = token)
         sendMessage(authMessage)
-        
+
         connectionScope?.launch {
             delay(AUTH_TIMEOUT_MS)
             if (!isAuthenticated) {
@@ -221,7 +221,7 @@ constructor(
 
                 val socketFactory = sslContext.socketFactory
                 sslSocket = socketFactory.createSocket() as SSLSocket
-                
+
                 sslSocket?.apply {
                     soTimeout = CONNECTION_TIMEOUT_MS
                     enabledProtocols = arrayOf("TLSv1.2", "TLSv1.3")
@@ -230,7 +230,7 @@ constructor(
                         cipher.contains("AES") && cipher.contains("GCM") ||
                         cipher.contains("CHACHA20")
                     }?.toTypedArray() ?: supportedCiphers
-                    
+
                     connect(InetSocketAddress(serverIp, serverPort), CONNECTION_TIMEOUT_MS)
                     startHandshake()
                 }
@@ -305,7 +305,7 @@ constructor(
 
                 if (message != null) {
                     logger.debug("Received secure message: ${message.type}")
-                    
+
                     if (message is AuthResponseMessage) {
                         handleAuthenticationResponse(message)
                     } else {
@@ -393,13 +393,13 @@ data class AuthenticateMessage(
     val token: String
 ) : JsonMessage() {
     override val type: String = "authenticate"
-    
+
     override fun toJsonObject(): JSONObject =
         JSONObject().apply {
             put("type", type)
             put("token", token)
         }
-    
+
     companion object {
         fun fromJson(json: JSONObject): AuthenticateMessage =
             AuthenticateMessage(
@@ -413,14 +413,14 @@ data class AuthResponseMessage(
     val message: String? = null
 ) : JsonMessage() {
     override val type: String = "auth_response"
-    
+
     override fun toJsonObject(): JSONObject =
         JSONObject().apply {
             put("type", type)
             put("success", success)
             message?.let { put("message", it) }
         }
-    
+
     companion object {
         fun fromJson(json: JSONObject): AuthResponseMessage =
             AuthResponseMessage(

@@ -7,7 +7,6 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
-
 from .pc_server import (
     AckMessage,
     BeepSyncCommand,
@@ -23,7 +22,6 @@ from .pc_server import (
     StatusMessage,
     StopRecordCommand,
 )
-
 @dataclass
 class AndroidDevice:
     device_id: str
@@ -41,7 +39,6 @@ class AndroidDevice:
     last_data_timestamp: Optional[float] = None
     pending_files: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     transfer_progress: Dict[str, float] = field(default_factory=dict)
-
 @dataclass
 class ShimmerDataSample:
     timestamp: float
@@ -50,7 +47,6 @@ class ShimmerDataSample:
     sensor_values: Dict[str, float]
     session_id: Optional[str] = None
     raw_message: Optional[SensorDataMessage] = None
-
 @dataclass
 class SessionInfo:
     session_id: str
@@ -60,9 +56,7 @@ class SessionInfo:
     shimmer_devices: Set[str] = field(default_factory=set)
     data_samples: int = 0
     files_collected: Dict[str, List[str]] = field(default_factory=dict)
-
 class AndroidDeviceManager:
-
     def __init__(
         self, server_port: int = 9000, logger: Optional[logging.Logger] = None
     ):
@@ -83,7 +77,6 @@ class AndroidDeviceManager:
         self.file_transfer_chunk_size = 8192
         self._setup_server_callbacks()
         self.logger.info("AndroidDeviceManager initialized")
-
     def initialize(self) -> bool:
         try:
             self.logger.info("Initializing AndroidDeviceManager...")
@@ -98,7 +91,6 @@ class AndroidDeviceManager:
         except Exception as e:
             self.logger.error(f"Failed to initialize AndroidDeviceManager: {e}")
             return False
-
     def shutdown(self) -> None:
         try:
             self.logger.info("Shutting down AndroidDeviceManager...")
@@ -112,13 +104,10 @@ class AndroidDeviceManager:
             self.logger.info("AndroidDeviceManager shutdown completed")
         except Exception as e:
             self.logger.error(f"Error during shutdown: {e}")
-
     def get_connected_devices(self) -> Dict[str, AndroidDevice]:
         return self.android_devices.copy()
-
     def get_device(self, device_id: str) -> Optional[AndroidDevice]:
         return self.android_devices.get(device_id)
-
     def get_shimmer_devices(self) -> Dict[str, Dict[str, Any]]:
         shimmer_devices = {}
         for android_device in self.android_devices.values():
@@ -130,7 +119,6 @@ class AndroidDeviceManager:
                     "shimmer_device_id": shimmer_id,
                 }
         return shimmer_devices
-
     def start_session(
         self,
         session_id: str,
@@ -176,7 +164,6 @@ class AndroidDeviceManager:
             self.logger.error(f"Error starting session: {e}")
             self.current_session = None
             return False
-
     def stop_session(self) -> bool:
         try:
             if not self.current_session:
@@ -203,7 +190,6 @@ class AndroidDeviceManager:
         except Exception as e:
             self.logger.error(f"Error stopping session: {e}")
             return False
-
     def send_sync_flash(
         self, duration_ms: int = 200, sync_id: Optional[str] = None
     ) -> int:
@@ -211,7 +197,6 @@ class AndroidDeviceManager:
         success_count = self.pc_server.broadcast_message(flash_cmd)
         self.logger.info(f"Sent flash sync to {success_count} devices")
         return success_count
-
     def send_sync_beep(
         self,
         frequency_hz: int = 1000,
@@ -228,14 +213,12 @@ class AndroidDeviceManager:
         success_count = self.pc_server.broadcast_message(beep_cmd)
         self.logger.info(f"Sent beep sync to {success_count} devices")
         return success_count
-
     def request_file_transfer(self, device_id: str, filepath: str) -> bool:
         if device_id not in self.android_devices:
             self.logger.error(f"Device not connected: {device_id}")
             return False
         try:
             from .pc_server import SendFileCommand
-
             file_request = SendFileCommand(
                 command="send_file", filepath=filepath, timestamp=time.time()
             )
@@ -264,7 +247,6 @@ class AndroidDeviceManager:
         except Exception as e:
             self.logger.error(f"Error requesting file transfer from {device_id}: {e}")
             return False
-
     def disconnect_device(self, device_id: str) -> bool:
         if device_id not in self.android_devices:
             self.logger.warning(f"Device not connected: {device_id}")
@@ -278,29 +260,22 @@ class AndroidDeviceManager:
         except Exception as e:
             self.logger.error(f"Error disconnecting device {device_id}: {e}")
             return False
-
     def add_data_callback(self, callback: Callable[[ShimmerDataSample], None]) -> None:
         self.data_callbacks.append(callback)
-
     def add_status_callback(
         self, callback: Callable[[str, AndroidDevice], None]
     ) -> None:
         self.status_callbacks.append(callback)
-
     def add_session_callback(self, callback: Callable[[SessionInfo], None]) -> None:
         self.session_callbacks.append(callback)
-
     def get_session_history(self) -> List[SessionInfo]:
         return self.session_history.copy()
-
     def get_current_session(self) -> Optional[SessionInfo]:
         return self.current_session
-
     def _setup_server_callbacks(self) -> None:
         self.pc_server.add_message_callback(self._on_message_received)
         self.pc_server.add_device_callback(self._on_device_connected)
         self.pc_server.add_disconnect_callback(self._on_device_disconnected)
-
     def _on_device_connected(
         self, device_id: str, connected_device: ConnectedDevice
     ) -> None:
@@ -325,7 +300,6 @@ class AndroidDeviceManager:
                     self.logger.error(f"Error in status callback: {e}")
         except Exception as e:
             self.logger.error(f"Error handling device connection: {e}")
-
     def _on_device_disconnected(self, device_id: str) -> None:
         try:
             if device_id in self.android_devices:
@@ -341,7 +315,6 @@ class AndroidDeviceManager:
                 self.logger.info(f"Android device disconnected: {device_id}")
         except Exception as e:
             self.logger.error(f"Error handling device disconnection: {e}")
-
     def _on_message_received(self, device_id: str, message: JsonMessage) -> None:
         try:
             if device_id not in self.android_devices:
@@ -366,7 +339,6 @@ class AndroidDeviceManager:
                 self._process_acknowledgment(device_id, message)
         except Exception as e:
             self.logger.error(f"Error processing message from {device_id}: {e}")
-
     def _process_status_message(self, device_id: str, message: StatusMessage) -> None:
         device = self.android_devices[device_id]
         device.status.update(
@@ -385,7 +357,6 @@ class AndroidDeviceManager:
                 callback(device_id, device)
             except Exception as e:
                 self.logger.error(f"Error in status callback: {e}")
-
     def _process_sensor_data(self, device_id: str, message: SensorDataMessage) -> None:
         device = self.android_devices[device_id]
         device.data_samples_received += 1
@@ -406,7 +377,6 @@ class AndroidDeviceManager:
                 callback(data_sample)
             except Exception as e:
                 self.logger.error(f"Error in data callback: {e}")
-
     def _process_file_info(self, device_id: str, message: FileInfoMessage) -> None:
         device = self.android_devices[device_id]
         device.pending_files[message.name] = {
@@ -419,7 +389,6 @@ class AndroidDeviceManager:
         self.logger.info(
             f"File transfer started from {device_id}: {message.name} ({message.size} bytes)"
         )
-
     def _process_file_chunk(self, device_id: str, message: FileChunkMessage) -> None:
         try:
             device = self.android_devices[device_id]
@@ -461,7 +430,6 @@ class AndroidDeviceManager:
                         self.logger.error(f"Error in file progress callback: {e}")
         except Exception as e:
             self.logger.error(f"Error processing file chunk from {device_id}: {e}")
-
     def _process_file_end(self, device_id: str, message: FileEndMessage) -> None:
         device = self.android_devices[device_id]
         if message.name in device.pending_files:
@@ -471,12 +439,10 @@ class AndroidDeviceManager:
             self.logger.info(
                 f"File transfer completed from {device_id}: {message.name}"
             )
-
     def _process_acknowledgment(self, device_id: str, message: AckMessage) -> None:
         self.logger.debug(f"ACK from {device_id}: {message.cmd} - {message.status}")
         if message.status == "error" and message.message:
             self.logger.warning(f"Command error from {device_id}: {message.message}")
-
     def _device_monitor_loop(self) -> None:
         while self.is_initialized:
             try:
@@ -494,7 +460,6 @@ class AndroidDeviceManager:
             except Exception as e:
                 self.logger.error(f"Error in device monitor loop: {e}")
                 time.sleep(5.0)
-
     def _data_processing_loop(self) -> None:
         while self.is_initialized:
             try:
@@ -508,29 +473,24 @@ class AndroidDeviceManager:
             except Exception as e:
                 self.logger.error(f"Error in data processing loop: {e}")
                 time.sleep(5.0)
-
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
-
     def on_data_received(sample: ShimmerDataSample):
         print(
             f"Shimmer data from {sample.android_device_id}: {len(sample.sensor_values)} sensors"
         )
         print(f"  Values: {sample.sensor_values}")
-
     def on_device_status(device_id: str, device: AndroidDevice):
         print(f"Device status {device_id}: {device.status}")
-
     def on_session_event(session: SessionInfo):
         if session.end_time:
             duration = session.end_time - session.start_time
             print(f"Session completed: {session.session_id} ({duration:.1f}s)")
         else:
             print(f"Session started: {session.session_id}")
-
     manager = AndroidDeviceManager(port=9000)
     manager.add_data_callback(on_data_received)
     manager.add_status_callback(on_device_status)

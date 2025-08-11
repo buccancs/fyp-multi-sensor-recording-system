@@ -5,12 +5,10 @@ import time
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Callable, Dict, List, Optional, Tuple
-
 import cv2
 import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap
-
 from ..utils.logging_config import get_logger
 from .webcam.advanced_sync_algorithms import (
     AdaptiveSynchronizer,
@@ -22,9 +20,7 @@ from .webcam.cv_preprocessing_pipeline import (
     ROIDetectionMethod,
     SignalExtractionMethod,
 )
-
 logger = get_logger(__name__)
-
 @dataclass
 class DualFrameData:
     timestamp: float
@@ -34,7 +30,6 @@ class DualFrameData:
     camera1_timestamp: float
     camera2_timestamp: float
     sync_quality: float
-
 @dataclass
 class CameraStatus:
     camera_index: int
@@ -44,7 +39,6 @@ class CameraStatus:
     frames_captured: int
     last_error: Optional[str]
     temperature: Optional[float]
-
 class DualWebcamCapture(QThread):
     dual_frame_ready = pyqtSignal(QPixmap, QPixmap)
     recording_started = pyqtSignal(str, str)
@@ -53,7 +47,6 @@ class DualWebcamCapture(QThread):
     camera_status_changed = pyqtSignal(dict)
     error_occurred = pyqtSignal(str)
     timestamp_sync_update = pyqtSignal(float)
-
     def __init__(
         self,
         camera1_index: int = 0,
@@ -124,7 +117,6 @@ class DualWebcamCapture(QThread):
         logger.info(
             f"DualWebcamCapture initialized: cameras {camera1_index},{camera2_index}, recording {self.recording_fps}fps @ {resolution}"
         )
-
     def initialize_cameras(self) -> bool:
         try:
             logger.info("Initializing dual Logitech Brio cameras...")
@@ -151,7 +143,6 @@ class DualWebcamCapture(QThread):
             self.error_occurred.emit(error_msg)
             logger.error(error_msg)
             return False
-
     def _configure_brio_camera(self, cap: cv2.VideoCapture, camera_num: int) -> bool:
         try:
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.target_resolution[0])
@@ -175,7 +166,6 @@ class DualWebcamCapture(QThread):
         except Exception as e:
             logger.error(f"Error configuring camera {camera_num}: {e}")
             return False
-
     def _update_camera_status(self):
         try:
             if self.cap1 and self.cap1.isOpened():
@@ -209,7 +199,6 @@ class DualWebcamCapture(QThread):
             self.camera_status_changed.emit(status_dict)
         except Exception as e:
             logger.error(f"Error updating camera status: {e}")
-
     def start_preview(self):
         if not self.cap1 or not self.cap2:
             if not self.initialize_cameras():
@@ -219,7 +208,6 @@ class DualWebcamCapture(QThread):
         self.master_start_time = time.time()
         self.start()
         logger.info("Dual camera preview started")
-
     def stop_preview(self):
         self.is_previewing = False
         self.running = False
@@ -227,7 +215,6 @@ class DualWebcamCapture(QThread):
             self.quit()
             self.wait()
         logger.info("Dual camera preview stopped")
-
     def start_recording(self, session_id: str) -> bool:
         if self.is_recording:
             self.error_occurred.emit("Recording already in progress")
@@ -279,7 +266,6 @@ class DualWebcamCapture(QThread):
             self.error_occurred.emit(error_msg)
             logger.error(error_msg)
             return False
-
     def stop_recording(self) -> Tuple[Optional[str], Optional[str]]:
         if not self.is_recording:
             return None, None
@@ -311,7 +297,6 @@ class DualWebcamCapture(QThread):
             self.error_occurred.emit(error_msg)
             logger.error(error_msg)
             return None, None
-
     def run(self):
         last_preview_time = 0
         last_recording_time = 0
@@ -375,7 +360,6 @@ class DualWebcamCapture(QThread):
                 logger.error(error_msg)
                 break
         logger.info("Dual camera capture thread ended")
-
     def _frame_to_pixmap(
         self, frame: np.ndarray, max_width: int = 640, max_height: int = 360
     ) -> Optional[QPixmap]:
@@ -398,22 +382,17 @@ class DualWebcamCapture(QThread):
         except Exception as e:
             logger.error(f"Error converting frame to pixmap: {str(e)}")
             return None
-
     def get_master_timestamp(self) -> float:
         return time.time()
-
     def get_sync_quality(self) -> float:
         return self.last_sync_quality
-
     def get_performance_stats(self) -> Dict:
         return self.performance_stats.copy()
-
     def get_latest_frame(self) -> Optional[DualFrameData]:
         with self.frame_lock:
             if self.frame_sync_buffer:
                 return self.frame_sync_buffer[-1]
             return None
-
     def get_camera_fps(self, camera_number: int) -> float:
         if camera_number == 1:
             return self.camera1_status.fps
@@ -422,7 +401,6 @@ class DualWebcamCapture(QThread):
         else:
             logger.warning(f"Invalid camera number: {camera_number}")
             return 0.0
-
     def start_capture(self) -> bool:
         try:
             if not self._initialize_cameras():
@@ -431,7 +409,6 @@ class DualWebcamCapture(QThread):
         except Exception as e:
             logger.error(f"Error starting capture: {e}", exc_info=True)
             return False
-
     def stop_capture(self):
         try:
             if self.is_recording:
@@ -440,10 +417,8 @@ class DualWebcamCapture(QThread):
             self._release_cameras()
         except Exception as e:
             logger.error(f"Error stopping capture: {e}", exc_info=True)
-
     def _initialize_cameras(self) -> bool:
         return self.initialize_cameras()
-
     def _release_cameras(self):
         try:
             if hasattr(self, "cap1") and self.cap1:
@@ -455,7 +430,6 @@ class DualWebcamCapture(QThread):
             logger.debug("Camera resources released")
         except Exception as e:
             logger.error(f"Error releasing cameras: {e}", exc_info=True)
-
     def cleanup(self):
         try:
             self.running = False
@@ -480,7 +454,6 @@ class DualWebcamCapture(QThread):
             logger.info("DualWebcamCapture cleanup completed")
         except Exception as e:
             logger.error(f"Error during cleanup: {e}")
-
     def enable_physiological_monitoring(self, enabled: bool = True):
         self.enable_physio_monitoring = enabled
         if enabled:
@@ -489,13 +462,11 @@ class DualWebcamCapture(QThread):
             logger.info("Physiological monitoring disabled")
             self.current_roi = None
             self.latest_physio_signal = None
-
     def get_synchronization_diagnostics(self) -> Dict:
         if hasattr(self, "synchronizer"):
             return self.synchronizer.get_diagnostics()
         else:
             return {"error": "Synchronizer not initialized"}
-
     def get_roi_metrics(self) -> Dict:
         if hasattr(self, "roi_detector"):
             metrics = self.roi_detector.get_metrics()
@@ -513,7 +484,6 @@ class DualWebcamCapture(QThread):
             }
         else:
             return {"error": "ROI detector not initialized"}
-
     def get_latest_physiological_signal(self) -> Optional[Dict]:
         if self.latest_physio_signal is not None:
             signal = self.latest_physio_signal
@@ -532,7 +502,6 @@ class DualWebcamCapture(QThread):
                 "spectral_features": signal.spectral_features,
             }
         return None
-
     def set_synchronization_strategy(self, strategy: str):
         if hasattr(self, "synchronizer"):
             try:
@@ -546,7 +515,6 @@ class DualWebcamCapture(QThread):
                 )
         else:
             logger.error("Synchronizer not initialized")
-
     def reset_synchronization_metrics(self):
         if hasattr(self, "synchronizer"):
             self.synchronizer.reset_metrics()
@@ -557,12 +525,10 @@ class DualWebcamCapture(QThread):
             "average_processing_time_ms": 0.0,
         }
         logger.info("Synchronization metrics reset")
-
     def export_synchronization_data(self, filepath: str) -> bool:
         try:
             import json
             from datetime import datetime
-
             diagnostics = self.get_synchronization_diagnostics()
             roi_metrics = self.get_roi_metrics()
             physio_signal = self.get_latest_physiological_signal()
@@ -603,7 +569,6 @@ class DualWebcamCapture(QThread):
         except Exception as e:
             logger.error(f"Failed to export synchronization data: {e}")
             return False
-
     def _process_advanced_synchronization(
         self,
         frame1: np.ndarray,
@@ -640,7 +605,6 @@ class DualWebcamCapture(QThread):
                 camera2_timestamp=timestamp2,
                 sync_quality=sync_quality,
             )
-
     def _process_physiological_monitoring(self, frame: np.ndarray):
         try:
             roi = self.roi_detector.detect_roi(frame)
@@ -655,7 +619,6 @@ class DualWebcamCapture(QThread):
                         physio_signal.roi_metrics = self.roi_detector.get_metrics()
         except Exception as e:
             logger.debug(f"Physiological monitoring processing failed: {e}")
-
     def __del__(self):
         try:
             if hasattr(self, "cap1") and self.cap1:
@@ -668,7 +631,6 @@ class DualWebcamCapture(QThread):
                 self.writer2.release()
         except Exception:
             pass
-
 def test_dual_webcam_access(camera_indices: List[int] = None):
     if camera_indices is None:
         camera_indices = [0, 1]
@@ -715,6 +677,5 @@ def test_dual_webcam_access(camera_indices: List[int] = None):
         f"SUCCESS: Both cameras ({camera1_index}, {camera2_index}) accessible for dual recording"
     )
     return True
-
 if __name__ == "__main__":
     test_dual_webcam_access()
