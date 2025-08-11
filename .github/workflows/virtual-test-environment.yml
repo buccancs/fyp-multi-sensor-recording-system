@@ -2,17 +2,23 @@ name: Virtual Test Environment
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, master, 'copilot/**' ]
     paths:
       - 'PythonApp/**'
       - 'tests/integration/virtual_environment/**'
       - '.github/workflows/virtual-test-environment.yml'
+      - 'run_local_test.sh'
+      - 'README.md'
+      - 'VIRTUAL_TEST_INTEGRATION_GUIDE.md'
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, develop, master ]
     paths:
       - 'PythonApp/**'
       - 'tests/integration/virtual_environment/**'
       - '.github/workflows/virtual-test-environment.yml'
+      - 'run_local_test.sh'
+      - 'README.md'
+      - 'VIRTUAL_TEST_INTEGRATION_GUIDE.md'
   workflow_dispatch:
     inputs:
       test_scenario:
