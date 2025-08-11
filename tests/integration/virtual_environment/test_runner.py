@@ -124,10 +124,31 @@ class VirtualTestRunner:
         # Test state
         self.is_running = False
         self.start_time: Optional[datetime] = None
-        self.metrics = VirtualTestMetrics(start_time=datetime.now())
+        # Initialize with current datetime - VirtualTestMetrics will be created when test starts
+        self._start_time = datetime.now()
         self.device_results: List[DeviceTestResult] = []
         
         # Monitoring
+        self.performance_monitoring_enabled = True
+        self.performance_data: List[Dict[str, Any]] = []
+    
+    @property
+    def metrics(self) -> "VirtualTestMetrics":
+        """Get or create test metrics"""
+        if not hasattr(self, '_metrics'):
+            self._metrics = VirtualTestMetrics(start_time=self._start_time)
+        return self._metrics
+        
+        # Original monitoring setup continues
+        self.performance_monitoring_enabled = True
+        self.performance_data: List[Dict[str, Any]] = []
+    
+    @property
+    def metrics(self) -> "VirtualTestMetrics":
+        """Get or create test metrics"""
+        if not hasattr(self, '_metrics'):
+            self._metrics = VirtualTestMetrics(start_time=self._start_time)
+        return self._metrics
         self.performance_monitor: Optional[threading.Thread] = None
         self.stop_event = threading.Event()
         self.thread_pool = ThreadPoolExecutor(max_workers=config.device_count + 5)
