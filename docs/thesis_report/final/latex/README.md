@@ -6,7 +6,7 @@ Key files:
 
 - main.tex — includes chapters and the global bibliography section
 - references.bib — BibTeX database with keys ref1–ref24
-- 2.tex (example chapter) — uses `\citep{...}` / `\citet{...}` instead of hard-coded [n]
+- 2.tex (example chapter) — uses `\cite{...}` / `\citet{...}` instead of hard-coded [n]
 
 Build sequence (BibTeX):
 

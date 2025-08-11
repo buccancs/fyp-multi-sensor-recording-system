@@ -16,11 +16,11 @@ The Multi-Sensor Recording System implements a distributed architecture comprisi
 \textbf{Primary Components:}
 - \textbf{Python Desktop Controller}: Central orchestration service providing master clock synchronisation, device management, and session coordination
 - \textbf{Android Mobile Application}: Distributed sensor nodes supporting RGB camera, thermal imaging, and physiological sensor integration
-- \textbf{SHIMMER3 Gsr+ Sensors}: Bluetooth-enabled physiological measurement devices for ground truth data collection \citep{ref8}
+- \textbf{SHIMMER3 Gsr+ Sensors}: Bluetooth-enabled physiological measurement devices for ground truth data collection \cite{ref8}
 - \textbf{TOPDON Tc001 Thermal Cameras}: USB-C connected thermal imaging sensors for contactless physiological monitoring
 
 \textbf{Network Architecture:}
-The system employs a hybrid star-mesh topology with the Python Desktop Controller serving as the master coordinator. Communication is implemented using WebSocket over TLS with structured JSON messaging protocol to ensure secure, real-time data exchange and temporal synchronisation \citep{ref21}. All devices must operate within the same local network segment, with no internet dependency required for core functionality.
+The system employs a hybrid star-mesh topology with the Python Desktop Controller serving as the master coordinator. Communication is implemented using WebSocket over TLS with structured JSON messaging protocol to ensure secure, real-time data exchange and temporal synchronisation \cite{ref21}. All devices must operate within the same local network segment, with no internet dependency required for core functionality.
 
 \textbf{Synchronisation Framework:}
 Temporal coordination is achieved through a custom NTP-based synchronisation engine integrated with the Python controller. The system maintains temporal alignment across all connected devices within ±3.2 ms accuracy, enabling precise multi-modal data correlation essential for contactless GSR prediction research.
@@ -47,11 +47,11 @@ Temporal coordination is achieved through a custom NTP-based synchronisation eng
 \subsubsection{A.2.2 Android Device Requirements}
 
 \textbf{Hardware Compatibility:}
-- \textbf{Android Version}: API Level 24+ (Android 7.0 Nougat) minimum \citep{ref13}
-- \textbf{Camera}: Camera2 API support with 4K recording capability \citep{ref13}
+- \textbf{Android Version}: API Level 24+ (Android 7.0 Nougat) minimum \cite{ref13}
+- \textbf{Camera}: Camera2 API support with 4K recording capability \cite{ref13}
 - \textbf{Memory}: 6GB RAM minimum (8GB+ recommended)
 - \textbf{Storage}: 128GB internal storage minimum (256GB+ recommended)
-- \textbf{Connectivity}: USB-C with OTG support, Bluetooth 4.0+, 802.11n WiFi \citep{ref14}
+- \textbf{Connectivity}: USB-C with OTG support, Bluetooth 4.0+, 802.11n WiFi \cite{ref14}
 - \textbf{Sensors}: Accelerometer, gyroscope, magnetometer for device orientation
 
 \textbf{Validated Device Models:}
@@ -67,7 +67,7 @@ Temporal coordination is achieved through a custom NTP-based synchronisation eng
 - \textbf{Gsr Range}: 0-4 μS (microsiemens)
 - \textbf{Resolution}: 16-bit ADC
 - \textbf{Battery Life}: 12+ hours continuous operation
-- \textbf{Connectivity}: Bluetooth 2.1+EDR, IEEE 802.15.1 compliant \citep{ref15}
+- \textbf{Connectivity}: Bluetooth 2.1+EDR, IEEE 802.15.1 compliant \cite{ref15}
 - \textbf{Data Format}: CSV export with timestamp synchronisation
 
 \textbf{TOPDON Tc001 Thermal Camera:}
@@ -75,7 +75,7 @@ Temporal coordination is achieved through a custom NTP-based synchronisation eng
 - \textbf{Temperature Range}: -20°C to +550°C
 - \textbf{Accuracy}: ±2°C or ±2% of reading
 - \textbf{Frame Rate}: 25 Hz
-- \textbf{Connectivity}: USB-C direct connection \citep{ref20}
+- \textbf{Connectivity}: USB-C direct connection \cite{ref20}
 - \textbf{Power}: Bus-powered via USB-C
 
 \subsection{A.3 Software Installation and Environment Setup}
@@ -143,7 +143,7 @@ pip install -r requirements.txt
 pip install -r PythonApp/requirements.txt
 
 # Install optional dependencies for enhanced functionality
-pip install pyshimmer bluetooth psutil matplotlib scipy \citep{ref18}
+pip install pyshimmer bluetooth psutil matplotlib scipy \cite{ref18}
 
 # Verify installation
 python PythonApp/system_test.py
@@ -154,7 +154,7 @@ python PythonApp/system_test.py
 \textbf{Development Environment Setup:}
 ```bash
 # Download and install Android Studio Arctic Fox (2020.3.1) or later
-# Configure Android SDK with API Level 24+ support \citep{ref13}
+# Configure Android SDK with API Level 24+ support \cite{ref13}
 # Enable Developer Options and USB Debugging on target device
 
 # Build application
@@ -190,7 +190,7 @@ adb install app-release.apk
    - Open inbound ports 8080-8089 on the Python controller machine
    - Allow Python application through Windows Defender/macOS Firewall
    - Configure router to allow inter-device communication
-3. \textbf{Ip Address Assignment}: Configure static IP addresses or ensure DHCP reservation for consistent device addressing \citep{ref19}
+3. \textbf{Ip Address Assignment}: Configure static IP addresses or ensure DHCP reservation for consistent device addressing \cite{ref19}
 
 \textbf{Network Quality Validation:}
 ```bash
@@ -209,20 +209,20 @@ telnet [CONTROLLER_IP] 8080
 
 \textbf{Android Device Configuration:}
 1. \textbf{Install Application}: Deploy signed APK to target Android devices
-2. \textbf{Grant Permissions}: Camera, microphone, storage, location, and network permissions \citep{ref13}
+2. \textbf{Grant Permissions}: Camera, microphone, storage, location, and network permissions \cite{ref13}
 3. \textbf{Configure Network Settings}: Set controller IP address and port in application settings
 4. \textbf{Test Connection}: Use built-in connection test to verify communication
 
 \textbf{Shimmer Sensor Pairing:}
 1. \textbf{Power On Sensor}: Ensure battery charge >50% for stable operation
 2. \textbf{Enable Bluetooth Pairing Mode}: Press and hold sensor button until LED blinks blue
-3. \textbf{pair With Controller}: Use Python application's Bluetooth discovery feature \citep{ref14}
+3. \textbf{pair With Controller}: Use Python application's Bluetooth discovery feature \cite{ref14}
 4. \textbf{Validate Connection}: Verify GSR data streaming at configured sample rate
 
 \textbf{Thermal Camera Setup:}
-1. \textbf{CONNECT USB-C Cable}: Use high-quality USB-C OTG cable rated for data transfer \citep{ref16}
+1. \textbf{CONNECT USB-C Cable}: Use high-quality USB-C OTG cable rated for data transfer \cite{ref16}
 2. \textbf{Install Camera Drivers}: May require manufacturer drivers on Windows systems
-3. \textbf{Configure Permissions}: Grant USB device access to Android application \citep{ref16}
+3. \textbf{Configure Permissions}: Grant USB device access to Android application \cite{ref16}
 4. \textbf{Calibrate Camera}: Run thermal calibration routine using black-body reference
 
 \subsubsection{A.4.3 Session Configuration}
@@ -300,7 +300,7 @@ telnet [CONTROLLER_IP] 8080
 \textbf{Data Management:}
 - Archive completed sessions to secure storage with redundant backup
 - Clear temporary files and cache from Android devices
-- Verify data backup integrity using automated validation scripts \citep{ref23}
+- Verify data backup integrity using automated validation scripts \cite{ref23}
 - Update session metadata database with new recordings
 - Monitor storage usage trends and plan capacity expansion
 
@@ -326,7 +326,7 @@ telnet [CONTROLLER_IP] 8080
 - Perform complete thermal camera calibration using certified black-body reference
 - Validate GSR sensor accuracy using known conductance standards
 - Conduct end-to-end synchronisation validation across all device configurations
-- Verify camera calibration parameters using calibrated checkerboard patterns \citep{ref22}
+- Verify camera calibration parameters using calibrated checkerboard patterns \cite{ref22}
 - Test emergency recovery procedures and backup restoration processes
 
 \textbf{Performance Optimisation:}
