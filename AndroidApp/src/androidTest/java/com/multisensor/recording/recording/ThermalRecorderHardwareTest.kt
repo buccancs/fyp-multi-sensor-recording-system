@@ -142,4 +142,3 @@ class ThermalRecorderHardwareTest {
             println("[DEBUG_LOG] Recording test completed")
         }
 }
-

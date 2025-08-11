@@ -113,7 +113,7 @@ class EdgeCaseAndStressTest : BaseUnitTest() {
     fun `device failure detection should trigger automatic recovery`() = runTest {
         val deviceFailures = mapOf(
             "camera" to "Camera device disconnected",
-            "thermal" to "Thermal camera not responding", 
+            "thermal" to "Thermal camera not responding",
             "shimmer" to "Shimmer device connection lost"
         )
         deviceFailures.forEach { (device, errorMessage) ->

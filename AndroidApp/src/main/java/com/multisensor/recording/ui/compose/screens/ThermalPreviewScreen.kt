@@ -28,8 +28,8 @@ fun ThermalPreviewScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
-                    Text("Thermal Preview") 
+                title = {
+                    Text("Thermal Preview")
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {

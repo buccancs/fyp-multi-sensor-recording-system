@@ -2,18 +2,13 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-
 import cv2
 import numpy as np
-
 from ..utils.logging_config import get_logger
 from .calibration_processor import CalibrationProcessor
 from .calibration_result import CalibrationResult
-
 logger = get_logger(__name__)
-
 class CalibrationManager:
-
     def __init__(self, output_dir: str = "calibration_data"):
         self.logger = get_logger(__name__)
         self.logger.info(f"for initialized")
@@ -36,7 +31,6 @@ class CalibrationManager:
         logger.debug(
             f"Pattern: {self.pattern_type}, Size: {self.chessboard_size}, Square: {self.square_size}mm"
         )
-
     def start_calibration_session(
         self, device_ids: List[str], session_name: str = None
     ) -> Dict[str, Any]:
@@ -70,7 +64,6 @@ class CalibrationManager:
             json.dump(self.current_session, f, indent=2)
         logger.debug(f" Calibration session started: {session_name}")
         return self.current_session
-
     def capture_calibration_frame(self, device_server) -> Dict[str, Any]:
         if not self.current_session:
             raise RuntimeError("No active calibration session")
@@ -117,7 +110,6 @@ class CalibrationManager:
             return capture_results
         finally:
             self.is_capturing = False
-
     def _simulate_image_capture(self, device_id: str) -> bool:
         rgb_image = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
         thermal_image = np.random.randint(0, 255, (240, 320), dtype=np.uint8)
@@ -133,7 +125,6 @@ class CalibrationManager:
         cv2.imwrite(str(thermal_path), thermal_image)
         logger.debug(f" Simulated capture for {device_id}: frame {frame_num}")
         return True
-
     def can_compute_calibration(self, device_id: str = None) -> Dict[str, bool]:
         if not self.current_session:
             return {}
@@ -145,7 +136,6 @@ class CalibrationManager:
             frame_count = self.capture_count.get(dev_id, 0)
             readiness[dev_id] = frame_count >= self.min_images
         return readiness
-
     def compute_calibration(self, device_id: str = None) -> Dict[str, Any]:
         if not self.current_session:
             raise RuntimeError("No active calibration session")
@@ -203,7 +193,6 @@ class CalibrationManager:
             computation_results["success"] = False
             computation_results["message"] = "Some device calibrations failed"
         return computation_results
-
     def _detect_calibration_patterns(
         self, rgb_images: List[np.ndarray], thermal_images: List[np.ndarray]
     ) -> Tuple[List, List, List]:
@@ -213,7 +202,6 @@ class CalibrationManager:
         rgb_image_points = []
         thermal_image_points = []
         valid_object_points = []
-        
         for i, (rgb_img, thermal_img) in enumerate(zip(rgb_images, thermal_images)):
             rgb_success, rgb_corners = self.processor.detect_chessboard_corners(
                 rgb_img, self.chessboard_size
@@ -228,19 +216,16 @@ class CalibrationManager:
                 logger.debug(f" Pattern detected in frame {i} for both cameras")
             else:
                 logger.debug(f" Pattern detection failed in frame {i}")
-        
         return valid_object_points, rgb_image_points, thermal_image_points
-
     def _calibrate_individual_cameras(
-        self, valid_object_points: List, rgb_image_points: List, 
-        thermal_image_points: List, rgb_images: List[np.ndarray], 
+        self, valid_object_points: List, rgb_image_points: List,
+        thermal_image_points: List, rgb_images: List[np.ndarray],
         thermal_images: List[np.ndarray], result: CalibrationResult
     ) -> Tuple[bool, bool]:
         rgb_image_size = rgb_images[0].shape[1], rgb_images[0].shape[0]
         rgb_ret, rgb_camera_matrix, rgb_dist_coeffs, _, _ = cv2.calibrateCamera(
             valid_object_points, rgb_image_points, rgb_image_size, None, None
         )
-        
         rgb_calibrated = False
         if rgb_ret:
             result.rgb_camera_matrix = rgb_camera_matrix
@@ -248,14 +233,12 @@ class CalibrationManager:
             result.rgb_rms_error = rgb_ret
             logger.debug(f" RGB camera calibrated with RMS error: {rgb_ret:.3f}")
             rgb_calibrated = True
-        
         thermal_image_size = thermal_images[0].shape[1], thermal_images[0].shape[0]
         thermal_ret, thermal_camera_matrix, thermal_dist_coeffs, _, _ = (
             cv2.calibrateCamera(
                 valid_object_points, thermal_image_points, thermal_image_size, None, None
             )
         )
-        
         thermal_calibrated = False
         if thermal_ret:
             result.thermal_camera_matrix = thermal_camera_matrix
@@ -263,11 +246,9 @@ class CalibrationManager:
             result.thermal_rms_error = thermal_ret
             logger.debug(f" Thermal camera calibrated with RMS error: {thermal_ret:.3f}")
             thermal_calibrated = True
-        
         return rgb_calibrated, thermal_calibrated
-
     def _perform_stereo_calibration(
-        self, valid_object_points: List, rgb_image_points: List, 
+        self, valid_object_points: List, rgb_image_points: List,
         thermal_image_points: List, result: CalibrationResult, rgb_images: List[np.ndarray]
     ) -> None:
         rgb_image_size = rgb_images[0].shape[1], rgb_images[0].shape[0]
@@ -277,7 +258,6 @@ class CalibrationManager:
             result.thermal_camera_matrix, result.thermal_distortion_coeffs,
             rgb_image_size, flags=cv2.CALIB_FIX_INTRINSIC,
         )
-        
         if stereo_ret:
             result.rotation_matrix = R
             result.translation_vector = T
@@ -288,7 +268,6 @@ class CalibrationManager:
             result.homography_matrix = self.processor.compute_homography(
                 thermal_image_points[0], rgb_image_points[0]
             )
-
     def _compute_device_calibration(
         self,
         device_id: str,
@@ -297,29 +276,23 @@ class CalibrationManager:
     ) -> CalibrationResult:
         logger.debug(f" Computing calibration for device {device_id}")
         result = CalibrationResult(device_id)
-        
         valid_object_points, rgb_image_points, thermal_image_points = (
             self._detect_calibration_patterns(rgb_images, thermal_images)
         )
-        
         if len(valid_object_points) < self.min_images:
             logger.debug(f" Insufficient valid frames: {len(valid_object_points)}/{self.min_images}")
             return result
-        
         rgb_calibrated, thermal_calibrated = self._calibrate_individual_cameras(
-            valid_object_points, rgb_image_points, thermal_image_points, 
+            valid_object_points, rgb_image_points, thermal_image_points,
             rgb_images, thermal_images, result
         )
-        
         if rgb_calibrated and thermal_calibrated:
             self._perform_stereo_calibration(
                 valid_object_points, rgb_image_points, thermal_image_points, result, rgb_images
             )
-        
         result.quality_assessment = self._assess_calibration_quality(result)
         result.calibration_timestamp = datetime.now().isoformat()
         return result
-
     def _assess_calibration_quality(self, result: CalibrationResult) -> Dict[str, Any]:
         assessment = {"quality_score": "UNKNOWN", "recommendations": []}
         rgb_error = result.rgb_rms_error or float("inf")
@@ -348,16 +321,13 @@ class CalibrationManager:
         assessment["thermal_error"] = thermal_error
         assessment["stereo_error"] = stereo_error
         return assessment
-
     def _save_calibration_result(self, device_id: str, result: CalibrationResult):
         session_folder = Path(self.current_session["session_folder"])
         calibration_file = session_folder / f"calibration_{device_id}.json"
         result.save_to_file(str(calibration_file))
         logger.debug(f" Calibration result saved: {calibration_file}")
-
     def get_calibration_result(self, device_id: str) -> Optional[CalibrationResult]:
         return self.calibration_results.get(device_id)
-
     def load_calibration_result(self, device_id: str, calibration_file: str) -> bool:
         try:
             result = CalibrationResult.load_from_file(calibration_file)
@@ -368,7 +338,6 @@ class CalibrationManager:
         except Exception as e:
             logger.debug(f" Failed to load calibration for {device_id}: {e}")
         return False
-
     def apply_thermal_overlay(
         self,
         device_id: str,
@@ -391,7 +360,6 @@ class CalibrationManager:
         except Exception as e:
             logger.debug(f" Overlay error for {device_id}: {e}")
             return None
-
     def end_calibration_session(self) -> Dict[str, Any]:
         if not self.current_session:
             return {"success": False, "message": "No active session"}
@@ -418,7 +386,6 @@ class CalibrationManager:
         self.is_capturing = False
         logger.debug(f" Calibration session ended: {session_summary}")
         return session_summary
-
     def get_session_status(self) -> Dict[str, Any]:
         if not self.current_session:
             return {"active": False}
@@ -431,11 +398,9 @@ class CalibrationManager:
             "calibrated_devices": list(self.calibration_results.keys()),
             "is_capturing": self.is_capturing,
         }
-
     @property
     def pattern_size(self):
         return self.chessboard_size
-
     def detect_pattern(self, image, pattern_type="chessboard"):
         if pattern_type == "chessboard":
             success, corners = self.processor.detect_chessboard_corners(
@@ -449,12 +414,10 @@ class CalibrationManager:
             return success, corners
         else:
             return False, None
-
     def save_calibration(self, device_id, filename):
         result = self.calibration_results.get(device_id)
         if result:
             import json
-
             data = {
                 "camera_matrix": result.camera_matrix.tolist(),
                 "distortion_coefficients": result.distortion_coefficients.tolist(),
@@ -467,7 +430,6 @@ class CalibrationManager:
                 json.dump(data, f, indent=2)
             return True
         return False
-
 if __name__ == "__main__":
     logger.debug(" Testing CalibrationManager...")
     manager = CalibrationManager("test_calibration")

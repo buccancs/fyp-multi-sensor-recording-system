@@ -28,14 +28,14 @@ fun DevicesScreen(
     devicesViewModel: DevicesViewModel = hiltViewModel()
 ) {
     val uiState by devicesViewModel.uiState.collectAsState()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        // Header with status summary
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -51,8 +51,8 @@ fun DevicesScreen(
                 Text(
                     text = "${uiState.totalConnectedDevices} device(s) connected",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (uiState.totalConnectedDevices > 0) 
-                        MaterialTheme.colorScheme.primary 
+                    color = if (uiState.totalConnectedDevices > 0)
+                        MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 if (uiState.allDevicesHealthy) {
@@ -64,15 +64,14 @@ fun DevicesScreen(
                 }
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // PC Controller Section
+
         DeviceCard(
             title = "PC Controller",
             isConnected = uiState.isPcConnected,
             status = uiState.pcConnectionStatus,
-            details = if (uiState.isPcConnected) 
+            details = if (uiState.isPcConnected)
                 "IP: ${uiState.pcIpAddress}\nPort: ${uiState.pcPort}\nLast seen: ${uiState.pcLastSeen}"
             else "Not connected",
             onConnect = { devicesViewModel.connectPc() },
@@ -81,10 +80,9 @@ fun DevicesScreen(
             isConnecting = uiState.isConnecting && !uiState.isPcConnected,
             isTesting = uiState.isTesting
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
-        // Shimmer Device Section
+
         DeviceCard(
             title = "Shimmer Device",
             isConnected = uiState.isShimmerConnected,
@@ -98,10 +96,9 @@ fun DevicesScreen(
             isConnecting = uiState.isConnecting && !uiState.isShimmerConnected,
             isTesting = uiState.isTesting
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
-        // Thermal Camera Section
+
         DeviceCard(
             title = "Thermal Camera",
             isConnected = uiState.isThermalConnected,
@@ -115,10 +112,9 @@ fun DevicesScreen(
             isConnecting = uiState.isConnecting && !uiState.isThermalConnected,
             isTesting = uiState.isTesting
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
-        // Network Section
+
         DeviceCard(
             title = "Network",
             isConnected = uiState.isNetworkConnected,
@@ -132,10 +128,9 @@ fun DevicesScreen(
             isConnecting = uiState.isConnecting && !uiState.isNetworkConnected,
             isTesting = uiState.isTesting
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Actions
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -148,7 +143,7 @@ fun DevicesScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Button(
                     onClick = { devicesViewModel.refreshAllDevices() },
                     modifier = Modifier.fillMaxWidth(),
@@ -162,8 +157,7 @@ fun DevicesScreen(
                 }
             }
         }
-        
-        // Test Results
+
         if (uiState.testResults.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
             Card(
@@ -178,14 +172,14 @@ fun DevicesScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    
+
                     uiState.testResults.takeLast(5).forEach { result ->
                         Text(
                             text = result,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(vertical = 2.dp),
-                            color = if (result.contains("PASSED")) 
-                                MaterialTheme.colorScheme.primary 
+                            color = if (result.contains("PASSED"))
+                                MaterialTheme.colorScheme.primary
                             else MaterialTheme.colorScheme.error
                         )
                     }
@@ -200,14 +194,14 @@ fun CalibrationScreen(
     calibrationViewModel: CalibrationViewModel = hiltViewModel()
 ) {
     val uiState by calibrationViewModel.uiState.collectAsState()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        // Overall status card
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -220,21 +214,21 @@ fun CalibrationScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 val calibratedCount = listOf(
                     uiState.isCameraCalibrated,
                     uiState.isThermalCalibrated,
                     uiState.isShimmerCalibrated
                 ).count { it }
-                
+
                 Text(
                     text = "$calibratedCount of 3 devices calibrated",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (calibratedCount == 3) 
-                        MaterialTheme.colorScheme.primary 
+                    color = if (calibratedCount == 3)
+                        MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                
+
                 if (uiState.isSystemValid) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
@@ -276,10 +270,9 @@ fun CalibrationScreen(
                 }
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Camera Calibration
+
         CalibrationCard(
             title = "Camera Calibration",
             isCalibrated = uiState.isCameraCalibrated,
@@ -292,10 +285,9 @@ fun CalibrationScreen(
             onReset = { calibrationViewModel.resetCameraCalibration() },
             canStart = uiState.canStartCalibration && !uiState.isCameraCalibrating
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
-        // Thermal Calibration
+
         CalibrationCard(
             title = "Thermal Camera Calibration",
             isCalibrated = uiState.isThermalCalibrated,
@@ -308,10 +300,9 @@ fun CalibrationScreen(
             onReset = { calibrationViewModel.resetThermalCalibration() },
             canStart = uiState.canStartCalibration && !uiState.isThermalCalibrating
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
-        // Shimmer Calibration
+
         CalibrationCard(
             title = "Shimmer Device Calibration",
             isCalibrated = uiState.isShimmerCalibrated,
@@ -324,10 +315,9 @@ fun CalibrationScreen(
             onReset = { calibrationViewModel.resetShimmerCalibration() },
             canStart = uiState.canStartCalibration && !uiState.isShimmerCalibrating
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Actions card
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -340,7 +330,7 @@ fun CalibrationScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Button(
                     onClick = { calibrationViewModel.validateSystem() },
                     modifier = Modifier.fillMaxWidth(),
@@ -355,9 +345,9 @@ fun CalibrationScreen(
                     }
                     Text("Validate System")
                 }
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -369,7 +359,7 @@ fun CalibrationScreen(
                     ) {
                         Text("Save")
                     }
-                    
+
                     OutlinedButton(
                         onClick = { calibrationViewModel.loadCalibrationData() },
                         modifier = Modifier.weight(1f),
@@ -377,7 +367,7 @@ fun CalibrationScreen(
                     ) {
                         Text("Load")
                     }
-                    
+
                     OutlinedButton(
                         onClick = { calibrationViewModel.exportCalibrationData() },
                         modifier = Modifier.weight(1f),
@@ -396,13 +386,13 @@ fun FilesScreen(
     fileViewModel: FileViewViewModel = hiltViewModel()
 ) {
     val uiState by fileViewModel.uiState.collectAsState()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Storage Overview Card
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -415,7 +405,7 @@ fun FilesScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -431,7 +421,7 @@ fun FilesScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                    
+
                     if (uiState.showStorageWarning) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
@@ -451,21 +441,20 @@ fun FilesScreen(
                         }
                     }
                 }
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
                 LinearProgressIndicator(
                     progress = uiState.storageUsagePercentage,
                     modifier = Modifier.fillMaxWidth(),
-                    color = if (uiState.showStorageWarning) 
-                        MaterialTheme.colorScheme.error 
+                    color = if (uiState.showStorageWarning)
+                        MaterialTheme.colorScheme.error
                     else MaterialTheme.colorScheme.primary
                 )
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Search bar
+
         OutlinedTextField(
             value = uiState.searchQuery,
             onValueChange = { fileViewModel.onSearchQueryChanged(it) },
@@ -473,10 +462,9 @@ fun FilesScreen(
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             modifier = Modifier.fillMaxWidth()
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Action buttons
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -495,7 +483,7 @@ fun FilesScreen(
                 }
                 Text("Refresh")
             }
-            
+
             OutlinedButton(
                 onClick = { fileViewModel.deleteAllSessions() },
                 modifier = Modifier.weight(1f),
@@ -507,10 +495,9 @@ fun FilesScreen(
                 Text("Clear All")
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Sessions list
+
         if (uiState.showEmptyState) {
             Card(
                 modifier = Modifier.fillMaxWidth()
@@ -534,8 +521,8 @@ fun FilesScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = if (uiState.searchQuery.isNotEmpty()) 
-                            "Try adjusting your search" 
+                        text = if (uiState.searchQuery.isNotEmpty())
+                            "Try adjusting your search"
                         else "Record a session to see files here",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -554,18 +541,17 @@ fun FilesScreen(
                 }
             }
         }
-        
-        // Error/Success messages
+
         uiState.errorMessage?.let { message ->
             LaunchedEffect(message) {
-                // Show snackbar or handle error
+
                 fileViewModel.clearError()
             }
         }
-        
+
         uiState.successMessage?.let { message ->
             LaunchedEffect(message) {
-                // Show snackbar or handle success
+
                 fileViewModel.clearSuccess()
             }
         }
@@ -580,10 +566,10 @@ private fun SessionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor = if (isSelected) 
-        MaterialTheme.colorScheme.primaryContainer 
+    val backgroundColor = if (isSelected)
+        MaterialTheme.colorScheme.primaryContainer
     else MaterialTheme.colorScheme.surface
-    
+
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
@@ -602,12 +588,12 @@ private fun SessionCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
-                
+
                 SessionStatusChip(session.status)
             }
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -624,7 +610,7 @@ private fun SessionCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                
+
                 Column {
                     Text(
                         text = formatFileSize(session.totalSize),
@@ -639,7 +625,7 @@ private fun SessionCard(
                     )
                 }
             }
-            
+
             if (session.deviceTypes.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
@@ -648,11 +634,11 @@ private fun SessionCard(
                     session.deviceTypes.forEach { deviceType ->
                         AssistChip(
                             onClick = { },
-                            label = { 
+                            label = {
                                 Text(
                                     deviceType,
                                     style = MaterialTheme.typography.labelSmall
-                                ) 
+                                )
                             },
                             modifier = Modifier.height(24.dp)
                         )
@@ -671,15 +657,15 @@ private fun SessionStatusChip(status: SessionStatus) {
         SessionStatus.CORRUPTED -> MaterialTheme.colorScheme.error to "Corrupted"
         SessionStatus.PROCESSING -> MaterialTheme.colorScheme.secondary to "Processing"
     }
-    
+
     AssistChip(
         onClick = { },
-        label = { 
+        label = {
             Text(
                 text,
                 style = MaterialTheme.typography.labelSmall,
                 color = color
-            ) 
+            )
         },
         modifier = Modifier.height(24.dp)
     )
@@ -742,7 +728,7 @@ private fun CalibrationCard(
                     )
                 }
             }
-            
+
             if (isCalibrating) {
                 Spacer(modifier = Modifier.height(8.dp))
                 LinearProgressIndicator(
@@ -755,17 +741,17 @@ private fun CalibrationCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Text(
                 text = details,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -784,7 +770,7 @@ private fun CalibrationCard(
                     }
                     Text(if (isCalibrated) "Recalibrate" else "Start Calibration")
                 }
-                
+
                 if (isCalibrated) {
                     OutlinedButton(
                         onClick = onReset,
@@ -844,17 +830,17 @@ private fun DeviceCard(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Text(
                 text = details,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -885,7 +871,7 @@ private fun DeviceCard(
                         Text("Connect")
                     }
                 }
-                
+
                 OutlinedButton(
                     onClick = onTest,
                     modifier = Modifier.weight(1f),

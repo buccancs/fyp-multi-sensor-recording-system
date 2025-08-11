@@ -20,13 +20,6 @@ import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.util.Logger
 import javax.inject.Inject
 
-/**
- * MainViewModel for the Multi-Sensor Recording application.
- * 
- * This ViewModel follows MVVM architecture pattern and serves as the central coordinator
- * for recording sessions, device connections, calibration, and file operations.
- * It manages UI state and coordinates between different managers and controllers.
- */
 @HiltViewModel
 class MainViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -385,10 +378,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    // Shimmer device methods for ShimmerController compatibility
     fun connectShimmerDevice(
-        address: String, 
-        name: String, 
+        address: String,
+        name: String,
         connectionType: com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid.BT_TYPE,
         callback: (Boolean) -> Unit
     ) {
@@ -403,35 +395,34 @@ class MainViewModel @Inject constructor(
             try {
                 logger.info("Configuring Shimmer sensors for device: $deviceId")
                 logger.info("Requested sensor channels: ${sensorChannels.joinToString()}")
-                
-                // Use ShimmerManager to configure sensors through the UI flow
+
                 if (context is android.app.Activity) {
                     shimmerManager.showSensorConfiguration(context, object : ShimmerManager.ShimmerCallback {
                         override fun onDeviceSelected(address: String, name: String) {
-                            // Not used in this context
+
                         }
-                        
+
                         override fun onDeviceSelectionCancelled() {
                             logger.warning("Sensor configuration cancelled by user")
                             callback(false)
                         }
-                        
+
                         override fun onConnectionStatusChanged(connected: Boolean) {
-                            // Not used in this context
+
                         }
-                        
+
                         override fun onConfigurationComplete() {
                             logger.info("Shimmer sensor configuration completed successfully")
                             callback(true)
                         }
-                        
+
                         override fun onError(message: String) {
                             logger.error("Shimmer sensor configuration error: $message")
                             callback(false)
                         }
                     })
                 } else {
-                    // Fallback for non-Activity context - simulate configuration
+
                     logger.info("Applying sensor configuration for: ${sensorChannels.joinToString()}")
                     callback(true)
                 }
@@ -446,35 +437,34 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 logger.info("Setting Shimmer sampling rate for device $deviceId to $samplingRate Hz")
-                
-                // Use ShimmerManager's general configuration to access advanced settings
+
                 if (context is android.app.Activity) {
                     shimmerManager.showGeneralConfiguration(context, object : ShimmerManager.ShimmerCallback {
                         override fun onDeviceSelected(address: String, name: String) {
-                            // Not used in this context
+
                         }
-                        
+
                         override fun onDeviceSelectionCancelled() {
                             logger.warning("Sampling rate configuration cancelled by user")
                             callback(false)
                         }
-                        
+
                         override fun onConnectionStatusChanged(connected: Boolean) {
-                            // Not used in this context
+
                         }
-                        
+
                         override fun onConfigurationComplete() {
                             logger.info("Shimmer sampling rate set to $samplingRate Hz successfully")
                             callback(true)
                         }
-                        
+
                         override fun onError(message: String) {
                             logger.error("Shimmer sampling rate configuration error: $message")
                             callback(false)
                         }
                     })
                 } else {
-                    // Fallback for non-Activity context
+
                     logger.info("Sampling rate configured to $samplingRate Hz")
                     callback(true)
                 }
@@ -489,35 +479,34 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 logger.info("Setting Shimmer GSR range for device $deviceId to range $gsrRange")
-                
-                // Use ShimmerManager's general configuration to access GSR settings
+
                 if (context is android.app.Activity) {
                     shimmerManager.showGeneralConfiguration(context, object : ShimmerManager.ShimmerCallback {
                         override fun onDeviceSelected(address: String, name: String) {
-                            // Not used in this context
+
                         }
-                        
+
                         override fun onDeviceSelectionCancelled() {
                             logger.warning("GSR range configuration cancelled by user")
                             callback(false)
                         }
-                        
+
                         override fun onConnectionStatusChanged(connected: Boolean) {
-                            // Not used in this context
+
                         }
-                        
+
                         override fun onConfigurationComplete() {
                             logger.info("Shimmer GSR range set to $gsrRange successfully")
                             callback(true)
                         }
-                        
+
                         override fun onError(message: String) {
                             logger.error("Shimmer GSR range configuration error: $message")
                             callback(false)
                         }
                     })
                 } else {
-                    // Fallback for non-Activity context
+
                     val rangeDescription = when (gsrRange) {
                         0 -> "10-56 kΩ"
                         1 -> "56-220 kΩ"
@@ -539,12 +528,10 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 logger.info("Retrieving Shimmer device info for device: $deviceId")
-                
-                // Get device statistics from ShimmerManager
+
                 val deviceStats = shimmerManager.getDeviceStatistics()
                 val lastDeviceName = shimmerManager.getLastConnectedDeviceDisplayName()
-                
-                // Create a comprehensive device info object
+
                 val deviceInfo = mapOf(
                     "deviceId" to deviceId,
                     "deviceName" to lastDeviceName,
@@ -558,10 +545,10 @@ class MainViewModel @Inject constructor(
                     "averageSessionDuration" to deviceStats.averageSessionDuration,
                     "errorCount" to deviceStats.errorCount
                 )
-                
+
                 logger.info("Device info retrieved: connected=${deviceInfo["isConnected"]}, battery=${deviceInfo["batteryLevel"]}%")
                 callback(deviceInfo)
-                
+
             } catch (e: Exception) {
                 logger.error("Exception in getShimmerDeviceInfo: ${e.message}")
                 callback(mapOf("error" to e.message, "deviceId" to deviceId))
@@ -573,26 +560,24 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 logger.info("Retrieving Shimmer data quality for device: $deviceId")
-                
-                // Get device statistics to assess data quality
+
                 val deviceStats = shimmerManager.getDeviceStatistics()
                 val isConnected = shimmerManager.isDeviceConnected()
-                
-                // Assess data quality based on various factors
+
                 val batteryLevel = deviceStats.lastKnownBatteryLevel
                 val errorCount = deviceStats.errorCount
                 val uptime = deviceStats.deviceUptime
-                
+
                 val qualityScore = when {
                     !isConnected -> 0
-                    batteryLevel < 15 -> 2  // Poor quality due to low battery
-                    errorCount > 10 -> 2    // Poor quality due to many errors
-                    batteryLevel < 30 -> 3  // Fair quality due to moderate battery
-                    errorCount > 5 -> 3     // Fair quality due to some errors
-                    batteryLevel >= 50 && errorCount <= 2 -> 5  // Excellent quality
-                    else -> 4  // Good quality
+                    batteryLevel < 15 -> 2
+                    errorCount > 10 -> 2
+                    batteryLevel < 30 -> 3
+                    errorCount > 5 -> 3
+                    batteryLevel >= 50 && errorCount <= 2 -> 5
+                    else -> 4
                 }
-                
+
                 val qualityDescription = when (qualityScore) {
                     0 -> "No Connection"
                     1 -> "Very Poor"
@@ -602,7 +587,7 @@ class MainViewModel @Inject constructor(
                     5 -> "Excellent"
                     else -> "Unknown"
                 }
-                
+
                 val dataQuality = mapOf(
                     "deviceId" to deviceId,
                     "qualityScore" to qualityScore,
@@ -619,10 +604,10 @@ class MainViewModel @Inject constructor(
                         if (!isConnected) add("Reconnect device")
                     }
                 )
-                
+
                 logger.info("Data quality assessed: $qualityDescription (score: $qualityScore/5)")
                 callback(dataQuality)
-                
+
             } catch (e: Exception) {
                 logger.error("Exception in getShimmerDataQuality: ${e.message}")
                 callback(mapOf(
@@ -639,34 +624,33 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 logger.info("Disconnecting Shimmer device: $deviceId")
-                
-                // Use ShimmerManager to disconnect the device
+
                 shimmerManager.disconnect(object : ShimmerManager.ShimmerCallback {
                     override fun onDeviceSelected(address: String, name: String) {
-                        // Not used in this context
+
                     }
-                    
+
                     override fun onDeviceSelectionCancelled() {
-                        // Not used in this context
+
                     }
-                    
+
                     override fun onConnectionStatusChanged(connected: Boolean) {
                         if (!connected) {
                             logger.info("Shimmer device $deviceId disconnected successfully")
                             callback(true)
                         }
                     }
-                    
+
                     override fun onConfigurationComplete() {
-                        // Not used in this context
+
                     }
-                    
+
                     override fun onError(message: String) {
                         logger.error("Error disconnecting Shimmer device $deviceId: $message")
                         callback(false)
                     }
                 })
-                
+
             } catch (e: Exception) {
                 logger.error("Exception in disconnectShimmerDevice: ${e.message}")
                 callback(false)
@@ -677,12 +661,11 @@ class MainViewModel @Inject constructor(
     fun getFirstConnectedShimmerDevice(): Any? {
         return try {
             logger.info("Retrieving first connected Shimmer device")
-            
+
             if (shimmerManager.isDeviceConnected()) {
                 val deviceStats = shimmerManager.getDeviceStatistics()
                 val deviceName = shimmerManager.getLastConnectedDeviceDisplayName()
-                
-                // Return device info for the connected device
+
                 mapOf(
                     "deviceName" to deviceName,
                     "isConnected" to true,
@@ -704,10 +687,9 @@ class MainViewModel @Inject constructor(
     fun getShimmerBluetoothManager(): Any? {
         return try {
             logger.info("Retrieving Shimmer Bluetooth manager")
-            
-            // Return information about the Bluetooth manager state
+
             val deviceStats = shimmerManager.getDeviceStatistics()
-            
+
             mapOf(
                 "isInitialized" to true,
                 "hasConnectedDevices" to shimmerManager.isDeviceConnected(),
@@ -725,19 +707,17 @@ class MainViewModel @Inject constructor(
     fun isAnyShimmerDeviceStreaming(): Boolean {
         return try {
             logger.debug("Checking if any Shimmer device is streaming")
-            
-            // Check if device is connected and potentially streaming
+
             val isConnected = shimmerManager.isDeviceConnected()
             val deviceStats = shimmerManager.getDeviceStatistics()
-            
-            // Device is likely streaming if connected and has recent activity
-            val isLikelyStreaming = isConnected && 
-                deviceStats.deviceUptime > 0 && 
+
+            val isLikelyStreaming = isConnected &&
+                deviceStats.deviceUptime > 0 &&
                 deviceStats.lastKnownBatteryLevel > 0
-            
+
             logger.debug("Streaming status: connected=$isConnected, likely_streaming=$isLikelyStreaming")
             isLikelyStreaming
-            
+
         } catch (e: Exception) {
             logger.error("Exception in isAnyShimmerDeviceStreaming: ${e.message}")
             false
@@ -747,20 +727,17 @@ class MainViewModel @Inject constructor(
     fun isAnyShimmerDeviceSDLogging(): Boolean {
         return try {
             logger.debug("Checking if any Shimmer device is SD logging")
-            
-            // Check device connection and logging status indicators
+
             val isConnected = shimmerManager.isDeviceConnected()
             val deviceStats = shimmerManager.getDeviceStatistics()
-            
-            // For a more accurate check, we would need to query the device directly
-            // For now, we check if device is connected and has been active
-            val isLikelyLogging = isConnected && 
-                deviceStats.deviceUptime > 30000 && // Active for more than 30 seconds
-                deviceStats.lastKnownBatteryLevel > 15 // Has sufficient battery for logging
-            
+
+            val isLikelyLogging = isConnected &&
+                deviceStats.deviceUptime > 30000 &&
+                deviceStats.lastKnownBatteryLevel > 15
+
             logger.debug("SD logging status: connected=$isConnected, likely_logging=$isLikelyLogging")
             isLikelyLogging
-            
+
         } catch (e: Exception) {
             logger.error("Exception in isAnyShimmerDeviceSDLogging: ${e.message}")
             false
@@ -771,34 +748,33 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 logger.info("Starting Shimmer SD logging")
-                
-                // Use ShimmerManager to start SD logging
+
                 shimmerManager.startSDLogging(object : ShimmerManager.ShimmerCallback {
                     override fun onDeviceSelected(address: String, name: String) {
-                        // Not used in this context
+
                     }
-                    
+
                     override fun onDeviceSelectionCancelled() {
                         logger.warning("SD logging start cancelled")
                         callback(false)
                     }
-                    
+
                     override fun onConnectionStatusChanged(connected: Boolean) {
-                        // Monitor connection during logging
+
                         if (!connected) {
                             logger.warning("Device disconnected during SD logging start")
                         }
                     }
-                    
+
                     override fun onConfigurationComplete() {
-                        // Not used in this context
+
                     }
-                    
+
                     override fun onError(message: String) {
                         logger.error("SD logging start error: $message")
                         callback(false)
                     }
-                    
+
                     override fun onSDLoggingStatusChanged(isLogging: Boolean) {
                         if (isLogging) {
                             logger.info("SD logging started successfully")
@@ -809,7 +785,7 @@ class MainViewModel @Inject constructor(
                         }
                     }
                 })
-                
+
             } catch (e: Exception) {
                 logger.error("Exception in startShimmerSDLogging: ${e.message}")
                 callback(false)
@@ -821,34 +797,33 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 logger.info("Stopping Shimmer SD logging")
-                
-                // Use ShimmerManager to stop SD logging
+
                 shimmerManager.stopSDLogging(object : ShimmerManager.ShimmerCallback {
                     override fun onDeviceSelected(address: String, name: String) {
-                        // Not used in this context
+
                     }
-                    
+
                     override fun onDeviceSelectionCancelled() {
                         logger.warning("SD logging stop cancelled")
                         callback(false)
                     }
-                    
+
                     override fun onConnectionStatusChanged(connected: Boolean) {
-                        // Monitor connection during logging stop
+
                         if (!connected) {
                             logger.warning("Device disconnected during SD logging stop")
                         }
                     }
-                    
+
                     override fun onConfigurationComplete() {
-                        // Not used in this context
+
                     }
-                    
+
                     override fun onError(message: String) {
                         logger.error("SD logging stop error: $message")
                         callback(false)
                     }
-                    
+
                     override fun onSDLoggingStatusChanged(isLogging: Boolean) {
                         if (!isLogging) {
                             logger.info("SD logging stopped successfully")
@@ -856,7 +831,7 @@ class MainViewModel @Inject constructor(
                         }
                     }
                 })
-                
+
             } catch (e: Exception) {
                 logger.error("Exception in stopShimmerSDLogging: ${e.message}")
                 callback(false)

@@ -17,14 +17,10 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from ..utils.logging_config import get_logger, log_method_entry, performance_timer
 from .webcam.dual_webcam_capture import DualWebcamCapture, test_dual_webcam_access
-
 logger = get_logger(__name__)
-
 class CameraPreviewWidget(QFrame):
-
     def __init__(self, camera_id: int, parent=None):
         super().__init__(parent)
         self.camera_id = camera_id
@@ -33,7 +29,6 @@ class CameraPreviewWidget(QFrame):
         self.setMinimumSize(320, 240)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setup_ui()
-
     def setup_ui(self):
         layout = QVBoxLayout(self)
         self.title_label = QLabel(f"Camera {self.camera_id}")
@@ -59,14 +54,12 @@ class CameraPreviewWidget(QFrame):
         status_layout.addWidget(QLabel("FPS:"))
         status_layout.addWidget(self.fps_label)
         layout.addLayout(status_layout)
-
     def update_preview(self, pixmap: QPixmap):
         if pixmap and not pixmap.isNull():
             scaled_pixmap = pixmap.scaled(
                 self.preview_label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation
             )
             self.preview_label.setPixmap(scaled_pixmap)
-
     def update_status(self, connected: bool, fps: float = 0.0):
         if connected:
             self.status_label.setText("Connected")
@@ -75,14 +68,11 @@ class CameraPreviewWidget(QFrame):
             self.status_label.setText("Disconnected")
             self.status_label.setStyleSheet("color: red; font-weight: bold;")
         self.fps_label.setText(f"{fps:.1f} FPS")
-
 class DualWebcamSettingsPanel(QGroupBox):
     settings_changed = pyqtSignal(dict)
-
     def __init__(self, parent=None):
         super().__init__("Camera Settings", parent)
         self.setup_ui()
-
     def setup_ui(self):
         layout = QGridLayout(self)
         layout.addWidget(QLabel("Camera 1 Index:"), 0, 0)
@@ -111,12 +101,10 @@ class DualWebcamSettingsPanel(QGroupBox):
         self.fps_spinbox.setSuffix(" FPS")
         self.fps_spinbox.valueChanged.connect(self.on_settings_changed)
         layout.addWidget(self.fps_spinbox, 3, 1)
-
     def on_settings_changed(self):
         settings = self.get_settings()
         self.settings_changed.emit(settings)
         logger.debug(f"Camera settings changed: {settings}")
-
     def get_settings(self) -> dict:
         resolution_text = self.resolution_combo.currentText()
         width, height = self.parse_resolution(resolution_text)
@@ -127,7 +115,6 @@ class DualWebcamSettingsPanel(QGroupBox):
             "height": height,
             "fps": self.fps_spinbox.value(),
         }
-
     def set_settings(self, settings: dict):
         if "camera1_index" in settings:
             self.camera1_spinbox.setValue(settings["camera1_index"])
@@ -141,7 +128,6 @@ class DualWebcamSettingsPanel(QGroupBox):
                 if resolution_text in self.resolution_combo.itemText(i):
                     self.resolution_combo.setCurrentIndex(i)
                     break
-
     def parse_resolution(self, resolution_text: str) -> tuple:
         try:
             resolution_part = resolution_text.split()[0]
@@ -150,9 +136,7 @@ class DualWebcamSettingsPanel(QGroupBox):
         except (ValueError, IndexError):
             logger.warning(f"Could not parse resolution: {resolution_text}")
             return 1920, 1080
-
 class DualWebcamMainWindow(QMainWindow):
-
     def __init__(self, camera_indices: list = None, initial_settings: dict = None):
         super().__init__()
         self.camera_indices = camera_indices or [0, 1]
@@ -168,7 +152,6 @@ class DualWebcamMainWindow(QMainWindow):
         logger.info(
             f"DualWebcamMainWindow initialized with cameras {self.camera_indices}"
         )
-
     @log_method_entry
     def setup_ui(self):
         self.setWindowTitle("Dual Webcam Recording System")
@@ -217,10 +200,8 @@ class DualWebcamMainWindow(QMainWindow):
         self.ui_timer = QTimer()
         self.ui_timer.timeout.connect(self.update_ui)
         self.ui_timer.start(100)
-
     def setup_connections(self):
         self.settings_panel.settings_changed.connect(self.on_settings_changed)
-
     def on_dual_frame_ready(self, pixmap1: QPixmap, pixmap2: QPixmap):
         try:
             if pixmap1 and not pixmap1.isNull():
@@ -229,12 +210,10 @@ class DualWebcamMainWindow(QMainWindow):
                 self.camera2_preview.update_preview(pixmap2)
         except Exception as e:
             logger.error(f"Error updating frame previews: {e}", exc_info=True)
-
     def apply_initial_settings(self):
         if self.initial_settings:
             self.settings_panel.set_settings(self.initial_settings)
             logger.info(f"Applied initial settings: {self.initial_settings}")
-
     @performance_timer("camera_test")
     def test_cameras(self):
         logger.info("Testing camera accessibility...")
@@ -265,14 +244,12 @@ class DualWebcamMainWindow(QMainWindow):
             QMessageBox.critical(self, "Camera Test Error", error_msg)
         finally:
             self.test_button.setEnabled(True)
-
     @log_method_entry
     def toggle_preview(self):
         if not self.is_previewing:
             self.start_preview()
         else:
             self.stop_preview()
-
     @performance_timer("start_preview")
     def start_preview(self):
         try:
@@ -299,7 +276,6 @@ class DualWebcamMainWindow(QMainWindow):
             error_msg = f"Error starting preview: {e}"
             logger.error(error_msg, exc_info=True)
             QMessageBox.critical(self, "Preview Error", error_msg)
-
     def stop_preview(self):
         try:
             if self.dual_webcam_capture:
@@ -314,13 +290,11 @@ class DualWebcamMainWindow(QMainWindow):
         except Exception as e:
             error_msg = f"Error stopping preview: {e}"
             logger.error(error_msg, exc_info=True)
-
     def toggle_recording(self):
         if not self.is_recording:
             self.start_recording()
         else:
             self.stop_recording()
-
     @performance_timer("start_recording")
     def start_recording(self):
         try:
@@ -342,7 +316,6 @@ class DualWebcamMainWindow(QMainWindow):
             error_msg = f"Error starting recording: {e}"
             logger.error(error_msg, exc_info=True)
             QMessageBox.critical(self, "Recording Error", error_msg)
-
     def stop_recording(self):
         try:
             if self.dual_webcam_capture:
@@ -356,7 +329,6 @@ class DualWebcamMainWindow(QMainWindow):
         except Exception as e:
             error_msg = f"Error stopping recording: {e}"
             logger.error(error_msg, exc_info=True)
-
     def on_settings_changed(self, settings: dict):
         logger.debug(f"Settings changed: {settings}")
         self.camera1_preview.camera_id = settings["camera1_index"]
@@ -367,7 +339,6 @@ class DualWebcamMainWindow(QMainWindow):
             logger.info("Restarting preview with new settings")
             self.stop_preview()
             QTimer.singleShot(500, self.start_preview)
-
     def update_ui(self):
         try:
             if self.dual_webcam_capture and self.is_previewing:
@@ -387,7 +358,6 @@ class DualWebcamMainWindow(QMainWindow):
                     )
         except Exception as e:
             logger.error(f"Error updating UI: {e}", exc_info=True)
-
     def closeEvent(self, event):
         logger.info("DualWebcamMainWindow closing")
         if self.is_recording:

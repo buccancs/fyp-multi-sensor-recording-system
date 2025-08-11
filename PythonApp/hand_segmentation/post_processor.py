@@ -3,16 +3,12 @@ import os
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-
 from .segmentation_engine import create_segmentation_engine
 from .utils import ProcessingResult, SegmentationMethod
-
 class SessionPostProcessor:
-
     def __init__(self, base_recordings_dir: str = "recordings"):
         self.base_recordings_dir = Path(base_recordings_dir)
         self.processing_history: List[Dict] = []
-
     def discover_sessions(self) -> List[str]:
         sessions = []
         if not self.base_recordings_dir.exists():
@@ -27,11 +23,9 @@ class SessionPostProcessor:
                     sessions.append(item.name)
         sessions.sort()
         return sessions
-
     def get_session_videos(self, session_id: str) -> List[str]:
         session_dir = self.base_recordings_dir / session_id
         return self._find_video_files(session_dir)
-
     def _find_video_files(self, directory: Path) -> List[str]:
         video_extensions = {".mp4", ".avi", ".mov", ".mkv", ".wmv"}
         video_files = []
@@ -40,7 +34,6 @@ class SessionPostProcessor:
                 if file_path.is_file() and file_path.suffix.lower() in video_extensions:
                     video_files.append(str(file_path))
         return video_files
-
     def process_session(
         self, session_id: str, method: str = "mediapipe", **config_kwargs
     ) -> Dict[str, ProcessingResult]:
@@ -80,7 +73,6 @@ class SessionPostProcessor:
             engine.cleanup()
         print(f"[INFO] Completed processing session: {session_id}")
         return results
-
     def process_video_file(
         self,
         video_path: str,
@@ -124,7 +116,6 @@ class SessionPostProcessor:
             return result
         finally:
             engine.cleanup()
-
     def _save_session_summary(
         self, session_id: str, method: str, results: Dict[str, ProcessingResult]
     ):
@@ -153,7 +144,6 @@ class SessionPostProcessor:
         with open(summary_path, "w") as f:
             json.dump(summary, f, indent=2)
         print(f"[INFO] Session summary saved: {summary_path}")
-
     def get_processing_status(self, session_id: str) -> Dict[str, bool]:
         session_dir = self.base_recordings_dir / session_id
         video_files = self.get_session_videos(session_id)
@@ -172,10 +162,8 @@ class SessionPostProcessor:
                     pass
             status[video_path] = is_processed
         return status
-
     def get_available_methods(self) -> List[str]:
         return [method.value for method in SegmentationMethod]
-
     def cleanup_session_outputs(self, session_id: str):
         session_dir = self.base_recordings_dir / session_id
         if not session_dir.exists():
@@ -184,12 +172,10 @@ class SessionPostProcessor:
             if item.is_dir() and item.name.startswith("hand_segmentation_"):
                 print(f"[INFO] Removing segmentation output: {item}")
                 import shutil
-
                 shutil.rmtree(item)
         for file_path in session_dir.glob("hand_segmentation_summary_*.json"):
             print(f"[INFO] Removing summary file: {file_path}")
             file_path.unlink()
-
 def create_session_post_processor(
     base_recordings_dir: str = "recordings",
 ) -> SessionPostProcessor:

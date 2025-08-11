@@ -13,14 +13,11 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-
 import psutil
-
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent
 sys.path.insert(0, str(src_dir))
 from ..utils.logging_config import get_logger
-
 try:
     import cv2
     import numpy as np
@@ -28,7 +25,6 @@ except ImportError:
     print("Warning: OpenCV and NumPy not available for performance tests")
     cv2 = None
     np = None
-
 @dataclass
 class PerformanceBenchmark:
     test_name: str
@@ -39,7 +35,6 @@ class PerformanceBenchmark:
     success: bool
     error_message: Optional[str] = None
     metadata: Dict[str, Any] = None
-
 @dataclass
 class SystemInfo:
     platform: str
@@ -48,16 +43,13 @@ class SystemInfo:
     total_memory_gb: float
     available_memory_gb: float
     timestamp: str
-
 class PerformanceProfiler:
-
     def __init__(self, test_name: str):
         self.test_name = test_name
         self.start_time = None
         self.process = psutil.Process()
         self.initial_memory = None
         self.peak_memory = None
-
     def __enter__(self):
         tracemalloc.start()
         self.start_time = time.perf_counter()
@@ -65,30 +57,23 @@ class PerformanceProfiler:
         self.peak_memory = self.initial_memory
         self.process.cpu_percent()
         return self
-
     def __exit__(self, exc_type, exc_val, exc_tb):
         tracemalloc.stop()
-
     def get_current_memory(self) -> float:
         memory = self.process.memory_info().rss / 1024 / 1024
         self.peak_memory = max(self.peak_memory, memory)
         return memory
-
     def get_cpu_usage(self) -> float:
         return self.process.cpu_percent()
-
     def get_duration(self) -> float:
         return time.perf_counter() - self.start_time if self.start_time else 0.0
-
 class PerformanceBenchmarkSuite:
-
     def __init__(self, output_dir: str = "performance_reports"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         self.logger = get_logger(__name__)
         self.results: List[PerformanceBenchmark] = []
         self.system_info = self._get_system_info()
-
     def _get_system_info(self) -> SystemInfo:
         return SystemInfo(
             platform=platform.platform(),
@@ -98,7 +83,6 @@ class PerformanceBenchmarkSuite:
             available_memory_gb=psutil.virtual_memory().available / 1024**3,
             timestamp=datetime.now().isoformat(),
         )
-
     async def run_all_benchmarks(self) -> Dict[str, Any]:
         self.logger.info("Starting complete performance benchmark suite")
         await self._benchmark_memory_allocation()
@@ -115,7 +99,6 @@ class PerformanceBenchmarkSuite:
         report = self._generate_report()
         self._save_report(report)
         return report
-
     async def _benchmark_memory_allocation(self):
         with PerformanceProfiler("memory_allocation") as profiler:
             try:
@@ -153,7 +136,6 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_cpu_intensive_task(self):
         with PerformanceProfiler("cpu_intensive") as profiler:
             try:
@@ -185,7 +167,6 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_file_io(self):
         with PerformanceProfiler("file_io") as profiler:
             try:
@@ -233,7 +214,6 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_network_simulation(self):
         with PerformanceProfiler("network_simulation") as profiler:
             try:
@@ -278,7 +258,6 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_image_processing(self):
         if not cv2 or not np:
             return
@@ -325,7 +304,6 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_video_processing(self):
         if not cv2 or not np:
             return
@@ -371,7 +349,6 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_json_processing(self):
         with PerformanceProfiler("json_processing") as profiler:
             try:
@@ -436,11 +413,9 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_concurrent_operations(self):
         with PerformanceProfiler("concurrent_operations") as profiler:
             try:
-
                 async def worker_task(worker_id: int, work_items: int) -> int:
                     completed = 0
                     for i in range(work_items):
@@ -448,7 +423,6 @@ class PerformanceBenchmarkSuite:
                         result = sum(range(100))
                         completed += 1
                     return completed
-
                 workers = 10
                 work_per_worker = 20
                 tasks = [worker_task(i, work_per_worker) for i in range(workers)]
@@ -482,7 +456,6 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_memory_stress(self):
         with PerformanceProfiler("memory_stress") as profiler:
             try:
@@ -526,19 +499,15 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     async def _benchmark_multithreading(self):
         with PerformanceProfiler("multithreading") as profiler:
             try:
-
                 def cpu_bound_task(iterations: int) -> int:
                     result = 0
                     for i in range(iterations):
                         result += i * i
                     return result
-
                 import concurrent.futures
-
                 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
                     futures = []
                     iterations_per_task = 100000
@@ -577,7 +546,6 @@ class PerformanceBenchmarkSuite:
                         error_message=str(e),
                     )
                 )
-
     def _generate_report(self) -> Dict[str, Any]:
         successful_tests = [r for r in self.results if r.success]
         failed_tests = [r for r in self.results if not r.success]
@@ -628,7 +596,6 @@ class PerformanceBenchmarkSuite:
             "detailed_results": [asdict(r) for r in self.results],
             "recommendations": self._generate_recommendations(),
         }
-
     def _generate_recommendations(self) -> List[str]:
         recommendations = []
         successful_tests = [r for r in self.results if r.success]
@@ -659,7 +626,6 @@ class PerformanceBenchmarkSuite:
         if not recommendations:
             recommendations.append("Performance looks good! No major issues detected.")
         return recommendations
-
     def _save_report(self, report: Dict[str, Any]):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         report_file = self.output_dir / f"performance_benchmark_{timestamp}.json"
@@ -690,18 +656,15 @@ class PerformanceBenchmarkSuite:
             f.write("Recommendations:\n")
             for rec in report["recommendations"]:
                 f.write(f"  - {rec}\n")
-
 async def main():
     print("Starting Phase 4 Performance Benchmark Suite...")
     benchmark = PerformanceBenchmark()
     report = await benchmark.run_complete_suite()
-    
     print(f"\nBenchmark completed!")
     print(f"Total tests: {report['summary']['total_tests']}")
     print(f"Successful: {report['summary']['successful_tests']}")
     print(f"Failed: {report['summary']['failed_tests']}")
     print(f"Success rate: {report['summary']['success_rate']:.1%}")
-    
     if report['performance_statistics']:
         stats = report['performance_statistics']
         print(f"\nPerformance Summary:")
@@ -709,13 +672,10 @@ async def main():
         print(f"  Average memory: {stats['memory_usage_mb']['mean']:.1f}MB")
         print(f"  Average CPU: {stats['cpu_usage_percent']['mean']:.1f}%")
         print(f"  Average throughput: {stats['throughput_ops_per_sec']['mean']:.1f} ops/sec")
-    
     if report['recommendations']:
         print(f"\nRecommendations:")
         for rec in report['recommendations']:
             print(f"  • {rec}")
-    
     print(f"\nDetailed report saved to: performance_benchmark_report.txt")
-
 if __name__ == "__main__":
     asyncio.run(main())

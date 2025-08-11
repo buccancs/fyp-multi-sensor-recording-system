@@ -4,10 +4,8 @@ import threading
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
-
 import psutil
 from PyQt5.QtCore import QObject, pyqtSignal
-
 class SessionRecoveryManager(QObject):
     disk_space_warning = pyqtSignal(str, float)
     disk_space_critical = pyqtSignal(str, float)
@@ -15,7 +13,6 @@ class SessionRecoveryManager(QObject):
     file_corruption_detected = pyqtSignal(str, str)
     backup_completed = pyqtSignal(str, str)
     system_health_alert = pyqtSignal(str, str)
-
     def __init__(
         self, base_sessions_dir: str = "recordings", backup_dir: Optional[str] = None
     ):
@@ -35,7 +32,6 @@ class SessionRecoveryManager(QObject):
         print(f"[DEBUG_LOG] Base directory: {self.base_sessions_dir}")
         print(f"[DEBUG_LOG] Backup directory: {self.backup_dir}")
         print(f"[DEBUG_LOG] Backup enabled: {self.backup_enabled}")
-
     def init_recovery_system(self):
         try:
             self.base_sessions_dir.mkdir(parents=True, exist_ok=True)
@@ -46,7 +42,6 @@ class SessionRecoveryManager(QObject):
             print("[DEBUG_LOG] Recovery system initialized successfully")
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to initialize recovery system: {e}")
-
     def start_monitoring(self):
         if self.monitoring_active:
             print("[DEBUG_LOG] Monitoring already active")
@@ -59,7 +54,6 @@ class SessionRecoveryManager(QObject):
         self.monitoring_thread.start()
         self.log_recovery_event("monitoring_start", "Background monitoring started")
         print("[DEBUG_LOG] Background monitoring started")
-
     def stop_monitoring(self):
         if not self.monitoring_active:
             return
@@ -69,7 +63,6 @@ class SessionRecoveryManager(QObject):
             self.monitoring_thread.join(timeout=5.0)
         self.log_recovery_event("monitoring_stop", "Background monitoring stopped")
         print("[DEBUG_LOG] Background monitoring stopped")
-
     def _monitoring_loop(self):
         while not self.stop_monitoring.is_set():
             try:
@@ -83,7 +76,6 @@ class SessionRecoveryManager(QObject):
                     "monitoring_error", f"Monitoring error: {str(e)}"
                 )
                 print(f"[DEBUG_LOG] Monitoring error: {e}")
-
     def check_disk_space(self):
         try:
             usage = psutil.disk_usage(str(self.base_sessions_dir))
@@ -111,7 +103,6 @@ class SessionRecoveryManager(QObject):
             self.log_recovery_event(
                 "disk_check_error", f"Disk space check failed: {str(e)}"
             )
-
     def scan_for_corrupted_files(self):
         try:
             for session_folder in self.base_sessions_dir.iterdir():
@@ -127,7 +118,6 @@ class SessionRecoveryManager(QObject):
             self.log_recovery_event(
                 "corruption_scan_error", f"Corruption scan failed: {str(e)}"
             )
-
     def is_file_corrupted(self, file_path: Path) -> bool:
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -135,7 +125,6 @@ class SessionRecoveryManager(QObject):
             return False
         except (json.JSONDecodeError, UnicodeDecodeError, IOError):
             return True
-
     def attempt_file_repair(self, file_path: Path) -> bool:
         try:
             backup_path = file_path.with_suffix(".json.corrupted")
@@ -160,7 +149,6 @@ class SessionRecoveryManager(QObject):
                 "file_repair_error", f"Repair error for {file_path}: {str(e)}"
             )
             return False
-
     def repair_json_content(self, content: str) -> Optional[str]:
         try:
             content = content.replace("\x00", "")
@@ -196,7 +184,6 @@ class SessionRecoveryManager(QObject):
         except Exception as e:
             print(f"[DEBUG_LOG] JSON repair error: {e}")
             return None
-
     def auto_cleanup_old_sessions(self):
         try:
             cutoff_date = datetime.now() - timedelta(days=self.max_session_age_days)
@@ -225,7 +212,6 @@ class SessionRecoveryManager(QObject):
                 )
         except Exception as e:
             self.log_recovery_event("cleanup_error", f"Auto cleanup failed: {str(e)}")
-
     def get_folder_size(self, folder_path: Path) -> int:
         total_size = 0
         try:
@@ -235,7 +221,6 @@ class SessionRecoveryManager(QObject):
         except Exception as e:
             print(f"[DEBUG_LOG] Error calculating folder size: {e}")
         return total_size
-
     def backup_session(self, session_folder: Path) -> bool:
         if not self.backup_enabled or not self.backup_dir:
             return False
@@ -252,7 +237,6 @@ class SessionRecoveryManager(QObject):
                 "backup_error", f"Backup failed for {session_folder.name}: {str(e)}"
             )
             return False
-
     def recover_incomplete_sessions(self) -> List[Dict]:
         recovered_sessions = []
         try:
@@ -279,7 +263,6 @@ class SessionRecoveryManager(QObject):
                 "recovery_error", f"Session recovery failed: {str(e)}"
             )
         return recovered_sessions
-
     def is_session_incomplete(self, log_file: Path) -> bool:
         try:
             with open(log_file, "r", encoding="utf-8") as f:
@@ -293,7 +276,6 @@ class SessionRecoveryManager(QObject):
             return not has_session_end
         except Exception:
             return True
-
     def recover_session(self, log_file: Path) -> Optional[Dict]:
         try:
             with open(log_file, "r", encoding="utf-8") as f:
@@ -348,7 +330,6 @@ class SessionRecoveryManager(QObject):
                 f"Failed to recover session {log_file}: {str(e)}",
             )
             return None
-
     def log_recovery_event(self, event_type: str, message: str):
         try:
             timestamp = datetime.now().isoformat()
@@ -357,7 +338,6 @@ class SessionRecoveryManager(QObject):
                 f.write(log_entry)
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to write recovery log: {e}")
-
     def get_recovery_statistics(self) -> Dict:
         try:
             stats = {
@@ -387,9 +367,7 @@ class SessionRecoveryManager(QObject):
         except Exception as e:
             print(f"[DEBUG_LOG] Failed to get recovery statistics: {e}")
             return {}
-
 _recovery_manager_instance: Optional[SessionRecoveryManager] = None
-
 def get_recovery_manager(
     base_sessions_dir: str = "recordings", backup_dir: Optional[str] = None
 ) -> SessionRecoveryManager:
@@ -399,7 +377,6 @@ def get_recovery_manager(
             base_sessions_dir, backup_dir
         )
     return _recovery_manager_instance
-
 def reset_recovery_manager() -> None:
     global _recovery_manager_instance
     if _recovery_manager_instance and _recovery_manager_instance.monitoring_active:

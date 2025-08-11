@@ -36,10 +36,10 @@ class SessionManagerUnitTest {
         every { mockLogger.error(any()) } returns Unit
 
         sessionManager = SessionManager(
-            mockContext, 
-            mockLogger, 
-            mockThermalSettings, 
-            mockSessionStateDao, 
+            mockContext,
+            mockLogger,
+            mockThermalSettings,
+            mockSessionStateDao,
             mockCrashRecoveryManager
         )
     }
@@ -47,10 +47,10 @@ class SessionManagerUnitTest {
     @Test
     fun `createNewSession should create new session with unique ID`() = runTest {
         val sessionId = sessionManager.createNewSession()
-        
+
         assertThat(sessionId).isNotEmpty()
         assertThat(sessionId).startsWith("session_")
-        
+
         verify { mockLogger.info(match { it.contains("Creating new session") }) }
     }
 
@@ -58,23 +58,23 @@ class SessionManagerUnitTest {
     fun `createNewSession should create different IDs for subsequent calls`() = runTest {
         val sessionId1 = sessionManager.createNewSession()
         val sessionId2 = sessionManager.createNewSession()
-        
+
         assertThat(sessionId1).isNotEqualTo(sessionId2)
     }
 
     @Test
     fun `getCurrentSession should return null when no session is active`() = runTest {
         val session = sessionManager.getCurrentSession()
-        
+
         assertThat(session).isNull()
     }
 
     @Test
     fun `getCurrentSession should return session when session is active`() = runTest {
         val sessionId = sessionManager.createNewSession()
-        
+
         val session = sessionManager.getCurrentSession()
-        
+
         assertThat(session).isNotNull()
         assertThat(session?.sessionId).isEqualTo(sessionId)
     }
@@ -82,18 +82,18 @@ class SessionManagerUnitTest {
     @Test
     fun `finalizeCurrentSession should complete active session`() = runTest {
         val sessionId = sessionManager.createNewSession()
-        
+
         sessionManager.finalizeCurrentSession()
-        
+
         verify { mockLogger.info(match { it.contains("Finalizing session") }) }
     }
 
     @Test
     fun `getSessionOutputDir should return directory when session exists`() = runTest {
         sessionManager.createNewSession()
-        
+
         val outputDir = sessionManager.getSessionOutputDir()
-        
+
         assertThat(outputDir).isNotNull()
         assertThat(outputDir?.exists()).isTrue()
     }
@@ -101,70 +101,70 @@ class SessionManagerUnitTest {
     @Test
     fun `getSessionOutputDir should return null when no active session`() = runTest {
         val outputDir = sessionManager.getSessionOutputDir()
-        
+
         assertThat(outputDir).isNull()
     }
 
     @Test
     fun `hasSufficientStorage should check available space`() = runTest {
         val hasSufficientSpace = sessionManager.hasSufficientStorage()
-        
+
         assertThat(hasSufficientSpace is Boolean).isTrue()
     }
 
     @Test
     fun `getAvailableStorageSpace should return positive value`() = runTest {
         val availableSpace = sessionManager.getAvailableStorageSpace()
-        
+
         assertThat(availableSpace).isAtLeast(0L)
     }
 
     @Test
     fun `getAllSessions should return list of sessions`() = runTest {
         val sessions = sessionManager.getAllSessions()
-        
+
         assertThat(sessions).isNotNull()
-        
+
         assertThat(sessions).isEmpty()
     }
 
     @Test
     fun `deleteAllSessions should complete successfully`() = runTest {
         val deleteResult = sessionManager.deleteAllSessions()
-        
+
         assertThat(deleteResult).isTrue()
         verify { mockLogger.info(match { it.contains("Deleting all sessions") }) }
     }
 
     @Test
     fun `session lifecycle should work end to end`() = runTest {
-        
+
         val sessionId = sessionManager.createNewSession()
         assertThat(sessionId).isNotEmpty()
-        
+
         val session = sessionManager.getCurrentSession()
         assertThat(session).isNotNull()
         assertThat(session?.sessionId).isEqualTo(sessionId)
-        
+
         val outputDir = sessionManager.getSessionOutputDir()
         assertThat(outputDir).isNotNull()
-        
+
         sessionManager.finalizeCurrentSession()
-        
+
         verify { mockLogger.info(match { it.contains("Creating new session") }) }
         verify { mockLogger.info(match { it.contains("Finalizing session") }) }
     }
 
     @Test
     fun `multiple sessions should work sequentially`() = runTest {
-        
+
         val sessionId1 = sessionManager.createNewSession()
         sessionManager.finalizeCurrentSession()
-        
+
         val sessionId2 = sessionManager.createNewSession()
-        
+
         assertThat(sessionId1).isNotEqualTo(sessionId2)
-        
+
         val currentSession = sessionManager.getCurrentSession()
         assertThat(currentSession?.sessionId).isEqualTo(sessionId2)
     }

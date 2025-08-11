@@ -35,10 +35,6 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-/**
- * Modularized CameraRecorder that uses dependency injection for preview streaming
- * and hand segmentation, reducing tight coupling and improving testability.
- */
 @Singleton
 class ModularCameraRecorder
 @Inject
@@ -149,7 +145,7 @@ constructor(
             for (cameraId in cameraManager.cameraIdList) {
                 val characteristics = cameraManager.getCameraCharacteristics(cameraId)
                 val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
-                
+
                 if (facing == CameraCharacteristics.LENS_FACING_BACK) {
                     return cameraId
                 }
@@ -165,16 +161,16 @@ constructor(
         cameraCharacteristics?.let { characteristics ->
             val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
             map?.let {
-                // Setup sizes for different outputs
+
                 val outputSizes = it.getOutputSizes(MediaRecorder::class.java)
                 videoSize = outputSizes.maxByOrNull { it.width * it.height } ?: Size(1920, 1080)
-                
+
                 val previewSizes = it.getOutputSizes(android.graphics.ImageFormat.PRIVATE)
                 previewSize = previewSizes.find { it.width <= 1920 && it.height <= 1080 } ?: Size(1280, 720)
-                
+
                 val rawSizes = it.getOutputSizes(ImageFormat.JPEG)
                 rawSize = rawSizes.maxByOrNull { it.width * it.height } ?: Size(3840, 2160)
-                
+
                 logger.info("Camera sizes configured - Video: $videoSize, Preview: $previewSize, Raw: $rawSize")
             }
         }
@@ -199,7 +195,7 @@ constructor(
 
             try {
                 val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-                
+
                 return@withContext suspendCancellableCoroutine { continuation ->
                     val stateCallback = object : CameraDevice.StateCallback() {
                         override fun onOpened(camera: CameraDevice) {
@@ -273,12 +269,11 @@ constructor(
                             captureSession = session
                             startRepeatingPreview()
                             logger.info("Preview session configured successfully")
-                            
-                            // Start preview streaming
+
                             CoroutineScope(Dispatchers.IO).launch {
                                 previewStreamer.startStreaming()
                             }
-                            
+
                             if (continuation.isActive) {
                                 continuation.resume(true)
                             }
@@ -323,12 +318,11 @@ constructor(
                 setOnImageAvailableListener({
                     val image = it.acquireLatestImage()
                     image?.let { img ->
-                        // Stream the preview frame
+
                         CoroutineScope(Dispatchers.IO).launch {
                             try {
                                 previewStreamer.streamFrame(img, FrameType.RGB_PREVIEW)
-                                
-                                // Process with hand segmentation if needed
+
                                 handSegmentationInterface.processFrame(img)
                             } catch (e: Exception) {
                                 logger.error("Error processing preview frame: ${e.message}", e)
@@ -355,7 +349,7 @@ constructor(
     private fun startRepeatingPreview() {
         try {
             val captureRequestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-            
+
             previewSurface?.let { captureRequestBuilder?.addTarget(it) }
             previewImageReader?.surface?.let { captureRequestBuilder?.addTarget(it) }
 
@@ -378,19 +372,19 @@ constructor(
             }
 
             try {
-                // Stop preview streaming
+
                 previewStreamer.stopStreaming()
-                
+
                 captureSession?.close()
                 captureSession = null
                 isSessionActive = false
-                
+
                 previewImageReader?.close()
                 previewImageReader = null
-                
+
                 previewSurface?.release()
                 previewSurface = null
-                
+
                 logger.info("Camera session stopped successfully")
             } finally {
                 cameraLock.release()
@@ -403,12 +397,12 @@ constructor(
     suspend fun close() = withContext(cameraDispatcher) {
         try {
             stopSession()
-            
+
             cameraDevice?.close()
             cameraDevice = null
-            
+
             stopBackgroundThread()
-            
+
             isInitialized = false
             logger.info("ModularCameraRecorder closed successfully")
         } catch (e: Exception) {
@@ -427,5 +421,3 @@ constructor(
         }
     }
 }
-
-// SessionInfo is now defined in SessionInfo.kt - removed duplicate

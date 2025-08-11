@@ -5,23 +5,18 @@ from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Callable, Dict, List, Optional, Tuple, Union
-
 import cv2
 import numpy as np
 import scipy.ndimage
 import scipy.signal
-
 from ..utils.logging_config import get_logger, performance_timer
-
 logger = get_logger(__name__)
-
 class ROIDetectionMethod(Enum):
     FACE_CASCADE = "face_cascade"
     DNN_FACE = "dnn_face"
     MEDIAPIPE = "mediapipe"
     CUSTOM_TRACKER = "custom_tracker"
     MANUAL_SELECTION = "manual"
-
 class SignalExtractionMethod(Enum):
     MEAN_RGB = "mean_rgb"
     ICA_SEPARATION = "ica"
@@ -29,7 +24,6 @@ class SignalExtractionMethod(Enum):
     CHROM_METHOD = "chrom"
     POS_METHOD = "pos"
     ADAPTIVE_HYBRID = "adaptive"
-
 @dataclass
 class ROIMetrics:
     area_pixels: int = 0
@@ -45,7 +39,6 @@ class ROIMetrics:
     is_valid: bool = False
     confidence_score: float = 0.0
     frame_count: int = 0
-
 @dataclass
 class PhysiologicalSignal:
     signal_data: np.ndarray
@@ -59,7 +52,6 @@ class PhysiologicalSignal:
     preprocessing_steps: List[str] = field(default_factory=list)
     roi_metrics: Optional[ROIMetrics] = None
     spectral_features: Optional[Dict] = None
-
     def get_heart_rate_estimate(
         self, freq_range: Tuple[float, float] = (0.7, 4.0)
     ) -> Optional[float]:
@@ -81,9 +73,7 @@ class PhysiologicalSignal:
         except Exception as e:
             logger.warning(f"Heart rate estimation failed: {e}")
         return None
-
 class AdvancedROIDetector:
-
     def __init__(
         self,
         method: ROIDetectionMethod = ROIDetectionMethod.DNN_FACE,
@@ -100,7 +90,6 @@ class AdvancedROIDetector:
         self.detection_times = deque(maxlen=100)
         self.roi_metrics = ROIMetrics()
         logger.info(f"AdvancedROIDetector initialized with method: {method.value}")
-
     def _init_detection_models(self):
         try:
             if self.method == ROIDetectionMethod.FACE_CASCADE:
@@ -116,7 +105,6 @@ class AdvancedROIDetector:
             elif self.method == ROIDetectionMethod.MEDIAPIPE:
                 try:
                     import mediapipe as mp
-
                     self.mp_face_detection = mp.solutions.face_detection
                     self.mp_drawing = mp.solutions.drawing_utils
                     self.face_detection = self.mp_face_detection.FaceDetection(
@@ -132,7 +120,6 @@ class AdvancedROIDetector:
             logger.error(f"Failed to initialize detection model: {e}")
             self.method = ROIDetectionMethod.FACE_CASCADE
             self._init_detection_models()
-
     @performance_timer("detect_roi")
     def detect_roi(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
         detection_start = time.time()
@@ -160,7 +147,6 @@ class AdvancedROIDetector:
         except Exception as e:
             logger.error(f"ROI detection failed: {e}")
             return None
-
     def _detect_cascade(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = self.face_cascade.detectMultiScale(
@@ -170,7 +156,6 @@ class AdvancedROIDetector:
             largest_face = max(faces, key=lambda f: f[2] * f[3])
             return tuple(largest_face)
         return None
-
     def _detect_dnn(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
         h, w = frame.shape[:2]
         blob = cv2.dnn.blobFromImage(frame, 1.0, (300, 300), [104, 117, 123])
@@ -186,7 +171,6 @@ class AdvancedROIDetector:
                 x, y, x1, y1 = box.astype(int)
                 best_roi = x, y, x1 - x, y1 - y
         return best_roi
-
     def _detect_mediapipe(
         self, frame: np.ndarray
     ) -> Optional[Tuple[int, int, int, int]]:
@@ -204,10 +188,8 @@ class AdvancedROIDetector:
             height = int(bbox.height * h)
             return x, y, width, height
         return None
-
     def _detect_custom(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
         return self._detect_cascade(frame)
-
     def _track_roi(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
         if self.tracker is None:
             return None
@@ -218,7 +200,6 @@ class AdvancedROIDetector:
         except Exception as e:
             logger.debug(f"ROI tracking failed: {e}")
         return None
-
     def _init_tracker(self, frame: np.ndarray, roi: Tuple[int, int, int, int]):
         try:
             self.tracker = cv2.TrackerCSRT_create()
@@ -226,7 +207,6 @@ class AdvancedROIDetector:
         except Exception as e:
             logger.debug(f"Tracker initialization failed: {e}")
             self.tracker = None
-
     def _update_roi_metrics(self, roi: Tuple[int, int, int, int], frame: np.ndarray):
         x, y, w, h = roi
         self.roi_metrics.area_pixels = w * h
@@ -238,7 +218,6 @@ class AdvancedROIDetector:
         roi_region = frame[y : y + h, x : x + w]
         if roi_region.size > 0:
             self._analyze_roi_content(roi_region)
-
     def _calculate_stability_metrics(self):
         if len(self.roi_history) < 2:
             return
@@ -265,7 +244,6 @@ class AdvancedROIDetector:
             avg_motion = np.mean(motion_scores)
             self.roi_metrics.motion_magnitude = avg_motion
             self.roi_metrics.stability_score = max(0.0, 1.0 - avg_motion / 50.0)
-
     def _analyze_roi_content(self, roi_region: np.ndarray):
         try:
             gray_roi = cv2.cvtColor(roi_region, cv2.COLOR_BGR2GRAY)
@@ -290,7 +268,6 @@ class AdvancedROIDetector:
             )
         except Exception as e:
             logger.debug(f"ROI content analysis failed: {e}")
-
     def _estimate_skin_probability(self, roi_region: np.ndarray) -> float:
         try:
             ycrcb = cv2.cvtColor(roi_region, cv2.COLOR_BGR2YCrCb)
@@ -304,19 +281,15 @@ class AdvancedROIDetector:
         except Exception as e:
             logger.debug(f"Skin probability estimation failed: {e}")
         return 0.5
-
     def get_metrics(self) -> ROIMetrics:
         return self.roi_metrics
-
     def reset_tracking(self):
         self.current_roi = None
         self.roi_history.clear()
         self.tracker = None
         self.roi_metrics = ROIMetrics()
         logger.info("ROI tracking reset")
-
 class PhysiologicalSignalExtractor:
-
     def __init__(
         self,
         method: SignalExtractionMethod = SignalExtractionMethod.CHROM_METHOD,
@@ -334,7 +307,6 @@ class PhysiologicalSignalExtractor:
         logger.info(
             f"PhysiologicalSignalExtractor initialized: {method.value}, {sampling_rate}Hz, {signal_length_seconds}s buffer"
         )
-
     def init_filters(self):
         nyquist = self.sampling_rate / 2.0
         low_freq = 0.7 / nyquist
@@ -344,7 +316,6 @@ class PhysiologicalSignalExtractor:
         )
         self.notch_filters = []
         self.ma_window = int(self.sampling_rate * 2)
-
     @performance_timer("extract_signal")
     def extract_signal(self, roi_region: np.ndarray) -> Optional[PhysiologicalSignal]:
         try:
@@ -383,18 +354,15 @@ class PhysiologicalSignalExtractor:
         except Exception as e:
             logger.error(f"Signal extraction failed: {e}")
         return None
-
     def _calculate_mean_rgb(self, roi_region: np.ndarray) -> Optional[np.ndarray]:
         if roi_region.size == 0:
             return None
         mean_values = np.mean(roi_region.reshape(-1, 3), axis=0)
         return mean_values
-
     def _extract_mean_rgb(self) -> Optional[np.ndarray]:
         if len(self.green_buffer) < 10:
             return None
         return np.array(list(self.green_buffer))
-
     def _extract_chrominance(self) -> Optional[np.ndarray]:
         if len(self.red_buffer) < 10:
             return None
@@ -409,7 +377,6 @@ class PhysiologicalSignalExtractor:
         alpha = np.std(X) / np.std(Y)
         pulse_signal = X - alpha * Y
         return pulse_signal
-
     def _extract_pos(self) -> Optional[np.ndarray]:
         if len(self.red_buffer) < 10:
             return None
@@ -424,11 +391,9 @@ class PhysiologicalSignalExtractor:
         S = np.dot(C, H)
         pulse_signal = S[0] - np.std(S[0]) / np.std(S[1]) * S[1]
         return pulse_signal
-
     def _extract_ica(self) -> Optional[np.ndarray]:
         try:
             from sklearn.decomposition import FastICA
-
             if len(self.red_buffer) < self.sampling_rate * 5:
                 return self._extract_chrominance()
             signals = np.array(
@@ -453,11 +418,9 @@ class PhysiologicalSignalExtractor:
         except Exception as e:
             logger.warning(f"ICA extraction failed: {e}, using fallback")
             return self._extract_chrominance()
-
     def _extract_pca(self) -> Optional[np.ndarray]:
         try:
             from sklearn.decomposition import PCA
-
             if len(self.red_buffer) < 10:
                 return None
             signals = np.array(
@@ -472,7 +435,6 @@ class PhysiologicalSignalExtractor:
         except Exception as e:
             logger.warning(f"PCA extraction failed: {e}, using fallback")
             return self._extract_chrominance()
-
     def _extract_adaptive(self) -> Optional[np.ndarray]:
         methods = [self._extract_chrominance, self._extract_pos, self._extract_mean_rgb]
         best_signal = None
@@ -489,7 +451,6 @@ class PhysiologicalSignalExtractor:
                 logger.debug(f"Adaptive method failed: {e}")
                 continue
         return best_signal
-
     def _post_process_signal(self, signal: np.ndarray) -> np.ndarray:
         try:
             signal = signal - np.mean(signal)
@@ -504,7 +465,6 @@ class PhysiologicalSignalExtractor:
         except Exception as e:
             logger.warning(f"Signal post-processing failed: {e}")
             return signal
-
     def _calculate_quality_metrics(
         self, phys_signal: PhysiologicalSignal, roi_region: np.ndarray
     ):
@@ -523,7 +483,6 @@ class PhysiologicalSignalExtractor:
             phys_signal.spectral_features = self._calculate_spectral_features(signal)
         except Exception as e:
             logger.warning(f"Quality metrics calculation failed: {e}")
-
     def _calculate_snr(self, signal: np.ndarray) -> float:
         try:
             freqs, psd = scipy.signal.welch(signal, fs=self.sampling_rate)
@@ -537,7 +496,6 @@ class PhysiologicalSignalExtractor:
         except Exception as e:
             logger.debug(f"SNR calculation failed: {e}")
         return 0.0
-
     def _calculate_sqi(self, signal: np.ndarray) -> float:
         try:
             freqs, psd = scipy.signal.welch(signal, fs=self.sampling_rate)
@@ -558,7 +516,6 @@ class PhysiologicalSignalExtractor:
         except Exception as e:
             logger.debug(f"SQI calculation failed: {e}")
             return 0.0
-
     def _assess_motion_artifacts(self, roi_region: np.ndarray) -> float:
         try:
             gray_roi = cv2.cvtColor(roi_region, cv2.COLOR_BGR2GRAY)
@@ -570,7 +527,6 @@ class PhysiologicalSignalExtractor:
         except Exception as e:
             logger.debug(f"Motion assessment failed: {e}")
             return 0.5
-
     def _calculate_spectral_features(self, signal: np.ndarray) -> Dict:
         try:
             freqs, psd = scipy.signal.welch(signal, fs=self.sampling_rate)
@@ -595,7 +551,6 @@ class PhysiologicalSignalExtractor:
         except Exception as e:
             logger.debug(f"Spectral features calculation failed: {e}")
             return {}
-
 def create_complete_pipeline(camera_indices: List[int] = [0, 1]) -> Dict:
     logger.info("Creating complete CV preprocessing pipeline")
     roi_detector = AdvancedROIDetector(
@@ -617,7 +572,6 @@ def create_complete_pipeline(camera_indices: List[int] = [0, 1]) -> Dict:
     }
     logger.info("CV preprocessing pipeline created successfully")
     return pipeline
-
 if __name__ == "__main__":
     pipeline = create_complete_pipeline()
     logger.info(f"Pipeline components: {list(pipeline.keys())}")

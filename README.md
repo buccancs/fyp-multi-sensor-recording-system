@@ -11,18 +11,25 @@ A comprehensive research platform for contactless Galvanic Skin Response (GSR) p
 **Test the entire system without any hardware:**
 
 ```bash
-# Clone and run immediately
 git clone https://github.com/buccancs/bucika_gsr.git
 cd bucika_gsr
 ./run_local_test.sh
 ```
 
-**Or run comprehensive tests:**
+**Comprehensive testing with multiple scenarios:**
 
 ```bash
 cd tests/integration/virtual_environment
-./setup_dev_environment.sh                    # Automated setup
+./setup_dev_environment.sh
 ./run_virtual_test.sh --scenario quick --devices 2 --duration 1.0
+```
+
+**Run specific test scenarios:**
+
+```bash
+./run_virtual_test.sh --scenario ci --devices 3
+./run_virtual_test.sh --scenario stress --devices 5 --duration 5.0
+pytest tests/integration/virtual_environment/test_pytest_integration.py -v
 ```
 
 ## 📱 System Overview
@@ -177,18 +184,114 @@ python test_performance_benchmarks.py --profile
 - **✅ Performance Testing**: Memory leak detection and resource monitoring
 - **✅ Real PC Integration**: End-to-end validation with actual PC application
 
-## 📚 Documentation
+## 🔧 Comprehensive Test Environment
 
-### Comprehensive Guides
-- **[VIRTUAL_TEST_INTEGRATION_GUIDE.md](VIRTUAL_TEST_INTEGRATION_GUIDE.md)**: Complete GitHub and local integration guide
-- **[TEST_RUNNER_README.md](TEST_RUNNER_README.md)**: Detailed test execution instructions  
-- **[tests/integration/virtual_environment/MIGRATION_GUIDE.md](tests/integration/virtual_environment/MIGRATION_GUIDE.md)**: Transition from physical to virtual testing
-- **[tests/integration/virtual_environment/TROUBLESHOOTING.md](tests/integration/virtual_environment/TROUBLESHOOTING.md)**: Issue resolution guide
+### Test Execution Options
 
-### Technical Documentation
-- **[tests/integration/virtual_environment/IMPLEMENTATION_SUMMARY.md](tests/integration/virtual_environment/IMPLEMENTATION_SUMMARY.md)**: Architecture details
-- **[architecture.md](architecture.md)**: System architecture overview
-- **[protocol/](protocol/)**: Communication protocol specifications
+**Quick Tests (1-2 minutes):**
+```bash
+./run_local_test.sh
+python tests/integration/virtual_environment/quick_test.py
+./tests/integration/virtual_environment/run_virtual_test.sh --scenario quick --devices 2
+```
+
+**CI/Development Tests (3-5 minutes):**
+```bash
+pytest tests/integration/virtual_environment/test_pytest_integration.py -v
+./tests/integration/virtual_environment/run_virtual_test.sh --scenario ci --devices 3
+pytest tests/integration/virtual_environment/ -m "quick" -v
+```
+
+**Extended Performance Tests:**
+```bash
+./tests/integration/virtual_environment/run_virtual_test.sh --scenario stress --devices 6 --duration 30
+python tests/integration/virtual_environment/test_performance_benchmarks.py --profile
+```
+
+### Environment Setup
+
+**Automated Setup (Recommended):**
+```bash
+cd tests/integration/virtual_environment
+
+# Linux/macOS
+./setup_dev_environment.sh
+
+# Windows
+powershell -ExecutionPolicy Bypass -File setup_dev_environment.ps1
+```
+
+**Manual Setup:**
+```bash
+pip install pytest pytest-asyncio psutil numpy opencv-python-headless
+pip install -r test-requirements.txt
+```
+
+**Docker Setup:**
+```bash
+cd tests/integration/virtual_environment
+docker build -t gsr-virtual-test -f Dockerfile ../../..
+docker run --rm -v "$(pwd)/test_results:/app/test_results" gsr-virtual-test --scenario ci
+```
+
+### Configuration Options
+
+Set environment variables for custom testing:
+```bash
+export GSR_TEST_LOG_LEVEL=DEBUG         # Enable debug logging
+export GSR_TEST_DURATION=300            # Set custom test duration (seconds)
+export GSR_TEST_DEVICE_COUNT=5          # Set device count
+export GSR_TEST_PERFORMANCE_MODE=true   # Enable performance monitoring
+```
+
+## 🔍 Troubleshooting
+
+### Common Issues and Solutions
+
+**Python Environment Issues:**
+```bash
+# Fix Python path issues
+export PYTHONPATH="${PYTHONPATH}:$(pwd)"
+
+# Reinstall dependencies
+pip install --force-reinstall -r test-requirements.txt
+
+# Clear Python cache
+find . -type d -name "__pycache__" -exec rm -rf {} +
+```
+
+**Test Failures:**
+```bash
+# Run with verbose output
+./tests/integration/virtual_environment/run_virtual_test.sh --scenario quick --verbose
+
+# Check test logs
+cat tests/integration/virtual_environment/test_results/latest/test_log.txt
+
+# Debug mode
+GSR_TEST_LOG_LEVEL=DEBUG python tests/integration/virtual_environment/test_runner.py
+```
+
+**Performance Issues:**
+- Reduce device count for lower-spec systems: `--devices 2`
+- Use quick scenario for fast validation: `--scenario quick`
+- Monitor system resources: `htop` or Task Manager
+- Free memory before tests: restart terminal/IDE
+
+**Windows-Specific Issues:**
+```powershell
+# Enable script execution
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Use PowerShell script
+cd tests\integration\virtual_environment
+powershell -File setup_dev_environment.ps1
+```
+
+### Support Resources
+- **Test Logs**: Check `tests/integration/virtual_environment/test_results/`
+- **GitHub Issues**: Report problems with test output logs
+- **Debug Mode**: Use `GSR_TEST_LOG_LEVEL=DEBUG` for detailed information
 
 ## 🛠️ Project Structure
 
@@ -263,9 +366,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **[🚀 Run Tests Now](./run_local_test.sh)** - One-click local testing
 - **[📊 GitHub Actions](https://github.com/buccancs/bucika_gsr/actions)** - Live CI/CD status
-- **[📚 Complete Integration Guide](VIRTUAL_TEST_INTEGRATION_GUIDE.md)** - Full setup documentation
-- **[🧪 Test Runner Guide](TEST_RUNNER_README.md)** - Detailed testing instructions
+- **[📚 Architecture Documentation](architecture.md)** - System architecture overview
 - **[🛠️ Troubleshooting](tests/integration/virtual_environment/TROUBLESHOOTING.md)** - Issue resolution
+- **[🧪 Test Documentation](tests/integration/virtual_environment/)** - Comprehensive test guides
 
 ---
 

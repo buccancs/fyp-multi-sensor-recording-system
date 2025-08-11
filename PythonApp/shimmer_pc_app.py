@@ -7,7 +7,6 @@ import threading
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-
 sys.path.insert(0, str(Path(__file__).parent))
 from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSample
 from .shimmer_manager import (
@@ -17,9 +16,7 @@ from .shimmer_manager import (
     ShimmerSample,
     ShimmerStatus,
 )
-
 class ShimmerPCApplication:
-
     def __init__(self, android_port: int = 9000, enable_gui: bool = False):
         self.android_port = android_port
         self.enable_gui = enable_gui
@@ -35,7 +32,6 @@ class ShimmerPCApplication:
         self.monitor_thread: Optional[threading.Thread] = None
         self.stats_thread: Optional[threading.Thread] = None
         self.logger.info("Shimmer PC Application initialized")
-
     def initialize(self) -> bool:
         try:
             self.logger.info("Initializing Shimmer PC Application...")
@@ -61,7 +57,6 @@ class ShimmerPCApplication:
         except Exception as e:
             self.logger.error(f"Failed to initialize application: {e}")
             return False
-
     def run(self) -> None:
         try:
             if not self.is_running:
@@ -90,7 +85,6 @@ class ShimmerPCApplication:
             self.logger.error(f"Error running application: {e}")
         finally:
             self.shutdown()
-
     def shutdown(self) -> None:
         try:
             self.logger.info("Shutting down Shimmer PC Application...")
@@ -106,7 +100,6 @@ class ShimmerPCApplication:
             self.logger.info("Shimmer PC Application shutdown completed")
         except Exception as e:
             self.logger.error(f"Error during shutdown: {e}")
-
     def start_session(self, session_id: str, record_shimmer: bool = True) -> bool:
         try:
             if self.current_session_id:
@@ -141,7 +134,6 @@ class ShimmerPCApplication:
         except Exception as e:
             self.logger.error(f"Error starting session: {e}")
             return False
-
     def stop_session(self) -> bool:
         try:
             if not self.current_session_id:
@@ -165,12 +157,10 @@ class ShimmerPCApplication:
         except Exception as e:
             self.logger.error(f"Error stopping session: {e}")
             return False
-
     def send_sync_signal(self, signal_type: str = "flash", **kwargs) -> int:
         count = self.shimmer_manager.send_sync_signal(signal_type, **kwargs)
         self.logger.info(f"Sent {signal_type} sync signal to {count} devices")
         return count
-
     def get_status_summary(self) -> Dict[str, Any]:
         android_devices = self.shimmer_manager.get_android_devices()
         shimmer_devices = self.shimmer_manager.get_shimmer_status()
@@ -186,7 +176,6 @@ class ShimmerPCApplication:
                 1 for status in shimmer_devices.values() if status.is_recording
             ),
         }
-
     def _on_shimmer_data(self, sample: ShimmerSample) -> None:
         self.data_samples_received += 1
         if sample.device_id not in self.device_stats:
@@ -200,7 +189,6 @@ class ShimmerPCApplication:
         stats["last_timestamp"] = sample.timestamp
         if self.data_samples_received % 100 == 0:
             self.logger.debug(f"Received {self.data_samples_received} samples total")
-
     def _on_status_update(self, device_id: str, status: ShimmerStatus) -> None:
         self.connected_devices[device_id] = {
             "connection_type": status.connection_type.value,
@@ -210,15 +198,12 @@ class ShimmerPCApplication:
             "battery_level": status.battery_level,
             "samples_recorded": status.samples_recorded,
         }
-
     def _on_android_device_event(self, device_id: str, status: Dict[str, Any]) -> None:
         self.logger.debug(f"Android device {device_id} status: {status}")
-
     def _on_connection_state_change(
         self, device_id: str, state: DeviceState, connection_type: ConnectionType
     ) -> None:
         self.logger.info(f"Device {device_id} ({connection_type.value}): {state.value}")
-
     def _start_monitoring_threads(self) -> None:
         self.monitor_thread = threading.Thread(
             target=self._device_monitor_loop, daemon=True
@@ -226,7 +211,6 @@ class ShimmerPCApplication:
         self.monitor_thread.start()
         self.stats_thread = threading.Thread(target=self._statistics_loop, daemon=True)
         self.stats_thread.start()
-
     def _device_monitor_loop(self) -> None:
         while self.is_running:
             try:
@@ -239,7 +223,6 @@ class ShimmerPCApplication:
             except Exception as e:
                 self.logger.error(f"Error in device monitor: {e}")
                 time.sleep(5)
-
     def _statistics_loop(self) -> None:
         while self.is_running:
             try:
@@ -253,24 +236,19 @@ class ShimmerPCApplication:
             except Exception as e:
                 self.logger.error(f"Error in statistics loop: {e}")
                 time.sleep(5)
-
     def _check_device_discovery(self) -> None:
         pass
-
     def _show_periodic_status(self) -> None:
         if int(time.time()) % 30 == 0:
             status = self.get_status_summary()
             self.logger.info(
                 f"Status: {status['android_devices']} Android, {status['shimmer_devices']} Shimmer, {status['data_samples_received']} samples"
             )
-
     def _handle_console_commands(self) -> None:
         pass
-
     def _signal_handler(self, signum, frame) -> None:
         self.logger.info(f"Received signal {signum}, shutting down...")
         self.is_running = False
-
 def main():
     parser = argparse.ArgumentParser(description="Shimmer PC Integration Application")
     parser.add_argument(
@@ -328,6 +306,5 @@ def main():
     except Exception as e:
         logger.error(f"Application error: {e}")
         sys.exit(1)
-
 if __name__ == "__main__":
     main()

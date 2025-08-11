@@ -1,4 +1,3 @@
-
 import logging
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
@@ -9,7 +8,6 @@ from .test_categories import QualityThresholds, TestCategory, TestType
 logger = logging.getLogger(__name__)
 @dataclass
 class ValidationRule:
-
     name: str
     description: str
     threshold: float
@@ -19,7 +17,6 @@ class ValidationRule:
     critical: bool = False
 @dataclass
 class ValidationIssue:
-
     rule_name: str
     severity: str
     message: str
@@ -28,7 +25,6 @@ class ValidationIssue:
     test_names: List[str]
 @dataclass
 class SuiteValidation:
-
     suite_name: str
     suite_category: TestCategory
     success_rate_valid: bool = False
@@ -46,7 +42,6 @@ class SuiteValidation:
             self.recommendations = []
 @dataclass
 class ValidationReport:
-
     execution_id: str
     timestamp: datetime
     overall_quality: float = 0.0
@@ -71,14 +66,12 @@ class ValidationReport:
         if self.confidence_intervals is None:
             self.confidence_intervals = {}
 class QualityValidator:
-
     def __init__(self, quality_thresholds: Optional[QualityThresholds] = None):
         self.quality_thresholds = quality_thresholds or QualityThresholds()
         self.validation_rules: Dict[str, List[ValidationRule]] = {}
         self.logger = logging.getLogger(__name__)
         self._initialize_default_rules()
     def _initialize_default_rules(self):
-
         foundation_rules = [
             ValidationRule(
                 name="success_rate_foundation",
@@ -89,7 +82,7 @@ class QualityValidator:
                 critical=True
             ),
             ValidationRule(
-                name="execution_time_foundation", 
+                name="execution_time_foundation",
                 description="Foundation tests should execute quickly",
                 threshold=300.0,
                 comparison="lte",
@@ -108,7 +101,7 @@ class QualityValidator:
         integration_rules = [
             ValidationRule(
                 name="success_rate_integration",
-                description="Integration tests must have >95% success rate", 
+                description="Integration tests must have >95% success rate",
                 threshold=0.95,
                 comparison="gte",
                 weight=2.0,
@@ -136,7 +129,7 @@ class QualityValidator:
                 name="success_rate_system",
                 description="System tests must have >95% success rate",
                 threshold=0.95,
-                comparison="gte", 
+                comparison="gte",
                 weight=2.0,
                 critical=True
             ),
@@ -177,7 +170,7 @@ class QualityValidator:
                 name="cpu_usage",
                 description="CPU usage should be <60%",
                 threshold=60.0,
-                comparison="lte", 
+                comparison="lte",
                 weight=1.0
             ),
             ValidationRule(
@@ -190,14 +183,12 @@ class QualityValidator:
         ]
         self.validation_rules[TestCategory.PERFORMANCE.name] = performance_rules
     def register_validation_rule(self, test_category: TestCategory, rule: ValidationRule):
-
         category_name = test_category.name
         if category_name not in self.validation_rules:
             self.validation_rules[category_name] = []
         self.validation_rules[category_name].append(rule)
         self.logger.info(f"Registered validation rule '{rule.name}' for category {category_name}")
     def validate_test_results(self, test_results: TestResults) -> ValidationReport:
-
         self.logger.info(f"Starting validation for execution {test_results.execution_id}")
         validation_report = ValidationReport(
             execution_id=test_results.execution_id,
@@ -218,7 +209,6 @@ class QualityValidator:
         self.logger.info(f"Validation completed. Overall quality: {validation_report.overall_quality:.3f}")
         return validation_report
     def _validate_suite_results(self, suite_results: SuiteResults) -> SuiteValidation:
-
         suite_validation = SuiteValidation(
             suite_name=suite_results.suite_name,
             suite_category=suite_results.suite_category
@@ -237,9 +227,8 @@ class QualityValidator:
             suite_results, suite_validation
         )
         return suite_validation
-    def _apply_validation_rule(self, rule: ValidationRule, suite_results: SuiteResults, 
+    def _apply_validation_rule(self, rule: ValidationRule, suite_results: SuiteResults,
                               suite_validation: SuiteValidation):
-
         measured_value = self._extract_measurement_value(rule.name, suite_results)
         if measured_value is None:
             self.logger.warning(f"Could not extract value for rule {rule.name}")
@@ -265,7 +254,6 @@ class QualityValidator:
             )
             suite_validation.issues.append(issue)
     def _extract_measurement_value(self, rule_name: str, suite_results: SuiteResults) -> Optional[float]:
-
         if "success_rate" in rule_name:
             return suite_results.success_rate
         elif "execution_time" in rule_name:
@@ -282,7 +270,7 @@ class QualityValidator:
             return suite_results.overall_quality_score
         elif "sync_precision" in rule_name:
             sync_values = [
-                r.performance_metrics.synchronization_precision_ms 
+                r.performance_metrics.synchronization_precision_ms
                 for r in suite_results.test_results
                 if r.performance_metrics.synchronization_precision_ms > 0
             ]
@@ -295,9 +283,8 @@ class QualityValidator:
             ]
             return statistics.mean(throughput_values) if throughput_values else None
         return None
-    def _compare_value(self, measured: float, threshold: float, comparison: str, 
+    def _compare_value(self, measured: float, threshold: float, comparison: str,
                       threshold_max: Optional[float] = None) -> bool:
-
         if comparison == "gt":
             return measured > threshold
         elif comparison == "gte":
@@ -314,7 +301,6 @@ class QualityValidator:
             self.logger.error(f"Unknown comparison operator: {comparison}")
             return False
     def _calculate_overall_quality(self, validation_report: ValidationReport) -> float:
-
         if not validation_report.suite_validations:
             return 0.0
         total_weight = 0.0
@@ -327,9 +313,8 @@ class QualityValidator:
         critical_penalty = len(validation_report.critical_issues) * 0.1
         overall_quality = max(0.0, overall_quality - critical_penalty)
         return min(1.0, overall_quality)
-    def _calculate_suite_quality_score(self, suite_results: SuiteResults, 
+    def _calculate_suite_quality_score(self, suite_results: SuiteResults,
                                      suite_validation: SuiteValidation) -> float:
-
         base_score = suite_results.success_rate
         performance_factor = 1.0
         if suite_results.average_cpu_percent > 0:
@@ -343,9 +328,8 @@ class QualityValidator:
             0.2 * quality_factor
         )
         return min(1.0, quality_score)
-    def _perform_statistical_validation(self, test_results: TestResults, 
+    def _perform_statistical_validation(self, test_results: TestResults,
                                        validation_report: ValidationReport):
-
         execution_times = []
         for suite in test_results.suite_results.values():
             execution_times.extend([r.execution_time for r in suite.test_results if r.execution_time > 0])
@@ -365,7 +349,6 @@ class QualityValidator:
             validation_report.statistical_summary["mean_success_rate"] = statistics.mean(success_rates)
             validation_report.statistical_summary["min_success_rate"] = min(success_rates)
     def _generate_recommendations(self, validation_report: ValidationReport) -> List[str]:
-
         recommendations = []
         if validation_report.critical_issues:
             recommendations.append(
@@ -373,7 +356,7 @@ class QualityValidator:
                 "before system deployment"
             )
         performance_issues = [
-            issue for issue in validation_report.quality_issues 
+            issue for issue in validation_report.quality_issues
             if any(keyword in issue.rule_name for keyword in ["cpu", "memory", "latency"])
         ]
         if performance_issues:

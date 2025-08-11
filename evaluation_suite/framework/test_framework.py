@@ -1,4 +1,3 @@
-
 import asyncio
 import logging
 import time
@@ -14,7 +13,6 @@ from .test_results import TestResults, SuiteResults, TestResult, TestStatus, Per
 from .quality_validator import QualityValidator, ValidationReport
 logger = logging.getLogger(__name__)
 class TestSuite:
-
     def __init__(self, name: str, category: TestCategory, description: str = ""):
         self.name = name
         self.category = category
@@ -23,16 +21,12 @@ class TestSuite:
         self.setup_functions: List[Callable] = []
         self.teardown_functions: List[Callable] = []
     def add_test(self, test: 'BaseTest'):
-
         self.tests.append(test)
     def add_setup(self, setup_func: Callable):
-
         self.setup_functions.append(setup_func)
     def add_teardown(self, teardown_func: Callable):
-
         self.teardown_functions.append(teardown_func)
 class BaseTest:
-
     def __init__(self, name: str, description: str = "", timeout: int = 300):
         self.name = name
         self.description = description
@@ -40,23 +34,19 @@ class BaseTest:
         self.setup_functions: List[Callable] = []
         self.teardown_functions: List[Callable] = []
     def add_setup(self, setup_func: Callable):
-
         self.setup_functions.append(setup_func)
     def add_teardown(self, teardown_func: Callable):
-
         self.teardown_functions.append(teardown_func)
     async def execute(self, test_env: Dict[str, Any]) -> TestResult:
         """Execute the test - to be implemented by subclasses"""
         raise NotImplementedError("Subclasses must implement execute method")
 class PerformanceMonitor:
-
     def __init__(self):
         self.monitoring = False
         self.monitor_thread = None
         self.metrics_history = []
         self._lock = threading.Lock()
     def start_monitoring(self):
-
         with self._lock:
             if not self.monitoring:
                 self.monitoring = True
@@ -64,7 +54,6 @@ class PerformanceMonitor:
                 self.monitor_thread.start()
                 logger.debug("Performance monitoring started")
     def stop_monitoring(self):
-
         with self._lock:
             self.monitoring = False
             if self.monitor_thread:
@@ -72,7 +61,6 @@ class PerformanceMonitor:
                 self.monitor_thread = None
             logger.debug("Performance monitoring stopped")
     def _monitor_loop(self):
-
         while self.monitoring:
             try:
                 cpu_percent = psutil.cpu_percent(interval=0.1)
@@ -98,7 +86,6 @@ class PerformanceMonitor:
                 logger.error(f"Error in performance monitoring: {e}")
                 time.sleep(5.0)
     def get_current_metrics(self) -> PerformanceMetrics:
-
         with self._lock:
             if not self.metrics_history:
                 return PerformanceMetrics()
@@ -112,7 +99,6 @@ class PerformanceMonitor:
                 ) / len(recent_metrics) if len(recent_metrics) > 1 else 0
             )
 class TestEnvironment:
-
     def __init__(self, config: TestConfiguration):
         self.config = config
         self.temp_files: List[Path] = []
@@ -120,19 +106,14 @@ class TestEnvironment:
         self.resources: Dict[str, Any] = {}
         self.cleanup_functions: List[Callable] = []
     def add_temp_file(self, file_path: Path):
-
         self.temp_files.append(file_path)
     def add_temp_dir(self, dir_path: Path):
-
         self.temp_dirs.append(dir_path)
     def add_resource(self, name: str, resource: Any):
-
         self.resources[name] = resource
     def add_cleanup(self, cleanup_func: Callable):
-
         self.cleanup_functions.append(cleanup_func)
     def cleanup(self):
-
         logger.debug("Cleaning up test environment")
         for cleanup_func in self.cleanup_functions:
             try:
@@ -154,7 +135,6 @@ class TestEnvironment:
                 logger.error(f"Error cleaning up temp dir {dir_path}: {e}")
         self.resources.clear()
 class TestFramework:
-
     def __init__(self, quality_thresholds: Optional[QualityThresholds] = None):
         self.test_suites: Dict[str, TestSuite] = {}
         self.quality_validator = QualityValidator(quality_thresholds)
@@ -166,7 +146,6 @@ class TestFramework:
         self.logger = logging.getLogger(__name__)
         self._setup_logging()
     def _setup_logging(self):
-
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -176,11 +155,9 @@ class TestFramework:
             ]
         )
     def register_test_suite(self, name: str, test_suite: TestSuite):
-
         self.test_suites[name] = test_suite
         self.logger.info(f"Registered test suite: {name} ({test_suite.category.name})")
     def configure(self, config: TestConfiguration):
-
         self.config = config
         self.logger.info("Test framework configuration updated")
     async def run_all_tests(self) -> TestResults:
@@ -387,7 +364,6 @@ class TestFramework:
             }
         return test_result
     def _generate_execution_report(self, results: TestResults, validation_report: ValidationReport):
-
         report_path = Path(f"test_execution_report_{results.execution_id[:8]}.json")
         report_data = {
             "execution_summary": results.get_summary_report(),
@@ -416,10 +392,8 @@ class TestFramework:
             json.dump(report_data, f, indent=2, default=str)
         self.logger.info(f"complete test report generated: {report_path}")
     def get_execution_history(self) -> List[TestResults]:
-
         return self.execution_history.copy()
     def get_quality_trends(self) -> Dict[str, List[float]]:
-
         trends = {
             "overall_quality": [],
             "success_rates": [],

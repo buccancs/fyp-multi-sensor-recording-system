@@ -13,9 +13,9 @@ class SessionManagerCoreTest {
     @BeforeEach
     fun setup() {
         mockLogger = mockk(relaxed = true)
-        tempDir = File.createTempFile("session_test", "").apply { 
+        tempDir = File.createTempFile("session_test", "").apply {
             delete()
-            mkdirs() 
+            mkdirs()
         }
     }
     @AfterEach

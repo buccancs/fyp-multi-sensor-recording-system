@@ -3,31 +3,24 @@ package com.multisensor.recording.security
 import android.graphics.Bitmap
 import kotlinx.coroutines.flow.StateFlow
 
-/**
- * Focused privacy interface that handles only privacy-related concerns.
- * Separates privacy management from data deletion and UI prompts.
- */
 interface PrivacyInterface {
     val privacySettings: StateFlow<PrivacySettings>
     val consentStatus: StateFlow<ConsentStatus>
-    
-    // Consent Management
+
     suspend fun hasValidConsent(): Boolean
     suspend fun recordConsent(consentData: ConsentData): Result<Unit>
     suspend fun withdrawConsent(): Result<Unit>
     suspend fun updateConsentVersion(newVersion: Int): Result<Unit>
-    
-    // Privacy Settings
+
     suspend fun enableDataAnonymization(enabled: Boolean): Result<Unit>
     suspend fun enableFaceBlurring(enabled: Boolean): Result<Unit>
     suspend fun enableMetadataStripping(enabled: Boolean): Result<Unit>
     suspend fun setDataRetentionPeriod(days: Int): Result<Unit>
-    
-    // Data Processing Privacy
+
     suspend fun anonymizeImage(bitmap: Bitmap): Result<Bitmap>
     suspend fun stripMetadata(filePath: String): Result<Unit>
     suspend fun isDataRetentionExpired(dataTimestamp: Long): Boolean
-    
+
     fun getPrivacySettings(): PrivacySettings
     fun getConsentInfo(): ConsentInfo
 }
@@ -62,31 +55,27 @@ sealed class ConsentStatus {
     data class UpdateRequired(val currentVersion: Int, val requiredVersion: Int) : ConsentStatus()
 }
 
-/**
- * Adapter that wraps the existing PrivacyManager to provide the focused interface.
- * This allows us to maintain backward compatibility while providing a cleaner API.
- */
 class PrivacyManagerAdapter(
     private val privacyManager: PrivacyManager
 ) : PrivacyInterface {
-    
+
     private val _privacySettings = kotlinx.coroutines.flow.MutableStateFlow(PrivacySettings())
     private val _consentStatus = kotlinx.coroutines.flow.MutableStateFlow<ConsentStatus>(ConsentStatus.Missing)
-    
+
     override val privacySettings: StateFlow<PrivacySettings> = _privacySettings
     override val consentStatus: StateFlow<ConsentStatus> = _consentStatus
-    
+
     init {
         updatePrivacySettingsFromManager()
         updateConsentStatusFromManager()
     }
-    
+
     override suspend fun hasValidConsent(): Boolean {
         val isValid = privacyManager.hasValidConsent()
         updateConsentStatusFromManager()
         return isValid
     }
-    
+
     override suspend fun recordConsent(consentData: ConsentData): Result<Unit> {
         return try {
             privacyManager.recordConsent(consentData.participantId, consentData.studyId)
@@ -96,7 +85,7 @@ class PrivacyManagerAdapter(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun withdrawConsent(): Result<Unit> {
         return try {
             val success = privacyManager.withdrawConsent()
@@ -110,15 +99,15 @@ class PrivacyManagerAdapter(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun updateConsentVersion(newVersion: Int): Result<Unit> {
-        // Implementation would depend on PrivacyManager supporting version updates
+
         return Result.failure(UnsupportedOperationException("Consent version update not yet implemented"))
     }
-    
+
     override suspend fun enableDataAnonymization(enabled: Boolean): Result<Unit> {
         return try {
-            // Use configureAnonymization method that exists in PrivacyManager
+
             val settings = privacyManager.getAnonymizationSettings()
             privacyManager.configureAnonymization(
                 enableDataAnonymization = enabled,
@@ -131,7 +120,7 @@ class PrivacyManagerAdapter(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun enableFaceBlurring(enabled: Boolean): Result<Unit> {
         return try {
             val settings = privacyManager.getAnonymizationSettings()
@@ -146,7 +135,7 @@ class PrivacyManagerAdapter(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun enableMetadataStripping(enabled: Boolean): Result<Unit> {
         return try {
             val settings = privacyManager.getAnonymizationSettings()
@@ -161,7 +150,7 @@ class PrivacyManagerAdapter(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun setDataRetentionPeriod(days: Int): Result<Unit> {
         return try {
             privacyManager.setDataRetentionPeriod(days)
@@ -171,31 +160,30 @@ class PrivacyManagerAdapter(
             Result.failure(e)
         }
     }
-    
+
     override suspend fun anonymizeImage(bitmap: Bitmap): Result<Bitmap> {
         return try {
-            // For now, return the original bitmap since PrivacyManager doesn't have this method yet
-            // In a real implementation, this would apply face blurring or other anonymization
+
             Result.success(bitmap)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
+
     override suspend fun stripMetadata(filePath: String): Result<Unit> {
         return try {
-            // Use anonymizeMetadata method for now - real implementation would strip file metadata
+
             privacyManager.anonymizeMetadata(emptyMap())
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
+
     override suspend fun isDataRetentionExpired(dataTimestamp: Long): Boolean {
         return privacyManager.shouldDeleteData(dataTimestamp)
     }
-    
+
     override fun getPrivacySettings(): PrivacySettings {
         val anonymizationSettings = privacyManager.getAnonymizationSettings()
         return PrivacySettings(
@@ -205,7 +193,7 @@ class PrivacyManagerAdapter(
             dataRetentionDays = privacyManager.getDataRetentionDays()
         )
     }
-    
+
     override fun getConsentInfo(): ConsentInfo {
         val managerInfo = privacyManager.getConsentInfo()
         return ConsentInfo(
@@ -216,11 +204,11 @@ class PrivacyManagerAdapter(
             studyId = managerInfo.studyId
         )
     }
-    
+
     private fun updatePrivacySettingsFromManager() {
         _privacySettings.value = getPrivacySettings()
     }
-    
+
     private fun updateConsentStatusFromManager() {
         val consentInfo = privacyManager.getConsentInfo()
         _consentStatus.value = when {
@@ -231,10 +219,6 @@ class PrivacyManagerAdapter(
     }
 }
 
-/**
- * Service responsible for data deletion and cleanup operations.
- * This separates data deletion logic from privacy settings management.
- */
 interface DataCleanupService {
     suspend fun deleteExpiredData(): Result<Int>
     suspend fun deleteAllUserData(): Result<Unit>
@@ -243,10 +227,6 @@ interface DataCleanupService {
     suspend fun cancelPeriodicCleanup()
 }
 
-/**
- * Service responsible for privacy-related UI prompts and notifications.
- * This separates UI concerns from core privacy logic.
- */
 interface PrivacyUiService {
     suspend fun showConsentDialog(): Result<ConsentData?>
     suspend fun showConsentUpdateDialog(currentVersion: Int, newVersion: Int): Result<Boolean>

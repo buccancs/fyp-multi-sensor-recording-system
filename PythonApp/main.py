@@ -1,26 +1,20 @@
 import os
 import sys
-
 from PyQt5.QtCore import Qt, qVersion
 from PyQt5.QtWidgets import QApplication
-
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from .utils.logging_config import AppLogger, get_logger
-
 log_level = os.environ.get("MSR_LOG_LEVEL", "INFO")
 AppLogger.set_level(log_level)
 from .gui.enhanced_ui_main_window import EnhancedMainWindow
 from .production.runtime_security_checker import validate_runtime_security, SecurityValidationError
-
 logger = get_logger(__name__)
-
 def main():
     logger.info(
         "=== Multi-Sensor Recording System Controller Starting (Enhanced UI) ==="
     )
     logger.info(f"Python version: {sys.version}")
     logger.info(f"PyQt5 available, Qt version: {qVersion()}")
-    
     try:
         logger.info("🔒 Performing runtime security validation...")
         validate_runtime_security()
@@ -34,7 +28,6 @@ def main():
     except Exception as e:
         logger.warning(f"🔒 Security validation encountered an error: {e}")
         logger.warning("🔒 Continuing startup with security warning")
-    
     try:
         logger.debug("Configuring high DPI scaling")
         QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
@@ -59,7 +52,6 @@ def main():
     except Exception as e:
         logger.error(f"Fatal error during application startup: {e}", exc_info=True)
         sys.exit(1)
-
 if __name__ == "__main__":
     logger.info("Application started from command line")
     main()

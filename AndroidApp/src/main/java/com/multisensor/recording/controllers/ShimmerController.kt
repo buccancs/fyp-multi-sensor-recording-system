@@ -471,7 +471,7 @@ class ShimmerController @Inject constructor(
 
             viewModel.getShimmerDeviceInfo(deviceId) { deviceInfo ->
                 val infoText = try {
-                    // Use reflection to call getDisplaySummary if it exists
+
                     deviceInfo?.javaClass?.getMethod("getDisplaySummary")?.invoke(deviceInfo) as? String
                         ?: "Device information not available"
                 } catch (e: Exception) {
@@ -490,7 +490,7 @@ class ShimmerController @Inject constructor(
 
             viewModel.getShimmerDataQuality(deviceId) { metrics ->
                 val metricsText = try {
-                    // Use reflection to call getDisplaySummary if it exists
+
                     metrics?.javaClass?.getMethod("getDisplaySummary")?.invoke(metrics) as? String
                         ?: "Data quality metrics not available"
                 } catch (e: Exception) {
@@ -535,8 +535,8 @@ class ShimmerController @Inject constructor(
         val btManager = viewModel.getShimmerBluetoothManager()
 
         if (shimmerDevice != null && btManager != null) {
-            // Check if these are real Shimmer objects or stubs
-            if (shimmerDevice is com.shimmerresearch.driver.ShimmerDevice && 
+
+            if (shimmerDevice is com.shimmerresearch.driver.ShimmerDevice &&
                 btManager is com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid) {
                 if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
                     try {
@@ -554,7 +554,7 @@ class ShimmerController @Inject constructor(
                     callback?.showToast("Cannot configure - device is streaming or logging")
                 }
             } else {
-                // Stub implementation
+
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] Using stub Shimmer implementation - skipping actual configuration")
                 callback?.showToast("Shimmer configuration (stub implementation)")
                 callback?.onConfigurationComplete()
@@ -575,8 +575,8 @@ class ShimmerController @Inject constructor(
         val btManager = viewModel.getShimmerBluetoothManager()
 
         if (shimmerDevice != null && btManager != null) {
-            // Check if these are real Shimmer objects or stubs
-            if (shimmerDevice is com.shimmerresearch.driver.ShimmerDevice && 
+
+            if (shimmerDevice is com.shimmerresearch.driver.ShimmerDevice &&
                 btManager is com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid) {
                 if (!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
                     try {
@@ -594,7 +594,7 @@ class ShimmerController @Inject constructor(
                     callback?.showToast("Cannot configure - device is streaming or logging")
                 }
             } else {
-                // Stub implementation
+
                 android.util.Log.d("ShimmerController", "[DEBUG_LOG] Using stub Shimmer implementation - skipping actual configuration")
                 callback?.showToast("Shimmer general configuration (stub implementation)")
                 callback?.onConfigurationComplete()

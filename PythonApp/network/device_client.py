@@ -6,16 +6,13 @@ import time
 import uuid
 from collections import defaultdict
 from typing import Any, Dict, List, Optional, Tuple
-
 from PyQt5.QtCore import QThread, QTimer, pyqtSignal
-
 class DeviceClient(QThread):
     device_connected = pyqtSignal(int, str)
     device_disconnected = pyqtSignal(int)
     frame_received = pyqtSignal(int, str, bytes)
     status_updated = pyqtSignal(int, dict)
     error_occurred = pyqtSignal(str)
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.devices: Dict[int, Dict[str, Any]] = {}
@@ -52,7 +49,6 @@ class DeviceClient(QThread):
             "avg_latency": 0.0,
             "connection_count": 0,
         }
-
     def run(self):
         self.running = True
         try:
@@ -93,7 +89,6 @@ class DeviceClient(QThread):
         finally:
             self._cleanup_server_socket()
         print("[DEBUG_LOG] DeviceClient thread stopped")
-
     def configure_ssl(
         self, certfile: str, keyfile: str, ca_certs: Optional[str] = None
     ) -> bool:
@@ -113,7 +108,6 @@ class DeviceClient(QThread):
         except Exception as e:
             self.error_occurred.emit(f"SSL configuration failed: {str(e)}")
             return False
-
     def _check_rate_limit(self, device_ip: str) -> bool:
         current_time = time.time()
         requests = self._rate_limiter[device_ip]
@@ -125,7 +119,6 @@ class DeviceClient(QThread):
             return False
         requests.append(current_time)
         return True
-
     def connect_to_device(self, device_ip: str, device_port: int = 8080) -> bool:
         print(
             f"[DEBUG_LOG] Attempting to connect to device at {device_ip}:{device_port}"
@@ -182,7 +175,6 @@ class DeviceClient(QThread):
         except Exception as e:
             self.error_occurred.emit(f"Failed to connect to {device_ip}: {str(e)}")
             return False
-
     def disconnect_device(self, device_index: int) -> None:
         print(f"[DEBUG_LOG] Disconnecting device {device_index}")
         with self._device_lock:
@@ -205,7 +197,6 @@ class DeviceClient(QThread):
                 print(f"[DEBUG_LOG] Device {device_index} disconnected successfully")
             else:
                 print(f"[DEBUG_LOG] Device {device_index} not found for disconnection")
-
     def send_command(
         self,
         device_index: int,
@@ -262,7 +253,6 @@ class DeviceClient(QThread):
                 self._message_stats["errors"] += 1
                 self._remove_failed_device(device_index)
                 return False
-
     def _handle_ack_timeout(self, message_id: str) -> None:
         if message_id not in self._pending_acknowledgments:
             return
@@ -306,7 +296,6 @@ class DeviceClient(QThread):
             self.error_occurred.emit(
                 f"Command '{command}' failed after {max_attempts} attempts to device {device_index}"
             )
-
     def stop_client(self) -> None:
         print("[DEBUG_LOG] Stopping DeviceClient")
         self.running = False
@@ -317,7 +306,6 @@ class DeviceClient(QThread):
         self.quit()
         self.wait()
         print("[DEBUG_LOG] DeviceClient stopped successfully")
-
     def negotiate_capabilities(
         self, device_index: int, requested_capabilities: List[str]
     ) -> Dict[str, bool]:
@@ -356,7 +344,6 @@ class DeviceClient(QThread):
                     f"Capability negotiation failed for device {device_index}: {str(e)}"
                 )
                 return {}
-
     def get_performance_metrics(self) -> Dict[str, Any]:
         with self._device_lock:
             connected_devices = len(self.devices)
@@ -385,7 +372,6 @@ class DeviceClient(QThread):
                     "capabilities": device_data.get("capabilities", []),
                 }
             return devices_info
-
     def handle_device_connection(
         self, client_socket: socket.socket, address: tuple
     ) -> None:
@@ -437,7 +423,6 @@ class DeviceClient(QThread):
                 client_socket.close()
             except:
                 pass
-
     def _monitor_device(self, device_id: int) -> None:
         print(f"[DEBUG_LOG] Starting device monitoring for device {device_id}")
         while self.running and device_id in self.devices:
@@ -463,7 +448,6 @@ class DeviceClient(QThread):
                 self._remove_failed_device(device_id)
                 break
         print(f"[DEBUG_LOG] Device {device_id} monitoring stopped")
-
     def _process_device_message(self, device_id: int, message: Dict[str, Any]) -> None:
         message_type = message.get("type")
         timestamp = time.time()
@@ -504,7 +488,6 @@ class DeviceClient(QThread):
                 f"[DEBUG_LOG] Unknown message type from device {device_id}: {message_type}"
             )
         self._message_stats["received"] += 1
-
     def _update_latency_stats(self, latency: float) -> None:
         alpha = 0.1
         if self._message_stats["avg_latency"] == 0:
@@ -513,7 +496,6 @@ class DeviceClient(QThread):
             self._message_stats["avg_latency"] = (
                 alpha * latency + (1 - alpha) * self._message_stats["avg_latency"]
             )
-
     def _remove_failed_device(self, device_id: int) -> None:
         with self._device_lock:
             if device_id in self.devices:
@@ -524,7 +506,6 @@ class DeviceClient(QThread):
                 del self.devices[device_id]
                 self.device_disconnected.emit(device_id)
                 print(f"[DEBUG_LOG] Removed failed device {device_id}")
-
     def _cleanup_server_socket(self) -> None:
         if self.server_socket:
             try:

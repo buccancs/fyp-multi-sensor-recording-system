@@ -10,26 +10,20 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Callable, Dict, List, Optional, Tuple
-
 from PyQt5.QtCore import QMutex, QMutexLocker, QThread, QTimer, pyqtSignal
-
 from ..utils.logging_config import get_logger
-
 logger = get_logger(__name__)
-
 class MessagePriority(Enum):
     CRITICAL = 1
     HIGH = 2
     NORMAL = 3
     LOW = 4
-
 class ConnectionState(Enum):
     DISCONNECTED = auto()
     CONNECTING = auto()
     CONNECTED = auto()
     RECONNECTING = auto()
     ERROR = auto()
-
 @dataclass
 class NetworkMessage:
     type: str
@@ -41,7 +35,6 @@ class NetworkMessage:
     timeout: float = 30.0
     requires_ack: bool = False
     message_id: Optional[str] = None
-
 @dataclass
 class ConnectionStats:
     connected_at: float = field(default_factory=time.time)
@@ -60,9 +53,7 @@ class ConnectionStats:
     packet_loss_rate: float = 0.0
     ping_count: int = 0
     pong_count: int = 0
-
 class EnhancedRemoteDevice:
-
     def __init__(
         self,
         device_id: str,
@@ -92,11 +83,9 @@ class EnhancedRemoteDevice:
         logger.info(
             f"Enhanced RemoteDevice created: {device_id} @ {address[0]}:{address[1]}"
         )
-
     def is_alive(self) -> bool:
         with QMutexLocker(self.mutex):
             return time.time() - self.last_heartbeat < self.heartbeat_timeout
-
     def should_send_frame(self) -> bool:
         current_time = time.time()
         frame_interval = 1.0 / self.max_frame_rate
@@ -104,7 +93,6 @@ class EnhancedRemoteDevice:
             self.last_frame_time = current_time
             return True
         return False
-
     def adapt_streaming_quality(self, network_latency: float, error_rate: float):
         with QMutexLocker(self.mutex):
             if error_rate > 0.1 or network_latency > 200:
@@ -116,18 +104,15 @@ class EnhancedRemoteDevice:
             else:
                 self.streaming_quality = "medium"
                 self.max_frame_rate = 15
-
     def queue_message(self, message: NetworkMessage):
         priority_value = message.priority.value
         self.outbound_queue.put((priority_value, time.time(), message))
-
     def get_next_message(self, timeout: float = 0.1) -> Optional[NetworkMessage]:
         try:
             _, _, message = self.outbound_queue.get(timeout=timeout)
             return message
         except queue.Empty:
             return None
-
     def update_latency(self, latency: float):
         with QMutexLocker(self.mutex):
             self.stats.latency_samples.append(latency)
@@ -150,27 +135,22 @@ class EnhancedRemoteDevice:
                         / self.stats.ping_count
                         * 100,
                     )
-
     def update_ping_stats(self, is_response: bool = False):
         with QMutexLocker(self.mutex):
             if is_response:
                 self.stats.pong_count += 1
             else:
                 self.stats.ping_count += 1
-
     def increment_error_count(self):
         with QMutexLocker(self.mutex):
             self.stats.error_count += 1
             self.consecutive_errors += 1
-
     def reset_error_count(self):
         with QMutexLocker(self.mutex):
             self.consecutive_errors = 0
-
     def should_reconnect(self) -> bool:
         with QMutexLocker(self.mutex):
             return self.consecutive_errors >= self.max_consecutive_errors
-
     def get_status_summary(self) -> Dict[str, Any]:
         with QMutexLocker(self.mutex):
             return {
@@ -203,7 +183,6 @@ class EnhancedRemoteDevice:
                     "latency_samples": len(self.stats.latency_samples),
                 },
             }
-
 class EnhancedDeviceServer(QThread):
     device_connected = pyqtSignal(str, dict)
     device_disconnected = pyqtSignal(str, str)
@@ -217,7 +196,6 @@ class EnhancedDeviceServer(QThread):
     connection_quality_changed = pyqtSignal(str, float)
     error_occurred = pyqtSignal(str, str, str)
     warning_occurred = pyqtSignal(str, str)
-
     def __init__(
         self,
         host: str = "0.0.0.0",
@@ -251,7 +229,6 @@ class EnhancedDeviceServer(QThread):
         self.enable_compression = True
         self.compression_threshold = 1024
         logger.info(f"Enhanced Device Server initialized: {host}:{port}")
-
     def start_server(self):
         if self.running:
             logger.warning("Server is already running")
@@ -277,7 +254,6 @@ class EnhancedDeviceServer(QThread):
             logger.error(f"Failed to start server: {e}")
             self.error_occurred.emit("server", "startup", str(e))
             return False
-
     def stop_server(self):
         logger.info("Stopping Enhanced Device Server...")
         self.running = False
@@ -294,7 +270,6 @@ class EnhancedDeviceServer(QThread):
         if self.isRunning():
             self.wait(5000)
         logger.info("Enhanced Device Server stopped")
-
     def run(self):
         while self.running and self.server_socket:
             try:
@@ -320,7 +295,6 @@ class EnhancedDeviceServer(QThread):
                 if self.running:
                     logger.error(f"Unexpected server error: {e}")
                     self.error_occurred.emit("server", "unexpected", str(e))
-
     def handle_client_connection(
         self, client_socket: socket.socket, address: Tuple[str, int]
     ):
@@ -364,7 +338,6 @@ class EnhancedDeviceServer(QThread):
         finally:
             if device_id and device:
                 self.disconnect_device(device_id, "Connection closed")
-
     def message_receiver_loop(self, device: EnhancedRemoteDevice):
         while self.running and device.state == ConnectionState.CONNECTED:
             try:
@@ -384,7 +357,6 @@ class EnhancedDeviceServer(QThread):
                 device.increment_error_count()
                 if device.should_reconnect():
                     break
-
     def message_sender_loop(self, device: EnhancedRemoteDevice):
         while self.running and device.state == ConnectionState.CONNECTED:
             try:
@@ -406,7 +378,6 @@ class EnhancedDeviceServer(QThread):
             except Exception as e:
                 logger.error(f"Send error for {device.device_id}: {e}")
                 device.increment_error_count()
-
     def send_message_immediate(
         self, device: EnhancedRemoteDevice, message: NetworkMessage
     ) -> bool:
@@ -421,7 +392,6 @@ class EnhancedDeviceServer(QThread):
         except Exception as e:
             logger.error(f"Failed to send message to {device.device_id}: {e}")
             return False
-
     def receive_message(
         self, sock: socket.socket, timeout: float = 1.0
     ) -> Optional[Dict[str, Any]]:
@@ -442,7 +412,6 @@ class EnhancedDeviceServer(QThread):
         except Exception as e:
             logger.error(f"Receive message error: {e}")
             return None
-
     def recv_exact(self, sock: socket.socket, length: int) -> Optional[bytes]:
         data = b""
         while len(data) < length:
@@ -451,7 +420,6 @@ class EnhancedDeviceServer(QThread):
                 return None
             data += chunk
         return data
-
     def process_message(self, device: EnhancedRemoteDevice, message: Dict[str, Any]):
         msg_type = message.get("type", "unknown")
         if "timestamp" in message:
@@ -469,7 +437,6 @@ class EnhancedDeviceServer(QThread):
             self.handle_sensor_data(device, message)
         else:
             self.message_received.emit(device.device_id, message)
-
     def handle_preview_frame(
         self, device: EnhancedRemoteDevice, message: Dict[str, Any]
     ):
@@ -497,7 +464,6 @@ class EnhancedDeviceServer(QThread):
             device.adapt_streaming_quality(device.stats.average_latency, error_rate)
         except Exception as e:
             logger.error(f"Preview frame processing error: {e}")
-
     def handle_heartbeat(self, device: EnhancedRemoteDevice, message: Dict[str, Any]):
         response = NetworkMessage(
             type="heartbeat_response",
@@ -509,7 +475,6 @@ class EnhancedDeviceServer(QThread):
             priority=MessagePriority.HIGH,
         )
         device.queue_message(response)
-
     def send_heartbeats(self):
         with QMutexLocker(self.devices_mutex):
             current_time = time.time()
@@ -523,7 +488,6 @@ class EnhancedDeviceServer(QThread):
                     device.queue_message(heartbeat)
                 else:
                     self.disconnect_device(device.device_id, "Heartbeat timeout")
-
     def send_command_to_device(self, device_id: str, command: str, **kwargs) -> bool:
         with QMutexLocker(self.devices_mutex):
             device = self.devices.get(device_id)
@@ -543,7 +507,6 @@ class EnhancedDeviceServer(QThread):
         )
         device.queue_message(message)
         return True
-
     def broadcast_command(self, command: str, **kwargs) -> int:
         count = 0
         with QMutexLocker(self.devices_mutex):
@@ -551,7 +514,6 @@ class EnhancedDeviceServer(QThread):
                 if self.send_command_to_device(device_id, command, **kwargs):
                     count += 1
         return count
-
     def disconnect_device(self, device_id: str, reason: str = "Unknown"):
         with QMutexLocker(self.devices_mutex):
             device = self.devices.get(device_id)
@@ -567,7 +529,6 @@ class EnhancedDeviceServer(QThread):
                 del self.client_handlers[device_id]
         self.device_disconnected.emit(device_id, reason)
         logger.info(f"Device {device_id} disconnected: {reason}")
-
     def get_network_statistics(self) -> Dict[str, Any]:
         with QMutexLocker(self.devices_mutex):
             stats = {
@@ -590,7 +551,6 @@ class EnhancedDeviceServer(QThread):
             for device_id, device in self.devices.items():
                 stats["devices"][device_id] = device.get_status_summary()
         return stats
-
     def _calculate_overall_latency(self) -> float:
         if not self.devices:
             return 0.0
@@ -601,7 +561,6 @@ class EnhancedDeviceServer(QThread):
                 total_latency += device.stats.average_latency
                 device_count += 1
         return total_latency / device_count if device_count > 0 else 0.0
-
     def _assess_overall_network_quality(self) -> str:
         if not self.devices:
             return "unknown"
@@ -614,7 +573,6 @@ class EnhancedDeviceServer(QThread):
             return "fair"
         else:
             return "poor"
-
     def get_device_latency_statistics(self, device_id: str) -> Dict[str, Any]:
         with QMutexLocker(self.devices_mutex):
             device = self.devices.get(device_id)
@@ -641,7 +599,6 @@ class EnhancedDeviceServer(QThread):
                         else []
                     ),
                 }
-
     def handle_status_update(
         self, device: EnhancedRemoteDevice, message: Dict[str, Any]
     ):
@@ -653,7 +610,6 @@ class EnhancedDeviceServer(QThread):
         else:
             status_data = {k: v for k, v in message.items() if k != "type"}
             self.message_received.emit(device.device_id, message)
-
     def handle_ping_message(
         self, device: EnhancedRemoteDevice, ping_data: str, original_timestamp: float
     ):
@@ -687,7 +643,6 @@ class EnhancedDeviceServer(QThread):
                 )
         except Exception as e:
             logger.error(f"Error handling ping message: {e}")
-
     def handle_acknowledgment(
         self, device: EnhancedRemoteDevice, message: Dict[str, Any]
     ):
@@ -696,10 +651,8 @@ class EnhancedDeviceServer(QThread):
         if message_id in self.pending_messages:
             del self.pending_messages[message_id]
         self.message_received.emit(device.device_id, message)
-
     def handle_sensor_data(self, device: EnhancedRemoteDevice, message: Dict[str, Any]):
         self.message_received.emit(device.device_id, message)
-
     def send_message(
         self,
         device: EnhancedRemoteDevice,
@@ -713,10 +666,8 @@ class EnhancedDeviceServer(QThread):
         )
         device.queue_message(message)
         return True
-
 def create_command_message(command: str, **kwargs) -> Dict[str, Any]:
     return {"type": "command", "command": command, "timestamp": time.time(), **kwargs}
-
 def decode_base64_image(data: str) -> Optional[bytes]:
     try:
         if data.startswith("data:"):

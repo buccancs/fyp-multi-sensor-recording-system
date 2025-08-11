@@ -124,7 +124,7 @@ class AppLoggerEnhancedTest {
         val tag = "SpecializedTest"
         val context = mapOf("test_phase" to "specialized_logging")
         AppLogger.logLifecycle(tag, "onCreate", "MainActivity", context)
-        AppLogger.logNetwork(tag, "GET", "https://api.example.com", "200 OK", 150L, context)
+        AppLogger.logNetwork(tag, "GET", "https:
         AppLogger.logRecording(tag, "start", "Camera1", 5000L, 1024 * 1024L, context)
         AppLogger.logSensor(tag, "reading", "GSR", "1.23", 3, System.currentTimeMillis(), context)
         AppLogger.logFile(tag, "save", "test.mp4", 1024 * 1024L, 250L, true, context)

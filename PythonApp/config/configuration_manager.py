@@ -4,9 +4,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-
 from ..utils.logging_config import get_logger
-
 @dataclass
 class DeviceConfig:
     device_id: str
@@ -17,7 +15,6 @@ class DeviceConfig:
     settings: Dict[str, Any]
     last_connected: str
     active: bool = True
-
 @dataclass
 class SessionConfig:
     session_id: str
@@ -26,9 +23,7 @@ class SessionConfig:
     calibration_settings: Dict[str, Any]
     created_timestamp: str
     modified_timestamp: str
-
 class ConfigurationManager:
-
     def __init__(self, config_dir: Optional[str] = None):
         self.logger = get_logger(__name__)
         if config_dir:
@@ -47,7 +42,6 @@ class ConfigurationManager:
         self.logger.info(
             f"ConfigurationManager initialized with config dir: {self.config_dir}"
         )
-
     def save_device_configuration(self, config: DeviceConfig) -> bool:
         try:
             self.device_configs[config.device_id] = config
@@ -57,16 +51,12 @@ class ConfigurationManager:
         except Exception as e:
             self.logger.error(f"Error saving device configuration: {e}")
             return False
-
     def get_device_configuration(self, device_id: str) -> Optional[DeviceConfig]:
         return self.device_configs.get(device_id)
-
     def get_all_device_configurations(self) -> List[DeviceConfig]:
         return list(self.device_configs.values())
-
     def get_active_device_configurations(self) -> List[DeviceConfig]:
         return [config for config in self.device_configs.values() if config.active]
-
     def remove_device_configuration(self, device_id: str) -> bool:
         try:
             if device_id in self.device_configs:
@@ -78,7 +68,6 @@ class ConfigurationManager:
         except Exception as e:
             self.logger.error(f"Error removing device configuration: {e}")
             return False
-
     def save_session_configuration(self, config: SessionConfig) -> bool:
         try:
             config.modified_timestamp = datetime.now().isoformat()
@@ -89,7 +78,6 @@ class ConfigurationManager:
         except Exception as e:
             self.logger.error(f"Error saving session configuration: {e}")
             return False
-
     def restore_last_session(self) -> Optional[SessionConfig]:
         try:
             if not self.session_configs:
@@ -103,10 +91,8 @@ class ConfigurationManager:
         except Exception as e:
             self.logger.error(f"Error restoring last session: {e}")
             return None
-
     def get_session_configuration(self, session_id: str) -> Optional[SessionConfig]:
         return self.session_configs.get(session_id)
-
     def export_session_settings(
         self, session_id: str, export_path: Optional[str] = None
     ) -> Optional[str]:
@@ -134,7 +120,6 @@ class ConfigurationManager:
         except Exception as e:
             self.logger.error(f"Error exporting session settings: {e}")
             return None
-
     def import_session_settings(self, import_path: str) -> Optional[SessionConfig]:
         try:
             import_path = Path(import_path)
@@ -165,7 +150,6 @@ class ConfigurationManager:
         except Exception as e:
             self.logger.error(f"Error importing session settings: {e}")
             return None
-
     def update_app_setting(self, key: str, value: Any) -> bool:
         try:
             self.app_settings[key] = value
@@ -175,10 +159,8 @@ class ConfigurationManager:
         except Exception as e:
             self.logger.error(f"Error updating app setting: {e}")
             return False
-
     def get_app_setting(self, key: str, default: Any = None) -> Any:
         return self.app_settings.get(key, default)
-
     def create_session_config_from_devices(
         self, session_id: str, device_ids: List[str]
     ) -> Optional[SessionConfig]:
@@ -209,12 +191,10 @@ class ConfigurationManager:
         except Exception as e:
             self.logger.error(f"Error creating session configuration: {e}")
             return None
-
     def _load_configurations(self):
         self._load_device_configs()
         self._load_session_configs()
         self._load_app_settings()
-
     def _load_device_configs(self):
         try:
             if self.device_config_file.exists():
@@ -228,7 +208,6 @@ class ConfigurationManager:
                 )
         except Exception as e:
             self.logger.error(f"Error loading device configurations: {e}")
-
     def _load_session_configs(self):
         try:
             if self.session_config_file.exists():
@@ -253,7 +232,6 @@ class ConfigurationManager:
                 )
         except Exception as e:
             self.logger.error(f"Error loading session configurations: {e}")
-
     def _load_app_settings(self):
         try:
             if self.app_settings_file.exists():
@@ -262,7 +240,6 @@ class ConfigurationManager:
                 self.logger.info("Loaded application settings")
         except Exception as e:
             self.logger.error(f"Error loading application settings: {e}")
-
     def _save_device_configs(self):
         try:
             data = {}
@@ -272,7 +249,6 @@ class ConfigurationManager:
                 json.dump(data, f, indent=2)
         except Exception as e:
             self.logger.error(f"Error saving device configurations: {e}")
-
     def _save_session_configs(self):
         try:
             data = {}
@@ -282,7 +258,6 @@ class ConfigurationManager:
                 json.dump(data, f, indent=2)
         except Exception as e:
             self.logger.error(f"Error saving session configurations: {e}")
-
     def _save_app_settings(self):
         try:
             with open(self.app_settings_file, "w") as f:

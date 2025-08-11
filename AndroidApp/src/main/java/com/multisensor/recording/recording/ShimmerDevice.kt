@@ -81,4 +81,3 @@ data class ShimmerDevice(
     override fun toString(): String =
         "ShimmerDevice(${getDisplayName()}, state=$connectionState, samples=${sampleCount.get()}, battery=$batteryLevel%)"
 }
-

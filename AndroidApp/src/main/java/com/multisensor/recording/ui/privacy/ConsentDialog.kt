@@ -137,7 +137,7 @@ class ConsentDialog(
             privacyManager.configureAnonymization(
                 enableDataAnonymization = enableAnonymization,
                 enableFaceBlurring = enableFaceBlurring,
-                enableMetadataStripping = true 
+                enableMetadataStripping = true
             )
 
             logger.info("User consent granted with participant ID: $participantId")

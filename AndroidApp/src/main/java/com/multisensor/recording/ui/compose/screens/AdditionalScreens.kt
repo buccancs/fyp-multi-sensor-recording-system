@@ -14,9 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.multisensor.recording.ui.MainViewModel
 
-/**
- * Settings screen that replaces SettingsActivity in the single-activity pattern.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -49,7 +46,7 @@ fun SettingsScreen(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-        // App Preferences Section
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -64,8 +61,7 @@ fun SettingsScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                
-                // Privacy Settings
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -82,14 +78,13 @@ fun SettingsScreen(
                         )
                     }
                     Switch(
-                        checked = true, // This would come from PrivacyManager
-                        onCheckedChange = { /* Handle toggle */ }
+                        checked = true,
+                        onCheckedChange = {  }
                     )
                 }
-                
+
                 HorizontalDivider()
-                
-                // Recording Settings
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -107,13 +102,12 @@ fun SettingsScreen(
                     }
                     Switch(
                         checked = false,
-                        onCheckedChange = { /* Handle toggle */ }
+                        onCheckedChange = {  }
                     )
                 }
             }
         }
-        
-        // Network Settings Section
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -128,26 +122,25 @@ fun SettingsScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 OutlinedTextField(
                     value = "192.168.0.100",
-                    onValueChange = { /* Handle IP change */ },
+                    onValueChange = {  },
                     label = { Text("PC Controller IP") },
                     modifier = Modifier.fillMaxWidth()
                 )
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 OutlinedTextField(
                     value = "9000",
-                    onValueChange = { /* Handle port change */ },
+                    onValueChange = {  },
                     label = { Text("PC Controller Port") },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         }
-        
-        // Advanced Settings Section
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,20 +155,20 @@ fun SettingsScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 Button(
-                    onClick = { /* Navigate to Shimmer Settings */ },
+                    onClick = {  },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(Icons.Default.Bluetooth, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Shimmer Device Settings")
                 }
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Button(
-                    onClick = { /* Navigate to Diagnostics */ },
+                    onClick = {  },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(Icons.Default.BugReport, contentDescription = null)
@@ -188,9 +181,6 @@ fun SettingsScreen(
 }
 }
 
-/**
- * About screen that replaces AboutActivity in the single-activity pattern.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
@@ -198,7 +188,7 @@ fun AboutScreen(
     aboutViewModel: com.multisensor.recording.ui.AboutViewModel = hiltViewModel()
 ) {
     val uiState by aboutViewModel.uiState.collectAsState()
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -227,32 +217,30 @@ fun AboutScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
         Spacer(modifier = Modifier.height(32.dp))
-        
-        // App Icon/Logo placeholder
+
         Icon(
             imageVector = Icons.Default.CameraAlt,
             contentDescription = "App Icon",
             modifier = Modifier.size(96.dp),
             tint = MaterialTheme.colorScheme.primary
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         Text(
             text = "Multi-Sensor Recording System",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
-        
+
         Text(
             text = "Version 0.1.0-beta (Build: ${aboutViewModel.getBuildDate()})",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        
+
         Spacer(modifier = Modifier.height(32.dp))
-        
-        // System Information Card
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -284,7 +272,7 @@ fun AboutScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 InfoRow("Device", "${uiState.deviceManufacturer} ${uiState.deviceModel}")
                 InfoRow("Android", "${uiState.androidVersion} (API ${uiState.androidApiLevel})")
                 InfoRow("Architecture", uiState.deviceArchitecture)
@@ -293,10 +281,9 @@ fun AboutScreen(
                 InfoRow("Screen", "${uiState.screenResolution} (${uiState.screenDensity} DPI)")
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // About This App Card
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -317,10 +304,9 @@ fun AboutScreen(
                 )
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Development Team Card
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -333,7 +319,7 @@ fun AboutScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 uiState.developers.forEach { developer ->
                     Column(
                         modifier = Modifier.padding(vertical = 4.dp)
@@ -354,10 +340,9 @@ fun AboutScreen(
                 }
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Licenses Card
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -370,7 +355,7 @@ fun AboutScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 uiState.thirdPartyLicenses.take(5).forEach { license ->
                     Text(
                         text = "• $license",
@@ -379,7 +364,7 @@ fun AboutScreen(
                         modifier = Modifier.padding(vertical = 2.dp)
                     )
                 }
-                
+
                 if (uiState.thirdPartyLicenses.size > 5) {
                     Text(
                         text = "... and ${uiState.thirdPartyLicenses.size - 5} more",
@@ -390,9 +375,9 @@ fun AboutScreen(
                 }
             }
         }
-        
+
         Spacer(modifier = Modifier.height(32.dp))
-        
+
         Text(
             text = uiState.copyrightInfo,
             style = MaterialTheme.typography.bodySmall,
@@ -402,9 +387,6 @@ fun AboutScreen(
 }
 }
 
-/**
- * Diagnostics screen that replaces DiagnosticsActivity in the single-activity pattern.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiagnosticsScreen(
@@ -437,7 +419,7 @@ fun DiagnosticsScreen(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-        // System Status Card
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -452,15 +434,14 @@ fun DiagnosticsScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 StatusItem("Camera", "Connected", true)
                 StatusItem("PC Controller", "Disconnected", false)
                 StatusItem("Shimmer Devices", "2 Connected", true)
                 StatusItem("Storage", "Available", true)
             }
         }
-        
-        // Performance Metrics Card
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -475,15 +456,14 @@ fun DiagnosticsScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 MetricItem("CPU Usage", "15%")
                 MetricItem("Memory Usage", "2.1 GB / 8 GB")
                 MetricItem("Storage Used", "45.2 GB / 128 GB")
                 MetricItem("Network Latency", "12 ms")
             }
         }
-        
-        // Actions Card
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -498,27 +478,27 @@ fun DiagnosticsScreen(
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 Button(
-                    onClick = { /* Run connection test */ },
+                    onClick = {  },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Test PC Connection")
                 }
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Button(
-                    onClick = { /* Export logs */ },
+                    onClick = {  },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Export System Logs")
                 }
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Button(
-                    onClick = { /* Clear cache */ },
+                    onClick = {  },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Clear Application Cache")
@@ -588,9 +568,6 @@ private fun MetricItem(
     }
 }
 
-/**
- * Shimmer Settings screen placeholder.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShimmerSettingsScreen(
@@ -644,9 +621,6 @@ fun ShimmerSettingsScreen(
 }
 }
 
-/**
- * Shimmer Visualization screen placeholder.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShimmerVisualizationScreen(

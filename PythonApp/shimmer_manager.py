@@ -11,11 +11,9 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Union
-
 from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSample
 from ..network.pc_server import PCServer
 from ..utils.logging_config import get_logger
-
 try:
     from .shimmer.shimmer_imports import (
         DEFAULT_BAUDRATE,
@@ -25,7 +23,6 @@ try:
         PYSHIMMER_AVAILABLE,
     )
 except ImportError:
-
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
     from shimmer.shimmer_imports import (
@@ -35,25 +32,21 @@ except ImportError:
         ShimmerBluetooth,
         PYSHIMMER_AVAILABLE,
     )
-
 class ConnectionType(Enum):
     DIRECT_BLUETOOTH = "direct_bluetooth"
     ANDROID_MEDIATED = "android_mediated"
     SIMULATION = "simulation"
-
 class DeviceState(Enum):
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
     CONNECTED = "connected"
     STREAMING = "streaming"
     ERROR = "error"
-
 class ConnectionStatus(Enum):
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
     CONNECTED = "connected"
     ERROR = "error"
-
 @dataclass
 class ShimmerStatus:
     is_available: bool = False
@@ -74,11 +67,9 @@ class ShimmerStatus:
     android_device_id: Optional[str] = None
     last_error: Optional[str] = None
     connection_attempts: int = 0
-
     def __post_init__(self):
         if self.enabled_channels is None:
             self.enabled_channels = set()
-
 @dataclass
 class ShimmerSample:
     timestamp: float
@@ -103,7 +94,6 @@ class ShimmerSample:
     signal_strength: Optional[float] = None
     raw_data: Optional[Dict[str, Any]] = None
     session_id: Optional[str] = None
-
 @dataclass
 class DeviceConfiguration:
     device_id: str
@@ -115,7 +105,6 @@ class DeviceConfiguration:
     auto_reconnect: bool = True
     data_validation: bool = True
     buffer_size: int = 1000
-
 @dataclass
 class DeviceStatus:
     device_id: str
@@ -126,13 +115,10 @@ class DeviceStatus:
     is_streaming: bool = False
     samples_count: int = 0
     last_error: Optional[str] = None
-
 class ShimmerManager:
-
     def __init__(
         self, session_manager=None, logger=None, enable_android_integration=True
     ):
-
         self.session_manager = session_manager
         self.logger = logger or get_logger(__name__)
         self.enable_android_integration = enable_android_integration
@@ -178,9 +164,7 @@ class ShimmerManager:
         self.logger.info(
             "Enhanced ShimmerManager initialized with Android integration support"
         )
-
     def initialize(self) -> bool:
-
         try:
             self.logger.info("Initializing Enhanced ShimmerManager...")
             if not PYSHIMMER_AVAILABLE:
@@ -220,7 +204,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Failed to initialize Enhanced ShimmerManager: {e}")
             return False
-
     def scan_and_pair_devices(self) -> Dict[str, List[str]]:
         discovered_devices = {"direct": [], "android": [], "simulated": []}
         try:
@@ -262,7 +245,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error during device scanning: {e}")
             return discovered_devices
-
     def connect_devices(
         self, device_info: Union[List[str], Dict[str, List[str]]]
     ) -> bool:
@@ -277,79 +259,64 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error connecting devices: {e}")
             return False
-
     def _connect_legacy_devices(self, device_addresses: List[str]) -> bool:
         self.logger.info(f"Connecting to {len(device_addresses)} devices (legacy mode)...")
         success_count = 0
-        
         for mac_address in device_addresses:
             if self._connect_single_device(mac_address, ConnectionType.SIMULATION):
                 success_count += 1
-        
         all_connected = success_count == len(device_addresses)
         self.logger.info(f"Connection results: {success_count}/{len(device_addresses)} successful")
         return all_connected
-
     def _connect_modern_devices(self, device_info: Dict[str, List[str]]) -> bool:
         total_devices = 0
         success_count = 0
-        
         if "direct" in device_info:
             direct_success = self._connect_direct_devices(device_info["direct"])
             total_devices += len(device_info["direct"])
             success_count += direct_success
-        
         if "android" in device_info and self.enable_android_integration:
             android_success = self._connect_android_devices(device_info["android"])
             total_devices += len(device_info["android"])
             success_count += android_success
-        
         if "simulated" in device_info:
             simulated_success = self._connect_simulated_devices(device_info["simulated"])
             total_devices += len(device_info["simulated"])
             success_count += simulated_success
-        
         all_connected = success_count == total_devices
         self.logger.info(f"Enhanced connection results: {success_count}/{total_devices} successful")
         return all_connected
-
     def _connect_direct_devices(self, device_addresses: List[str]) -> int:
         success_count = 0
         for mac_address in device_addresses:
             if self._connect_single_device(mac_address, ConnectionType.DIRECT_BLUETOOTH):
                 success_count += 1
         return success_count
-
     def _connect_android_devices(self, android_device_ids: List[str]) -> int:
         success_count = 0
         for android_device_id in android_device_ids:
             if self._connect_android_device(android_device_id):
                 success_count += 1
         return success_count
-
     def _connect_simulated_devices(self, device_addresses: List[str]) -> int:
         success_count = 0
         for mac_address in device_addresses:
             if self._connect_single_device(mac_address, ConnectionType.SIMULATION):
                 success_count += 1
         return success_count
-
     def _connect_single_device(
         self, mac_address: str, connection_type: ConnectionType
     ) -> bool:
         try:
             device_id = f"shimmer_{mac_address.replace(':', '_')}"
-            
             if connection_type == ConnectionType.SIMULATION or not PYSHIMMER_AVAILABLE:
                 return self._setup_simulated_device(device_id, mac_address, connection_type)
             elif connection_type == ConnectionType.DIRECT_BLUETOOTH:
                 return self._setup_bluetooth_device(device_id, mac_address, connection_type)
-            
             return False
         except Exception as e:
             self.logger.error(f"Error connecting to device {mac_address}: {e}")
             return False
-
     def _setup_simulated_device(
         self, device_id: str, mac_address: str, connection_type: ConnectionType
     ) -> bool:
@@ -363,18 +330,15 @@ class ShimmerManager:
             firmware_version="1.0.0",
             sampling_rate=self.default_sampling_rate,
         )
-        
         self.device_configurations[device_id] = DeviceConfiguration(
             device_id=device_id,
             mac_address=mac_address,
             enabled_channels={"GSR", "PPG_A13", "Accel_X", "Accel_Y", "Accel_Z"},
             connection_type=connection_type,
         )
-        
         self.data_queues[device_id] = queue.Queue(maxsize=self.data_buffer_size)
         self.logger.info(f"Simulated connection to {device_id}")
         return True
-
     def _setup_bluetooth_device(
         self, device_id: str, mac_address: str, connection_type: ConnectionType
     ) -> bool:
@@ -383,41 +347,31 @@ class ShimmerManager:
                 f"pyshimmer library not available for direct connection to {device_id}"
             )
             return False
-        
         try:
             self.logger.info(f"Establishing direct Bluetooth connection to {mac_address}")
-            
             serial_port = self._find_serial_port_for_device(mac_address)
             if not serial_port:
                 self.logger.error(f"Could not find serial port for device {mac_address}")
                 return False
-            
             from pyshimmer import ShimmerBluetooth
             shimmer_device = ShimmerBluetooth(serial_port)
-            
             connect_success = shimmer_device.connect(timeout=10.0)
             if not connect_success:
                 self.logger.error(f"Failed to connect to Shimmer device at {mac_address}")
                 return False
-            
             shimmer_device.set_data_callback(
                 lambda data: self._on_shimmer_data_received(device_id, data)
             )
-            
             default_config = self.device_configurations.get(device_id)
             if default_config:
                 self._configure_shimmer_device(shimmer_device, default_config)
-            
             self.shimmer_devices[device_id] = shimmer_device
             self._store_device_status_and_config(device_id, mac_address, connection_type)
-            
             self.logger.info(f"Successfully connected to Shimmer device {device_id} via Bluetooth")
             return True
-            
         except Exception as e:
             self.logger.error(f"Exception during Bluetooth connection to {mac_address}: {e}")
             return False
-
     def _store_device_status_and_config(
         self, device_id: str, mac_address: str, connection_type: ConnectionType
     ) -> None:
@@ -428,7 +382,6 @@ class ShimmerManager:
             connection_type=connection_type,
             last_seen=datetime.now(),
         )
-        
         if device_id not in self.device_configurations:
             self.device_configurations[device_id] = DeviceConfiguration(
                 device_id=device_id,
@@ -436,9 +389,7 @@ class ShimmerManager:
                 enabled_channels={"GSR", "PPG_A13", "Accel_X", "Accel_Y", "Accel_Z"},
                 connection_type=connection_type,
             )
-        
         self.data_queues[device_id] = queue.Queue(maxsize=self.data_buffer_size)
-
     def _connect_android_device(self, android_device_id: str) -> bool:
         try:
             if not self.enable_android_integration or not self.android_device_manager:
@@ -485,7 +436,6 @@ class ShimmerManager:
                 f"Error connecting to Android device {android_device_id}: {e}"
             )
             return False
-
     def _scan_direct_bluetooth_devices(self) -> List[str]:
         discovered_devices = []
         try:
@@ -497,7 +447,6 @@ class ShimmerManager:
             self.logger.info("Starting Bluetooth scan for Shimmer devices...")
             try:
                 from pyshimmer import ShimmerBluetooth
-
                 scan_timeout = 10.0
                 self.logger.info(f"Scanning for {scan_timeout} seconds...")
                 self.logger.info(
@@ -514,13 +463,11 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error during Bluetooth scanning: {e}")
             return discovered_devices
-
     def _generic_bluetooth_scan(self) -> List[str]:
         discovered_devices = []
         try:
             try:
                 import bluetooth
-
                 self.logger.info(
                     "Using generic bluetooth library for device discovery..."
                 )
@@ -538,7 +485,6 @@ class ShimmerManager:
             if len(discovered_devices) == 0:
                 try:
                     import bluetooth as pybluez
-
                     self.logger.info("Using pybluez for device discovery...")
                     nearby_devices = pybluez.discover_devices(
                         duration=8, lookup_names=True
@@ -562,7 +508,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error in generic Bluetooth scanning: {e}")
         return discovered_devices
-
     def set_enabled_channels(self, device_id: str, channels: Set[str]) -> bool:
         try:
             if device_id not in self.device_status:
@@ -581,7 +526,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error configuring channels for {device_id}: {e}")
             return False
-
     def start_streaming(self) -> bool:
         try:
             if not self.is_initialized:
@@ -602,7 +546,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error starting streaming: {e}")
             return False
-
     def _start_device_streaming(self, device_id: str) -> bool:
         try:
             if device_id in self.connected_devices:
@@ -616,7 +559,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error starting streaming for {device_id}: {e}")
             return False
-
     def stop_streaming(self) -> bool:
         try:
             self.logger.info("Stopping data streaming...")
@@ -631,7 +573,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error stopping streaming: {e}")
             return False
-
     def _stop_device_streaming(self, device_id: str) -> bool:
         try:
             if device_id in self.connected_devices:
@@ -643,7 +584,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error stopping streaming for {device_id}: {e}")
             return False
-
     def start_recording(self, session_id: str) -> bool:
         try:
             if not self.is_initialized:
@@ -669,7 +609,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error starting recording: {e}")
             return False
-
     def stop_recording(self) -> bool:
         try:
             if not self.is_recording:
@@ -690,28 +629,22 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error stopping recording: {e}")
             return False
-
     def get_shimmer_status(self) -> Dict[str, ShimmerStatus]:
         return self.device_status.copy()
-
     def add_data_callback(self, callback: Callable[[ShimmerSample], None]) -> None:
         self.data_callbacks.append(callback)
-
     def add_status_callback(
         self, callback: Callable[[str, ShimmerStatus], None]
     ) -> None:
         self.status_callbacks.append(callback)
-
     def add_android_device_callback(
         self, callback: Callable[[str, Dict[str, Any]], None]
     ) -> None:
         self.android_device_callbacks.append(callback)
-
     def add_connection_state_callback(
         self, callback: Callable[[str, DeviceState, ConnectionType], None]
     ) -> None:
         self.connection_state_callbacks.append(callback)
-
     def _on_android_shimmer_data(self, sample: ShimmerDataSample) -> None:
         try:
             if sample.android_device_id not in self.android_shimmer_mapping:
@@ -771,7 +704,6 @@ class ShimmerManager:
                 self.logger.warning(f"Invalid data sample from {shimmer_device_id}")
         except Exception as e:
             self.logger.error(f"Error processing Android Shimmer data: {e}")
-
     def _on_android_device_status(self, android_device_id: str, android_device) -> None:
         try:
             if android_device_id in self.android_shimmer_mapping:
@@ -800,7 +732,6 @@ class ShimmerManager:
                     self.logger.error(f"Error in Android device callback: {e}")
         except Exception as e:
             self.logger.error(f"Error processing Android device status: {e}")
-
     def _validate_sample_data(self, sample: ShimmerSample) -> bool:
         try:
             if sample.timestamp <= 0:
@@ -828,11 +759,9 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error validating sample data: {e}")
             return False
-
     def _find_serial_port_for_device(self, mac_address: str) -> Optional[str]:
         try:
             import serial.tools.list_ports
-
             ports = serial.tools.list_ports.comports()
             for port in ports:
                 if hasattr(port, "device") and hasattr(port, "description"):
@@ -857,14 +786,12 @@ class ShimmerManager:
                         )
                         return port.device
             import platform
-
             system = platform.system().lower()
             if system == "windows":
                 for i in range(1, 20):
                     port_name = f"COM{i}"
                     try:
                         import serial
-
                         test_port = serial.Serial(port_name, timeout=1)
                         test_port.close()
                         self.logger.info(f"Found available COM port: {port_name}")
@@ -874,7 +801,6 @@ class ShimmerManager:
                         continue
             elif system == "linux":
                 import glob
-
                 bt_ports = (
                     glob.glob("/dev/rfcomm*")
                     + glob.glob("/dev/ttyUSB*")
@@ -885,7 +811,6 @@ class ShimmerManager:
                     return bt_ports[0]
             elif system == "darwin":
                 import glob
-
                 bt_ports = glob.glob("/dev/tty.*Bluetooth*") + glob.glob(
                     "/dev/cu.*Bluetooth*"
                 )
@@ -897,7 +822,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error finding serial port for {mac_address}: {e}")
             return None
-
     def _configure_shimmer_device(
         self, shimmer_device, device_config: DeviceConfiguration
     ) -> bool:
@@ -924,7 +848,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error configuring Shimmer device: {e}")
             return False
-
     def _channels_to_sensor_ids(self, channels: Set[str]) -> List[int]:
         channel_mapping = {
             "GSR": 4,
@@ -946,7 +869,6 @@ class ShimmerManager:
                 if sensor_id not in sensor_ids:
                     sensor_ids.append(sensor_id)
         return sensor_ids
-
     def _on_shimmer_data_received(self, device_id: str, data) -> None:
         try:
             sample = self._convert_pyshimmer_data(device_id, data)
@@ -965,7 +887,6 @@ class ShimmerManager:
                     self._write_sample_to_file(device_id, sample)
         except Exception as e:
             self.logger.error(f"Error processing Shimmer data for {device_id}: {e}")
-
     def _convert_pyshimmer_data(self, device_id: str, data) -> Optional[Dict[str, Any]]:
         try:
             sample = {
@@ -994,7 +915,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error converting pyshimmer data: {e}")
             return None
-
     def cleanup(self) -> None:
         try:
             self.logger.info("Cleaning up Enhanced ShimmerManager...")
@@ -1042,7 +962,6 @@ class ShimmerManager:
             self.logger.info("Enhanced ShimmerManager cleanup completed")
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
-
     def get_android_devices(self) -> Dict[str, Any]:
         if not self.android_device_manager:
             return {}
@@ -1057,19 +976,16 @@ class ShimmerManager:
                     "shimmer_devices": device.shimmer_devices,
                 }
         return shimmer_capable
-
     def start_android_session(self, session_id: str, **kwargs) -> bool:
         if not self.android_device_manager:
             self.logger.error("Android device manager not available")
             return False
         return self.android_device_manager.start_session(session_id, **kwargs)
-
     def stop_android_session(self) -> bool:
         if not self.android_device_manager:
             self.logger.error("Android device manager not available")
             return False
         return self.android_device_manager.stop_session()
-
     def send_sync_signal(self, signal_type: str = "flash", **kwargs) -> int:
         if not self.android_device_manager:
             self.logger.error("Android device manager not available")
@@ -1081,7 +997,6 @@ class ShimmerManager:
         else:
             self.logger.error(f"Unknown sync signal type: {signal_type}")
             return 0
-
     def _create_session_directory(self, session_id: str) -> Optional[Path]:
         try:
             if self.session_manager:
@@ -1097,7 +1012,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error creating session directory: {e}")
             return None
-
     def _initialize_csv_file(self, device_id: str, session_dir: Path) -> bool:
         try:
             csv_file_path = session_dir / f"{device_id}_data.csv"
@@ -1134,7 +1048,6 @@ class ShimmerManager:
         except Exception as e:
             self.logger.error(f"Error initializing CSV file for {device_id}: {e}")
             return False
-
     def _start_background_threads(self) -> None:
         self.stop_event.clear()
         self.data_processing_thread = threading.Thread(
@@ -1147,7 +1060,6 @@ class ShimmerManager:
         )
         self.file_writing_thread.daemon = True
         self.file_writing_thread.start()
-
     def _data_processing_loop(self) -> None:
         while not self.stop_event.is_set():
             try:
@@ -1163,7 +1075,6 @@ class ShimmerManager:
             except Exception as e:
                 self.logger.error(f"Error in data processing loop: {e}")
                 time.sleep(1.0)
-
     def _file_writing_loop(self) -> None:
         while not self.stop_event.is_set():
             try:
@@ -1174,7 +1085,6 @@ class ShimmerManager:
             except Exception as e:
                 self.logger.error(f"Error in file writing loop: {e}")
                 time.sleep(1.0)
-
     def _process_data_sample(self, sample: ShimmerSample) -> None:
         try:
             if self.is_recording and sample.device_id in self.csv_writers:
@@ -1192,9 +1102,7 @@ class ShimmerManager:
                     self.logger.error(f"Error in data callback: {e}")
         except Exception as e:
             self.logger.error(f"Error processing data sample: {e}")
-
     def _start_simulated_streaming(self, device_id: str) -> None:
-
         def simulate_data():
             while not self.stop_event.is_set() and self.is_streaming:
                 try:
@@ -1218,12 +1126,9 @@ class ShimmerManager:
                         f"Error in simulated streaming for {device_id}: {e}"
                     )
                     time.sleep(1.0)
-
         self.thread_pool.submit(simulate_data)
-
     def _generate_simulated_sample(self, device_id: str) -> ShimmerSample:
         import random
-
         timestamp = time.time()
         system_time = datetime.now().isoformat()
         gsr_conductance = random.uniform(0.1, 10.0)
@@ -1243,23 +1148,18 @@ class ShimmerManager:
             accel_z=accel_z,
             battery_percentage=battery_percentage,
         )
-
 if __name__ == "__main__":
     logger = get_logger(__name__)
-
     def on_data_received(sample: ShimmerSample):
         logger.info(
             f"Data from {sample.device_id} ({sample.connection_type.value}): GSR={sample.gsr_conductance}, PPG={sample.ppg_a13}"
         )
-
     def on_status_update(device_id: str, status: ShimmerStatus):
         logger.info(
             f"Status {device_id}: {status.device_state.value} - Battery: {status.battery_level}%"
         )
-
     def on_android_device(device_id: str, status: Dict[str, Any]):
         logger.info(f"Android device {device_id}: {status}")
-
     manager = ShimmerManager(enable_android_integration=True)
     manager.add_data_callback(on_data_received)
     manager.add_status_callback(on_status_update)

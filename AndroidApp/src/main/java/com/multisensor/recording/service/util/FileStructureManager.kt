@@ -8,19 +8,12 @@ import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * FileStructureManager handles directory and file structure operations for recording sessions.
- * 
- * This class provides centralized management of session directories, file creation,
- * and cleanup operations. It abstracts the complexity of file system operations
- * and provides a clean API for session-related file management.
- */
 @Singleton
 class FileStructureManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val logger: Logger
 ) {
-    
+
     companion object {
         private const val BASE_FOLDER_NAME = "MultiSensorRecording"
         private const val SESSION_INFO_FILE = "session_info.txt"
@@ -35,9 +28,6 @@ class FileStructureManager @Inject constructor(
         private const val STIMULUS_EVENTS_FILE = "stimulus_events.csv"
     }
 
-    /**
-     * Data class containing all file paths for a recording session.
-     */
     data class SessionFilePaths(
         val sessionFolder: File,
         val sessionInfoFile: File,
@@ -52,12 +42,6 @@ class FileStructureManager @Inject constructor(
         val stimulusEventsFile: File
     )
 
-    /**
-     * Gets the base recording folder, creating it if necessary.
-     * Falls back to internal storage if external storage is not available.
-     * 
-     * @return Base folder for all recording sessions
-     */
     fun getBaseRecordingFolder(): File {
         val baseDir = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
             File(Environment.getExternalStorageDirectory(), BASE_FOLDER_NAME)
@@ -75,13 +59,6 @@ class FileStructureManager @Inject constructor(
         return baseDir
     }
 
-    /**
-     * Creates a new session folder with the specified session ID.
-     * 
-     * @param sessionId Unique identifier for the session
-     * @return Created session folder
-     * @throws Exception if folder creation fails
-     */
     fun createSessionFolder(sessionId: String): File {
         val baseFolder = getBaseRecordingFolder()
         val sessionFolder = File(baseFolder, sessionId)
@@ -92,19 +69,14 @@ class FileStructureManager @Inject constructor(
 
         createSessionSubfolders(sessionFolder)
         logger.info("Created session folder structure: ${sessionFolder.absolutePath}")
-        
+
         return sessionFolder
     }
 
-    /**
-     * Creates all required subfolders within a session folder.
-     * 
-     * @param sessionFolder Parent session folder
-     */
     fun createSessionSubfolders(sessionFolder: File) {
         val folders = mapOf(
             RAW_FRAMES_FOLDER to "raw frames",
-            THERMAL_DATA_FOLDER to "thermal data", 
+            THERMAL_DATA_FOLDER to "thermal data",
             CALIBRATION_FOLDER to "calibration"
         )
 
@@ -116,12 +88,6 @@ class FileStructureManager @Inject constructor(
         }
     }
 
-    /**
-     * Gets all file paths for a session, creating the structure if needed.
-     * 
-     * @param sessionFolder The session's root folder
-     * @return SessionFilePaths object with all file references
-     */
     fun getSessionFilePaths(sessionFolder: File): SessionFilePaths {
         return SessionFilePaths(
             sessionFolder = sessionFolder,
@@ -138,11 +104,6 @@ class FileStructureManager @Inject constructor(
         )
     }
 
-    /**
-     * Lists all session folders in the base recording directory.
-     * 
-     * @return List of session folders, sorted by modification time (newest first)
-     */
     fun getAllSessionFolders(): List<File> {
         return try {
             val baseFolder = getBaseRecordingFolder()
@@ -160,12 +121,6 @@ class FileStructureManager @Inject constructor(
         }
     }
 
-    /**
-     * Deletes a session folder and all its contents recursively.
-     * 
-     * @param sessionFolder The folder to delete
-     * @return true if deletion was successful, false otherwise
-     */
     fun deleteSessionFolder(sessionFolder: File): Boolean {
         return try {
             deleteRecursively(sessionFolder)
@@ -175,11 +130,6 @@ class FileStructureManager @Inject constructor(
         }
     }
 
-    /**
-     * Deletes all session folders in the base recording directory.
-     * 
-     * @return Pair of (deleted count, failed count)
-     */
     fun deleteAllSessionFolders(): Pair<Int, Int> {
         var deletedCount = 0
         var failedCount = 0
@@ -206,12 +156,6 @@ class FileStructureManager @Inject constructor(
         return Pair(deletedCount, failedCount)
     }
 
-    /**
-     * Checks if a session folder has valid structure and required files.
-     * 
-     * @param sessionFolder The folder to validate
-     * @return true if the session folder structure is valid
-     */
     fun validateSessionStructure(sessionFolder: File): Boolean {
         if (!sessionFolder.exists() || !sessionFolder.isDirectory) {
             return false
@@ -223,12 +167,6 @@ class FileStructureManager @Inject constructor(
         }
     }
 
-    /**
-     * Gets the disk space usage for a session folder.
-     * 
-     * @param sessionFolder The folder to analyze
-     * @return Size in bytes, or -1 if calculation fails
-     */
     fun getSessionFolderSize(sessionFolder: File): Long {
         return try {
             calculateFolderSize(sessionFolder)
@@ -238,12 +176,6 @@ class FileStructureManager @Inject constructor(
         }
     }
 
-    /**
-     * Creates a stimulus events file with CSV headers if it doesn't exist.
-     * 
-     * @param sessionFolder The session folder
-     * @return The stimulus events file
-     */
     fun createStimulusEventsFile(sessionFolder: File): File {
         val stimulusFile = File(sessionFolder, STIMULUS_EVENTS_FILE)
         if (!stimulusFile.exists()) {

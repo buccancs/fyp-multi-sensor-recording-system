@@ -1,14 +1,9 @@
 from typing import List, Optional, Tuple
-
 import cv2
 import numpy as np
-
 from ..utils.logging_config import get_logger
-
 class CalibrationProcessor:
-
     def __init__(self):
-
         self.logger = get_logger(__name__)
         self.pattern_size = 9, 6
         self.square_size = 25.0
@@ -23,7 +18,6 @@ class CalibrationProcessor:
             | cv2.CALIB_TILTED_MODEL
         )
         self.logger.debug("CalibrationProcessor initialized")
-
     def detect_chessboard_corners(
         self, image: np.ndarray, pattern_size: Tuple[int, int]
     ) -> Tuple[bool, Optional[np.ndarray]]:
@@ -43,7 +37,6 @@ class CalibrationProcessor:
             return True, corners
         else:
             return False, None
-
     def detect_circles_grid(
         self, image: np.ndarray, pattern_size: Tuple[int, int]
     ) -> Tuple[bool, Optional[np.ndarray]]:
@@ -55,7 +48,6 @@ class CalibrationProcessor:
             gray, pattern_size, cv2.CALIB_CB_SYMMETRIC_GRID
         )
         return ret, centers if ret else None
-
     def find_calibration_corners(self, image: np.ndarray) -> dict:
         try:
             success, corners = self.detect_chessboard_corners(image, self.pattern_size)
@@ -65,7 +57,6 @@ class CalibrationProcessor:
                 return {"success": False, "error": "No chessboard pattern detected"}
         except Exception as e:
             return {"success": False, "error": f"Corner detection failed: {str(e)}"}
-
     def detect_aruco_markers(
         self, image: np.ndarray, dictionary_id: int = cv2.aruco.DICT_6X6_250
     ) -> Tuple[bool, List[np.ndarray]]:
@@ -82,7 +73,6 @@ class CalibrationProcessor:
             return True, corners
         else:
             return False, []
-
     def create_object_points(
         self, pattern_size: Tuple[int, int], square_size: float
     ) -> np.ndarray:
@@ -92,7 +82,6 @@ class CalibrationProcessor:
         )
         objp *= square_size
         return objp
-
     def calibrate_camera_intrinsics(
         self,
         object_points: List[np.ndarray],
@@ -108,7 +97,6 @@ class CalibrationProcessor:
             flags=self.calibration_flags,
         )
         return ret, camera_matrix, dist_coeffs, rvecs, tvecs
-
     def calibrate_stereo_cameras(
         self,
         object_points: List[np.ndarray],
@@ -132,11 +120,9 @@ class CalibrationProcessor:
             flags=cv2.CALIB_FIX_INTRINSIC,
         )
         return ret, R, T, E, F
-
     def compute_homography(
         self, points1: np.ndarray, points2: np.ndarray
     ) -> Optional[np.ndarray]:
-
         if len(points1) < 4 or len(points2) < 4:
             self.logger.debug("Insufficient points for homography computation")
             return None
@@ -155,7 +141,6 @@ class CalibrationProcessor:
         except Exception as e:
             self.logger.debug(f"Homography computation error: {e}")
             return None
-
     def compute_reprojection_error(
         self,
         object_points: List[np.ndarray],
@@ -178,7 +163,6 @@ class CalibrationProcessor:
             total_error += error
         mean_error = total_error / len(object_points)
         return mean_error, per_image_errors
-
     def undistort_image(
         self, image: np.ndarray, camera_matrix: np.ndarray, dist_coeffs: np.ndarray
     ) -> np.ndarray:
@@ -193,7 +177,6 @@ class CalibrationProcessor:
         if w > 0 and h > 0:
             undistorted = undistorted[y : y + h, x : x + w]
         return undistorted
-
     def create_rectification_maps(
         self,
         camera_matrix1: np.ndarray,
@@ -214,7 +197,6 @@ class CalibrationProcessor:
             camera_matrix2, dist_coeffs2, R2, P2, image_size, cv2.CV_16SC2
         )
         return map1x, map1y, map2x, map2y
-
     def apply_rectification(
         self,
         image1: np.ndarray,
@@ -227,7 +209,6 @@ class CalibrationProcessor:
         rectified1 = cv2.remap(image1, map1x, map1y, cv2.INTER_LINEAR)
         rectified2 = cv2.remap(image2, map2x, map2y, cv2.INTER_LINEAR)
         return rectified1, rectified2
-
     def validate_calibration_quality(
         self, reprojection_error: float, num_images: int, pattern_coverage: float = None
     ) -> dict:
@@ -272,7 +253,6 @@ class CalibrationProcessor:
                 ]
             )
         return quality
-
     def draw_chessboard_corners(
         self,
         image: np.ndarray,
@@ -283,7 +263,6 @@ class CalibrationProcessor:
         result_image = image.copy()
         cv2.drawChessboardCorners(result_image, pattern_size, corners, pattern_found)
         return result_image
-
 if __name__ == "__main__":
     logger = get_logger(__name__)
     logger.info("Testing CalibrationProcessor...")

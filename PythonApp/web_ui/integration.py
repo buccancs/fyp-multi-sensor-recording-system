@@ -3,7 +3,6 @@ import os
 import sys
 import time
 from typing import Any, Dict, Optional
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
     from web_ui.web_dashboard import WebDashboardServer
@@ -14,7 +13,6 @@ try:
         WebController,
         create_web_controller_with_real_components,
     )
-
     WEB_CONTROLLER_AVAILABLE = True
 except ImportError:
     WebController = None
@@ -22,14 +20,11 @@ except ImportError:
     WEB_CONTROLLER_AVAILABLE = False
 try:
     from utils.logging_config import get_logger
-
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-
 class WebDashboardIntegration:
-
     def __init__(
         self,
         enable_web_ui: bool = True,
@@ -59,7 +54,6 @@ class WebDashboardIntegration:
         logger.info(
             f"Controller: {'WebController' if self.using_web_controller else 'MainController' if self.controller else 'None'}"
         )
-
     def start_web_dashboard(self) -> bool:
         if not self.enable_web_ui:
             logger.info("Web UI is disabled, not starting dashboard")
@@ -91,7 +85,6 @@ class WebDashboardIntegration:
         except Exception as e:
             logger.error(f"Failed to start web dashboard: {e}")
             return False
-
     def stop_web_dashboard(self):
         if not self.is_running or not self.web_server:
             return
@@ -104,7 +97,6 @@ class WebDashboardIntegration:
             logger.info("Web dashboard stopped")
         except Exception as e:
             logger.error(f"Error stopping web dashboard: {e}")
-
     def _connect_to_controller(self):
         if self.controller is None:
             return
@@ -122,18 +114,15 @@ class WebDashboardIntegration:
             logger.info(f"Connected to {controller_type} signals")
         except Exception as e:
             logger.error(f"Failed to connect to controller signals: {e}")
-
     def _on_device_status_received(self, device_id: str, status_data: dict):
         if self.is_running and self.web_server:
             device_type = self._determine_device_type(device_id, status_data)
             self.web_server.update_device_status(device_type, device_id, status_data)
-
     def _on_sensor_data_received(self, device_id: str, sensor_data: dict):
         if self.is_running and self.web_server:
             for sensor_type, value in sensor_data.items():
                 if isinstance(value, (int, float)):
                     self.web_server.update_sensor_data(device_id, sensor_type, value)
-
     def _on_session_status_changed(self, session_id: str, is_active: bool):
         if self.is_running and self.web_server:
             session_info = {
@@ -143,12 +132,10 @@ class WebDashboardIntegration:
             }
             self.web_server.session_info = session_info
             self.web_server._broadcast_session_update()
-
     def get_web_dashboard_url(self) -> Optional[str]:
         if self.is_running:
             return f"http://localhost:{self.web_port}"
         return None
-
     def _determine_device_type(self, device_id: str, status_data: dict) -> str:
         device_type = status_data.get("type", "")
         if device_type == "shimmer" or "shimmer" in device_id.lower():
@@ -159,9 +146,7 @@ class WebDashboardIntegration:
             return "usb_webcams"
         else:
             return "android_devices"
-
 _web_integration_instance: Optional[WebDashboardIntegration] = None
-
 def get_web_integration(
     enable_web_ui: bool = True,
     web_port: int = 5000,
@@ -181,7 +166,6 @@ def get_web_integration(
             android_device_manager,
         )
     return _web_integration_instance
-
 def start_web_dashboard(
     enable_web_ui: bool = True,
     web_port: int = 5000,
@@ -199,13 +183,11 @@ def start_web_dashboard(
         android_device_manager,
     )
     return integration.start_web_dashboard()
-
 def stop_web_dashboard():
     global _web_integration_instance
     if _web_integration_instance:
         _web_integration_instance.stop_web_dashboard()
         _web_integration_instance = None
-
 if __name__ == "__main__":
     print("Starting Web Dashboard Integration Demo...")
     integration = WebDashboardIntegration(enable_web_ui=True, web_port=5000)
