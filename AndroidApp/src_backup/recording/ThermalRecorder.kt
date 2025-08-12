@@ -155,36 +155,6 @@ constructor(
         previewStreamer: PreviewStreamer? = null,
     ): Boolean =
         try {
-            logger.info("Initializing ThermalRecorder with hardware detection...")
-
-            currentThermalConfig = thermalSettings.getCurrentConfig()
-            logger.info("Loaded thermal configuration:")
-            logger.info(thermalSettings.getConfigSummary())
-
-            this.previewSurface = previewSurface
-            this.previewStreamer = previewStreamer
-
-            usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
-
-            // Check for supported thermal cameras
-            val supportedDevices = usbManager!!.deviceList.values.filter { device ->
-                isSupportedThermalCamera(device)
-            }
-
-            if (supportedDevices.isEmpty()) {
-                logger.warning("No supported thermal cameras detected")
-                logger.info("Available USB devices: ${usbManager!!.deviceList.size}")
-                usbManager!!.deviceList.values.forEach { device ->
-                    logger.info("  Device: ${device.deviceName}, VID: ${String.format("0x%04X", device.vendorId)}, PID: ${String.format("0x%04X", device.productId)}")
-                }
-                
-                enableSimulationMode()
-                logger.info("ThermalRecorder initialized in simulation mode")
-                return true
-            }
-
-            // Original hardware initialization code continues...
-            topdonUsbMonitor =
             logger.info("Initializing ThermalRecorder")
 
             currentThermalConfig = thermalSettings.getCurrentConfig()
@@ -1080,73 +1050,5 @@ constructor(
             result = 31 * result + temperatureData.contentHashCode()
             return result
         }
-    }
-
-    
-    // Simulation mode for when thermal camera hardware is not available
-    private var simulationMode = false
-    private var simulationJob: Job? = null
-    
-    fun enableSimulationMode() {
-        simulationMode = true
-        logger.info("ThermalRecorder: Simulation mode enabled (no thermal camera detected)")
-    }
-    
-    fun isSimulationMode(): Boolean = simulationMode
-    
-    private fun startSimulationCapture(): Boolean {
-        try {
-            logger.info("Starting thermal camera simulation...")
-            
-            simulationJob = coroutineScope.launch {
-                while (isRecording.get()) {
-                    if (!isActive) break
-                    
-                    // Generate simulated thermal frame
-                    val simulatedFrame = generateSimulatedThermalFrame()
-                    frameQueue.offer(simulatedFrame)
-                    
-                    // Notify preview streamer with simulated data
-                    previewStreamer?.onThermalFrameAvailable(simulatedFrame.imageData, simulatedFrame.timestamp)
-                    
-                    delay(1000 / THERMAL_FRAME_RATE) // Maintain frame rate
-                }
-            }
-            
-            return true
-        } catch (e: Exception) {
-            logger.error("Failed to start thermal simulation", e)
-            return false
-        }
-    }
-    
-    private fun generateSimulatedThermalFrame(): ThermalFrame {
-        val timestamp = System.currentTimeMillis()
-        val frameData = ByteArray(THERMAL_WIDTH * THERMAL_HEIGHT * BYTES_PER_PIXEL)
-        
-        // Generate a simple thermal pattern for demonstration
-        for (i in frameData.indices step 2) {
-            val x = (i / 2) % THERMAL_WIDTH
-            val y = (i / 2) / THERMAL_WIDTH
-            
-            // Create a simple gradient pattern
-            val centerX = THERMAL_WIDTH / 2
-            val centerY = THERMAL_HEIGHT / 2
-            val distance = Math.sqrt(((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY)).toDouble())
-            val maxDistance = Math.sqrt((centerX * centerX + centerY * centerY).toDouble())
-            
-            // Simulate temperature variation (16-bit thermal data)
-            val temperature = (65535 * (1.0 - distance / maxDistance)).toInt().coerceIn(0, 65535)
-            
-            frameData[i] = (temperature and 0xFF).toByte()
-            frameData[i + 1] = ((temperature shr 8) and 0xFF).toByte()
-        }
-        
-        return ThermalFrame(
-            imageData = frameData,
-            temperatureData = frameData.copyOf(),
-            timestamp = timestamp,
-            frameNumber = frameCounter.incrementAndGet()
-        )
     }
 }

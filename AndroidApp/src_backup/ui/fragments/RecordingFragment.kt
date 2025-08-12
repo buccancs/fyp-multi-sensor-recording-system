@@ -110,91 +110,49 @@ class RecordingFragment : Fragment() {
         }
     }
 
-    
     private suspend fun initializeCameraWithRetry(textureView: TextureView) {
         try {
-            binding.previewPlaceholderText.text = "Checking camera compatibility..."
+            binding.previewPlaceholderText.text = "Connecting to camera..."
 
             val initialized = cameraRecorder.initialize(textureView)
 
             if (initialized) {
                 binding.rgbCameraPreview.visibility = View.VISIBLE
                 binding.previewPlaceholderText.visibility = View.GONE
-                Toast.makeText(requireContext(), "✅ Camera preview ready", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Camera preview ready", Toast.LENGTH_SHORT).show()
             } else {
-                binding.previewPlaceholderText.text = "Checking device capabilities..."
-                kotlinx.coroutines.delay(1000)
 
-                // Provide specific guidance based on device capabilities
-                val deviceModel = android.os.Build.MODEL
-                val sdkVersion = android.os.Build.VERSION.SDK_INT
+                binding.previewPlaceholderText.text = "Trying fallback camera mode..."
+                kotlinx.coroutines.delay(1000)
 
                 binding.rgbCameraPreview.visibility = View.GONE
                 binding.previewPlaceholderText.apply {
                     visibility = View.VISIBLE
-                    text = """📱 Camera Status: Initializing...
-                    
-Device: $deviceModel (API $sdkVersion)
+                    text = """Camera initialization failed
 
-🔍 Checking compatibility:
-• Basic camera: Detecting...
-• Video recording: Checking...
-• Preview display: Available
+This device may not support:
+• RAW image capture
+• Advanced camera features
+• High-end camera requirements
 
-💡 Camera may be in use by another app.
-Try closing other camera apps and restart.
-
-📷 Recording functionality may still work
-even without preview display."""
+Basic recording may still work."""
                 }
-                
-                // Try to provide more specific feedback
-                kotlinx.coroutines.delay(2000)
-                
-                binding.previewPlaceholderText.text = """📱 Camera Status: Compatible Mode
-
-Device: $deviceModel
-
-✅ Application is functional
-✅ Recording features available  
-⚠️ Preview may be limited
-
-💡 Tips:
-• Grant camera permissions in Settings
-• Close other camera apps
-• Restart the application
-• Some devices have limited preview support
-
-🎥 You can still use recording functions
-even without live preview."""
-
-                Toast.makeText(requireContext(), "📷 Camera in compatibility mode - recording still available", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Camera preview unavailable - check device compatibility", Toast.LENGTH_LONG).show()
             }
         } catch (e: Exception) {
             binding.rgbCameraPreview.visibility = View.GONE
             binding.previewPlaceholderText.apply {
                 visibility = View.VISIBLE
-                text = """📱 Camera Status: Compatibility Mode
+                text = """Camera error: ${e.message}
 
-❓ Camera access limited: ${e.message?.take(50) ?: "Unknown issue"}
+Possible issues:
+• Camera permission denied
+• Camera in use by another app
+• Hardware compatibility issue
 
-✅ Application is still functional:
-• Recording features available
-• File management works
-• Device connections active
-• Calibration tools available
-
-🔧 Troubleshooting:
-• Check camera permissions in Android Settings
-• Ensure no other apps are using camera
-• Restart the application
-• Reboot device if needed
-
-💡 Many features work without camera preview.
-The application is NOT fake - it's running in
-compatibility mode for your device."""
+Try restarting the app or checking permissions."""
             }
-            Toast.makeText(requireContext(), "📱 App running in compatibility mode - many features still available", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Camera error: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 

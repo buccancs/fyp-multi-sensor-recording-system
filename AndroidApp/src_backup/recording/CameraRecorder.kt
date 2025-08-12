@@ -658,103 +658,18 @@ constructor(
         }
     }
 
-    
     private fun selectBestCamera(cameraManager: CameraManager): String? {
         try {
-            logger.info("Selecting camera with improved compatibility...")
+            logger.info("Selecting best camera with Samsung S21/S22 RAW capability and LEVEL_3 support...")
 
             val deviceModel = android.os.Build.MODEL.uppercase()
             val isSamsungS21S22 = deviceModel.contains("SM-G99") || deviceModel.contains("SM-G99") ||
                     deviceModel.contains("S21") || deviceModel.contains("S22")
 
             if (isSamsungS21S22) {
-                logger.info("Samsung S21/S22 device detected: $deviceModel - Trying optimized mode first")
-                val samsungCamera = findSamsungOptimizedCamera(cameraManager)
-                if (samsungCamera != null) {
-                    return samsungCamera
-                }
-                logger.info("Samsung optimized camera not available, trying standard mode")
+                logger.info("Samsung S21/S22 device detected: $deviceModel - Applying optimisations")
             }
 
-            // Try to find any back camera with basic capabilities
-            for (cameraId in cameraManager.cameraIdList) {
-                val characteristics = cameraManager.getCameraCharacteristics(cameraId)
-
-                val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
-                if (facing != CameraCharacteristics.LENS_FACING_BACK) {
-                    continue
-                }
-
-                val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
-                val hasBackwardCompatibility =
-                    capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE) == true
-
-                if (!hasBackwardCompatibility) {
-                    logger.debug("Camera $cameraId: No backward compatibility")
-                    continue
-                }
-
-                // Check for basic video recording capability
-                val streamConfigMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                val videoSizes = streamConfigMap?.getOutputSizes(MediaRecorder::class.java)
-                val supportsVideo = videoSizes?.isNotEmpty() == true
-
-                if (!supportsVideo) {
-                    logger.debug("Camera $cameraId: No video recording support")
-                    continue
-                }
-
-                // This camera meets basic requirements
-                val hardwareLevel = characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
-                val levelName = when (hardwareLevel) {
-                    CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3 -> "LEVEL_3"
-                    CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL -> "FULL"
-                    CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED -> "LIMITED"
-                    CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY -> "LEGACY"
-                    else -> "UNKNOWN($hardwareLevel)"
-                }
-
-                val hasRawCapability = capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW) == true
-                val rawStatus = if (hasRawCapability) " [RAW SUPPORTED]" else " [BASIC MODE]"
-
-                logger.info("Selected camera: $cameraId (back camera, $levelName)$rawStatus")
-                logger.info("Video recording: SUPPORTED")
-                logger.info("Device compatibility: EXCELLENT")
-
-                return cameraId
-            }
-
-            logger.warning("No suitable back camera found, trying any camera...")
-
-            // Fallback: try any camera
-            for (cameraId in cameraManager.cameraIdList) {
-                val characteristics = cameraManager.getCameraCharacteristics(cameraId)
-                val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
-                val hasBackwardCompatibility =
-                    capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE) == true
-
-                if (hasBackwardCompatibility) {
-                    val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
-                    val facingName = when (facing) {
-                        CameraCharacteristics.LENS_FACING_BACK -> "back"
-                        CameraCharacteristics.LENS_FACING_FRONT -> "front"
-                        else -> "external"
-                    }
-                    logger.warning("Selected fallback camera: $cameraId ($facingName camera)")
-                    return cameraId
-                }
-            }
-
-            logger.error("No compatible camera found on this device")
-        } catch (e: Exception) {
-            logger.error("Error selecting camera", e)
-        }
-
-        return null
-    }
-
-    private fun findSamsungOptimizedCamera(cameraManager: CameraManager): String? {
-        try {
             for (cameraId in cameraManager.cameraIdList) {
                 val characteristics = cameraManager.getCameraCharacteristics(cameraId)
 
@@ -768,7 +683,12 @@ constructor(
                 val isFullOrBetter =
                     hardwareLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL || isLevel3
 
+                if (isSamsungS21S22 && !isLevel3) {
+                    logger.debug("Camera $cameraId: Not LEVEL_3 - may not support optimal Samsung RAW features")
+                }
+
                 if (!isFullOrBetter) {
+                    logger.debug("Camera $cameraId: Hardware level insufficient (level: $hardwareLevel)")
                     continue
                 }
 
@@ -778,8 +698,28 @@ constructor(
                 val hasBackwardCompatibility =
                     capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE) == true
 
-                if (!hasRawCapability || !hasBackwardCompatibility) {
+                val hasManualSensor =
+                    capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) == true
+                val hasManualPostProcessing =
+                    capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING) == true
+
+                if (!hasRawCapability) {
+                    logger.debug("Camera $cameraId: No RAW capability - REQUIRED for stage 3 extraction")
                     continue
+                }
+
+                if (!hasBackwardCompatibility) {
+                    logger.debug("Camera $cameraId: No backward compatibility")
+                    continue
+                }
+
+                if (isSamsungS21S22) {
+                    if (!hasManualSensor) {
+                        logger.warning("Camera $cameraId: No manual sensor control - stage 3 RAW may be limited")
+                    }
+                    if (!hasManualPostProcessing) {
+                        logger.warning("Camera $cameraId: No manual post-processing - advanced RAW features limited")
+                    }
                 }
 
                 val streamConfigMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
@@ -787,6 +727,7 @@ constructor(
                 val supports4K = videoSizes?.any { it.width >= 3840 && it.height >= 2160 } == true
 
                 if (!supports4K) {
+                    logger.debug("Camera $cameraId: No 4K video support")
                     continue
                 }
 
@@ -794,20 +735,79 @@ constructor(
                 val hasRawSizes = rawSizes?.isNotEmpty() == true
 
                 if (!hasRawSizes) {
+                    logger.debug("Camera $cameraId: No RAW sensor sizes available - stage 3 extraction not possible")
                     continue
                 }
 
-                logger.info("Found Samsung optimized camera: $cameraId (LEVEL_3, RAW capable, 4K support)")
+                if (isSamsungS21S22) {
+                    val maxRawSize = rawSizes.maxByOrNull { it.width * it.height }
+                    val megapixels = maxRawSize?.let { (it.width * it.height) / 1_000_000 } ?: 0
+
+                    logger.info("Samsung device RAW sensor: ${maxRawSize?.width}x${maxRawSize?.height} (${megapixels}MP)")
+
+                    if (megapixels < 12) {
+                        logger.warning("Camera $cameraId: RAW sensor below expected Samsung S21/S22 resolution")
+                    }
+                }
+
+                val colorFilterArrangement =
+                    characteristics.get(CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT)
+                if (isSamsungS21S22 && colorFilterArrangement != null) {
+                    val cfaName = when (colorFilterArrangement) {
+                        CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_RGGB -> "RGGB"
+                        CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_GRBG -> "GRBG"
+                        CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_GBRG -> "GBRG"
+                        CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_BGGR -> "BGGR"
+                        else -> "UNKNOWN"
+                    }
+                    logger.info("Samsung device CFA pattern: $cfaName (required for proper RAW demosaicing)")
+                }
+
+                val levelName =
+                    when (hardwareLevel) {
+                        CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3 -> "LEVEL_3"
+                        CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL -> "FULL"
+                        else -> "OTHER($hardwareLevel)"
+                    }
+
+                val samsungOptimized = if (isSamsungS21S22 && isLevel3) " [SAMSUNG_OPTIMIZED]" else ""
+                logger.info("Selected camera: $cameraId (back camera, $levelName, RAW capable, 4K support)$samsungOptimized")
+                logger.info("RAW sizes available: ${rawSizes?.size}")
+                logger.info("Video sizes available: ${videoSizes?.size}")
+
+                if (isSamsungS21S22) {
+                    logger.info("Stage 3 RAW extraction capabilities: Manual sensor=$hasManualSensor, Manual post-processing=$hasManualPostProcessing")
+                }
+
                 return cameraId
             }
+
+            logger.warning("No camera found with all requirements, trying with relaxed constraints...")
+
+            for (cameraId in cameraManager.cameraIdList) {
+                val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+                val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+
+                if (facing == CameraCharacteristics.LENS_FACING_BACK) {
+                    val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+                    val hasBackwardCompatibility =
+                        capabilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE) == true
+
+                    if (hasBackwardCompatibility) {
+                        logger.warning("Selected fallback camera: $cameraId (may not support all features)")
+                        return cameraId
+                    }
+                }
+            }
+
+            logger.error("No suitable camera found")
         } catch (e: Exception) {
-            logger.debug("Error finding Samsung optimized camera", e)
+            logger.error("Error selecting camera", e)
         }
-        
+
         return null
     }
 
-    
     private fun configureCameraSizes(characteristics: CameraCharacteristics) {
         val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
         if (map == null) {
@@ -815,16 +815,13 @@ constructor(
             return
         }
 
-        logger.info("Configuring camera sizes with improved compatibility...")
+        logger.info("Configuring camera sizes for multi-stream capture...")
 
         val videoSizes = map.getOutputSizes(MediaRecorder::class.java)
-        
-        // Try to get the best available video size, with fallbacks
-        videoSize = videoSizes?.find { it.width == 3840 && it.height == 2160 } // 4K
-            ?: videoSizes?.find { it.width == 1920 && it.height == 1080 } // 1080p
-            ?: videoSizes?.find { it.width == 1280 && it.height == 720 } // 720p
-            ?: videoSizes?.maxByOrNull { it.width * it.height } // Best available
-            ?: Size(1280, 720) // Absolute fallback
+        videoSize = videoSizes?.find { it.width == 3840 && it.height == 2160 }
+            ?: videoSizes?.find { it.width >= 3840 && it.height >= 2160 }
+                    ?: videoSizes?.maxByOrNull { it.width * it.height }
+                    ?: Size(1920, 1080)
 
         logger.info("Video recording size: ${videoSize.width}x${videoSize.height}")
 
@@ -834,32 +831,33 @@ constructor(
         previewSize = previewSizes
             ?.filter { size ->
                 val aspectRatio = size.width.toFloat() / size.height.toFloat()
-                Math.abs(aspectRatio - videoAspectRatio) < 0.2f // More lenient aspect ratio matching
+                Math.abs(aspectRatio - videoAspectRatio) < 0.1f
             }?.filter { size ->
                 size.width <= 1920 && size.height <= 1080
             }?.maxByOrNull { it.width * it.height }
-            ?: previewSizes?.find { it.width == 1280 && it.height == 720 }
-            ?: previewSizes?.find { it.width == 640 && it.height == 480 }
-            ?: Size(640, 480) // Safe fallback
+            ?: previewSizes?.find { it.width == 1920 && it.height == 1080 }
+                    ?: previewSizes?.find { it.width == 1280 && it.height == 720 }
+                    ?: Size(1280, 720)
 
         logger.info("Preview size: ${previewSize?.width}x${previewSize?.height}")
 
-        // RAW sizes are optional - only use if available
         val rawSizes = map.getOutputSizes(ImageFormat.RAW_SENSOR)
         rawSize = rawSizes?.maxByOrNull { it.width * it.height }
 
         if (rawSize != null) {
             logger.info(
-                "RAW capture size: ${rawSize!!.width}x${rawSize!!.height} (${rawSize!!.width * rawSize!!.height / 1_000_000}MP) - AVAILABLE",
+                "RAW capture size: ${rawSize!!.width}x${rawSize!!.height} (${rawSize!!.width * rawSize!!.height / 1_000_000}MP)",
             )
         } else {
-            logger.info("RAW capture: NOT AVAILABLE (basic mode only)")
+            logger.warning("No RAW sizes available - RAW capture will be disabled")
         }
 
-        logger.info("Camera sizes configured successfully for device compatibility")
+        verifyStreamCombination(map)
+
+        logger.info("Camera sizes configured successfully")
         logger.info("  Video: ${videoSize.width}x${videoSize.height}")
         logger.info("  Preview: ${previewSize?.width}x${previewSize?.height}")
-        logger.info("  RAW: ${if (rawSize != null) "${rawSize!!.width}x${rawSize!!.height}" else "Not available"}")
+        logger.info("  RAW: ${rawSize?.width ?: 0}x${rawSize?.height ?: 0}")
     }
 
     private fun verifyStreamCombination(map: StreamConfigurationMap) {

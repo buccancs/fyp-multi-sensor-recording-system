@@ -47,7 +47,6 @@ constructor(
         val errorMessage: String? = null,
     )
 
-    
     suspend fun captureCalibrationImages(
         calibrationId: String? = null,
         captureRgb: Boolean = true,
@@ -60,7 +59,7 @@ constructor(
             val syncedTimestamp = syncClockManager.getSyncedTimestamp(captureTimestamp)
             val currentThermalConfig = thermalSettings.getCurrentConfig()
 
-            logger.info("[DEBUG_LOG] Starting calibration capture with compatibility mode: $actualCalibrationId")
+            logger.info("[DEBUG_LOG] Starting calibration capture: $actualCalibrationId")
             logger.info("[DEBUG_LOG] Capture settings - RGB: $captureRgb, Thermal: $captureThermal, HighRes: $highResolution")
             logger.info("[DEBUG_LOG] Thermal settings - Enabled: ${currentThermalConfig.isEnabled}, Format: ${currentThermalConfig.dataFormat}")
 
@@ -74,32 +73,20 @@ constructor(
                 var thermalFilePath: String? = null
                 val captureJobs = mutableListOf<Deferred<String?>>()
 
-                // Check camera availability before attempting capture
-                val cameraAvailable = cameraRecorder.isConnected
-                val thermalAvailable = !thermalRecorder.isSimulationMode()
-
                 if (captureRgb) {
-                    val rgbJob = async {
-                        if (cameraAvailable) {
+                    val rgbJob =
+                        async {
                             captureRgbImage(actualCalibrationId, highResolution, syncedTimestamp)
-                        } else {
-                            logger.warning("Camera not available - creating placeholder RGB calibration")
-                            createPlaceholderRgbCalibration(actualCalibrationId)
                         }
-                    }
                     captureJobs.add(rgbJob)
                 }
 
                 if (captureThermal) {
-                    val thermalJob = async {
-                        delay(10)
-                        if (thermalAvailable && currentThermalConfig.isEnabled) {
+                    val thermalJob =
+                        async {
+                            delay(10)
                             captureThermalImage(actualCalibrationId, syncedTimestamp)
-                        } else {
-                            logger.warning("Thermal camera not available - creating placeholder thermal calibration")
-                            createPlaceholderThermalCalibration(actualCalibrationId)
                         }
-                    }
                     captureJobs.add(thermalJob)
                 }
 
@@ -114,23 +101,14 @@ constructor(
                     thermalFilePath = results[0]
                 }
 
-                val success = (captureRgb && rgbFilePath != null || !captureRgb) &&
-                        (captureThermal && thermalFilePath != null || !captureThermal)
-
-                val warningMessage = when {
-                    !cameraAvailable && !thermalAvailable -> "Calibration completed with placeholder data (no cameras available)"
-                    !cameraAvailable -> "Calibration completed with placeholder RGB data (camera unavailable)"
-                    !thermalAvailable -> "Calibration completed with simulated thermal data (thermal camera unavailable)"
-                    else -> null
-                }
+                val success =
+                    (captureRgb && rgbFilePath != null || !captureRgb) &&
+                            (captureThermal && thermalFilePath != null || !captureThermal)
 
                 if (success) {
                     logger.info("[DEBUG_LOG] Calibration capture successful: $actualCalibrationId")
                     logger.info("[DEBUG_LOG] RGB file: $rgbFilePath")
                     logger.info("[DEBUG_LOG] Thermal file: $thermalFilePath")
-                    if (warningMessage != null) {
-                        logger.info("[DEBUG_LOG] Note: $warningMessage")
-                    }
                 } else {
                     logger.error("Calibration capture failed for: $actualCalibrationId")
                 }
@@ -143,7 +121,6 @@ constructor(
                     timestamp = captureTimestamp,
                     syncedTimestamp = syncedTimestamp,
                     thermalConfig = currentThermalConfig,
-                    errorMessage = warningMessage,
                 )
             } catch (e: Exception) {
                 logger.error("Error during calibration capture: $actualCalibrationId", e)
@@ -157,85 +134,6 @@ constructor(
                     thermalConfig = currentThermalConfig,
                     errorMessage = e.message,
                 )
-            }
-        }
-
-    private suspend fun createPlaceholderRgbCalibration(calibrationId: String): String? =
-        withContext(Dispatchers.IO) {
-            try {
-                val fileName = "${calibrationId}${RGB_SUFFIX}"
-                val filePath = File(getCalibrationDirectory(), fileName).absolutePath
-
-                logger.info("[DEBUG_LOG] Creating placeholder RGB calibration: $fileName")
-
-                // Create a simple placeholder image (solid color bitmap as JPEG)
-                val placeholderBitmap = android.graphics.Bitmap.createBitmap(640, 480, android.graphics.Bitmap.Config.RGB_565)
-                val canvas = android.graphics.Canvas(placeholderBitmap)
-                val paint = android.graphics.Paint().apply {
-                    color = android.graphics.Color.GRAY
-                    textSize = 24f
-                    isAntiAlias = true
-                }
-                
-                canvas.drawColor(android.graphics.Color.LTGRAY)
-                canvas.drawText("RGB Camera Placeholder", 50f, 240f, paint)
-                canvas.drawText("Camera not available", 50f, 280f, paint)
-                canvas.drawText("Calibration: $calibrationId", 50f, 320f, paint)
-
-                val outputStream = java.io.FileOutputStream(filePath)
-                placeholderBitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, outputStream)
-                outputStream.close()
-                placeholderBitmap.recycle()
-
-                logger.info("[DEBUG_LOG] Placeholder RGB calibration created: $filePath")
-                filePath
-            } catch (e: Exception) {
-                logger.error("Error creating placeholder RGB calibration", e)
-                null
-            }
-        }
-
-    private suspend fun createPlaceholderThermalCalibration(calibrationId: String): String? =
-        withContext(Dispatchers.IO) {
-            try {
-                val fileName = "${calibrationId}${THERMAL_SUFFIX}"
-                val filePath = File(getCalibrationDirectory(), fileName).absolutePath
-
-                logger.info("[DEBUG_LOG] Creating placeholder thermal calibration: $fileName")
-
-                // Create a simple thermal placeholder image
-                val thermalBitmap = android.graphics.Bitmap.createBitmap(256, 192, android.graphics.Bitmap.Config.RGB_565)
-                val canvas = android.graphics.Canvas(thermalBitmap)
-                val paint = android.graphics.Paint().apply {
-                    color = android.graphics.Color.RED
-                    textSize = 16f
-                    isAntiAlias = true
-                }
-                
-                // Create a thermal-like gradient
-                val gradient = android.graphics.LinearGradient(
-                    0f, 0f, 256f, 192f,
-                    intArrayOf(android.graphics.Color.BLUE, android.graphics.Color.GREEN, android.graphics.Color.YELLOW, android.graphics.Color.RED),
-                    null,
-                    android.graphics.Shader.TileMode.CLAMP
-                )
-                paint.shader = gradient
-                canvas.drawRect(0f, 0f, 256f, 192f, paint)
-                
-                paint.shader = null
-                paint.color = android.graphics.Color.WHITE
-                canvas.drawText("Thermal Placeholder", 10f, 100f, paint)
-
-                val outputStream = java.io.FileOutputStream(filePath)
-                thermalBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, outputStream)
-                outputStream.close()
-                thermalBitmap.recycle()
-
-                logger.info("[DEBUG_LOG] Placeholder thermal calibration created: $filePath")
-                filePath
-            } catch (e: Exception) {
-                logger.error("Error creating placeholder thermal calibration", e)
-                null
             }
         }
 
