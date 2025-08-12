@@ -31,12 +31,23 @@ jobs:
         # Create benchmark output directory
         mkdir -p performance_reports
         
-        # Run performance tests if they exist
-        if [ -d "evaluation_suite/performance/" ]; then
-          pytest evaluation_suite/performance/ -v --benchmark-only --benchmark-json=benchmark.json || echo "::warning::Some performance tests failed"
+        # Run unified performance tests if available
+        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
+          echo "Running unified performance tests..."
+          python tests_unified/runners/run_unified_tests.py --level performance --mode ci --output-format json > performance_results.json || echo "::warning::Some performance tests failed"
+          
+          # Also run specific benchmark tests
+          python tests_unified/runners/run_unified_tests.py --category evaluation --performance-benchmarks --output-format json > benchmark.json || echo "::warning::Benchmark tests failed"
         else
-          echo "::warning::Performance test directory not found, creating placeholder"
-          echo '{"benchmarks": [], "datetime": "'$(date -u +"%Y-%m-%dT%H:%M:%S")'", "version": "1.0.0"}' > benchmark.json
+          echo "::warning::Unified test framework not found, falling back to legacy performance tests"
+          
+          # Run legacy performance tests if they exist
+          if [ -d "evaluation_suite/performance/" ]; then
+            pytest evaluation_suite/performance/ -v --benchmark-only --benchmark-json=benchmark.json || echo "::warning::Some performance tests failed"
+          else
+            echo "::warning::Performance test directory not found, creating placeholder"
+            echo '{"benchmarks": [], "datetime": "'$(date -u +"%Y-%m-%dT%H:%M:%S")'", "version": "1.0.0"}' > benchmark.json
+          fi
         fi
     
     - name: Upload performance results
@@ -44,5 +55,9 @@ jobs:
       if: always()
       with:
         name: performance-results
-        path: benchmark.json
+        path: |
+          benchmark.json
+          performance_results.json
+          performance_reports/
+          tests_unified/reports/performance/
         retention-days: 30

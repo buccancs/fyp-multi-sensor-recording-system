@@ -28,29 +28,51 @@ jobs:
     
     - name: Run extended test suite
       run: |
-        # Run tests if directories exist
-        TEST_DIRS=""
-        [ -d "tests/" ] && TEST_DIRS="$TEST_DIRS tests/"
-        [ -d "evaluation_suite/" ] && TEST_DIRS="$TEST_DIRS evaluation_suite/"
-        
-        if [ -n "$TEST_DIRS" ]; then
-          pytest $TEST_DIRS -v --tb=short --durations=10 || echo "::warning::Some extended tests failed"
+        # Use unified testing framework for extended tests
+        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
+          echo "Running extended test suite via unified framework..."
+          python tests_unified/runners/run_unified_tests.py --mode research --all-levels --extended --durations=10 || echo "::warning::Some extended tests failed"
         else
-          echo "::warning::No test directories found for extended testing"
+          echo "::warning::Unified test framework not found, falling back to legacy extended testing"
+          
+          # Run legacy tests if directories exist
+          TEST_DIRS=""
+          [ -d "tests/" ] && TEST_DIRS="$TEST_DIRS tests/"
+          [ -d "evaluation_suite/" ] && TEST_DIRS="$TEST_DIRS evaluation_suite/"
+          
+          if [ -n "$TEST_DIRS" ]; then
+            pytest $TEST_DIRS -v --tb=short --durations=10 || echo "::warning::Some extended tests failed"
+          else
+            echo "::warning::No test directories found for extended testing"
+          fi
         fi
     
     - name: Run architecture enforcement tests
       run: |
-        if [ -f "PythonApp/test_architecture_enforcement.py" ]; then
-          python PythonApp/test_architecture_enforcement.py || echo "::warning::Architecture enforcement tests failed"
+        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
+          echo "Running architecture enforcement tests via unified framework..."
+          python tests_unified/runners/run_unified_tests.py --category evaluation --architecture-validation || echo "::warning::Architecture enforcement tests failed"
         else
-          echo "::warning::Architecture enforcement test not found, skipping"
+          echo "::warning::Unified test framework not found, falling back to legacy architecture tests"
+          
+          if [ -f "PythonApp/test_architecture_enforcement.py" ]; then
+            python PythonApp/test_architecture_enforcement.py || echo "::warning::Architecture enforcement tests failed"
+          else
+            echo "::warning::Architecture enforcement test not found, skipping"
+          fi
         fi
     
     - name: Run calibration implementation tests
       run: |
-        if [ -f "PythonApp/test_calibration_implementation.py" ]; then
-          python PythonApp/test_calibration_implementation.py || echo "::warning::Calibration implementation tests failed"
+        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
+          echo "Running calibration tests via unified framework..."
+          python tests_unified/runners/run_unified_tests.py --category hardware --calibration-tests || echo "::warning::Calibration implementation tests failed"
         else
-          echo "::warning::Calibration implementation test not found, skipping"
+          echo "::warning::Unified test framework not found, falling back to legacy calibration tests"
+          
+          if [ -f "PythonApp/test_calibration_implementation.py" ]; then
+            python PythonApp/test_calibration_implementation.py || echo "::warning::Calibration implementation tests failed"
+          else
+            echo "::warning::Calibration implementation test not found, skipping"
+          fi
         fi

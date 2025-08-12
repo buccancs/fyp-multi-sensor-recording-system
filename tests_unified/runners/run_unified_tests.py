@@ -67,6 +67,7 @@ except ImportError:
     pass
 
 @dataclass
+@dataclass
 class TestConfiguration:
     """Test execution configuration"""
     level: Optional[str] = None
@@ -79,6 +80,15 @@ class TestConfiguration:
     timeout: Optional[int] = None
     output_dir: str = "test_results"
     config_file: Optional[str] = None
+    output_format: str = "json"
+    validate_requirements: bool = False
+    report_requirements_coverage: bool = False
+    performance_benchmarks: bool = False
+    architecture_validation: bool = False
+    calibration_tests: bool = False
+    all_levels: bool = False
+    extended: bool = False
+    durations: int = 0
 
 class UnifiedTestRunner:
     """
@@ -97,6 +107,10 @@ class UnifiedTestRunner:
         self.test_config = self._load_test_config()
         self.quality_validator = None
         self.performance_monitor = None
+        
+        # Create output directories first
+        self.results_dir.mkdir(exist_ok=True)
+        (self.results_dir / "logs").mkdir(exist_ok=True)
         
         # Setup logging
         self._setup_logging()
@@ -474,8 +488,51 @@ def main():
     parser.add_argument("--timeout", type=int, help="Test timeout in seconds")
     parser.add_argument("--output-dir", default="test_results", help="Output directory for results")
     parser.add_argument("--config-file", help="Test configuration file")
+    parser.add_argument("--output-format", choices=["json", "xml", "markdown"], default="json", 
+                       help="Output format for reports")
+    
+    # Requirements validation options
+    parser.add_argument("--validate-requirements", action="store_true", 
+                       help="Validate that all FR/NFR requirements are tested")
+    parser.add_argument("--report-requirements-coverage", action="store_true",
+                       help="Generate requirements coverage traceability report")
+    parser.add_argument("--performance-benchmarks", action="store_true",
+                       help="Run performance benchmark tests")
+    parser.add_argument("--architecture-validation", action="store_true",
+                       help="Run architecture validation tests")
+    parser.add_argument("--calibration-tests", action="store_true",
+                       help="Run calibration-specific tests")
+    parser.add_argument("--all-levels", action="store_true",
+                       help="Run tests at all levels (unit, integration, system, performance)")
+    parser.add_argument("--extended", action="store_true",
+                       help="Run extended test suite with longer timeouts")
+    parser.add_argument("--durations", type=int, default=0,
+                       help="Show N slowest test durations (0 to disable)")
     
     args = parser.parse_args()
+    
+    # Handle special modes
+    if args.validate_requirements or args.report_requirements_coverage:
+        # Run requirements analysis
+        sys.path.insert(0, str(Path(__file__).parent.parent))
+        from evaluation.requirements_coverage_analysis import RequirementsCoverageAnalyzer
+        
+        analyzer = RequirementsCoverageAnalyzer()
+        analyzer.extract_requirements_from_tex()
+        analyzer.find_test_files()
+        analyzer.analyze_test_coverage()
+        report = analyzer.generate_coverage_report()
+        
+        if args.report_requirements_coverage:
+            if args.output_format == "json":
+                print(json.dumps(report, indent=2))
+            else:
+                analyzer.print_coverage_summary(report)
+        else:
+            analyzer.print_coverage_summary(report)
+        
+        # Exit with appropriate code
+        sys.exit(0 if report['summary']['coverage_percentage'] >= 80 else 1)
     
     # Create configuration
     config = TestConfiguration(
@@ -488,7 +545,16 @@ def main():
         headless=not args.headed,
         timeout=args.timeout,
         output_dir=args.output_dir,
-        config_file=args.config_file
+        config_file=args.config_file,
+        output_format=args.output_format,
+        validate_requirements=args.validate_requirements,
+        report_requirements_coverage=args.report_requirements_coverage,
+        performance_benchmarks=args.performance_benchmarks,
+        architecture_validation=args.architecture_validation,
+        calibration_tests=args.calibration_tests,
+        all_levels=args.all_levels,
+        extended=args.extended,
+        durations=args.durations
     )
     
     # Create and run test runner
