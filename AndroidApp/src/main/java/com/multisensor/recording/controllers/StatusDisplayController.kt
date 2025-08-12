@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Colour
+import android.graphics.Color
 import android.os.BatteryManager
 import android.os.Handler
 import android.os.Looper
@@ -40,21 +40,21 @@ class StatusDisplayController @Inject constructor() {
         val displayName: String,
         val updateInterval: Long,
         val valueProvider: () -> Any,
-        val colorProvider: (Any) -> Int = { Colour.GREY },
+        val colorProvider: (Any) -> Int = { Color.GRAY },
         val isEnabled: Boolean = true
     )
 
     data class StatusThemeConfig(
-        val primaryColor: Int = Colour.parseColor("#2196F3"),
-        val errorColor: Int = Colour.parseColor("#F44336"),
-        val warningColor: Int = Colour.parseColor("#FF9800"),
-        val successColor: Int = Colour.parseColor("#4CAF50"),
-        val backgroundColor: Int = Colour.parseColor("#FFFFFF"),
-        val textColor: Int = Colour.parseColor("#000000")
+        val primaryColor: Int = Color.parseColor("#2196F3"),
+        val errorColor: Int = Color.parseColor("#F44336"),
+        val warningColor: Int = Color.parseColor("#FF9800"),
+        val successColor: Int = Color.parseColor("#4CAF50"),
+        val backgroundColor: Int = Color.parseColor("#FFFFFF"),
+        val textColor: Int = Color.parseColor("#000000")
     )
 
     interface StatusDisplayCallback {
-        fun onBatteryLevelChanged(level: Int, colour: Int)
+        fun onBatteryLevelChanged(level: Int, color: Int)
         fun onConnectionStatusChanged(type: ConnectionType, connected: Boolean)
         fun onStatusMonitoringInitialized()
         fun onStatusMonitoringError(message: String)
@@ -150,9 +150,9 @@ class StatusDisplayController @Inject constructor() {
                 val batteryText = "Battery: $currentBatteryLevel%"
 
                 val textColor = when {
-                    currentBatteryLevel > 50 -> Colour.GREEN
-                    currentBatteryLevel > 20 -> Colour.YELLOW
-                    else -> Colour.RED
+                    currentBatteryLevel > 50 -> Color.GREEN
+                    currentBatteryLevel > 20 -> Color.YELLOW
+                    else -> Color.RED
                 }
 
                 callback?.getBatteryLevelText()?.let { textView ->
@@ -164,10 +164,10 @@ class StatusDisplayController @Inject constructor() {
             } else {
                 callback?.getBatteryLevelText()?.let { textView ->
                     textView.text = "Battery: ---%"
-                    textView.setTextColor(Colour.WHITE)
+                    textView.setTextColor(Color.WHITE)
                 }
 
-                callback?.onBatteryLevelChanged(-1, Colour.WHITE)
+                callback?.onBatteryLevelChanged(-1, Color.WHITE)
             }
         }
     }
@@ -178,7 +178,7 @@ class StatusDisplayController @Inject constructor() {
         isPcConnected = connected
         callback?.runOnUiThread {
             val statusText = if (connected) "PC: Connected" else "PC: Waiting for PC..."
-            val indicatorColor = if (connected) Colour.GREEN else Colour.RED
+            val indicatorColor = if (connected) Color.GREEN else Color.RED
 
             callback?.getPcConnectionStatus()?.text = statusText
             callback?.getPcConnectionIndicator()?.setBackgroundColor(indicatorColor)
@@ -198,13 +198,13 @@ class StatusDisplayController @Inject constructor() {
 
         callback?.runOnUiThread {
             val shimmerStatusText = if (shimmerConnected) "Shimmer: Connected" else "Shimmer: Disconnected"
-            val shimmerIndicatorColor = if (shimmerConnected) Colour.GREEN else Colour.RED
+            val shimmerIndicatorColor = if (shimmerConnected) Color.GREEN else Color.RED
 
             callback?.getShimmerConnectionStatus()?.text = shimmerStatusText
             callback?.getShimmerConnectionIndicator()?.setBackgroundColor(shimmerIndicatorColor)
 
             val thermalStatusText = if (thermalConnected) "Thermal: Connected" else "Thermal: Disconnected"
-            val thermalIndicatorColor = if (thermalConnected) Colour.GREEN else Colour.RED
+            val thermalIndicatorColor = if (thermalConnected) Color.GREEN else Color.RED
 
             callback?.getThermalConnectionStatus()?.text = thermalStatusText
             callback?.getThermalConnectionIndicator()?.setBackgroundColor(thermalIndicatorColor)
@@ -407,12 +407,12 @@ class StatusDisplayController @Inject constructor() {
     }
 
     private fun updateConnectionIndicatorColor(type: ConnectionType, connected: Boolean) {
-        val colour = if (connected) statusThemeConfig.successColor else statusThemeConfig.errorColor
+        val color = if (connected) statusThemeConfig.successColor else statusThemeConfig.errorColor
 
         when (type) {
-            ConnectionType.PC -> callback?.getPcConnectionIndicator()?.setBackgroundColor(colour)
-            ConnectionType.SHIMMER -> callback?.getShimmerConnectionIndicator()?.setBackgroundColor(colour)
-            ConnectionType.THERMAL -> callback?.getThermalConnectionIndicator()?.setBackgroundColor(colour)
+            ConnectionType.PC -> callback?.getPcConnectionIndicator()?.setBackgroundColor(color)
+            ConnectionType.SHIMMER -> callback?.getShimmerConnectionIndicator()?.setBackgroundColor(color)
+            ConnectionType.THERMAL -> callback?.getThermalConnectionIndicator()?.setBackgroundColor(color)
         }
     }
 

@@ -34,7 +34,7 @@ class SectionHeaderView @JvmOverloads constructor(
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
                 setTypeface(null, Typeface.BOLD)
                 textAlignment = TEXT_ALIGNMENT_CENTER
-                setTextColor(ContextCompat.getColor(context, android.R.colour.black))
+                setTextColor(ContextCompat.getColor(context, android.R.color.black))
                 setPadding(0, 0, 0, dpToPx(16))
             }
 
@@ -42,7 +42,7 @@ class SectionHeaderView @JvmOverloads constructor(
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
                 setTypeface(null, Typeface.BOLD)
                 textAlignment = TEXT_ALIGNMENT_TEXT_START
-                setTextColor(ContextCompat.getColor(context, android.R.colour.black))
+                setTextColor(ContextCompat.getColor(context, android.R.color.black))
                 setPadding(0, 0, 0, dpToPx(8))
             }
 
@@ -50,7 +50,7 @@ class SectionHeaderView @JvmOverloads constructor(
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 setTypeface(null, Typeface.BOLD)
                 textAlignment = TEXT_ALIGNMENT_TEXT_START
-                setTextColor(ContextCompat.getColor(context, android.R.colour.black))
+                setTextColor(ContextCompat.getColor(context, android.R.color.black))
                 setPadding(0, 0, 0, dpToPx(4))
             }
         }
@@ -61,11 +61,11 @@ class SectionHeaderView @JvmOverloads constructor(
     }
 
     fun setDarkTheme() {
-        setTextColor(ContextCompat.getColor(context, android.R.colour.white))
+        setTextColor(ContextCompat.getColor(context, android.R.color.white))
     }
 
     fun setLightTheme() {
-        setTextColor(ContextCompat.getColor(context, android.R.colour.black))
+        setTextColor(ContextCompat.getColor(context, android.R.color.black))
     }
 
     private fun dpToPx(dp: Int): Int {

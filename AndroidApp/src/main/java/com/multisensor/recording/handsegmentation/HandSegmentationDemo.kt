@@ -2,7 +2,7 @@ package com.multisensor.recording.handsegmentation
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Colour
+import android.graphics.Color
 import android.util.Log
 import kotlinx.coroutines.runBlocking
 
@@ -59,9 +59,9 @@ class HandSegmentationDemo(private val context: Context) {
         val height = 480
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
-        bitmap.eraseColor(Colour.rgb(200, 200, 200))
+        bitmap.eraseColor(Color.rgb(200, 200, 200))
 
-        val skinColor = Colour.rgb(220, 180, 140)
+        val skinColor = Color.rgb(220, 180, 140)
 
         for (y in 150..350) {
             for (x in 200..400) {

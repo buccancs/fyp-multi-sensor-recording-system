@@ -10,18 +10,18 @@ object UIUtils {
 
     fun updateConnectionIndicator(context: Context, indicator: View, isConnected: Boolean) {
         val colorRes = if (isConnected) {
-            R.colour.statusIndicatorConnected
+            R.color.statusIndicatorConnected
         } else {
-            R.colour.statusIndicatorDisconnected
+            R.color.statusIndicatorDisconnected
         }
         indicator.setBackgroundColor(ContextCompat.getColor(context, colorRes))
     }
 
     fun updateRecordingIndicator(context: Context, indicator: View, isRecording: Boolean) {
         val colorRes = if (isRecording) {
-            R.colour.recordingActive
+            R.color.recordingActive
         } else {
-            R.colour.recordingInactive
+            R.color.recordingInactive
         }
         indicator.setBackgroundColor(ContextCompat.getColor(context, colorRes))
     }
@@ -66,10 +66,10 @@ object UIUtils {
 
     fun styleButton(context: Context, button: View, buttonType: ButtonType, isEnabled: Boolean = true) {
         val colorRes = when (buttonType) {
-            ButtonType.PRIMARY -> R.colour.colorSecondary
-            ButtonType.SUCCESS -> R.colour.colorPrimary
-            ButtonType.DANGER -> R.colour.recordingActive
-            ButtonType.SECONDARY -> R.colour.textColorSecondary
+            ButtonType.PRIMARY -> R.color.colorSecondary
+            ButtonType.SUCCESS -> R.color.colorPrimary
+            ButtonType.DANGER -> R.color.recordingActive
+            ButtonType.SECONDARY -> R.color.textColorSecondary
         }
 
         button.setBackgroundColor(ContextCompat.getColor(context, colorRes))

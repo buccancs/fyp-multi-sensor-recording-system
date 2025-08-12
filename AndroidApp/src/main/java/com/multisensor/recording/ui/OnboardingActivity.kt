@@ -52,7 +52,7 @@ class OnboardingActivity : ComponentActivity() {
             MultiSensorTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    colour = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     OnboardingFlow(
                         onComplete = { completeOnboarding() },
@@ -175,7 +175,7 @@ fun WelcomePage() {
             .fillMaxSize()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Centre
+        verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Filled.Sensors,
@@ -189,15 +189,15 @@ fun WelcomePage() {
         Text(
             text = "Welcome to",
             style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Centre
+            textAlign = TextAlign.Center
         )
 
         Text(
             text = "Multi-Sensor Recording",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Centre,
-            colour = MaterialTheme.colorScheme.primary
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.primary
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -205,8 +205,8 @@ fun WelcomePage() {
         Text(
             text = "Advanced multi-modal sensor recording system for contactless GSR prediction research.",
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Centre,
-            colour = MaterialTheme.colorScheme.onSurfaceVariant
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -224,7 +224,7 @@ fun FeaturePage() {
                 text = "Powerful Features",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Centre,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -282,7 +282,7 @@ fun FeatureCard(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
-                    colour = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -312,7 +312,7 @@ fun PermissionsPage(
                 text = "Permissions Required",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Centre,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -321,8 +321,8 @@ fun PermissionsPage(
             Text(
                 text = "The app needs these permissions to function properly:",
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Centre,
-                colour = MaterialTheme.colorScheme.onSurfaceVariant
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -396,7 +396,7 @@ fun PermissionCard(
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    colour = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -410,7 +410,7 @@ fun SetupPage() {
             .fillMaxSize()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Centre
+        verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Filled.CheckCircle,
@@ -425,8 +425,8 @@ fun SetupPage() {
             text = "Setup Complete!",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Centre,
-            colour = MaterialTheme.colorScheme.primary
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.primary
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -434,8 +434,8 @@ fun SetupPage() {
         Text(
             text = "Your multi-sensor recording system is ready to use. You can now:",
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Centre,
-            colour = MaterialTheme.colorScheme.onSurfaceVariant
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(24.dp))

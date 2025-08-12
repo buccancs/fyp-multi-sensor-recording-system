@@ -262,14 +262,14 @@ class DevicesActivity : AppCompatActivity() {
     ) {
         if (isConnected) {
             indicator.setImageResource(com.multisensor.recording.R.drawable.ic_check_circle)
-            indicator.setColorFilter(getColor(com.multisensor.recording.R.colour.md_theme_primary))
+            indicator.setColorFilter(getColor(com.multisensor.recording.R.color.md_theme_primary))
             textView.text = connectedText
-            textView.setTextColor(getColor(com.multisensor.recording.R.colour.md_theme_primary))
+            textView.setTextColor(getColor(com.multisensor.recording.R.color.md_theme_primary))
         } else {
             indicator.setImageResource(com.multisensor.recording.R.drawable.ic_close)
-            indicator.setColorFilter(getColor(com.multisensor.recording.R.colour.md_theme_error))
+            indicator.setColorFilter(getColor(com.multisensor.recording.R.color.md_theme_error))
             textView.text = disconnectedText
-            textView.setTextColor(getColor(com.multisensor.recording.R.colour.md_theme_error))
+            textView.setTextColor(getColor(com.multisensor.recording.R.color.md_theme_error))
         }
     }
 

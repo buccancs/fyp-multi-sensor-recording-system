@@ -307,7 +307,7 @@ class FileViewActivity : AppCompatActivity() {
     private fun showError(message: String) {
         findViewById<View>(android.R.id.content)?.let { view ->
             Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getColor(android.R.colour.holo_red_dark))
+                .setBackgroundTint(getColor(android.R.color.holo_red_dark))
                 .show()
         }
     }
@@ -335,7 +335,7 @@ class FileViewActivity : AppCompatActivity() {
             onPreviewUpdate = { isActive ->
                 rgbPreviewBtn.text = if (isActive) "Stop" else "Start"
                 rgbPreviewBtn.backgroundTintList = getColorStateList(
-                    if (isActive) android.R.colour.holo_red_dark else android.R.colour.holo_green_dark
+                    if (isActive) android.R.color.holo_red_dark else android.R.color.holo_green_dark
                 )
                 rgbPreviewPlaceholder.visibility = if (isActive) View.GONE else View.VISIBLE
                 rgbPreviewImage.visibility = if (isActive) View.VISIBLE else View.GONE
@@ -348,7 +348,7 @@ class FileViewActivity : AppCompatActivity() {
     private fun stopRgbPreview() {
         previewManager.stopRgbPreview { isActive ->
             rgbPreviewBtn.text = "Start"
-            rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.colour.holo_green_dark)
+            rgbPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_green_dark)
             rgbPreviewImage.visibility = View.GONE
             rgbPreviewPlaceholder.visibility = View.VISIBLE
         }
@@ -363,7 +363,7 @@ class FileViewActivity : AppCompatActivity() {
             onPreviewUpdate = { isActive ->
                 irPreviewBtn.text = if (isActive) "Stop" else "Start"
                 irPreviewBtn.backgroundTintList = getColorStateList(
-                    if (isActive) android.R.colour.holo_red_dark else android.R.colour.holo_orange_dark
+                    if (isActive) android.R.color.holo_red_dark else android.R.color.holo_orange_dark
                 )
                 irPreviewPlaceholder.visibility = if (isActive) View.GONE else View.VISIBLE
                 irPreviewImage.visibility = if (isActive) View.VISIBLE else View.GONE
@@ -376,7 +376,7 @@ class FileViewActivity : AppCompatActivity() {
     private fun stopIrPreview() {
         previewManager.stopThermalPreview { isActive ->
             irPreviewBtn.text = "Start"
-            irPreviewBtn.backgroundTintList = getColorStateList(android.R.colour.holo_orange_dark)
+            irPreviewBtn.backgroundTintList = getColorStateList(android.R.color.holo_orange_dark)
             irPreviewImage.visibility = View.GONE
             irPreviewPlaceholder.visibility = View.VISIBLE
         }

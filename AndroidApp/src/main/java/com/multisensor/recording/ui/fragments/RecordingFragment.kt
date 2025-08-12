@@ -199,11 +199,11 @@ Try restarting the app or checking permissions."""
     ) {
         val context = requireContext()
         if (isConnected) {
-            icon.setColorFilter(androidx.core.content.ContextCompat.getColor(context, R.colour.statusIndicatorConnected))
+            icon.setColorFilter(androidx.core.content.ContextCompat.getColor(context, R.color.statusIndicatorConnected))
             text.text = "$sensorName\n$connectedText"
             text.contentDescription = "$sensorName sensor is $connectedText"
         } else {
-            icon.setColorFilter(androidx.core.content.ContextCompat.getColor(context, R.colour.statusIndicatorDisconnected))
+            icon.setColorFilter(androidx.core.content.ContextCompat.getColor(context, R.color.statusIndicatorDisconnected))
             text.text = "$sensorName\n$disconnectedText"
             text.contentDescription = "$sensorName sensor is $disconnectedText"
         }

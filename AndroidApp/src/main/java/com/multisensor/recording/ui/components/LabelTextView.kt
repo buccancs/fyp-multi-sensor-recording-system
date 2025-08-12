@@ -1,7 +1,7 @@
 package com.multisensor.recording.ui.components
 
 import android.content.Context
-import android.graphics.Colour
+import android.graphics.Color
 import android.util.AttributeSet
 import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatTextView
@@ -34,31 +34,31 @@ class LabelTextView @JvmOverloads constructor(
         when (style) {
             LabelStyle.FORM_LABEL -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-                setTextColor(Colour.parseColor("#666666"))
+                setTextColor(Color.parseColor("#666666"))
                 setPadding(0, 0, 0, dpToPx(4))
             }
 
             LabelStyle.DESCRIPTION -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-                setTextColor(Colour.parseColor("#888888"))
+                setTextColor(Color.parseColor("#888888"))
                 setPadding(0, 0, 0, dpToPx(2))
             }
 
             LabelStyle.INSTRUCTION -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-                setTextColor(Colour.parseColor("#444444"))
+                setTextColor(Color.parseColor("#444444"))
                 setPadding(0, 0, 0, dpToPx(8))
             }
 
             LabelStyle.ERROR -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-                setTextColor(ContextCompat.getColor(context, android.R.colour.holo_red_dark))
+                setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
                 setPadding(0, 0, 0, dpToPx(4))
             }
 
             LabelStyle.SUCCESS -> {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-                setTextColor(ContextCompat.getColor(context, android.R.colour.holo_green_dark))
+                setTextColor(ContextCompat.getColor(context, android.R.color.holo_green_dark))
                 setPadding(0, 0, 0, dpToPx(4))
             }
         }
@@ -69,15 +69,15 @@ class LabelTextView @JvmOverloads constructor(
     }
 
     fun setLabelTextColor(hexColor: String) {
-        setTextColor(Colour.parseColor(hexColor))
+        setTextColor(Color.parseColor(hexColor))
     }
 
     fun setDarkTheme() {
-        setTextColor(Colour.parseColor("#CCCCCC"))
+        setTextColor(Color.parseColor("#CCCCCC"))
     }
 
     fun setLightTheme() {
-        setTextColor(Colour.parseColor("#666666"))
+        setTextColor(Color.parseColor("#666666"))
     }
 
     fun setRequired(isRequired: Boolean) {
@@ -85,7 +85,7 @@ class LabelTextView @JvmOverloads constructor(
             text = "${text}*"
             val spannableText = android.text.SpannableString(text)
             spannableText.setSpan(
-                android.text.style.ForegroundColorSpan(Colour.RED),
+                android.text.style.ForegroundColorSpan(Color.RED),
                 text.length - 1,
                 text.length,
                 android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

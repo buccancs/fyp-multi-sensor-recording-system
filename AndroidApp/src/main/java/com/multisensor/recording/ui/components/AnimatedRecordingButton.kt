@@ -9,7 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Colour
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -30,7 +30,7 @@ fun AnimatedRecordingButton(
     val containerColor by animateColorAsState(
         targetValue = when {
             !enabled -> MaterialTheme.colorScheme.surface
-            isRecording -> Colour(0xFFE53E3E)
+            isRecording -> Color(0xFFE53E3E)
             else -> MaterialTheme.colorScheme.primary
         },
         animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
@@ -85,7 +85,7 @@ fun AnimatedRecordingButton(
                     imageVector = if (recording) Icons.Default.Stop else Icons.Default.FiberManualRecord,
                     contentDescription = if (recording) "Stop Recording" else "Start Recording",
                     modifier = Modifier.size(36.dp),
-                    tint = Colour.White
+                    tint = Color.White
                 )
             }
         }

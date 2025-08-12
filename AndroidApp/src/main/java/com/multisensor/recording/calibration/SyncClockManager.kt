@@ -124,7 +124,7 @@ constructor(
         if (isSynchronized) {
             deviceTimestamp + clockOffsetMs
         } else {
-            logger.warning("Clock not synchronised, using device timestamp")
+            logger.warning("Clock not synchronized, using device timestamp")
             deviceTimestamp
         }
 
