@@ -28,6 +28,7 @@ from unittest.mock import Mock, patch
 try:
     from appium import webdriver
     from appium.webdriver.common.appiumby import AppiumBy
+    from selenium import webdriver as selenium_webdriver
     from appium.options.android import UiAutomator2Options
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
@@ -89,7 +90,7 @@ class AndroidLoadTester:
         self.performance_data = []
         self.monitoring_active = False
     
-    def create_android_driver(self, device_id: str = "emulator-5554") -> webdriver.Remote:
+    def create_android_driver(self, device_id: str = "emulator-5554") -> selenium_webdriver.Remote:
         """Create Android WebDriver instance."""
         if not APPIUM_AVAILABLE:
             raise pytest.skip("Appium not available for load testing")

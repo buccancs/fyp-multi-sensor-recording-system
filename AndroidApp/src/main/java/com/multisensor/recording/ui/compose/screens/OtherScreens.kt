@@ -444,7 +444,7 @@ fun FilesScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 LinearProgressIndicator(
-                    progress = uiState.storageUsagePercentage,
+                    progress = { uiState.storageUsagePercentage },
                     modifier = Modifier.fillMaxWidth(),
                     color = if (uiState.showStorageWarning)
                         MaterialTheme.colorScheme.error

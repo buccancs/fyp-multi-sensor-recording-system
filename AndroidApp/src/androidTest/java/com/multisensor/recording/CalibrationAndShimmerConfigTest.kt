@@ -86,7 +86,7 @@ class CalibrationAndShimmerConfigTest {
         Log.i(testTag, "Testing Shimmer configuration activity")
 
         val shimmerNavSuccess = TestHelpers.navigateToSettingsActivity(
-            R.id.nav_shimmer_config, "ShimmerConfig"
+            R.id.nav_shimmer_settings, "ShimmerConfig"
         )
         resultCollector.addResult("shimmer_config_navigation", shimmerNavSuccess)
 
