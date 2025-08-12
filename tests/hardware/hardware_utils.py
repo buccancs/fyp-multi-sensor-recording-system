@@ -17,10 +17,14 @@ import sys
 import time
 import threading
 import json
+import numpy as np
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Hardware interface imports
 try:
@@ -45,6 +49,415 @@ try:
 except ImportError:
     USB_AVAILABLE = False
     usb = None
+
+
+@dataclass
+class HardwareConfig:
+    """Configuration for hardware testing environments."""
+    use_real_hardware: bool = False
+    shimmer_timeout: float = 5.0
+    thermal_timeout: float = 5.0
+    mock_data_quality: str = "good"  # good, fair, poor
+    enable_stress_testing: bool = True
+    max_connection_retries: int = 3
+
+
+@dataclass
+class HardwareStatus:
+    """Status information for hardware devices."""
+    device_type: str
+    device_id: str
+    connected: bool
+    last_seen: datetime
+    error_count: int = 0
+    data_quality: str = "unknown"
+
+
+@dataclass
+class DeviceInfo:
+    """Information about detected hardware devices."""
+    device_id: str
+    device_type: str
+    name: str
+    address: str  # Bluetooth address or USB path
+    capabilities: List[str]
+    status: str = "detected"
+
+
+def detect_shimmer_devices(timeout: float = 5.0) -> List[Dict[str, Any]]:
+    """
+    Detect available Shimmer sensor devices.
+    
+    Args:
+        timeout: Maximum time to spend scanning
+        
+    Returns:
+        List of device information dictionaries
+    """
+    devices = []
+    
+    if not BLUETOOTH_AVAILABLE:
+        logger.warning("Bluetooth not available for Shimmer detection")
+        return devices
+        
+    try:
+        # Scan for Bluetooth devices
+        logger.info(f"Scanning for Shimmer devices (timeout: {timeout}s)")
+        
+        if bluetooth:
+            # Perform Bluetooth device discovery
+            nearby_devices = bluetooth.discover_devices(
+                duration=int(timeout), 
+                lookup_names=True,
+                flush_cache=True
+            )
+            
+            for addr, name in nearby_devices:
+                # Check if device appears to be a Shimmer
+                if name and ('shimmer' in name.lower() or 'gsr' in name.lower()):
+                    device_info = {
+                        'address': addr,
+                        'name': name,
+                        'device_type': 'shimmer_gsr',
+                        'capabilities': ['gsr', 'bluetooth'],
+                        'status': 'detected'
+                    }
+                    devices.append(device_info)
+                    logger.info(f"Found Shimmer device: {name} ({addr})")
+                    
+    except Exception as e:
+        logger.error(f"Error during Shimmer device discovery: {e}")
+        
+    logger.info(f"Shimmer device scan complete: {len(devices)} devices found")
+    return devices
+
+
+def detect_thermal_cameras(timeout: float = 5.0) -> List[Dict[str, Any]]:
+    """
+    Detect available thermal camera devices.
+    
+    Args:
+        timeout: Maximum time to spend scanning
+        
+    Returns:
+        List of camera information dictionaries
+    """
+    cameras = []
+    
+    if not USB_AVAILABLE:
+        logger.warning("USB not available for thermal camera detection")
+        return cameras
+        
+    try:
+        logger.info(f"Scanning for thermal cameras (timeout: {timeout}s)")
+        
+        # Scan USB devices
+        devices = usb.core.find(find_all=True)
+        
+        for device in devices:
+            try:
+                # Check if device might be a thermal camera
+                # Common thermal camera vendor IDs
+                thermal_vendors = [
+                    0x045e,  # Microsoft (some thermal cameras)
+                    0x1e4e,  # Topdon
+                    0x0547,  # Anchor Chips
+                    0x1a86,  # QinHeng Electronics
+                ]
+                
+                if device.idVendor in thermal_vendors:
+                    try:
+                        manufacturer = usb.util.get_string(device, device.iManufacturer) if device.iManufacturer else "Unknown"
+                        product = usb.util.get_string(device, device.iProduct) if device.iProduct else "Unknown"
+                    except:
+                        manufacturer = "Unknown"
+                        product = "Unknown"
+                        
+                    camera_info = {
+                        'device_id': f"USB_{device.idVendor:04x}:{device.idProduct:04x}",
+                        'name': f"{manufacturer} {product}",
+                        'device_type': 'thermal_camera',
+                        'vendor_id': device.idVendor,
+                        'product_id': device.idProduct,
+                        'capabilities': ['thermal', 'usb', 'video'],
+                        'resolution': (160, 120),  # Default thermal resolution
+                        'status': 'detected'
+                    }
+                    cameras.append(camera_info)
+                    logger.info(f"Found thermal camera: {manufacturer} {product}")
+                    
+            except Exception as e:
+                logger.debug(f"Error checking USB device: {e}")
+                continue
+                
+    except Exception as e:
+        logger.error(f"Error during thermal camera discovery: {e}")
+        
+    logger.info(f"Thermal camera scan complete: {len(cameras)} cameras found")
+    return cameras
+
+
+def detect_all_hardware(timeout: float = 10.0) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Detect all available hardware devices.
+    
+    Args:
+        timeout: Maximum time to spend scanning
+        
+    Returns:
+        Dictionary with device types as keys and device lists as values
+    """
+    logger.info("Starting comprehensive hardware detection")
+    
+    hardware = {
+        'shimmer_devices': [],
+        'thermal_cameras': [],
+        'other_devices': []
+    }
+    
+    # Split timeout between device types
+    per_type_timeout = timeout / 2
+    
+    try:
+        # Detect Shimmer sensors
+        hardware['shimmer_devices'] = detect_shimmer_devices(per_type_timeout)
+        
+        # Detect thermal cameras
+        hardware['thermal_cameras'] = detect_thermal_cameras(per_type_timeout)
+        
+        total_devices = sum(len(devices) for devices in hardware.values())
+        logger.info(f"Hardware detection complete: {total_devices} devices found")
+        
+    except Exception as e:
+        logger.error(f"Error during hardware detection: {e}")
+        
+    return hardware
+
+
+def validate_gsr_data(data: Any) -> bool:
+    """
+    Validate GSR sensor data quality and format.
+    
+    Args:
+        data: GSR data to validate
+        
+    Returns:
+        True if data is valid, False otherwise
+    """
+    try:
+        if hasattr(data, 'resistance'):
+            # Check resistance value is reasonable
+            if not (10.0 <= data.resistance <= 1000.0):  # kOhms
+                return False
+                
+        if hasattr(data, 'conductance'):
+            # Check conductance value is reasonable
+            if not (1.0 <= data.conductance <= 100.0):  # μS
+                return False
+                
+        if hasattr(data, 'timestamp'):
+            # Check timestamp is recent
+            current_time = time.time()
+            if abs(current_time - data.timestamp) > 60.0:  # More than 1 minute old
+                return False
+                
+        if hasattr(data, 'quality'):
+            # Check quality indicator
+            if data.quality not in ['good', 'fair', 'poor']:
+                return False
+                
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error validating GSR data: {e}")
+        return False
+
+
+def validate_thermal_frame(frame: Any) -> bool:
+    """
+    Validate thermal camera frame data quality and format.
+    
+    Args:
+        frame: Thermal frame data to validate
+        
+    Returns:
+        True if frame is valid, False otherwise
+    """
+    try:
+        if not hasattr(frame, 'temperature_data'):
+            return False
+            
+        if not hasattr(frame, 'timestamp'):
+            return False
+            
+        temp_data = frame.temperature_data
+        
+        # Check data shape and type
+        if not isinstance(temp_data, np.ndarray):
+            return False
+            
+        if len(temp_data.shape) != 2:  # Should be 2D array
+            return False
+            
+        # Check temperature ranges are reasonable
+        if hasattr(frame, 'min_temp') and hasattr(frame, 'max_temp'):
+            if not (-50.0 <= frame.min_temp <= frame.max_temp <= 200.0):
+                return False
+                
+        # Check for invalid values
+        if np.any(np.isnan(temp_data)) or np.any(np.isinf(temp_data)):
+            return False
+            
+        # Check timestamp is recent
+        current_time = time.time()
+        if abs(current_time - frame.timestamp) > 60.0:  # More than 1 minute old
+            return False
+            
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error validating thermal frame: {e}")
+        return False
+
+
+def create_mock_environment() -> Dict[str, Any]:
+    """
+    Create a mock hardware environment for testing.
+    
+    Returns:
+        Dictionary with mock device configurations
+    """
+    mock_env = {
+        'shimmer_devices': [
+            {
+                'device_id': '00:06:66:66:66:66',
+                'name': 'MockShimmer3',
+                'device_type': 'shimmer_gsr',
+                'capabilities': ['gsr', 'bluetooth'],
+                'status': 'mock',
+                'sample_rate': 128,
+                'battery_level': 85
+            }
+        ],
+        'thermal_cameras': [
+            {
+                'device_id': 'MockThermal_001',
+                'name': 'Mock Thermal Camera',
+                'device_type': 'thermal_camera',
+                'capabilities': ['thermal', 'usb', 'video'],
+                'status': 'mock',
+                'resolution': (160, 120),
+                'frame_rate': 30
+            }
+        ],
+        'environment': {
+            'test_mode': True,
+            'mock_data_quality': 'good',
+            'noise_level': 0.1,
+            'simulation_time_factor': 1.0
+        }
+    }
+    
+    logger.info("Created mock hardware environment")
+    return mock_env
+
+
+def get_hardware_test_config() -> HardwareConfig:
+    """
+    Get hardware testing configuration from environment variables.
+    
+    Returns:
+        Hardware configuration object
+    """
+    config = HardwareConfig()
+    
+    # Check environment variables
+    config.use_real_hardware = os.getenv('USE_REAL_HARDWARE', 'false').lower() == 'true'
+    config.shimmer_timeout = float(os.getenv('SHIMMER_TIMEOUT', '5.0'))
+    config.thermal_timeout = float(os.getenv('THERMAL_TIMEOUT', '5.0'))
+    config.mock_data_quality = os.getenv('MOCK_DATA_QUALITY', 'good')
+    config.enable_stress_testing = os.getenv('ENABLE_STRESS_TESTING', 'true').lower() == 'true'
+    config.max_connection_retries = int(os.getenv('MAX_CONNECTION_RETRIES', '3'))
+    
+    logger.info(f"Hardware test config: use_real={config.use_real_hardware}")
+    return config
+
+
+def monitor_hardware_health(devices: List[Any], duration: float = 10.0) -> Dict[str, Any]:
+    """
+    Monitor hardware device health over a specified duration.
+    
+    Args:
+        devices: List of hardware devices to monitor
+        duration: Monitoring duration in seconds
+        
+    Returns:
+        Health monitoring report
+    """
+    start_time = time.time()
+    health_report = {
+        'start_time': start_time,
+        'duration': duration,
+        'devices': {},
+        'errors': [],
+        'warnings': []
+    }
+    
+    for device in devices:
+        device_id = getattr(device, 'device_id', str(id(device)))
+        health_report['devices'][device_id] = {
+            'connection_checks': 0,
+            'successful_checks': 0,
+            'errors': [],
+            'last_check': None
+        }
+        
+    logger.info(f"Starting hardware health monitoring for {duration} seconds")
+    
+    while time.time() - start_time < duration:
+        for device in devices:
+            device_id = getattr(device, 'device_id', str(id(device)))
+            device_health = health_report['devices'][device_id]
+            
+            try:
+                device_health['connection_checks'] += 1
+                
+                # Check if device is connected
+                if hasattr(device, 'connected'):
+                    if device.connected:
+                        device_health['successful_checks'] += 1
+                    else:
+                        device_health['errors'].append({
+                            'timestamp': time.time(),
+                            'error': 'Device not connected'
+                        })
+                        
+                device_health['last_check'] = time.time()
+                
+            except Exception as e:
+                error_info = {
+                    'timestamp': time.time(),
+                    'error': str(e),
+                    'device_id': device_id
+                }
+                device_health['errors'].append(error_info)
+                health_report['errors'].append(error_info)
+                
+        time.sleep(1.0)  # Check every second
+        
+    # Calculate health statistics
+    for device_id, device_health in health_report['devices'].items():
+        if device_health['connection_checks'] > 0:
+            device_health['success_rate'] = (
+                device_health['successful_checks'] / device_health['connection_checks']
+            )
+        else:
+            device_health['success_rate'] = 0.0
+            
+    health_report['end_time'] = time.time()
+    logger.info("Hardware health monitoring complete")
+    
+    return health_report
 
 
 @dataclass
