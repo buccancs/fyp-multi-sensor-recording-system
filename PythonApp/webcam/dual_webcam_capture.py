@@ -90,7 +90,7 @@ class DualWebcamCapture(QThread):
         self.last_frames = {"camera1": None, "camera2": None}
         self.last_sync_quality = 1.0
         self.roi_detector = AdvancedROIDetector(
-            method=ROIDetectionMethod.DNN_FACE,
+            method=ROIDetectionMethod.MEDIAPIPE_HANDS,
             tracking_enabled=True,
             stability_threshold=0.8,
         )

@@ -15,6 +15,7 @@ class ROIDetectionMethod(Enum):
     FACE_CASCADE = "face_cascade"
     DNN_FACE = "dnn_face"
     MEDIAPIPE = "mediapipe"
+    MEDIAPIPE_HANDS = "mediapipe_hands"
     CUSTOM_TRACKER = "custom_tracker"
     MANUAL_SELECTION = "manual"
 class SignalExtractionMethod(Enum):
@@ -76,7 +77,7 @@ class PhysiologicalSignal:
 class AdvancedROIDetector:
     def __init__(
         self,
-        method: ROIDetectionMethod = ROIDetectionMethod.DNN_FACE,
+        method: ROIDetectionMethod = ROIDetectionMethod.MEDIAPIPE_HANDS,
         tracking_enabled: bool = True,
         stability_threshold: float = 0.8,
     ):
@@ -116,6 +117,23 @@ class AdvancedROIDetector:
                     )
                     self.method = ROIDetectionMethod.DNN_FACE
                     self._init_detection_models()
+            elif self.method == ROIDetectionMethod.MEDIAPIPE_HANDS:
+                try:
+                    import mediapipe as mp
+                    self.mp_hands = mp.solutions.hands
+                    self.mp_drawing = mp.solutions.drawing_utils
+                    self.hands_detection = self.mp_hands.Hands(
+                        static_image_mode=False,
+                        max_num_hands=2,
+                        min_detection_confidence=0.5,
+                        min_tracking_confidence=0.5
+                    )
+                except ImportError:
+                    logger.warning(
+                        "MediaPipe not available, falling back to custom tracker"
+                    )
+                    self.method = ROIDetectionMethod.CUSTOM_TRACKER
+                    self._init_detection_models()
         except Exception as e:
             logger.error(f"Failed to initialize detection model: {e}")
             self.method = ROIDetectionMethod.FACE_CASCADE
@@ -134,6 +152,8 @@ class AdvancedROIDetector:
                     roi = self._detect_dnn(frame)
                 elif self.method == ROIDetectionMethod.MEDIAPIPE:
                     roi = self._detect_mediapipe(frame)
+                elif self.method == ROIDetectionMethod.MEDIAPIPE_HANDS:
+                    roi = self._detect_mediapipe_hands(frame)
                 elif self.method == ROIDetectionMethod.CUSTOM_TRACKER:
                     roi = self._detect_custom(frame)
             if roi is not None:
@@ -188,6 +208,40 @@ class AdvancedROIDetector:
             height = int(bbox.height * h)
             return x, y, width, height
         return None
+    
+    def _detect_mediapipe_hands(
+        self, frame: np.ndarray
+    ) -> Optional[Tuple[int, int, int, int]]:
+        if not hasattr(self, "hands_detection"):
+            return None
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = self.hands_detection.process(rgb_frame)
+        if results.multi_hand_landmarks:
+            # Get the first detected hand
+            landmarks = results.multi_hand_landmarks[0]
+            h, w = frame.shape[:2]
+            
+            # Calculate bounding box from hand landmarks
+            x_coords = []
+            y_coords = []
+            for landmark in landmarks.landmark:
+                x_coords.append(int(landmark.x * w))
+                y_coords.append(int(landmark.y * h))
+            
+            if x_coords and y_coords:
+                min_x, max_x = min(x_coords), max(x_coords)
+                min_y, max_y = min(y_coords), max(y_coords)
+                
+                # Add some padding around the hand
+                padding = 20
+                x = max(0, min_x - padding)
+                y = max(0, min_y - padding)
+                width = min(w - x, max_x - min_x + 2 * padding)
+                height = min(h - y, max_y - min_y + 2 * padding)
+                
+                return x, y, width, height
+        return None
+    
     def _detect_custom(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
         return self._detect_cascade(frame)
     def _track_roi(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
@@ -554,7 +608,7 @@ class PhysiologicalSignalExtractor:
 def create_complete_pipeline(camera_indices: List[int] = [0, 1]) -> Dict:
     logger.info("Creating complete CV preprocessing pipeline")
     roi_detector = AdvancedROIDetector(
-        method=ROIDetectionMethod.DNN_FACE,
+        method=ROIDetectionMethod.MEDIAPIPE_HANDS,
         tracking_enabled=True,
         stability_threshold=0.8,
     )

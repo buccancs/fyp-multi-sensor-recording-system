@@ -58,7 +58,7 @@
             android:id="@+id/checkbox_face_blurring"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Blur faces in video recordings"
+            android:text="Blur faces in video recordings (disabled - hands-only video)"
             android:checked="false" />
 
         <View
