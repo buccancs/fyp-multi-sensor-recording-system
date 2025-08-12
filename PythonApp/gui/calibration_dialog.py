@@ -49,7 +49,6 @@ class CalibrationDialog(QDialog):
         instructions_group = QGroupBox("Calibration Instructions")
         instructions_layout = QVBoxLayout(instructions_group)
         instructions_text = """
-"""
         <b>Camera Calibration Procedure:</b><br><br>
         1. Place the calibration pattern (chessboard) in view of both RGB and thermal cameras<br>
         2. Capture at least 5-10 images from different angles and positions<br>
@@ -57,16 +56,4 @@ class CalibrationDialog(QDialog):
         4. Vary the pattern orientation and distance for better accuracy<br>
         5. Click 'Compute Calibration' when you have enough frames<br><br>
         <b>Tips:</b> For thermal cameras, ensure temperature contrast in the pattern
-            <b>Calibration Results for {device_id}</b><br><br>
-            <b>RGB Camera:</b><br>
-            - Reprojection Error: {summary.get('rgb_error', 'N/A'):.3f} pixels<br>
-            - Focal Length: fx={summary.get('rgb_fx', 'N/A'):.1f}, fy={summary.get('rgb_fy', 'N/A'):.1f}<br>
-            - Principal Point: cx={summary.get('rgb_cx', 'N/A'):.1f}, cy={summary.get('rgb_cy', 'N/A'):.1f}<br><br>
-            <b>Thermal Camera:</b><br>
-            - Reprojection Error: {summary.get('thermal_error', 'N/A'):.3f} pixels<br>
-            - Focal Length: fx={summary.get('thermal_fx', 'N/A'):.1f}, fy={summary.get('thermal_fy', 'N/A'):.1f}<br>
-            - Principal Point: cx={summary.get('thermal_cx', 'N/A'):.1f}, cy={summary.get('thermal_cy', 'N/A'):.1f}<br><br>
-            <b>Stereo Calibration:</b><br>
-            - Stereo Error: {summary.get('stereo_error', 'N/A'):.3f} pixels<br>
-            - Translation: {summary.get('translation', 'N/A')}<br>
-            - Rotation: {summary.get('rotation_angles', 'N/A')}<br>
+        """

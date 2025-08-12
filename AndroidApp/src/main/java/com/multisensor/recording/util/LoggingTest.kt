@@ -21,8 +21,8 @@ object LoggingTest {
         AppLogger.logLifecycle("LoggingTest", "onCreate", "TestActivity")
         AppLogger.logLifecycle("LoggingTest", "onStart", "TestActivity")
         AppLogger.logLifecycle("LoggingTest", "onResume", "TestActivity")
-        AppLogger.logNetwork("LoggingTest", "HTTP GET", "https:
-        AppLogger.logNetwork("LoggingTest", "HTTP POST", "https:
+        AppLogger.logNetwork("LoggingTest", "HTTP GET", "https://api.example.com/test")
+        AppLogger.logNetwork("LoggingTest", "HTTP POST", "https://api.example.com/data")
         AppLogger.logRecording("LoggingTest", "start recording", "camera_front")
         AppLogger.logRecording("LoggingTest", "stop recording", "camera_front")
         AppLogger.logSensor("LoggingTest", "reading", "accelerometer", "x=1.2, y=0.8, z=9.8")

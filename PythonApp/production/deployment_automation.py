@@ -641,6 +641,20 @@ echo "See USER_MANUAL.md for detailed instructions"
 echo
 """
             )
+        self.logger.info("Deployment guide created")
+        
+        # Create installer scripts  
+        try:
+            installer_dir = self.dist_dir / "installers"
+            installer_dir.mkdir(exist_ok=True)
+            
+            # Create Unix installer script
+            unix_installer = installer_dir / "install.sh"
+            unix_installer.write_text(f"""#!/bin/bash
+echo "Installing Multi-Sensor Recording System..."
+# Installation logic would go here
+echo "Installation complete!"
+""")
             try:
                 unix_installer.chmod(493)
             except (OSError, PermissionError) as e:

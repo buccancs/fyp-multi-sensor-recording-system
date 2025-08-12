@@ -167,7 +167,7 @@ constructor(
             appendLine("=== Thermal Camera Configuration ===")
             appendLine("Enabled: ${config.isEnabled}")
             appendLine("Frame Rate: ${config.frameRate} fps")
-            appendLine("Colour Palette: ${config.getColorPaletteDisplay()}")
+            appendLine("Color Palette: ${config.getColorPaletteDisplay()}")
             appendLine("Temperature Range: ${config.getTemperatureRangeDisplay()}")
             appendLine("Emissivity: ${config.emissivity}")
             appendLine("Auto-Calibration: ${config.autoCalibration}")

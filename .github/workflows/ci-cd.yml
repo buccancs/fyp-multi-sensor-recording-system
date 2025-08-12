@@ -107,26 +107,34 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
     
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-    
+    - name: Make gradlew executable and clear corrupted caches
+      run: |
+        chmod +x ./gradlew
+        
+        # Clear any potentially corrupted Gradle caches
+        ./gradlew --stop || true
+        rm -rf ~/.gradle/caches/*/dependencies-accessors/ || true
+        
+        # Test Gradle setup
+        ./gradlew --version --no-daemon
+
     - name: Generate build constants
-      run: ./gradlew generateConstants
-    
+      run: ./gradlew generateConstants --no-daemon
+
     - name: Lint Android code
-      run: ./gradlew lintDevDebug --continue || echo "::warning::Android linting completed with issues"
-    
+      run: ./gradlew lintDevDebug --continue --no-daemon || echo "::warning::Android linting completed with issues"
+
     - name: Run Detekt static analysis
-      run: ./gradlew detekt
-    
+      run: ./gradlew detekt --no-daemon
+
     - name: Build Android app
-      run: ./gradlew assembleDevDebug --continue || echo "::warning::Android build completed with issues"
-    
+      run: ./gradlew assembleDevDebug --continue --no-daemon || echo "::warning::Android build completed with issues"
+
     - name: Run Android unit tests
-      run: ./gradlew testDevDebugUnitTest --continue || echo "::warning::Some Android unit tests failed"
-    
+      run: ./gradlew testDevDebugUnitTest --continue --no-daemon || echo "::warning::Some Android unit tests failed"
+
     - name: Generate test coverage report
-      run: ./gradlew jacocoTestReport --continue || echo "::warning::Coverage report generation failed"
+      run: ./gradlew jacocoTestReport --continue --no-daemon || echo "::warning::Coverage report generation failed"
     
     - name: Upload Android coverage to Codecov
       uses: codecov/codecov-action@v4

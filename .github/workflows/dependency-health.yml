@@ -31,8 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Test against multiple Python versions as recommended
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        # Test against Python 3.10 only as per requirement
+        python-version: ['3.10']
     
     steps:
       - name: Checkout repository
@@ -82,7 +82,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
           
       - name: Install monitoring dependencies
         run: |
@@ -163,13 +163,19 @@ jobs:
         run: |
           echo "🔍 Checking for outdated Gradle dependencies..."
           cd AndroidApp
-          ./gradlew dependencyUpdates --info
+          chmod +x ./gradlew
+          
+          # Clear potentially corrupted caches
+          ./gradlew --stop || true
+          rm -rf ~/.gradle/caches/*/dependencies-accessors/ || true
+          
+          ./gradlew dependencyUpdates --info --no-daemon
           
       - name: Run Gradle dependency analysis
         run: |
           echo "🔍 Analysing Gradle dependencies..."
           cd AndroidApp
-          ./gradlew dependencies --configuration releaseRuntimeClasspath > gradle-dependencies.txt
+          ./gradlew dependencies --configuration releaseRuntimeClasspath --no-daemon > gradle-dependencies.txt
           
       - name: Upload Android dependency reports
         uses: actions/upload-artifact@v4
@@ -198,7 +204,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
           
       - name: Generate detailed summary
         run: |
@@ -213,7 +219,7 @@ jobs:
           
           ## 🐍 Python Dependency Status
           
-          - **Versions Tested**: 3.9, 3.10, 3.11, 3.12
+          - **Versions Tested**: 3.10
           - **Security Scans**: Safety, Bandit, pip-audit
           - **Status**: ${{ needs.python-dependency-health.result }}
           

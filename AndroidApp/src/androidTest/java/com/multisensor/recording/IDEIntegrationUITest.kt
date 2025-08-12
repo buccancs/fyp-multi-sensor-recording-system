@@ -3,6 +3,7 @@ package com.multisensor.recording
 import android.util.Log
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
@@ -11,6 +12,9 @@ import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.multisensor.recording.testhelpers.CustomIdlingResource
+import com.multisensor.recording.testhelpers.TestHelpers
+import com.multisensor.recording.testhelpers.TestResultCollector
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -21,22 +25,27 @@ import java.util.*
 class IDEIntegrationUITest {
 
     private lateinit var activityScenario: ActivityScenario<MainActivity>
+    private lateinit var resultCollector: TestResultCollector
     private val testTag = "IDEIntegrationUITest"
-    private val testResults = mutableMapOf<String, Boolean>()
 
     @Before
     fun setUp() {
         Log.i(testTag, "Setting up IDE Integration UI Test")
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
-
-        Thread.sleep(2000)
+        resultCollector = TestResultCollector("IDEIntegration")
+        
+        // Use IdlingResource instead of Thread.sleep
+        val setupIdling = CustomIdlingResource.createNavigationResource()
+        IdlingRegistry.getInstance().register(setupIdling)
+        IdlingRegistry.getInstance().unregister(setupIdling)
+        
         Log.i(testTag, "MainActivity launched successfully")
     }
 
     @After
     fun tearDown() {
         Log.i(testTag, "Tearing down IDE Integration UI Test")
-        logTestResults()
+        resultCollector.logResults()
         activityScenario.close()
     }
 
@@ -70,10 +79,13 @@ class IDEIntegrationUITest {
         Log.i(testTag, "Testing drawer navigation menu")
 
         try {
+            val drawerIdling = CustomIdlingResource.createNavigationResource()
+            IdlingRegistry.getInstance().register(drawerIdling)
+
             onView(withId(R.id.drawer_layout))
                 .perform(DrawerActions.open())
 
-            testResults["drawer_open"] = true
+            resultCollector.addResult("drawer_open", true)
             Log.i(testTag, "✅ Drawer opened successfully")
 
             val mainNavItems = listOf(
@@ -84,33 +96,18 @@ class IDEIntegrationUITest {
             )
 
             for ((itemId, itemName) in mainNavItems) {
-                try {
-                    onView(withId(R.id.nav_view))
-                        .perform(NavigationViewActions.navigateTo(itemId))
-
-                    Thread.sleep(1000)
-
-                    testResults["drawer_nav_$itemName"] = true
-                    Log.i(testTag, "✅ Drawer navigation to $itemName successful")
-
-                    if (itemId != R.id.nav_files) {
-                        onView(withId(R.id.drawer_layout))
-                            .perform(DrawerActions.open())
-                    }
-
-                } catch (e: Exception) {
-                    testResults["drawer_nav_$itemName"] = false
-                    Log.e(testTag, "❌ Drawer navigation to $itemName failed", e)
-                }
+                val success = TestHelpers.navigateToFragment(itemId, itemName)
+                resultCollector.addResult("drawer_nav_$itemName", success)
             }
 
             onView(withId(R.id.drawer_layout))
                 .perform(DrawerActions.close())
 
+            IdlingRegistry.getInstance().unregister(drawerIdling)
             Log.i(testTag, "Drawer navigation menu testing completed")
 
         } catch (e: Exception) {
-            testResults["drawer_open"] = false
+            resultCollector.addResult("drawer_open", false)
             Log.e(testTag, "❌ Drawer navigation menu testing failed", e)
             throw e
         }
@@ -126,19 +123,8 @@ class IDEIntegrationUITest {
         )
 
         for ((itemId, itemName) in bottomNavItems) {
-            try {
-                onView(withId(itemId))
-                    .perform(click())
-
-                Thread.sleep(1000)
-
-                testResults["bottom_nav_$itemName"] = true
-                Log.i(testTag, "✅ Bottom navigation to $itemName successful")
-
-            } catch (e: Exception) {
-                testResults["bottom_nav_$itemName"] = false
-                Log.e(testTag, "❌ Bottom navigation to $itemName failed", e)
-            }
+            val success = TestHelpers.testBottomNavigation(itemId, itemName)
+            resultCollector.addResult("bottom_nav_$itemName", success)
         }
 
         Log.i(testTag, "Bottom navigation testing completed")

@@ -214,7 +214,7 @@ class CalibrationActivity : AppCompatActivity() {
             binding.thermalCalibrationDetails.text = buildString {
                 appendLine("Temperature Range: ${uiState.thermalTempRange}")
                 appendLine("Emissivity: ${uiState.thermalEmissivity}")
-                appendLine("Colour Palette: ${uiState.thermalColorPalette}")
+                appendLine("Color Palette: ${uiState.thermalColorPalette}")
                 appendLine("Calibration Date: ${uiState.thermalCalibrationDate}")
             }
         } else {

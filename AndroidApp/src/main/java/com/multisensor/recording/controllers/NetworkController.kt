@@ -278,7 +278,7 @@ class NetworkController @Inject constructor() {
 
         callback?.getStreamingIndicator()?.let { indicator ->
             indicator.setBackgroundColor(
-                ContextCompat.getColor(context, android.R.colour.holo_green_light)
+                ContextCompat.getColor(context, android.R.color.holo_green_light)
             )
         }
 
@@ -295,7 +295,7 @@ class NetworkController @Inject constructor() {
 
         callback?.getStreamingIndicator()?.let { indicator ->
             indicator.setBackgroundColor(
-                ContextCompat.getColor(context, android.R.colour.darker_gray)
+                ContextCompat.getColor(context, android.R.color.darker_gray)
             )
         }
 

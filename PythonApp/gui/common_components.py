@@ -84,66 +84,93 @@ class ModernButton(QPushButton):
             QPushButton:disabled {
                 opacity: 0.6;
             }
-                QPushButton {
-                    background-colour:
-                    colour: white;
-                }
-                QPushButton:hover {
-                    background-colour:
-                }
-                QPushButton {
-                    background-colour:
-                    colour: white;
-                }
-                QPushButton:hover {
-                    background-colour:
-                }
-                QPushButton {
-                    background-colour:
-                    colour: white;
-                }
-                QPushButton:hover {
-                    background-colour:
-                }
-                QPushButton {
-                    background-colour:
-                    colour: white;
-                }
-                QPushButton:hover {
-                    background-colour:
-                }
             QGroupBox {
                 font-weight: 600;
                 font-size: 14px;
-                border: 2px solid
+                border: 2px solid #cccccc;
                 border-radius: 8px;
                 margin-top: 10px;
                 padding-top: 10px;
-                background-colour:
+                background-color: #f9f9f9;
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 8px 0 8px;
-                colour:
-                background-colour:
+                color: #333333;
+                background-color: transparent;
             }
             QProgressBar {
-                border: 2px solid
+                border: 2px solid #cccccc;
                 border-radius: 5px;
-                text-align: centre;
-                background-colour:
+                text-align: center;
+                background-color: #f0f0f0;
             }
             QProgressBar::chunk {
-                background-colour:
+                background-color: #4CAF50;
                 border-radius: 3px;
             }
             QPlainTextEdit {
-                background-colour:
-                colour:
-                border: 1px solid
+                background-color: #ffffff;
+                color: #333333;
+                border: 1px solid #cccccc;
                 border-radius: 4px;
                 font-family: 'Consolas', 'Monaco', monospace;
                 font-size: 12px;
                 padding: 5px;
             }
+        """
+        
+        # Apply button type specific styling
+        if self.button_type == "primary":
+            button_style = """
+                QPushButton {
+                    background-color: #2196F3;
+                    color: white;
+                }
+                QPushButton:hover {
+                    background-color: #1976D2;
+                }
+            """
+        elif self.button_type == "success":
+            button_style = """
+                QPushButton {
+                    background-color: #4CAF50;
+                    color: white;
+                }
+                QPushButton:hover {
+                    background-color: #45a049;
+                }
+            """
+        elif self.button_type == "warning":
+            button_style = """
+                QPushButton {
+                    background-color: #FF9800;
+                    color: white;
+                }
+                QPushButton:hover {
+                    background-color: #F57C00;
+                }
+            """
+        elif self.button_type == "danger":
+            button_style = """
+                QPushButton {
+                    background-color: #f44336;
+                    color: white;
+                }
+                QPushButton:hover {
+                    background-color: #d32f2f;
+                }
+            """
+        else:  # default
+            button_style = """
+                QPushButton {
+                    background-color: #f0f0f0;
+                    color: #333333;
+                }
+                QPushButton:hover {
+                    background-color: #e0e0e0;
+                }
+            """
+        
+        self.setStyleSheet(base_style + button_style)

@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Comprehensive UI and App Test Expansion (2025-01-11)**
+  - Implemented comprehensive test coverage aligned to Chapter 3 requirements (FR1–FR10, NFR1–NFR8)
+  - Enhanced Android Espresso tests with IdlingResources replacing Thread.sleep for improved stability
+  - Added navigation tests (NavigationTest.kt), recording flow tests (RecordingFlowTest.kt), device management tests (DevicesAndPermissionsTest.kt), and calibration tests (CalibrationAndShimmerConfigTest.kt)
+  - Created PyQt5 GUI tests using pytest-qt for desktop interface components (test_enhanced_main_window.py)
+  - Implemented Flask + Socket.IO API tests for web dashboard (test_web_dashboard.py)
+  - Added cross-component integration tests for session orchestration and fault tolerance (test_session_orchestration.py)
+  - Included accessibility testing with AccessibilityChecks for Android (NFR6)
+  - Added test helper utilities (CustomIdlingResource.kt, TestHelpers.kt, TestResultCollector.kt) to maintain cognitive complexity under 15
+  - Updated pyproject.toml with pytest-qt, playwright, Flask, and Flask-SocketIO dependencies
+  - All tests designed to exclude external/ and docs/generated_docs from coverage as specified
+
 - **References Conversion to LaTeX (2025-08-11)**
   - Converted `docs/thesis_report/final/references.md` to LaTeX at `docs/thesis_report/final/latex/references.tex` using thebibliography; preserved DOIs/URLs
   - Integrated into `docs/thesis_report/final/latex/main.tex` via `\input{references}` before appendices

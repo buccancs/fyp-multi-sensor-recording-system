@@ -345,7 +345,7 @@ object AppLogger {
             threadCount = threadCount
         )
 
-        synchronised(memorySnapshots) {
+        synchronized(memorySnapshots) {
             memorySnapshots.add(snapshot)
             if (memorySnapshots.size > 50) {
                 memorySnapshots.removeAt(0)
@@ -390,7 +390,7 @@ object AppLogger {
         }
     }
 
-    fun getMemorySnapshots(): List<MemorySnapshot> = synchronised(memorySnapshots) {
+    fun getMemorySnapshots(): List<MemorySnapshot> = synchronized(memorySnapshots) {
         memorySnapshots.toList()
     }
 
@@ -474,7 +474,7 @@ object AppLogger {
                 e("CrashReport", "Active Performance Timers: ${startTimes.keys.joinToString(", ")}")
             }
 
-            synchronised(memorySnapshots) {
+            synchronized(memorySnapshots) {
                 if (memorySnapshots.isNotEmpty()) {
                     val recent = memorySnapshots.takeLast(3)
                     e("CrashReport", "Recent Memory Snapshots:")

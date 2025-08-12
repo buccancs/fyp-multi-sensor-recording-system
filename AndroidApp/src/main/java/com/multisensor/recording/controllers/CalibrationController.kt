@@ -1,7 +1,7 @@
 package com.multisensor.recording.controllers
 
 import android.content.Context
-import android.graphics.Colour
+import android.graphics.Color
 import android.media.MediaActionSound
 import android.os.Handler
 import android.os.Looper
@@ -255,7 +255,7 @@ class CalibrationController @Inject constructor(
     private fun triggerScreenFlash() {
         callback?.getContentView()?.let { contentView ->
             val flashOverlay = View(contentView.context).apply {
-                setBackgroundColor(Colour.WHITE)
+                setBackgroundColor(Color.WHITE)
                 alpha = 0.8f
             }
 
@@ -368,7 +368,7 @@ class CalibrationController @Inject constructor(
                             "✅ Clock sync successful!\nOffset: ${syncStatus.clockOffsetMs}ms\nSync ID: $syncId"
                         callback?.showToast(statusMessage, Toast.LENGTH_LONG)
 
-                        callback?.updateStatusText("Clock synchronised - Offset: ${syncStatus.clockOffsetMs}ms")
+                        callback?.updateStatusText("Clock synchronized - Offset: ${syncStatus.clockOffsetMs}ms")
 
                         android.util.Log.d(
                             "CalibrationController",
@@ -376,7 +376,7 @@ class CalibrationController @Inject constructor(
                         )
                         callback?.onSyncTestCompleted(
                             true,
-                            "Clock synchronised with offset: ${syncStatus.clockOffsetMs}ms"
+                            "Clock synchronized with offset: ${syncStatus.clockOffsetMs}ms"
                         )
                     } else {
                         callback?.showToast("❌ Clock sync test failed", Toast.LENGTH_LONG)
