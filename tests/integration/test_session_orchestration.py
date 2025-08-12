@@ -195,11 +195,22 @@ def web_client(web_server):
         yield client
 
 
+@pytest.fixture
+def web_client_with_controller(web_server):
+    """Create web client with access to the controller for integration testing."""
+    web_server.app.config['TESTING'] = True
+    with web_server.app.test_client() as client:
+        yield client, web_server.controller
+
+
 class TestSessionOrchestration:
     """Test end-to-end session orchestration across components."""
     
-    def test_session_lifecycle_via_web_api(self, web_client, mock_controller):
+    @pytest.mark.unit
+    def test_session_lifecycle_via_web_api(self, web_client_with_controller):
         """FR2, FR4: Test complete session lifecycle through web API."""
+        web_client, mock_controller = web_client_with_controller
+        
         # Step 1: Check initial status
         response = web_client.get('/api/status')
         assert response.status_code == 200
@@ -244,6 +255,7 @@ class TestSessionOrchestration:
             status = response.get_json()
             assert not status['session']['active']
     
+    @pytest.mark.unit
     def test_device_status_synchronization(self, mock_controller):
         """FR1, FR6: Test device status synchronization across components."""
         # Connect devices
@@ -275,6 +287,7 @@ class TestSessionOrchestration:
         status = mock_controller.get_status()
         assert status['devices'][webcam_id]['recording']
     
+    @pytest.mark.unit
     def test_multi_device_coordination(self, mock_controller):
         """FR2: Test synchronized multi-device recording coordination."""
         # Connect all devices
@@ -355,6 +368,7 @@ class TestFaultTolerance:
         assert status['devices'][test_device]['connected']
         # Note: In a full implementation, device would rejoin recording automatically
     
+    @pytest.mark.unit
     def test_graceful_degradation_no_devices(self, mock_controller):
         """NFR3: Test graceful degradation when no devices are available."""
         # Don't connect any devices
@@ -400,8 +414,10 @@ class TestDataTransferIntegration:
         assert 'end_time' in session_data
         assert session_data['devices'] == device_ids
     
-    def test_data_export_functionality(self, web_client, mock_controller):
+    def test_data_export_functionality(self, web_client_with_controller):
         """FR10: Test data export through web API."""
+        web_client, mock_controller = web_client_with_controller
+        
         # Run a session first
         device_ids = list(mock_controller.devices.keys())
         for device_id in device_ids:
@@ -471,10 +487,13 @@ class TestPerformanceIntegration:
 
 
 @pytest.mark.integration
-def test_end_to_end_workflow(mock_controller, web_client):
+@pytest.mark.unit
+def test_end_to_end_workflow(web_client_with_controller):
     """Complete end-to-end workflow test covering all major components."""
     if not WEB_AVAILABLE:
         pytest.skip("Web components not available")
+    
+    web_client, mock_controller = web_client_with_controller
     
     # Step 1: System initialization
     status_response = web_client.get('/api/status')

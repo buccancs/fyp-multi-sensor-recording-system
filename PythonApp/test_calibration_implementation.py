@@ -5,9 +5,11 @@ import tempfile
 import traceback
 from pathlib import Path
 import numpy as np
+import pytest
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+@pytest.mark.unit
 def test_pattern_detection():
     print("Testing pattern detection...")
     try:
@@ -97,6 +99,7 @@ def _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coef
     print(f"✓ Calibrated camera matrix:\n{camera_matrix}")
     print(f"✓ Distortion coefficients: {dist_coeffs.flatten()}")
     return True
+@pytest.mark.unit
 def test_single_camera_calibration():
     print("Testing single camera calibration...")
     try:
@@ -190,6 +193,7 @@ def _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, p
         print(f"⚠ Stereo calibration failed with synthetic data: {str(e)}")
         print("✓ Stereo calibration functionality verified (algorithm available)")
         return True
+@pytest.mark.unit
 def test_stereo_calibration():
     print("Testing stereo calibration...")
     try:
@@ -202,6 +206,7 @@ def test_stereo_calibration():
         print(f"✗ Stereo calibration test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.unit
 def test_calibration_quality_assessment():
     print("Testing calibration quality assessment...")
     try:
@@ -258,6 +263,7 @@ def test_calibration_quality_assessment():
         print(f"✗ Quality assessment test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.unit
 def test_data_persistence():
     print("Testing calibration data persistence...")
     try:

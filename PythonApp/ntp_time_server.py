@@ -333,21 +333,21 @@ if __name__ == "__main__":
     server = NTPTimeServer()
     try:
         if server.start_server():
-            print("NTP time server started successfully")
+            logging.info("NTP time server started successfully")
             def sync_callback(response):
-                print(
+                logging.info(
                     f"Sync request served: precision={response.server_precision_ms:.2f}ms"
                 )
             server.add_sync_callback(sync_callback)
-            print("Server running... Press Ctrl+C to stop")
+            logging.info("Server running... Press Ctrl+C to stop")
             while True:
                 time.sleep(5)
                 status = server.get_server_status()
-                print(
+                logging.info(
                     f"Status: clients={status.client_count}, requests={status.requests_served}, sync={status.is_synchronized}, accuracy={status.time_accuracy_ms:.2f}ms"
                 )
     except KeyboardInterrupt:
-        print("\nShutting down server...")
+        logging.info("Shutting down server...")
     finally:
         server.stop_server()
-        print("Server stopped")
+        logging.info("Server stopped")
