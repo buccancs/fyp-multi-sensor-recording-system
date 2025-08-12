@@ -26,31 +26,18 @@ jobs:
         pip install -e .
         pip install -r test-requirements.txt
     
-    - name: Run extended test suite
+    - name: Run extended test suite with unified framework
       run: |
-        # Run tests if directories exist
-        TEST_DIRS=""
-        [ -d "tests/" ] && TEST_DIRS="$TEST_DIRS tests/"
-        [ -d "evaluation_suite/" ] && TEST_DIRS="$TEST_DIRS evaluation_suite/"
-        
-        if [ -n "$TEST_DIRS" ]; then
-          pytest $TEST_DIRS -v --tb=short --durations=10 || echo "::warning::Some extended tests failed"
-        else
-          echo "::warning::No test directories found for extended testing"
-        fi
+        # Use unified testing framework for extended tests
+        echo "Running extended test suite via unified framework..."
+        python tests_unified/runners/run_unified_tests.py --mode research --all-levels --extended --durations=10
     
-    - name: Run architecture enforcement tests
+    - name: Run architecture enforcement tests with unified framework
       run: |
-        if [ -f "PythonApp/test_architecture_enforcement.py" ]; then
-          python PythonApp/test_architecture_enforcement.py || echo "::warning::Architecture enforcement tests failed"
-        else
-          echo "::warning::Architecture enforcement test not found, skipping"
-        fi
+        echo "Running architecture enforcement tests via unified framework..."
+        python tests_unified/runners/run_unified_tests.py --category evaluation --architecture-validation
     
-    - name: Run calibration implementation tests
+    - name: Run calibration implementation tests with unified framework
       run: |
-        if [ -f "PythonApp/test_calibration_implementation.py" ]; then
-          python PythonApp/test_calibration_implementation.py || echo "::warning::Calibration implementation tests failed"
-        else
-          echo "::warning::Calibration implementation test not found, skipping"
-        fi
+        echo "Running calibration tests via unified framework..."
+        python tests_unified/runners/run_unified_tests.py --category hardware --calibration-tests
