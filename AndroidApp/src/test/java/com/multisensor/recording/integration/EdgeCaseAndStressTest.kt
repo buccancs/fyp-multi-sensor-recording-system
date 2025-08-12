@@ -33,23 +33,22 @@ class EdgeCaseAndStressTest : BaseUnitTest() {
         every { mockLogger.info(any()) } returns Unit
         every { mockLogger.debug(any()) } returns Unit
         every { mockLogger.error(any()) } returns Unit
-        every { mockLogger.warn(any()) } returns Unit
+        every { mockLogger.warning(any()) } returns Unit
         coEvery { mockSessionManager.createNewSession() } returns "test-session-123"
         coEvery { mockSessionManager.finalizeCurrentSession() } returns Unit
-        coEvery { mockSessionManager.isSessionActive() } returns false
+        coEvery { mockSessionManager.getCurrentSession() } returns null
     }
     @Test
     fun `dropped Bluetooth connection during recording should pause GSR stream and notify user`() = runTest {
         coEvery { mockShimmerRecorder.startRecording(any()) } returns Unit
         every { mockBluetoothAdapter.isEnabled } returns true
-        coEvery { mockShimmerRecorder.startRecording(any()) } returns Unit
         coEvery { mockShimmerRecorder.stopRecording() } throws IOException("Bluetooth connection lost")
         try {
             mockShimmerRecorder.startRecording("/test/path")
             mockShimmerRecorder.stopRecording()
         } catch (e: IOException) {
         }
-        verify { mockLogger.error(any()) }
+        verify { mockLogger.error(any<String>()) }
         coVerify { mockShimmerRecorder.startRecording(any()) }
     }
     @Test
@@ -98,7 +97,7 @@ class EdgeCaseAndStressTest : BaseUnitTest() {
     @Test
     fun `long recording session should not cause memory leaks or crashes`() = runTest {
         coEvery { mockSessionManager.createNewSession() } returns "long-session-123"
-        coEvery { mockSessionManager.isSessionActive() } returns true
+        coEvery { mockSessionManager.getCurrentSession() } returns mockk(relaxed = true)
         val startTime = System.currentTimeMillis()
         var simulatedRecordingTime = 0L
         while (simulatedRecordingTime < 2 * 60 * 60 * 1000) {
@@ -122,23 +121,23 @@ class EdgeCaseAndStressTest : BaseUnitTest() {
             } catch (e: RuntimeException) {
                 when {
                     e.message?.contains("Camera") == true -> {
-                        mockLogger.warn("Camera failure detected, attempting recovery")
+                        mockLogger.warning("Camera failure detected, attempting recovery")
                     }
                     e.message?.contains("Thermal") == true -> {
-                        mockLogger.warn("Thermal camera failure detected")
+                        mockLogger.warning("Thermal camera failure detected")
                     }
                     e.message?.contains("Shimmer") == true -> {
-                        mockLogger.warn("Shimmer device failure detected")
+                        mockLogger.warning("Shimmer device failure detected")
                     }
                 }
             }
         }
-        verify(exactly = 3) { mockLogger.warn(match { it.contains("failure detected") }) }
+        verify(exactly = 3) { mockLogger.warning(match { it.contains("failure detected") }) }
     }
     @Test
     fun `rapid start-stop recording cycles should maintain stability`() = runTest {
         coEvery { mockSessionManager.createNewSession() } returns "rapid-test-session"
-        coEvery { mockSessionManager.isSessionActive() } returnsMany listOf(false, true, false, true, false)
+        every { mockSessionManager.getCurrentSession() } returnsMany listOf(null, mockk(relaxed = true), null, mockk(relaxed = true), null)
         repeat(10) { cycle ->
             try {
                 mockSessionManager.createNewSession()
