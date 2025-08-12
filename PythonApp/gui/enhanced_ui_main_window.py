@@ -64,11 +64,40 @@ class ModernButton(QPushButton):
         self.update_style()
     def update_style(self):
         if self.primary:
-            self.setStyleSheet(
-            )
+            self.setStyleSheet("""
+                QPushButton {
+                    background-color: #4a90e2;
+                    color: #ffffff;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 6px;
+                    font-weight: bold;
+                    font-size: 10pt;
+                }
+                QPushButton:hover {
+                    background-color: #357abd;
+                }
+                QPushButton:pressed {
+                    background-color: #2968a3;
+                }
+            """)
         else:
-            self.setStyleSheet(
-            )
+            self.setStyleSheet("""
+                QPushButton {
+                    background-color: #5a5a5a;
+                    color: #ffffff;
+                    border: 1px solid #777777;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    font-size: 9pt;
+                }
+                QPushButton:hover {
+                    background-color: #6a6a6a;
+                }
+                QPushButton:pressed {
+                    background-color: #4a4a4a;
+                }
+            """)
 class StatusIndicator(QWidget):
     def __init__(self, status="disconnected", parent=None):
         super().__init__(parent)
@@ -94,8 +123,21 @@ class ModernGroupBox(QGroupBox):
     def __init__(self, title="", parent=None):
         super().__init__(title, parent)
         self.setFont(QFont("Segoe UI", 9, QFont.Bold))
-        self.setStyleSheet(
-        )
+        self.setStyleSheet("""
+            QGroupBox {
+                font-weight: bold;
+                border: 2px solid #555555;
+                border-radius: 8px;
+                margin-top: 1ex;
+                padding-top: 10px;
+                color: #ffffff;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px 0 5px;
+            }
+        """)
 class EnhancedMainWindow(QMainWindow):
     device_connected = pyqtSignal(str)
     recording_started = pyqtSignal()
@@ -112,8 +154,125 @@ class EnhancedMainWindow(QMainWindow):
         self.setup_connections()
         logger.info("Enhanced Main Window initialized")
     def setup_styling(self):
-        self.setStyleSheet(
-        )
+        stylesheet = """
+            QMainWindow {
+                background-color: #2b2b2b;
+                color: #ffffff;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 9pt;
+            }
+            QMenuBar {
+                background-color: #3c3c3c;
+                color: #ffffff;
+                border-bottom: 1px solid #555555;
+            }
+            QMenuBar::item:selected {
+                background-color: #4a90e2;
+            }
+            QStatusBar {
+                background-color: #3c3c3c;
+                color: #ffffff;
+                border-top: 1px solid #555555;
+            }
+            QTabWidget::pane {
+                border: 1px solid #555555;
+                background-color: #2b2b2b;
+            }
+            QTabBar::tab {
+                background-color: #3c3c3c;
+                color: #ffffff;
+                padding: 8px 12px;
+                margin-right: 2px;
+                border: 1px solid #555555;
+                border-bottom: none;
+            }
+            QTabBar::tab:selected {
+                background-color: #4a90e2;
+                border-bottom: 1px solid #4a90e2;
+            }
+            QPushButton {
+                background-color: #4a90e2;
+                color: #ffffff;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #357abd;
+            }
+            QPushButton:pressed {
+                background-color: #2968a3;
+            }
+            QPushButton:disabled {
+                background-color: #666666;
+                color: #999999;
+            }
+            QGroupBox {
+                color: #ffffff;
+                border: 2px solid #555555;
+                border-radius: 5px;
+                margin-top: 1ex;
+                font-weight: bold;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px 0 5px;
+            }
+            QLabel {
+                color: #ffffff;
+            }
+            QProgressBar {
+                border: 1px solid #555555;
+                border-radius: 5px;
+                background-color: #3c3c3c;
+                text-align: center;
+                color: #ffffff;
+            }
+            QProgressBar::chunk {
+                background-color: #4a90e2;
+                border-radius: 4px;
+            }
+            QComboBox {
+                background-color: #3c3c3c;
+                color: #ffffff;
+                border: 1px solid #555555;
+                padding: 5px;
+                border-radius: 3px;
+            }
+            QComboBox:drop-down {
+                border: none;
+            }
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 5px solid #ffffff;
+                margin-right: 5px;
+            }
+            QSlider::groove:horizontal {
+                border: 1px solid #555555;
+                height: 8px;
+                background-color: #3c3c3c;
+                border-radius: 4px;
+            }
+            QSlider::handle:horizontal {
+                background-color: #4a90e2;
+                border: 1px solid #357abd;
+                width: 18px;
+                margin: -5px 0;
+                border-radius: 9px;
+            }
+            QTextEdit {
+                background-color: #1e1e1e;
+                color: #ffffff;
+                border: 1px solid #555555;
+                border-radius: 3px;
+                selection-background-color: #4a90e2;
+            }
+        """
+        self.setStyleSheet(stylesheet)
     def setup_ui(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -194,6 +353,7 @@ class EnhancedMainWindow(QMainWindow):
         self.preview_label.setAlignment(Qt.AlignCenter)
         self.preview_label.setMinimumHeight(400)
         self.preview_label.setStyleSheet(
+            "background-color: #1e1e1e; border: 2px dashed #555555; border-radius: 8px;"
         )
         preview_layout.addWidget(self.preview_label)
         layout.addWidget(preview_group)
