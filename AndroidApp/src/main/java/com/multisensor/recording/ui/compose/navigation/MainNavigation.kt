@@ -52,21 +52,12 @@ fun MainNavigation(
             EnhancedBottomNavigation(navController = navController)
         },
         floatingActionButton = {
-
+            // No duplicate FABs - RecordingScreen has its own AnimatedRecordingButton
+            // Files screen can have its own refresh button if needed
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
 
             when (currentRoute) {
-                Screen.Recording.route -> {
-                    FloatingActionButton(
-                        onClick = {  }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.FiberManualRecord,
-                            contentDescription = "Start Recording"
-                        )
-                    }
-                }
                 Screen.Files.route -> {
                     FloatingActionButton(
                         onClick = {  }
@@ -77,6 +68,7 @@ fun MainNavigation(
                         )
                     }
                 }
+                // Recording screen has its own AnimatedRecordingButton, no duplicate needed
             }
         }
     ) { paddingValues ->

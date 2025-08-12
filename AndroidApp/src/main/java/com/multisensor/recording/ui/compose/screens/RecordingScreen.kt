@@ -50,6 +50,9 @@ fun RecordingScreen(
     var cameraTextureView by remember { mutableStateOf<TextureView?>(null) }
     var thermalSurfaceView by remember { mutableStateOf<SurfaceView?>(null) }
     var initializationAttempted by remember { mutableStateOf(false) }
+    
+    // Camera switching state - true for thermal/IR, false for RGB
+    var showThermalCamera by remember { mutableStateOf(false) }
 
     // Initialize system when both preview components are ready
     LaunchedEffect(cameraTextureView, thermalSurfaceView) {
@@ -58,6 +61,7 @@ fun RecordingScreen(
             android.util.Log.d("RecordingScreen", "Starting device initialization with TextureView and SurfaceView")
             
             // Initialize the system with the actual views
+            // Note: We need both views for full system initialization even if only one is displayed
             viewModel.initializeSystem(cameraTextureView!!, thermalSurfaceView)
             
             // Also try to connect to PC server automatically
@@ -108,21 +112,69 @@ fun RecordingScreen(
                     "PC Connection" to if (uiState.isPcConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED
                 )
             )
-            // RGB Camera Preview
-            CameraPreview(
-                isRecording = uiState.isRecording,
-                onTextureViewReady = { textureView ->
-                    cameraTextureView = textureView
+            
+            // Camera Preview Switch
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Camera Preview",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "RGB",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (!showThermalCamera) MaterialTheme.colorScheme.primary 
+                                   else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Switch(
+                            checked = showThermalCamera,
+                            onCheckedChange = { showThermalCamera = it }
+                        )
+                        Text(
+                            text = "Thermal",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (showThermalCamera) MaterialTheme.colorScheme.primary 
+                                   else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
-            )
+            }
 
-            // Thermal Camera Preview
-            ThermalPreviewSurface(
-                isRecording = uiState.isRecording,
-                onSurfaceViewReady = { surfaceView ->
-                    thermalSurfaceView = surfaceView
-                }
-            )
+            // Camera Preview - Always create both views for initialization, but only display one
+            Box {
+                // RGB Camera Preview - Always present for initialization
+                CameraPreview(
+                    isRecording = uiState.isRecording,
+                    onTextureViewReady = { textureView ->
+                        cameraTextureView = textureView
+                    },
+                    modifier = if (!showThermalCamera) Modifier else Modifier.size(0.dp)
+                )
+
+                // Thermal Camera Preview - Always present for initialization
+                ThermalPreviewSurface(
+                    isRecording = uiState.isRecording,
+                    onSurfaceViewReady = { surfaceView ->
+                        thermalSurfaceView = surfaceView
+                    },
+                    modifier = if (showThermalCamera) Modifier else Modifier.size(0.dp)
+                )
+            }
+
             ColorPaletteSelector(
                 currentPalette = uiState.colorPalette,
                 onPaletteSelect = {  }
