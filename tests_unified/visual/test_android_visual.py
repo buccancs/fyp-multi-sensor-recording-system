@@ -25,9 +25,15 @@ from pathlib import Path
 
 # Import visual testing utilities
 from .visual_utils import (
-    VisualTestConfig, 
-    AndroidVisualTester, 
-    get_visual_test_config
+    VisualTestSkipConditions,
+    MockVisualComponent,
+    VisualTestReporter,
+    VisualTestConfig,
+    AndroidVisualTester,
+    get_visual_test_capabilities,
+    get_visual_test_config,
+    HAS_DISPLAY,
+    HAS_QT
 )
 
 # Appium imports
@@ -112,6 +118,7 @@ class TestAndroidFragmentVisuals:
     @pytest.mark.visual
     @pytest.mark.appium
     @pytest.mark.android
+    @pytest.mark.skipif(not HAS_DISPLAY, reason="No display available for GUI testing")
     def test_main_fragment_visual(self, appium_driver_visual, android_visual_tester):
         """Test visual appearance of main fragment (FR6)."""
         driver = appium_driver_visual
