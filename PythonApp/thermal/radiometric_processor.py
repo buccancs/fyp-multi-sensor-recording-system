@@ -73,7 +73,7 @@ class RadiometricProcessor:
         self.temperature_range_min = -20.0  # Celsius
         self.temperature_range_max = 550.0  # Celsius
         
-        self.logger.info("RadiometricProcessor initialized for Topdon TC001 (256×192)")
+        self.logger.info("RadiometricProcessor initialized for Topdon TC001 (256x192)")
     
     def process_raw_frame(self, raw_data: bytes, timestamp_ms: int, 
                          device_temp: float = 25.0,
@@ -126,7 +126,7 @@ class RadiometricProcessor:
             self.frame_counter += 1
             
             self.logger.debug(f"Processed thermal frame {frame.frame_id}: "
-                            f"temp range {radiometric_temps.min():.1f}°C to {radiometric_temps.max():.1f}°C")
+                            f"temp range {radiometric_temps.min():.1f}degC to {radiometric_temps.max():.1f}degC")
             
             return frame
             
@@ -381,10 +381,10 @@ if __name__ == "__main__":
     stats = processor.get_temperature_statistics(frame)
     logger.info("Thermal frame processing results:")
     logger.info(f"  Frame ID: {frame.frame_id}")
-    logger.info(f"  Temperature range: {stats['min_temperature_c']:.1f}°C to {stats['max_temperature_c']:.1f}°C")
-    logger.info(f"  Mean temperature: {stats['mean_temperature_c']:.1f}°C ± {stats['std_temperature_c']:.1f}°C")
-    logger.info(f"  Device temperature: {frame.device_temperature:.1f}°C")
-    logger.info(f"  Environmental: ε={frame.emissivity}, RH={frame.humidity_percent}%")
+    logger.info(f"  Temperature range: {stats['min_temperature_c']:.1f}degC to {stats['max_temperature_c']:.1f}degC")
+    logger.info(f"  Mean temperature: {stats['mean_temperature_c']:.1f}degC +/- {stats['std_temperature_c']:.1f}degC")
+    logger.info(f"  Device temperature: {frame.device_temperature:.1f}degC")
+    logger.info(f"  Environmental: epsilon={frame.emissivity}, RH={frame.humidity_percent}%")
     
     # Test CSV logging
     csv_logger = ThermalCsvLogger("/tmp/thermal_test.csv", logger)

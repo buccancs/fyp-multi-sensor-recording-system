@@ -62,7 +62,7 @@ class ThesisVerifiedConfigurations:
         ]
     )
     
-    # Thesis Claim: "Thermal camera at 256×192 resolution, 25 Hz"
+    # Thesis Claim: "Thermal camera at 256x192 resolution, 25 Hz"
     THERMAL_CAMERA_CONFIG = SamplingConfiguration(
         device_type=DeviceType.TOPDON_TC001,
         sampling_rate_hz=25.0,      # Verified thesis claim
@@ -210,14 +210,14 @@ class SystemConfiguration:
             issues.append(f"Thermal sampling rate {thermal_config.sampling_rate_hz} != thesis claim of 25 Hz")
         
         if thermal_config.resolution_width != 256 or thermal_config.resolution_height != 192:
-            issues.append(f"Thermal resolution {thermal_config.resolution_width}×{thermal_config.resolution_height} != thesis claim of 256×192")
+            issues.append(f"Thermal resolution {thermal_config.resolution_width}x{thermal_config.resolution_height} != thesis claim of 256x192")
         
         rgb_config = self.device_configs[DeviceType.ANDROID_RGB_CAMERA]
         if rgb_config.sampling_rate_hz != 30.0:
             issues.append(f"RGB camera frame rate {rgb_config.sampling_rate_hz} != thesis claim of 30 fps")
         
         if rgb_config.resolution_width != 1920 or rgb_config.resolution_height != 1080:
-            issues.append(f"RGB resolution {rgb_config.resolution_width}×{rgb_config.resolution_height} != thesis claim of 1920×1080")
+            issues.append(f"RGB resolution {rgb_config.resolution_width}x{rgb_config.resolution_height} != thesis claim of 1920x1080")
         
         # Validate NTP sync target
         if self.network.ntp_sync_target_offset_ms != 21.0:
@@ -295,7 +295,7 @@ if __name__ == "__main__":
         logger.info(f"    Sampling rate: {device_config.sampling_rate_hz} Hz")
         logger.info(f"    Resolution: {device_config.resolution_bits}-bit")
         if device_config.resolution_width and device_config.resolution_height:
-            logger.info(f"    Dimensions: {device_config.resolution_width}×{device_config.resolution_height}")
+            logger.info(f"    Dimensions: {device_config.resolution_width}x{device_config.resolution_height}")
         logger.info(f"    Channels: {len(device_config.channels)}")
     
     logger.info(f"Network NTP target offset: {config.network.ntp_sync_target_offset_ms} ms")

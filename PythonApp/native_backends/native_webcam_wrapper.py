@@ -192,6 +192,10 @@ class PythonWebcamProcessor:
         return frames
     
     def preprocess_frame(self, input_frame: np.ndarray) -> np.ndarray:
+        # Validate input frame
+        if input_frame is None or input_frame.size == 0:
+            raise ValueError("Input frame cannot be None or empty")
+        
         processed = input_frame.copy()
         
         # Apply basic image enhancements

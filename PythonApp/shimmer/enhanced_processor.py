@@ -52,7 +52,7 @@ class ShimmerConfiguration:
     gsr_smoothing_factor: float = 0.1
     
     # Accelerometer configuration  
-    accel_range: int = 2            # ±2g range
+    accel_range: int = 2            # +/-2g range
     accel_sampling_rate_hz: float = 128.0
     
     # PPG configuration
@@ -233,7 +233,7 @@ class ShimmerProcessor:
             else:
                 conductance_microsiemens = 0.0
             
-            # Apply range limits for realistic GSR values (0.1 to 100 μS)
+            # Apply range limits for realistic GSR values (0.1 to 100 uS)
             conductance_microsiemens = np.clip(conductance_microsiemens, 0.1, 100.0)
             
             return conductance_microsiemens
@@ -244,11 +244,11 @@ class ShimmerProcessor:
     
     def _convert_accel_to_g(self, accel_raw: int) -> float:
         """Convert raw accelerometer value to g units."""
-        # 16-bit signed accelerometer, ±2g range
+        # 16-bit signed accelerometer, +/-2g range
         if accel_raw > 32767:
             accel_raw -= 65536  # Convert to signed
         
-        # Scale to g units (assuming ±2g range, 16-bit resolution)
+        # Scale to g units (assuming +/-2g range, 16-bit resolution)
         accel_g = (accel_raw / 32768.0) * 2.0
         return accel_g
     

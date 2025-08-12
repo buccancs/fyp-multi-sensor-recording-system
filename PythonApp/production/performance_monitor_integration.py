@@ -346,7 +346,7 @@ async def main():
             result = await monitor.run_endurance_test(args.duration)
             print(f"\n=== Endurance Test Results ===")
             print(f"Test ID: {result.test_id}")
-            print(f"Success: {'✓' if result.success else '✗'}")
+            print(f"Success: {'[PASS]' if result.success else '[FAIL]'}")
             print(f"Duration: {result.duration_hours:.2f} hours")
             print(f"Memory Growth: {result.memory_growth_mb:.1f}MB")
             print(f"Memory Leak: {'Yes' if result.memory_leak_detected else 'No'}")

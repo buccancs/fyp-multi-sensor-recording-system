@@ -232,12 +232,12 @@ class TestMigrator:
         for category, files in test_files.items():
             report += f"\n### {category.title()}\n"
             for file_path in files:
-                status = "✅ Already migrated" if "tests_unified" in str(file_path) else "📋 To migrate"
+                status = "[PASS] Already migrated" if "tests_unified" in str(file_path) else "[CLIPBOARD] To migrate"
                 report += f"- {status} `{file_path}`\n"
         
         report += "\n## Migration Plan\n"
         for source, target in migration_plan:
-            report += f"- `{source}` → `{target}`\n"
+            report += f"- `{source}` -> `{target}`\n"
         
         report += f"""
 ## Next Steps
@@ -299,10 +299,10 @@ def main():
     # Initialize migrator
     migrator = TestMigrator(args.project_root, dry_run=not args.execute)
     
-    print(f"🔍 Scanning for test files in {args.project_root}")
+    print(f"[INFO] Scanning for test files in {args.project_root}")
     test_files = migrator.scan_existing_tests()
     
-    print(f"📋 Found {sum(len(files) for files in test_files.values())} test files")
+    print(f"[CLIPBOARD] Found {sum(len(files) for files in test_files.values())} test files")
     
     # Generate migration plan
     migration_plan = migrator.generate_migration_plan(test_files)
@@ -313,23 +313,23 @@ def main():
     # Save report
     report_file = args.project_root / "test_migration_report.md"
     report_file.write_text(report)
-    print(f"📊 Migration report saved to {report_file}")
+    print(f"[CHART] Migration report saved to {report_file}")
     
     if args.report_only:
-        print("✅ Report generation complete")
+        print("[PASS] Report generation complete")
         return
     
     if migration_plan:
         if args.execute:
-            print(f"🚀 Executing migration of {len(migration_plan)} files...")
+            print(f"[DEPLOY] Executing migration of {len(migration_plan)} files...")
             migrator.execute_migration(migration_plan)
-            print("✅ Migration complete!")
+            print("[PASS] Migration complete!")
         else:
-            print(f"🔍 DRY RUN: Would migrate {len(migration_plan)} files")
+            print(f"[INFO] DRY RUN: Would migrate {len(migration_plan)} files")
             migrator.execute_migration(migration_plan)
-            print("✅ Dry run complete. Use --execute to perform actual migration.")
+            print("[PASS] Dry run complete. Use --execute to perform actual migration.")
     else:
-        print("✅ No files need migration - all tests are already in unified structure")
+        print("[PASS] No files need migration - all tests are already in unified structure")
 
 if __name__ == "__main__":
     main()
