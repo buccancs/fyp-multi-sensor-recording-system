@@ -275,8 +275,7 @@ jobs:
         ./gradlew assembleDevDebug assembleDevDebugAndroidTest \
           --no-daemon \
           --no-build-cache \
-          --refresh-dependencies \
-          --recompile-scripts
+          --refresh-dependencies
     
     - name: Run Android unit tests
       if: matrix.test-type == 'unit'
@@ -497,8 +496,7 @@ jobs:
         ./gradlew assembleDevDebug \
           --no-daemon \
           --no-build-cache \
-          --refresh-dependencies \
-          --recompile-scripts
+          --refresh-dependencies
     
     # Start Web dashboard for network tests
     - name: Start Web dashboard
