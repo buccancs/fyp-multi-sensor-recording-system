@@ -27,23 +27,15 @@ import com.multisensor.recording.ui.MainViewModel
 fun CameraPreview(
     isRecording: Boolean,
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = hiltViewModel()
+    onTextureViewReady: (TextureView) -> Unit = {}
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by hiltViewModel<MainViewModel>().uiState.collectAsStateWithLifecycle()
     var textureView by remember { mutableStateOf<TextureView?>(null) }
-    var thermalSurfaceView by remember { mutableStateOf<SurfaceView?>(null) }
-    var initializationAttempted by remember { mutableStateOf(false) }
 
-    // Initialize devices when preview components are ready
-    LaunchedEffect(textureView, thermalSurfaceView) {
-        if (textureView != null && !initializationAttempted) {
-            initializationAttempted = true
-            // Initialize the system with the actual views
-            val result = viewModel.initializeSystem(textureView!!, thermalSurfaceView)
-            // Also try to connect to PC automatically
-            viewModel.connectToPC()
-        }
+    // Notify parent when TextureView is ready
+    LaunchedEffect(textureView) {
+        textureView?.let { onTextureViewReady(it) }
     }
 
     Card(
@@ -175,11 +167,16 @@ private fun CameraInfoOverlay(
 fun ThermalPreviewSurface(
     isRecording: Boolean,
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = hiltViewModel()
+    onSurfaceViewReady: (SurfaceView) -> Unit = {}
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by hiltViewModel<MainViewModel>().uiState.collectAsStateWithLifecycle()
     var surfaceView by remember { mutableStateOf<SurfaceView?>(null) }
+
+    // Notify parent when SurfaceView is ready
+    LaunchedEffect(surfaceView) {
+        surfaceView?.let { onSurfaceViewReady(it) }
+    }
 
     Card(
         modifier = modifier

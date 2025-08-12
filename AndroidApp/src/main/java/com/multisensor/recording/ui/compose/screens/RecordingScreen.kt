@@ -1,4 +1,6 @@
 package com.multisensor.recording.ui.compose.screens
+import android.view.SurfaceView
+import android.view.TextureView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -43,15 +45,21 @@ fun RecordingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    
+    // Track preview components readiness
+    var cameraTextureView by remember { mutableStateOf<TextureView?>(null) }
+    var thermalSurfaceView by remember { mutableStateOf<SurfaceView?>(null) }
+    var initializationAttempted by remember { mutableStateOf(false) }
 
-    // Initialize system when the screen is first composed
-    LaunchedEffect(Unit) {
-        if (!uiState.isInitialized && !uiState.isConnecting) {
-            // Initialize with fallback first to show the UI, then try real initialization
-            viewModel.initializeSystemWithFallback()
-            // Trigger device scanning and status refresh in the background
-            viewModel.scanForDevices()
-            viewModel.refreshSystemStatus()
+    // Initialize system when both preview components are ready
+    LaunchedEffect(cameraTextureView, thermalSurfaceView) {
+        if (cameraTextureView != null && !initializationAttempted) {
+            initializationAttempted = true
+            android.util.Log.d("RecordingScreen", "Starting device initialization with TextureView and SurfaceView")
+            
+            // Initialize the system with the actual views
+            viewModel.initializeSystem(cameraTextureView!!, thermalSurfaceView)
+            
             // Also try to connect to PC server automatically
             viewModel.connectToPC()
         }
@@ -103,13 +111,17 @@ fun RecordingScreen(
             // RGB Camera Preview
             CameraPreview(
                 isRecording = uiState.isRecording,
-                viewModel = viewModel
+                onTextureViewReady = { textureView ->
+                    cameraTextureView = textureView
+                }
             )
 
             // Thermal Camera Preview
             ThermalPreviewSurface(
                 isRecording = uiState.isRecording,
-                viewModel = viewModel
+                onSurfaceViewReady = { surfaceView ->
+                    thermalSurfaceView = surfaceView
+                }
             )
             ColorPaletteSelector(
                 currentPalette = uiState.colorPalette,
