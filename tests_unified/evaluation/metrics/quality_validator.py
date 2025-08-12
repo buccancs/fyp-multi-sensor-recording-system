@@ -1,272 +1,379 @@
-"""
-Quality Validator for Unified Testing Framework
-
-Provides research-grade quality validation and assessment capabilities
-for the Multi-Sensor Recording System test results.
-"""
-
-import json
-import statistics
-from typing import Dict, List, Any, Optional, Tuple
+import logging
+from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-
+import statistics
+from .test_results import TestResults, SuiteResults, TestResult, TestStatus
+from .test_categories import QualityThresholds, TestCategory, TestType
+logger = logging.getLogger(__name__)
 @dataclass
-class QualityThresholds:
-    """Quality thresholds for different test categories"""
-    minimum_success_rate: float = 0.95
-    maximum_execution_time: float = 300.0
-    minimum_coverage: float = 0.80
-    sync_precision_ms: float = 1.0
-    data_quality_score: float = 0.8
-    measurement_accuracy: float = 0.95
-
-@dataclass 
-class QualityAssessment:
-    """Quality assessment results"""
-    overall_score: float
-    success_rate: float
-    performance_score: float
-    coverage_score: float
-    research_readiness: str
-    recommendations: List[str]
-    detailed_metrics: Dict[str, Any]
-
+class ValidationRule:
+    name: str
+    description: str
+    threshold: float
+    comparison: str
+    threshold_max: Optional[float] = None
+    weight: float = 1.0
+    critical: bool = False
+@dataclass
+class ValidationIssue:
+    rule_name: str
+    severity: str
+    message: str
+    measured_value: float
+    threshold_value: float
+    test_names: List[str]
+@dataclass
+class SuiteValidation:
+    suite_name: str
+    suite_category: TestCategory
+    success_rate_valid: bool = False
+    performance_valid: bool = False
+    quality_valid: bool = False
+    coverage_valid: bool = False
+    overall_valid: bool = False
+    quality_score: float = 0.0
+    issues: List[ValidationIssue] = None
+    recommendations: List[str] = None
+    def __post_init__(self):
+        if self.issues is None:
+            self.issues = []
+        if self.recommendations is None:
+            self.recommendations = []
+@dataclass
+class ValidationReport:
+    execution_id: str
+    timestamp: datetime
+    overall_quality: float = 0.0
+    overall_valid: bool = False
+    suite_validations: Dict[str, SuiteValidation] = None
+    critical_issues: List[ValidationIssue] = None
+    quality_issues: List[ValidationIssue] = None
+    recommendations: List[str] = None
+    statistical_summary: Dict[str, float] = None
+    confidence_intervals: Dict[str, Tuple[float, float]] = None
+    def __post_init__(self):
+        if self.suite_validations is None:
+            self.suite_validations = {}
+        if self.critical_issues is None:
+            self.critical_issues = []
+        if self.quality_issues is None:
+            self.quality_issues = []
+        if self.recommendations is None:
+            self.recommendations = []
+        if self.statistical_summary is None:
+            self.statistical_summary = {}
+        if self.confidence_intervals is None:
+            self.confidence_intervals = {}
 class QualityValidator:
-    """
-    Validates test results against research-grade quality standards
-    """
-    
-    def __init__(self, config: Dict[str, Any]):
-        self.config = config
-        self.thresholds = self._load_thresholds()
-    
-    def _load_thresholds(self) -> Dict[str, QualityThresholds]:
-        """Load quality thresholds from configuration"""
-        thresholds = {}
-        
-        quality_config = self.config.get("quality_thresholds", {})
-        
-        for test_type, threshold_config in quality_config.items():
-            thresholds[test_type] = QualityThresholds(
-                minimum_success_rate=threshold_config.get("minimum_success_rate", 0.95),
-                maximum_execution_time=threshold_config.get("maximum_execution_time", 300.0),
-                minimum_coverage=threshold_config.get("minimum_coverage", 0.80),
-                sync_precision_ms=threshold_config.get("sync_precision_ms", 1.0),
-                data_quality_score=threshold_config.get("data_quality_score", 0.8),
-                measurement_accuracy=threshold_config.get("measurement_accuracy", 0.95)
+    def __init__(self, quality_thresholds: Optional[QualityThresholds] = None):
+        self.quality_thresholds = quality_thresholds or QualityThresholds()
+        self.validation_rules: Dict[str, List[ValidationRule]] = {}
+        self.logger = logging.getLogger(__name__)
+        self._initialize_default_rules()
+    def _initialize_default_rules(self):
+        foundation_rules = [
+            ValidationRule(
+                name="success_rate_foundation",
+                description="Foundation tests must have >98% success rate",
+                threshold=0.98,
+                comparison="gte",
+                weight=2.0,
+                critical=True
+            ),
+            ValidationRule(
+                name="execution_time_foundation",
+                description="Foundation tests should execute quickly",
+                threshold=300.0,
+                comparison="lte",
+                weight=1.0
+            ),
+            ValidationRule(
+                name="coverage_foundation",
+                description="Foundation tests must achieve >90% coverage",
+                threshold=0.90,
+                comparison="gte",
+                weight=1.5,
+                critical=True
             )
-        
-        return thresholds
-    
-    def validate_results(self, test_results: Dict[str, Any]) -> QualityAssessment:
-        """
-        Validate test results against quality standards
-        
-        Args:
-            test_results: Dictionary containing test execution results
-            
-        Returns:
-            QualityAssessment with overall quality evaluation
-        """
-        
-        # Calculate success rate
-        success_rate = self._calculate_success_rate(test_results)
-        
-        # Calculate performance metrics
-        performance_score = self._calculate_performance_score(test_results)
-        
-        # Calculate coverage metrics (placeholder - would integrate with actual coverage data)
-        coverage_score = self._calculate_coverage_score(test_results)
-        
-        # Calculate overall score
-        overall_score = self._calculate_overall_score(success_rate, performance_score, coverage_score)
-        
-        # Determine research readiness
-        research_readiness = self._assess_research_readiness(overall_score, success_rate)
-        
-        # Generate recommendations
-        recommendations = self._generate_recommendations(test_results, success_rate, performance_score, coverage_score)
-        
-        # Collect detailed metrics
-        detailed_metrics = self._collect_detailed_metrics(test_results, success_rate, performance_score, coverage_score)
-        
-        return QualityAssessment(
-            overall_score=overall_score,
-            success_rate=success_rate,
-            performance_score=performance_score,
-            coverage_score=coverage_score,
-            research_readiness=research_readiness,
-            recommendations=recommendations,
-            detailed_metrics=detailed_metrics
+        ]
+        self.validation_rules[TestCategory.FOUNDATION.name] = foundation_rules
+        integration_rules = [
+            ValidationRule(
+                name="success_rate_integration",
+                description="Integration tests must have >95% success rate",
+                threshold=0.95,
+                comparison="gte",
+                weight=2.0,
+                critical=True
+            ),
+            ValidationRule(
+                name="latency_integration",
+                description="Network latency should be <100ms",
+                threshold=100.0,
+                comparison="lte",
+                weight=1.5
+            ),
+            ValidationRule(
+                name="sync_precision",
+                description="Synchronisation precision must be <1ms",
+                threshold=1.0,
+                comparison="lte",
+                weight=2.0,
+                critical=True
+            )
+        ]
+        self.validation_rules[TestCategory.INTEGRATION.name] = integration_rules
+        system_rules = [
+            ValidationRule(
+                name="success_rate_system",
+                description="System tests must have >95% success rate",
+                threshold=0.95,
+                comparison="gte",
+                weight=2.0,
+                critical=True
+            ),
+            ValidationRule(
+                name="data_quality_system",
+                description="Data quality score must be >0.8",
+                threshold=0.8,
+                comparison="gte",
+                weight=1.5,
+                critical=True
+            ),
+            ValidationRule(
+                name="workflow_completion",
+                description="End-to-end workflows must complete successfully",
+                threshold=0.95,
+                comparison="gte",
+                weight=2.0,
+                critical=True
+            )
+        ]
+        self.validation_rules[TestCategory.SYSTEM.name] = system_rules
+        performance_rules = [
+            ValidationRule(
+                name="success_rate_performance",
+                description="Performance tests must have >90% success rate",
+                threshold=0.90,
+                comparison="gte",
+                weight=1.5
+            ),
+            ValidationRule(
+                name="memory_usage",
+                description="Memory usage should be <1GB",
+                threshold=1000.0,
+                comparison="lte",
+                weight=1.0
+            ),
+            ValidationRule(
+                name="cpu_usage",
+                description="CPU usage should be <60%",
+                threshold=60.0,
+                comparison="lte",
+                weight=1.0
+            ),
+            ValidationRule(
+                name="throughput_performance",
+                description="Data throughput should meet target >25MB/s",
+                threshold=25.0,
+                comparison="gte",
+                weight=1.5
+            )
+        ]
+        self.validation_rules[TestCategory.PERFORMANCE.name] = performance_rules
+    def register_validation_rule(self, test_category: TestCategory, rule: ValidationRule):
+        category_name = test_category.name
+        if category_name not in self.validation_rules:
+            self.validation_rules[category_name] = []
+        self.validation_rules[category_name].append(rule)
+        self.logger.info(f"Registered validation rule '{rule.name}' for category {category_name}")
+    def validate_test_results(self, test_results: TestResults) -> ValidationReport:
+        self.logger.info(f"Starting validation for execution {test_results.execution_id}")
+        validation_report = ValidationReport(
+            execution_id=test_results.execution_id,
+            timestamp=datetime.now()
         )
-    
-    def _calculate_success_rate(self, test_results: Dict[str, Any]) -> float:
-        """Calculate overall test success rate"""
-        if not test_results:
-            return 0.0
-        
-        total_tests = len(test_results)
-        passed_tests = sum(1 for result in test_results.values() if result.get("return_code") == 0)
-        
-        return passed_tests / total_tests if total_tests > 0 else 0.0
-    
-    def _calculate_performance_score(self, test_results: Dict[str, Any]) -> float:
-        """Calculate performance score based on execution times"""
-        if not test_results:
-            return 0.0
-        
-        execution_times = [result.get("execution_time", 0) for result in test_results.values()]
-        
-        if not execution_times:
-            return 0.0
-        
-        # Calculate score based on execution time efficiency
-        # Score decreases as execution time increases beyond expected thresholds
-        avg_time = statistics.mean(execution_times)
-        max_reasonable_time = 300.0  # 5 minutes as baseline
-        
-        if avg_time <= max_reasonable_time:
-            return 1.0
-        else:
-            # Exponential decay for longer execution times
-            return max(0.0, 1.0 - (avg_time - max_reasonable_time) / max_reasonable_time)
-    
-    def _calculate_coverage_score(self, test_results: Dict[str, Any]) -> float:
-        """Calculate coverage score (placeholder implementation)"""
-        # In a real implementation, this would parse coverage reports
-        # For now, return a baseline score
-        return 0.75
-    
-    def _calculate_overall_score(self, success_rate: float, performance_score: float, coverage_score: float) -> float:
-        """Calculate weighted overall quality score"""
-        # Weighted average with success rate being most important
-        weights = {
-            "success": 0.5,
-            "performance": 0.3, 
-            "coverage": 0.2
-        }
-        
-        overall_score = (
-            success_rate * weights["success"] +
-            performance_score * weights["performance"] +
-            coverage_score * weights["coverage"]
+        for suite_name, suite_results in test_results.suite_results.items():
+            suite_validation = self._validate_suite_results(suite_results)
+            validation_report.suite_validations[suite_name] = suite_validation
+            for issue in suite_validation.issues:
+                if issue.severity == 'critical':
+                    validation_report.critical_issues.append(issue)
+                else:
+                    validation_report.quality_issues.append(issue)
+        validation_report.overall_quality = self._calculate_overall_quality(validation_report)
+        validation_report.overall_valid = len(validation_report.critical_issues) == 0
+        self._perform_statistical_validation(test_results, validation_report)
+        validation_report.recommendations = self._generate_recommendations(validation_report)
+        self.logger.info(f"Validation completed. Overall quality: {validation_report.overall_quality:.3f}")
+        return validation_report
+    def _validate_suite_results(self, suite_results: SuiteResults) -> SuiteValidation:
+        suite_validation = SuiteValidation(
+            suite_name=suite_results.suite_name,
+            suite_category=suite_results.suite_category
         )
-        
-        return min(1.0, max(0.0, overall_score))
-    
-    def _assess_research_readiness(self, overall_score: float, success_rate: float) -> str:
-        """Assess if system is ready for research use"""
-        if overall_score >= 0.90 and success_rate >= 0.95:
-            return "Research Ready"
-        elif overall_score >= 0.75 and success_rate >= 0.85:
-            return "Needs Minor Improvements"
-        elif overall_score >= 0.60 and success_rate >= 0.70:
-            return "Needs Major Improvements"
+        category_name = suite_results.suite_category.name
+        rules = self.validation_rules.get(category_name, [])
+        for rule in rules:
+            self._apply_validation_rule(rule, suite_results, suite_validation)
+        suite_validation.overall_valid = (
+            suite_validation.success_rate_valid and
+            suite_validation.performance_valid and
+            suite_validation.quality_valid and
+            suite_validation.coverage_valid
+        )
+        suite_validation.quality_score = self._calculate_suite_quality_score(
+            suite_results, suite_validation
+        )
+        return suite_validation
+    def _apply_validation_rule(self, rule: ValidationRule, suite_results: SuiteResults,
+                              suite_validation: SuiteValidation):
+        measured_value = self._extract_measurement_value(rule.name, suite_results)
+        if measured_value is None:
+            self.logger.warning(f"Could not extract value for rule {rule.name}")
+            return
+        valid = self._compare_value(measured_value, rule.threshold, rule.comparison, rule.threshold_max)
+        if "success_rate" in rule.name:
+            suite_validation.success_rate_valid = valid
+        elif any(keyword in rule.name for keyword in ["latency", "cpu", "memory", "throughput"]):
+            suite_validation.performance_valid = valid
+        elif "quality" in rule.name:
+            suite_validation.quality_valid = valid
+        elif "coverage" in rule.name:
+            suite_validation.coverage_valid = valid
+        if not valid:
+            severity = "critical" if rule.critical else "warning"
+            issue = ValidationIssue(
+                rule_name=rule.name,
+                severity=severity,
+                message=f"{rule.description} (measured: {measured_value:.3f}, threshold: {rule.threshold})",
+                measured_value=measured_value,
+                threshold_value=rule.threshold,
+                test_names=[r.test_name for r in suite_results.test_results if not r.success]
+            )
+            suite_validation.issues.append(issue)
+    def _extract_measurement_value(self, rule_name: str, suite_results: SuiteResults) -> Optional[float]:
+        if "success_rate" in rule_name:
+            return suite_results.success_rate
+        elif "execution_time" in rule_name:
+            return suite_results.average_execution_time
+        elif "coverage" in rule_name:
+            return suite_results.total_coverage / 100.0
+        elif "latency" in rule_name:
+            return suite_results.average_latency_ms
+        elif "memory" in rule_name:
+            return suite_results.peak_memory_mb
+        elif "cpu" in rule_name:
+            return suite_results.average_cpu_percent
+        elif "quality" in rule_name:
+            return suite_results.overall_quality_score
+        elif "sync_precision" in rule_name:
+            sync_values = [
+                r.performance_metrics.synchronization_precision_ms
+                for r in suite_results.test_results
+                if r.performance_metrics.synchronization_precision_ms > 0
+            ]
+            return statistics.mean(sync_values) if sync_values else None
+        elif "throughput" in rule_name:
+            throughput_values = [
+                r.performance_metrics.data_throughput_mb_per_sec
+                for r in suite_results.test_results
+                if r.performance_metrics.data_throughput_mb_per_sec > 0
+            ]
+            return statistics.mean(throughput_values) if throughput_values else None
+        return None
+    def _compare_value(self, measured: float, threshold: float, comparison: str,
+                      threshold_max: Optional[float] = None) -> bool:
+        if comparison == "gt":
+            return measured > threshold
+        elif comparison == "gte":
+            return measured >= threshold
+        elif comparison == "lt":
+            return measured < threshold
+        elif comparison == "lte":
+            return measured <= threshold
+        elif comparison == "eq":
+            return abs(measured - threshold) < 1e-6
+        elif comparison == "range" and threshold_max is not None:
+            return threshold <= measured <= threshold_max
         else:
-            return "Not Ready for Research"
-    
-    def _generate_recommendations(self, test_results: Dict[str, Any], success_rate: float, 
-                                performance_score: float, coverage_score: float) -> List[str]:
-        """Generate actionable recommendations for improvement"""
+            self.logger.error(f"Unknown comparison operator: {comparison}")
+            return False
+    def _calculate_overall_quality(self, validation_report: ValidationReport) -> float:
+        if not validation_report.suite_validations:
+            return 0.0
+        total_weight = 0.0
+        weighted_sum = 0.0
+        for suite_validation in validation_report.suite_validations.values():
+            weight = 1.0
+            weighted_sum += weight * suite_validation.quality_score
+            total_weight += weight
+        overall_quality = weighted_sum / total_weight if total_weight > 0 else 0.0
+        critical_penalty = len(validation_report.critical_issues) * 0.1
+        overall_quality = max(0.0, overall_quality - critical_penalty)
+        return min(1.0, overall_quality)
+    def _calculate_suite_quality_score(self, suite_results: SuiteResults,
+                                     suite_validation: SuiteValidation) -> float:
+        base_score = suite_results.success_rate
+        performance_factor = 1.0
+        if suite_results.average_cpu_percent > 0:
+            performance_factor *= max(0.5, 1.0 - suite_results.average_cpu_percent / 100.0)
+        coverage_factor = suite_results.total_coverage / 100.0 if suite_results.total_coverage > 0 else 0.5
+        quality_factor = suite_results.overall_quality_score if suite_results.overall_quality_score > 0 else 0.5
+        quality_score = (
+            0.4 * base_score +
+            0.2 * performance_factor +
+            0.2 * coverage_factor +
+            0.2 * quality_factor
+        )
+        return min(1.0, quality_score)
+    def _perform_statistical_validation(self, test_results: TestResults,
+                                       validation_report: ValidationReport):
+        execution_times = []
+        for suite in test_results.suite_results.values():
+            execution_times.extend([r.execution_time for r in suite.test_results if r.execution_time > 0])
+        if execution_times:
+            validation_report.statistical_summary["mean_execution_time"] = statistics.mean(execution_times)
+            validation_report.statistical_summary["median_execution_time"] = statistics.median(execution_times)
+            validation_report.statistical_summary["std_execution_time"] = statistics.stdev(execution_times) if len(execution_times) > 1 else 0.0
+            if len(execution_times) > 1:
+                mean_time = statistics.mean(execution_times)
+                std_time = statistics.stdev(execution_times)
+                margin = 1.96 * std_time / (len(execution_times) ** 0.5)
+                validation_report.confidence_intervals["execution_time"] = (
+                    max(0, mean_time - margin), mean_time + margin
+                )
+        success_rates = [suite.success_rate for suite in test_results.suite_results.values()]
+        if success_rates:
+            validation_report.statistical_summary["mean_success_rate"] = statistics.mean(success_rates)
+            validation_report.statistical_summary["min_success_rate"] = min(success_rates)
+    def _generate_recommendations(self, validation_report: ValidationReport) -> List[str]:
         recommendations = []
-        
-        # Success rate recommendations
-        if success_rate < 0.95:
-            failed_tests = [name for name, result in test_results.items() 
-                          if result.get("return_code") != 0]
-            recommendations.append(f"Address failing tests: {', '.join(failed_tests)}")
-        
-        # Performance recommendations
-        if performance_score < 0.8:
-            slow_tests = [name for name, result in test_results.items() 
-                         if result.get("execution_time", 0) > 300]
-            if slow_tests:
-                recommendations.append(f"Optimize slow tests: {', '.join(slow_tests)}")
-        
-        # Coverage recommendations
-        if coverage_score < 0.8:
-            recommendations.append("Increase test coverage to meet research standards")
-        
-        # General recommendations
-        if not recommendations:
-            recommendations.append("Test suite meets quality standards - continue monitoring")
-        
+        if validation_report.critical_issues:
+            recommendations.append(
+                f"CRITICAL: Address {len(validation_report.critical_issues)} critical issues "
+                "before system deployment"
+            )
+        performance_issues = [
+            issue for issue in validation_report.quality_issues
+            if any(keyword in issue.rule_name for keyword in ["cpu", "memory", "latency"])
+        ]
+        if performance_issues:
+            recommendations.append(
+                "Consider performance optimisation for CPU/memory usage and network latency"
+            )
+        coverage_issues = [
+            issue for issue in validation_report.quality_issues
+            if "coverage" in issue.rule_name
+        ]
+        if coverage_issues:
+            recommendations.append(
+                "Increase test coverage to meet research-grade quality standards"
+            )
+        if validation_report.overall_quality < 0.85:
+            recommendations.append(
+                f"Overall quality score ({validation_report.overall_quality:.3f}) below target (0.85). "
+                "Review test implementations and system performance"
+            )
         return recommendations
-    
-    def _collect_detailed_metrics(self, test_results: Dict[str, Any], success_rate: float,
-                                performance_score: float, coverage_score: float) -> Dict[str, Any]:
-        """Collect detailed quality metrics"""
-        
-        execution_times = [result.get("execution_time", 0) for result in test_results.values()]
-        
-        metrics = {
-            "test_execution": {
-                "total_test_suites": len(test_results),
-                "passed_suites": sum(1 for r in test_results.values() if r.get("return_code") == 0),
-                "failed_suites": sum(1 for r in test_results.values() if r.get("return_code") != 0),
-                "success_rate_percent": success_rate * 100
-            },
-            "performance": {
-                "avg_execution_time": statistics.mean(execution_times) if execution_times else 0,
-                "max_execution_time": max(execution_times) if execution_times else 0,
-                "min_execution_time": min(execution_times) if execution_times else 0,
-                "performance_score": performance_score
-            },
-            "coverage": {
-                "coverage_score": coverage_score,
-                "estimated_coverage_percent": coverage_score * 100
-            },
-            "quality_assessment": {
-                "timestamp": datetime.now().isoformat(),
-                "overall_score": success_rate * 0.5 + performance_score * 0.3 + coverage_score * 0.2,
-                "research_readiness_score": self._calculate_research_readiness_score(success_rate, performance_score)
-            }
-        }
-        
-        return metrics
-    
-    def _calculate_research_readiness_score(self, success_rate: float, performance_score: float) -> float:
-        """Calculate specific research readiness score"""
-        # Research requires high reliability and reasonable performance
-        return min(1.0, success_rate * 0.7 + performance_score * 0.3)
-    
-    def generate_quality_report(self, assessment: QualityAssessment) -> str:
-        """Generate human-readable quality report"""
-        
-        status_emoji = {
-            "Research Ready": "✅",
-            "Needs Minor Improvements": "⚠️", 
-            "Needs Major Improvements": "⚠️",
-            "Not Ready for Research": "❌"
-        }
-        
-        emoji = status_emoji.get(assessment.research_readiness, "❓")
-        
-        report = f"""
-# Quality Validation Report
-
-## Overall Assessment
-{emoji} **{assessment.research_readiness}**
-
-**Overall Score:** {assessment.overall_score:.2f}/1.00 ({assessment.overall_score*100:.1f}%)
-
-## Key Metrics
-- **Success Rate:** {assessment.success_rate:.2f} ({assessment.success_rate*100:.1f}%)
-- **Performance Score:** {assessment.performance_score:.2f} ({assessment.performance_score*100:.1f}%)
-- **Coverage Score:** {assessment.coverage_score:.2f} ({assessment.coverage_score*100:.1f}%)
-
-## Recommendations
-"""
-        
-        for i, recommendation in enumerate(assessment.recommendations, 1):
-            report += f"{i}. {recommendation}\n"
-        
-        report += f"""
-## Detailed Metrics
-```json
-{json.dumps(assessment.detailed_metrics, indent=2)}
-```
-"""
-        
-        return report

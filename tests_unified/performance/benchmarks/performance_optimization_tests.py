@@ -7,7 +7,7 @@ from pathlib import Path
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent
 sys.path.insert(0, str(src_dir))
-from evaluation_suite.framework.test_framework import TestSuite, TestResult
+from tests_unified.evaluation.test_framework import TestSuite, TestResult
 from PythonApp.performance_optimizer import PerformanceManager, OptimizationConfig
 from PythonApp.production.endurance_test_suite import EnduranceTestSuite, EnduranceTestConfig
 from PythonApp.production.device_capability_detector import DeviceCapabilityDetector

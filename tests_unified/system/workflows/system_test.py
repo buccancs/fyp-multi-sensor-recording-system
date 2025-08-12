@@ -5,10 +5,12 @@ import tempfile
 import threading
 import time
 import traceback
+import pytest
 from pathlib import Path
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+@pytest.mark.system
 def test_python_environment():
     print("Testing Python environment...")
     dependencies = {
@@ -42,6 +44,7 @@ def test_python_environment():
     if missing:
         print(f"Missing: {', '.join(missing)}")
     return len(missing) == 0
+@pytest.mark.system
 def test_gui_components():
     print("\nTesting GUI components...")
     try:
@@ -75,6 +78,7 @@ def test_gui_components():
         print(f"✗ GUI components test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.system
 def test_opencv_functionality():
     print("\nTesting OpenCV functionality...")
     try:
@@ -105,6 +109,7 @@ def test_opencv_functionality():
         print(f"✗ OpenCV functionality test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.system
 def test_network_capabilities():
     print("\nTesting network capabilities...")
     try:
@@ -164,6 +169,7 @@ def test_network_capabilities():
         print(f"✗ Network capabilities test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.system
 def test_data_processing():
     print("\nTesting data processing...")
     try:
@@ -260,6 +266,7 @@ def _test_directory_structure(session_metadata):
         for subdir in subdirs:
             assert (session_dir / subdir).exists()
         print("✓ Session directory structure creation works")
+@pytest.mark.system
 def test_file_operations():
     print("\nTesting file operations...")
     try:
@@ -272,6 +279,7 @@ def test_file_operations():
         print(f"✗ File operations test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.system
 def test_system_integration():
     print("\nTesting system integration...")
     try:

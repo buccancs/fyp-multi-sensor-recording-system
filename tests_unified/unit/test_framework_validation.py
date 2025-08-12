@@ -27,30 +27,32 @@ class TestUnifiedFramework:
     @pytest.mark.unit
     def test_framework_structure_exists(self):
         """Test that the unified framework directory structure exists"""
-        test_root = Path(__file__).parent.parent.parent
+        # tests_unified directory is where the structure should be
+        test_root = Path(__file__).parent.parent
         
-        # Check that key directories exist
+        # Check that key directories exist within tests_unified
         expected_dirs = [
             "unit", "integration", "system", "performance",
             "evaluation", "browser", "visual", "hardware",
-            "config", "fixtures", "runners"
+            "config", "fixtures", "runners", "e2e", "web", "load", "migration"
         ]
         
         for dir_name in expected_dirs:
             dir_path = test_root / dir_name
-            assert dir_path.exists(), f"Directory {dir_name} should exist"
+            assert dir_path.exists(), f"Directory {dir_name} should exist in tests_unified/"
             assert dir_path.is_dir(), f"{dir_name} should be a directory"
     
     @pytest.mark.unit
     def test_configuration_files_exist(self):
         """Test that configuration files are present"""
-        config_dir = Path(__file__).parent.parent.parent / "config"
+        # Check pytest.ini in project root
+        project_root = Path(__file__).parent.parent.parent
+        pytest_ini = project_root / "pytest.ini"
+        assert pytest_ini.exists(), "pytest.ini should exist in project root"
         
-        expected_files = ["pytest.ini", "test_config.yaml"]
-        
-        for file_name in expected_files:
-            file_path = config_dir / file_name
-            assert file_path.exists(), f"Config file {file_name} should exist"
+        # Check test_config.yaml in tests_unified/config
+        test_config = project_root / "tests_unified" / "config" / "test_config.yaml"
+        assert test_config.exists(), "test_config.yaml should exist in tests_unified/config"
     
     @pytest.mark.unit
     def test_test_utilities_work(self):
@@ -165,7 +167,8 @@ class TestUnifiedFramework:
     @pytest.mark.integration
     def test_unified_runner_exists(self):
         """Test that the unified test runner exists and is executable"""
-        runner_path = Path(__file__).parent.parent.parent / "runners" / "run_unified_tests.py"
+        # Check runner in tests_unified/runners
+        runner_path = Path(__file__).parent.parent / "runners" / "run_unified_tests.py"
         
         assert runner_path.exists(), "Unified test runner should exist"
         assert runner_path.is_file(), "Runner should be a file"

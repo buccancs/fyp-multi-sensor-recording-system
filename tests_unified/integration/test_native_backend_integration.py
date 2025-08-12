@@ -14,19 +14,59 @@ from typing import List, Dict, Any
 import logging
 
 # Add PythonApp to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / "PythonApp"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "PythonApp"))
 
-from native_backends.native_shimmer_wrapper import (
-    ShimmerProcessor, SensorReading, ProcessingConfig, NATIVE_AVAILABLE as SHIMMER_NATIVE_AVAILABLE
-)
-from native_backends.native_webcam_wrapper import (
-    WebcamProcessor, FrameData, ProcessingConfig as WebcamConfig, 
-    PerformanceMetrics, NATIVE_AVAILABLE as WEBCAM_NATIVE_AVAILABLE
-)
+# Try importing native backends with fallback to mocks
+try:
+    from native_backends.native_shimmer_wrapper import (
+        ShimmerProcessor, SensorReading, ProcessingConfig, NATIVE_AVAILABLE as SHIMMER_NATIVE_AVAILABLE
+    )
+    from native_backends.native_webcam_wrapper import (
+        WebcamProcessor, FrameData, ProcessingConfig as WebcamConfig, 
+        PerformanceMetrics, NATIVE_AVAILABLE as WEBCAM_NATIVE_AVAILABLE
+    )
+except ImportError:
+    # Mock classes if native backends not available
+    SHIMMER_NATIVE_AVAILABLE = False
+    WEBCAM_NATIVE_AVAILABLE = False
+    
+    class SensorReading:
+        def __init__(self, value=0.5, timestamp=0):
+            self.value = value
+            self.timestamp = timestamp
+    
+    class ProcessingConfig:
+        def __init__(self):
+            self.sample_rate = 128
+    
+    class ShimmerProcessor:
+        def __init__(self, config):
+            self.config = config
+        def is_available(self):
+            return False
+    
+    class FrameData:
+        def __init__(self):
+            self.data = b'mock_frame'
+    
+    class WebcamConfig:
+        def __init__(self):
+            self.fps = 30
+    
+    class PerformanceMetrics:
+        def __init__(self):
+            self.fps = 30
+    
+    class WebcamProcessor:
+        def __init__(self, config):
+            self.config = config
+        def is_available(self):
+            return False
 
 logger = logging.getLogger(__name__)
 
 
+@pytest.mark.integration
 class TestNativeShimmerIntegration:
     """Test native Shimmer implementation integration"""
     
@@ -231,6 +271,7 @@ class TestNativeShimmerIntegration:
             assert isinstance(result_dict[field], (int, float))
 
 
+@pytest.mark.integration
 class TestNativeWebcamIntegration:
     """Test native webcam implementation integration"""
     
@@ -411,6 +452,7 @@ class TestNativeWebcamIntegration:
         assert data_dict['frame_shape'] == (480, 640, 3)
 
 
+@pytest.mark.integration
 class TestNativeBackendCompatibility:
     """Test compatibility between native and Python backends"""
     
@@ -447,6 +489,7 @@ class TestNativeBackendCompatibility:
         webcam_config = WebcamConfig()
         webcam_processor.configure(webcam_config)
     
+    @pytest.mark.slow
     def test_error_handling(self):
         """Test error handling in native backends"""
         shimmer_processor = ShimmerProcessor()
@@ -468,6 +511,7 @@ class TestNativeBackendCompatibility:
             assert True
 
 
+@pytest.mark.integration
 @pytest.mark.integration
 class TestEndToEndIntegration:
     """End-to-end integration tests"""

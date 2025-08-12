@@ -11,6 +11,7 @@ import os
 import time
 from pathlib import Path
 
+@pytest.mark.system
 def test_lsl_integration():
     """Test LSL integration with fallback support."""
     from PythonApp.network.lsl_integration import LSLStreamer, DefaultLSLStreams
@@ -37,6 +38,7 @@ def test_lsl_integration():
     streamer.cleanup()
 
 
+@pytest.mark.system
 def test_zeroconf_discovery():
     """Test Zeroconf device discovery functionality."""
     from PythonApp.network.zeroconf_discovery import ZeroconfDiscovery, MultiSensorDiscovery
@@ -61,6 +63,7 @@ def test_zeroconf_discovery():
     multi_discovery.cleanup()
 
 
+@pytest.mark.system
 def test_enhanced_security():
     """Test enhanced security features."""
     from PythonApp.network.enhanced_security import (
@@ -114,6 +117,7 @@ def test_enhanced_security():
     assert weak is False
 
 
+@pytest.mark.system
 def test_file_integrity():
     """Test file integrity and secure transfer functionality."""
     from PythonApp.network.file_integrity import (
@@ -176,6 +180,7 @@ def test_file_integrity():
         os.unlink(test_file)
 
 
+@pytest.mark.system
 def test_enhanced_pc_server():
     """Test enhanced PC server with new features."""
     from PythonApp.network.pc_server import PCServer
@@ -218,6 +223,7 @@ def test_enhanced_pc_server():
     server.stop()
 
 
+@pytest.mark.system
 def test_integration_with_existing_system():
     """Test that new features integrate properly with existing system."""
     # Test imports don't break existing code

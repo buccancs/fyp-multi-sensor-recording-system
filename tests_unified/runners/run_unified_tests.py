@@ -292,7 +292,14 @@ class UnifiedTestRunner:
         
         # Add markers if specified
         if markers:
-            cmd.extend(["-m", markers])
+            # In quick mode, exclude slow tests
+            if self.config.quick:
+                cmd.extend(["-m", f"{markers} and not slow"])
+            else:
+                cmd.extend(["-m", markers])
+        elif self.config.quick:
+            # If no specific markers but in quick mode, exclude slow tests
+            cmd.extend(["-m", "not slow"])
         
         # Add configuration
         cmd.extend([
