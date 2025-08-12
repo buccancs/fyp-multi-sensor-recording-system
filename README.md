@@ -8,28 +8,48 @@ A comprehensive research platform for contactless Galvanic Skin Response (GSR) p
 
 ## 🚀 Quick Start (30 seconds)
 
-**Test the entire system with unified testing framework:**
+**Cross-Platform Test System:**
 
+*Universal Python (Windows/Linux/macOS)*:
+```bash
+git clone https://github.com/buccancs/bucika_gsr.git
+cd bucika_gsr
+python run_local_tests.py
+```
+
+*Linux/macOS*:
 ```bash
 git clone https://github.com/buccancs/bucika_gsr.git
 cd bucika_gsr
 ./run_local_tests.sh
 ```
 
+*Windows*:
+```cmd
+git clone https://github.com/buccancs/bucika_gsr.git
+cd bucika_gsr
+run_local_tests.bat
+```
+
 **Advanced testing options:**
 
 ```bash
 # Quick validation (< 2 minutes)
-./run_local_tests.sh quick
+python run_local_tests.py quick
 
 # Complete test suite with requirements validation
-./run_local_tests.sh full
+python run_local_tests.py full
 
 # Requirements traceability (thesis compliance)
-./run_local_tests.sh requirements
+python run_local_tests.py requirements
+
+# Platform-specific testing
+python run_local_tests.py pc       # Desktop application
+python run_local_tests.py android  # Mobile application
+python run_local_tests.py gui      # GUI tests both platforms
 
 # Performance benchmarks
-./run_local_tests.sh performance
+python run_local_tests.py performance
 ```
 
 **Direct unified framework usage:**
@@ -78,25 +98,41 @@ This research platform enables contactless GSR prediction through synchronised m
 
 ### 🧪 Comprehensive Testing Framework
 - **4 Test Scenarios**: Quick (1min), CI (3min), Stress (30min), Sync validation
+- **Cross-Platform Support**: Windows, Linux, macOS with multiple runner options
 - **GitHub Actions Integration**: Automated CI/CD with full test coverage
 - **Performance Monitoring**: CPU, memory, and throughput analysis
-- **Cross-Platform Support**: Linux, macOS, Windows compatibility
+- **GUI Testing**: Complete UI/UX validation for both desktop and mobile platforms
 
 ## 🏃‍♂️ Getting Started
 
 ### Prerequisites
-- Python 3.10+ (for PC application and virtual testing)
-- Android 8.0+ (for mobile application)
+- Python 3.7+ (for PC application and virtual testing)
+- Android 8.0+ (for mobile application)  
 - 4GB+ RAM (for multi-device virtual testing)
+- Windows 10+, Linux, or macOS (cross-platform support)
 - Optional: Shimmer GSR+ sensors for ground truth data
 
 ### Installation Methods
 
 #### 1. Quick Test Run (Recommended First Step)
+
+*Universal Cross-Platform*:
 ```bash
 git clone https://github.com/buccancs/bucika_gsr.git
 cd bucika_gsr
-./run_local_test.sh  # Automated setup and test execution
+python run_local_tests.py  # Works on Windows, Linux, macOS
+```
+
+*Platform-Specific*:
+```bash
+# Linux/macOS
+./run_local_tests.sh
+
+# Windows (Batch)
+run_local_tests.bat
+
+# Windows (PowerShell)
+.\run_local_tests.ps1
 ```
 
 #### 2. Virtual Test Environment Setup

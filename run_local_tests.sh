@@ -77,9 +77,18 @@ run_unified_tests() {
         "ci")
             python tests_unified/runners/run_unified_tests.py --mode ci
             ;;
+        "pc")
+            python tests_unified/runners/run_unified_tests.py --category pc --level system
+            ;;
+        "android")
+            python tests_unified/runners/run_unified_tests.py --category android --level system
+            ;;
+        "gui")
+            python tests_unified/runners/run_unified_tests.py --category gui
+            ;;
         *)
             print_error "Unknown mode: $mode"
-            print_status "Available modes: quick, full, requirements, performance, ci"
+            print_status "Available modes: quick, full, requirements, performance, ci, pc, android, gui"
             exit 1
             ;;
     esac
@@ -115,6 +124,9 @@ show_usage() {
     echo "  requirements Validate functional and non-functional requirements"
     echo "  performance  Run performance benchmarks"
     echo "  ci           Run CI/CD mode tests"
+    echo "  pc           Run PC/desktop application tests"
+    echo "  android      Run Android application tests"
+    echo "  gui          Run GUI/UI tests for both platforms"
     echo ""
     echo "OPTIONS:"
     echo "  --install-deps    Install test dependencies before running"
@@ -125,6 +137,9 @@ show_usage() {
     echo "  $0 full                      # Complete test suite"
     echo "  $0 requirements              # Requirements validation"
     echo "  $0 quick --install-deps      # Install deps and run quick tests"
+    echo "  $0 pc                        # PC application tests only"
+    echo "  $0 android                   # Android application tests only"
+    echo "  $0 gui                       # GUI tests for both platforms"
     echo ""
     echo "UNIFIED FRAMEWORK USAGE:"
     echo "  # Direct usage of unified framework"
@@ -156,7 +171,7 @@ main() {
                 show_usage
                 exit 0
                 ;;
-            quick|full|requirements|performance|ci)
+            quick|full|requirements|performance|ci|pc|android|gui)
                 mode="$1"
                 shift
                 ;;

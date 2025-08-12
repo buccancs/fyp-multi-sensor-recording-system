@@ -4,12 +4,47 @@ A comprehensive, research-grade testing framework for the Multi-Sensor Recording
 
 ## 🚀 Quick Start
 
-### Local Testing (30 seconds)
+### Cross-Platform Local Testing (30 seconds)
 
+**Universal Python Runner (Recommended)**:
 ```bash
 # Navigate to repository root
 cd /path/to/bucika_gsr
 
+# Quick test suite (works on Windows, Linux, macOS)
+python run_local_tests.py
+
+# Install dependencies and run tests
+python run_local_tests.py quick --install-deps
+
+# Platform-specific tests
+python run_local_tests.py pc       # Desktop application
+python run_local_tests.py android  # Mobile application  
+python run_local_tests.py gui      # GUI tests both platforms
+```
+
+**Platform-Specific Runners**:
+
+*Linux/macOS*:
+```bash
+./run_local_tests.sh quick
+./run_local_tests.sh pc --install-deps
+```
+
+*Windows (Batch)*:
+```cmd
+run_local_tests.bat quick
+run_local_tests.bat gui --install-deps
+```
+
+*Windows (PowerShell)*:
+```powershell
+.\run_local_tests.ps1 -Mode quick
+.\run_local_tests.ps1 -Mode android -InstallDeps
+```
+
+**Direct Framework Usage**:
+```bash
 # Run all tests with unified framework
 python tests_unified/runners/run_unified_tests.py
 
@@ -511,6 +546,13 @@ All test data handling follows ethical guidelines:
 - Secure storage of any sensitive test configurations
 - GDPR-compliant data processing
 
+## 📚 Additional Documentation
+
+- **[Cross-Platform Guide](CROSS_PLATFORM_GUIDE.md)** - Complete Windows, Linux, macOS setup and usage instructions
+- **[GitHub Workflows](GITHUB_WORKFLOWS.md)** - CI/CD integration and automation setup  
+- **[Getting Started Guide](GETTING_STARTED.md)** - Quick setup and basic usage
+- **[Infrastructure Summary](INFRASTRUCTURE_SUMMARY.md)** - High-level framework overview
+
 ## 🔗 Integration with Existing Systems
 
 ### Legacy Test Migration
@@ -534,9 +576,15 @@ python tests_unified/migration/migrate_tests.py --source tests/ --target tests_u
 ### Planned Enhancements
 
 1. **Machine Learning Validation**: Automated test generation based on system behavior
-2. **Visual Regression Testing**: Automated UI/UX validation
-3. **Cross-Platform Testing**: Extended support for different operating systems
-4. **Real-Time Monitoring**: Live test execution monitoring and alerting
+2. **Visual Regression Testing**: Automated UI/UX validation  
+3. **Real-Time Monitoring**: Live test execution monitoring and alerting
+4. **Advanced Performance Analytics**: Deep system profiling and optimization insights
+
+### Completed Features
+
+- **Cross-Platform Testing**: ✅ Full Windows, Linux, macOS support with multiple runner options
+- **GUI Testing Framework**: ✅ Comprehensive UI/UX validation for desktop and mobile platforms
+- **Requirements Validation**: ✅ Automated FR/NFR compliance checking and traceability
 
 ### Contributing
 
