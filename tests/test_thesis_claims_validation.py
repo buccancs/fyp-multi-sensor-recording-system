@@ -1,8 +1,15 @@
 """
 Comprehensive Thesis Claims Verification Test Suite
 
+IMPORTANT: This test suite uses SYNTHETIC DATA ONLY for implementation validation.
+It validates the structure and functionality of code modules but does NOT
+use real sensor data or conduct actual experiments.
+
 This test suite validates all the specific claims made in the thesis documentation
 against the actual implementation, ensuring 100% compliance with documented features.
+
+WARNING: These tests are for code validation only.
+Real experiments must use actual hardware and authentic sensor data.
 """
 
 import asyncio

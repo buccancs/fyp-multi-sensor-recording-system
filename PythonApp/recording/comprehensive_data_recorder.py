@@ -676,11 +676,29 @@ class AtomicFileOperations:
 
 
 if __name__ == "__main__":
-    # Example usage and testing
+    # =================================================================
+    # WARNING: THIS IS TEST/DEMO CODE ONLY - DO NOT USE FOR REAL EXPERIMENTS
+    # This section uses synthetic test data for validation purposes only.
+    # Real experiments must use actual sensor hardware and authentic data.
+    # =================================================================
+    
+    import warnings
+    warnings.warn(
+        "Running test mode with synthetic data. "
+        "NEVER use this for actual experimental data collection.",
+        UserWarning,
+        stacklevel=2
+    )
+    
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
     
-    # Create test session
+    logger.warning("="*60)
+    logger.warning("TEST MODE: Using synthetic data for validation only")
+    logger.warning("DO NOT use this for real experimental data collection")
+    logger.warning("="*60)
+    
+    # Create test session (SYNTHETIC DATA ONLY)
     session = RecordingSession(
         session_id="test_session_001",
         session_name="Thesis Validation Test",
@@ -700,9 +718,11 @@ if __name__ == "__main__":
         csv_logger = CSVDataLogger(session, logger)
         
         if csv_logger.initialize_csv_files(temp_dir):
-            # Log some test data
+            logger.warning("GENERATING SYNTHETIC TEST DATA - NOT REAL SENSOR DATA")
+            
+            # Log some synthetic test data (FOR TESTING ONLY)
             for i in range(10):
-                # Shimmer data
+                # Synthetic Shimmer data (TEST ONLY)
                 shimmer_data = {
                     "timestamp_ms": int(time.time() * 1000) + i * 8,  # 128Hz interval
                     "gsr_conductance_us": 5.0 + i * 0.1,
@@ -715,7 +735,7 @@ if __name__ == "__main__":
                 }
                 csv_logger.log_shimmer_data(shimmer_data)
                 
-                # Thermal data (every 4th iteration for 25Hz vs 128Hz)
+                # Synthetic thermal data (every 4th iteration for 25Hz vs 128Hz) - TEST ONLY
                 if i % 4 == 0:
                     thermal_data = {
                         "timestamp_ms": int(time.time() * 1000) + i * 40,  # 25Hz interval
@@ -726,8 +746,9 @@ if __name__ == "__main__":
                         "std_temp_c": 2.0,
                         "median_temp_c": 24.8 + i * 0.5,
                         "device_temp_c": 28.5,
-                        "raw_data_base64": f"fake_raw_data_{i}",
-                        "radiometric_data_base64": f"fake_radiometric_{i}"
+                        # NOTE: This is TEST DATA ONLY - never use fake data in real experiments
+                        "raw_data_base64": f"TEST_ONLY_fake_raw_data_{i}",
+                        "radiometric_data_base64": f"TEST_ONLY_fake_radiometric_{i}"
                     }
                     csv_logger.log_thermal_data(thermal_data)
             

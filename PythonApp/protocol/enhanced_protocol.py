@@ -643,9 +643,28 @@ MESSAGE_SCHEMAS = {
 
 
 if __name__ == "__main__":
+    # =================================================================
+    # WARNING: PROTOCOL TESTING CODE - USES SYNTHETIC DATA ONLY
+    # This is for protocol validation, not real experimental data.
+    # Real experiments require actual sensor hardware connections.
+    # =================================================================
+    
+    import warnings
+    warnings.warn(
+        "Running protocol test with synthetic data. "
+        "Real experiments require actual hardware connections.",
+        UserWarning,
+        stacklevel=2
+    )
+    
     # Example protocol usage
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
+    
+    logger.warning("="*60)
+    logger.warning("PROTOCOL TEST MODE: Using synthetic data only")
+    logger.warning("Not for real experimental data collection")
+    logger.warning("="*60)
     
     # Create protocol handlers for PC and Android device
     pc_handler = ProtocolHandler("pc_controller_001", logger)
@@ -676,15 +695,15 @@ if __name__ == "__main__":
     logger.info(f"  Sync timestamp: {session_start.payload.sync_timestamp}")
     logger.info(f"  Countdown: {session_start.payload.countdown_seconds}s")
     
-    # Test preview frame
-    fake_frame_data = b"fake_jpeg_data_for_testing" * 100
+    # Test preview frame (SYNTHETIC DATA FOR TESTING ONLY)
+    test_frame_data = b"SYNTHETIC_TEST_DATA_NOT_REAL_JPEG" * 100
     preview_frame = android_handler.create_preview_frame(
-        "thermal", fake_frame_data, width=256, height=192
+        "thermal", test_frame_data, width=256, height=192
     )
     
     logger.info("Created preview frame message:")
     logger.info(f"  Frame type: {preview_frame.payload.frame_type}")
-    logger.info(f"  Data size: {len(fake_frame_data)} bytes")
+    logger.info(f"  Data size: {len(test_frame_data)} bytes (SYNTHETIC TEST DATA)")
     logger.info(f"  Resolution: {preview_frame.payload.frame_width}×{preview_frame.payload.frame_height}")
     
     # Test heartbeat with NTP sync info

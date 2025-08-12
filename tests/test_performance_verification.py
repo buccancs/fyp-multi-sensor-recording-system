@@ -1,8 +1,13 @@
 """
 Performance Verification Tests for Native and Python Implementations
 
+IMPORTANT: This test suite uses SYNTHETIC DATA ONLY for performance validation.
+It does NOT use real sensor data or conduct actual experiments.
 Tests specific performance claims from the thesis documentation and compares
 native C++ implementations against Python fallback implementations.
+
+WARNING: These tests are for code performance validation only.
+Real experiments must use actual hardware and authentic sensor data.
 """
 
 import pytest
