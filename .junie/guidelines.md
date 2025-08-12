@@ -11,4 +11,5 @@ test every feature repeatedly
 use eslint and prettier
 do not declare something as "done" if it is not tested extensively
 build and run app on a samsung device after each change
-exclude external/ and docs/generated_docs 
+exclude external/ and docs/generated_docs
+only use ASCII-safe characters

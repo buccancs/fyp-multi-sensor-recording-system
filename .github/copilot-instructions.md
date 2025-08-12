@@ -10,6 +10,8 @@ guidelines will produce professional, consistent documentation that
 meets academic requirements and supports the reproducibility and
 integrity of the research.
 
+Only use ASCII-safe characters.
+
 ## Testing and Evaluation
 - **NEVER USE FAKE DATA/LOGS OR MOCK DATA/LOGS**
 - **Testing:** The system must be tested in a controlled environment
