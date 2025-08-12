@@ -2847,6 +2847,370 @@ fun Shimmer.getDeviceName(): String {
 }
 
 /**
+ * Extension method to get current gyroscope X-axis reading from Shimmer device
+ * Implements proper gyroscope data retrieval following Shimmer API patterns
+ */
+fun Shimmer.getGyroXReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val gyroXFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.GYRO_X
+            )
+            val gyroXCluster = ObjectCluster.returnFormatCluster(gyroXFormats, "CAL") as? FormatCluster
+            gyroXCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current gyroscope Y-axis reading from Shimmer device
+ */
+fun Shimmer.getGyroYReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val gyroYFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.GYRO_Y
+            )
+            val gyroYCluster = ObjectCluster.returnFormatCluster(gyroYFormats, "CAL") as? FormatCluster
+            gyroYCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current gyroscope Z-axis reading from Shimmer device
+ */
+fun Shimmer.getGyroZReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val gyroZFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.GYRO_Z
+            )
+            val gyroZCluster = ObjectCluster.returnFormatCluster(gyroZFormats, "CAL") as? FormatCluster
+            gyroZCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current magnetometer X-axis reading from Shimmer device
+ * Implements proper magnetometer data retrieval following Shimmer API patterns
+ */
+fun Shimmer.getMagXReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val magXFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.MAG_X
+            )
+            val magXCluster = ObjectCluster.returnFormatCluster(magXFormats, "CAL") as? FormatCluster
+            magXCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current magnetometer Y-axis reading from Shimmer device
+ */
+fun Shimmer.getMagYReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val magYFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.MAG_Y
+            )
+            val magYCluster = ObjectCluster.returnFormatCluster(magYFormats, "CAL") as? FormatCluster
+            magYCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current magnetometer Z-axis reading from Shimmer device
+ */
+fun Shimmer.getMagZReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val magZFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.MAG_Z
+            )
+            val magZCluster = ObjectCluster.returnFormatCluster(magZFormats, "CAL") as? FormatCluster
+            magZCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current ECG reading from Shimmer device
+ * Implements proper ECG data retrieval following Shimmer API patterns
+ */
+fun Shimmer.getECGReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val ecgFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.EXG1_24BIT
+            )
+            val ecgCluster = ObjectCluster.returnFormatCluster(ecgFormats, "CAL") as? FormatCluster
+            ecgCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current EMG reading from Shimmer device  
+ * Implements proper EMG data retrieval following Shimmer API patterns
+ */
+fun Shimmer.getEMGReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val emgFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.EXG2_24BIT
+            )
+            val emgCluster = ObjectCluster.returnFormatCluster(emgFormats, "CAL") as? FormatCluster
+            emgCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current temperature reading from Shimmer device
+ * Implements proper temperature data retrieval following Shimmer API patterns
+ */
+fun Shimmer.getTemperatureReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val tempFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.TEMPERATURE
+            )
+            val tempCluster = ObjectCluster.returnFormatCluster(tempFormats, "CAL") as? FormatCluster
+            tempCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to get current pressure reading from Shimmer device (if available)
+ * Implements proper pressure data retrieval following Shimmer API patterns
+ */
+fun Shimmer.getPressureReading(): Double? {
+    return try {
+        val latestObjectCluster = getLatestReceivedData()
+        if (latestObjectCluster != null) {
+            val pressureFormats = latestObjectCluster.getCollectionOfFormatClusters(
+                Configuration.Shimmer3.ObjectClusterSensorName.PRESSURE
+            )
+            val pressureCluster = ObjectCluster.returnFormatCluster(pressureFormats, "CAL") as? FormatCluster
+            pressureCluster?.mData
+        } else {
+            null
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+
+/**
+ * Extension method to check if device is currently logging to SD card
+ * Enhanced version with proper state checking following Shimmer API patterns
+ */
+fun Shimmer.isSDLoggingActive(): Boolean {
+    return try {
+        val state = getShimmerState()
+        when (state) {
+            ShimmerBluetooth.BT_STATE.SDLOGGING,
+            ShimmerBluetooth.BT_STATE.STREAMING_AND_SDLOGGING -> true
+            else -> false
+        }
+    } catch (e: Exception) {
+        false
+    }
+}
+
+/**
+ * Extension method to get comprehensive device status
+ * Returns detailed status information following Shimmer API patterns
+ */
+fun Shimmer.getComprehensiveStatus(): Map<String, Any> {
+    return try {
+        mapOf(
+            "isConnected" to isConnected(),
+            "isStreaming" to isStreaming(),
+            "isSDLogging" to isSDLogging(),
+            "batteryLevel" to (getBatteryLevel() ?: -1),
+            "samplingRate" to getSamplingRate(),
+            "enabledSensors" to getEnabledSensors(),
+            "firmwareVersion" to getFirmwareVersion(),
+            "hardwareVersion" to getHardwareVersion(),
+            "macAddress" to getMacAddress(),
+            "deviceName" to getDeviceName(),
+            "shimmerState" to getShimmerState().toString()
+        )
+    } catch (e: Exception) {
+        mapOf("error" to e.message.orEmpty())
+    }
+}
+
+/**
+ * Extension method to perform device calibration
+ * Implements calibration procedures following Shimmer API patterns
+ */
+fun Shimmer.performCalibration(sensorType: String): Boolean {
+    return try {
+        when (sensorType.uppercase()) {
+            "GSR" -> {
+                // GSR calibration procedure
+                val calibrationMethod = this.javaClass.getMethod("startGSRCalibration")
+                calibrationMethod.invoke(this)
+                true
+            }
+            "ACCEL" -> {
+                // Accelerometer calibration procedure
+                val calibrationMethod = this.javaClass.getMethod("startAccelCalibration")
+                calibrationMethod.invoke(this)
+                true
+            }
+            "GYRO" -> {
+                // Gyroscope calibration procedure
+                val calibrationMethod = this.javaClass.getMethod("startGyroCalibration")
+                calibrationMethod.invoke(this)
+                true
+            }
+            "MAG" -> {
+                // Magnetometer calibration procedure
+                val calibrationMethod = this.javaClass.getMethod("startMagCalibration")
+                calibrationMethod.invoke(this)
+                true
+            }
+            else -> {
+                false
+            }
+        }
+    } catch (e: Exception) {
+        false
+    }
+}
+
+/**
+ * Extension method to write configuration to device
+ * Implements configuration writing following Shimmer API patterns
+ */
+fun Shimmer.writeCompleteConfiguration(config: Map<String, Any>): Boolean {
+    return try {
+        var success = true
+        
+        config["samplingRate"]?.let { rate ->
+            if (rate is Double) {
+                try {
+                    val writeMethod = this.javaClass.getMethod("writeSamplingRate", Double::class.java)
+                    writeMethod.invoke(this, rate)
+                } catch (e: Exception) {
+                    success = false
+                }
+            }
+        }
+        
+        config["gsrRange"]?.let { range ->
+            if (range is Int) {
+                try {
+                    writeGSRRange(range)
+                } catch (e: Exception) {
+                    success = false
+                }
+            }
+        }
+        
+        config["accelRange"]?.let { range ->
+            if (range is Int) {
+                try {
+                    writeAccelRange(range)
+                } catch (e: Exception) {
+                    success = false
+                }
+            }
+        }
+        
+        config["enabledSensors"]?.let { sensors ->
+            if (sensors is Long) {
+                try {
+                    @Suppress("DEPRECATION")
+                    writeEnabledSensors(sensors)
+                } catch (e: Exception) {
+                    success = false
+                }
+            }
+        }
+        
+        success
+    } catch (e: Exception) {
+        false
+    }
+}
+
+/**
+ * Extension method to read current device configuration
+ * Implements configuration reading following Shimmer API patterns
+ */
+fun Shimmer.readCurrentConfiguration(): Map<String, Any> {
+    return try {
+        mapOf(
+            "samplingRate" to getSamplingRate(),
+            "enabledSensors" to getEnabledSensors(),
+            "gsrRange" to (getCurrentGSRRange() ?: 0),
+            "batteryLevel" to (getBatteryLevel() ?: -1),
+            "firmwareVersion" to getFirmwareVersion(),
+            "hardwareVersion" to getHardwareVersion(),
+            "deviceName" to getDeviceName(),
+            "macAddress" to getMacAddress()
+        )
+    } catch (e: Exception) {
+        mapOf("error" to e.message.orEmpty())
+    }
+}
+
+/**
  * Convert raw GSR reading to conductance (μS) based on GSR range setting
  */
 private fun convertGSRRawToConductance(rawValue: Double, gsrRange: Int): Double {
