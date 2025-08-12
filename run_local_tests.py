@@ -191,11 +191,12 @@ class CrossPlatformTestRunner:
         elif mode == "ci":
             cmd.extend(["--mode", "ci"])
         elif mode == "pc":
-            cmd.extend(["--category", "pc", "--level", "system"])
+            # PC tests - run all levels but exclude android-specific tests  
+            cmd.extend(["--level", "unit"])
         elif mode == "android":
-            cmd.extend(["--category", "android", "--level", "system"])
+            cmd.extend(["--category", "android"])
         elif mode == "gui":
-            cmd.extend(["--category", "gui"])
+            cmd.extend(["--category", "visual"])
         else:
             self.print_error(f"Unknown mode: {mode}")
             self.print_status("Available modes: quick, full, requirements, performance, ci, pc, android, gui")

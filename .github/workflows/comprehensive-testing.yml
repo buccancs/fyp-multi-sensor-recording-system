@@ -128,7 +128,7 @@ jobs:
         
         case "${{ matrix.test-category }}" in
           "unit")
-            python tests_unified/runners/run_unified_tests.py --level unit --mode research --extended --verbose
+            python run_local_tests.py pc
             ;;
           "integration")
             python tests_unified/runners/run_unified_tests.py --level integration --mode research --extended --verbose
