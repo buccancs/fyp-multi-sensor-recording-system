@@ -53,7 +53,7 @@ class AboutActivity : AppCompatActivity() {
     private fun setupLinks() {
         binding.githubLinkButton.setOnClickListener {
             try {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https:
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr"))
                 startActivity(intent)
             } catch (e: Exception) {
                 showError("Failed to open GitHub: ${e.message}")
@@ -61,7 +61,7 @@ class AboutActivity : AppCompatActivity() {
         }
         binding.documentationLinkButton.setOnClickListener {
             try {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https:
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr"))
                 startActivity(intent)
             } catch (e: Exception) {
                 showError("Failed to open documentation: ${e.message}")
@@ -87,7 +87,7 @@ class AboutActivity : AppCompatActivity() {
         binding.licenseLinkButton.setOnClickListener {
             try {
                 val intent =
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https:
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/blob/main/LICENSE"))
                 startActivity(intent)
             } catch (e: Exception) {
                 showError("Failed to open licence: ${e.message}")
@@ -96,7 +96,7 @@ class AboutActivity : AppCompatActivity() {
         binding.privacyPolicyButton.setOnClickListener {
             try {
                 val intent =
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https:
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/buccancs/bucika_gsr/blob/main/docs/privacy_policy.md"))
                 startActivity(intent)
             } catch (e: Exception) {
                 showError("Failed to open privacy policy: ${e.message}")

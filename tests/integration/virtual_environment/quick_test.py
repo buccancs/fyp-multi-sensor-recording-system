@@ -9,6 +9,7 @@ import asyncio
 import logging
 import sys
 import tempfile
+import pytest
 from pathlib import Path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
@@ -20,6 +21,8 @@ from tests.integration.virtual_environment import (
     VirtualDeviceConfig,
     SyntheticDataGenerator
 )
+
+@pytest.mark.asyncio
 async def test_basic_functionality():
     """Test basic virtual device client functionality"""
     print("Testing basic virtual device functionality...")
@@ -51,6 +54,12 @@ async def test_basic_functionality():
     print(f"   Estimated data volume: {data_est['total_mb']:.1f} MB")
     print("   ✓ Configuration working")
     print("Basic functionality test completed successfully!")
+
+@pytest.mark.asyncio
+@pytest.mark.integration
+@pytest.mark.slow  
+@pytest.mark.network
+@pytest.mark.skipif(True, reason="Requires virtual test infrastructure setup")
 async def test_quick_scenario():
     """Test a quick scenario end-to-end"""
     print("\nTesting quick scenario end-to-end...")
@@ -88,6 +97,12 @@ async def test_quick_scenario():
         import traceback
         traceback.print_exc()
         return False
+
+@pytest.mark.asyncio
+@pytest.mark.integration
+@pytest.mark.slow
+@pytest.mark.network
+@pytest.mark.skipif(True, reason="Requires virtual test infrastructure setup")
 async def test_device_communication():
     """Test direct device communication"""
     print("\nTesting direct device communication...")

@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.Colour
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,7 +36,7 @@ fun ThermalPreview(
             .fillMaxWidth()
             .aspectRatio(4f / 3f),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
@@ -79,10 +79,10 @@ private fun ThermalPreviewPlaceholder(
         modifier = modifier
             .fillMaxSize()
             .background(
-                colour = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(12.dp)
             ),
-        contentAlignment = Alignment.Centre
+        contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,13 +97,13 @@ private fun ThermalPreviewPlaceholder(
             Text(
                 text = "No Thermal Data",
                 style = MaterialTheme.typography.titleMedium,
-                colour = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Medium
             )
             Text(
                 text = "Connect thermal camera to view",
                 style = MaterialTheme.typography.bodyMedium,
-                colour = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -115,7 +115,7 @@ private fun TemperatureOverlay(
 ) {
     Card(
         modifier = modifier.padding(12.dp),
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -131,12 +131,12 @@ private fun TemperatureOverlay(
                 Box(
                     modifier = Modifier
                         .size(8.dp)
-                        .background(Colour.Red, RoundedCornerShape(4.dp))
+                        .background(Color.Red, RoundedCornerShape(4.dp))
                 )
                 Text(
                     text = "${temperatureRange.max.toInt()}°C",
                     style = MaterialTheme.typography.labelMedium,
-                    colour = Colour.Red,
+                    color = Color.Red,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -147,12 +147,12 @@ private fun TemperatureOverlay(
                 Box(
                     modifier = Modifier
                         .size(8.dp)
-                        .background(Colour.Blue, RoundedCornerShape(4.dp))
+                        .background(Color.Blue, RoundedCornerShape(4.dp))
                 )
                 Text(
                     text = "${temperatureRange.min.toInt()}°C",
                     style = MaterialTheme.typography.labelMedium,
-                    colour = Colour.Blue,
+                    color = Color.Blue,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -172,8 +172,8 @@ private fun RecordingIndicator(
     )
     Card(
         modifier = modifier.padding(12.dp),
-        colours = CardDefaults.cardColors(
-            containerColor = Colour.Red.copy(alpha = alpha * 0.9f + 0.1f)
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Red.copy(alpha = alpha * 0.9f + 0.1f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
@@ -185,12 +185,12 @@ private fun RecordingIndicator(
             Box(
                 modifier = Modifier
                     .size(8.dp)
-                    .background(Colour.White, shape = RoundedCornerShape(4.dp))
+                    .background(Color.White, shape = RoundedCornerShape(4.dp))
             )
             Text(
                 text = "REC",
                 style = MaterialTheme.typography.labelMedium,
-                colour = Colour.White,
+                color = Color.White,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -203,7 +203,7 @@ private fun ColorPaletteIndicator(
 ) {
     Card(
         modifier = modifier.padding(12.dp),
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)

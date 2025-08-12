@@ -785,8 +785,15 @@ Generated at: {datetime.now().isoformat()}"""
                     <p>Data points: 10,800</p>
                 </body>
                 </html>
-            try:
+                """
+                return report_html
+            except Exception as e:
+                logger.error(f"Report generation error: {e}")
+                return "<html><body><h1>Error generating report</h1></body></html>"
 
+        @self.app.route("/api/camera/rgb/preview")
+        def api_camera_rgb_preview():
+            try:
                 if (
                     self.controller
                     and hasattr(self.controller, "webcam_capture")

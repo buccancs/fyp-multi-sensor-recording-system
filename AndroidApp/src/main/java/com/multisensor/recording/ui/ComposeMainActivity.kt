@@ -35,7 +35,7 @@ class ComposeMainActivity : ComponentActivity() {
                 MultiSensorTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        colour = MaterialTheme.colorScheme.background
+                        color = MaterialTheme.colorScheme.background
                     ) {
                         MainNavigation()
                     }

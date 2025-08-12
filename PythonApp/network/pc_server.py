@@ -8,7 +8,17 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+
+# Import new security and discovery features
+try:
+    from .enhanced_security import SecurityConfig, TokenManager, SecureSocketWrapper, RuntimeSecurityChecker
+    from .zeroconf_discovery import MultiSensorDiscovery
+    from .lsl_integration import LSLStreamer, DefaultLSLStreams, push_sync_marker
+    from .file_integrity import SecureFileTransfer, FileIntegrityVerifier
+    ENHANCED_FEATURES_AVAILABLE = True
+except ImportError:
+    ENHANCED_FEATURES_AVAILABLE = False
 @dataclass
 class ConnectedDevice:
     device_id: str
@@ -213,7 +223,8 @@ class BeepSyncCommand(JsonMessage):
         super().__post_init__()
         self.type = "beep_sync"
 class PCServer:
-    def __init__(self, port: int = 9000, logger: Optional[logging.Logger] = None):
+    def __init__(self, port: int = 9000, logger: Optional[logging.Logger] = None, 
+                 enable_security: bool = True, enable_discovery: bool = True, enable_lsl: bool = True):
         self.port = port
         self.logger = logger or logging.getLogger(__name__)
         self.server_socket: Optional[socket.socket] = None
@@ -229,26 +240,136 @@ class PCServer:
         self.heartbeat_timeout = 60.0
         self.message_buffer_size = 4096
         self.max_message_size = 1024 * 1024
-        self.logger.info(f"PCServer initialized for port {port}")
+        
+        # Enhanced features
+        self.enable_security = enable_security and ENHANCED_FEATURES_AVAILABLE
+        self.enable_discovery = enable_discovery and ENHANCED_FEATURES_AVAILABLE
+        self.enable_lsl = enable_lsl and ENHANCED_FEATURES_AVAILABLE
+        
+        # Security components
+        self.security_config: Optional[SecurityConfig] = None
+        self.token_manager: Optional[TokenManager] = None
+        self.security_wrapper: Optional[SecureSocketWrapper] = None
+        self.security_checker: Optional[RuntimeSecurityChecker] = None
+        
+        # Discovery components
+        self.discovery: Optional[MultiSensorDiscovery] = None
+        
+        # LSL components
+        self.lsl_streamer: Optional[LSLStreamer] = None
+        
+        # File transfer
+        self.file_transfer: Optional[SecureFileTransfer] = None
+        self.file_verifier: Optional[FileIntegrityVerifier] = None
+        
+        self._initialize_enhanced_features()
+        
+        self.logger.info(f"PCServer initialized for port {port} "
+                        f"(Security: {self.enable_security}, "
+                        f"Discovery: {self.enable_discovery}, "
+                        f"LSL: {self.enable_lsl})")
+    
+    def _initialize_enhanced_features(self):
+        """Initialize enhanced security, discovery, and LSL features."""
+        if not ENHANCED_FEATURES_AVAILABLE:
+            self.logger.warning("Enhanced features not available - some functionality disabled")
+            return
+        
+        # Initialize security
+        if self.enable_security:
+            self.security_config = SecurityConfig(
+                use_tls=True,
+                tls_version="TLSv1.3",
+                min_token_length=32,
+                max_token_age_seconds=24 * 3600  # 24 hours
+            )
+            self.token_manager = TokenManager(logger=self.logger)
+            self.security_wrapper = SecureSocketWrapper(
+                self.security_config, self.token_manager, self.logger
+            )
+            self.security_checker = RuntimeSecurityChecker(
+                self.security_config, self.logger
+            )
+            self.logger.info("Security features initialized")
+        
+        # Initialize discovery
+        if self.enable_discovery:
+            self.discovery = MultiSensorDiscovery(self.logger)
+            self.logger.info("Device discovery initialized")
+        
+        # Initialize LSL
+        if self.enable_lsl:
+            self.lsl_streamer = LSLStreamer(self.logger)
+            # Create sync marker stream
+            sync_config = DefaultLSLStreams.sync_markers_stream()
+            self.lsl_streamer.create_outlet("sync_markers", sync_config)
+            self.logger.info("LSL streaming initialized")
+        
+        # Initialize file transfer
+        self.file_transfer = SecureFileTransfer(logger=self.logger)
+        self.file_verifier = FileIntegrityVerifier(logger=self.logger)
     def start(self) -> bool:
         try:
             if self.is_running:
                 self.logger.warning("Server already running")
                 return True
+            
             self.logger.info(f"Starting PC server on port {self.port}...")
+            
+            # Check security configuration if enabled
+            if self.enable_security and self.security_checker:
+                issues = self.security_checker.check_configuration()
+                if issues:
+                    self.logger.warning("Security configuration issues detected:")
+                    for issue in issues:
+                        self.logger.warning(f"  - {issue}")
+            
+            # Create and configure socket
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            
+            # Apply TLS if security is enabled
+            if self.enable_security and self.security_wrapper:
+                ssl_context = self.security_wrapper.create_server_context()
+                if ssl_context:
+                    self.server_socket = ssl_context.wrap_socket(
+                        self.server_socket, server_side=True
+                    )
+                    self.logger.info("TLS encryption enabled for server socket")
+            
             self.server_socket.bind(("0.0.0.0", self.port))
             self.server_socket.listen(5)
             self.is_running = True
+            
+            # Start server thread
             self.server_thread = threading.Thread(
                 target=self._server_loop, name="PCServer"
             )
             self.server_thread.daemon = True
             self.server_thread.start()
+            
+            # Start heartbeat monitor
             self.thread_pool.submit(self._heartbeat_monitor)
+            
+            # Start security token cleanup if enabled
+            if self.enable_security and self.token_manager:
+                self.thread_pool.submit(self._security_cleanup_loop)
+            
+            # Register service for discovery if enabled
+            if self.enable_discovery and self.discovery:
+                self.discovery.start()
+                hostname = socket.gethostname()
+                self.discovery.register_pc_controller(f"pc_controller_{hostname}", self.port)
+                self.logger.info("Device discovery service started")
+            
+            # Send session start marker to LSL if enabled
+            if self.enable_lsl and self.lsl_streamer:
+                push_sync_marker(self.lsl_streamer, "session_start")
+                self.logger.info("LSL session start marker sent")
+            
             self.logger.info(f"PC server started successfully on port {self.port}")
             return True
+            
         except Exception as e:
             self.logger.error(f"Failed to start PC server: {e}")
             self.is_running = False
@@ -257,15 +378,36 @@ class PCServer:
         try:
             self.logger.info("Stopping PC server...")
             self.is_running = False
+            
+            # Send session stop marker to LSL if enabled
+            if self.enable_lsl and self.lsl_streamer:
+                push_sync_marker(self.lsl_streamer, "session_stop")
+                self.lsl_streamer.cleanup()
+                self.logger.info("LSL session stopped")
+            
+            # Stop discovery service if enabled
+            if self.enable_discovery and self.discovery:
+                self.discovery.cleanup()
+                self.logger.info("Device discovery stopped")
+            
+            # Disconnect all devices
             for device_id in list(self.connected_devices.keys()):
                 self._disconnect_device(device_id)
+            
+            # Close server socket
             if self.server_socket:
                 self.server_socket.close()
                 self.server_socket = None
+            
+            # Wait for server thread
             if self.server_thread and self.server_thread.is_alive():
                 self.server_thread.join(timeout=5.0)
+            
+            # Shutdown thread pool
             self.thread_pool.shutdown(wait=True)
+            
             self.logger.info("PC server stopped successfully")
+            
         except Exception as e:
             self.logger.error(f"Error stopping PC server: {e}")
     def send_message(self, device_id: str, message: JsonMessage) -> bool:
@@ -427,6 +569,75 @@ class PCServer:
             except Exception as e:
                 self.logger.error(f"Error in heartbeat monitor: {e}")
                 time.sleep(5.0)
+    
+    def _security_cleanup_loop(self) -> None:
+        """Periodic cleanup of expired security tokens."""
+        while self.is_running:
+            try:
+                if self.token_manager:
+                    self.token_manager.cleanup_expired_tokens()
+                time.sleep(300)  # Clean up every 5 minutes
+            except Exception as e:
+                self.logger.error(f"Error in security cleanup: {e}")
+                time.sleep(60)
+    
+    def generate_device_token(self, device_id: str, permissions: List[str]) -> Optional[str]:
+        """Generate authentication token for a device."""
+        if not self.enable_security or not self.token_manager:
+            return "no_security_enabled"
+        
+        token = self.token_manager.generate_token(device_id, permissions)
+        if token:
+            self.logger.info(f"Generated token for device {device_id}")
+            return token.token
+        return None
+    
+    def validate_device_token(self, token: str) -> bool:
+        """Validate device authentication token."""
+        if not self.enable_security or not self.token_manager:
+            return True  # Security disabled
+        
+        auth_token = self.token_manager.validate_token(token)
+        return auth_token is not None
+    
+    def send_lsl_marker(self, event_type: str):
+        """Send synchronization marker to LSL."""
+        if self.enable_lsl and self.lsl_streamer:
+            push_sync_marker(self.lsl_streamer, event_type)
+            self.logger.debug(f"Sent LSL marker: {event_type}")
+    
+    def get_discovered_devices(self) -> List[Dict[str, Any]]:
+        """Get devices discovered via Zeroconf."""
+        if not self.enable_discovery or not self.discovery:
+            return []
+        
+        devices = []
+        android_devices = self.discovery.get_android_devices()
+        pc_controllers = self.discovery.get_pc_controllers()
+        
+        for device in android_devices + pc_controllers:
+            devices.append({
+                "name": device.name,
+                "type": device.properties.get("type", "unknown"),
+                "ip_address": device.ip_address,
+                "port": device.port,
+                "capabilities": device.properties.get("capabilities", "").split(","),
+                "last_seen": device.last_seen
+            })
+        
+        return devices
+    
+    def create_file_integrity_manifest(self, directory: str, output_file: str) -> bool:
+        """Create file integrity manifest for a directory."""
+        if self.file_verifier:
+            return self.file_verifier.create_manifest(directory, output_file)
+        return False
+    
+    def verify_file_integrity_manifest(self, directory: str, manifest_file: str) -> Tuple[bool, List[str]]:
+        """Verify files against integrity manifest."""
+        if self.file_verifier:
+            return self.file_verifier.verify_manifest(directory, manifest_file)
+        return False, ["File verifier not available"]
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,

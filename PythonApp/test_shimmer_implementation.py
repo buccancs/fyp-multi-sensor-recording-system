@@ -6,9 +6,11 @@ import threading
 import time
 import traceback
 from pathlib import Path
+import pytest
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+@pytest.mark.unit
 def test_shimmer_libraries_availability():
     print("Testing Shimmer libraries availability...")
     available_libraries = []
@@ -44,6 +46,7 @@ def test_shimmer_libraries_availability():
     else:
         print("✗ No Shimmer libraries available")
         return False
+@pytest.mark.unit
 def test_device_discovery_simulation():
     print("Testing device discovery simulation...")
     try:
@@ -90,6 +93,7 @@ def test_device_discovery_simulation():
         print(f"✗ Device discovery test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.unit
 def test_data_streaming_simulation():
     print("Testing data streaming simulation...")
     try:
@@ -191,6 +195,7 @@ def test_data_streaming_simulation():
         print(f"✗ Data streaming test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.unit
 def test_session_management():
     print("Testing session management...")
     try:
@@ -295,6 +300,7 @@ def test_session_management():
         print(f"✗ Session management test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.unit
 def test_error_handling():
     print("Testing error handling...")
     try:
@@ -372,6 +378,7 @@ def test_error_handling():
         print(f"✗ Error handling test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.unit
 def test_multi_library_compatibility():
     print("Testing multi-library compatibility...")
     try:

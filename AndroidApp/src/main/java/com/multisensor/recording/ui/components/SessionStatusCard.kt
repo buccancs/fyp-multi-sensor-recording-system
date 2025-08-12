@@ -14,7 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Colour
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,7 +28,7 @@ fun SessionStatusCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
@@ -54,7 +54,7 @@ fun SessionStatusCard(
                     Text(
                         text = "Session Status",
                         style = MaterialTheme.typography.titleLarge,
-                        colour = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -90,12 +90,12 @@ private fun SessionStatusBadge(
     modifier: Modifier = Modifier
 ) {
     val (colour, icon) = when (status.lowercase()) {
-        "recording" -> Colour(0xFFE53E3E) to Icons.Default.FiberManualRecord
-        "connected" -> Colour(0xFF38A169) to Icons.Default.CheckCircle
-        "ready" -> Colour(0xFF3182CE) to Icons.Default.CheckCircle
-        "disconnected" -> Colour(0xFF718096) to Icons.Default.Cancel
-        "error" -> Colour(0xFFE53E3E) to Icons.Default.Error
-        else -> Colour(0xFFED8936) to Icons.Default.Warning
+        "recording" -> Color(0xFFE53E3E) to Icons.Default.FiberManualRecord
+        "connected" -> Color(0xFF38A169) to Icons.Default.CheckCircle
+        "ready" -> Color(0xFF3182CE) to Icons.Default.CheckCircle
+        "disconnected" -> Color(0xFF718096) to Icons.Default.Cancel
+        "error" -> Color(0xFFE53E3E) to Icons.Default.Error
+        else -> Color(0xFFED8936) to Icons.Default.Warning
     }
     val animatedColor by animateColorAsState(
         targetValue = colour,
@@ -104,7 +104,7 @@ private fun SessionStatusBadge(
     )
     Card(
         modifier = modifier,
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = animatedColor.copy(alpha = 0.15f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -123,7 +123,7 @@ private fun SessionStatusBadge(
             Text(
                 text = status,
                 style = MaterialTheme.typography.labelLarge,
-                colour = animatedColor,
+                color = animatedColor,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -136,10 +136,10 @@ private fun DeviceStatusChip(
     modifier: Modifier = Modifier
 ) {
     val (statusColor, icon) = when (status) {
-        DeviceStatus.CONNECTED -> Colour(0xFF38A169) to Icons.Default.CheckCircle
-        DeviceStatus.DISCONNECTED -> Colour(0xFF718096) to Icons.Default.Cancel
-        DeviceStatus.CONNECTING -> Colour(0xFFED8936) to Icons.Default.Sync
-        DeviceStatus.ERROR -> Colour(0xFFE53E3E) to Icons.Default.Error
+        DeviceStatus.CONNECTED -> Color(0xFF38A169) to Icons.Default.CheckCircle
+        DeviceStatus.DISCONNECTED -> Color(0xFF718096) to Icons.Default.Cancel
+        DeviceStatus.CONNECTING -> Color(0xFFED8936) to Icons.Default.Sync
+        DeviceStatus.ERROR -> Color(0xFFE53E3E) to Icons.Default.Error
     }
     val animatedColor by animateColorAsState(
         targetValue = statusColor,
@@ -148,7 +148,7 @@ private fun DeviceStatusChip(
     )
     Card(
         modifier = modifier,
-        colours = CardDefaults.cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
@@ -182,14 +182,14 @@ private fun DeviceStatusChip(
                     modifier = Modifier
                         .size(8.dp)
                         .background(
-                            colour = animatedColor,
+                            color = animatedColor,
                             shape = CircleShape
                         )
                 )
                 Text(
                     text = status.displayText,
                     style = MaterialTheme.typography.bodySmall,
-                    colour = animatedColor,
+                    color = animatedColor,
                     fontWeight = FontWeight.Medium
                 )
             }

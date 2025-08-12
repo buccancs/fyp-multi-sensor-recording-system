@@ -27,9 +27,9 @@ class UserFeedbackManager @Inject constructor(
         duration: Int = Snackbar.LENGTH_LONG
     ) {
         val snackbar = Snackbar.make(view, message, duration)
-            .setBackgroundTint(context.getColor(R.colour.buttonDanger))
-            .setTextColor(context.getColor(R.colour.colorOnPrimary))
-            .setActionTextColor(context.getColor(R.colour.colorOnPrimary))
+            .setBackgroundTint(context.getColor(R.color.buttonDanger))
+            .setTextColor(context.getColor(R.color.colorOnPrimary))
+            .setActionTextColor(context.getColor(R.color.colorOnPrimary))
 
         if (actionText != null && action != null) {
             snackbar.setAction(actionText) { action() }
@@ -44,8 +44,8 @@ class UserFeedbackManager @Inject constructor(
         duration: Int = Snackbar.LENGTH_SHORT
     ) {
         Snackbar.make(view, message, duration)
-            .setBackgroundTint(context.getColor(R.colour.statusIndicatorConnected))
-            .setTextColor(context.getColor(R.colour.colorOnPrimary))
+            .setBackgroundTint(context.getColor(R.color.statusIndicatorConnected))
+            .setTextColor(context.getColor(R.color.colorOnPrimary))
             .show()
     }
 
@@ -57,9 +57,9 @@ class UserFeedbackManager @Inject constructor(
         duration: Int = Snackbar.LENGTH_LONG
     ) {
         val snackbar = Snackbar.make(view, message, duration)
-            .setBackgroundTint(context.getColor(R.colour.statusIndicatorWarning))
-            .setTextColor(context.getColor(R.colour.colorOnPrimary))
-            .setActionTextColor(context.getColor(R.colour.colorOnPrimary))
+            .setBackgroundTint(context.getColor(R.color.statusIndicatorWarning))
+            .setTextColor(context.getColor(R.color.colorOnPrimary))
+            .setActionTextColor(context.getColor(R.color.colorOnPrimary))
 
         if (actionText != null && action != null) {
             snackbar.setAction(actionText) { action() }
@@ -74,8 +74,8 @@ class UserFeedbackManager @Inject constructor(
         duration: Int = Snackbar.LENGTH_SHORT
     ) {
         Snackbar.make(view, message, duration)
-            .setBackgroundTint(context.getColor(R.colour.statusIndicatorInfo))
-            .setTextColor(context.getColor(R.colour.colorOnPrimary))
+            .setBackgroundTint(context.getColor(R.color.statusIndicatorInfo))
+            .setTextColor(context.getColor(R.color.colorOnPrimary))
             .show()
     }
 

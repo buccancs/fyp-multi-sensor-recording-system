@@ -34,9 +34,18 @@ sys.path.insert(0, str(virtual_env_path))
 
 from PythonApp.network.android_device_manager import AndroidDeviceManager, ShimmerDataSample, SessionInfo
 from PythonApp.network.pc_server import PCServer
-from virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
-from synthetic_data_generator import SyntheticDataGenerator, estimate_data_volume
-from test_config import VirtualTestConfig, VirtualTestScenario
+
+# Handle both relative and absolute imports for flexibility
+try:
+    from .virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
+    from .synthetic_data_generator import SyntheticDataGenerator, estimate_data_volume
+    from .test_config import VirtualTestConfig, VirtualTestScenario
+except ImportError:
+    # Fallback to absolute imports when run directly
+    from virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
+    from synthetic_data_generator import SyntheticDataGenerator, estimate_data_volume
+    from test_config import VirtualTestConfig, VirtualTestScenario
+
 @dataclass
 class VirtualTestMetrics:
     """Metrics collected during test execution"""
@@ -110,7 +119,7 @@ class VirtualTestRunner:
         self.collected_data_samples: List[ShimmerDataSample] = []
         self.session_events: List[Tuple[str, float, Dict[str, Any]]] = []
         self.logger.info(f"VirtualTestRunner initialized for {config.device_count} devices")
-        
+
     @property
     def metrics(self) -> "VirtualTestMetrics":
         """Get or create test metrics"""

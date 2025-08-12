@@ -2,7 +2,7 @@ import logging
 import queue
 import threading
 from typing import Dict, List, Optional, Set
-from ..utils.logging_config import get_logger
+from PythonApp.utils.logging_config import get_logger
 from .device_models import (
     ConnectionType,
     DeviceConfiguration,

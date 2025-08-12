@@ -292,7 +292,7 @@ class SettingsActivity : AppCompatActivity() {
                         "medical" -> "Medical"
                         else -> palette
                     }
-                    summary = "Colour Palette: $displayName"
+                    summary = "Color Palette: $displayName"
                     (activity as? SettingsActivity)?.markAsChanged()
                     true
                 }
@@ -307,7 +307,7 @@ class SettingsActivity : AppCompatActivity() {
                         "medical" -> "Medical"
                         else -> it
                     }
-                    summary = "Colour Palette: $displayName"
+                    summary = "Color Palette: $displayName"
                 }
             }
 

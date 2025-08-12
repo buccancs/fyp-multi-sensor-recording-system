@@ -37,7 +37,7 @@ from PythonApp.network.pc_server import (
     FileInfoMessage,
     FileChunkMessage,
     FileEndMessage,
-    JsonMessage,
+    JsonMessage
 )
 @dataclass
 class VirtualDeviceConfig:

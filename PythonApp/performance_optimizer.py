@@ -193,8 +193,8 @@ class CPUOptimizer:
             try:
                 current_process.nice(1)
                 optimisations.append({"action": "lowered_process_priority"})
-            except:
-                pass
+            except OSError as e:
+                logging.warning(f"Could not adjust process priority: {e}")
         final_metrics = self.get_cpu_metrics()
         return {
             "initial_cpu_percent": initial_metrics["overall_percent"],
@@ -402,8 +402,8 @@ class HardwareAccelerationManager:
             self.capabilities["opencv_gpu"] = cv2.cuda.getCudaEnabledDeviceCount() > 0
             if self.capabilities["opencv_gpu"]:
                 self.logger.info(f"OpenCV CUDA devices detected: {cv2.cuda.getCudaEnabledDeviceCount()}")
-        except:
-            pass
+        except ImportError:
+            logging.debug("OpenCV not available for GPU detection")
         try:
             import torch
             self.capabilities["cuda_available"] = torch.cuda.is_available()
@@ -433,13 +433,13 @@ class HardwareAccelerationManager:
                 try:
                     fourcc = cv2.VideoWriter_fourcc(*codec)
                     available_codecs.append(codec)
-                except:
-                    pass
+                except ValueError:
+                    logging.debug(f"Codec {codec} not supported")
             self.capabilities["hardware_codecs"] = available_codecs
             if available_codecs:
                 self.logger.info(f"Hardware codecs available: {available_codecs}")
-        except:
-            pass
+        except ImportError:
+            logging.debug("Hardware codec detection not available")
     def get_optimal_processing_device(self) -> str:
         if self.config.prefer_gpu_processing:
             if self.capabilities["cuda_available"]:
@@ -461,7 +461,8 @@ class HardwareAccelerationManager:
                             if writer.isOpened():
                                 self.logger.info(f"Using hardware codec: {codec}")
                                 return writer
-                        except:
+                        except Exception as e:
+                            logging.debug(f"Failed to create writer with codec {codec}: {e}")
                             continue
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')
             writer = cv2.VideoWriter(filename, fourcc, fps, frame_size)
@@ -902,24 +903,24 @@ if __name__ == "__main__":
     manager = PerformanceManager()
     try:
         if manager.initialize(config):
-            print("Performance manager initialized successfully")
+            logging.info("Performance manager initialized successfully")
             if manager.start():
-                print("Performance monitoring started")
-                print("Monitoring performance... Press Ctrl+C to stop")
+                logging.info("Performance monitoring started")
+                logging.info("Monitoring performance... Press Ctrl+C to stop")
                 while True:
                     time.sleep(10)
                     status = manager.get_status()
                     if status:
                         current = status.get("current_metrics", {})
-                        print(
+                        logging.info(
                             f"CPU: {current.get('cpu_percent', 0):.1f}%, Memory: {current.get('memory_mb', 0):.1f}MB"
                         )
                         if current.get("memory_mb", 0) > 500:
-                            print("Triggering optimisation...")
+                            logging.info("Triggering optimisation...")
                             result = manager.optimize_now()
-                            print(f"Optimisation result: {result}")
+                            logging.info(f"Optimisation result: {result}")
     except KeyboardInterrupt:
-        print("\nShutting down performance manager...")
+        logging.info("Shutting down performance manager...")
     finally:
         manager.stop()
-        print("Performance manager stopped")
+        logging.info("Performance manager stopped")

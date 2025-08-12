@@ -285,7 +285,8 @@ class WebController:
                     real_shimmer_devices = (
                         self.shimmer_manager.get_all_device_status() or {}
                     )
-                except:
+                except Exception as e:
+                    logging.debug(f"Error getting shimmer device status: {e}")
                     pass
             if real_shimmer_devices:
                 for device_id, status in real_shimmer_devices.items():
@@ -313,7 +314,8 @@ class WebController:
                     real_android_devices = (
                         self.android_device_manager.get_connected_devices() or {}
                     )
-                except:
+                except Exception as e:
+                    logging.debug(f"Error getting android device status: {e}")
                     pass
             if real_android_devices:
                 for device_id, device_info in real_android_devices.items():

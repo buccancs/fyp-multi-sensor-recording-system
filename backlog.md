@@ -2,6 +2,18 @@
 
 This file tracks pending items and TODOs identified in the thesis documentation and system development.
 
+### Testing and Quality Assurance
+- [ ] **Appium End-to-End Testing**: Implement Appium-based cross-platform tests spanning Android app and Web dashboard interactions for complete user journey validation
+- [ ] **Visual Regression Testing**: Add screenshot comparison testing for UI consistency across Android fragments and PyQt5 windows using tools like percy.io or visual-testing libraries
+- [ ] **Hardware-in-the-Loop Testing**: Develop automated testing infrastructure with real Shimmer sensors and thermal cameras for integration validation without manual intervention
+- [ ] **Synthetic Load Testing**: Create Socket.IO load generators to simulate multiple concurrent device connections and high-frequency data streaming scenarios
+- [ ] **Thermal Camera Integration Testing**: Automated testing pipeline for TOPDON thermal camera SDK integration when hardware becomes available in test environment
+- [ ] **Performance Regression Testing**: Establish baseline performance metrics and automated detection of performance degradation in CI pipeline
+- [ ] **Accessibility Compliance Testing**: Expand beyond basic AccessibilityChecks to include full WCAG 2.1 compliance testing for Web UI using tools like axe-core
+- [ ] **Security Penetration Testing**: Automated security scanning for Web APIs, input validation, and potential vulnerability detection in CI/CD pipeline
+- [ ] **Cross-Browser Compatibility Testing**: Playwright-based testing across Chrome, Firefox, Safari, and Edge for Web dashboard compatibility
+- [ ] **Device Compatibility Matrix Testing**: Systematic testing across different Android versions (8.0-14) and device manufacturers beyond Samsung
+
 ## Documentation TODOs
 
 ### High Priority

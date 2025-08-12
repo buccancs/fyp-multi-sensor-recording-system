@@ -29,7 +29,7 @@ object LoggingTestUtility {
     }
     private fun testSpecializedLogging() {
         AppLogger.logLifecycle(TAG, "test_lifecycle", "Testing lifecycle logging")
-        AppLogger.logNetwork(TAG, "test_request", "https:
+        AppLogger.logNetwork(TAG, "test_request", "https://api.example.com/test")
         AppLogger.logRecording(TAG, "test_recording", "1920x1080@30fps")
         AppLogger.logSensor(TAG, "test_sensor", "GSR", "value=1.23")
         AppLogger.logFile(TAG, "test_file", "test.mp4", 1024L)

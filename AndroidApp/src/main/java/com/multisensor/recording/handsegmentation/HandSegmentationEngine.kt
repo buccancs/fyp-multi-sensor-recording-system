@@ -142,7 +142,7 @@ class HandSegmentationEngine(private val context: Context) {
 
         for (i in pixels.indices) {
             val pixel = pixels[i]
-            Colour.colorToHSV(pixel, hsv)
+            Color.colorToHSV(pixel, hsv)
 
             val hue = hsv[0]
             val sat = hsv[1] * 255
@@ -259,10 +259,10 @@ class HandSegmentationEngine(private val context: Context) {
         val maskBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(maskBitmap)
 
-        canvas.drawColor(Colour.BLACK)
+        canvas.drawColor(Color.BLACK)
 
         val paint = Paint().apply {
-            colour = Colour.WHITE
+            color = Color.WHITE
             style = Paint.Style.FILL
         }
 
@@ -284,11 +284,11 @@ class HandSegmentationEngine(private val context: Context) {
         }
 
         for ((index, handRegion) in handRegions.withIndex()) {
-            paint.colour = if (index == 0) Colour.GREEN else Colour.BLUE
+            paint.color = if (index == 0) Color.GREEN else Color.BLUE
             canvas.drawRect(handRegion.boundingBox, paint)
 
             val textPaint = Paint().apply {
-                colour = paint.colour
+                color = paint.color
                 textSize = 32f
                 isAntiAlias = true
             }
