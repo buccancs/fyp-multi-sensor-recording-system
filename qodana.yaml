@@ -27,7 +27,6 @@ include:
   - name: ConfigurationAvoidance
   - name: ProblematicWhitespace
   - name: TodoComment
-  - name: TodoComment
   - name: ReassignedToPlainText
   - name: RedundantSuppression
   - name: JsCoverageInspection
@@ -91,7 +90,6 @@ exclude:
       - .gradle/
       - node_modules/
       - .idea/
-      -
       - __pycache__/
       - venv/
       - env/
