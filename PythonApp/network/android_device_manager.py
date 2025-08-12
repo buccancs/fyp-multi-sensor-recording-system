@@ -7,6 +7,17 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
+
+# Import Android connection detector
+try:
+    from ..utils.android_connection_detector import (
+        AndroidConnectionDetector,
+        ConnectionType,
+        IDEType
+    )
+    CONNECTION_DETECTOR_AVAILABLE = True
+except ImportError:
+    CONNECTION_DETECTOR_AVAILABLE = False
 from .pc_server import (
     AckMessage,
     BeepSyncCommand,
@@ -39,6 +50,12 @@ class AndroidDevice:
     last_data_timestamp: Optional[float] = None
     pending_files: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     transfer_progress: Dict[str, float] = field(default_factory=dict)
+    # Enhanced connection information
+    connection_type: Optional[str] = None
+    wireless_debugging_enabled: bool = False
+    ide_connections: List[str] = field(default_factory=list)
+    ip_address: Optional[str] = None
+    port: Optional[int] = None
 @dataclass
 class ShimmerDataSample:
     timestamp: float
@@ -75,6 +92,16 @@ class AndroidDeviceManager:
         self.heartbeat_interval = 30.0
         self.data_timeout = 60.0
         self.file_transfer_chunk_size = 8192
+        
+        # Initialize connection detector if available
+        if CONNECTION_DETECTOR_AVAILABLE:
+            self.connection_detector = AndroidConnectionDetector(logger=self.logger)
+            self.connection_detection_enabled = True
+        else:
+            self.connection_detector = None
+            self.connection_detection_enabled = False
+            self.logger.warning("Android connection detector not available - enhanced detection disabled")
+        
         self._setup_server_callbacks()
         self.logger.info("AndroidDeviceManager initialized")
     def initialize(self) -> bool:
@@ -272,6 +299,173 @@ class AndroidDeviceManager:
         return self.session_history.copy()
     def get_current_session(self) -> Optional[SessionInfo]:
         return self.current_session
+
+    def detect_wireless_and_ide_connections(self) -> Dict[str, Any]:
+        """
+        Detect devices connected via wireless debugging and IDE connections.
+        Returns comprehensive connection information.
+        """
+        if not self.connection_detection_enabled:
+            self.logger.warning("Connection detection not available")
+            return {
+                'available': False,
+                'reason': 'Connection detector not available'
+            }
+        
+        try:
+            # Detect all connections
+            detected_devices = self.connection_detector.detect_all_connections()
+            
+            # Update existing device information with enhanced details
+            self._enhance_devices_with_connection_info(detected_devices)
+            
+            # Get summary
+            summary = self.connection_detector.get_detection_summary()
+            
+            self.logger.info(f"Connection detection completed: {summary['total_devices']} devices, "
+                           f"{summary['wireless_devices']} wireless, {summary['ides_running']} IDEs")
+            
+            return {
+                'available': True,
+                'summary': summary,
+                'detected_devices': detected_devices,
+                'timestamp': time.time()
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error during connection detection: {e}")
+            return {
+                'available': True,
+                'error': str(e),
+                'timestamp': time.time()
+            }
+    
+    def _enhance_devices_with_connection_info(self, detected_devices: Dict) -> None:
+        """
+        Enhance existing Android devices with connection detection information.
+        """
+        for device_id, detected_device in detected_devices.items():
+            if device_id in self.android_devices:
+                android_device = self.android_devices[device_id]
+                
+                # Update connection information
+                android_device.connection_type = detected_device.connection_type.value
+                android_device.wireless_debugging_enabled = detected_device.wireless_debugging_enabled
+                android_device.ip_address = detected_device.ip_address
+                android_device.port = detected_device.port
+                
+                # Update IDE connections
+                ide_connections = self.connection_detector.is_device_ide_connected(device_id)
+                android_device.ide_connections = [ide.value for ide in ide_connections]
+                
+                self.logger.debug(f"Enhanced device {device_id} with connection info: "
+                                f"type={android_device.connection_type}, "
+                                f"wireless={android_device.wireless_debugging_enabled}, "
+                                f"ides={android_device.ide_connections}")
+    
+    def get_wireless_debugging_devices(self) -> List[AndroidDevice]:
+        """Get devices connected via wireless debugging."""
+        if not self.connection_detection_enabled:
+            return []
+        
+        wireless_devices = []
+        for device in self.android_devices.values():
+            if (device.connection_type == "wireless_adb" or 
+                device.wireless_debugging_enabled):
+                wireless_devices.append(device)
+        
+        return wireless_devices
+    
+    def get_ide_connected_devices(self) -> Dict[str, List[AndroidDevice]]:
+        """Get devices connected through IDEs, grouped by IDE type."""
+        if not self.connection_detection_enabled:
+            return {}
+        
+        ide_devices = {}
+        for device in self.android_devices.values():
+            for ide_type in device.ide_connections:
+                if ide_type not in ide_devices:
+                    ide_devices[ide_type] = []
+                ide_devices[ide_type].append(device)
+        
+        return ide_devices
+    
+    def is_device_wireless_connected(self, device_id: str) -> bool:
+        """Check if specific device is connected via wireless debugging."""
+        if not self.connection_detection_enabled:
+            return False
+        
+        device = self.android_devices.get(device_id)
+        if not device:
+            return False
+        
+        return (device.connection_type == "wireless_adb" or
+                device.wireless_debugging_enabled)
+    
+    def is_device_ide_connected(self, device_id: str) -> List[str]:
+        """Check if specific device is connected through IDEs."""
+        if not self.connection_detection_enabled:
+            return []
+        
+        device = self.android_devices.get(device_id)
+        return device.ide_connections if device else []
+    
+    def get_enhanced_device_info(self, device_id: str) -> Optional[Dict[str, Any]]:
+        """Get comprehensive device information including connection details."""
+        device = self.android_devices.get(device_id)
+        if not device:
+            return None
+        
+        info = {
+            'device_id': device.device_id,
+            'status': device.status,
+            'capabilities': device.capabilities,
+            'connection_time': device.connection_time,
+            'last_heartbeat': device.last_heartbeat,
+            'is_recording': device.is_recording,
+            'current_session_id': device.current_session_id,
+            'messages_received': device.messages_received,
+            'messages_sent': device.messages_sent,
+            'data_samples_received': device.data_samples_received,
+            'last_data_timestamp': device.last_data_timestamp,
+            'shimmer_devices': device.shimmer_devices,
+        }
+        
+        # Add enhanced connection information if available
+        if self.connection_detection_enabled:
+            info.update({
+                'connection_type': device.connection_type,
+                'wireless_debugging_enabled': device.wireless_debugging_enabled,
+                'ide_connections': device.ide_connections,
+                'ip_address': device.ip_address,
+                'port': device.port,
+            })
+        
+        return info
+    
+    def refresh_connection_detection(self) -> Dict[str, Any]:
+        """Manually refresh connection detection information."""
+        if not self.connection_detection_enabled:
+            return {'available': False}
+        
+        self.logger.info("Refreshing connection detection...")
+        return self.detect_wireless_and_ide_connections()
+    
+    def get_connection_detection_status(self) -> Dict[str, Any]:
+        """Get status of connection detection capabilities."""
+        return {
+            'available': self.connection_detection_enabled,
+            'detector_initialized': self.connection_detector is not None,
+            'adb_available': (self.connection_detector.adb_path is not None 
+                            if self.connection_detector else False),
+            'supported_features': [
+                'wireless_debugging_detection',
+                'ide_connection_detection', 
+                'android_studio_detection',
+                'intellij_idea_detection',
+                'vscode_android_detection'
+            ] if self.connection_detection_enabled else []
+        }
     def _setup_server_callbacks(self) -> None:
         self.pc_server.add_message_callback(self._on_message_received)
         self.pc_server.add_device_callback(self._on_device_connected)
@@ -485,6 +679,16 @@ if __name__ == "__main__":
         print(f"  Values: {sample.sensor_values}")
     def on_device_status(device_id: str, device: AndroidDevice):
         print(f"Device status {device_id}: {device.status}")
+        
+        # Show enhanced connection information if available
+        if hasattr(device, 'connection_type') and device.connection_type:
+            print(f"  Connection type: {device.connection_type}")
+            if device.wireless_debugging_enabled:
+                print(f"  Wireless debugging: Enabled")
+                if device.ip_address and device.port:
+                    print(f"  IP: {device.ip_address}:{device.port}")
+            if device.ide_connections:
+                print(f"  IDE connections: {', '.join(device.ide_connections)}")
     def on_session_event(session: SessionInfo):
         if session.end_time:
             duration = session.end_time - session.start_time
@@ -499,14 +703,68 @@ if __name__ == "__main__":
         if manager.initialize():
             print("AndroidDeviceManager started. Waiting for device connections...")
             print("Press Ctrl+C to stop.")
+            
+            # Show connection detection status
+            detection_status = manager.get_connection_detection_status()
+            print(f"\nConnection Detection Status:")
+            print(f"  Available: {detection_status['available']}")
+            print(f"  ADB Available: {detection_status.get('adb_available', 'Unknown')}")
+            if detection_status['supported_features']:
+                print(f"  Features: {', '.join(detection_status['supported_features'])}")
+            
+            # Detect initial connections
+            if detection_status['available']:
+                print("\nDetecting wireless debugging and IDE connections...")
+                connection_info = manager.detect_wireless_and_ide_connections()
+                if connection_info.get('available'):
+                    summary = connection_info.get('summary', {})
+                    print(f"  Total devices: {summary.get('total_devices', 0)}")
+                    print(f"  Wireless devices: {summary.get('wireless_devices', 0)}")
+                    print(f"  IDEs running: {summary.get('ides_running', 0)}")
+                    
+                    # Show wireless devices
+                    wireless_details = summary.get('wireless_device_details', [])
+                    if wireless_details:
+                        print("\n  Wireless Debugging Devices:")
+                        for device in wireless_details:
+                            print(f"    - {device['device_id']} ({device.get('model', 'Unknown')})")
+                            if device.get('ip_address'):
+                                print(f"      IP: {device['ip_address']}:{device['port']}")
+                    
+                    # Show IDE connections
+                    ide_details = summary.get('ide_details', [])
+                    if ide_details:
+                        print("\n  IDE Connections:")
+                        for ide in ide_details:
+                            print(f"    - {ide['ide_type'].replace('_', ' ').title()}")
+                            if ide.get('project_path') and ide['project_path'] != "Unknown":
+                                print(f"      Project: {ide['project_path']}")
+                            if ide.get('connected_devices'):
+                                print(f"      Devices: {', '.join(ide['connected_devices'])}")
+            
             while True:
                 time.sleep(10)
                 devices = manager.get_connected_devices()
                 shimmer_devices = manager.get_shimmer_devices()
-                print(
-                    f"""
-Status: {len(devices)} Android devices, {len(shimmer_devices)} Shimmer devices"""
-                )
+                
+                print(f"""
+Status: {len(devices)} Android devices, {len(shimmer_devices)} Shimmer devices""")
+                
+                # Show wireless and IDE connection status
+                if manager.connection_detection_enabled:
+                    wireless_devices = manager.get_wireless_debugging_devices()
+                    ide_devices = manager.get_ide_connected_devices()
+                    
+                    if wireless_devices:
+                        print(f"  Wireless debugging devices: {len(wireless_devices)}")
+                        for device in wireless_devices:
+                            print(f"    - {device.device_id}")
+                    
+                    if ide_devices:
+                        print(f"  IDE-connected devices:")
+                        for ide_type, device_list in ide_devices.items():
+                            print(f"    {ide_type}: {len(device_list)} devices")
+                
                 if devices and not manager.get_current_session():
                     session_id = f"test_session_{int(time.time())}"
                     print(f"Starting test session: {session_id}")
