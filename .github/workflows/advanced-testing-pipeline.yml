@@ -242,6 +242,12 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     
+    - name: Clear Gradle caches
+      run: |
+        ./gradlew clean
+        rm -rf ~/.gradle/caches/
+        rm -rf .gradle/
+    
     - name: Build Android app
       run: ./gradlew assembleDevDebug assembleDevDebugAndroidTest
     
@@ -450,6 +456,9 @@ jobs:
       if: matrix.markers == 'e2e'
       run: |
         chmod +x ./gradlew
+        ./gradlew clean
+        rm -rf ~/.gradle/caches/ || true
+        rm -rf .gradle/ || true
         ./gradlew assembleDevDebug
     
     # Start Web dashboard for network tests
