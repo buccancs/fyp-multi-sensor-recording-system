@@ -27,8 +27,14 @@ import traceback
 import sys
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
+
+# Add the virtual_environment directory to the path for direct imports
+virtual_env_path = Path(__file__).parent
+sys.path.insert(0, str(virtual_env_path))
+
 from PythonApp.network.android_device_manager import AndroidDeviceManager, ShimmerDataSample, SessionInfo
 from PythonApp.network.pc_server import PCServer
+
 # Handle both relative and absolute imports for flexibility
 try:
     from .virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
@@ -39,6 +45,7 @@ except ImportError:
     from virtual_device_client import VirtualDeviceClient, VirtualDeviceConfig
     from synthetic_data_generator import SyntheticDataGenerator, estimate_data_volume
     from test_config import VirtualTestConfig, VirtualTestScenario
+
 @dataclass
 class VirtualTestMetrics:
     """Metrics collected during test execution"""
@@ -532,7 +539,10 @@ class VirtualTestRunner:
             if self.performance_monitor and self.performance_monitor.is_alive():
                 self.stop_event.set()
                 self.performance_monitor.join(timeout=5.0)
-            self.thread_pool.shutdown(wait=True)
+            try:
+                self.thread_pool.shutdown(wait=True)
+            except Exception as e:
+                self.logger.debug(f"ThreadPoolExecutor already shut down: {e}")
             self.logger.info("Cleanup completed")
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
