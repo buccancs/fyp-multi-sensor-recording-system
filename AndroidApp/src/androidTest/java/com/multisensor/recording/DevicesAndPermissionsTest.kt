@@ -333,12 +333,20 @@ class DevicesAndPermissionsTest {
             // Look for permission dialog buttons
             val allowButton = uiDevice.findObject(
                 UiSelector().text("Allow")
-                    .or(UiSelector().text("ALLOW"))
+            )
+            val allowButtonCaps = uiDevice.findObject(
+                UiSelector().text("ALLOW")
             )
             
-            if (allowButton.exists()) {
-                allowButton.click()
-                Log.i(testTag, "✅ Granted $permissionType permission")
+            when {
+                allowButton.exists() -> {
+                    allowButton.click()
+                    Log.i(testTag, "✅ Granted $permissionType permission")
+                }
+                allowButtonCaps.exists() -> {
+                    allowButtonCaps.click()
+                    Log.i(testTag, "✅ Granted $permissionType permission")
+                }
             }
         } catch (e: Exception) {
             Log.w(testTag, "⚠️ No permission dialog found for $permissionType", e)
