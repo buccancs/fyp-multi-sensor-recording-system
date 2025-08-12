@@ -31,7 +31,7 @@ on:
         type: boolean
 
 env:
-  PYTHON_VERSION: '3.11'
+  PYTHON_VERSION: '3.10'
   JAVA_VERSION: '17'
   NODE_VERSION: '18'
   
@@ -108,7 +108,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: ['3.10', '3.11']
+        python-version: ['3.10']
     
     steps:
     - name: Checkout code
@@ -172,19 +172,19 @@ jobs:
     strategy:
       matrix:
         include:
-          - api-level: 30
+          - api-level: 35
             target: google_apis
             arch: x86_64
             test-type: unit
-          - api-level: 30
+          - api-level: 35
             target: google_apis
             arch: x86_64
             test-type: instrumented
-          - api-level: 29
-            target: default
+          - api-level: 35
+            target: google_apis
             arch: x86_64
             test-type: ui
-          - api-level: 31
+          - api-level: 35
             target: google_apis
             arch: x86_64
             test-type: integration
@@ -408,13 +408,13 @@ jobs:
         path: |
           ~/.android/avd/*
           ~/.android/adb*
-        key: avd-e2e-30-google_apis-x86_64
+        key: avd-e2e-35-google_apis-x86_64
     
     - name: Create AVD for E2E tests
       if: matrix.markers == 'e2e' && steps.avd-cache-e2e.outputs.cache-hit != 'true'
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: 30
+        api-level: 35
         target: google_apis
         arch: x86_64
         force-avd-creation: false
