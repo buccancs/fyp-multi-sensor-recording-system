@@ -1,3 +1,8 @@
+/*
+ * DEPRECATED: This fragment is no longer used.
+ * The app has migrated to Compose UI with RecordingScreen.kt
+ * This file and fragment_recording.xml can be removed in future cleanup.
+ */
 package com.multisensor.recording.ui.fragments
 
 import android.graphics.SurfaceTexture

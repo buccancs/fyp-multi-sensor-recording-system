@@ -121,8 +121,12 @@ class DeviceConnectionManager @Inject constructor(
             if (textureView != null) {
                 val success = cameraRecorder.initialize(textureView)
                 if (success) {
+                    // Give the camera a moment to fully initialize before starting preview
+                    kotlinx.coroutines.delay(500)
+                    
                     // Start a preview-only session to show camera feed
                     try {
+                        logger.info("Starting camera preview session...")
                         val previewSession = cameraRecorder.startSession(recordVideo = false, captureRaw = false)
                         if (previewSession != null) {
                             logger.info("Camera preview started successfully")
@@ -131,13 +135,14 @@ class DeviceConnectionManager @Inject constructor(
                         }
                     } catch (e: Exception) {
                         logger.warning("Failed to start camera preview: ${e.message}")
-                        // Don't fail initialization if preview fails
+                        // Don't fail initialization if preview fails - the camera is still initialized
                     }
                     
                     _connectionState.value = _connectionState.value.copy(cameraConnected = true)
                     logger.info("Camera initialized successfully")
                     Result.success(Unit)
                 } else {
+                    logger.error("Camera initialization returned false")
                     Result.failure(RuntimeException("Camera initialization failed"))
                 }
             } else {
