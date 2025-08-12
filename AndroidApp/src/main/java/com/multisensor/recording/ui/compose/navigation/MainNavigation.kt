@@ -52,15 +52,14 @@ fun MainNavigation(
             EnhancedBottomNavigation(navController = navController)
         },
         floatingActionButton = {
-            // No duplicate FABs - RecordingScreen has its own AnimatedRecordingButton
-            // Files screen can have its own refresh button if needed
+            // Only show FAB for screens that need one
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
 
             when (currentRoute) {
                 Screen.Files.route -> {
                     FloatingActionButton(
-                        onClick = {  }
+                        onClick = { /* Refresh files functionality could be added here */ }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -68,7 +67,8 @@ fun MainNavigation(
                         )
                     }
                 }
-                // Recording screen has its own AnimatedRecordingButton, no duplicate needed
+                // Recording screen has its own AnimatedRecordingButton
+                // No FAB needed for other screens
             }
         }
     ) { paddingValues ->
