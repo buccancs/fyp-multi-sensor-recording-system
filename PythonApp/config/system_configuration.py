@@ -148,7 +148,7 @@ class SecurityConfiguration:
     token_expiry_hours: int = 24
     require_device_authentication: bool = True
     enable_data_encryption: bool = True
-    enable_face_blurring: bool = True  # Privacy requirement
+    enable_face_blurring: bool = False  # Disabled - no faces in video, only hands
     log_security_events: bool = True
 
 
