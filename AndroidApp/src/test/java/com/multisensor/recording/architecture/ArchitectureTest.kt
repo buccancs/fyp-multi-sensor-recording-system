@@ -42,7 +42,7 @@ class ArchitectureTest {
 
         val streamingInterface: PreviewStreamingInterface = NetworkPreviewStreamer(mockConnectionManager, mockLogger)
 
-        val config = StreamingConfig(fps = 5, jpegQuality = 80)
+        val config = StreamingConfig(targetFps = 5, jpegQuality = 80)
         streamingInterface.configure(config)
         streamingInterface.startStreaming(config)
 
