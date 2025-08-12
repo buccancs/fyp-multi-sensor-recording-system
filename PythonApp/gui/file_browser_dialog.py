@@ -61,6 +61,9 @@ Size: {self.format_file_size(file_size)}
 Type: {file_suffix.upper() if file_suffix else 'Unknown'}
 Modified: {file_info.lastModified().toString(Qt.DefaultLocaleLongDate)}
 Path: {file_path}
+"""
+        self.info_text.setText(info_text)
+        
         try:
             pixmap = QPixmap(file_path)
             if not pixmap.isNull():
@@ -94,29 +97,38 @@ Path: {file_path}
         self.preview_label.setPixmap(QPixmap())
         self.preview_label.setText(
             f"""
-🎥 Video File
+[Video] Video File
 {os.path.basename(file_path)}
 Click 'Open' to play with external application
 or use the playback page for detailed analysis.
 """
         )
+
+    def preview_unsupported(self, file_path: str, file_type: str):
+        self.preview_label.setPixmap(QPixmap())
         self.preview_label.setText(
             f"""
-📄 {file_type.upper()} File
+[File] {file_type.upper()} File
 {os.path.basename(file_path)}
 Preview not available for this file type.
 Click 'Open' to open with external application.
+"""
+        )
+
+    def show_error(self, message: str):
         self.preview_label.setPixmap(QPixmap())
-        self.preview_label.setText(f"❌ {message}")
+        self.preview_label.setText(f"[Error] {message}")
         self.preview_label.setAlignment(Qt.AlignCenter)
         self.preview_label.setFont(QFont("Arial", 10))
-        self.preview_label.setStyleSheet("QLabel { colour: #d32f2f; }")
+        self.preview_label.setStyleSheet("QLabel { color: #d32f2f; }")
+
     def clear_preview(self):
         self.preview_label.setPixmap(QPixmap())
         self.preview_label.setText("Select a file to preview")
         self.preview_label.setAlignment(Qt.AlignCenter)
         self.preview_label.setFont(QFont("Arial", 10))
         self.preview_label.setStyleSheet(
+            "QLabel { color: #666; font-style: italic; }"
         )
         self.info_text.clear()
         self.current_file_path = None

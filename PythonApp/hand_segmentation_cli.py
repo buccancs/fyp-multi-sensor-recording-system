@@ -27,7 +27,6 @@ def _create_argument_parser():
     return parser
 def _get_help_examples():
     return """
-"""
 Examples:
   python hand_segmentation_cli.py list-sessions
   python hand_segmentation_cli.py process-session session_20250131_143022
@@ -40,6 +39,14 @@ Examples:
     --max-hands 2 \\
     --output-cropped \\
     --output-masks
+"""
+
+def _setup_argument_parser():
+    parser = argparse.ArgumentParser(
+        description="CLI for hand segmentation processing",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=_get_help_examples()
+    )
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     subparsers.add_parser("list-sessions", help="List available sessions that contain videos")
     session_parser = subparsers.add_parser("process-session", help="Process all videos in a session")
@@ -53,6 +60,7 @@ Examples:
     status_parser.add_argument("session_id", help="Session ID to check")
     cleanup_parser = subparsers.add_parser("cleanup", help="Clean up segmentation outputs for a session")
     cleanup_parser.add_argument("session_id", help="Session ID to clean up")
+    return parser
 def _execute_command(processor, args):
     try:
         command_map = {
