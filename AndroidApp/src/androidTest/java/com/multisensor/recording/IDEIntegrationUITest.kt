@@ -27,6 +27,7 @@ class IDEIntegrationUITest {
     private lateinit var activityScenario: ActivityScenario<MainActivity>
     private lateinit var resultCollector: TestResultCollector
     private val testTag = "IDEIntegrationUITest"
+    private val testResults = mutableMapOf<String, Boolean>()
 
     @Before
     fun setUp() {
@@ -295,7 +296,7 @@ class IDEIntegrationUITest {
                 .perform(DrawerActions.open())
 
             onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_shimmer_config))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_shimmer_settings))
 
             Thread.sleep(2000)
 

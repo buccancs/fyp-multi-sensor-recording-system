@@ -8,6 +8,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
 import androidx.test.platform.app.InstrumentationRegistry
 import com.multisensor.recording.testhelpers.TestHelpers
 import com.multisensor.recording.testhelpers.TestResultCollector
@@ -331,8 +332,8 @@ class DevicesAndPermissionsTest {
         try {
             // Look for permission dialog buttons
             val allowButton = uiDevice.findObject(
-                androidx.test.uiautomator.UiSelector().text("Allow")
-                    .or(androidx.test.uiautomator.UiSelector().text("ALLOW"))
+                UiSelector().text("Allow")
+                    .or(UiSelector().text("ALLOW"))
             )
             
             if (allowButton.exists()) {
