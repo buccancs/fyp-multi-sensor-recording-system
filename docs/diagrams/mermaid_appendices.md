@@ -9,7 +9,7 @@ graph TD
     subgraph "Data Capture Layer"
         GSR[GSR Sensors<br/>128Hz Sampling<br/>Shimmer3 Bluetooth]
         RGB[RGB Camera<br/>1920x1080@30fps<br/>H.264 Encoding]
-        THERMAL[Thermal Camera<br/>320x240@15fps<br/>FLIR Lepton]
+        THERMAL[Thermal Camera<br/>256x192@25fps<br/>Topdon TC001]
         IMU[IMU Sensors<br/>Accelerometer<br/>Gyroscope]
         AUDIO[Audio Recording<br/>44.1kHz PCM<br/>Microphone]
     end
