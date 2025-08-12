@@ -8,28 +8,42 @@ A comprehensive research platform for contactless Galvanic Skin Response (GSR) p
 
 ## 🚀 Quick Start (30 seconds)
 
-**Test the entire system without any hardware:**
+**Test the entire system with unified testing framework:**
 
 ```bash
 git clone https://github.com/buccancs/bucika_gsr.git
 cd bucika_gsr
-./run_local_test.sh
+./run_local_tests.sh
 ```
 
-**Comprehensive testing with multiple scenarios:**
+**Advanced testing options:**
 
 ```bash
-cd tests/integration/virtual_environment
-./setup_dev_environment.sh
-./run_virtual_test.sh --scenario quick --devices 2 --duration 1.0
+# Quick validation (< 2 minutes)
+./run_local_tests.sh quick
+
+# Complete test suite with requirements validation
+./run_local_tests.sh full
+
+# Requirements traceability (thesis compliance)
+./run_local_tests.sh requirements
+
+# Performance benchmarks
+./run_local_tests.sh performance
 ```
 
-**Run specific test scenarios:**
+**Direct unified framework usage:**
 
 ```bash
-./run_virtual_test.sh --scenario ci --devices 3
-./run_virtual_test.sh --scenario stress --devices 5 --duration 5.0
-pytest tests/integration/virtual_environment/test_pytest_integration.py -v
+# All tests with automated requirements validation
+python tests_unified/runners/run_unified_tests.py
+
+# Specific test levels
+python tests_unified/runners/run_unified_tests.py --level unit
+python tests_unified/runners/run_unified_tests.py --level integration
+
+# Validate 100% FR/NFR coverage
+python tests_unified/runners/run_unified_tests.py --validate-requirements
 ```
 
 ## 📱 System Overview
@@ -184,47 +198,95 @@ python test_performance_benchmarks.py --profile
 - **✅ Performance Testing**: Memory leak detection and resource monitoring
 - **✅ Real PC Integration**: End-to-end validation with actual PC application
 
-## 🔧 Comprehensive Test Environment
+## 🔧 Unified Testing Framework
 
-### Test Execution Options
+### Research-Grade Testing Infrastructure
 
-**Quick Tests (1-2 minutes):**
+**Unified Test Execution (Recommended):**
 ```bash
-./run_local_test.sh
-python tests/integration/virtual_environment/quick_test.py
-./tests/integration/virtual_environment/run_virtual_test.sh --scenario quick --devices 2
+# Complete test suite with requirements validation
+python tests_unified/runners/run_unified_tests.py
+
+# Quick validation (< 2 minutes)
+python tests_unified/runners/run_unified_tests.py --quick
+
+# Test specific levels
+python tests_unified/runners/run_unified_tests.py --level unit
+python tests_unified/runners/run_unified_tests.py --level integration
+python tests_unified/runners/run_unified_tests.py --level system
+python tests_unified/runners/run_unified_tests.py --level performance
 ```
 
-**CI/Development Tests (3-5 minutes):**
+**Academic Compliance Testing:**
 ```bash
-pytest tests/integration/virtual_environment/test_pytest_integration.py -v
-./tests/integration/virtual_environment/run_virtual_test.sh --scenario ci --devices 3
-pytest tests/integration/virtual_environment/ -m "quick" -v
+# Validate all Functional & Non-Functional Requirements (FR/NFR)
+python tests_unified/runners/run_unified_tests.py --validate-requirements
+
+# Generate requirements traceability report
+python tests_unified/runners/run_unified_tests.py --report-requirements-coverage
+
+# Research mode with comprehensive analysis
+python tests_unified/runners/run_unified_tests.py --mode research --all-levels
 ```
 
-**Extended Performance Tests:**
+**Easy Local Testing:**
 ```bash
-./tests/integration/virtual_environment/run_virtual_test.sh --scenario stress --devices 6 --duration 30
-python tests/integration/virtual_environment/test_performance_benchmarks.py --profile
+# One-command testing with automatic dependency installation
+./run_local_tests.sh --install-deps
+
+# Performance benchmarks
+./run_local_tests.sh performance
+
+# Full test suite
+./run_local_tests.sh full
 ```
+
+**Technology-Specific Testing:**
+```bash
+# Android application testing
+python tests_unified/runners/run_unified_tests.py --category android
+
+# Hardware integration testing
+python tests_unified/runners/run_unified_tests.py --category hardware
+
+# Visual validation testing
+python tests_unified/runners/run_unified_tests.py --category visual
+```
+
+### Framework Architecture
+
+**4-Layer Testing Hierarchy:**
+- **Unit** (`tests_unified/unit/`): Component-level validation
+- **Integration** (`tests_unified/integration/`): Cross-component testing  
+- **System** (`tests_unified/system/`): End-to-end workflow validation
+- **Performance** (`tests_unified/performance/`): Benchmarks and quality metrics
+
+**Requirements Coverage:** 15/15 FR/NFR requirements (100%) with automated validation
+**Academic Compliance:** Full traceability aligned with thesis documentation
+**CI/CD Integration:** All GitHub workflows updated for unified testing
+
+📖 **Detailed Documentation:** [`tests_unified/README.md`](tests_unified/README.md)
 
 ### Environment Setup
 
-**Automated Setup (Recommended):**
+**Unified Framework Setup (Recommended):**
 ```bash
-cd tests/integration/virtual_environment
+# Install dependencies and run tests
+./run_local_tests.sh --install-deps
 
+# Or manually
+pip install -r test-requirements.txt
+pip install -e .
+```
+
+**Legacy Environment Setup:**
+```bash
 # Linux/macOS
+cd tests/integration/virtual_environment
 ./setup_dev_environment.sh
 
 # Windows
 powershell -ExecutionPolicy Bypass -File setup_dev_environment.ps1
-```
-
-**Manual Setup:**
-```bash
-pip install pytest pytest-asyncio psutil numpy opencv-python-headless
-pip install -r test-requirements.txt
 ```
 
 **Docker Setup:**
