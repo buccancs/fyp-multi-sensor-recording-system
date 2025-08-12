@@ -142,7 +142,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
             # Verify Android shows connection attempt
             self._verify_android_connection_indicator(android_driver)
         
-        print("✓ PC to Android connection coordination tested")
+        print("[PASS] PC to Android connection coordination tested")
     
     def _test_android_connection_response(self, android_driver, pc_window):
         """Test Android responding to PC connection."""
@@ -156,7 +156,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
             connection_elements = android_driver.find_elements(AppiumBy.XPATH, "//*[contains(@text, 'PC') or contains(@text, 'Desktop')]")
             
             if connection_elements:
-                print("✓ Android shows PC connection status")
+                print("[PASS] Android shows PC connection status")
             else:
                 print("Warning: Android PC connection status not visible")
                 
@@ -177,7 +177,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
                 if start_button.is_enabled():
                     start_button.click()
                     time.sleep(2)
-                    print("✓ Android recording started")
+                    print("[PASS] Android recording started")
             except Exception:
                 print("Warning: Could not start Android recording")
                 
@@ -195,7 +195,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
                 panel = pc_window.device_status_panel
                 assert panel.isVisible(), "Device panel should show data updates"
                 
-            print("✓ PC data reception verified")
+            print("[PASS] PC data reception verified")
     
     def _simulate_pc_control_commands(self, pc_window, android_driver):
         """Simulate control commands from PC to Android."""
@@ -217,7 +217,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
             
             # Verify Android receives command (mock verification)
             time.sleep(1)
-            print(f"✓ {description} coordination simulated")
+            print(f"[PASS] {description} coordination simulated")
     
     def _execute_pc_session_operation(self, pc_window, operation):
         """Execute session operation on PC."""
@@ -233,7 +233,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
             method = getattr(pc_window, method_name)
             if callable(method):
                 method()
-                print(f"✓ PC {operation} executed")
+                print(f"[PASS] PC {operation} executed")
         else:
             # Fallback: look for corresponding button
             from PyQt5.QtWidgets import QPushButton
@@ -243,7 +243,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
                     from PyQt5.QtCore import Qt
                     from PyQt5.QtTest import QTest
                     QTest.mouseClick(button, Qt.LeftButton)
-                    print(f"✓ PC {operation} button clicked")
+                    print(f"[PASS] PC {operation} button clicked")
                     break
     
     def _verify_android_session_response(self, android_driver, operation):
@@ -265,7 +265,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
                 element_text = self.get_element_text_safe(element).lower()
                 for indicator in expected_indicators:
                     if indicator in element_text:
-                        print(f"✓ Android shows {operation} response: {element_text}")
+                        print(f"[PASS] Android shows {operation} response: {element_text}")
                         return True
             
             print(f"Warning: Android {operation} response not clearly visible")
@@ -290,7 +290,7 @@ class TestCrossPlatformUICoordination(GUITestBase, AndroidTestBase):
                     indicator = android_driver.find_element(AppiumBy.ID, indicator_id)
                     if indicator.is_displayed():
                         status_text = self.get_element_text_safe(indicator)
-                        print(f"✓ Android connection indicator: {status_text}")
+                        print(f"[PASS] Android connection indicator: {status_text}")
                         return True
                 except Exception:
                     continue
@@ -333,7 +333,7 @@ class TestCrossPlatformConsistency(GUITestBase, AndroidTestBase):
             
             # Both platforms should have common functionality
             if pc_has_element or android_has_element:
-                print(f"✓ {description} available on at least one platform")
+                print(f"[PASS] {description} available on at least one platform")
         
         pc_window.close()
     
@@ -361,8 +361,8 @@ class TestCrossPlatformConsistency(GUITestBase, AndroidTestBase):
             pc_workflow_success = self._test_pc_workflow(pc_window, workflow_name, steps)
             android_workflow_success = self._test_android_workflow(android_driver, workflow_name, steps)
             
-            print(f"  PC: {'✓' if pc_workflow_success else '✗'}")
-            print(f"  Android: {'✓' if android_workflow_success else '✗'}")
+            print(f"  PC: {'[PASS]' if pc_workflow_success else '[FAIL]'}")
+            print(f"  Android: {'[PASS]' if android_workflow_success else '[FAIL]'}")
         
         pc_window.close()
     

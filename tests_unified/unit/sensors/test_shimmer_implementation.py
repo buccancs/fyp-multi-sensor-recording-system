@@ -17,34 +17,34 @@ def test_shimmer_libraries_availability():
     try:
         import pyshimmer
         available_libraries.append("pyshimmer")
-        print("✓ pyshimmer library available")
+        print("[PASS] pyshimmer library available")
     except ImportError:
-        print("⚠ pyshimmer library not available (optional)")
+        print("[WARN] pyshimmer library not available (optional)")
     try:
         import bluetooth
         available_libraries.append("bluetooth")
-        print("✓ bluetooth library available")
+        print("[PASS] bluetooth library available")
     except ImportError:
-        print("⚠ bluetooth library not available (optional)")
+        print("[WARN] bluetooth library not available (optional)")
     try:
         import pybluez
         available_libraries.append("pybluez")
-        print("✓ pybluez library available")
+        print("[PASS] pybluez library available")
     except ImportError:
-        print("⚠ pybluez library not available (optional)")
+        print("[WARN] pybluez library not available (optional)")
     try:
         import serial
         available_libraries.append("serial")
-        print("✓ serial library available")
+        print("[PASS] serial library available")
     except ImportError:
-        print("⚠ serial library not available")
+        print("[WARN] serial library not available")
     if available_libraries:
         print(
-            f"✓ Found {len(available_libraries)} Shimmer-compatible libraries: {', '.join(available_libraries)}"
+            f"[PASS] Found {len(available_libraries)} Shimmer-compatible libraries: {', '.join(available_libraries)}"
         )
         return True
     else:
-        print("✗ No Shimmer libraries available")
+        print("[FAIL] No Shimmer libraries available")
         return False
 @pytest.mark.unit
 def test_device_discovery_simulation():
@@ -72,11 +72,11 @@ def test_device_discovery_simulation():
             return shimmer_devices
         discovered_devices = simulate_bluetooth_scan()
         if discovered_devices:
-            print(f"✓ Discovered {len(discovered_devices)} Shimmer devices:")
+            print(f"[PASS] Discovered {len(discovered_devices)} Shimmer devices:")
             for device in discovered_devices:
                 print(f"  - {device['name']} ({device['address']})")
         else:
-            print("✓ Device discovery simulation works (no devices found)")
+            print("[PASS] Device discovery simulation works (no devices found)")
         def filter_shimmer_devices(devices):
             return [d for d in devices if "shimmer" in d["name"].lower()]
         filtered = filter_shimmer_devices(
@@ -87,10 +87,10 @@ def test_device_discovery_simulation():
             ]
         )
         assert len(filtered) == 2
-        print("✓ Device filtering works correctly")
+        print("[PASS] Device filtering works correctly")
         return True
     except Exception as e:
-        print(f"✗ Device discovery test failed: {e}")
+        print(f"[FAIL] Device discovery test failed: {e}")
         traceback.print_exc()
         return False
 @pytest.mark.unit
@@ -164,35 +164,35 @@ def test_data_streaming_simulation():
         device = MockShimmerDevice("Test-Shimmer")
         assert device.connect() == True
         assert device.is_connected == True
-        print("✓ Device connection simulation works")
+        print("[PASS] Device connection simulation works")
         assert device.configure_sensors(["GSR", "PPG"]) == True
-        print("✓ Sensor configuration works")
+        print("[PASS] Sensor configuration works")
         assert device.set_sampling_rate(256) == True
         assert device.sampling_rate == 256
-        print("✓ Sampling rate configuration works")
+        print("[PASS] Sampling rate configuration works")
         received_samples = []
         def data_callback(sample):
             received_samples.append(sample)
         assert device.start_streaming(data_callback) == True
         assert device.is_streaming == True
-        print("✓ Data streaming started")
+        print("[PASS] Data streaming started")
         time.sleep(0.5)
         assert device.stop_streaming() == True
         assert device.is_streaming == False
-        print("✓ Data streaming stopped")
+        print("[PASS] Data streaming stopped")
         assert len(received_samples) > 0
-        print(f"✓ Received {len(received_samples)} data samples")
+        print(f"[PASS] Received {len(received_samples)} data samples")
         sample = received_samples[0]
         required_fields = ["timestamp", "sample_number", "GSR", "PPG"]
         for field in required_fields:
             assert field in sample
-        print("✓ Sample data structure is correct")
+        print("[PASS] Sample data structure is correct")
         assert device.disconnect() == True
         assert device.is_connected == False
-        print("✓ Device disconnection works")
+        print("[PASS] Device disconnection works")
         return True
     except Exception as e:
-        print(f"✗ Data streaming test failed: {e}")
+        print(f"[FAIL] Data streaming test failed: {e}")
         traceback.print_exc()
         return False
 @pytest.mark.unit
@@ -263,7 +263,7 @@ def test_session_management():
         manager = SessionManager()
         session_name = manager.start_session("test_session")
         assert session_name == "test_session"
-        print("✓ Session creation works")
+        print("[PASS] Session creation works")
         for i in range(100):
             sample = {
                 "timestamp": time.time() + i * 0.01,
@@ -272,32 +272,32 @@ def test_session_management():
                 "PPG": 2048 + i * 2,
             }
             manager.add_sample(sample)
-        print("✓ Sample data addition works")
+        print("[PASS] Sample data addition works")
         manager.stop_session()
-        print("✓ Session stopping works")
+        print("[PASS] Session stopping works")
         info = manager.get_session_info("test_session")
         assert info is not None
         assert info["sample_count"] == 100
         assert "duration" in info
         print(
-            f"✓ Session info: {info['sample_count']} samples, {info['duration']:.3f}s duration"
+            f"[PASS] Session info: {info['sample_count']} samples, {info['duration']:.3f}s duration"
         )
         with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             csv_file = f.name
         success = manager.export_session_csv("test_session", csv_file)
         assert success == True
-        print("✓ CSV export works")
+        print("[PASS] CSV export works")
         with open(csv_file, "r") as f:
             reader = csv.DictReader(f)
             rows = list(reader)
             assert len(rows) == 100
             assert "GSR" in rows[0]
             assert "PPG" in rows[0]
-        print("✓ CSV content verification passed")
+        print("[PASS] CSV content verification passed")
         os.unlink(csv_file)
         return True
     except Exception as e:
-        print(f"✗ Session management test failed: {e}")
+        print(f"[FAIL] Session management test failed: {e}")
         traceback.print_exc()
         return False
 @pytest.mark.unit
@@ -358,7 +358,7 @@ def test_error_handling():
                 return error_messages.get(error_type, f"Unknown error: {error}")
         manager = RobustShimmerManager()
         result = manager.connect_with_fallback("00:06:66:12:34:56")
-        print(f"✓ Connection result: {result}")
+        print(f"[PASS] Connection result: {result}")
         error_cases = [
             ConnectionError("Device not found"),
             TimeoutError("Connection timeout"),
@@ -368,14 +368,14 @@ def test_error_handling():
         for error in error_cases:
             message = manager.handle_connection_error(error)
             assert len(message) > 0
-            print(f"✓ Error handled: {type(error).__name__} -> {message}")
+            print(f"[PASS] Error handled: {type(error).__name__} -> {message}")
         if not manager.available_libraries:
-            print("✓ Graceful degradation when no libraries available")
+            print("[PASS] Graceful degradation when no libraries available")
         else:
-            print(f"✓ Using available libraries: {manager.available_libraries}")
+            print(f"[PASS] Using available libraries: {manager.available_libraries}")
         return True
     except Exception as e:
-        print(f"✗ Error handling test failed: {e}")
+        print(f"[FAIL] Error handling test failed: {e}")
         traceback.print_exc()
         return False
 @pytest.mark.unit
@@ -447,15 +447,15 @@ def test_multi_library_compatibility():
             result = interface.connect("test_device", library)
             assert result["connected"] == True
             assert result["library"] == library
-            print(f"✓ Connection with {library} adapter works")
+            print(f"[PASS] Connection with {library} adapter works")
         compatibility_results = interface.test_library_compatibility()
         for library, status in compatibility_results.items():
-            print(f"✓ {library} compatibility: {status}")
+            print(f"[PASS] {library} compatibility: {status}")
             assert status == "Compatible"
-        print("✓ All library adapters provide consistent interface")
+        print("[PASS] All library adapters provide consistent interface")
         return True
     except Exception as e:
-        print(f"✗ Multi-library compatibility test failed: {e}")
+        print(f"[FAIL] Multi-library compatibility test failed: {e}")
         traceback.print_exc()
         return False
 def main():
@@ -477,20 +477,20 @@ def main():
             print(f"\n{'-' * 40}")
             if test():
                 passed += 1
-                print(f"✓ {test.__name__} PASSED")
+                print(f"[PASS] {test.__name__} PASSED")
             else:
-                print(f"✗ {test.__name__} FAILED")
+                print(f"[FAIL] {test.__name__} FAILED")
         except Exception as e:
-            print(f"✗ {test.__name__} FAILED with exception: {e}")
+            print(f"[FAIL] {test.__name__} FAILED with exception: {e}")
             traceback.print_exc()
     print("\n" + "=" * 60)
     print(f"Shimmer Test Results: {passed}/{total} tests passed")
     print("=" * 60)
     if passed == total:
-        print("✓ All Shimmer implementation tests passed!")
+        print("[PASS] All Shimmer implementation tests passed!")
         return True
     else:
-        print("✗ Some Shimmer tests failed. Check the output above for details.")
+        print("[FAIL] Some Shimmer tests failed. Check the output above for details.")
         return False
 if __name__ == "__main__":
     success = main()

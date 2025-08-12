@@ -5,10 +5,12 @@ import tempfile
 import threading
 import time
 import traceback
+import pytest
 from pathlib import Path
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+@pytest.mark.system
 def test_python_environment():
     print("Testing Python environment...")
     dependencies = {
@@ -34,14 +36,16 @@ def test_python_environment():
             else:
                 __import__(module)
             available.append(name)
-            print(f"✓ {name}")
+            print(f"[PASS] {name}")
         except (ImportError, AttributeError) as e:
             missing.append(name)
-            print(f"✗ {name}")
+            print(f"[FAIL] {name}")
     print(f"\nDependencies: {len(available)}/{len(dependencies)} available")
     if missing:
         print(f"Missing: {', '.join(missing)}")
     return len(missing) == 0
+@pytest.mark.system
+@pytest.mark.slow  # Requires PyQt5 dependency
 def test_gui_components():
     print("\nTesting GUI components...")
     try:
@@ -61,32 +65,34 @@ def test_gui_components():
         main_window.setCentralWidget(central_widget)
         button = QPushButton("Test Button")
         label = QLabel("Test Label")
-        print("✓ Basic widgets created successfully")
+        print("[PASS] Basic widgets created successfully")
         try:
             from PythonApp.gui.enhanced_ui_main_window import EnhancedMainWindow
             enhanced_window = EnhancedMainWindow()
-            print("✓ Enhanced main window created successfully")
+            print("[PASS] Enhanced main window created successfully")
             enhanced_window.close()
         except Exception as e:
-            print(f"⚠ Enhanced main window creation failed: {e}")
+            print(f"[WARN] Enhanced main window creation failed: {e}")
         app.quit()
         return True
     except Exception as e:
-        print(f"✗ GUI components test failed: {e}")
+        print(f"[FAIL] GUI components test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.system
+@pytest.mark.slow  # Requires opencv-python dependency  
 def test_opencv_functionality():
     print("\nTesting OpenCV functionality...")
     try:
         import cv2
         import numpy as np
-        print(f"✓ OpenCV version: {cv2.__version__}")
+        print(f"[PASS] OpenCV version: {cv2.__version__}")
         test_img = np.zeros((480, 640, 3), dtype=np.uint8)
         test_img[100:380, 100:540] = [0, 255, 0]
         grey = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
-        print("✓ Colour conversion works")
+        print("[PASS] Colour conversion works")
         edges = cv2.Canny(grey, 50, 150)
-        print("✓ Edge detection works")
+        print("[PASS] Edge detection works")
         pattern_size = (9, 6)
         square_size = 1.0
         pattern_points = np.zeros((pattern_size[0] * pattern_size[1], 3), np.float32)
@@ -94,17 +100,18 @@ def test_opencv_functionality():
             0 : pattern_size[0], 0 : pattern_size[1]
         ].T.reshape(-1, 2)
         pattern_points *= square_size
-        print("✓ Calibration pattern generation works")
+        print("[PASS] Calibration pattern generation works")
         camera_matrix = np.array(
             [[500, 0, 320], [0, 500, 240], [0, 0, 1]], dtype=np.float32
         )
         dist_coeffs = np.zeros((4, 1))
-        print("✓ Camera matrix operations work")
+        print("[PASS] Camera matrix operations work")
         return True
     except Exception as e:
-        print(f"✗ OpenCV functionality test failed: {e}")
+        print(f"[FAIL] OpenCV functionality test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.system
 def test_network_capabilities():
     print("\nTesting network capabilities...")
     try:
@@ -114,7 +121,7 @@ def test_network_capabilities():
         import time
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        print("✓ Socket creation works")
+        print("[PASS] Socket creation works")
         test_message = {
             "type": "command",
             "command": "start_recording",
@@ -129,7 +136,7 @@ def test_network_capabilities():
         json_str = json.dumps(test_message)
         parsed_message = json.loads(json_str)
         assert parsed_message == test_message
-        print("✓ JSON message serialization works")
+        print("[PASS] JSON message serialization works")
         def test_server():
             try:
                 server_socket.bind(("localhost", 0))
@@ -153,17 +160,19 @@ def test_network_capabilities():
                 assert response["echo"] == test_message
                 client_socket.close()
                 client_thread.join(timeout=1)
-                print("✓ Socket communication works")
+                print("[PASS] Socket communication works")
             except Exception as e:
-                print(f"⚠ Socket communication test partial failure: {e}")
+                print(f"[WARN] Socket communication test partial failure: {e}")
             finally:
                 server_socket.close()
         test_server()
         return True
     except Exception as e:
-        print(f"✗ Network capabilities test failed: {e}")
+        print(f"[FAIL] Network capabilities test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.system
+@pytest.mark.slow  # Requires matplotlib and pandas dependencies
 def test_data_processing():
     print("\nTesting data processing...")
     try:
@@ -175,14 +184,14 @@ def test_data_processing():
         data = np.random.randn(1000, 3)
         mean_vals = np.mean(data, axis=0)
         std_vals = np.std(data, axis=0)
-        print(f"✓ NumPy processing: mean={mean_vals}, std={std_vals}")
+        print(f"[PASS] NumPy processing: mean={mean_vals}, std={std_vals}")
         df = pd.DataFrame(data, columns=["GSR", "PPG", "Accelerometer"])
         df["timestamp"] = pd.date_range("2024-01-01", periods=1000, freq="1ms")
         stats = df.describe()
-        print("✓ Pandas DataFrame operations work")
+        print("[PASS] Pandas DataFrame operations work")
         filtered_df = df[df["GSR"] > 0]
         rolling_mean = df["PPG"].rolling(window=10).mean()
-        print("✓ Data filtering and rolling statistics work")
+        print("[PASS] Data filtering and rolling statistics work")
         fig, ax = plt.subplots(figsize=(8, 6))
         ax.plot(df.index[:100], df["GSR"][:100], label="GSR")
         ax.plot(df.index[:100], df["PPG"][:100], label="PPG")
@@ -193,13 +202,13 @@ def test_data_processing():
             plot_file = f.name
         plt.close(fig)
         if os.path.exists(plot_file) and os.path.getsize(plot_file) > 0:
-            print("✓ Matplotlib plotting works")
+            print("[PASS] Matplotlib plotting works")
             os.unlink(plot_file)
         else:
-            print("⚠ Matplotlib plotting may have issues")
+            print("[WARN] Matplotlib plotting may have issues")
         return True
     except Exception as e:
-        print(f"✗ Data processing test failed: {e}")
+        print(f"[FAIL] Data processing test failed: {e}")
         traceback.print_exc()
         return False
 def _create_test_session_metadata():
@@ -225,7 +234,7 @@ def _test_json_operations(session_metadata):
     with open(json_file, "r") as f:
         loaded_metadata = json.load(f)
     assert loaded_metadata == session_metadata
-    print("✓ JSON session metadata export/import works")
+    print("[PASS] JSON session metadata export/import works")
     os.unlink(json_file)
 def _test_csv_operations():
     import csv
@@ -246,7 +255,7 @@ def _test_csv_operations():
         rows = list(reader)
     assert len(rows) == len(sensor_data)
     assert float(rows[0]["GSR"]) == 1000
-    print("✓ CSV sensor data export/import works")
+    print("[PASS] CSV sensor data export/import works")
     os.unlink(csv_file)
 def _test_directory_structure(session_metadata):
     import tempfile
@@ -259,7 +268,8 @@ def _test_directory_structure(session_metadata):
             (session_dir / subdir).mkdir(exist_ok=True)
         for subdir in subdirs:
             assert (session_dir / subdir).exists()
-        print("✓ Session directory structure creation works")
+        print("[PASS] Session directory structure creation works")
+@pytest.mark.system
 def test_file_operations():
     print("\nTesting file operations...")
     try:
@@ -269,9 +279,10 @@ def test_file_operations():
         _test_directory_structure(session_metadata)
         return True
     except Exception as e:
-        print(f"✗ File operations test failed: {e}")
+        print(f"[FAIL] File operations test failed: {e}")
         traceback.print_exc()
         return False
+@pytest.mark.system
 def test_system_integration():
     print("\nTesting system integration...")
     try:
@@ -315,30 +326,30 @@ def test_system_integration():
         ]
         for device in devices:
             assert device.connect() == True
-        print("✓ All devices connected successfully")
+        print("[PASS] All devices connected successfully")
         for device in devices:
             assert device.start_recording() == True
         statuses = [device.get_status() for device in devices]
         assert all(status["recording"] for status in statuses)
-        print("✓ Synchronised recording start works")
+        print("[PASS] Synchronised recording start works")
         for status in statuses:
             assert status["connected"] == True
             assert status["recording"] == True
             assert status["status"] == "recording"
-        print("✓ Status monitoring works")
+        print("[PASS] Status monitoring works")
         for device in devices:
             assert device.stop_recording() == True
         statuses = [device.get_status() for device in devices]
         assert all(not status["recording"] for status in statuses)
-        print("✓ Synchronised recording stop works")
+        print("[PASS] Synchronised recording stop works")
         for device in devices:
             assert device.disconnect() == True
         statuses = [device.get_status() for device in devices]
         assert all(not status["connected"] for status in statuses)
-        print("✓ Device disconnection works")
+        print("[PASS] Device disconnection works")
         return True
     except Exception as e:
-        print(f"✗ System integration test failed: {e}")
+        print(f"[FAIL] System integration test failed: {e}")
         traceback.print_exc()
         return False
 def generate_test_report():
@@ -365,25 +376,25 @@ def generate_test_report():
             results[test_name] = "PASS" if result else "FAIL"
             if result:
                 passed += 1
-                print(f"✓ {test_name}: PASSED")
+                print(f"[PASS] {test_name}: PASSED")
             else:
-                print(f"✗ {test_name}: FAILED")
+                print(f"[FAIL] {test_name}: FAILED")
         except Exception as e:
             results[test_name] = f"ERROR: {e}"
-            print(f"✗ {test_name}: ERROR - {e}")
+            print(f"[FAIL] {test_name}: ERROR - {e}")
     print("\n" + "=" * 60)
     print("TEST SUMMARY")
     print("=" * 60)
     for test_name, result in results.items():
-        status_char = "✓" if result == "PASS" else "✗"
+        status_char = "[PASS]" if result == "PASS" else "[FAIL]"
         print(f"{status_char} {test_name}: {result}")
     print(f"\nOverall Result: {passed}/{total} tests passed ({passed/total*100:.1f}%)")
     if passed == total:
         print(
-            "🎉 ALL TESTS PASSED! The Multi-Sensor Recording System is working correctly."
+            "[SUCCESS] ALL TESTS PASSED! The Multi-Sensor Recording System is working correctly."
         )
     else:
-        print("⚠️  Some tests failed. Review the details above.")
+        print("[WARNING] Some tests failed. Review the details above.")
     return passed == total
 def main():
     success = generate_test_report()

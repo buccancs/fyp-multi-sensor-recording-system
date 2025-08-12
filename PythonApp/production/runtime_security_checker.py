@@ -211,7 +211,7 @@ class RuntimeSecurityChecker:
         ]
         if any(debug_indicators):
             self._add_warning("Debug mode indicators found - ensure this is not production")
-            self.logger.warning("🔒 [SECURITY WARNING] Debug mode detected - verify this is not production")
+            self.logger.warning("[SECURE] [SECURITY WARNING] Debug mode detected - verify this is not production")
         return True
     def check_android_device_security(self) -> Dict[str, bool]:
         results = {
@@ -254,20 +254,20 @@ class RuntimeSecurityChecker:
         warnings.warn(message, SecurityWarning)
     def _report_security_status(self, critical_failures: List[str]):
         if not critical_failures and not self._security_issues:
-            self.logger.info("🔒 All security checks passed")
+            self.logger.info("[SECURE] All security checks passed")
             return
-        self.logger.warning("🔒 Security Status Report:")
+        self.logger.warning("[SECURE] Security Status Report:")
         if critical_failures:
-            self.logger.error(f"❌ Critical failures: {len(critical_failures)}")
+            self.logger.error(f"[FAIL] Critical failures: {len(critical_failures)}")
             for failure in critical_failures:
                 self.logger.error(f"   - {failure}")
         if self._security_issues:
-            self.logger.warning(f"⚠️  Security issues found: {len(self._security_issues)}")
+            self.logger.warning(f"[WARN]  Security issues found: {len(self._security_issues)}")
             for issue in self._security_issues:
                 self.logger.warning(f"   [{issue['severity'].upper()}] {issue['title']}")
                 self.logger.warning(f"      Recommendation: {issue['recommendation']}")
         if self._warnings:
-            self.logger.info(f"💡 Security warnings: {len(self._warnings)}")
+            self.logger.info(f"[IDEA] Security warnings: {len(self._warnings)}")
             for warning in self._warnings:
                 self.logger.info(f"   - {warning}")
     def get_security_report(self) -> Dict:
@@ -298,17 +298,17 @@ def check_production_readiness() -> Dict[str, bool]:
     }
 if __name__ == "__main__":
     try:
-        print("🔒 Running runtime security validation...")
+        print("[SECURE] Running runtime security validation...")
         validate_runtime_security()
-        print("✅ All security checks passed!")
-        print("\n🏭 Checking production readiness...")
+        print("[PASS] All security checks passed!")
+        print("\n[FACTORY] Checking production readiness...")
         readiness = check_production_readiness()
         for check, status in readiness.items():
-            status_icon = "✅" if status else "❌"
+            status_icon = "[PASS]" if status else "[FAIL]"
             print(f"{status_icon} {check}: {status}")
     except SecurityValidationError as e:
-        print(f"❌ Security validation failed: {e}")
+        print(f"[FAIL] Security validation failed: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"💥 Security check error: {e}")
+        print(f"[CRASH] Security check error: {e}")
         sys.exit(1)

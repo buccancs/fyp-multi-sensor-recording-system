@@ -550,7 +550,7 @@ class TestThermalImageProcessing:
                 assert len(hot_spot_temps) > 0
                 
                 logger.info(f"Detected {len(hot_spot_temps)} hot spot pixels")
-                logger.info(f"Max hot spot temp: {np.max(hot_spot_temps):.1f}°C")
+                logger.info(f"Max hot spot temp: {np.max(hot_spot_temps):.1f}degC")
                 
         thermal_camera.disconnect()
 

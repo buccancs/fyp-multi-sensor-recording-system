@@ -28,7 +28,7 @@ class StatusIndicator(QWidget):
         self.label = QLabel(label_text)
         self.label.setMinimumWidth(80)
         layout.addWidget(self.label)
-        self.indicator = QLabel("●")
+        self.indicator = QLabel("*")
         self.indicator.setFixedSize(16, 16)
         self.indicator.setAlignment(Qt.AlignCenter)
         font = QFont()

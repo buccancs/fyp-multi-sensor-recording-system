@@ -24,6 +24,9 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 import tempfile
 
+# Import visual utilities
+from .visual_utils import HAS_DISPLAY, MockAndroidTestManager
+
 # Image processing imports with fallback
 try:
     from PIL import Image, ImageDraw, ImageChops
@@ -51,8 +54,13 @@ try:
     APPIUM_AVAILABLE = True
 except ImportError:
     APPIUM_AVAILABLE = False
-    sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
-    from tests.hardware.android_mock_infrastructure import MockAndroidTestManager
+    # Try to import mock infrastructure from hardware tests
+    try:
+        sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'hardware'))
+        from test_android_infrastructure import MockAndroidTestManager
+    except ImportError:
+        # Use the one from visual_utils
+        pass
 
 
 @dataclass
@@ -305,13 +313,13 @@ class TestAndroidVisualRegression:
     
     @pytest.mark.visual
     @pytest.mark.android
+    @pytest.mark.skipif(not HAS_DISPLAY, reason="No display available for GUI testing")  
     def test_main_screen_visual_consistency(self, visual_framework):
         """Test main screen visual consistency (FR6)."""
         # Setup mock driver for consistent testing
         if not APPIUM_AVAILABLE:
-            from tests.hardware.android_mock_infrastructure import MockAndroidTestManager
             manager = MockAndroidTestManager()
-            driver = manager.get_driver()
+            driver = manager
         else:
             pytest.skip("Real device testing not available in CI")
         

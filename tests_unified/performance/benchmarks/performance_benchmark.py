@@ -675,7 +675,7 @@ async def main():
     if report['recommendations']:
         print(f"\nRecommendations:")
         for rec in report['recommendations']:
-            print(f"  • {rec}")
+            print(f"  * {rec}")
     print(f"\nDetailed report saved to: performance_benchmark_report.txt")
 if __name__ == "__main__":
     asyncio.run(main())

@@ -690,13 +690,13 @@ async def main():
         )
         print(f"\\nComponent results:")
         for result in package.components:
-            status = "✓" if result.success else "✗"
+            status = "[PASS]" if result.success else "[FAIL]"
             size_info = (
                 f" ({result.build_size_mb:.1f}MB)" if result.build_size_mb else ""
             )
             print(f"  {status} {result.component}{size_info}")
         if any(not r.success for r in package.components):
-            print(f"\\n⚠️  Some components failed to build. Check logs for details.")
+            print(f"\\n[WARN]  Some components failed to build. Check logs for details.")
         print(f"\\nDeployment instructions:")
         for i, instruction in enumerate(package.deployment_instructions, 1):
             print(f"  {i}. {instruction}")

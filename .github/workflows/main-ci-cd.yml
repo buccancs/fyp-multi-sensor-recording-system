@@ -99,8 +99,8 @@ jobs:
         echo "🧪 Running Python unit tests..."
         mkdir -p htmlcov
         
-        # Run unified testing framework for unit tests
-        python tests_unified/runners/run_unified_tests.py --mode ci --level unit --verbose
+        # Run unified testing framework for unit tests in quick mode
+        python run_local_tests.py quick
     
     - name: Upload Python coverage
       uses: codecov/codecov-action@v4

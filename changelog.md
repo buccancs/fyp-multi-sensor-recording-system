@@ -106,6 +106,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Python Import System Standardization (2025-08-12)**
+  - Fixed all incorrect import statements throughout the Python application
+  - **Enhanced Main Application (`enhanced_main_with_web.py`)**: 
+    - Removed sys.path.insert hack and converted all imports to absolute imports with PythonApp prefix
+    - Fixed shimmer_manager import from relative to absolute path
+  - **Web UI Controller (`web_ui/web_controller.py`)**:
+    - Converted all imports to proper relative imports using ".." prefix for parent modules
+    - Fixed session, shimmer_manager, network, webcam, and utils imports
+  - **Master Clock Synchronizer (`master_clock_synchronizer.py`)**:
+    - Fixed incorrect single-dot relative imports to proper sibling imports
+    - Corrected network.pc_server, utils.logging_config, and ntp_time_server imports
+  - **Main Entry Point (`main.py`)**:
+    - Removed sys.path.insert hack while preserving correct relative imports for module execution
+    - Maintained proper import structure for `python -m PythonApp.main` execution
+  - **Enhanced UI Main Window (`gui/enhanced_ui_main_window.py`)**:
+    - Fixed imports to use proper relative imports with ".." prefix for parent modules
+    - Corrected network.device_server, session.session_manager, and utils.logging_config imports
+  - **Internal Module Structure**: Preserved existing relative imports in shimmer_manager.py as they are correct for internal module usage
+  - All changes maintain ASCII-safe characters and follow project import conventions
+  - Application now starts successfully without import errors when run as `python -m PythonApp.main`
+
 - **Critical Formatting Issues**: Resolved major presentation standard violations
   - **Chapter 5 Placeholder Removal**: Removed 80 stray "$$1$$" through "$$80$$" tokens (lines 469-628)
   - **Heading Capitalisation**: Fixed "synchronisation" → "Synchronisation" in Chapter 4.4 heading
