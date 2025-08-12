@@ -1,4 +1,6 @@
 package com.multisensor.recording.ui.compose.screens
+import android.view.SurfaceView
+import android.view.TextureView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,8 +28,10 @@ import com.multisensor.recording.recording.DeviceStatus
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.components.AnimatedRecordingButton
+import com.multisensor.recording.ui.components.CameraPreview
 import com.multisensor.recording.ui.components.ColorPaletteSelector
 import com.multisensor.recording.ui.components.ThermalPreview
+import com.multisensor.recording.ui.components.ThermalPreviewSurface
 import com.multisensor.recording.ui.components.SessionStatusCard
 import com.multisensor.recording.ui.theme.ConnectionGreen
 import com.multisensor.recording.ui.theme.DisconnectedRed
@@ -41,6 +45,37 @@ fun RecordingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    
+    // Track preview components readiness
+    var cameraTextureView by remember { mutableStateOf<TextureView?>(null) }
+    var thermalSurfaceView by remember { mutableStateOf<SurfaceView?>(null) }
+    var initializationAttempted by remember { mutableStateOf(false) }
+    
+    // Camera switching state - true for thermal/IR, false for RGB
+    var showThermalCamera by remember { mutableStateOf(false) }
+
+    // Initialize system when both preview components are ready
+    LaunchedEffect(cameraTextureView, thermalSurfaceView) {
+        if (cameraTextureView != null && !initializationAttempted) {
+            initializationAttempted = true
+            android.util.Log.d("RecordingScreen", "Starting device initialization with TextureView and SurfaceView")
+            
+            // Initialize the system with the actual views
+            // Note: We need both views for full system initialization even if only one is displayed
+            viewModel.initializeSystem(cameraTextureView!!, thermalSurfaceView)
+            
+            // Also try to connect to PC server automatically
+            viewModel.connectToPC()
+        }
+    }
+
+    // Show any errors that occur during initialization
+    if (uiState.showErrorDialog && !uiState.errorMessage.isNullOrBlank()) {
+        LaunchedEffect(uiState.errorMessage) {
+            // Log the error for debugging
+            android.util.Log.e("RecordingScreen", "Initialization error: ${uiState.errorMessage}")
+        }
+    }
     Scaffold(
         floatingActionButton = {
             AnimatedRecordingButton(
@@ -77,116 +112,73 @@ fun RecordingScreen(
                     "PC Connection" to if (uiState.isPcConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED
                 )
             )
-            ThermalPreviewCard(
-                thermalBitmap = uiState.currentThermalFrame,
-                isRecording = uiState.isRecording,
-                onNavigateToPreview = onNavigateToPreview
-            )
-            ColorPaletteSelector(
-                currentPalette = uiState.colorPalette,
-                onPaletteSelect = {  }
-            )
-        }
-    }
-}
-@Composable
-private fun ThermalPreviewCard(
-    thermalBitmap: android.graphics.Bitmap?,
-    isRecording: Boolean,
-    onNavigateToPreview: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(200.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        onClick = onNavigateToPreview
-    ) {
-        Box {
-            thermalBitmap?.let { bitmap ->
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "Thermal Preview",
+            
+            // Camera Preview Switch
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Row(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            } ?: run {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = RoundedCornerShape(12.dp)
-                        ),
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    Text(
+                        text = "Camera Preview",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Visibility,
-                            contentDescription = "View thermal preview",
-                            modifier = Modifier.size(32.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                        Text(
+                            text = "RGB",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (!showThermalCamera) MaterialTheme.colorScheme.primary 
+                                   else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Switch(
+                            checked = showThermalCamera,
+                            onCheckedChange = { showThermalCamera = it }
                         )
                         Text(
-                            text = "Tap to View Thermal Preview",
+                            text = "Thermal",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = if (showThermalCamera) MaterialTheme.colorScheme.primary 
+                                   else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
             }
-            if (isRecording) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .background(
-                            color = RecordingActive.copy(alpha = 0.9f),
-                            shape = RoundedCornerShape(4.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = "REC",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+
+            // Camera Preview - Always create both views for initialization, but only display one
+            Box {
+                // RGB Camera Preview - Always present for initialization
+                CameraPreview(
+                    isRecording = uiState.isRecording,
+                    onTextureViewReady = { textureView ->
+                        cameraTextureView = textureView
+                    },
+                    modifier = if (!showThermalCamera) Modifier else Modifier.size(0.dp)
+                )
+
+                // Thermal Camera Preview - Always present for initialization
+                ThermalPreviewSurface(
+                    isRecording = uiState.isRecording,
+                    onSurfaceViewReady = { surfaceView ->
+                        thermalSurfaceView = surfaceView
+                    },
+                    modifier = if (showThermalCamera) Modifier else Modifier.size(0.dp)
+                )
             }
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(8.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.OpenInFull,
-                        contentDescription = "View full screen",
-                        modifier = Modifier.size(12.dp),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = "Full View",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
+
+            ColorPaletteSelector(
+                currentPalette = uiState.colorPalette,
+                onPaletteSelect = {  }
+            )
         }
     }
 }

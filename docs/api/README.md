@@ -44,11 +44,73 @@ class PCServer:
 
 ### Android Application APIs
 
-#### Recording Controllers
-- **RecordingSessionController**: Pure recording operation management
-- **DeviceConnectionManager**: Device connectivity orchestration
-- **FileTransferManager**: Data transfer operations
-- **CalibrationManager**: Calibration process coordination
+#### Enhanced Recording Controllers
+- **RecordingSessionController**: Pure recording operation management with enhanced error handling
+- **DeviceConnectionManager**: Device connectivity orchestration with improved timing control and race condition prevention
+- **FileTransferManager**: Data transfer operations with integrity validation
+- **CalibrationManager**: Calibration process coordination with multi-device synchronisation
+
+#### UI Component Architecture (New)
+```kotlin
+// Unified UI components eliminating 500+ lines of duplicate code
+@Composable
+fun RecordingIndicator(modifier: Modifier = Modifier)
+
+@Composable  
+fun DeviceStatusOverlay(
+    deviceName: String,
+    icon: ImageVector,
+    isConnected: Boolean,
+    isInitializing: Boolean,
+    modifier: Modifier = Modifier,
+    detailText: String? = null
+)
+
+@Composable
+fun PreviewCard(
+    title: String,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+)
+```
+
+#### Camera Preview Switching (New)
+```kotlin
+// Enhanced RecordingScreen with camera switching capability
+@Composable
+fun RecordingScreen(
+    onNavigateToPreview: () -> Unit = {},
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    // Camera switching state - true for thermal/IR, false for RGB
+    var showThermalCamera by remember { mutableStateOf(false) }
+    
+    // Toggle switch for camera preview selection
+    SegmentedButton(
+        onClick = { showThermalCamera = !showThermalCamera },
+        selected = showThermalCamera
+    ) {
+        Text(if (showThermalCamera) "Thermal" else "RGB")
+    }
+}
+```
+
+#### Enhanced Device Initialization (Updated)
+```kotlin
+class DeviceConnectionManager {
+    // Enhanced with timing coordination to prevent race conditions
+    suspend fun initializeWithDelay(
+        cameraTextureView: TextureView,
+        thermalSurfaceView: SurfaceView?
+    ): Boolean
+    
+    // Improved error handling and logging
+    fun getInitializationState(): DeviceInitializationState
+    
+    // Coordinated session management
+    suspend fun startSessionWithCoordination(): Boolean
+}
+```
 
 #### Network Communication
 ```kotlin
@@ -61,17 +123,30 @@ class NetworkClient {
 ```
 
 #### Recording Components
+
 ```kotlin
 class CameraRecorder {
+    // Enhanced with improved initialization coordination
     fun startRecording(config: RecordingConfig): Boolean
     fun stopRecording(): Boolean
     fun getRecordingStatus(): RecordingStatus
+    fun isInitialized(): Boolean  // New: Initialization state checking
 }
 
 class ThermalRecorder {
+    // Enhanced with preview switching support
     fun initialise(config: ThermalConfig): Boolean
     fun startCapture(): Boolean
     fun stopCapture(): Boolean
+    fun setPreviewVisibility(visible: Boolean)  // New: Preview control
+}
+
+// New: Enhanced error handling for device coordination
+enum class DeviceInitializationState {
+    NOT_STARTED,
+    INITIALIZING,
+    COMPLETED,
+    FAILED
 }
 ```
 

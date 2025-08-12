@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -31,44 +30,40 @@ fun ThermalPreview(
     onTemperatureRangeChange: (TemperatureRange) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(4f / 3f),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+    PreviewCard(
+        modifier = modifier,
+        height = 300.dp // Using aspect ratio calculation
     ) {
-        Box {
-            thermalBitmap?.let { bitmap ->
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "Thermal Preview",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            } ?: run {
-                ThermalPreviewPlaceholder()
-            }
-            TemperatureOverlay(
-                temperatureRange = temperatureRange,
-                modifier = Modifier.align(Alignment.TopStart)
+        thermalBitmap?.let { bitmap ->
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = "Thermal Preview",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(12.dp)),
+                contentScale = ContentScale.Crop
             )
-            thermalBitmap?.let {
-                if (isRecording) {
-                    RecordingIndicator(
-                        modifier = Modifier.align(Alignment.TopEnd)
-                    )
-                }
-            }
-            ColorPaletteIndicator(
-                palette = colorPalette,
-                modifier = Modifier.align(Alignment.BottomStart)
-            )
+        } ?: run {
+            ThermalPreviewPlaceholder()
         }
+        
+        TemperatureOverlay(
+            temperatureRange = temperatureRange,
+            modifier = Modifier.align(Alignment.TopStart)
+        )
+        
+        thermalBitmap?.let {
+            if (isRecording) {
+                RecordingIndicator(
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
+            }
+        }
+        
+        ColorPaletteIndicator(
+            palette = colorPalette,
+            modifier = Modifier.align(Alignment.BottomStart)
+        )
     }
 }
 @Composable
@@ -159,43 +154,7 @@ private fun TemperatureOverlay(
         }
     }
 }
-@Composable
-private fun RecordingIndicator(
-    modifier: Modifier = Modifier
-) {
-    val alpha by animateFloatAsState(
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-    Card(
-        modifier = modifier.padding(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Red.copy(alpha = alpha * 0.9f + 0.1f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .background(Color.White, shape = RoundedCornerShape(4.dp))
-            )
-            Text(
-                text = "REC",
-                style = MaterialTheme.typography.labelMedium,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
+
 @Composable
 private fun ColorPaletteIndicator(
     palette: ThermalColorPalette,

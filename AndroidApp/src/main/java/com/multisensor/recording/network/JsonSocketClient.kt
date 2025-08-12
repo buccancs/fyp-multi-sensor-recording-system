@@ -26,7 +26,7 @@ constructor(
     private var isConnected = false
     private var shouldReconnect = true
 
-    private var serverIp: String = "192.168.0.100"
+    private var serverIp: String = ""
     private var serverPort: Int = 9000
 
     private var commandCallback: ((JsonMessage) -> Unit)? = null

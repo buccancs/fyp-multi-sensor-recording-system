@@ -8,11 +8,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 import com.multisensor.recording.recording.CameraRecorder
 import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.recording.ShimmerRecorder
 import com.multisensor.recording.network.JsonSocketClient
 import com.multisensor.recording.network.NetworkConfiguration
+import com.multisensor.recording.network.ServerConfiguration
 import com.multisensor.recording.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -118,10 +121,28 @@ class DeviceConnectionManager @Inject constructor(
             if (textureView != null) {
                 val success = cameraRecorder.initialize(textureView)
                 if (success) {
+                    // Give the camera a moment to fully initialize before starting preview
+                    kotlinx.coroutines.delay(500)
+                    
+                    // Start a preview-only session to show camera feed
+                    try {
+                        logger.info("Starting camera preview session...")
+                        val previewSession = cameraRecorder.startSession(recordVideo = false, captureRaw = false)
+                        if (previewSession != null) {
+                            logger.info("Camera preview started successfully")
+                        } else {
+                            logger.warning("Camera preview failed to start, but camera is initialized")
+                        }
+                    } catch (e: Exception) {
+                        logger.warning("Failed to start camera preview: ${e.message}")
+                        // Don't fail initialization if preview fails - the camera is still initialized
+                    }
+                    
                     _connectionState.value = _connectionState.value.copy(cameraConnected = true)
                     logger.info("Camera initialized successfully")
                     Result.success(Unit)
                 } else {
+                    logger.error("Camera initialization returned false")
                     Result.failure(RuntimeException("Camera initialization failed"))
                 }
             } else {
@@ -173,7 +194,17 @@ class DeviceConnectionManager @Inject constructor(
         return try {
             logger.info("Connecting to PC server...")
 
-            val serverConfig = networkConfiguration.getServerConfiguration()
+            // Try to discover server automatically first
+            val discoveredServer = discoverPCServer()
+            val serverConfig = if (discoveredServer != null) {
+                logger.info("Discovered PC server at: ${discoveredServer.getJsonAddress()}")
+                networkConfiguration.updateServerConfiguration(discoveredServer)
+                discoveredServer
+            } else {
+                logger.info("Using configured server address")
+                networkConfiguration.getServerConfiguration()
+            }
+
             jsonSocketClient.configure(serverConfig.serverIp, serverConfig.jsonPort)
             jsonSocketClient.connect()
 
@@ -353,6 +384,60 @@ class DeviceConnectionManager @Inject constructor(
 
     fun clearError() {
         _connectionState.value = _connectionState.value.copy(connectionError = null)
+    }
+
+    private suspend fun discoverPCServer(): ServerConfiguration? {
+        return withContext(Dispatchers.IO) {
+            try {
+                logger.info("Discovering PC server on local network...")
+                
+                val currentConfig = networkConfiguration.getServerConfiguration()
+                
+                // List of common IPs to try based on current network
+                val baseIp = currentConfig.serverIp.substringBeforeLast(".")
+                val ipsToTry = listOf(
+                    currentConfig.serverIp, // Try configured IP first
+                    "$baseIp.100",
+                    "$baseIp.101", 
+                    "$baseIp.1",   // Router
+                    "$baseIp.10",
+                    "$baseIp.50",
+                    "192.168.1.100",
+                    "192.168.0.100",
+                    "10.0.0.100"
+                )
+                
+                for (ip in ipsToTry) {
+                    try {
+                        logger.debug("Trying PC server at: $ip:${currentConfig.jsonPort}")
+                        
+                        val socket = java.net.Socket()
+                        socket.connect(
+                            java.net.InetSocketAddress(ip, currentConfig.jsonPort), 
+                            2000  // 2 second timeout
+                        )
+                        socket.close()
+                        
+                        logger.info("Found responsive server at: $ip:${currentConfig.jsonPort}")
+                        return@withContext ServerConfiguration(
+                            serverIp = ip,
+                            legacyPort = currentConfig.legacyPort,
+                            jsonPort = currentConfig.jsonPort
+                        )
+                        
+                    } catch (e: Exception) {
+                        logger.debug("No server found at $ip: ${e.message}")
+                    }
+                }
+                
+                logger.warning("No PC server discovered on local network")
+                null
+                
+            } catch (e: Exception) {
+                logger.error("Error during PC server discovery", e)
+                null
+            }
+        }
     }
 
     suspend fun checkDeviceCapabilities(): Result<Map<String, Boolean>> {

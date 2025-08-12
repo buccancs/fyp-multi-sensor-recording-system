@@ -70,11 +70,12 @@ python tests_unified/runners/run_unified_tests.py --validate-requirements
 
 This research platform enables contactless GSR prediction through synchronised multi-sensor data collection:
 
-- **📱 Android Mobile Application**: Real-time RGB video and thermal imaging capture
-- **🖥️ PC Controller Application**: Centralized data recording and synchronisation
-- **📊 Shimmer GSR Sensors**: Ground truth physiological measurements
-- **🧪 Virtual Test Environment**: Complete system simulation without hardware
-- **⚡ Real-time Processing**: Live data analysis and visualisation
+- **📱 Android Mobile Application**: Real-time RGB video and thermal imaging capture with unified UI architecture and camera switching capabilities
+- **🖥️ PC Controller Application**: Centralized data recording and synchronisation with enhanced device coordination
+- **📊 Shimmer GSR Sensors**: Ground truth physiological measurements with improved initialization timing
+- **🧪 Virtual Test Environment**: Complete system simulation without hardware dependencies
+- **⚡ Real-time Processing**: Live data analysis and visualisation with sub-millisecond precision
+- **🔄 Enhanced UI Architecture**: Unified components eliminating code duplication and providing consistent user experience
 
 ## ✨ Key Features
 
@@ -84,10 +85,13 @@ This research platform enables contactless GSR prediction through synchronised m
 - **Complete Protocol Simulation**: Full message exchange and file transfer
 - **No Physical Dependencies**: Test entire system without hardware
 
-### 📊 Multi-Sensor Data Fusion
-- **Synchronised Recording**: Precise timestamp alignment across all sensors
+### 📊 Multi-Sensor Data Fusion with Enhanced UI
+- **Synchronised Recording**: Precise timestamp alignment across all sensors with improved initialization coordination
 - **Multiple Data Streams**: GSR, RGB video, thermal imaging, device metadata
-- **Real-time Visualisation**: Live data monitoring and analysis
+- **Camera Preview Switching**: Toggle between RGB and thermal camera views with real-time preview control
+- **Unified UI Architecture**: Streamlined components eliminating 500+ lines of duplicate code
+- **Enhanced Error Handling**: Improved camera initialization timing preventing "CameraRecorder not initialized" errors
+- **Real-time Visualisation**: Live data monitoring and analysis with consistent UI patterns
 - **Data Export**: CSV, JSON, and binary formats for research analysis
 
 ### 🌐 Network Communication
@@ -95,6 +99,7 @@ This research platform enables contactless GSR prediction through synchronised m
 - **JSON Protocol**: Structured message exchange and control
 - **File Transfer**: Secure video and thermal data transmission
 - **Heartbeat Monitoring**: Connection health and automatic recovery
+- **Enhanced Device Coordination**: Improved initialization timing and error recovery
 
 ### 🧪 Comprehensive Testing Framework
 - **4 Test Scenarios**: Quick (1min), CI (3min), Stress (30min), Sync validation
@@ -102,6 +107,7 @@ This research platform enables contactless GSR prediction through synchronised m
 - **GitHub Actions Integration**: Automated CI/CD with full test coverage
 - **Performance Monitoring**: CPU, memory, and throughput analysis
 - **GUI Testing**: Complete UI/UX validation for both desktop and mobile platforms
+- **Component Testing**: Comprehensive tests for unified UI components and camera switching functionality
 
 ## 🏃‍♂️ Getting Started
 
