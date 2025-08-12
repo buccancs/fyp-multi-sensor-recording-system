@@ -1,5 +1,6 @@
 package com.multisensor.recording.service
 
+import com.multisensor.recording.service.util.FileStructureManager
 import com.multisensor.recording.util.Logger
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -96,8 +97,10 @@ class SessionManagerBusinessLogicTest {
         val sessionConfigFile = File(sessionFolder, "session_config.json")
 
         val filePaths =
-            SessionManager.SessionFilePaths(
+            FileStructureManager.SessionFilePaths(
                 sessionFolder = sessionFolder,
+                sessionInfoFile = File(sessionFolder, "session_info.txt"),
+                sessionConfigFile = sessionConfigFile,
                 rgbVideoFile = rgbVideoFile,
                 thermalVideoFile = thermalVideoFile,
                 thermalDataFolder = thermalDataFolder,
@@ -105,7 +108,7 @@ class SessionManagerBusinessLogicTest {
                 shimmerDataFile = shimmerDataFile,
                 logFile = logFile,
                 calibrationFolder = calibrationFolder,
-                sessionConfigFile = sessionConfigFile,
+                stimulusEventsFile = File(sessionFolder, "stimulus_events.csv")
             )
 
         assertEquals(sessionFolder, filePaths.sessionFolder)
@@ -132,8 +135,10 @@ class SessionManagerBusinessLogicTest {
         val sessionConfigFile = File(sessionFolder, "session_config.json")
 
         val filePaths =
-            SessionManager.SessionFilePaths(
+            FileStructureManager.SessionFilePaths(
                 sessionFolder = sessionFolder,
+                sessionInfoFile = File(sessionFolder, "session_info.txt"),
+                sessionConfigFile = sessionConfigFile,
                 rgbVideoFile = rgbVideoFile,
                 thermalVideoFile = thermalVideoFile,
                 thermalDataFolder = thermalDataFolder,
@@ -141,7 +146,7 @@ class SessionManagerBusinessLogicTest {
                 shimmerDataFile = shimmerDataFile,
                 logFile = logFile,
                 calibrationFolder = calibrationFolder,
-                sessionConfigFile = sessionConfigFile,
+                stimulusEventsFile = File(sessionFolder, "stimulus_events.csv")
             )
 
         assertTrue("RGB video should be MP4", filePaths.rgbVideoFile.name.endsWith(".mp4"))

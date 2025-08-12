@@ -83,7 +83,7 @@ class StatusIndicatorViewTest {
 
     @Test
     fun testSetCustomTextColor() {
-        statusIndicatorView.setTextColor(android.R.colour.holo_blue_light)
+        statusIndicatorView.setTextColor(android.R.color.holo_blue_light)
 
         val textView = statusIndicatorView.getChildAt(1) as android.widget.TextView
         assertNotNull(textView)

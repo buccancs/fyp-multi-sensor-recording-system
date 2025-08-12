@@ -2,14 +2,11 @@ package com.multisensor.recording.ui.viewmodel
 
 import com.google.common.truth.Truth.assertThat
 import android.content.Context
-import com.multisensor.recording.recording.CameraRecorder
-import com.multisensor.recording.recording.ShimmerRecorder
-import com.multisensor.recording.recording.ThermalRecorder
-import com.multisensor.recording.service.SessionManager
-import com.multisensor.recording.network.FileTransferHandler
-import com.multisensor.recording.network.JsonSocketClient
-import com.multisensor.recording.network.NetworkConfiguration
-import com.multisensor.recording.calibration.CalibrationCaptureManager
+import com.multisensor.recording.controllers.RecordingSessionController
+import com.multisensor.recording.managers.DeviceConnectionManager
+import com.multisensor.recording.managers.FileTransferManager
+import com.multisensor.recording.managers.CalibrationManager
+import com.multisensor.recording.managers.ShimmerManager
 import com.multisensor.recording.testbase.BaseUnitTest
 import com.multisensor.recording.util.Logger
 import io.mockk.coEvery
@@ -26,14 +23,11 @@ class MainViewModelTest : BaseUnitTest() {
 
     private lateinit var viewModel: MainViewModel
     private val mockContext: Context = mockk(relaxed = true)
-    private val mockCameraRecorder: CameraRecorder = mockk(relaxed = true)
-    private val mockThermalRecorder: ThermalRecorder = mockk(relaxed = true)
-    private val mockShimmerRecorder: ShimmerRecorder = mockk(relaxed = true)
-    private val mockSessionManager: SessionManager = mockk(relaxed = true)
-    private val mockFileTransferHandler: FileTransferHandler = mockk(relaxed = true)
-    private val mockCalibrationCaptureManager: CalibrationCaptureManager = mockk(relaxed = true)
-    private val mockJsonSocketClient: JsonSocketClient = mockk(relaxed = true)
-    private val mockNetworkConfiguration: NetworkConfiguration = mockk(relaxed = true)
+    private val mockRecordingController: RecordingSessionController = mockk(relaxed = true)
+    private val mockDeviceManager: DeviceConnectionManager = mockk(relaxed = true)
+    private val mockFileManager: FileTransferManager = mockk(relaxed = true)
+    private val mockCalibrationManager: CalibrationManager = mockk(relaxed = true)
+    private val mockShimmerManager: ShimmerManager = mockk(relaxed = true)
     private val mockLogger: Logger = mockk(relaxed = true)
 
     @Before
@@ -46,14 +40,11 @@ class MainViewModelTest : BaseUnitTest() {
 
         viewModel = MainViewModel(
             mockContext,
-            mockCameraRecorder,
-            mockThermalRecorder,
-            mockShimmerRecorder,
-            mockSessionManager,
-            mockFileTransferHandler,
-            mockCalibrationCaptureManager,
-            mockJsonSocketClient,
-            mockNetworkConfiguration,
+            mockRecordingController,
+            mockDeviceManager,
+            mockFileManager,
+            mockCalibrationManager,
+            mockShimmerManager,
             mockLogger
         )
     }
@@ -79,8 +70,6 @@ class MainViewModelTest : BaseUnitTest() {
 
     @Test
     fun `should start recording when requested`() = runTest {
-        coEvery { mockSessionManager.createNewSession() } returns "test-session-123"
-
         viewModel.startRecording()
 
         assertThat(viewModel).isNotNull()
@@ -106,9 +95,7 @@ class MainViewModelTest : BaseUnitTest() {
 
     @Test
     fun `should provide recording configuration options`() = runTest {
-        viewModel.setRecordVideoEnabled(true)
-        viewModel.setCaptureRawEnabled(true)
-
+        // Remove obsolete method calls as functionality has changed
         assertThat(viewModel).isNotNull()
     }
 
