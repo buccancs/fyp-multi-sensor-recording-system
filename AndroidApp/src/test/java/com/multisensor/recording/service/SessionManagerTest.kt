@@ -3,6 +3,7 @@ package com.multisensor.recording.service
 import android.content.Context
 import com.multisensor.recording.persistence.CrashRecoveryManager
 import com.multisensor.recording.persistence.SessionStateDao
+import com.multisensor.recording.service.util.FileStructureManager
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import io.mockk.mockk
@@ -31,8 +32,9 @@ class SessionManagerTest {
         val mockThermalSettings = mockk<ThermalCameraSettings>(relaxed = true)
         val mockSessionStateDao = mockk<SessionStateDao>(relaxed = true)
         val mockCrashRecoveryManager = mockk<CrashRecoveryManager>(relaxed = true)
+        val mockFileStructureManager = mockk<FileStructureManager>(relaxed = true)
         sessionManager =
-            SessionManager(context, mockLogger, mockThermalSettings, mockSessionStateDao, mockCrashRecoveryManager)
+            SessionManager(context, mockLogger, mockThermalSettings, mockSessionStateDao, mockCrashRecoveryManager, mockFileStructureManager)
     }
 
     @After
