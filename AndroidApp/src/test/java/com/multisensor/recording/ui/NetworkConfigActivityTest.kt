@@ -60,8 +60,6 @@ class NetworkConfigActivityTest {
                     legacyPort = 8080,
                     jsonPort = 9000,
                 )
-        every { mockNetworkConfiguration.isValidIpAddress(any()) } returns true
-        every { mockNetworkConfiguration.isValidPort(any()) } returns true
         every { mockNetworkConfiguration.getConfigurationSummary() } returns "NetworkConfig[IP=192.168.1.100, Legacy=8080, JSON=9000]"
 
         activity = Robolectric.buildActivity(NetworkConfigActivity::class.java).create().get()
@@ -132,10 +130,6 @@ class NetworkConfigActivityTest {
         legacyPortEditText.setText("8081")
         jsonPortEditText.setText("9001")
 
-        every { mockNetworkConfiguration.isValidIpAddress("192.168.1.200") } returns true
-        every { mockNetworkConfiguration.isValidPort(8081) } returns true
-        every { mockNetworkConfiguration.isValidPort(9001) } returns true
-
         saveButton.performClick()
 
         verify { mockNetworkConfiguration.setServerIp("192.168.1.200") }
@@ -175,8 +169,6 @@ class NetworkConfigActivityTest {
 
         serverIpEditText.setText("invalid.ip.address")
 
-        every { mockNetworkConfiguration.isValidIpAddress("invalid.ip.address") } returns false
-
         saveButton.performClick()
 
         assertEquals("Invalid IP address format", ShadowToast.getTextOfLatestToast())
@@ -195,8 +187,6 @@ class NetworkConfigActivityTest {
 
         legacyPortEditText.setText("99999")
 
-        every { mockNetworkConfiguration.isValidPort(99999) } returns false
-
         saveButton.performClick()
 
         assertEquals("Legacy port must be between 1024 and 65535", ShadowToast.getTextOfLatestToast())
@@ -214,8 +204,6 @@ class NetworkConfigActivityTest {
 
         legacyPortEditText.setText("8080")
         jsonPortEditText.setText("8080")
-
-        every { mockNetworkConfiguration.isValidPort(8080) } returns true
 
         saveButton.performClick()
 

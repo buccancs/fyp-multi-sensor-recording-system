@@ -183,7 +183,7 @@ class AppLoggerEnhancedTest {
                         AppLogger.logNetwork(tag, "API call", "test.com", "200", 50L, context)
                     }
                 } catch (e: Exception) {
-                    synchronised(exceptions) {
+                    synchronized(exceptions) {
                         exceptions.add(e)
                     }
                 } finally {

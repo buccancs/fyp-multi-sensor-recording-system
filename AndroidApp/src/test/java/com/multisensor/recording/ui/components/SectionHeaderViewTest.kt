@@ -82,7 +82,7 @@ class SectionHeaderViewTest {
 
     @Test
     fun testSetHeaderTextColor() {
-        sectionHeaderView.setHeaderTextColor(android.R.colour.holo_blue_light)
+        sectionHeaderView.setHeaderTextColor(android.R.color.holo_blue_light)
 
         assertNotNull(sectionHeaderView)
     }

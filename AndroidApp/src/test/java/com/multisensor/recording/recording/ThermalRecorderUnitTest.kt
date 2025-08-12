@@ -2,6 +2,7 @@ package com.multisensor.recording.recording
 
 import android.content.Context
 import com.multisensor.recording.service.SessionManager
+import com.multisensor.recording.service.util.FileStructureManager
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import io.kotest.core.spec.style.DescribeSpec
@@ -29,7 +30,7 @@ class ThermalRecorderUnitTest : DescribeSpec({
     beforeEach {
         clearAllMocks()
 
-        val mockSessionPaths = mockk<SessionManager.SessionFilePaths>()
+        val mockSessionPaths = mockk<FileStructureManager.SessionFilePaths>()
         every { mockSessionPaths.sessionFolder } returns File("/test/session/folder")
         every { mockSessionManager.getSessionFilePaths() } returns mockSessionPaths
 

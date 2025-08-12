@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.common.truth.Truth.assertThat
 import com.multisensor.recording.persistence.CrashRecoveryManager
 import com.multisensor.recording.persistence.SessionStateDao
+import com.multisensor.recording.service.util.FileStructureManager
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import io.mockk.every
@@ -40,7 +41,8 @@ class SessionManagerUnitTest {
             mockLogger,
             mockThermalSettings,
             mockSessionStateDao,
-            mockCrashRecoveryManager
+            mockCrashRecoveryManager,
+            mockk<FileStructureManager>(relaxed = true)
         )
     }
 
