@@ -632,7 +632,7 @@ def create_mock_ntp_server(port: int = 8123, logger: Optional[logging.Logger] = 
                 t3 = time.time()  # Server send time (immediately)
                 
                 # Add simulated network delay and offset to match thesis claims
-                simulated_offset = np.random.normal(0.021, 0.003)  # ~21ms ± 3ms
+                simulated_offset = np.random.normal(0.021, 0.003)  # ~21ms +/- 3ms
                 t2 += simulated_offset
                 t3 += simulated_offset
                 

@@ -4,9 +4,8 @@ import webbrowser
 from PyQt5.QtCore import Qt, QTimer, qVersion
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
-    from utils.logging_config import AppLogger, get_logger
+    from PythonApp.utils.logging_config import AppLogger, get_logger
     log_level = os.environ.get("MSR_LOG_LEVEL", "INFO")
     AppLogger.set_level(log_level)
     logger = get_logger(__name__)
@@ -15,61 +14,61 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 try:
-    from gui.enhanced_ui_main_window import EnhancedMainWindow
+    from PythonApp.gui.enhanced_ui_main_window import EnhancedMainWindow
 except ImportError:
     logger.error("Enhanced UI main window not available")
     EnhancedMainWindow = None
 try:
-    from gui.main_controller import MainController
+    from PythonApp.gui.main_controller import MainController
     MAIN_CONTROLLER_AVAILABLE = True
 except ImportError:
     logger.warning("MainController not available")
     MainController = None
     MAIN_CONTROLLER_AVAILABLE = False
 try:
-    from session.session_manager import SessionManager
+    from PythonApp.session.session_manager import SessionManager
     SESSION_MANAGER_AVAILABLE = True
 except ImportError:
     logger.warning("SessionManager not available")
     SessionManager = None
     SESSION_MANAGER_AVAILABLE = False
 try:
-    from shimmer_manager import ShimmerManager
+    from PythonApp.shimmer_manager import ShimmerManager
     SHIMMER_MANAGER_AVAILABLE = True
 except ImportError:
     logger.warning("ShimmerManager not available")
     ShimmerManager = None
     SHIMMER_MANAGER_AVAILABLE = False
 try:
-    from network.android_device_manager import AndroidDeviceManager
+    from PythonApp.network.android_device_manager import AndroidDeviceManager
     ANDROID_DEVICE_MANAGER_AVAILABLE = True
 except ImportError:
     logger.warning("AndroidDeviceManager not available")
     AndroidDeviceManager = None
     ANDROID_DEVICE_MANAGER_AVAILABLE = False
 try:
-    from network.device_server import JsonSocketServer
+    from PythonApp.network.device_server import JsonSocketServer
     JSON_SOCKET_SERVER_AVAILABLE = True
 except ImportError:
     logger.warning("JsonSocketServer not available")
     JsonSocketServer = None
     JSON_SOCKET_SERVER_AVAILABLE = False
 try:
-    from webcam.webcam_capture import WebcamCapture
+    from PythonApp.webcam.webcam_capture import WebcamCapture
     WEBCAM_CAPTURE_AVAILABLE = True
 except ImportError:
     logger.warning("WebcamCapture not available")
     WebcamCapture = None
     WEBCAM_CAPTURE_AVAILABLE = False
 try:
-    from gui.stimulus_controller import StimulusController
+    from PythonApp.gui.stimulus_controller import StimulusController
     STIMULUS_CONTROLLER_AVAILABLE = True
 except ImportError:
     logger.warning("StimulusController not available")
     StimulusController = None
     STIMULUS_CONTROLLER_AVAILABLE = False
 try:
-    from web_ui.integration import WebDashboardIntegration
+    from PythonApp.web_ui.integration import WebDashboardIntegration
     WEB_UI_AVAILABLE = True
 except ImportError:
     logger.warning("Web UI components not available")

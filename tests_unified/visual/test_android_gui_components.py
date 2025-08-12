@@ -105,7 +105,7 @@ class TestAndroidRecordingComponents(AndroidTestBase):
                 element_text = self.get_element_text_safe(element)
                 assert len(element_text) >= 0, f"{element_name} should have content"
                 
-                print(f"✓ {element_name}: {element_text}")
+                print(f"[PASS] {element_name}: {element_text}")
                 
             except NoSuchElementException:
                 print(f"Warning: Status element {element_name} not found")
@@ -194,7 +194,7 @@ class TestAndroidRecordingComponents(AndroidTestBase):
                             control.click()
                             time.sleep(0.5)
                         
-                        print(f"✓ Tested {control_name} control")
+                        print(f"[PASS] Tested {control_name} control")
                         break
             except Exception as e:
                 print(f"Warning: Could not test {control_name} control: {e}")
@@ -318,7 +318,7 @@ class TestAndroidDeviceComponents(AndroidTestBase):
                 # Verify item response (selection, detail view, etc.)
                 self._verify_device_item_response(driver, i)
                 
-                print(f"✓ Tested device item {i}")
+                print(f"[PASS] Tested device item {i}")
     
     def _test_alternative_device_list(self, driver):
         """Test alternative device list implementations."""
@@ -329,7 +329,7 @@ class TestAndroidDeviceComponents(AndroidTestBase):
         
         for list_view in list_views:
             if list_view.is_displayed():
-                print("✓ Found device list container")
+                print("[PASS] Found device list container")
                 break
     
     def _verify_scan_indicator(self, driver):
@@ -343,7 +343,7 @@ class TestAndroidDeviceComponents(AndroidTestBase):
             try:
                 indicator = driver.find_element(AppiumBy.ID, indicator_id)
                 if indicator.is_displayed():
-                    print("✓ Scan indicator visible")
+                    print("[PASS] Scan indicator visible")
                     return True
             except NoSuchElementException:
                 continue
@@ -359,10 +359,10 @@ class TestAndroidDeviceComponents(AndroidTestBase):
                 # Check if scan is still in progress
                 scan_indicator = driver.find_element(AppiumBy.ID, "com.multisensor.recording:id/scan_progress")
                 if not scan_indicator.is_displayed():
-                    print("✓ Scan completed")
+                    print("[PASS] Scan completed")
                     return True
             except NoSuchElementException:
-                print("✓ Scan completed")
+                print("[PASS] Scan completed")
                 return True
             
             time.sleep(0.5)
@@ -379,7 +379,7 @@ class TestAndroidDeviceComponents(AndroidTestBase):
             for element in status_elements:
                 element_text = self.get_element_text_safe(element).lower()
                 if control_name.lower() in element_text:
-                    print(f"✓ Device {control_name} response: {element_text}")
+                    print(f"[PASS] Device {control_name} response: {element_text}")
                     return True
         except Exception:
             pass
@@ -394,7 +394,7 @@ class TestAndroidDeviceComponents(AndroidTestBase):
         try:
             current_activity = driver.current_activity
             assert current_activity is not None, "App should still be running after device item click"
-            print(f"✓ Device item {item_index} click handled")
+            print(f"[PASS] Device item {item_index} click handled")
         except Exception as e:
             print(f"Warning: Device item {item_index} click verification failed: {e}")
 
@@ -493,7 +493,7 @@ class TestAndroidSettingsComponents(AndroidTestBase):
                 try:
                     setting_element = driver.find_element(AppiumBy.XPATH, f"//*[contains(@text, '{setting}')]")
                     if setting_element.is_displayed():
-                        print(f"✓ Found {setting} in {category} settings")
+                        print(f"[PASS] Found {setting} in {category} settings")
                 except NoSuchElementException:
                     continue
             
@@ -535,7 +535,7 @@ class TestAndroidSettingsComponents(AndroidTestBase):
                 new_state = switch.get_attribute("checked")
                 assert new_state != original_state, f"Switch {i} should have changed state"
                 
-                print(f"✓ Tested switch {i}: {original_state} -> {new_state}")
+                print(f"[PASS] Tested switch {i}: {original_state} -> {new_state}")
     
     def _test_text_input_controls(self, driver):
         """Test text input controls in settings."""
@@ -552,7 +552,7 @@ class TestAndroidSettingsComponents(AndroidTestBase):
                 new_text = text_input.text
                 assert "test_value" in new_text, f"Text input {i} should accept new text"
                 
-                print(f"✓ Tested text input {i}")
+                print(f"[PASS] Tested text input {i}")
                 
                 # Restore original text if needed
                 if original_text:
@@ -576,7 +576,7 @@ class TestAndroidSettingsComponents(AndroidTestBase):
                         if option.is_displayed() and option.text:
                             option.click()
                             time.sleep(0.5)
-                            print(f"✓ Tested spinner {i} selection")
+                            print(f"[PASS] Tested spinner {i} selection")
                             break
                 except Exception:
                     # If no options found, just close spinner

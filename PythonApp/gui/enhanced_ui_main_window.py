@@ -38,15 +38,15 @@ try:
 except ImportError:
     PreviewPanel = None
 try:
-    from network.device_server import JsonSocketServer
+    from ..network.device_server import JsonSocketServer
 except ImportError:
     JsonSocketServer = None
 try:
-    from session.session_manager import SessionManager
+    from ..session.session_manager import SessionManager
 except ImportError:
     SessionManager = None
 try:
-    from utils.logging_config import get_logger
+    from ..utils.logging_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     import logging

@@ -704,7 +704,7 @@ if __name__ == "__main__":
     logger.info("Created preview frame message:")
     logger.info(f"  Frame type: {preview_frame.payload.frame_type}")
     logger.info(f"  Data size: {len(test_frame_data)} bytes (SYNTHETIC TEST DATA)")
-    logger.info(f"  Resolution: {preview_frame.payload.frame_width}×{preview_frame.payload.frame_height}")
+    logger.info(f"  Resolution: {preview_frame.payload.frame_width}x{preview_frame.payload.frame_height}")
     
     # Test heartbeat with NTP sync info
     heartbeat = android_handler.create_heartbeat(
