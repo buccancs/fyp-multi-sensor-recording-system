@@ -3,7 +3,7 @@ package com.multisensor.recording.controllers
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.graphics.Colour
+import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import com.multisensor.recording.ui.MainUiState
@@ -148,17 +148,17 @@ class UIController @Inject constructor() {
 
             pcStatusIndicator = StatusIndicatorView(context).apply {
                 setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "PC: Waiting for PC...")
-                setTextColor(android.R.colour.white)
+                setTextColor(android.R.color.white)
             }
 
             shimmerStatusIndicator = StatusIndicatorView(context).apply {
                 setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "Shimmer: Disconnected")
-                setTextColor(android.R.colour.white)
+                setTextColor(android.R.color.white)
             }
 
             thermalStatusIndicator = StatusIndicatorView(context).apply {
                 setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "Thermal: Disconnected")
-                setTextColor(android.R.colour.white)
+                setTextColor(android.R.color.white)
             }
 
             recordingButtonPair = ActionButtonPair(context).apply {
@@ -292,20 +292,20 @@ class UIController @Inject constructor() {
         }
 
         val textColor = when {
-            batteryLevel < 0 -> Colour.WHITE
+            batteryLevel < 0 -> Color.WHITE
             isHighContrast -> {
                 when {
-                    batteryLevel > 50 -> Colour.GREEN
-                    batteryLevel > 20 -> Colour.YELLOW
-                    else -> Colour.RED
+                    batteryLevel > 50 -> Color.GREEN
+                    batteryLevel > 20 -> Color.YELLOW
+                    else -> Color.RED
                 }
             }
 
             else -> {
                 when {
-                    batteryLevel > 50 -> Colour.parseColor("#4CAF50")
-                    batteryLevel > 20 -> Colour.parseColor("#FF9800")
-                    else -> Colour.parseColor("#F44336")
+                    batteryLevel > 50 -> Color.parseColor("#4CAF50")
+                    batteryLevel > 20 -> Color.parseColor("#FF9800")
+                    else -> Color.parseColor("#F44336")
                 }
             }
         }
@@ -334,9 +334,9 @@ class UIController @Inject constructor() {
         }
 
         val textColor = if (isHighContrast) {
-            if (state.isShimmerConnected) Colour.GREEN else Colour.RED
+            if (state.isShimmerConnected) Color.GREEN else Color.RED
         } else {
-            if (state.isShimmerConnected) Colour.parseColor("#4CAF50") else Colour.parseColor("#F44336")
+            if (state.isShimmerConnected) Color.parseColor("#4CAF50") else Color.parseColor("#F44336")
         }
 
         callback?.getShimmerStatusText()?.let { textView ->
@@ -354,39 +354,39 @@ class UIController @Inject constructor() {
         val savedState = getSavedUIState()
         val isHighContrast = savedState.highContrastMode
 
-        val colour = if (isHighContrast) {
-            if (isConnected) Colour.GREEN else Colour.RED
+        val color = if (isHighContrast) {
+            if (isConnected) Color.GREEN else Color.RED
         } else {
-            if (isConnected) Colour.parseColor("#4CAF50") else Colour.parseColor("#F44336")
+            if (isConnected) Color.parseColor("#4CAF50") else Color.parseColor("#F44336")
         }
 
-        indicator?.setBackgroundColor(colour)
+        indicator?.setBackgroundColor(color)
     }
 
     private fun updateRecordingIndicator(isRecording: Boolean) {
         val savedState = getSavedUIState()
         val isHighContrast = savedState.highContrastMode
 
-        val colour = if (isHighContrast) {
-            if (isRecording) Colour.RED else Colour.GREY
+        val color = if (isHighContrast) {
+            if (isRecording) Color.RED else Color.GRAY
         } else {
-            if (isRecording) Colour.parseColor("#F44336") else Colour.parseColor("#9E9E9E")
+            if (isRecording) Color.parseColor("#F44336") else Color.parseColor("#9E9E9E")
         }
 
-        callback?.getRecordingIndicator()?.setBackgroundColor(colour)
+        callback?.getRecordingIndicator()?.setBackgroundColor(color)
     }
 
     private fun updateStreamingIndicator(isStreaming: Boolean, frameRate: Int, dataSize: String) {
         val savedState = getSavedUIState()
         val isHighContrast = savedState.highContrastMode
 
-        val colour = if (isHighContrast) {
-            if (isStreaming) Colour.GREEN else Colour.GREY
+        val color = if (isHighContrast) {
+            if (isStreaming) Color.GREEN else Color.GRAY
         } else {
-            if (isStreaming) Colour.parseColor("#4CAF50") else Colour.parseColor("#9E9E9E")
+            if (isStreaming) Color.parseColor("#4CAF50") else Color.parseColor("#9E9E9E")
         }
 
-        callback?.getStreamingIndicator()?.setBackgroundColor(colour)
+        callback?.getStreamingIndicator()?.setBackgroundColor(color)
 
         if (isStreaming && frameRate > 0) {
             callback?.getStreamingDebugOverlay()?.let { overlay ->
@@ -891,15 +891,15 @@ class UIController @Inject constructor() {
     }
 
     private fun updateComponentColors(isDarkMode: Boolean) {
-        val backgroundColor = if (isDarkMode) Colour.parseColor("#1E1E1E") else Colour.parseColor("#FFFFFF")
-        val textColor = if (isDarkMode) Colour.parseColor("#FFFFFF") else Colour.parseColor("#000000")
-        val accentColor = if (isDarkMode) Colour.parseColor("#BB86FC") else Colour.parseColor("#6200EE")
+        val backgroundColor = if (isDarkMode) Color.parseColor("#1E1E1E") else Color.parseColor("#FFFFFF")
+        val textColor = if (isDarkMode) Color.parseColor("#FFFFFF") else Color.parseColor("#000000")
+        val accentColor = if (isDarkMode) Color.parseColor("#BB86FC") else Color.parseColor("#6200EE")
 
         callback?.getStatusText()?.setTextColor(textColor)
 
         android.util.Log.d(
             "UIController",
-            "[DEBUG_LOG] Component colours updated for ${if (isDarkMode) "dark" else "light"} mode"
+            "[DEBUG_LOG] Component colors updated for ${if (isDarkMode) "dark" else "light"} mode"
         )
     }
 

@@ -137,11 +137,12 @@ android {
             }
         }
         managedDevices {
-            devices {
-                create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel2api30") {
+            // Updated to use allDevices instead of deprecated devices API
+            allDevices {
+                create<com.android.build.api.dsl.ManagedVirtualDevice>("pixel2api35") {
                     device = "Pixel 2"
-                    apiLevel = 30
-                    systemImageSource = "aosp"
+                    apiLevel = 35
+                    systemImageSource = "google"
                 }
             }
         }
@@ -377,7 +378,8 @@ tasks.register("runIDEIntegrationUITest") {
     dependsOn("assembleDebug", "assembleDebugAndroidTest")
 
     doLast {
-        exec {
+        // Updated to use ExecOperations.exec instead of deprecated exec(Action<ExecSpec>)
+        providers.exec {
             commandLine(
                 "adb", "shell", "am", "instrument", "-w",
                 "-e", "class", "com.multisensor.recording.IDEIntegrationUITest",

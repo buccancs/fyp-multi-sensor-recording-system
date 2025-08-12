@@ -188,7 +188,7 @@ class AnalyticsManager @Inject constructor(
 
         val sessionEvents = eventQueue.getOrPut(currentSessionId ?: "global") { mutableListOf() }
 
-        synchronised(sessionEvents) {
+        synchronized(sessionEvents) {
             if (sessionEvents.size < MAX_EVENTS_PER_SESSION) {
                 sessionEvents.add(event)
             } else {
@@ -219,7 +219,7 @@ class AnalyticsManager @Inject constructor(
                 val allEvents = mutableListOf<AnalyticsEvent>()
 
                 eventQueue.forEach { (_, events) ->
-                    synchronised(events) {
+                    synchronized(events) {
                         allEvents.addAll(events)
                         events.clear()
                     }

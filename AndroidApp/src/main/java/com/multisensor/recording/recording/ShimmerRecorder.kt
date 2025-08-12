@@ -1811,7 +1811,7 @@ constructor(
                 try {
                     if (enable) {
                         shimmer.writeConfigTime(System.currentTimeMillis())
-                        logger.info("Clock synchronised for device ${device.getDisplayName()}")
+                        logger.info("Clock synchronized for device ${device.getDisplayName()}")
                     }
                     true
                 } catch (e: Exception) {

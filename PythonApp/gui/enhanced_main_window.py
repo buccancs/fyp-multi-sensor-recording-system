@@ -403,8 +403,8 @@ PsychoPy-Inspired Improvements:
 
 Author: Multi-Sensor Recording System Team
 Date: 2025-07-29
-        setup_text = """
-VLC Backend Setup Guide
+
+VLC Backend Setup Guide:
 To enable enhanced codec support with VLC backend:
 1. Install VLC Media Player:
    - Download from: https://www.videolan.org/vlc/
@@ -415,15 +415,21 @@ To enable enhanced codec support with VLC backend:
 3. Verify Installation:
    - Check status bar for "VLC Backend: Available"
    - Use "Switch Video Backend" from Stimulus menu
+
 Benefits of VLC Backend:
-• Support for additional formats: FLV, WebM, OGV, MPEG, TS
-• Better codec compatibility
-• Improved error handling
-• Hardware acceleration support
+- Support for additional formats: FLV, WebM, OGV, MPEG, TS
+- Better codec compatibility
+- Improved error handling
+- Hardware acceleration support
+
 Troubleshooting:
-• If VLC not detected, ensure VLC is in system PATH
-• For codec issues, try switching backends via menu
-• Check logs for detailed error information
+- If VLC not detected, ensure VLC is in system PATH
+- For codec issues, try switching backends via menu
+- Check logs for detailed error information
+"""
+        QMessageBox.about(self, "About Enhanced Controller", about_text)
+
+    def log_message(self, message: str, category: str = "System"):
         timestamp = time.strftime("%H:%M:%S")
         formatted_message = f"[{timestamp}] [{category}] {message}"
         self.log_text.append(formatted_message)
@@ -439,6 +445,8 @@ Troubleshooting:
     def on_server_error(self, error):
         self.log_message(f"Server error: {error}", "Errors")
     def on_webcam_frame_ready(self, frame):
+        pass  # Frame processing logic would go here
+
     def on_webcam_recording_started(self):
         self.webcam_recording = True
         self.log_message("Webcam recording started", "Recording")
