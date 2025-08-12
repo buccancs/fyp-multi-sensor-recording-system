@@ -36,16 +36,28 @@ android {
         }
         jniLibs {
             useLegacyPackaging = false
-            val libsToPickFirst = listOf(
-                "libUSBUVCCamera.so", "libencrypt.so", "libusbcamera.so", "libircmd.so",
-                "libirparse.so", "libirprocess.so", "libirtemp.so", "libomp.so"
-            )
-            val abis = listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-            abis.forEach { abi ->
-                libsToPickFirst.forEach { lib ->
-                    pickFirsts.add("lib/$abi/$lib")
-                }
-            }
+            pickFirsts.addAll(listOf(
+                "lib/arm64-v8a/libUSBUVCCamera.so", "lib/arm64-v8a/libencrypt.so",
+                "lib/arm64-v8a/libusbcamera.so", "lib/arm64-v8a/libircmd.so",
+                "lib/arm64-v8a/libirparse.so", "lib/arm64-v8a/libirprocess.so",
+                "lib/arm64-v8a/libirtemp.so", "lib/arm64-v8a/libomp.so",
+                "lib/arm64-v8a/libopencv_java4.so",
+                "lib/armeabi-v7a/libUSBUVCCamera.so", "lib/armeabi-v7a/libencrypt.so",
+                "lib/armeabi-v7a/libusbcamera.so", "lib/armeabi-v7a/libircmd.so",
+                "lib/armeabi-v7a/libirparse.so", "lib/armeabi-v7a/libirprocess.so",
+                "lib/armeabi-v7a/libirtemp.so", "lib/armeabi-v7a/libomp.so",
+                "lib/armeabi-v7a/libopencv_java4.so",
+                "lib/x86/libUSBUVCCamera.so", "lib/x86/libencrypt.so",
+                "lib/x86/libusbcamera.so", "lib/x86/libircmd.so",
+                "lib/x86/libirparse.so", "lib/x86/libirprocess.so",
+                "lib/x86/libirtemp.so", "lib/x86/libomp.so",
+                "lib/x86/libopencv_java4.so",
+                "lib/x86_64/libUSBUVCCamera.so", "lib/x86_64/libencrypt.so",
+                "lib/x86_64/libusbcamera.so", "lib/x86_64/libircmd.so",
+                "lib/x86_64/libirparse.so", "lib/x86_64/libirprocess.so",
+                "lib/x86_64/libirtemp.so", "lib/x86_64/libomp.so",
+                "lib/x86_64/libopencv_java4.so"
+            ))
         }
     }
 
