@@ -51,10 +51,17 @@ except ImportError:
     usb = None
 
 # Import hardware utilities
-from tests.hardware.hardware_utils import (
-    HardwareConfig, HardwareStatus,
-    detect_thermal_cameras, validate_thermal_frame
-)
+try:
+    from tests.hardware.hardware_utils import (
+        HardwareConfig, HardwareStatus,
+        detect_thermal_cameras, validate_thermal_frame
+    )
+except ImportError:
+    # Try relative import
+    from .hardware_utils import (
+        HardwareConfig, HardwareStatus,
+        detect_thermal_cameras, validate_thermal_frame
+    )
 
 logger = logging.getLogger(__name__)
 

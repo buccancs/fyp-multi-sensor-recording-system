@@ -47,10 +47,17 @@ except ImportError:
     ShimmerBluetooth = None
 
 # Import hardware utilities
-from tests.hardware.hardware_utils import (
-    HardwareConfig, HardwareStatus, 
-    detect_shimmer_devices, validate_gsr_data
-)
+try:
+    from tests.hardware.hardware_utils import (
+        HardwareConfig, HardwareStatus, 
+        detect_shimmer_devices, validate_gsr_data
+    )
+except ImportError:
+    # Try relative import
+    from .hardware_utils import (
+        HardwareConfig, HardwareStatus, 
+        detect_shimmer_devices, validate_gsr_data
+    )
 
 logger = logging.getLogger(__name__)
 

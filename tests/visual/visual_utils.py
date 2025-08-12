@@ -166,7 +166,8 @@ class ScreenshotComparator:
             "different_pixels": diff_pixels
         }
     
-    def _normalize_images(self, img1: Image.Image, img2: Image.Image) -> Tuple[Image.Image, Image.Image]:
+    def _normalize_images(self, img1, img2):
+        """Normalize images for comparison."""
         """Normalize two images to same size and format."""
         # Get target size (use larger dimensions)
         target_width = max(img1.width, img2.width)
