@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="10" failures="0" skipped="0" tests="10" time="7.996" timestamp="2025-08-12T05:50:35.819409+00:00" hostname="pkrvmsl9tci6h6u"><testcase classname="" name="tests.gui.test_enhanced_main_window" time="0.000"><error message="collection failure">ImportError while importing test module '/home/runner/work/bucika_gsr/bucika_gsr/tests/gui/test_enhanced_main_window.py'.
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="10" failures="0" skipped="0" tests="10" time="0.342" timestamp="2025-08-12T06:37:51.206014+00:00" hostname="pkrvmsl9tci6h6u"><testcase classname="" name="tests.gui.test_enhanced_main_window" time="0.000"><error message="collection failure">ImportError while importing test module '/home/runner/work/bucika_gsr/bucika_gsr/tests/gui/test_enhanced_main_window.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 /usr/lib/python3.12/importlib/__init__.py:90: in import_module
