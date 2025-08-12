@@ -194,7 +194,47 @@ class CrossPlatformTestRunner:
             # PC tests - run all levels but exclude android-specific tests  
             cmd.extend(["--level", "unit"])
         elif mode == "android":
-            cmd.extend(["--category", "android"])
+            # Enhanced Android testing with comprehensive device testing
+            self.print_status("Running comprehensive Android device tests...")
+            android_demo_script = self.project_root / "android_device_testing_demo.py"
+            if android_demo_script.exists():
+                # Use the new comprehensive Android testing demo
+                retcode, stdout, stderr = self.run_command([
+                    python_exe, str(android_demo_script), "--mode", "full"
+                ])
+                if retcode == 0:
+                    self.print_success("Android comprehensive testing completed")
+                else:
+                    self.print_warning("Comprehensive testing failed, falling back to standard Android tests")
+                    cmd.extend(["--category", "android"])
+            else:
+                # Fallback to standard Android category tests
+                cmd.extend(["--category", "android"])
+        elif mode == "android_comprehensive":
+            self.print_status("Running comprehensive Android device tests...")
+            android_demo_script = self.project_root / "android_device_testing_demo.py"
+            if android_demo_script.exists():
+                cmd = [python_exe, str(android_demo_script), "--mode", "comprehensive", "--comprehensive"]
+            else:
+                self.print_warning("Android comprehensive testing script not found")
+                cmd = [python_exe, "-m", "pytest", str(self.unified_tests_dir / "test_android_device_comprehensive.py"), 
+                       "--tb=short", "-v"]
+        elif mode == "android_quick":
+            self.print_status("Running quick Android device validation...")
+            android_demo_script = self.project_root / "android_device_testing_demo.py"
+            if android_demo_script.exists():
+                cmd = [python_exe, str(android_demo_script), "--mode", "quick"]
+            else:
+                cmd = [python_exe, "-m", "pytest", str(self.unified_tests_dir / "test_android_device_comprehensive.py"), 
+                       "-k", "quick", "--tb=short", "-v"]
+        elif mode == "android_ide":
+            self.print_status("Running Android IDE integration tests...")
+            android_demo_script = self.project_root / "android_device_testing_demo.py"
+            if android_demo_script.exists():
+                cmd = [python_exe, str(android_demo_script), "--mode", "ide"]
+            else:
+                cmd = [python_exe, "-m", "pytest", str(self.unified_tests_dir / "test_android_device_comprehensive.py"), 
+                       "-k", "ide", "--tb=short", "-v"]
         elif mode == "gui":
             cmd.extend(["--category", "visual"])
         else:
@@ -270,7 +310,10 @@ class CrossPlatformTestRunner:
         print("  performance  Run performance benchmarks")
         print("  ci           Run CI/CD mode tests")
         print("  pc           Run PC/desktop application tests")
-        print("  android      Run Android application tests")
+        print("  android      Run comprehensive Android device tests with IDE integration")
+        print("  android_comprehensive  Run full Android testing suite (UI, functional, requirements)")
+        print("  android_quick          Run quick Android device validation")
+        print("  android_ide            Run Android IDE integration tests")
         print("  gui          Run GUI/UI tests for both platforms")
         print("")
         print("OPTIONS:")
@@ -283,7 +326,9 @@ class CrossPlatformTestRunner:
         print("  python run_local_tests.py requirements        # Requirements validation")
         print("  python run_local_tests.py quick --install-deps # Install deps and run quick tests")
         print("  python run_local_tests.py pc                  # PC application tests only")
-        print("  python run_local_tests.py android             # Android application tests only")
+        print("  android             # Comprehensive Android device tests")
+        print("  python run_local_tests.py android_quick       # Quick Android validation")
+        print("  python run_local_tests.py android_ide         # Android IDE integration tests")
         print("  python run_local_tests.py gui                 # GUI tests for both platforms")
         print("")
         print(f"PLATFORM INFO:")
@@ -363,7 +408,7 @@ Examples:
         "mode",
         nargs="?",
         default="quick",
-        choices=["quick", "full", "requirements", "performance", "ci", "pc", "android", "gui"],
+        choices=["quick", "full", "requirements", "performance", "ci", "pc", "android", "android_comprehensive", "android_quick", "android_ide", "gui"],
         help="Test mode to run (default: quick)"
     )
     
