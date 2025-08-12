@@ -198,6 +198,7 @@ def web_client(web_server):
 class TestSessionOrchestration:
     """Test end-to-end session orchestration across components."""
     
+    @pytest.mark.unit
     def test_session_lifecycle_via_web_api(self, web_client, mock_controller):
         """FR2, FR4: Test complete session lifecycle through web API."""
         # Step 1: Check initial status
@@ -244,6 +245,7 @@ class TestSessionOrchestration:
             status = response.get_json()
             assert not status['session']['active']
     
+    @pytest.mark.unit
     def test_device_status_synchronization(self, mock_controller):
         """FR1, FR6: Test device status synchronization across components."""
         # Connect devices
@@ -275,6 +277,7 @@ class TestSessionOrchestration:
         status = mock_controller.get_status()
         assert status['devices'][webcam_id]['recording']
     
+    @pytest.mark.unit
     def test_multi_device_coordination(self, mock_controller):
         """FR2: Test synchronized multi-device recording coordination."""
         # Connect all devices
@@ -355,6 +358,7 @@ class TestFaultTolerance:
         assert status['devices'][test_device]['connected']
         # Note: In a full implementation, device would rejoin recording automatically
     
+    @pytest.mark.unit
     def test_graceful_degradation_no_devices(self, mock_controller):
         """NFR3: Test graceful degradation when no devices are available."""
         # Don't connect any devices
@@ -471,6 +475,7 @@ class TestPerformanceIntegration:
 
 
 @pytest.mark.integration
+@pytest.mark.unit
 def test_end_to_end_workflow(mock_controller, web_client):
     """Complete end-to-end workflow test covering all major components."""
     if not WEB_AVAILABLE:

@@ -3,6 +3,9 @@ import os
 import ast
 from pathlib import Path
 from typing import List, Set
+import pytest
+
+@pytest.mark.unit
 class PythonArchitectureTest(unittest.TestCase):
     def setUp(self):
         self.project_root = Path(__file__).parent.parent
