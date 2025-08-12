@@ -163,13 +163,19 @@ jobs:
         run: |
           echo "🔍 Checking for outdated Gradle dependencies..."
           cd AndroidApp
-          ./gradlew dependencyUpdates --info
+          chmod +x ./gradlew
+          
+          # Clear potentially corrupted caches
+          ./gradlew --stop || true
+          rm -rf ~/.gradle/caches/*/dependencies-accessors/ || true
+          
+          ./gradlew dependencyUpdates --info --no-daemon
           
       - name: Run Gradle dependency analysis
         run: |
           echo "🔍 Analysing Gradle dependencies..."
           cd AndroidApp
-          ./gradlew dependencies --configuration releaseRuntimeClasspath > gradle-dependencies.txt
+          ./gradlew dependencies --configuration releaseRuntimeClasspath --no-daemon > gradle-dependencies.txt
           
       - name: Upload Android dependency reports
         uses: actions/upload-artifact@v4

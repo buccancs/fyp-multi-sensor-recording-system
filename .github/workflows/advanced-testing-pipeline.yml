@@ -242,14 +242,41 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     
-    - name: Clear Gradle caches
+    - name: Clear Gradle caches and validate integrity
       run: |
-        ./gradlew clean
+        # Stop any running Gradle daemons
+        ./gradlew --stop || true
+        
+        # Clear all Gradle caches completely
         rm -rf ~/.gradle/caches/
+        rm -rf ~/.gradle/daemon/
+        rm -rf ~/.gradle/wrapper/
         rm -rf .gradle/
-    
-    - name: Build Android app
-      run: ./gradlew assembleDevDebug assembleDevDebugAndroidTest
+        
+        # Clear any corrupted dependency accessors specifically
+        rm -rf ~/.gradle/caches/*/dependencies-accessors/ || true
+        
+        # Clean the project
+        ./gradlew clean --no-daemon --no-build-cache || true
+
+    - name: Validate and rebuild Gradle environment
+      run: |
+        # Verify Gradle wrapper is executable
+        chmod +x ./gradlew
+        
+        # Test Gradle initialization without cache
+        ./gradlew --version --no-daemon --no-build-cache
+        
+        # Initialize project dependencies without cache
+        ./gradlew tasks --no-daemon --no-build-cache
+
+    - name: Build Android app with fresh environment
+      run: |
+        ./gradlew assembleDevDebug assembleDevDebugAndroidTest \
+          --no-daemon \
+          --no-build-cache \
+          --refresh-dependencies \
+          --recompile-scripts
     
     - name: Run Android unit tests
       if: matrix.test-type == 'unit'
@@ -456,10 +483,22 @@ jobs:
       if: matrix.markers == 'e2e'
       run: |
         chmod +x ./gradlew
-        ./gradlew clean
-        rm -rf ~/.gradle/caches/ || true
-        rm -rf .gradle/ || true
-        ./gradlew assembleDevDebug
+        
+        # Comprehensive cache clearing for E2E builds
+        ./gradlew --stop || true
+        rm -rf ~/.gradle/caches/
+        rm -rf ~/.gradle/daemon/
+        rm -rf ~/.gradle/wrapper/
+        rm -rf .gradle/
+        rm -rf ~/.gradle/caches/*/dependencies-accessors/ || true
+        
+        # Clean and rebuild with fresh environment
+        ./gradlew clean --no-daemon --no-build-cache || true
+        ./gradlew assembleDevDebug \
+          --no-daemon \
+          --no-build-cache \
+          --refresh-dependencies \
+          --recompile-scripts
     
     # Start Web dashboard for network tests
     - name: Start Web dashboard

@@ -161,14 +161,22 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
+    - name: Make gradlew executable and prevent cache corruption
+      run: |
+        chmod +x ./gradlew
+        
+        # Clear potentially corrupted caches
+        ./gradlew --stop || true
+        rm -rf ~/.gradle/caches/*/dependencies-accessors/ || true
+        
+        # Test Gradle setup
+        ./gradlew --version --no-daemon
 
     - name: Run Detekt analysis
       run: |
         mkdir -p quality-reports/kotlin
         echo "::group::Detekt static analysis"
-        ./gradlew detekt || true
+        ./gradlew detekt --no-daemon || true
         cp AndroidApp/build/reports/detekt/detekt.xml quality-reports/kotlin/ || true
         cp AndroidApp/build/reports/detekt/detekt.html quality-reports/kotlin/ || true
         echo "::endgroup::"
@@ -177,7 +185,7 @@ jobs:
       run: |
         echo "::group::Kotlin complexity metrics"
         # Use detekt's complexity report
-        ./gradlew detektBaseline || true
+        ./gradlew detektBaseline --no-daemon || true
         
         # Extract complexity metrics from detekt report
         if [ -f "AndroidApp/build/reports/detekt/detekt.xml" ]; then
