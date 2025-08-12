@@ -3,37 +3,37 @@ import threading
 import time
 from typing import Any, Callable, Dict, List, Optional
 try:
-    from session.session_manager import SessionManager
+    from ..session.session_manager import SessionManager
     SESSION_MANAGER_AVAILABLE = True
 except ImportError:
     SessionManager = None
     SESSION_MANAGER_AVAILABLE = False
 try:
-    from shimmer_manager import ShimmerManager
+    from ..shimmer_manager import ShimmerManager
     SHIMMER_MANAGER_AVAILABLE = True
 except ImportError:
     ShimmerManager = None
     SHIMMER_MANAGER_AVAILABLE = False
 try:
-    from network.android_device_manager import AndroidDeviceManager
+    from ..network.android_device_manager import AndroidDeviceManager
     ANDROID_DEVICE_MANAGER_AVAILABLE = True
 except ImportError:
     AndroidDeviceManager = None
     ANDROID_DEVICE_MANAGER_AVAILABLE = False
 try:
-    from network.device_server import JsonSocketServer
+    from ..network.device_server import JsonSocketServer
     JSON_SOCKET_SERVER_AVAILABLE = True
 except ImportError:
     JsonSocketServer = None
     JSON_SOCKET_SERVER_AVAILABLE = False
 try:
-    from webcam.webcam_capture import WebcamCapture
+    from ..webcam.webcam_capture import WebcamCapture
     WEBCAM_CAPTURE_AVAILABLE = True
 except ImportError:
     WebcamCapture = None
     WEBCAM_CAPTURE_AVAILABLE = False
 try:
-    from utils.logging_config import get_logger
+    from ..utils.logging_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
