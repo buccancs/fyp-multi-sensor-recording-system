@@ -217,7 +217,7 @@ def cmd_status(processor: SessionPostProcessor, args) -> int:
     print(f"Processing status for session: {args.session_id}")
     processed_count = 0
     for video_path, is_processed in status.items():
-        status_str = "✓ Processed" if is_processed else "✗ Not processed"
+        status_str = "[PASS] Processed" if is_processed else "[FAIL] Not processed"
         print(f"  {Path(video_path).name}: {status_str}")
         if is_processed:
             processed_count += 1

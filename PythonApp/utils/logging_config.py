@@ -383,14 +383,14 @@ def log_function_entry(func):
         logger = get_logger(func.__module__)
         arg_info = f"args={len(args)}" if args else "no args"
         kwarg_info = f"kwargs={list(kwargs.keys())}" if kwargs else "no kwargs"
-        logger.debug(f"→ Entering {func.__name__}({arg_info}, {kwarg_info})")
+        logger.debug(f"-> Entering {func.__name__}({arg_info}, {kwarg_info})")
         try:
             result = func(*args, **kwargs)
-            logger.debug(f"← Exiting {func.__name__} successfully")
+            logger.debug(f"<- Exiting {func.__name__} successfully")
             return result
         except Exception as e:
             logger.error(
-                f"✗ Exception in {func.__name__}: {type(e).__name__}: {e}",
+                f"[FAIL] Exception in {func.__name__}: {type(e).__name__}: {e}",
                 exc_info=True,
             )
             raise
@@ -402,17 +402,17 @@ def log_method_entry(method):
         arg_info = f"args={len(args)}" if args else "no args"
         kwarg_info = f"kwargs={list(kwargs.keys())}" if kwargs else "no kwargs"
         logger.debug(
-            f"→ Entering {self.__class__.__name__}.{method.__name__}({arg_info}, {kwarg_info})"
+            f"-> Entering {self.__class__.__name__}.{method.__name__}({arg_info}, {kwarg_info})"
         )
         try:
             result = method(self, *args, **kwargs)
             logger.debug(
-                f"← Exiting {self.__class__.__name__}.{method.__name__} successfully"
+                f"<- Exiting {self.__class__.__name__}.{method.__name__} successfully"
             )
             return result
         except Exception as e:
             logger.error(
-                f"✗ Exception in {self.__class__.__name__}.{method.__name__}: {type(e).__name__}: {e}",
+                f"[FAIL] Exception in {self.__class__.__name__}.{method.__name__}: {type(e).__name__}: {e}",
                 exc_info=True,
             )
             raise

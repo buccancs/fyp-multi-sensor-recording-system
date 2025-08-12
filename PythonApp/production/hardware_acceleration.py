@@ -513,7 +513,7 @@ def main():
             capabilities = detector.detect_all_capabilities()
             print(f"\nDetected {len(capabilities)} hardware capabilities:")
             for cap in capabilities:
-                status = "✓" if cap.available else "✗"
+                status = "[PASS]" if cap.available else "[FAIL]"
                 print(f"  {status} {cap.acceleration_type.value}: {cap.device_info or 'Available'}")
                 if cap.performance_score:
                     print(f"    Performance Score: {cap.performance_score:.2f}")

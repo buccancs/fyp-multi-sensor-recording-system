@@ -67,7 +67,7 @@ class MockGSRReading:
     """Mock GSR reading data structure."""
     timestamp: float
     resistance: float  # in kOhms
-    conductance: float  # in μS
+    conductance: float  # in uS
     voltage: float     # raw voltage reading
     quality: str      # 'good', 'fair', 'poor'
 
@@ -146,7 +146,7 @@ class MockShimmerDevice:
             noise = random.uniform(-0.5, 0.5)
             
             resistance = base_resistance + breathing_component + stress_component + noise
-            conductance = 1000.0 / resistance  # Convert to μS
+            conductance = 1000.0 / resistance  # Convert to uS
             voltage = 3.3 * (resistance / 200.0)  # Simulate ADC voltage
             
             # Determine quality based on signal characteristics

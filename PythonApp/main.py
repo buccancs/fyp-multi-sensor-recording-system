@@ -16,18 +16,18 @@ def main():
     logger.info(f"Python version: {sys.version}")
     logger.info(f"PyQt5 available, Qt version: {qVersion()}")
     try:
-        logger.info("🔒 Performing runtime security validation...")
+        logger.info("[SECURE] Performing runtime security validation...")
         validate_runtime_security()
-        logger.info("🔒 Runtime security validation completed successfully")
+        logger.info("[SECURE] Runtime security validation completed successfully")
     except SecurityValidationError as e:
-        logger.error(f"🔒 SECURITY VALIDATION FAILED: {e}")
-        logger.error("🔒 Application startup aborted due to security issues")
-        print(f"\n❌ SECURITY ERROR: {e}")
-        print("🔒 Please fix security issues before running the application")
+        logger.error(f"[SECURE] SECURITY VALIDATION FAILED: {e}")
+        logger.error("[SECURE] Application startup aborted due to security issues")
+        print(f"\n[FAIL] SECURITY ERROR: {e}")
+        print("[SECURE] Please fix security issues before running the application")
         sys.exit(1)
     except Exception as e:
-        logger.warning(f"🔒 Security validation encountered an error: {e}")
-        logger.warning("🔒 Continuing startup with security warning")
+        logger.warning(f"[SECURE] Security validation encountered an error: {e}")
+        logger.warning("[SECURE] Continuing startup with security warning")
     try:
         logger.debug("Configuring high DPI scaling")
         QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)

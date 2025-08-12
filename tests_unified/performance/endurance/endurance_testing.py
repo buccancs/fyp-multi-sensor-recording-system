@@ -542,7 +542,7 @@ def main():
         print(f"\n=== Endurance Test Results ===")
         print(f"Test ID: {result.test_id}")
         print(f"Duration: {result.duration_hours:.2f} hours")
-        print(f"Success: {'✓' if result.success else '✗'}")
+        print(f"Success: {'[PASS]' if result.success else '[FAIL]'}")
         print(f"Average CPU: {result.average_cpu_percent:.1f}%")
         print(f"Peak Memory: {result.peak_memory_mb:.1f}MB")
         print(f"Memory Growth: {result.memory_growth_mb:.1f}MB")

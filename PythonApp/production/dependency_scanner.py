@@ -23,7 +23,7 @@ class DependencySecurityScanner:
             "overall": {"critical": 0, "high": 0, "medium": 0, "low": 0}
         }
     def scan_all_dependencies(self) -> Dict:
-        self.logger.info("🔍 Starting complete dependency security scan...")
+        self.logger.info("[INFO] Starting complete dependency security scan...")
         try:
             self.scan_python_dependencies()
         except Exception as e:
@@ -44,7 +44,7 @@ class DependencySecurityScanner:
         self._log_scan_results()
         return report
     def scan_python_dependencies(self) -> List[Dict]:
-        self.logger.info("🐍 Scanning Python dependencies for vulnerabilities...")
+        self.logger.info("[PYTHON] Scanning Python dependencies for vulnerabilities...")
         vulnerabilities = []
         req_files = list(self.project_root.glob("*requirements*.txt"))
         req_files.extend(list(self.project_root.glob("pyproject.toml")))
@@ -160,7 +160,7 @@ class DependencySecurityScanner:
             })
         return alpha_deps
     def scan_gradle_dependencies(self) -> List[Dict]:
-        self.logger.info("🤖 Scanning Gradle/Android dependencies for vulnerabilities...")
+        self.logger.info("[BOT] Scanning Gradle/Android dependencies for vulnerabilities...")
         vulnerabilities = []
         gradle_files = list(self.project_root.glob("**/build.gradle*"))
         if not gradle_files:
@@ -254,25 +254,25 @@ class DependencySecurityScanner:
         self.scan_results["overall"] = severity_counts
         if severity_counts["critical"] > 0:
             recommendations.append(
-                f"🚨 CRITICAL: {severity_counts['critical']} critical vulnerabilities found - "
+                f"[ALERT] CRITICAL: {severity_counts['critical']} critical vulnerabilities found - "
                 "immediate action required"
             )
         if severity_counts["high"] > 0:
             recommendations.append(
-                f"⚠️ HIGH: {severity_counts['high']} high-severity vulnerabilities found - "
+                f"[WARN] HIGH: {severity_counts['high']} high-severity vulnerabilities found - "
                 "prioritise updates"
             )
         if total_vulns == 0:
-            recommendations.append("✅ No known vulnerabilities found in dependencies")
+            recommendations.append("[PASS] No known vulnerabilities found in dependencies")
         else:
             recommendations.append(
-                f"🔧 Update {total_vulns} vulnerable dependencies to secure versions"
+                f"[TOOL] Update {total_vulns} vulnerable dependencies to secure versions"
             )
         recommendations.extend([
-            "🤖 Enable Dependabot for automated dependency updates",
-            "🔄 Run dependency scans in CI/CD pipeline",
-            "📅 Schedule weekly dependency vulnerability scans",
-            "🔒 Replace alpha/beta dependencies with stable versions"
+            "[BOT] Enable Dependabot for automated dependency updates",
+            "[REFRESH] Run dependency scans in CI/CD pipeline",
+            "[CALENDAR] Schedule weekly dependency vulnerability scans",
+            "[SECURE] Replace alpha/beta dependencies with stable versions"
         ])
         return recommendations
     def _generate_summary(self) -> Dict:
@@ -298,15 +298,15 @@ class DependencySecurityScanner:
             self.logger.error(f"Failed to save scan report: {e}")
     def _log_scan_results(self):
         summary = self._generate_summary()
-        self.logger.info("🔍 Dependency Security Scan Summary:")
+        self.logger.info("[INFO] Dependency Security Scan Summary:")
         self.logger.info(f"   Total vulnerabilities: {summary['total_vulnerabilities']}")
         for severity, count in summary["severity_breakdown"].items():
             if count > 0:
                 self.logger.warning(f"   {severity.upper()}: {count}")
         if summary["total_vulnerabilities"] == 0:
-            self.logger.info("   ✅ No vulnerabilities found!")
+            self.logger.info("   [PASS] No vulnerabilities found!")
         else:
-            self.logger.warning(f"   ⚠️  Action required for {summary['total_vulnerabilities']} vulnerabilities")
+            self.logger.warning(f"   [WARN]  Action required for {summary['total_vulnerabilities']} vulnerabilities")
 def create_dependabot_config(project_root: str) -> bool:
     logger = get_logger(__name__)
     dependabot_config = {

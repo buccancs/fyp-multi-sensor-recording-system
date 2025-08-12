@@ -194,7 +194,7 @@ class RealTimePlotWidget(QWidget):
                         min_val = np.min(self.value_data[-100:])
                         max_val = np.max(self.value_data[-100:])
                         
-                        stats_text = (f"Mean: {mean_val:.3f} ± {std_val:.3f}\n"
+                        stats_text = (f"Mean: {mean_val:.3f} +/- {std_val:.3f}\n"
                                     f"Range: {min_val:.3f} - {max_val:.3f}\n"
                                     f"Samples: {len(self.value_data)}")
                         self.stats_label.setText(stats_text)
@@ -215,7 +215,7 @@ class ThermalImageWidget(QWidget):
         layout = QVBoxLayout()
         
         # Title
-        title = QLabel("Thermal Camera (256×192 @ 25Hz)")
+        title = QLabel("Thermal Camera (256x192 @ 25Hz)")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("font-weight: bold; font-size: 14px;")
         layout.addWidget(title)
@@ -255,8 +255,8 @@ class ThermalImageWidget(QWidget):
                 max_temp = np.max(temp_array)
                 mean_temp = np.mean(temp_array)
                 
-                info_text = (f"Temperature Range: {min_temp:.1f}°C - {max_temp:.1f}°C\n"
-                           f"Mean: {mean_temp:.1f}°C\n"
+                info_text = (f"Temperature Range: {min_temp:.1f}degC - {max_temp:.1f}degC\n"
+                           f"Mean: {mean_temp:.1f}degC\n"
                            f"Frame: {frame_data.get('frame_id', 'N/A')}")
                 self.temp_info.setText(info_text)
                 
@@ -611,7 +611,7 @@ class MultiSensorMainWindow(QMainWindow):
         realtime_layout = QGridLayout()
         
         # GSR plot
-        self.gsr_plot = RealTimePlotWidget("GSR Conductance (μS)")
+        self.gsr_plot = RealTimePlotWidget("GSR Conductance (uS)")
         realtime_layout.addWidget(self.gsr_plot, 0, 0)
         
         # PPG plot
@@ -671,7 +671,7 @@ class MultiSensorMainWindow(QMainWindow):
         thesis_layout = QFormLayout()
         
         thesis_layout.addRow("Shimmer Sampling:", QLabel("128.0 Hz, 16-bit"))
-        thesis_layout.addRow("Thermal Resolution:", QLabel("256×192 @ 25 Hz"))
+        thesis_layout.addRow("Thermal Resolution:", QLabel("256x192 @ 25 Hz"))
         thesis_layout.addRow("RGB Camera:", QLabel("1080p @ 30 fps"))
         thesis_layout.addRow("NTP Sync Target:", QLabel("~21 ms median offset"))
         thesis_layout.addRow("Security:", QLabel("TLS 1.3, 32-char tokens"))
@@ -809,12 +809,12 @@ class MultiSensorMainWindow(QMainWindow):
                          "UCL Multi-Sensor Recording System\n"
                          "Thesis Implementation with PyQt6\n\n"
                          "Features:\n"
-                         "• Real-time sensor data visualization\n"
-                         "• 128Hz Shimmer GSR+ processing\n"
-                         "• 256×192 thermal imaging @ 25Hz\n"
-                         "• 1080p RGB recording @ 30fps\n"
-                         "• Annotation and session management\n"
-                         "• Thesis-verified configurations")
+                         "* Real-time sensor data visualization\n"
+                         "* 128Hz Shimmer GSR+ processing\n"
+                         "* 256x192 thermal imaging @ 25Hz\n"
+                         "* 1080p RGB recording @ 30fps\n"
+                         "* Annotation and session management\n"
+                         "* Thesis-verified configurations")
 
 
 def create_gui_application(args: Optional[List[str]] = None) -> Optional['QApplication']:

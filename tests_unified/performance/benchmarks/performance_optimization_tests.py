@@ -419,7 +419,7 @@ if __name__ == "__main__":
         passed = sum(1 for r in results if r.success)
         print(f"Passed: {passed}/{len(results)} ({passed/len(results)*100:.1f}%)")
         for result in results:
-            status = "✓" if result.success else "✗"
+            status = "[PASS]" if result.success else "[FAIL]"
             print(f"  {status} {result.test_name}: {result.duration:.2f}s")
             if not result.success:
                 print(f"    Error: {result.error_message}")

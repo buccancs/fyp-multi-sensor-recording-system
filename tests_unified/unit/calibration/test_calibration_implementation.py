@@ -36,20 +36,20 @@ def test_pattern_detection():
             + cv2.CALIB_CB_FILTER_QUADS,
         )
         if ret and corners is not None:
-            print("✓ Chessboard corner detection works")
+            print("[PASS] Chessboard corner detection works")
             grey = chessboard.copy()
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
             corners_refined = cv2.cornerSubPix(
                 grey, corners, (11, 11), (-1, -1), criteria
             )
-            print("✓ Sub-pixel corner refinement works")
+            print("[PASS] Sub-pixel corner refinement works")
             return True
         else:
-            print("⚠ Chessboard corner detection failed (synthetic pattern limitation)")
-            print("✓ Pattern detection functionality verified (algorithms available)")
+            print("[WARN] Chessboard corner detection failed (synthetic pattern limitation)")
+            print("[PASS] Pattern detection functionality verified (algorithms available)")
             return True
     except Exception as e:
-        print(f"✗ Pattern detection test failed: {e}")
+        print(f"[FAIL] Pattern detection test failed: {e}")
         return False
 def _setup_single_camera_parameters():
     import numpy as np
@@ -95,9 +95,9 @@ def _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coef
         ) / len(imgpoints2)
         total_error += error
     mean_error = total_error / len(objpoints)
-    print(f"✓ Mean reprojection error: {mean_error:.3f} pixels")
-    print(f"✓ Calibrated camera matrix:\n{camera_matrix}")
-    print(f"✓ Distortion coefficients: {dist_coeffs.flatten()}")
+    print(f"[PASS] Mean reprojection error: {mean_error:.3f} pixels")
+    print(f"[PASS] Calibrated camera matrix:\n{camera_matrix}")
+    print(f"[PASS] Distortion coefficients: {dist_coeffs.flatten()}")
     return True
 @pytest.mark.unit
 def test_single_camera_calibration():
@@ -111,13 +111,13 @@ def test_single_camera_calibration():
             objpoints, imgpoints, params['img_size'], None, None
         )
         if ret:
-            print("✓ Camera calibration completed successfully")
+            print("[PASS] Camera calibration completed successfully")
             return _evaluate_calibration_results(objpoints, imgpoints, camera_matrix, dist_coeffs, rvecs, tvecs)
         else:
-            print("✗ Camera calibration failed")
+            print("[FAIL] Camera calibration failed")
             return False
     except Exception as e:
-        print(f"✗ Single camera calibration test failed: {e}")
+        print(f"[FAIL] Single camera calibration test failed: {e}")
         traceback.print_exc()
         return False
 def _setup_stereo_calibration_parameters():
@@ -178,20 +178,20 @@ def _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, p
             params['img_size'], flags=cv2.CALIB_FIX_INTRINSIC,
         )
         if ret:
-            print("✓ Stereo calibration completed successfully")
-            print(f"✓ Rotation matrix:\n{R}")
-            print(f"✓ Translation vector: {T.flatten()}")
-            print(f"✓ Essential matrix computed")
-            print(f"✓ Fundamental matrix computed")
+            print("[PASS] Stereo calibration completed successfully")
+            print(f"[PASS] Rotation matrix:\n{R}")
+            print(f"[PASS] Translation vector: {T.flatten()}")
+            print(f"[PASS] Essential matrix computed")
+            print(f"[PASS] Fundamental matrix computed")
             baseline_computed = np.linalg.norm(T)
-            print(f"✓ Computed baseline: {baseline_computed:.2f}mm")
+            print(f"[PASS] Computed baseline: {baseline_computed:.2f}mm")
             return True
         else:
-            print("✗ Stereo calibration failed")
+            print("[FAIL] Stereo calibration failed")
             return False
     except cv2.error as e:
-        print(f"⚠ Stereo calibration failed with synthetic data: {str(e)}")
-        print("✓ Stereo calibration functionality verified (algorithm available)")
+        print(f"[WARN] Stereo calibration failed with synthetic data: {str(e)}")
+        print("[PASS] Stereo calibration functionality verified (algorithm available)")
         return True
 @pytest.mark.unit
 def test_stereo_calibration():
@@ -203,7 +203,7 @@ def test_stereo_calibration():
         objpoints, imgpoints1, imgpoints2 = _generate_synthetic_stereo_data(params)
         return _perform_stereo_calibration_computation(objpoints, imgpoints1, imgpoints2, params)
     except Exception as e:
-        print(f"✗ Stereo calibration test failed: {e}")
+        print(f"[FAIL] Stereo calibration test failed: {e}")
         traceback.print_exc()
         return False
 @pytest.mark.unit
@@ -241,12 +241,12 @@ def test_calibration_quality_assessment():
             )
             return coverage_percentage
         coverage = calculate_coverage(corners_list, img_size)
-        print(f"✓ Coverage analysis: {coverage:.1f}% of image covered")
+        print(f"[PASS] Coverage analysis: {coverage:.1f}% of image covered")
         def calculate_rms_error(reprojection_errors):
             return np.sqrt(np.mean(np.array(reprojection_errors) ** 2))
         test_errors = [0.5, 0.3, 0.7, 0.4, 0.6, 0.2, 0.8, 0.3, 0.5, 0.4]
         rms_error = calculate_rms_error(test_errors)
-        print(f"✓ RMS error calculation: {rms_error:.3f} pixels")
+        print(f"[PASS] RMS error calculation: {rms_error:.3f} pixels")
         def assess_calibration_quality(rms_error, coverage):
             if rms_error < 0.5 and coverage > 80:
                 return "Excellent"
@@ -257,10 +257,10 @@ def test_calibration_quality_assessment():
             else:
                 return "Poor"
         quality = assess_calibration_quality(rms_error, coverage)
-        print(f"✓ Calibration quality assessment: {quality}")
+        print(f"[PASS] Calibration quality assessment: {quality}")
         return True
     except Exception as e:
-        print(f"✗ Quality assessment test failed: {e}")
+        print(f"[FAIL] Quality assessment test failed: {e}")
         traceback.print_exc()
         return False
 @pytest.mark.unit
@@ -289,7 +289,7 @@ def test_data_persistence():
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(calibration_data, f, indent=2)
             temp_file = f.name
-        print("✓ Calibration data saved to JSON")
+        print("[PASS] Calibration data saved to JSON")
         with open(temp_file, "r") as f:
             loaded_data = json.load(f)
         assert loaded_data["camera_matrix"] == calibration_data["camera_matrix"]
@@ -302,11 +302,11 @@ def test_data_persistence():
             loaded_data["metadata"]["pattern_size"]
             == calibration_data["metadata"]["pattern_size"]
         )
-        print("✓ Calibration data loaded and validated successfully")
+        print("[PASS] Calibration data loaded and validated successfully")
         os.unlink(temp_file)
         return True
     except Exception as e:
-        print(f"✗ Data persistence test failed: {e}")
+        print(f"[FAIL] Data persistence test failed: {e}")
         traceback.print_exc()
         return False
 def main():
@@ -327,20 +327,20 @@ def main():
             print(f"\n{'-' * 40}")
             if test():
                 passed += 1
-                print(f"✓ {test.__name__} PASSED")
+                print(f"[PASS] {test.__name__} PASSED")
             else:
-                print(f"✗ {test.__name__} FAILED")
+                print(f"[FAIL] {test.__name__} FAILED")
         except Exception as e:
-            print(f"✗ {test.__name__} FAILED with exception: {e}")
+            print(f"[FAIL] {test.__name__} FAILED with exception: {e}")
             traceback.print_exc()
     print("\n" + "=" * 60)
     print(f"Calibration Test Results: {passed}/{total} tests passed")
     print("=" * 60)
     if passed == total:
-        print("✓ All calibration implementation tests passed!")
+        print("[PASS] All calibration implementation tests passed!")
         return True
     else:
-        print("✗ Some calibration tests failed. Check the output above for details.")
+        print("[FAIL] Some calibration tests failed. Check the output above for details.")
         return False
 if __name__ == "__main__":
     success = main()

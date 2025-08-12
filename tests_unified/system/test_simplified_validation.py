@@ -76,9 +76,9 @@ def validate_file_structure():
         }
         
         if exists:
-            logger.info(f"✓ Found: {relative_path}")
+            logger.info(f"[PASS] Found: {relative_path}")
         else:
-            logger.error(f"✗ Missing: {relative_path}")
+            logger.error(f"[FAIL] Missing: {relative_path}")
     
     return results
 
@@ -114,7 +114,7 @@ def validate_configuration_values():
             'severity': 'critical'
         }
         
-        # Validate Thermal configuration - Thesis Claim: "256×192 at 25 Hz"
+        # Validate Thermal configuration - Thesis Claim: "256x192 at 25 Hz"
         thermal_config = config.get_device_config(DeviceType.TOPDON_TC001)
         results['thermal_sampling_rate'] = {
             'claim': 'Thermal camera at 25 Hz',
@@ -125,7 +125,7 @@ def validate_configuration_values():
         }
         
         results['thermal_resolution'] = {
-            'claim': 'Thermal camera 256×192 resolution',
+            'claim': 'Thermal camera 256x192 resolution',
             'expected': (256, 192),
             'actual': (thermal_config.resolution_width, thermal_config.resolution_height),
             'passed': thermal_config.resolution_width == 256 and thermal_config.resolution_height == 192,
@@ -143,7 +143,7 @@ def validate_configuration_values():
         }
         
         results['rgb_resolution'] = {
-            'claim': 'RGB camera 1080p (1920×1080)',
+            'claim': 'RGB camera 1080p (1920x1080)',
             'expected': (1920, 1080),
             'actual': (rgb_config.resolution_width, rgb_config.resolution_height),
             'passed': rgb_config.resolution_width == 1920 and rgb_config.resolution_height == 1080,
@@ -171,7 +171,7 @@ def validate_configuration_values():
         
         results['security_token_length'] = {
             'claim': 'Minimum 32-character tokens',
-            'expected': '≥32',
+            'expected': '>=32',
             'actual': config.security.min_token_length,
             'passed': config.security.min_token_length >= 32,
             'severity': 'critical'
@@ -398,7 +398,7 @@ def validate_android_implementations():
                         'actual': thermal_compliant,
                         'passed': thermal_compliant,
                         'severity': 'critical',
-                        'details': f'Infisense SDK: {has_infisense}, 256×192: {has_256x192}, 25Hz: {has_25hz}, Radiometric: {has_radiometric}'
+                        'details': f'Infisense SDK: {has_infisense}, 256x192: {has_256x192}, 25Hz: {has_25hz}, Radiometric: {has_radiometric}'
                     }
                 
                 elif component == 'shimmer_recorder':
@@ -509,13 +509,13 @@ def run_comprehensive_validation():
     print(f"Critical Failures: {len(critical_failures)}")
     
     if compliance_percentage >= 95:
-        print("\n✅ THESIS CLAIMS VALIDATION: PASSED")
+        print("\n[PASS] THESIS CLAIMS VALIDATION: PASSED")
         overall_status = "PASSED"
     elif compliance_percentage >= 80:
-        print("\n⚠️  THESIS CLAIMS VALIDATION: MOSTLY COMPLIANT")
+        print("\n[WARN]  THESIS CLAIMS VALIDATION: MOSTLY COMPLIANT")
         overall_status = "MOSTLY_COMPLIANT"
     else:
-        print("\n❌ THESIS CLAIMS VALIDATION: FAILED")
+        print("\n[FAIL] THESIS CLAIMS VALIDATION: FAILED")
         overall_status = "FAILED"
     
     # Detailed results
@@ -565,7 +565,7 @@ def run_comprehensive_validation():
     ]
     
     for item_name, item_implemented in coverage_items:
-        status = "✓" if item_implemented else "✗"
+        status = "[PASS]" if item_implemented else "[FAIL]"
         print(f"  {status} {item_name}")
     
     # Save detailed results

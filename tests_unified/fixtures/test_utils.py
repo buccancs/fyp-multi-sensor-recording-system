@@ -268,7 +268,7 @@ def hardware_test(test_func):
 def assert_within_tolerance(actual: float, expected: float, tolerance: float = 0.01):
     """Assert that actual value is within tolerance of expected value"""
     assert abs(actual - expected) <= tolerance, \
-        f"Expected {expected} ± {tolerance}, got {actual}"
+        f"Expected {expected} +/- {tolerance}, got {actual}"
 
 def assert_timing_within_bounds(actual_time: float, min_time: float, max_time: float):
     """Assert that timing is within expected bounds"""

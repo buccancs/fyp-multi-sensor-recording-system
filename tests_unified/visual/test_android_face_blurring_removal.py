@@ -19,7 +19,7 @@ from pathlib import Path
 def check_file_exists(file_path):
     """Check if a file exists and is readable."""
     if not os.path.exists(file_path):
-        print(f"❌ ERROR: File not found: {file_path}")
+        print(f"[FAIL] ERROR: File not found: {file_path}")
         return False
     return True
 
@@ -30,7 +30,7 @@ def check_kotlin_face_blurring_defaults():
     if not check_file_exists(privacy_manager_path):
         return False
     
-    print(f"📁 Checking Android PrivacyManager configuration...")
+    print(f"[FOLDER] Checking Android PrivacyManager configuration...")
     
     with open(privacy_manager_path, 'r') as f:
         content = f.read()
@@ -45,17 +45,17 @@ def check_kotlin_face_blurring_defaults():
     success = True
     for pattern in expected_patterns:
         if not re.search(pattern, content, re.IGNORECASE):
-            print(f"❌ FAIL: Expected pattern not found: {pattern}")
+            print(f"[FAIL] FAIL: Expected pattern not found: {pattern}")
             success = False
         else:
-            print(f"✅ PASS: Found correct face blurring default setting")
+            print(f"[PASS] PASS: Found correct face blurring default setting")
     
     # Check that comments reference hands-only video
     if "hands-only" not in content.lower():
-        print(f"❌ FAIL: Missing 'hands-only' reference in comments")
+        print(f"[FAIL] FAIL: Missing 'hands-only' reference in comments")
         success = False
     else:
-        print(f"✅ PASS: Found 'hands-only' reference in comments")
+        print(f"[PASS] PASS: Found 'hands-only' reference in comments")
     
     return success
 
@@ -74,17 +74,17 @@ def check_ui_text_updates():
             success = False
             continue
         
-        print(f"📁 Checking UI file: {ui_file}")
+        print(f"[FOLDER] Checking UI file: {ui_file}")
         
         with open(ui_file, 'r') as f:
             content = f.read()
         
         # Check for hands-only or hands references
         if "hands-only" not in content.lower() and "hands" not in content.lower():
-            print(f"❌ FAIL: No hands-only reference found in {ui_file}")
+            print(f"[FAIL] FAIL: No hands-only reference found in {ui_file}")
             success = False
         else:
-            print(f"✅ PASS: Found hands reference in {ui_file}")
+            print(f"[PASS] PASS: Found hands reference in {ui_file}")
     
     return success
 
@@ -95,7 +95,7 @@ def check_backward_compatibility():
     if not check_file_exists(privacy_manager_path):
         return False
     
-    print(f"📁 Checking backward compatibility...")
+    print(f"[FOLDER] Checking backward compatibility...")
     
     with open(privacy_manager_path, 'r') as f:
         content = f.read()
@@ -110,10 +110,10 @@ def check_backward_compatibility():
     success = True
     for method in required_methods:
         if method not in content:
-            print(f"❌ FAIL: Missing required method: {method}")
+            print(f"[FAIL] FAIL: Missing required method: {method}")
             success = False
         else:
-            print(f"✅ PASS: Found method: {method}")
+            print(f"[PASS] PASS: Found method: {method}")
     
     return success
 
@@ -124,7 +124,7 @@ def check_security_features_preserved():
     if not check_file_exists(privacy_manager_path):
         return False
     
-    print(f"📁 Checking other security features...")
+    print(f"[FOLDER] Checking other security features...")
     
     with open(privacy_manager_path, 'r') as f:
         content = f.read()
@@ -141,16 +141,16 @@ def check_security_features_preserved():
         # Look for the feature being set to true
         pattern = rf'\.putBoolean\({feature},\s*true\)'
         if not re.search(pattern, content):
-            print(f"❌ FAIL: Security feature not enabled by default: {feature}")
+            print(f"[FAIL] FAIL: Security feature not enabled by default: {feature}")
             success = False
         else:
-            print(f"✅ PASS: Security feature enabled: {feature}")
+            print(f"[PASS] PASS: Security feature enabled: {feature}")
     
     return success
 
 def main():
     """Main test function."""
-    print("🚀 Starting Android app face blurring removal validation...")
+    print("[DEPLOY] Starting Android app face blurring removal validation...")
     print("=" * 60)
     
     # Change to repository root
@@ -167,14 +167,14 @@ def main():
     
     # Print summary
     print("\n" + "=" * 60)
-    print("📋 TEST SUMMARY")
+    print("[CLIPBOARD] TEST SUMMARY")
     print("=" * 60)
     
     passed = 0
     total = len(test_results)
     
     for test_name, result in test_results:
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS] PASS" if result else "[FAIL] FAIL"
         print(f"{status}: {test_name}")
         if result:
             passed += 1
@@ -182,15 +182,15 @@ def main():
     print(f"\nResults: {passed}/{total} tests passed")
     
     if passed == total:
-        print("\n🎉 SUCCESS: All Android face blurring removal tests passed!")
+        print("\n[SUCCESS] SUCCESS: All Android face blurring removal tests passed!")
         print("\nThe Android app has been successfully updated for hands-only video processing:")
-        print("• Face blurring disabled by default (no faces in video)")
-        print("• UI text updated to reflect hands-only video processing")
-        print("• Backward compatibility maintained for face detection features")
-        print("• Other security features remain enabled")
+        print("* Face blurring disabled by default (no faces in video)")
+        print("* UI text updated to reflect hands-only video processing")
+        print("* Backward compatibility maintained for face detection features")
+        print("* Other security features remain enabled")
         return True
     else:
-        print(f"\n❌ FAILURE: {total - passed} test(s) failed!")
+        print(f"\n[FAIL] FAILURE: {total - passed} test(s) failed!")
         return False
 
 if __name__ == "__main__":

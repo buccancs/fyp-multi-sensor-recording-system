@@ -158,13 +158,13 @@ class FileBrowserDialog(QDialog):
     def setup_ui(self):
         layout = QVBoxLayout(self)
         header_layout = QHBoxLayout()
-        self.back_btn = QPushButton("⬅ Back")
+        self.back_btn = QPushButton("LEFT Back")
         self.back_btn.clicked.connect(self.go_back)
         header_layout.addWidget(self.back_btn)
-        self.up_btn = QPushButton("⬆ Up")
+        self.up_btn = QPushButton("UP Up")
         self.up_btn.clicked.connect(self.go_up)
         header_layout.addWidget(self.up_btn)
-        self.home_btn = QPushButton("🏠 Recordings")
+        self.home_btn = QPushButton("[HOME] Recordings")
         self.home_btn.clicked.connect(self.go_home)
         header_layout.addWidget(self.home_btn)
         self.path_label = QLabel(self.current_path)
@@ -172,7 +172,7 @@ class FileBrowserDialog(QDialog):
             "QLabel { background: #f0f0f0; padding: 5px; border-radius: 3px; }"
         )
         header_layout.addWidget(self.path_label, 1)
-        self.refresh_btn = QPushButton("🔄 Refresh")
+        self.refresh_btn = QPushButton("[REFRESH] Refresh")
         self.refresh_btn.clicked.connect(self.refresh)
         header_layout.addWidget(self.refresh_btn)
         layout.addLayout(header_layout)
@@ -240,7 +240,7 @@ class FileBrowserDialog(QDialog):
             for item in os.listdir(path):
                 item_path = os.path.join(path, item)
                 if os.path.isdir(item_path):
-                    list_item = QListWidgetItem(f"📁 {item}")
+                    list_item = QListWidgetItem(f"[FOLDER] {item}")
                     list_item.setData(Qt.UserRole, item_path)
                     list_item.setData(Qt.UserRole + 1, "directory")
                     items.append(list_item)
@@ -273,28 +273,28 @@ class FileBrowserDialog(QDialog):
             self.status_label.setText(f"Error: {str(e)}")
     def get_file_icon(self, extension: str) -> str:
         icons = {
-            "jpg": "🖼️",
-            "jpeg": "🖼️",
-            "png": "🖼️",
-            "gif": "🖼️",
-            "bmp": "🖼️",
-            "mp4": "🎥",
-            "avi": "🎥",
-            "mov": "🎥",
-            "mkv": "🎥",
-            "mp3": "🎵",
-            "wav": "🎵",
-            "ogg": "🎵",
-            "txt": "📄",
-            "log": "📄",
-            "json": "📄",
-            "xml": "📄",
-            "csv": "📊",
-            "pdf": "📕",
-            "zip": "📦",
-            "rar": "📦",
+            "jpg": "[IMAGE]",
+            "jpeg": "[IMAGE]",
+            "png": "[IMAGE]",
+            "gif": "[IMAGE]",
+            "bmp": "[IMAGE]",
+            "mp4": "[VIDEO]",
+            "avi": "[VIDEO]",
+            "mov": "[VIDEO]",
+            "mkv": "[VIDEO]",
+            "mp3": "[AUDIO]",
+            "wav": "[AUDIO]",
+            "ogg": "[AUDIO]",
+            "txt": "[DOC]",
+            "log": "[DOC]",
+            "json": "[DOC]",
+            "xml": "[DOC]",
+            "csv": "[CHART]",
+            "pdf": "[BOOK]",
+            "zip": "[PACKAGE]",
+            "rar": "[PACKAGE]",
         }
-        return icons.get(extension, "📄")
+        return icons.get(extension, "[DOC]")
     def on_file_selected(self, item: QListWidgetItem):
         file_path = item.data(Qt.UserRole)
         file_type = item.data(Qt.UserRole + 1)
