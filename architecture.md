@@ -72,7 +72,7 @@ graph TB
             end
             
             subgraph "Thermal Cameras"
-                TC1[Thermal Camera 1<br/>FLIR/Seek Integration]
+                TC1[Thermal Camera 1<br/>Topdon TC001]
                 TC2[Thermal Camera 2<br/>Multi-Angle Capture]
             end
             
