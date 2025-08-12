@@ -3,18 +3,37 @@ package com.multisensor.recording.managers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 import com.multisensor.recording.calibration.CalibrationCaptureManager
 import com.multisensor.recording.calibration.CalibrationProcessor
 import com.multisensor.recording.util.Logger
+import android.content.Context
+import android.content.SharedPreferences
+import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.File
+import java.io.FileWriter
+import java.io.BufferedWriter
+import java.io.BufferedReader
+import java.io.FileReader
+import org.json.JSONObject
+import org.json.JSONArray
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CalibrationManager @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val calibrationCaptureManager: CalibrationCaptureManager,
     private val calibrationProcessor: CalibrationProcessor,
     private val logger: Logger
 ) {
+
+    companion object {
+        private const val CALIBRATION_PREFS = "calibration_data"
+        private const val CALIBRATION_FILE_PREFIX = "calibration_"
+        private const val CALIBRATION_EXPORT_DIR = "calibration_exports"
+    }
 
     data class CalibrationState(
         val isCalibrating: Boolean = false,
@@ -46,7 +65,38 @@ class CalibrationManager @Inject constructor(
         val message: String,
         val rgbFilePath: String? = null,
         val thermalFilePath: String? = null,
-        val timestamp: Long = System.currentTimeMillis()
+        val timestamp: Long = System.currentTimeMillis(),
+        val calibrationParameters: CalibrationParameters? = null
+    )
+    
+    data class CalibrationParameters(
+        val cameraIntrinsics: CameraIntrinsics? = null,
+        val thermalCalibration: ThermalCalibration? = null,
+        val shimmerCalibration: ShimmerCalibration? = null,
+        val qualityScore: Double = 0.0,
+        val calibrationId: String
+    )
+    
+    data class CameraIntrinsics(
+        val focalLengthX: Double,
+        val focalLengthY: Double,
+        val principalPointX: Double,
+        val principalPointY: Double,
+        val distortionCoefficients: List<Double>
+    )
+    
+    data class ThermalCalibration(
+        val temperatureRange: Pair<Double, Double>,
+        val calibrationMatrix: List<List<Double>>,
+        val noiseLevel: Double,
+        val uniformityError: Double
+    )
+    
+    data class ShimmerCalibration(
+        val gsrBaseline: Double,
+        val gsrRange: Pair<Double, Double>,
+        val samplingAccuracy: Double,
+        val signalNoiseRatio: Double
     )
 
     data class CalibrationConfig(
@@ -131,7 +181,26 @@ class CalibrationManager @Inject constructor(
                 calibrationType = CalibrationType.SYSTEM,
                 message = "Calibration completed successfully with quality: ${String.format("%.2f", cameraCalibrationResult.calibrationQuality)}",
                 rgbFilePath = captureResult.rgbFilePath,
-                thermalFilePath = captureResult.thermalFilePath
+                thermalFilePath = captureResult.thermalFilePath,
+                calibrationParameters = CalibrationParameters(
+                    calibrationId = calibrationId,
+                    qualityScore = cameraCalibrationResult.calibrationQuality,
+                    cameraIntrinsics = CameraIntrinsics(
+                        focalLengthX = cameraCalibrationResult.focalLengthX,
+                        focalLengthY = cameraCalibrationResult.focalLengthY,
+                        principalPointX = cameraCalibrationResult.principalPointX,
+                        principalPointY = cameraCalibrationResult.principalPointY,
+                        distortionCoefficients = cameraCalibrationResult.distortionCoefficients.toList()
+                    ),
+                    thermalCalibration = thermalCalibrationResult?.let { thermal ->
+                        ThermalCalibration(
+                            temperatureRange = thermal.temperatureRange,
+                            calibrationMatrix = thermal.calibrationMatrix.map { it.toList() },
+                            noiseLevel = thermal.noiseLevel,
+                            uniformityError = thermal.uniformityError
+                        )
+                    }
+                )
             )
 
             _calibrationState.value = _calibrationState.value.copy(
@@ -206,7 +275,20 @@ class CalibrationManager @Inject constructor(
                     captureResult.errorMessage ?: cameraCalibrationResult?.errorMessage ?: "Camera calibration failed"
                 },
                 rgbFilePath = captureResult.rgbFilePath,
-                thermalFilePath = captureResult.thermalFilePath
+                thermalFilePath = captureResult.thermalFilePath,
+                calibrationParameters = if (cameraCalibrationResult?.success == true) {
+                    CalibrationParameters(
+                        calibrationId = calibrationId,
+                        qualityScore = cameraCalibrationResult.calibrationQuality,
+                        cameraIntrinsics = CameraIntrinsics(
+                            focalLengthX = cameraCalibrationResult.focalLengthX,
+                            focalLengthY = cameraCalibrationResult.focalLengthY,
+                            principalPointX = cameraCalibrationResult.principalPointX,
+                            principalPointY = cameraCalibrationResult.principalPointY,
+                            distortionCoefficients = cameraCalibrationResult.distortionCoefficients.toList()
+                        )
+                    )
+                } else null
             )
 
             _calibrationState.value = _calibrationState.value.copy(
@@ -283,7 +365,19 @@ class CalibrationManager @Inject constructor(
                 } else {
                     captureResult.errorMessage ?: thermalCalibrationResult?.errorMessage ?: "Thermal calibration failed"
                 },
-                thermalFilePath = captureResult.thermalFilePath
+                thermalFilePath = captureResult.thermalFilePath,
+                calibrationParameters = if (thermalCalibrationResult?.success == true) {
+                    CalibrationParameters(
+                        calibrationId = calibrationId,
+                        qualityScore = thermalCalibrationResult.calibrationQuality,
+                        thermalCalibration = ThermalCalibration(
+                            temperatureRange = thermalCalibrationResult.temperatureRange,
+                            calibrationMatrix = thermalCalibrationResult.calibrationMatrix.map { it.toList() },
+                            noiseLevel = thermalCalibrationResult.noiseLevel,
+                            uniformityError = thermalCalibrationResult.uniformityError
+                        )
+                    )
+                } else null
             )
 
             _calibrationState.value = _calibrationState.value.copy(
@@ -349,7 +443,19 @@ class CalibrationManager @Inject constructor(
                     "Shimmer calibration completed with quality: ${String.format("%.2f", shimmerCalibrationResult.calibrationQuality)}"
                 } else {
                     shimmerCalibrationResult.errorMessage ?: "Shimmer calibration failed"
-                }
+                },
+                calibrationParameters = if (shimmerCalibrationResult.success) {
+                    CalibrationParameters(
+                        calibrationId = "shimmer_calibration_${System.currentTimeMillis()}",
+                        qualityScore = shimmerCalibrationResult.calibrationQuality,
+                        shimmerCalibration = ShimmerCalibration(
+                            gsrBaseline = shimmerCalibrationResult.gsrBaseline,
+                            gsrRange = shimmerCalibrationResult.gsrRange,
+                            samplingAccuracy = shimmerCalibrationResult.samplingAccuracy,
+                            signalNoiseRatio = shimmerCalibrationResult.signalNoiseRatio
+                        )
+                    )
+                } else null
             )
 
             _calibrationState.value = _calibrationState.value.copy(
@@ -459,18 +565,53 @@ class CalibrationManager @Inject constructor(
         }
     }
 
-    suspend fun saveCalibrationData(): Result<Unit> {
-        return try {
-            logger.info("Saving calibration data...")
+    suspend fun saveCalibrationData(): Result<Unit> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            logger.info("Saving calibration data to persistent storage...")
 
-            // Here we would save actual calibration parameters to persistent storage
-            // For now, we just log that the operation is performed
             val lastResult = _calibrationState.value.lastCalibrationResult
-            if (lastResult != null) {
-                logger.info("Saving calibration result: ${lastResult.calibrationType} - ${lastResult.message}")
+            if (lastResult == null) {
+                logger.warning("No calibration result to save")
+                return@withContext Result.failure(IllegalStateException("No calibration result available"))
             }
 
-            logger.info("Calibration data saved successfully")
+            // Save to SharedPreferences for quick access
+            val prefs = context.getSharedPreferences(CALIBRATION_PREFS, Context.MODE_PRIVATE)
+            val editor = prefs.edit()
+            
+            // Save basic calibration info
+            editor.putString("last_calibration_type", lastResult.calibrationType.name)
+            editor.putLong("last_calibration_timestamp", lastResult.timestamp)
+            editor.putBoolean("last_calibration_success", lastResult.success)
+            editor.putString("last_calibration_message", lastResult.message)
+            
+            // Save calibration parameters if available
+            lastResult.calibrationParameters?.let { params ->
+                editor.putString("calibration_parameters", serializeCalibrationParameters(params))
+                editor.putFloat("calibration_quality", params.qualityScore.toFloat())
+                editor.putString("calibration_id", params.calibrationId)
+                
+                // Save individual components
+                params.cameraIntrinsics?.let { intrinsics ->
+                    editor.putString("camera_intrinsics", serializeCameraIntrinsics(intrinsics))
+                }
+                
+                params.thermalCalibration?.let { thermal ->
+                    editor.putString("thermal_calibration", serializeThermalCalibration(thermal))
+                }
+                
+                params.shimmerCalibration?.let { shimmer ->
+                    editor.putString("shimmer_calibration", serializeShimmerCalibration(shimmer))
+                }
+            }
+            
+            editor.apply()
+            
+            // Also save to file for detailed backup
+            val calibrationFile = File(context.filesDir, "${CALIBRATION_FILE_PREFIX}${lastResult.timestamp}.json")
+            saveCalibrationToFile(lastResult, calibrationFile)
+            
+            logger.info("Calibration data saved successfully to preferences and file: ${calibrationFile.name}")
             Result.success(Unit)
 
         } catch (e: Exception) {
@@ -479,16 +620,50 @@ class CalibrationManager @Inject constructor(
         }
     }
 
-    suspend fun loadCalibrationData(): Result<Unit> {
-        return try {
-            logger.info("Loading calibration data...")
+    suspend fun loadCalibrationData(): Result<CalibrationParameters?> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            logger.info("Loading calibration data from persistent storage...")
 
-            // Here we would load actual calibration parameters from persistent storage
-            // For now, we just log that the operation is performed
-            logger.info("Loading previously saved calibration configurations...")
-
-            logger.info("Calibration data loaded successfully")
-            Result.success(Unit)
+            val prefs = context.getSharedPreferences(CALIBRATION_PREFS, Context.MODE_PRIVATE)
+            
+            // Check if we have saved calibration data
+            val calibrationId = prefs.getString("calibration_id", null)
+            if (calibrationId == null) {
+                logger.info("No saved calibration data found")
+                return@withContext Result.success(null)
+            }
+            
+            // Load calibration parameters
+            val paramsJson = prefs.getString("calibration_parameters", null)
+            if (paramsJson != null) {
+                val params = deserializeCalibrationParameters(paramsJson)
+                
+                // Update current state with loaded data
+                val calibrationType = try {
+                    CalibrationType.valueOf(prefs.getString("last_calibration_type", "SYSTEM") ?: "SYSTEM")
+                } catch (e: IllegalArgumentException) {
+                    CalibrationType.SYSTEM
+                }
+                
+                val result = CalibrationResult(
+                    success = prefs.getBoolean("last_calibration_success", false),
+                    calibrationType = calibrationType,
+                    message = prefs.getString("last_calibration_message", "Loaded from storage") ?: "Loaded from storage",
+                    timestamp = prefs.getLong("last_calibration_timestamp", System.currentTimeMillis()),
+                    calibrationParameters = params
+                )
+                
+                _calibrationState.value = _calibrationState.value.copy(
+                    lastCalibrationResult = result,
+                    completedCalibrations = setOf(calibrationType)
+                )
+                
+                logger.info("Successfully loaded calibration data: ID=${params.calibrationId}, Quality=${params.qualityScore}")
+                return@withContext Result.success(params)
+            }
+            
+            logger.info("No calibration parameters found in storage")
+            Result.success(null)
 
         } catch (e: Exception) {
             logger.error("Failed to load calibration data", e)
@@ -496,26 +671,227 @@ class CalibrationManager @Inject constructor(
         }
     }
 
-    suspend fun exportCalibrationData(): Result<String> {
-        return try {
+    suspend fun exportCalibrationData(): Result<String> = withContext(Dispatchers.IO) {
+        return@withContext try {
             logger.info("Exporting calibration data...")
 
-            // Export actual calibration results and parameters
             val calibrationData = _calibrationState.value.lastCalibrationResult
-            val exportTimestamp = System.currentTimeMillis()
-            val exportPath = "calibration_export_${exportTimestamp}.json"
-            
-            if (calibrationData != null) {
-                logger.info("Exporting calibration data: ${calibrationData.calibrationType} - ${calibrationData.message}")
+            if (calibrationData == null) {
+                return@withContext Result.failure(IllegalStateException("No calibration data to export"))
             }
             
-            logger.info("Calibration data exported to: $exportPath")
-
-            Result.success(exportPath)
+            // Create export directory if it doesn't exist
+            val exportDir = File(context.getExternalFilesDir(null), CALIBRATION_EXPORT_DIR)
+            if (!exportDir.exists()) {
+                exportDir.mkdirs()
+            }
+            
+            val exportTimestamp = System.currentTimeMillis()
+            val exportFile = File(exportDir, "calibration_export_${exportTimestamp}.json")
+            
+            // Create comprehensive export data
+            val exportData = JSONObject().apply {
+                put("export_timestamp", exportTimestamp)
+                put("export_version", "1.0")
+                put("calibration_result", serializeCalibrationResult(calibrationData))
+                
+                // Add system information
+                put("system_info", JSONObject().apply {
+                    put("android_version", android.os.Build.VERSION.RELEASE)
+                    put("device_model", android.os.Build.MODEL)
+                    put("device_manufacturer", android.os.Build.MANUFACTURER)
+                    put("app_version", getAppVersion())
+                })
+                
+                // Add all completed calibrations
+                val completedCalibs = JSONArray()
+                _calibrationState.value.completedCalibrations.forEach { calibType ->
+                    completedCalibs.put(calibType.name)
+                }
+                put("completed_calibrations", completedCalibs)
+            }
+            
+            // Write to file
+            BufferedWriter(FileWriter(exportFile)).use { writer ->
+                writer.write(exportData.toString(2)) // Pretty print with indent
+            }
+            
+            logger.info("Calibration data exported to: ${exportFile.absolutePath}")
+            logger.info("Export file size: ${exportFile.length()} bytes")
+            
+            Result.success(exportFile.absolutePath)
 
         } catch (e: Exception) {
             logger.error("Failed to export calibration data", e)
             Result.failure(e)
+        }
+    }
+    
+    // Helper functions for serialization
+    private fun serializeCalibrationParameters(params: CalibrationParameters): String {
+        return JSONObject().apply {
+            put("calibration_id", params.calibrationId)
+            put("quality_score", params.qualityScore)
+            
+            params.cameraIntrinsics?.let { intrinsics ->
+                put("camera_intrinsics", JSONObject().apply {
+                    put("focal_length_x", intrinsics.focalLengthX)
+                    put("focal_length_y", intrinsics.focalLengthY) 
+                    put("principal_point_x", intrinsics.principalPointX)
+                    put("principal_point_y", intrinsics.principalPointY)
+                    put("distortion_coefficients", JSONArray(intrinsics.distortionCoefficients))
+                })
+            }
+            
+            params.thermalCalibration?.let { thermal ->
+                put("thermal_calibration", JSONObject().apply {
+                    put("temperature_range_min", thermal.temperatureRange.first)
+                    put("temperature_range_max", thermal.temperatureRange.second)
+                    put("noise_level", thermal.noiseLevel)
+                    put("uniformity_error", thermal.uniformityError)
+                    put("calibration_matrix", JSONArray().apply {
+                        thermal.calibrationMatrix.forEach { row ->
+                            put(JSONArray(row))
+                        }
+                    })
+                })
+            }
+            
+            params.shimmerCalibration?.let { shimmer ->
+                put("shimmer_calibration", JSONObject().apply {
+                    put("gsr_baseline", shimmer.gsrBaseline)
+                    put("gsr_range_min", shimmer.gsrRange.first)
+                    put("gsr_range_max", shimmer.gsrRange.second)
+                    put("sampling_accuracy", shimmer.samplingAccuracy)
+                    put("signal_noise_ratio", shimmer.signalNoiseRatio)
+                })
+            }
+        }.toString()
+    }
+    
+    private fun deserializeCalibrationParameters(json: String): CalibrationParameters {
+        val obj = JSONObject(json)
+        
+        val cameraIntrinsics = if (obj.has("camera_intrinsics")) {
+            val intrinsicsObj = obj.getJSONObject("camera_intrinsics")
+            CameraIntrinsics(
+                focalLengthX = intrinsicsObj.getDouble("focal_length_x"),
+                focalLengthY = intrinsicsObj.getDouble("focal_length_y"),
+                principalPointX = intrinsicsObj.getDouble("principal_point_x"),
+                principalPointY = intrinsicsObj.getDouble("principal_point_y"),
+                distortionCoefficients = jsonArrayToDoubleList(intrinsicsObj.getJSONArray("distortion_coefficients"))
+            )
+        } else null
+        
+        val thermalCalibration = if (obj.has("thermal_calibration")) {
+            val thermalObj = obj.getJSONObject("thermal_calibration")
+            ThermalCalibration(
+                temperatureRange = Pair(
+                    thermalObj.getDouble("temperature_range_min"),
+                    thermalObj.getDouble("temperature_range_max")
+                ),
+                calibrationMatrix = jsonArrayToMatrix(thermalObj.getJSONArray("calibration_matrix")),
+                noiseLevel = thermalObj.getDouble("noise_level"),
+                uniformityError = thermalObj.getDouble("uniformity_error")
+            )
+        } else null
+        
+        val shimmerCalibration = if (obj.has("shimmer_calibration")) {
+            val shimmerObj = obj.getJSONObject("shimmer_calibration")
+            ShimmerCalibration(
+                gsrBaseline = shimmerObj.getDouble("gsr_baseline"),
+                gsrRange = Pair(
+                    shimmerObj.getDouble("gsr_range_min"),
+                    shimmerObj.getDouble("gsr_range_max")
+                ),
+                samplingAccuracy = shimmerObj.getDouble("sampling_accuracy"),
+                signalNoiseRatio = shimmerObj.getDouble("signal_noise_ratio")
+            )
+        } else null
+        
+        return CalibrationParameters(
+            calibrationId = obj.getString("calibration_id"),
+            qualityScore = obj.getDouble("quality_score"),
+            cameraIntrinsics = cameraIntrinsics,
+            thermalCalibration = thermalCalibration,
+            shimmerCalibration = shimmerCalibration
+        )
+    }
+    
+    private fun serializeCameraIntrinsics(intrinsics: CameraIntrinsics): String {
+        return JSONObject().apply {
+            put("focal_length_x", intrinsics.focalLengthX)
+            put("focal_length_y", intrinsics.focalLengthY)
+            put("principal_point_x", intrinsics.principalPointX)
+            put("principal_point_y", intrinsics.principalPointY)
+            put("distortion_coefficients", JSONArray(intrinsics.distortionCoefficients))
+        }.toString()
+    }
+    
+    private fun serializeThermalCalibration(thermal: ThermalCalibration): String {
+        return JSONObject().apply {
+            put("temperature_range_min", thermal.temperatureRange.first)
+            put("temperature_range_max", thermal.temperatureRange.second)
+            put("noise_level", thermal.noiseLevel)
+            put("uniformity_error", thermal.uniformityError)
+        }.toString()
+    }
+    
+    private fun serializeShimmerCalibration(shimmer: ShimmerCalibration): String {
+        return JSONObject().apply {
+            put("gsr_baseline", shimmer.gsrBaseline)
+            put("gsr_range_min", shimmer.gsrRange.first)
+            put("gsr_range_max", shimmer.gsrRange.second)
+            put("sampling_accuracy", shimmer.samplingAccuracy)
+            put("signal_noise_ratio", shimmer.signalNoiseRatio)
+        }.toString()
+    }
+    
+    private fun serializeCalibrationResult(result: CalibrationResult): JSONObject {
+        return JSONObject().apply {
+            put("success", result.success)
+            put("calibration_type", result.calibrationType.name)
+            put("message", result.message)
+            put("timestamp", result.timestamp)
+            put("rgb_file_path", result.rgbFilePath)
+            put("thermal_file_path", result.thermalFilePath)
+            
+            result.calibrationParameters?.let { params ->
+                put("calibration_parameters", JSONObject(serializeCalibrationParameters(params)))
+            }
+        }
+    }
+    
+    private fun saveCalibrationToFile(result: CalibrationResult, file: File) {
+        val jsonData = serializeCalibrationResult(result)
+        BufferedWriter(FileWriter(file)).use { writer ->
+            writer.write(jsonData.toString(2))
+        }
+    }
+    
+    private fun jsonArrayToDoubleList(jsonArray: JSONArray): List<Double> {
+        val list = mutableListOf<Double>()
+        for (i in 0 until jsonArray.length()) {
+            list.add(jsonArray.getDouble(i))
+        }
+        return list
+    }
+    
+    private fun jsonArrayToMatrix(jsonArray: JSONArray): List<List<Double>> {
+        val matrix = mutableListOf<List<Double>>()
+        for (i in 0 until jsonArray.length()) {
+            val row = jsonArray.getJSONArray(i)
+            matrix.add(jsonArrayToDoubleList(row))
+        }
+        return matrix
+    }
+    
+    private fun getAppVersion(): String {
+        return try {
+            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            "${packageInfo.versionName} (${packageInfo.versionCode})"
+        } catch (e: Exception) {
+            "Unknown"
         }
     }
 
