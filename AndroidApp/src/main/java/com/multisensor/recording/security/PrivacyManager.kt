@@ -51,18 +51,18 @@ class PrivacyManager @Inject constructor(
         private const val KEY_PARTICIPANT_ID = "participant_id"
         private const val KEY_STUDY_ID = "study_id"
         private const val KEY_DATA_RETENTION_DAYS = "data_retention_days"
-        
+
         // Enhanced security constants - thesis compliant
         private const val KEY_ENCRYPT_DATA_AT_REST = "encrypt_data_at_rest"
         private const val KEY_SECURE_FILE_DELETION = "secure_file_deletion"
         private const val KEY_LOG_SECURITY_EVENTS = "log_security_events"
         private const val CURRENT_CONSENT_VERSION = 1
         private const val DEFAULT_RETENTION_DAYS = 365
-        
+
         // Face blurring parameters - thesis specification
         private const val FACE_BLUR_RADIUS = 25f
         private const val FACE_DETECTION_MIN_SIZE = 100
-        
+
         // AES-GCM encryption parameters - thesis security requirements
         private const val AES_KEY_SIZE = 256
         private const val GCM_IV_LENGTH = 12
@@ -103,12 +103,12 @@ class PrivacyManager @Inject constructor(
             ).also {
                 // Initialize enhanced privacy features
                 initializeEnhancedPrivacyFeatures()
-                logSecurityEvent("privacy_manager_init", SecuritySeverity.INFO, 
+                logSecurityEvent("privacy_manager_init", SecuritySeverity.INFO,
                     "PrivacyManager initialized with AES-256-GCM encryption")
             }
         } catch (e: Exception) {
             logger.error("Failed to create encrypted preferences, falling back to regular preferences", e)
-            logSecurityEvent("encrypted_prefs_failed", SecuritySeverity.CRITICAL, 
+            logSecurityEvent("encrypted_prefs_failed", SecuritySeverity.CRITICAL,
                 "Failed to initialize encrypted preferences: ${e.message}")
             context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE)
         }
@@ -126,15 +126,15 @@ class PrivacyManager @Inject constructor(
                     .putBoolean(KEY_LOG_SECURITY_EVENTS, true)  // Default enabled for audit
                     .apply()
             }
-            
+
             // Initialize face detection if enabled (disabled by default for hands-only video)
             if (isFaceBlurringEnabled()) {
                 initializeFaceDetection()
             }
-            
-            logSecurityEvent("enhanced_features_init", SecuritySeverity.INFO, 
+
+            logSecurityEvent("enhanced_features_init", SecuritySeverity.INFO,
                 "Enhanced privacy features initialized")
-                
+
         } catch (e: Exception) {
             logger.error("Failed to initialize enhanced privacy features", e)
         }
@@ -145,7 +145,7 @@ class PrivacyManager @Inject constructor(
         try {
             // Copy face detection cascade to internal storage if needed
             val cascadeFile = File(context.filesDir, "haarcascade_frontalface_alt.xml")
-            
+
             if (!cascadeFile.exists()) {
                 // Copy from assets (would need to be included in app assets)
                 context.assets.open("opencv/haarcascade_frontalface_alt.xml").use { inputStream ->
@@ -154,25 +154,25 @@ class PrivacyManager @Inject constructor(
                     }
                 }
             }
-            
+
             // Initialize face detector
             faceDetector = CascadeClassifier(cascadeFile.absolutePath)
-            
+
             if (faceDetector?.empty() == true) {
                 logger.error("Failed to load face detection cascade")
                 faceDetector = null
-                logSecurityEvent("face_detection_failed", SecuritySeverity.WARNING, 
+                logSecurityEvent("face_detection_failed", SecuritySeverity.WARNING,
                     "Face detection cascade failed to load")
             } else {
                 logger.info("Face detection initialized successfully")
-                logSecurityEvent("face_detection_init", SecuritySeverity.INFO, 
+                logSecurityEvent("face_detection_init", SecuritySeverity.INFO,
                     "Face detection initialized for privacy protection")
             }
-            
+
         } catch (e: Exception) {
             logger.error("Failed to initialize face detection", e)
             faceDetector = null
-            logSecurityEvent("face_detection_error", SecuritySeverity.WARNING, 
+            logSecurityEvent("face_detection_error", SecuritySeverity.WARNING,
                 "Face detection initialization error: ${e.message}")
         }
     }
@@ -345,12 +345,12 @@ class PrivacyManager @Inject constructor(
         return@withContext try {
             securePrefs.edit().clear().apply()
             logger.info("All privacy data cleared successfully")
-            logSecurityEvent("privacy_data_cleared", SecuritySeverity.INFO, 
+            logSecurityEvent("privacy_data_cleared", SecuritySeverity.INFO,
                 "All privacy data cleared from encrypted storage")
             true
         } catch (e: Exception) {
             logger.error("Failed to clear privacy data", e)
-            logSecurityEvent("privacy_clear_failed", SecuritySeverity.CRITICAL, 
+            logSecurityEvent("privacy_clear_failed", SecuritySeverity.CRITICAL,
                 "Failed to clear privacy data: ${e.message}")
             false
         }
@@ -371,11 +371,11 @@ class PrivacyManager @Inject constructor(
             // Convert bitmap to OpenCV Mat
             val mat = Mat()
             Utils.bitmapToMat(bitmap, mat)
-            
+
             // Convert to grayscale for face detection
             val grayMat = Mat()
             Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_BGR2GRAY)
-            
+
             // Detect faces
             val faces = MatOfRect()
             faceDetector?.detectMultiScale(
@@ -387,13 +387,13 @@ class PrivacyManager @Inject constructor(
                 Size(FACE_DETECTION_MIN_SIZE.toDouble(), FACE_DETECTION_MIN_SIZE.toDouble()),
                 Size()
             )
-            
+
             // Blur detected faces
             val faceArray = faces.toArray()
             if (faceArray.isNotEmpty()) {
                 for (face in faceArray) {
                     val faceRegion = Mat(mat, face)
-                    
+
                     // Apply Gaussian blur to face region
                     val blurredFace = Mat()
                     val kernelSize = Size(
@@ -401,21 +401,27 @@ class PrivacyManager @Inject constructor(
                         (FACE_BLUR_RADIUS * 2 + 1).toDouble()
                     )
                     Imgproc.GaussianBlur(faceRegion, blurredFace, kernelSize, 0.0)
-                    
+
                     // Copy blurred face back to original image
                     blurredFace.copyTo(faceRegion)
                 }
-                
+
                 logSecurityEvent("face_blurring_applied", SecuritySeverity.INFO,
                     "Applied face blurring to ${faceArray.size} detected faces")
             }
-            
+
             // Convert back to bitmap
-            val result = bitmap.copy(bitmap.config, true)
+            val result = bitmap.copy(
+                bitmap.config ?: when {
+                    bitmap.hasAlpha() -> Bitmap.Config.ARGB_8888
+                    else -> Bitmap.Config.RGB_565
+                },
+                true
+            )
             Utils.matToBitmap(mat, result)
-            
+
             result
-            
+
         } catch (e: Exception) {
             logger.error("Failed to apply face blurring", e)
             logSecurityEvent("face_blurring_failed", SecuritySeverity.WARNING,
@@ -435,24 +441,24 @@ class PrivacyManager @Inject constructor(
         try {
             // Generate or retrieve AES key
             val secretKey = getOrCreateSecretKey(keyAlias)
-            
+
             // Generate random IV
             val iv = ByteArray(GCM_IV_LENGTH)
             java.security.SecureRandom().nextBytes(iv)
-            
+
             // Initialize cipher
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             val spec = GCMParameterSpec(GCM_TAG_LENGTH * 8, iv)
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, spec)
-            
+
             // Encrypt data
             val encryptedData = cipher.doFinal(data)
-            
+
             logSecurityEvent("data_encrypted", SecuritySeverity.INFO,
                 "Encrypted ${data.size} bytes using AES-GCM")
-            
+
             EncryptedData(encryptedData, iv, keyAlias, true)
-            
+
         } catch (e: Exception) {
             logger.error("Failed to encrypt data", e)
             logSecurityEvent("encryption_failed", SecuritySeverity.CRITICAL,
@@ -472,20 +478,20 @@ class PrivacyManager @Inject constructor(
         try {
             // Retrieve secret key
             val secretKey = getOrCreateSecretKey(encryptedData.keyAlias)
-            
+
             // Initialize cipher for decryption
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             val spec = GCMParameterSpec(GCM_TAG_LENGTH * 8, encryptedData.iv)
             cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
-            
+
             // Decrypt data
             val decryptedData = cipher.doFinal(encryptedData.data)
-            
+
             logSecurityEvent("data_decrypted", SecuritySeverity.INFO,
                 "Decrypted ${decryptedData.size} bytes")
-            
+
             decryptedData
-            
+
         } catch (e: Exception) {
             logger.error("Failed to decrypt data", e)
             logSecurityEvent("decryption_failed", SecuritySeverity.CRITICAL,
@@ -508,7 +514,7 @@ class PrivacyManager @Inject constructor(
             }
 
             val fileSize = file.length()
-            
+
             // Perform secure deletion with multiple passes
             FileOutputStream(file).use { fos ->
                 // Pass 1: Write zeros
@@ -520,7 +526,7 @@ class PrivacyManager @Inject constructor(
                     remaining -= writeSize
                 }
                 fos.flush()
-                
+
                 // Pass 2: Write random data
                 val random = java.security.SecureRandom()
                 val randomBytes = ByteArray(1024)
@@ -533,7 +539,7 @@ class PrivacyManager @Inject constructor(
                     remaining -= writeSize
                 }
                 fos.flush()
-                
+
                 // Pass 3: Write zeros again
                 fos.channel.position(0)
                 remaining = fileSize
@@ -544,17 +550,17 @@ class PrivacyManager @Inject constructor(
                 }
                 fos.flush()
             }
-            
+
             // Finally delete the file
             val deleted = file.delete()
-            
+
             if (deleted) {
                 logSecurityEvent("secure_file_delete", SecuritySeverity.INFO,
                     "Securely deleted file: ${file.name} (${fileSize} bytes)")
             }
-            
+
             deleted
-            
+
         } catch (e: Exception) {
             logger.error("Failed to securely delete file: ${file.name}", e)
             logSecurityEvent("secure_delete_failed", SecuritySeverity.WARNING,
@@ -578,16 +584,16 @@ class PrivacyManager @Inject constructor(
             description = description,
             deviceInfo = "${android.os.Build.MODEL} ${android.os.Build.VERSION.RELEASE}"
         )
-        
+
         securityEvents[eventType + "_" + event.timestamp] = event
-        
+
         // Log to system log based on severity
         when (severity) {
             SecuritySeverity.INFO -> Log.i(TAG, "Security Event: $description")
             SecuritySeverity.WARNING -> Log.w(TAG, "Security Warning: $description")
             SecuritySeverity.CRITICAL -> Log.e(TAG, "Security Critical: $description")
         }
-        
+
         // Keep only last 1000 events
         if (securityEvents.size > 1000) {
             val oldestKey = securityEvents.keys.minOrNull()
@@ -610,7 +616,7 @@ class PrivacyManager @Inject constructor(
     suspend fun getEnhancedPrivacyReport(): EnhancedPrivacyReport = withContext(Dispatchers.Default) {
         val consentInfo = getConsentInfo()
         val anonymizationSettings = getAnonymizationSettings()
-        
+
         val enabledFeatures = listOf(
             isFaceBlurringEnabled(),
             isDataEncryptionEnabled(),
@@ -619,12 +625,12 @@ class PrivacyManager @Inject constructor(
             anonymizationSettings.dataAnonymizationEnabled,
             anonymizationSettings.metadataStrippingEnabled
         ).count { it }
-        
+
         val compliancePercentage = (enabledFeatures.toFloat() / 6) * 100
-        
+
         val criticalEvents = securityEvents.values.count { it.severity == SecuritySeverity.CRITICAL }
         val warningEvents = securityEvents.values.count { it.severity == SecuritySeverity.WARNING }
-        
+
         EnhancedPrivacyReport(
             consentInfo = consentInfo,
             anonymizationSettings = anonymizationSettings,
@@ -651,9 +657,9 @@ class PrivacyManager @Inject constructor(
     // Helper methods
     private fun getOrCreateSecretKey(keyAlias: String): SecretKey {
         encryptionKeys[keyAlias]?.let { return it }
-        
+
         val keyData = securePrefs.getString("key_$keyAlias", null)
-        
+
         val secretKey = if (keyData != null) {
             // Load existing key
             val keyBytes = android.util.Base64.decode(keyData, android.util.Base64.DEFAULT)
@@ -663,15 +669,15 @@ class PrivacyManager @Inject constructor(
             val keyGenerator = KeyGenerator.getInstance("AES")
             keyGenerator.init(AES_KEY_SIZE)
             val newKey = keyGenerator.generateKey()
-            
+
             // Store key
             val keyBytes = newKey.encoded
             val keyString = android.util.Base64.encodeToString(keyBytes, android.util.Base64.DEFAULT)
             securePrefs.edit().putString("key_$keyAlias", keyString).apply()
-            
+
             newKey
         }
-        
+
         encryptionKeys[keyAlias] = secretKey
         return secretKey
     }

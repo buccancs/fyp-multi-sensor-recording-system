@@ -160,7 +160,7 @@ dependencies {
     // Compose BOM
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose.ui)
-    
+
     // Debug tooling for Compose
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
@@ -187,10 +187,10 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.bundles.networking)
-    
+
     // Charting library for real-time data visualization
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    
+
     // Security dependencies - Updated from alpha to stable versions
     // Addresses Low Priority recommendation: "Evaluate alpha/beta dependency risk"
     implementation("androidx.security:security-crypto:1.1.0-alpha06")  // Restored higher version for MasterKey support
@@ -216,6 +216,8 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     androidTestUtil("androidx.test:orchestrator:1.5.0")
     kspAndroidTest(libs.hilt.compiler)
+
+    implementation("org.opencv:opencv:4.9.0")
 
     val ktlint by configurations.getting
     ktlint(libs.ktlint)
@@ -302,13 +304,13 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     group = "Reporting"
     description = "Generates Jacoco coverage reports for all variants."
     dependsOn("testDevDebugUnitTest")
-    
+
     reports {
         xml.required.set(true)
         html.required.set(true)
         csv.required.set(false)
     }
-    
+
     val fileFilter = listOf(
         "**/R.class", "**/R$*.class", "**/BuildConfig.*",
         "**/*_Factory.*", "**/*_MembersInjector.*", "**/*Module*.*",
@@ -316,24 +318,24 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/Hilt_*.*", "**/DaggerHilt*.*", "**/*_HiltModules*.*",
         "**/di/**/*.*"
     )
-    
+
     val kotlinClasses = fileTree("${layout.buildDirectory.get().asFile}/tmp/kotlin-classes/devDebug") {
         exclude(fileFilter)
     }
     val javaClasses = fileTree("${layout.buildDirectory.get().asFile}/intermediates/javac/devDebug/classes") {
         exclude(fileFilter)
     }
-    
+
     classDirectories.setFrom(files(listOf(kotlinClasses, javaClasses)))
     sourceDirectories.setFrom(files(listOf("$projectDir/src/main/java", "$projectDir/src/main/kotlin")))
-    
+
     executionData.setFrom(fileTree(layout.buildDirectory.get().asFile) {
         include(listOf(
             "outputs/unit_test_code_coverage/devDebugUnitTest/*.exec",
             "jacoco/testDevDebugUnitTest.exec"
         ))
     })
-    
+
     doFirst {
         executionData.setFrom(files(executionData.files.filter { it.exists() }))
     }
