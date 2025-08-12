@@ -40,13 +40,14 @@ class EdgeCaseAndStressTest : BaseUnitTest() {
     }
     @Test
     fun `dropped Bluetooth connection during recording should pause GSR stream and notify user`() = runTest {
-        coEvery { mockShimmerRecorder.startRecording(any()) } returns Unit
         every { mockBluetoothAdapter.isEnabled } returns true
+        coEvery { mockShimmerRecorder.startRecording(any()) } returns true
         coEvery { mockShimmerRecorder.stopRecording() } throws IOException("Bluetooth connection lost")
         try {
             mockShimmerRecorder.startRecording("/test/path")
             mockShimmerRecorder.stopRecording()
         } catch (e: IOException) {
+            // Expected exception
         }
         verify { mockLogger.error(any<String>()) }
         coVerify { mockShimmerRecorder.startRecording(any()) }
@@ -58,9 +59,8 @@ class EdgeCaseAndStressTest : BaseUnitTest() {
             connectionAttempt++
             if (connectionAttempt == 1) {
                 throw IOException("Connection failed")
-            } else {
-                Unit
             }
+            true
         }
         try {
             mockShimmerRecorder.startRecording("/test/path")
