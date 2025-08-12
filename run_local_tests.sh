@@ -94,23 +94,6 @@ run_unified_tests() {
     esac
 }
 
-# Function to run legacy tests as fallback
-run_legacy_tests() {
-    print_warning "Unified testing framework not found, falling back to legacy tests"
-    
-    # Check for pytest
-    if command -v pytest &> /dev/null; then
-        if [ -d "tests" ]; then
-            print_status "Running pytest on tests/ directory..."
-            pytest tests/ -v --tb=short
-        else
-            print_warning "No tests/ directory found"
-        fi
-    else
-        print_error "pytest not available and no unified framework found"
-        exit 1
-    fi
-}
 
 # Function to show usage information
 show_usage() {
@@ -197,12 +180,15 @@ main() {
         install_dependencies
     fi
     
-    # Check for unified framework and run appropriate tests
+    # Check for unified framework and run tests
     if check_unified_framework; then
         print_success "Unified testing framework found"
         run_unified_tests "$mode"
     else
-        run_legacy_tests
+        print_error "Unified testing framework not found!"
+        print_error "The project has been consolidated to use only the unified framework."
+        print_error "Please ensure tests_unified/runners/run_unified_tests.py exists"
+        exit 1
     fi
     
     print_success "Test execution completed"

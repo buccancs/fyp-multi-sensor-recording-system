@@ -55,31 +55,14 @@ jobs:
       run: |
         isort --check-only --diff PythonApp/ || echo "::warning::Import sorting issues found but continuing CI"
     
-    - name: Run Python tests
+    - name: Run Python tests with unified framework
       run: |
         # Create coverage directory
         mkdir -p htmlcov
         
         # Run unified testing framework
-        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
-          echo "Running unified test framework..."
-          python tests_unified/runners/run_unified_tests.py --mode ci || echo "::warning::Some unified tests failed"
-        else
-          echo "::warning::Unified test framework not found, falling back to legacy tests"
-          
-          # Fallback to legacy tests if unified framework not available
-          if [ -d "tests/" ]; then
-            pytest tests/ -v --tb=short || echo "::warning::Some tests in tests/ failed"
-          fi
-          
-          # Run specific test files that exist
-          if [ -f "PythonApp/system_test.py" ]; then
-            python PythonApp/system_test.py || echo "::warning::System test failed"
-          fi
-          
-          # Try to run any other test files
-          find PythonApp/ -name "test_*.py" -exec python {} \; || echo "::warning::Some individual test files failed"
-        fi
+        echo "Running unified test framework..."
+        python tests_unified/runners/run_unified_tests.py --mode ci --all-levels --verbose
     
     - name: Upload coverage to Codecov
       if: matrix.python-version == env.PYTHON_VERSION_DEFAULT
@@ -183,38 +166,17 @@ jobs:
         pip install -e .
         pip install -r test-requirements.txt
     
-    - name: Run integration tests
+    - name: Run integration tests with unified framework
       run: |
         # Run unified integration tests
-        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
-          echo "Running unified integration tests..."
-          python tests_unified/runners/run_unified_tests.py --level integration --mode ci || echo "::warning::Some integration tests failed"
-        else
-          echo "::warning::Unified test framework not found, falling back to legacy integration tests"
-          
-          # Fallback to legacy tests
-          if [ -d "tests/" ]; then
-            pytest tests/ -m "integration" -v --tb=short || echo "::warning::Some integration tests failed"
-          else
-            echo "::warning::No tests directory found, skipping integration tests"
-          fi
-        fi
+        echo "Running unified integration tests..."
+        python tests_unified/runners/run_unified_tests.py --level integration --mode ci --verbose
     
-    - name: Run system tests
+    - name: Run system tests with unified framework
       run: |
         # Run unified system tests
-        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
-          echo "Running unified system tests..."
-          python tests_unified/runners/run_unified_tests.py --level system --mode ci || echo "::warning::System tests failed"
-        else
-          echo "::warning::Unified test framework not found, falling back to legacy system tests"
-          
-          if [ -f "PythonApp/system_test.py" ]; then
-            python PythonApp/system_test.py || echo "::warning::System tests failed"
-          else
-            echo "::warning::System test file not found, skipping"
-          fi
-        fi
+        echo "Running unified system tests..."
+        python tests_unified/runners/run_unified_tests.py --level system --mode ci --verbose
 
   requirements-validation:
     name: Requirements Validation
@@ -238,37 +200,26 @@ jobs:
     
     - name: Validate Functional Requirements (FR) Testing
       run: |
-        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
-          echo "Validating FR coverage through unified testing framework..."
-          python tests_unified/runners/run_unified_tests.py --category evaluation --mode research --validate-requirements || echo "::warning::FR validation completed with issues"
-        else
-          echo "::warning::Unified test framework not found - manual FR validation required"
-        fi
+        echo "Validating FR coverage through unified testing framework..."
+        python tests_unified/runners/run_unified_tests.py --validate-requirements --category evaluation --mode research
     
     - name: Validate Non-Functional Requirements (NFR) Testing
       run: |
-        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
-          echo "Validating NFR coverage through performance and quality tests..."
-          python tests_unified/runners/run_unified_tests.py --level performance --mode research || echo "::warning::NFR validation completed with issues"
-        else
-          echo "::warning::Unified test framework not found - manual NFR validation required"
-        fi
+        echo "Validating NFR coverage through performance and quality tests..."
+        python tests_unified/runners/run_unified_tests.py --level performance --mode research --performance-benchmarks
     
     - name: Generate Requirements Traceability Report
       run: |
-        if [ -f "tests_unified/runners/run_unified_tests.py" ]; then
-          echo "Generating requirements traceability report..."
-          python tests_unified/runners/run_unified_tests.py --report-requirements-coverage --output-format json > requirements_coverage.json || echo "::warning::Requirements report generation failed"
-          
-          # Check if report was generated and contains data
-          if [ -f "requirements_coverage.json" ]; then
-            echo "Requirements coverage report generated successfully"
-            cat requirements_coverage.json | head -20
-          else
-            echo "::warning::Requirements coverage report not generated"
-          fi
+        echo "Generating requirements traceability report..."
+        python tests_unified/runners/run_unified_tests.py --report-requirements-coverage --output-format json > requirements_coverage.json
+        
+        # Check if report was generated and contains data
+        if [ -f "requirements_coverage.json" ]; then
+          echo "Requirements coverage report generated successfully"
+          cat requirements_coverage.json | head -20
         else
-          echo "::warning::Unified test framework not found - cannot generate requirements report"
+          echo "::warning::Requirements coverage report not generated"
+          exit 1
         fi
     
     - name: Upload requirements validation artifacts

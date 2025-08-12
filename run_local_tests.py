@@ -160,6 +160,11 @@ class CrossPlatformTestRunner:
         python_exe = self.check_python_executable()
         unified_runner = self.project_root / "tests_unified" / "runners" / "run_unified_tests.py"
         
+        if not unified_runner.exists():
+            self.print_error("Unified testing framework not found!")
+            self.print_error("Please ensure tests_unified/runners/run_unified_tests.py exists")
+            return False
+        
         # Build command based on mode
         cmd = [python_exe, str(unified_runner)]
         
@@ -326,12 +331,15 @@ class CrossPlatformTestRunner:
             if not self.install_dependencies():
                 return False
                 
-        # Check for unified framework and run appropriate tests
+        # Check for unified framework and run tests
         if self.check_unified_framework():
             self.print_success("Unified testing framework found")
             return self.run_unified_tests(mode)
         else:
-            return self.run_legacy_tests()
+            self.print_error("Unified testing framework not found!")
+            self.print_error("The project has been consolidated to use only the unified framework.")
+            self.print_error("Please ensure tests_unified/runners/run_unified_tests.py exists")
+            return False
 
 def main():
     """Main entry point"""
