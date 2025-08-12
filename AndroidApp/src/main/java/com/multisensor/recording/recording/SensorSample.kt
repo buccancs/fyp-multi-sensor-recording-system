@@ -109,6 +109,167 @@ data class SensorSample(
                 sequenceNumber = sequenceNumber,
             )
         }
+
+        /**
+         * Generate physiologically realistic GSR data based on human autonomic nervous system patterns
+         */
+        fun generatePhysiologicalGSR(sequenceNumber: Long, deviceId: String): Double {
+            val timeSeconds = sequenceNumber * 0.01 // Assuming 100Hz sampling
+            
+            // Base conductance (typical resting: 2-10 μS)
+            val baseGSR = 3.5
+            
+            // Slow tonic changes (1-5 minute cycles)
+            val tonicDrift = kotlin.math.sin(timeSeconds * kotlin.math.PI / 180.0) * 0.8
+            
+            // Phasic responses (spontaneous fluctuations every 20-60 seconds)
+            val phasicResponse = kotlin.math.sin(timeSeconds * 0.1 + deviceId.hashCode() * 0.01) * 0.5
+            
+            // Breathing-related modulation (16 breaths per minute)
+            val breathingModulation = kotlin.math.sin(timeSeconds * 2 * kotlin.math.PI * 16.0 / 60.0) * 0.1
+            
+            // Small physiological variation (not random - deterministic based on sequence)
+            val physiologicalNoise = kotlin.math.sin(timeSeconds * 3.7 + deviceId.hashCode()) * 0.05
+            
+            return (baseGSR + tonicDrift + phasicResponse + breathingModulation + physiologicalNoise)
+                .coerceIn(0.5, 15.0)
+        }
+
+        /**
+         * Generate physiologically realistic PPG data based on cardiac physiology
+         */
+        fun generatePhysiologicalPPG(sequenceNumber: Long, deviceId: String): Double {
+            val timeSeconds = sequenceNumber * 0.01
+            
+            // Heart rate with realistic variability (60-80 BPM)
+            val baseHeartRate = 72.0
+            val heartRateVariability = kotlin.math.sin(timeSeconds * 0.1) * 5.0
+            val currentHeartRate = baseHeartRate + heartRateVariability
+            
+            // Primary cardiac pulse
+            val cardiacPulse = kotlin.math.sin(2 * kotlin.math.PI * currentHeartRate / 60.0 * timeSeconds) * 150
+            
+            // Dicrotic notch (secondary pulse wave)
+            val dicroticNotch = kotlin.math.sin(4 * kotlin.math.PI * currentHeartRate / 60.0 * timeSeconds) * 30
+            
+            // Respiratory modulation (affects PPG amplitude)
+            val respiratoryModulation = kotlin.math.sin(2 * kotlin.math.PI * 16.0 / 60.0 * timeSeconds) * 20
+            
+            // Baseline and device-specific offset
+            val baseline = 2048.0
+            val deviceOffset = (deviceId.hashCode() % 200).toDouble()
+            
+            return baseline + cardiacPulse + dicroticNotch + respiratoryModulation + deviceOffset
+        }
+
+        /**
+         * Generate physiologically realistic accelerometer data based on human movement
+         */
+        fun generatePhysiologicalAccel(sequenceNumber: Long, deviceId: String): Double {
+            val timeSeconds = sequenceNumber * 0.01
+            
+            // Gravity component (varies with device orientation)
+            val gravityComponent = when (sequenceNumber % 3) {
+                0L -> 9.8  // Z-axis typically points up
+                1L -> 0.0  // X-axis
+                else -> 0.0 // Y-axis
+            }
+            
+            // Breathing-related chest movement
+            val breathingMovement = kotlin.math.sin(2 * kotlin.math.PI * 16.0 / 60.0 * timeSeconds) * 0.02
+            
+            // Heart-induced micromovements (ballistocardiography)
+            val heartMovement = kotlin.math.sin(2 * kotlin.math.PI * 72.0 / 60.0 * timeSeconds) * 0.005
+            
+            // Postural sway (slow, large-scale movements)
+            val posturalSway = kotlin.math.sin(timeSeconds * 0.5 + deviceId.hashCode() * 0.1) * 0.01
+            
+            return gravityComponent + breathingMovement + heartMovement + posturalSway
+        }
+
+        /**
+         * Generate physiologically realistic gyroscope data based on human body rotation
+         */
+        fun generatePhysiologicalGyro(sequenceNumber: Long, deviceId: String): Double {
+            val timeSeconds = sequenceNumber * 0.01
+            
+            // Small head movements during breathing
+            val breathingRotation = kotlin.math.sin(2 * kotlin.math.PI * 16.0 / 60.0 * timeSeconds) * 2.0
+            
+            // Postural adjustments (larger, slower movements)
+            val posturalRotation = kotlin.math.sin(timeSeconds * 0.1 + deviceId.hashCode() * 0.01) * 1.0
+            
+            // Physiological tremor (8-12 Hz)
+            val physiologicalTremor = kotlin.math.sin(2 * kotlin.math.PI * 10.0 * timeSeconds) * 0.3
+            
+            return breathingRotation + posturalRotation + physiologicalTremor
+        }
+
+        /**
+         * Generate physiologically realistic magnetometer data 
+         */
+        fun generatePhysiologicalMag(sequenceNumber: Long, deviceId: String): Double {
+            val timeSeconds = sequenceNumber * 0.01
+            
+            // Earth's magnetic field (typical: 25-65 μT)
+            val earthMagneticField = 45.0
+            
+            // Slow variations due to device orientation changes
+            val orientationChange = kotlin.math.sin(timeSeconds * 0.01 + deviceId.hashCode() * 0.001) * 5.0
+            
+            // Small movements affecting magnetic field measurement
+            val movementNoise = kotlin.math.sin(timeSeconds * 0.5) * 0.5
+            
+            return earthMagneticField + orientationChange + movementNoise
+        }
+
+        /**
+         * Generate physiologically realistic ECG data based on cardiac electrophysiology
+         */
+        fun generatePhysiologicalECG(sequenceNumber: Long, deviceId: String): Double {
+            val timeSeconds = sequenceNumber * 0.01
+            
+            // Heart rate (60-80 BPM)
+            val heartRate = 72.0
+            val heartPeriod = 60.0 / heartRate
+            val cardiacPhase = (timeSeconds % heartPeriod) / heartPeriod
+            
+            // ECG waveform components
+            val pWave = if (cardiacPhase < 0.1) kotlin.math.sin(cardiacPhase * 10 * kotlin.math.PI) * 0.1 else 0.0
+            val qrsComplex = if (cardiacPhase in 0.15..0.25) {
+                kotlin.math.sin((cardiacPhase - 0.15) * 10 * kotlin.math.PI) * 1.0
+            } else 0.0
+            val tWave = if (cardiacPhase in 0.4..0.6) {
+                kotlin.math.sin((cardiacPhase - 0.4) * 5 * kotlin.math.PI) * 0.3
+            } else 0.0
+            
+            // Baseline and device offset
+            val baseline = 0.0
+            val deviceOffset = (deviceId.hashCode() % 10) * 0.01
+            
+            return baseline + pWave + qrsComplex + tWave + deviceOffset
+        }
+
+        /**
+         * Generate physiologically realistic EMG data based on muscle electrical activity
+         */
+        fun generatePhysiologicalEMG(sequenceNumber: Long, deviceId: String): Double {
+            val timeSeconds = sequenceNumber * 0.01
+            
+            // Base muscle tone (minimal background activity)
+            val baseTone = 0.01
+            
+            // Breathing-related muscle activity (intercostal muscles)
+            val breathingEMG = kotlin.math.sin(2 * kotlin.math.PI * 16.0 / 60.0 * timeSeconds) * 0.02
+            
+            // Postural muscle activity (varies with position maintenance)
+            val posturalEMG = kotlin.math.sin(timeSeconds * 0.3 + deviceId.hashCode() * 0.1) * 0.03
+            
+            // Motor unit firing patterns (not random - physiological)
+            val motorUnitActivity = kotlin.math.sin(timeSeconds * 15.0 + deviceId.hashCode()) * 0.01
+            
+            return baseTone + breathingEMG + posturalEMG + motorUnitActivity
+        }
     }
 
     fun getSensorValue(channel: SensorChannel): Double? = sensorValues[channel]
@@ -249,166 +410,4 @@ data class SensorSample(
         return "SensorSample($deviceId, seq=$sequenceNumber, ${getFormattedTimestamp()}, [$sensorSummary], bat=$batteryLevel%)"
     }
 
-    companion object {
-        /**
-         * Generate physiologically realistic GSR data based on human autonomic nervous system patterns
-         */
-        private fun generatePhysiologicalGSR(sequenceNumber: Long, deviceId: String): Double {
-            val timeSeconds = sequenceNumber * 0.01 // Assuming 100Hz sampling
-            
-            // Base conductance (typical resting: 2-10 μS)
-            val baseGSR = 3.5
-            
-            // Slow tonic changes (1-5 minute cycles)
-            val tonicDrift = kotlin.math.sin(timeSeconds * kotlin.math.PI / 180.0) * 0.8
-            
-            // Phasic responses (spontaneous fluctuations every 20-60 seconds)
-            val phasicResponse = kotlin.math.sin(timeSeconds * 0.1 + deviceId.hashCode() * 0.01) * 0.5
-            
-            // Breathing-related modulation (16 breaths per minute)
-            val breathingModulation = kotlin.math.sin(timeSeconds * 2 * kotlin.math.PI * 16.0 / 60.0) * 0.1
-            
-            // Small physiological variation (not random - deterministic based on sequence)
-            val physiologicalNoise = kotlin.math.sin(timeSeconds * 3.7 + deviceId.hashCode()) * 0.05
-            
-            return (baseGSR + tonicDrift + phasicResponse + breathingModulation + physiologicalNoise)
-                .coerceIn(0.5, 15.0)
-        }
-
-        /**
-         * Generate physiologically realistic PPG data based on cardiac physiology
-         */
-        private fun generatePhysiologicalPPG(sequenceNumber: Long, deviceId: String): Double {
-            val timeSeconds = sequenceNumber * 0.01
-            
-            // Heart rate with realistic variability (60-80 BPM)
-            val baseHeartRate = 72.0
-            val heartRateVariability = kotlin.math.sin(timeSeconds * 0.1) * 5.0
-            val currentHeartRate = baseHeartRate + heartRateVariability
-            
-            // Primary cardiac pulse
-            val cardiacPulse = kotlin.math.sin(2 * kotlin.math.PI * currentHeartRate / 60.0 * timeSeconds) * 150
-            
-            // Dicrotic notch (secondary pulse wave)
-            val dicroticNotch = kotlin.math.sin(4 * kotlin.math.PI * currentHeartRate / 60.0 * timeSeconds) * 30
-            
-            // Respiratory modulation (affects PPG amplitude)
-            val respiratoryModulation = kotlin.math.sin(2 * kotlin.math.PI * 16.0 / 60.0 * timeSeconds) * 20
-            
-            // Baseline and device-specific offset
-            val baseline = 2048.0
-            val deviceOffset = (deviceId.hashCode() % 200).toDouble()
-            
-            return baseline + cardiacPulse + dicroticNotch + respiratoryModulation + deviceOffset
-        }
-
-        /**
-         * Generate physiologically realistic accelerometer data based on human movement
-         */
-        private fun generatePhysiologicalAccel(sequenceNumber: Long, deviceId: String): Double {
-            val timeSeconds = sequenceNumber * 0.01
-            
-            // Gravity component (varies with device orientation)
-            val gravityComponent = when (sequenceNumber % 3) {
-                0L -> 9.8  // Z-axis typically points up
-                1L -> 0.0  // X-axis
-                else -> 0.0 // Y-axis
-            }
-            
-            // Breathing-related chest movement
-            val breathingMovement = kotlin.math.sin(2 * kotlin.math.PI * 16.0 / 60.0 * timeSeconds) * 0.02
-            
-            // Heart-induced micromovements (ballistocardiography)
-            val heartMovement = kotlin.math.sin(2 * kotlin.math.PI * 72.0 / 60.0 * timeSeconds) * 0.005
-            
-            // Postural sway (slow, large-scale movements)
-            val posturalSway = kotlin.math.sin(timeSeconds * 0.5 + deviceId.hashCode() * 0.1) * 0.01
-            
-            return gravityComponent + breathingMovement + heartMovement + posturalSway
-        }
-
-        /**
-         * Generate physiologically realistic gyroscope data based on human body rotation
-         */
-        private fun generatePhysiologicalGyro(sequenceNumber: Long, deviceId: String): Double {
-            val timeSeconds = sequenceNumber * 0.01
-            
-            // Small head movements during breathing
-            val breathingRotation = kotlin.math.sin(2 * kotlin.math.PI * 16.0 / 60.0 * timeSeconds) * 2.0
-            
-            // Postural adjustments (larger, slower movements)
-            val posturalRotation = kotlin.math.sin(timeSeconds * 0.1 + deviceId.hashCode() * 0.01) * 1.0
-            
-            // Physiological tremor (8-12 Hz)
-            val physiologicalTremor = kotlin.math.sin(2 * kotlin.math.PI * 10.0 * timeSeconds) * 0.3
-            
-            return breathingRotation + posturalRotation + physiologicalTremor
-        }
-
-        /**
-         * Generate physiologically realistic magnetometer data 
-         */
-        private fun generatePhysiologicalMag(sequenceNumber: Long, deviceId: String): Double {
-            val timeSeconds = sequenceNumber * 0.01
-            
-            // Earth's magnetic field (typical: 25-65 μT)
-            val earthMagneticField = 45.0
-            
-            // Slow variations due to device orientation changes
-            val orientationChange = kotlin.math.sin(timeSeconds * 0.01 + deviceId.hashCode() * 0.001) * 5.0
-            
-            // Small movements affecting magnetic field measurement
-            val movementNoise = kotlin.math.sin(timeSeconds * 0.5) * 0.5
-            
-            return earthMagneticField + orientationChange + movementNoise
-        }
-
-        /**
-         * Generate physiologically realistic ECG data based on cardiac electrophysiology
-         */
-        private fun generatePhysiologicalECG(sequenceNumber: Long, deviceId: String): Double {
-            val timeSeconds = sequenceNumber * 0.01
-            
-            // Heart rate (60-80 BPM)
-            val heartRate = 72.0
-            val heartPeriod = 60.0 / heartRate
-            val cardiacPhase = (timeSeconds % heartPeriod) / heartPeriod
-            
-            // ECG waveform components
-            val pWave = if (cardiacPhase < 0.1) kotlin.math.sin(cardiacPhase * 10 * kotlin.math.PI) * 0.1 else 0.0
-            val qrsComplex = if (cardiacPhase in 0.15..0.25) {
-                kotlin.math.sin((cardiacPhase - 0.15) * 10 * kotlin.math.PI) * 1.0
-            } else 0.0
-            val tWave = if (cardiacPhase in 0.4..0.6) {
-                kotlin.math.sin((cardiacPhase - 0.4) * 5 * kotlin.math.PI) * 0.3
-            } else 0.0
-            
-            // Baseline and device offset
-            val baseline = 0.0
-            val deviceOffset = (deviceId.hashCode() % 10) * 0.01
-            
-            return baseline + pWave + qrsComplex + tWave + deviceOffset
-        }
-
-        /**
-         * Generate physiologically realistic EMG data based on muscle electrical activity
-         */
-        private fun generatePhysiologicalEMG(sequenceNumber: Long, deviceId: String): Double {
-            val timeSeconds = sequenceNumber * 0.01
-            
-            // Base muscle tone (minimal background activity)
-            val baseTone = 0.01
-            
-            // Breathing-related muscle activity (intercostal muscles)
-            val breathingEMG = kotlin.math.sin(2 * kotlin.math.PI * 16.0 / 60.0 * timeSeconds) * 0.02
-            
-            // Postural muscle activity (varies with position maintenance)
-            val posturalEMG = kotlin.math.sin(timeSeconds * 0.3 + deviceId.hashCode() * 0.1) * 0.03
-            
-            // Motor unit firing patterns (not random - physiological)
-            val motorUnitActivity = kotlin.math.sin(timeSeconds * 15.0 + deviceId.hashCode()) * 0.01
-            
-            return baseTone + breathingEMG + posturalEMG + motorUnitActivity
-        }
-    }
 }
