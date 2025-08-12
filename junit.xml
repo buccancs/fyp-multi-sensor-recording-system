@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="10" time="0.258" timestamp="2025-08-12T13:35:14.961840+00:00" hostname="pkrvmsl9tci6h6u"><testcase classname="tests_unified.system.test_new_features" name="test_lsl_integration" time="0.059" /><testcase classname="tests_unified.system.test_new_features" name="test_zeroconf_discovery" time="0.001"><failure message="ModuleNotFoundError: No module named 'zeroconf'">tests_unified/system/test_new_features.py:44: in test_zeroconf_discovery
-    from PythonApp.network.zeroconf_discovery import ZeroconfDiscovery, MultiSensorDiscovery
-PythonApp/network/zeroconf_discovery.py:15: in &lt;module&gt;
-    from zeroconf import Zeroconf, ServiceBrowser, ServiceListener, ServiceInfo
-E   ModuleNotFoundError: No module named 'zeroconf'</failure></testcase><testcase classname="tests_unified.system.test_new_features" name="test_enhanced_security" time="0.027" /><testcase classname="tests_unified.system.test_new_features" name="test_file_integrity" time="0.003" /><testcase classname="tests_unified.system.test_new_features" name="test_enhanced_pc_server" time="0.008"><failure message="assert False is True&#10; +  where False = &lt;PythonApp.network.pc_server.PCServer object at 0x7f7df41cb500&gt;.enable_security">tests_unified/system/test_new_features.py:197: in test_enhanced_pc_server
-    assert server.enable_security is True
-E   assert False is True
-E    +  where False = &lt;PythonApp.network.pc_server.PCServer object at 0x7f7df41cb500&gt;.enable_security</failure></testcase><testcase classname="tests_unified.system.test_new_features" name="test_integration_with_existing_system" time="0.001"><failure message="Failed: Import error in integration: No module named 'zeroconf'">tests_unified/system/test_new_features.py:233: in test_integration_with_existing_system
-    from PythonApp.network import zeroconf_discovery
-PythonApp/network/zeroconf_discovery.py:15: in &lt;module&gt;
-    from zeroconf import Zeroconf, ServiceBrowser, ServiceListener, ServiceInfo
-E   ModuleNotFoundError: No module named 'zeroconf'
-
-During handling of the above exception, another exception occurred:
-tests_unified/system/test_new_features.py:241: in test_integration_with_existing_system
-    pytest.fail(f"Import error in integration: {e}")
-E   Failed: Import error in integration: No module named 'zeroconf'</failure></testcase><testcase classname="tests_unified.system.workflows.system_test" name="test_python_environment" time="0.046" /><testcase classname="tests_unified.system.workflows.system_test" name="test_network_capabilities" time="0.001" /><testcase classname="tests_unified.system.workflows.system_test" name="test_file_operations" time="0.002" /><testcase classname="tests_unified.system.workflows.system_test" name="test_system_integration" time="0.000" /></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="0" time="0.047" timestamp="2025-08-12T14:08:55.213957+00:00" hostname="pkrvmsl9tci6h6u" /></testsuites>
