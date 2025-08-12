@@ -43,7 +43,8 @@ class TestRealPCAppIntegration:
         """Test virtual device connecting to real PC server"""
         pc_server = PCServer(port=9001)
         try:
-            await pc_server.start()
+            result = pc_server.start()
+            assert result, "PC server should start successfully"
             await asyncio.sleep(0.1)
             device_config = VirtualDeviceConfig(
                 device_id="real_pc_test_device",
@@ -59,7 +60,7 @@ class TestRealPCAppIntegration:
                 timeout=5.0
             )
             assert connected, "Virtual device should connect to real PC server"
-            assert virtual_device.is_connected()
+            assert virtual_device.is_connected
             data_generator = SyntheticDataGenerator(seed=42)
             gsr_samples = data_generator.generate_gsr_batch(10)
             for sample in gsr_samples[:3]:
@@ -67,13 +68,14 @@ class TestRealPCAppIntegration:
                 await asyncio.sleep(0.01)
             await virtual_device.disconnect()
         finally:
-            await pc_server.stop()
+            pc_server.stop()
     @pytest.mark.asyncio
     async def test_android_device_manager_with_virtual_devices(self, test_logger):
         """Test AndroidDeviceManager with virtual devices"""
         device_manager = AndroidDeviceManager(server_port=9002)
         try:
-            await device_manager.start()
+            result = device_manager.initialize()
+            assert result, "Device manager should initialize successfully"
             await asyncio.sleep(0.1)
             devices = []
             for i in range(2):
@@ -99,7 +101,7 @@ class TestRealPCAppIntegration:
             for device in devices:
                 await device.disconnect()
         finally:
-            await device_manager.stop()
+            device_manager.shutdown()
     @pytest.mark.asyncio
     async def test_protocol_compatibility(self, test_logger):
         """Test that virtual devices use compatible protocol"""

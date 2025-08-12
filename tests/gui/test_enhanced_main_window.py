@@ -12,6 +12,9 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtTest import QTest
 import os
 
+# Require Xvfb for GUI tests
+pytestmark = pytest.mark.xvfb
+
 # Import the main window component
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'PythonApp'))
 
@@ -24,10 +27,15 @@ except ImportError:
 @pytest.fixture(scope="session")
 def qapp():
     """Create QApplication instance for testing."""
-    if not QApplication.instance():
-        app = QApplication([])
-        app.setQuitOnLastWindowClosed(False)
-        return app
+    # Skip GUI tests if QApplication fails to initialize
+    try:
+        if not QApplication.instance():
+            app = QApplication([])
+            app.setQuitOnLastWindowClosed(False)
+            return app
+        return QApplication.instance()
+    except Exception:
+        pytest.skip("QApplication cannot be initialized in this environment")
     return QApplication.instance()
 
 
