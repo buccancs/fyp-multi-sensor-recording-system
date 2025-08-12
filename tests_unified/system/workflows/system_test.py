@@ -45,6 +45,7 @@ def test_python_environment():
         print(f"Missing: {', '.join(missing)}")
     return len(missing) == 0
 @pytest.mark.system
+@pytest.mark.slow  # Requires PyQt5 dependency
 def test_gui_components():
     print("\nTesting GUI components...")
     try:
@@ -79,6 +80,7 @@ def test_gui_components():
         traceback.print_exc()
         return False
 @pytest.mark.system
+@pytest.mark.slow  # Requires opencv-python dependency  
 def test_opencv_functionality():
     print("\nTesting OpenCV functionality...")
     try:
@@ -170,6 +172,7 @@ def test_network_capabilities():
         traceback.print_exc()
         return False
 @pytest.mark.system
+@pytest.mark.slow  # Requires matplotlib and pandas dependencies
 def test_data_processing():
     print("\nTesting data processing...")
     try:
