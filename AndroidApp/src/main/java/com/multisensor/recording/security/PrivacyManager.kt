@@ -120,14 +120,14 @@ class PrivacyManager @Inject constructor(
             // Set thesis-compliant default privacy settings
             if (!securePrefs.contains(KEY_FACE_BLURRING)) {
                 securePrefs.edit()
-                    .putBoolean(KEY_FACE_BLURRING, true)  // Default enabled for privacy
+                    .putBoolean(KEY_FACE_BLURRING, false)  // Disabled - no faces in video, only hands
                     .putBoolean(KEY_ENCRYPT_DATA_AT_REST, true)  // Default enabled for security
                     .putBoolean(KEY_SECURE_FILE_DELETION, true)  // Default enabled for privacy
                     .putBoolean(KEY_LOG_SECURITY_EVENTS, true)  // Default enabled for audit
                     .apply()
             }
             
-            // Initialize face detection if enabled
+            // Initialize face detection if enabled (disabled by default for hands-only video)
             if (isFaceBlurringEnabled()) {
                 initializeFaceDetection()
             }
@@ -240,14 +240,14 @@ class PrivacyManager @Inject constructor(
     fun getAnonymizationSettings(): AnonymizationSettings {
         return AnonymizationSettings(
             dataAnonymizationEnabled = securePrefs.getBoolean(KEY_DATA_ANONYMIZATION, false),
-            faceBlurringEnabled = securePrefs.getBoolean(KEY_FACE_BLURRING, true),  // Default true for privacy
+            faceBlurringEnabled = securePrefs.getBoolean(KEY_FACE_BLURRING, false),  // Disabled - no faces in video, only hands
             metadataStrippingEnabled = securePrefs.getBoolean(KEY_METADATA_STRIPPING, true)
         )
     }
 
     // Enhanced privacy feature accessors
     fun isFaceBlurringEnabled(): Boolean {
-        return securePrefs.getBoolean(KEY_FACE_BLURRING, true)
+        return securePrefs.getBoolean(KEY_FACE_BLURRING, false)  // Disabled - no faces in video, only hands
     }
 
     fun isDataEncryptionEnabled(): Boolean {

@@ -96,7 +96,7 @@ class ConsentDialog(
         val dataTypesContent = """
             <h3>Types of Data Collected</h3>
             <ul>
-            <li><b>Video recordings:</b> RGB camera footage for gesture and movement analysis</li>
+            <li><b>Video recordings:</b> RGB camera footage for hand gesture and movement analysis (hands-only)</li>
             <li><b>Thermal imagery:</b> Thermal camera data for physiological monitoring</li>
             <li><b>Sensor data:</b> Shimmer device measurements (GSR, accelerometer, etc.)</li>
             <li><b>Device metadata:</b> Technical information about recording sessions</li>
