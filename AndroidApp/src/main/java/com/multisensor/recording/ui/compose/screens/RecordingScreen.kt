@@ -49,9 +49,19 @@ fun RecordingScreen(
         if (!uiState.isInitialized && !uiState.isConnecting) {
             // Initialize with fallback first to show the UI, then try real initialization
             viewModel.initializeSystemWithFallback()
-            // Trigger real initialization in the background
+            // Trigger device scanning and status refresh in the background
             viewModel.scanForDevices()
             viewModel.refreshSystemStatus()
+            // Also try to connect to PC server automatically
+            viewModel.connectToPC()
+        }
+    }
+
+    // Show any errors that occur during initialization
+    if (uiState.showErrorDialog && !uiState.errorMessage.isNullOrBlank()) {
+        LaunchedEffect(uiState.errorMessage) {
+            // Log the error for debugging
+            android.util.Log.e("RecordingScreen", "Initialization error: ${uiState.errorMessage}")
         }
     }
     Scaffold(

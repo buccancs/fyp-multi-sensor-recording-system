@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.multisensor.recording.ui.MainViewModel
 
 @Composable
@@ -29,12 +30,15 @@ fun CameraPreview(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var textureView by remember { mutableStateOf<TextureView?>(null) }
     var thermalSurfaceView by remember { mutableStateOf<SurfaceView?>(null) }
+    var initializationAttempted by remember { mutableStateOf(false) }
 
     // Initialize devices when preview components are ready
     LaunchedEffect(textureView, thermalSurfaceView) {
-        if (textureView != null) {
+        if (textureView != null && !initializationAttempted) {
+            initializationAttempted = true
             // Initialize the system with the actual views
             val result = viewModel.initializeSystem(textureView!!, thermalSurfaceView)
             // Also try to connect to PC automatically
@@ -77,6 +81,8 @@ fun CameraPreview(
 
             // Camera info overlay
             CameraInfoOverlay(
+                isConnected = uiState.isCameraConnected,
+                isInitializing = uiState.isConnecting,
                 modifier = Modifier.align(Alignment.BottomStart)
             )
         }
@@ -117,12 +123,18 @@ private fun RecordingIndicator(
 
 @Composable
 private fun CameraInfoOverlay(
+    isConnected: Boolean,
+    isInitializing: Boolean,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier.padding(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
+            containerColor = when {
+                isConnected -> Color.Green.copy(alpha = 0.9f)
+                isInitializing -> Color(0xFFFF9800).copy(alpha = 0.9f) // Orange
+                else -> MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
+            }
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -135,12 +147,25 @@ private fun CameraInfoOverlay(
                 imageVector = Icons.Default.Camera,
                 contentDescription = "Camera",
                 modifier = Modifier.size(16.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = when {
+                    isConnected -> Color.White
+                    isInitializing -> Color.White
+                    else -> MaterialTheme.colorScheme.primary
+                }
             )
             Text(
-                text = "RGB Camera",
+                text = when {
+                    isConnected -> "Camera Connected"
+                    isInitializing -> "Initializing..."
+                    else -> "Camera Disconnected"
+                },
                 style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = when {
+                    isConnected -> Color.White
+                    isInitializing -> Color.White
+                    else -> MaterialTheme.colorScheme.onSurface
+                }
             )
         }
     }
@@ -153,6 +178,7 @@ fun ThermalPreviewSurface(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var surfaceView by remember { mutableStateOf<SurfaceView?>(null) }
 
     Card(
@@ -185,6 +211,8 @@ fun ThermalPreviewSurface(
 
             // Placeholder overlay when no thermal data
             ThermalPlaceholderOverlay(
+                isConnected = uiState.isThermalConnected,
+                isInitializing = uiState.isConnecting,
                 modifier = Modifier.align(Alignment.Center)
             )
 
@@ -200,12 +228,18 @@ fun ThermalPreviewSurface(
 
 @Composable
 private fun ThermalPlaceholderOverlay(
+    isConnected: Boolean,
+    isInitializing: Boolean,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
+            containerColor = when {
+                isConnected -> Color.Green.copy(alpha = 0.8f)
+                isInitializing -> Color(0xFFFF9800).copy(alpha = 0.8f) // Orange
+                else -> MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
+            }
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -218,17 +252,38 @@ private fun ThermalPlaceholderOverlay(
                 imageVector = Icons.Default.Camera,
                 contentDescription = "Thermal Camera",
                 modifier = Modifier.size(32.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = when {
+                    isConnected -> Color.White
+                    isInitializing -> Color.White
+                    else -> MaterialTheme.colorScheme.primary
+                }
             )
             Text(
-                text = "Thermal Preview",
+                text = when {
+                    isConnected -> "Thermal Connected"
+                    isInitializing -> "Initializing..."
+                    else -> "Thermal Preview"
+                },
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = when {
+                    isConnected -> Color.White
+                    isInitializing -> Color.White
+                    else -> MaterialTheme.colorScheme.onSurface
+                }
             )
             Text(
-                text = "Connect thermal camera",
+                text = when {
+                    isConnected -> "Thermal camera active"
+                    isInitializing -> "Connecting to camera..."
+                    else -> "Connect thermal camera"
+                },
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = when {
+                    isConnected -> Color.White.copy(alpha = 0.8f)
+                    isInitializing -> Color.White.copy(alpha = 0.8f)
+                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                }
             )
         }
     }
