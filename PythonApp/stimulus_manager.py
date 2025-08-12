@@ -103,7 +103,7 @@ class StimulusWindow(QMainWindow):
         label.setStyleSheet("colour: white;")
         layout.addWidget(label)
     def setup_pattern_content(self, layout):
-        label = QLabel("● TEST PATTERN ●")
+        label = QLabel("* TEST PATTERN *")
         label.setAlignment(Qt.AlignCenter)
         font = QFont()
         font.setPointSize(72)

@@ -47,7 +47,7 @@ class SensorReading:
         self.battery_level = battery_level
     
     def __repr__(self):
-        return f"<SensorReading timestamp={self.timestamp} gsr={self.gsr_value}μS>"
+        return f"<SensorReading timestamp={self.timestamp} gsr={self.gsr_value}uS>"
     
     def to_dict(self) -> Dict[str, float]:
         """Convert to dictionary for JSON serialization"""
@@ -123,7 +123,7 @@ class PythonShimmerProcessor:
         reading.ppg_value = ppg_raw * 0.001
         
         # Accelerometer scaling
-        accel_scale = 4.0 / 65536.0 * 9.81  # ±2g range to m/s²
+        accel_scale = 4.0 / 65536.0 * 9.81  # +/-2g range to m/s^2
         reading.accel_x = accel_x_raw * accel_scale
         reading.accel_y = accel_y_raw * accel_scale
         reading.accel_z = accel_z_raw * accel_scale

@@ -642,7 +642,7 @@ async def main():
         print(f"  Medium: {report.medium_issues}")
         print(f"  Low: {report.low_issues}")
         if report.critical_issues > 0:
-            print("\n⚠️  CRITICAL ISSUES FOUND - Immediate action required!")
+            print("\n[WARN]  CRITICAL ISSUES FOUND - Immediate action required!")
         print(f"\nTop recommendations:")
         for i, rec in enumerate(report.recommendations[:3], 1):
             print(f"  {i}. {rec}")

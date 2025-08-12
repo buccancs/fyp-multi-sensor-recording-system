@@ -85,7 +85,7 @@ class TestNativeShimmerIntegration:
         """Generate a realistic Shimmer data packet"""
         packet = []
         
-        # GSR data (2 bytes) - simulate 10μS
+        # GSR data (2 bytes) - simulate 10uS
         gsr_raw = 2048  # Mid-range value
         packet.extend([gsr_raw & 0xFF, (gsr_raw >> 8) & 0xFF])
         
@@ -159,7 +159,7 @@ class TestNativeShimmerIntegration:
         assert abs(native_result.timestamp - current_time) < 60000
         assert abs(python_result.timestamp - current_time) < 60000
         
-        # GSR values should be in reasonable range (0-100 μS)
+        # GSR values should be in reasonable range (0-100 uS)
         assert 0 <= native_result.gsr_value <= 100
         assert 0 <= python_result.gsr_value <= 100
         

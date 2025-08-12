@@ -374,8 +374,8 @@ class EnhancedMainWindow(QMainWindow):
         try:
             timing_logger = self.enhanced_stimulus_controller.timing_logger
             offset_ms = timing_logger.clock_offset * 1000
-            self.timing_precision_label.setText(f"Timing: ±{abs(offset_ms):.2f}ms")
-            self.timing_status.setText(f"Timing: ±{abs(offset_ms):.2f}ms")
+            self.timing_precision_label.setText(f"Timing: +/-{abs(offset_ms):.2f}ms")
+            self.timing_status.setText(f"Timing: +/-{abs(offset_ms):.2f}ms")
         except Exception as e:
             self.log_message(f"Timing display update error: {str(e)}", "Errors")
     def filter_log_messages(self, filter_type):
@@ -389,17 +389,17 @@ Enhanced Multi-Sensor Recording System Controller
 
 Version: 3.5 Enhanced
 Features:
-• VLC Backend Support: {'Available' if VLC_AVAILABLE else 'Not Available'}
-• Enhanced Timing Precision: Multiple clock sources with calibration
-• Performance Monitoring: Real-time frame timing analysis
-• Automatic Backend Selection: Smart codec compatibility
-• complete Error Handling: Detailed error reporting
+* VLC Backend Support: {'Available' if VLC_AVAILABLE else 'Not Available'}
+* Enhanced Timing Precision: Multiple clock sources with calibration
+* Performance Monitoring: Real-time frame timing analysis
+* Automatic Backend Selection: Smart codec compatibility
+* complete Error Handling: Detailed error reporting
 
 PsychoPy-Inspired Improvements:
-• Frame-accurate timing control
-• Hardware-accelerated video playback
-• Robust codec support and fallback mechanisms
-• Professional-grade synchronisation accuracy
+* Frame-accurate timing control
+* Hardware-accelerated video playback
+* Robust codec support and fallback mechanisms
+* Professional-grade synchronisation accuracy
 
 Author: Multi-Sensor Recording System Team
 Date: 2025-07-29

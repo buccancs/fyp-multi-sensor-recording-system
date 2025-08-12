@@ -318,7 +318,7 @@ class RealTimeCalibrationWidget(QWidget):
         self.pattern_progress.setValue(100 if feedback.pattern_detected else 0)
         self.primary_issue_label.setText(f"Primary Issue: {feedback.primary_issue}")
         recommendations_text = "\n".join(
-            [f"• {rec}" for rec in feedback.recommendations]
+            [f"* {rec}" for rec in feedback.recommendations]
         )
         self.recommendations_text.setText(recommendations_text)
     def update_preview(self, camera_name: str, frame: np.ndarray):

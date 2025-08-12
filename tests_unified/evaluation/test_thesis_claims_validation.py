@@ -112,7 +112,7 @@ class ThesisClaimsValidator:
             'severity': 'critical'
         }
         
-        # Thesis Claim: "Thermal camera at 256×192 resolution, 25 Hz"
+        # Thesis Claim: "Thermal camera at 256x192 resolution, 25 Hz"
         thermal_config = self.config.get_device_config(DeviceType.TOPDON_TC001)
         
         self.test_results['thermal_sampling_rate_25hz'] = {
@@ -124,7 +124,7 @@ class ThesisClaimsValidator:
         }
         
         self.test_results['thermal_resolution_256x192'] = {
-            'claim': 'Thermal camera resolution 256×192',
+            'claim': 'Thermal camera resolution 256x192',
             'expected': (256, 192),
             'actual': (thermal_config.resolution_width, thermal_config.resolution_height),
             'passed': thermal_config.resolution_width == 256 and thermal_config.resolution_height == 192,
@@ -143,7 +143,7 @@ class ThesisClaimsValidator:
         }
         
         self.test_results['rgb_resolution_1080p'] = {
-            'claim': 'RGB camera resolution 1080p (1920×1080)',
+            'claim': 'RGB camera resolution 1080p (1920x1080)',
             'expected': (1920, 1080),
             'actual': (rgb_config.resolution_width, rgb_config.resolution_height),
             'passed': rgb_config.resolution_width == 1920 and rgb_config.resolution_height == 1080,
@@ -191,7 +191,7 @@ class ThesisClaimsValidator:
             )
             
             self.test_results['thermal_processor_specifications'] = {
-                'claim': 'Thermal processor handles 256×192 resolution',
+                'claim': 'Thermal processor handles 256x192 resolution',
                 'expected': (256, 192),
                 'actual': (thermal_processor.sensor_width, thermal_processor.sensor_height),
                 'passed': thermal_specs_valid,
@@ -285,8 +285,8 @@ class ThesisClaimsValidator:
         shimmer_performance = ThesisVerifiedConfigurations.SHIMMER_PERFORMANCE
         
         self.test_results['shimmer_processing_time_target'] = {
-            'claim': 'Shimmer processing time ≤7.8ms (128Hz requirement)',
-            'expected': '≤7.8ms',
+            'claim': 'Shimmer processing time <=7.8ms (128Hz requirement)',
+            'expected': '<=7.8ms',
             'actual': shimmer_performance.max_processing_time_ms,
             'passed': shimmer_performance.max_processing_time_ms <= 7.8,
             'severity': 'critical'
@@ -296,8 +296,8 @@ class ThesisClaimsValidator:
         thermal_performance = ThesisVerifiedConfigurations.THERMAL_PERFORMANCE
         
         self.test_results['thermal_processing_time_target'] = {
-            'claim': 'Thermal processing time ≤40ms (25Hz requirement)',
-            'expected': '≤40ms',
+            'claim': 'Thermal processing time <=40ms (25Hz requirement)',
+            'expected': '<=40ms',
             'actual': thermal_performance.max_processing_time_ms,
             'passed': thermal_performance.max_processing_time_ms <= 40.0,
             'severity': 'critical'
@@ -307,8 +307,8 @@ class ThesisClaimsValidator:
         rgb_performance = ThesisVerifiedConfigurations.RGB_PERFORMANCE
         
         self.test_results['rgb_processing_time_target'] = {
-            'claim': 'RGB processing time ≤33.3ms (30fps requirement)',
-            'expected': '≤33.3ms',
+            'claim': 'RGB processing time <=33.3ms (30fps requirement)',
+            'expected': '<=33.3ms',
             'actual': rgb_performance.max_processing_time_ms,
             'passed': rgb_performance.max_processing_time_ms <= 33.3,
             'severity': 'critical'
@@ -378,7 +378,7 @@ class ThesisClaimsValidator:
             
             self.test_results['token_generation'] = {
                 'claim': 'Secure token generation with minimum length',
-                'expected': '≥32 characters',
+                'expected': '>=32 characters',
                 'actual': len(test_token.token) if test_token else 0,
                 'passed': test_token is not None and len(test_token.token) >= 32,
                 'severity': 'critical'
@@ -535,8 +535,8 @@ class ThesisClaimsValidator:
                 
                 self.test_results['temperature_range_validation'] = {
                     'claim': 'Temperature values within valid range',
-                    'expected': f'{processor.temperature_range_min}°C to {processor.temperature_range_max}°C',
-                    'actual': f'{np.min(frame.radiometric_temperatures):.1f}°C to {np.max(frame.radiometric_temperatures):.1f}°C',
+                    'expected': f'{processor.temperature_range_min}degC to {processor.temperature_range_max}degC',
+                    'actual': f'{np.min(frame.radiometric_temperatures):.1f}degC to {np.max(frame.radiometric_temperatures):.1f}degC',
                     'passed': temp_range_valid,
                     'severity': 'moderate'
                 }
@@ -569,8 +569,8 @@ class ThesisClaimsValidator:
                 
                 self.test_results['gsr_range_validation'] = {
                     'claim': 'GSR values within physiological range',
-                    'expected': '0.1 to 100.0 μS',
-                    'actual': f'{sample.gsr_conductance_us:.3f} μS',
+                    'expected': '0.1 to 100.0 uS',
+                    'actual': f'{sample.gsr_conductance_us:.3f} uS',
                     'passed': gsr_range_valid,
                     'severity': 'moderate'
                 }
@@ -635,17 +635,17 @@ def run_comprehensive_thesis_validation():
     
     print("THESIS COMPLIANCE SUMMARY:")
     print("-"*40)
-    print("✓ Multi-sensor architecture implemented")
-    print("✓ Device configurations match thesis specifications") 
-    print("✓ Real-time processing with performance targets")
-    print("✓ LSL integration for data streaming")
-    print("✓ Zeroconf device discovery")
-    print("✓ Enhanced security with TLS/AES encryption")
-    print("✓ File integrity with SHA-256 verification")
-    print("✓ PyQt6 GUI with real-time visualization")
-    print("✓ Lab protocol support (Stroop, TSST)")
-    print("✓ NTP synchronization with ~21ms target")
-    print("✓ Native backend with performance improvements")
+    print("[PASS] Multi-sensor architecture implemented")
+    print("[PASS] Device configurations match thesis specifications") 
+    print("[PASS] Real-time processing with performance targets")
+    print("[PASS] LSL integration for data streaming")
+    print("[PASS] Zeroconf device discovery")
+    print("[PASS] Enhanced security with TLS/AES encryption")
+    print("[PASS] File integrity with SHA-256 verification")
+    print("[PASS] PyQt6 GUI with real-time visualization")
+    print("[PASS] Lab protocol support (Stroop, TSST)")
+    print("[PASS] NTP synchronization with ~21ms target")
+    print("[PASS] Native backend with performance improvements")
     
     return results
 
@@ -662,8 +662,8 @@ if __name__ == "__main__":
     
     # Exit with appropriate code
     if results['overall_compliance_percentage'] >= 95:
-        print("✅ THESIS CLAIMS VALIDATION: PASSED")
+        print("[PASS] THESIS CLAIMS VALIDATION: PASSED")
         exit(0)
     else:
-        print("❌ THESIS CLAIMS VALIDATION: FAILED")
+        print("[FAIL] THESIS CLAIMS VALIDATION: FAILED")
         exit(1)

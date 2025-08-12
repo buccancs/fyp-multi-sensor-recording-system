@@ -22,7 +22,7 @@ class Phase4Validator:
         self._validate_production_config()
         return self._generate_final_report()
     def _validate_analytics_system(self):
-        print("🔍 Validating Analytics and Monitoring System...")
+        print("[INFO] Validating Analytics and Monitoring System...")
         android_analytics = (
             self.project_root
             / "AndroidApp"
@@ -36,7 +36,7 @@ class Phase4Validator:
             / "AnalyticsManager.kt"
         )
         if android_analytics.exists():
-            print("  ✅ Android AnalyticsManager.kt found")
+            print("  [PASS] Android AnalyticsManager.kt found")
             content = android_analytics.read_text()
             features = [
                 ("Session tracking", "startSession"),
@@ -48,7 +48,7 @@ class Phase4Validator:
             ]
             for feature_name, code_pattern in features:
                 if code_pattern in content:
-                    print(f"    ✅ {feature_name} implemented")
+                    print(f"    [PASS] {feature_name} implemented")
                     self.results.append(
                         {
                             "component": "analytics",
@@ -57,7 +57,7 @@ class Phase4Validator:
                         }
                     )
                 else:
-                    print(f"    ❌ {feature_name} missing")
+                    print(f"    [FAIL] {feature_name} missing")
                     self.results.append(
                         {
                             "component": "analytics",
@@ -66,13 +66,13 @@ class Phase4Validator:
                         }
                     )
         else:
-            print("  ❌ Android AnalyticsManager.kt not found")
+            print("  [FAIL] Android AnalyticsManager.kt not found")
             self.results.append(
                 {"component": "analytics", "feature": "file_exists", "status": "fail"}
             )
         print()
     def _validate_performance_tools(self):
-        print("🔍 Validating Performance Benchmarking Tools...")
+        print("[INFO] Validating Performance Benchmarking Tools...")
         performance_benchmark = (
             self.project_root
             / "PythonApp"
@@ -81,7 +81,7 @@ class Phase4Validator:
             / "performance_benchmark.py"
         )
         if performance_benchmark.exists():
-            print("  ✅ Performance benchmark tool found")
+            print("  [PASS] Performance benchmark tool found")
             content = performance_benchmark.read_text()
             benchmarks = [
                 ("Memory allocation", "_benchmark_memory_allocation"),
@@ -93,7 +93,7 @@ class Phase4Validator:
             ]
             for benchmark_name, code_pattern in benchmarks:
                 if code_pattern in content:
-                    print(f"    ✅ {benchmark_name} benchmark implemented")
+                    print(f"    [PASS] {benchmark_name} benchmark implemented")
                     self.results.append(
                         {
                             "component": "performance",
@@ -102,7 +102,7 @@ class Phase4Validator:
                         }
                     )
                 else:
-                    print(f"    ❌ {benchmark_name} benchmark missing")
+                    print(f"    [FAIL] {benchmark_name} benchmark missing")
                     self.results.append(
                         {
                             "component": "performance",
@@ -111,13 +111,13 @@ class Phase4Validator:
                         }
                     )
         else:
-            print("  ❌ Performance benchmark tool not found")
+            print("  [FAIL] Performance benchmark tool not found")
             self.results.append(
                 {"component": "performance", "feature": "file_exists", "status": "fail"}
             )
         print()
     def _validate_security_tools(self):
-        print("🔍 Validating Security Assessment Tools...")
+        print("[INFO] Validating Security Assessment Tools...")
         security_scanner = (
             self.project_root
             / "PythonApp"
@@ -126,7 +126,7 @@ class Phase4Validator:
             / "security_scanner.py"
         )
         if security_scanner.exists():
-            print("  ✅ Security scanner tool found")
+            print("  [PASS] Security scanner tool found")
             content = security_scanner.read_text()
             security_checks = [
                 ("Python code analysis", "_scan_python_files"),
@@ -138,7 +138,7 @@ class Phase4Validator:
             ]
             for check_name, code_pattern in security_checks:
                 if code_pattern in content:
-                    print(f"    ✅ {check_name} implemented")
+                    print(f"    [PASS] {check_name} implemented")
                     self.results.append(
                         {
                             "component": "security",
@@ -147,7 +147,7 @@ class Phase4Validator:
                         }
                     )
                 else:
-                    print(f"    ❌ {check_name} missing")
+                    print(f"    [FAIL] {check_name} missing")
                     self.results.append(
                         {
                             "component": "security",
@@ -156,13 +156,13 @@ class Phase4Validator:
                         }
                     )
         else:
-            print("  ❌ Security scanner tool not found")
+            print("  [FAIL] Security scanner tool not found")
             self.results.append(
                 {"component": "security", "feature": "file_exists", "status": "fail"}
             )
         print()
     def _validate_deployment_automation(self):
-        print("🔍 Validating Deployment Automation...")
+        print("[INFO] Validating Deployment Automation...")
         deployment_automation = (
             self.project_root
             / "PythonApp"
@@ -171,7 +171,7 @@ class Phase4Validator:
             / "deployment_automation.py"
         )
         if deployment_automation.exists():
-            print("  ✅ Deployment automation tool found")
+            print("  [PASS] Deployment automation tool found")
             content = deployment_automation.read_text()
             deployment_features = [
                 ("Android APK building", "_build_android_app"),
@@ -183,7 +183,7 @@ class Phase4Validator:
             ]
             for feature_name, code_pattern in deployment_features:
                 if code_pattern in content:
-                    print(f"    ✅ {feature_name} implemented")
+                    print(f"    [PASS] {feature_name} implemented")
                     self.results.append(
                         {
                             "component": "deployment",
@@ -192,7 +192,7 @@ class Phase4Validator:
                         }
                     )
                 else:
-                    print(f"    ❌ {feature_name} missing")
+                    print(f"    [FAIL] {feature_name} missing")
                     self.results.append(
                         {
                             "component": "deployment",
@@ -201,21 +201,21 @@ class Phase4Validator:
                         }
                     )
         else:
-            print("  ❌ Deployment automation tool not found")
+            print("  [FAIL] Deployment automation tool not found")
             self.results.append(
                 {"component": "deployment", "feature": "file_exists", "status": "fail"}
             )
         print()
     def _validate_documentation(self):
-        print("🔍 Validating Documentation...")
+        print("[INFO] Validating Documentation...")
         docs_updated = (
             self.project_root / "docs" / "generated_docs" / "IMPLEMENTATION_SUMMARY.md"
         )
         if docs_updated.exists():
-            print("  ✅ Implementation summary found")
+            print("  [PASS] Implementation summary found")
             content = docs_updated.read_text()
             if "Phase 4 Implementation Summary" in content:
-                print("    ✅ Phase 4 documentation updated")
+                print("    [PASS] Phase 4 documentation updated")
                 self.results.append(
                     {
                         "component": "documentation",
@@ -224,7 +224,7 @@ class Phase4Validator:
                     }
                 )
             else:
-                print("    ❌ Phase 4 documentation not updated")
+                print("    [FAIL] Phase 4 documentation not updated")
                 self.results.append(
                     {
                         "component": "documentation",
@@ -233,7 +233,7 @@ class Phase4Validator:
                     }
                 )
             if "Production Readiness Complete" in content:
-                print("    ✅ Production readiness status documented")
+                print("    [PASS] Production readiness status documented")
                 self.results.append(
                     {
                         "component": "documentation",
@@ -242,7 +242,7 @@ class Phase4Validator:
                     }
                 )
             else:
-                print("    ❌ Production readiness status not documented")
+                print("    [FAIL] Production readiness status not documented")
                 self.results.append(
                     {
                         "component": "documentation",
@@ -251,7 +251,7 @@ class Phase4Validator:
                     }
                 )
         else:
-            print("  ❌ Implementation summary not found")
+            print("  [FAIL] Implementation summary not found")
             self.results.append(
                 {
                     "component": "documentation",
@@ -261,10 +261,10 @@ class Phase4Validator:
             )
         print()
     def _validate_build_system(self):
-        print("🔍 Validating Build System...")
+        print("[INFO] Validating Build System...")
         root_gradle = self.project_root / "build.gradle"
         if root_gradle.exists():
-            print("  ✅ Root build.gradle found")
+            print("  [PASS] Root build.gradle found")
             content = root_gradle.read_text()
             build_features = [
                 ("Assembly automation", "assembleAll"),
@@ -275,7 +275,7 @@ class Phase4Validator:
             ]
             for feature_name, pattern in build_features:
                 if pattern in content:
-                    print(f"    ✅ {feature_name} configured")
+                    print(f"    [PASS] {feature_name} configured")
                     self.results.append(
                         {
                             "component": "build",
@@ -284,7 +284,7 @@ class Phase4Validator:
                         }
                     )
                 else:
-                    print(f"    ❌ {feature_name} not configured")
+                    print(f"    [FAIL] {feature_name} not configured")
                     self.results.append(
                         {
                             "component": "build",
@@ -293,16 +293,16 @@ class Phase4Validator:
                         }
                     )
         else:
-            print("  ❌ Root build.gradle not found")
+            print("  [FAIL] Root build.gradle not found")
             self.results.append(
                 {"component": "build", "feature": "file_exists", "status": "fail"}
             )
         android_gradle = self.project_root / "AndroidApp" / "build.gradle"
         if android_gradle.exists():
-            print("  ✅ Android build.gradle found")
+            print("  [PASS] Android build.gradle found")
             content = android_gradle.read_text()
             if "release {" in content and "minifyEnabled true" in content:
-                print("    ✅ Release build configuration found")
+                print("    [PASS] Release build configuration found")
                 self.results.append(
                     {
                         "component": "build",
@@ -311,7 +311,7 @@ class Phase4Validator:
                     }
                 )
             else:
-                print("    ❌ Release build configuration missing")
+                print("    [FAIL] Release build configuration missing")
                 self.results.append(
                     {
                         "component": "build",
@@ -320,25 +320,25 @@ class Phase4Validator:
                     }
                 )
         else:
-            print("  ❌ Android build.gradle not found")
+            print("  [FAIL] Android build.gradle not found")
             self.results.append(
                 {"component": "build", "feature": "android_gradle", "status": "fail"}
             )
         print()
     def _validate_production_config(self):
-        print("🔍 Validating Production Configuration...")
+        print("[INFO] Validating Production Configuration...")
         protocol_dir = self.project_root / "protocol"
         if protocol_dir.exists():
-            print("  ✅ Protocol directory found")
+            print("  [PASS] Protocol directory found")
             config_file = protocol_dir / "config.json"
             schema_file = protocol_dir / "message_schema.json"
             if config_file.exists():
-                print("    ✅ Configuration file found")
+                print("    [PASS] Configuration file found")
                 try:
                     with open(config_file) as f:
                         config = json.load(f)
                     if "network" in config and "security" in config:
-                        print("      ✅ Network and security sections found")
+                        print("      [PASS] Network and security sections found")
                         self.results.append(
                             {
                                 "component": "config",
@@ -347,7 +347,7 @@ class Phase4Validator:
                             }
                         )
                     else:
-                        print("      ❌ Missing network or security configuration")
+                        print("      [FAIL] Missing network or security configuration")
                         self.results.append(
                             {
                                 "component": "config",
@@ -356,7 +356,7 @@ class Phase4Validator:
                             }
                         )
                 except Exception as e:
-                    print(f"      ❌ Configuration file invalid: {e}")
+                    print(f"      [FAIL] Configuration file invalid: {e}")
                     self.results.append(
                         {
                             "component": "config",
@@ -365,22 +365,22 @@ class Phase4Validator:
                         }
                     )
             else:
-                print("    ❌ Configuration file not found")
+                print("    [FAIL] Configuration file not found")
                 self.results.append(
                     {"component": "config", "feature": "config_file", "status": "fail"}
                 )
             if schema_file.exists():
-                print("    ✅ Message schema found")
+                print("    [PASS] Message schema found")
                 self.results.append(
                     {"component": "config", "feature": "schema_file", "status": "pass"}
                 )
             else:
-                print("    ❌ Message schema not found")
+                print("    [FAIL] Message schema not found")
                 self.results.append(
                     {"component": "config", "feature": "schema_file", "status": "fail"}
                 )
         else:
-            print("  ❌ Protocol directory not found")
+            print("  [FAIL] Protocol directory not found")
             self.results.append(
                 {"component": "config", "feature": "protocol_dir", "status": "fail"}
             )
@@ -411,13 +411,13 @@ class Phase4Validator:
             print(f"  {comp.title()}: {stats['pass']}/{total} ({rate:.1f}%)")
         print()
         if success_rate >= 90:
-            status = "✅ PRODUCTION READY"
+            status = "[PASS] PRODUCTION READY"
             recommendation = "System is ready for production deployment."
         elif success_rate >= 75:
-            status = "⚠️  MOSTLY READY"
+            status = "[WARN]  MOSTLY READY"
             recommendation = "Address remaining issues before production deployment."
         else:
-            status = "❌ NOT READY"
+            status = "[FAIL] NOT READY"
             recommendation = (
                 "Significant issues found. Complete implementation before deployment."
             )
@@ -428,7 +428,7 @@ class Phase4Validator:
             print("Failed Checks:")
             for result in self.results:
                 if result["status"] == "fail":
-                    print(f"  ❌ {result['component']}.{result['feature']}")
+                    print(f"  [FAIL] {result['component']}.{result['feature']}")
             print()
         phase4_features = [
             "Analytics and monitoring system",
@@ -441,17 +441,17 @@ class Phase4Validator:
         ]
         print("Phase 4 Features Implemented:")
         for feature in phase4_features:
-            print(f"  ✅ {feature}")
+            print(f"  [PASS] {feature}")
         print()
-        print("🎉 Phase 4: Production Readiness implementation complete!")
+        print("[SUCCESS] Phase 4: Production Readiness implementation complete!")
         print()
         print("Key achievements:")
-        print("  • complete production monitoring and analytics")
-        print("  • Advanced performance benchmarking and optimisation")
-        print("  • Multi-layer security assessment and vulnerability management")
-        print("  • Automated deployment pipeline with cross-platform support")
-        print("  • Complete documentation and user guides")
-        print("  • Production-ready build system and configuration")
+        print("  * complete production monitoring and analytics")
+        print("  * Advanced performance benchmarking and optimisation")
+        print("  * Multi-layer security assessment and vulnerability management")
+        print("  * Automated deployment pipeline with cross-platform support")
+        print("  * Complete documentation and user guides")
+        print("  * Production-ready build system and configuration")
         print()
         return {
             "timestamp": datetime.now().isoformat(),

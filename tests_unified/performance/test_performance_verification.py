@@ -89,7 +89,7 @@ class ShimmerPerformanceTester(PerformanceTester):
         # Simulate 21-byte Shimmer3 GSR+ packet
         packet = []
         
-        # GSR data (2 bytes) - simulate ~10μS
+        # GSR data (2 bytes) - simulate ~10uS
         gsr_raw = int(np.random.normal(2000, 100))
         packet.extend([gsr_raw & 0xFF, (gsr_raw >> 8) & 0xFF])
         
@@ -455,8 +455,8 @@ class ThesisPerformanceValidator:
             shimmer = self.validation_results['shimmer_sampling_rate']
             report.append("1. Shimmer 128Hz Sampling Rate Performance")
             report.append(f"   Target processing time: {shimmer['target_time_ms']:.2f}ms")
-            report.append(f"   Native implementation: {shimmer['native_time_ms']:.2f}ms ({'✓' if shimmer['native_meets_target'] else '✗'})")
-            report.append(f"   Python implementation: {shimmer['python_time_ms']:.2f}ms ({'✓' if shimmer['python_meets_target'] else '✗'})")
+            report.append(f"   Native implementation: {shimmer['native_time_ms']:.2f}ms ({'[PASS]' if shimmer['native_meets_target'] else '[FAIL]'})")
+            report.append(f"   Python implementation: {shimmer['python_time_ms']:.2f}ms ({'[PASS]' if shimmer['python_meets_target'] else '[FAIL]'})")
             report.append(f"   Native speedup: {shimmer['speedup_factor']:.1f}x")
             report.append()
         
@@ -465,8 +465,8 @@ class ThesisPerformanceValidator:
             webcam = self.validation_results['webcam_frame_rate']
             report.append("2. Webcam 30fps Processing Performance")
             report.append(f"   Target processing time: {webcam['target_time_ms']:.2f}ms")
-            report.append(f"   Native implementation: {webcam['native_time_ms']:.2f}ms ({'✓' if webcam['native_meets_target'] else '✗'})")
-            report.append(f"   Python implementation: {webcam['python_time_ms']:.2f}ms ({'✓' if webcam['python_meets_target'] else '✗'})")
+            report.append(f"   Native implementation: {webcam['native_time_ms']:.2f}ms ({'[PASS]' if webcam['native_meets_target'] else '[FAIL]'})")
+            report.append(f"   Python implementation: {webcam['python_time_ms']:.2f}ms ({'[PASS]' if webcam['python_meets_target'] else '[FAIL]'})")
             report.append(f"   Native speedup: {webcam['speedup_factor']:.1f}x")
             report.append()
         
@@ -476,7 +476,7 @@ class ThesisPerformanceValidator:
             report.append("3. Millisecond-Precision Synchronization")
             report.append(f"   Shimmer precision: {sync['shimmer_precision_ms']:.3f}ms")
             report.append(f"   Webcam precision: {sync['webcam_precision_ms']:.3f}ms")
-            report.append(f"   Meets ms precision: {'✓' if sync['meets_ms_precision'] else '✗'}")
+            report.append(f"   Meets ms precision: {'[PASS]' if sync['meets_ms_precision'] else '[FAIL]'}")
             report.append()
         
         # Native performance gain validation
@@ -486,7 +486,7 @@ class ThesisPerformanceValidator:
             report.append(f"   Average speedup: {perf['average_speedup']:.1f}x")
             report.append(f"   Minimum speedup: {perf['min_speedup']:.1f}x")
             report.append(f"   Maximum speedup: {perf['max_speedup']:.1f}x")
-            report.append(f"   All operations faster: {'✓' if perf['all_operations_faster'] else '✗'}")
+            report.append(f"   All operations faster: {'[PASS]' if perf['all_operations_faster'] else '[FAIL]'}")
             report.append()
             
             report.append("   Individual operation speedups:")

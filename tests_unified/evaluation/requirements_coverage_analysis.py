@@ -302,13 +302,13 @@ class RequirementsCoverageAnalyzer:
         print(f"Coverage Percentage: {summary['coverage_percentage']:.1f}%")
         
         if report['gaps']:
-            print(f"\n🚨 TESTING GAPS ({len(report['gaps'])} requirements):")
+            print(f"\n[ALERT] TESTING GAPS ({len(report['gaps'])} requirements):")
             for gap in report['gaps']:
                 print(f"  - {gap['requirement_id']}: {gap['title']}")
         else:
-            print("\n✅ ALL REQUIREMENTS HAVE TEST COVERAGE!")
+            print("\n[PASS] ALL REQUIREMENTS HAVE TEST COVERAGE!")
         
-        print(f"\n📝 RECOMMENDATIONS:")
+        print(f"\n[NOTE] RECOMMENDATIONS:")
         for rec in report['recommendations']:
             print(f"  - {rec}")
         
@@ -340,10 +340,10 @@ def main():
     
     # Return exit code based on coverage
     if report['summary']['coverage_percentage'] < 80:
-        print(f"\n⚠️  Coverage below 80% threshold: {report['summary']['coverage_percentage']:.1f}%")
+        print(f"\n[WARN]  Coverage below 80% threshold: {report['summary']['coverage_percentage']:.1f}%")
         return 1
     else:
-        print(f"\n✅ Coverage meets 80% threshold: {report['summary']['coverage_percentage']:.1f}%")
+        print(f"\n[PASS] Coverage meets 80% threshold: {report['summary']['coverage_percentage']:.1f}%")
         return 0
 
 if __name__ == "__main__":
