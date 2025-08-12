@@ -1777,7 +1777,7 @@ constructor(
         
         // Add realistic battery curve (batteries discharge faster when low)
         val dischargeAcceleration = if (linearDischarge < 20) {
-            pow(linearDischarge / 20.0, 1.5) * linearDischarge
+            (linearDischarge / 20.0).pow(1.5) * linearDischarge
         } else {
             linearDischarge
         }
@@ -2423,15 +2423,10 @@ fun Shimmer.getAccelZReading(): Double? {
 fun Shimmer.getBatteryLevel(): Int? {
     return try {
         // Simplified approach that doesn't rely on potentially missing API methods
-        val batteryPercent = null // getBatteryPercent()
-        if (batteryPercent != null && batteryPercent >= 0) {
-            batteryPercent
-        } else {
-            // Fallback - return simulated value based on system time
-            val systemTime = System.currentTimeMillis()
-            val batterySimulation = 100 - ((systemTime / 600000) % 100).toInt() // Decline over 10 minutes
-            batterySimulation.coerceIn(10, 100)
-        }
+        // Fallback - return simulated value based on system time
+        val systemTime = System.currentTimeMillis()
+        val batterySimulation = 100 - ((systemTime / 600000) % 100).toInt() // Decline over 10 minutes
+        batterySimulation.coerceIn(10, 100)
     } catch (e: Exception) {
         85 // Default battery level
     }
