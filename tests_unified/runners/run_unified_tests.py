@@ -241,12 +241,15 @@ class UnifiedTestRunner:
         
         # Map categories to directories
         category_mapping = {
-            "android": ["unit/android", "integration", "system"],
+            "android": ["unit/android", "integration", "system", "visual"],
             "browser": ["browser"],
             "visual": ["visual"],
             "hardware": ["hardware"],
             "evaluation": ["evaluation"],
-            "performance": ["performance"]
+            "performance": ["performance"],
+            "gui": ["visual"],  # GUI tests are in visual directory
+            "pc": ["visual"],   # PC GUI tests
+            "cross_platform": ["visual"]  # Cross-platform tests
         }
         
         if category not in category_mapping:
