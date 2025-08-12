@@ -26,8 +26,10 @@ import com.multisensor.recording.recording.DeviceStatus
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.components.AnimatedRecordingButton
+import com.multisensor.recording.ui.components.CameraPreview
 import com.multisensor.recording.ui.components.ColorPaletteSelector
 import com.multisensor.recording.ui.components.ThermalPreview
+import com.multisensor.recording.ui.components.ThermalPreviewSurface
 import com.multisensor.recording.ui.components.SessionStatusCard
 import com.multisensor.recording.ui.theme.ConnectionGreen
 import com.multisensor.recording.ui.theme.DisconnectedRed
@@ -41,6 +43,17 @@ fun RecordingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    // Initialize system when the screen is first composed
+    LaunchedEffect(Unit) {
+        if (!uiState.isInitialized && !uiState.isConnecting) {
+            // Initialize with fallback first to show the UI, then try real initialization
+            viewModel.initializeSystemWithFallback()
+            // Trigger real initialization in the background
+            viewModel.scanForDevices()
+            viewModel.refreshSystemStatus()
+        }
+    }
     Scaffold(
         floatingActionButton = {
             AnimatedRecordingButton(
@@ -77,10 +90,16 @@ fun RecordingScreen(
                     "PC Connection" to if (uiState.isPcConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED
                 )
             )
-            ThermalPreviewCard(
-                thermalBitmap = uiState.currentThermalFrame,
+            // RGB Camera Preview
+            CameraPreview(
                 isRecording = uiState.isRecording,
-                onNavigateToPreview = onNavigateToPreview
+                viewModel = viewModel
+            )
+
+            // Thermal Camera Preview
+            ThermalPreviewSurface(
+                isRecording = uiState.isRecording,
+                viewModel = viewModel
             )
             ColorPaletteSelector(
                 currentPalette = uiState.colorPalette,
