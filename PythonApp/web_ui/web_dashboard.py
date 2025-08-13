@@ -793,7 +793,14 @@ Generated at: {datetime.now().isoformat()}"""
 
         @self.app.route("/api/camera/rgb/preview")
         def api_camera_rgb_preview():
+            """Serve RGB camera preview from connected devices."""
             try:
+                # Try to get real RGB camera feed from connected devices
+                real_frame = self._get_real_rgb_frame()
+                if real_frame is not None:
+                    return real_frame
+                
+                # Check if PC webcam is available
                 if (
                     self.controller
                     and hasattr(self.controller, "webcam_capture")
@@ -802,7 +809,6 @@ Generated at: {datetime.now().isoformat()}"""
                     frame = self.controller.webcam_capture.get_current_frame()
                     if frame is not None:
                         import io
-
                         import cv2
                         from flask import Response
 
@@ -821,7 +827,7 @@ Generated at: {datetime.now().isoformat()}"""
                             return response
 
                 return self._generate_placeholder_image(
-                    "RGB Camera\nPreview Not Available"
+                    "RGB Camera\nPreview Not Available\n\nWaiting for Device Connection"
                 )
             except Exception as e:
                 logger.error(f"RGB preview error: {e}")
@@ -829,23 +835,26 @@ Generated at: {datetime.now().isoformat()}"""
 
         @self.app.route("/api/camera/ir/preview")
         def api_camera_ir_preview():
+            """Serve IR/thermal camera preview from connected Android devices."""
             try:
-
-                if (
-                    self.controller
-                    and hasattr(self.controller, "android_device_manager")
-                    and self.controller.android_device_manager
-                ):
-                    devices = (
-                        self.controller.android_device_manager.get_connected_devices()
-                        or {}
+                # Try to get real thermal camera feed from connected Android devices
+                real_frame = self._get_real_thermal_frame_web()
+                if real_frame is not None:
+                    return real_frame
+                
+                # Check if we have connected devices with thermal capability
+                device_status = self._check_thermal_device_status()
+                if device_status["devices_connected"] > 0:
+                    # Devices connected but no thermal data yet
+                    return self._generate_thermal_placeholder(
+                        "IR CAMERA\nConnected - Initializing"
                     )
-                    for device_id, device_info in devices.items():
-                        if "thermal" in device_info.get("capabilities", []):
-
-                            pass
-
-                return self._generate_thermal_placeholder()
+                
+                # No devices connected - show waiting message
+                return self._generate_thermal_placeholder(
+                    "IR CAMERA\nWaiting for Android Device"
+                )
+                
             except Exception as e:
                 logger.error(f"IR preview error: {e}")
                 return self._generate_placeholder_image("IR Camera\nError")
@@ -932,7 +941,8 @@ Generated at: {datetime.now().isoformat()}"""
 
         return Response(b"", mimetype="image/jpeg")
 
-    def _generate_thermal_placeholder(self):
+    def _generate_thermal_placeholder(self, overlay_text="IR CAMERA\nTHERMAL PREVIEW"):
+        """Generate thermal-style placeholder with custom overlay text."""
         try:
             import io
 
@@ -957,10 +967,12 @@ Generated at: {datetime.now().isoformat()}"""
                         img[y, x] = [255, 255, (intensity - 170) * 3]
 
             font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(img, "IR CAMERA", (100, 120), font, 0.7, (255, 255, 255), 2)
-            cv2.putText(
-                img, "THERMAL PREVIEW", (60, 150), font, 0.5, (255, 255, 255), 1
-            )
+            lines = overlay_text.split('\n')
+            for i, line in enumerate(lines):
+                text_size = cv2.getTextSize(line, font, 0.6, 2)[0]
+                x = (img.shape[1] - text_size[0]) // 2
+                y = (img.shape[0] // 2) + (i - len(lines) // 2) * 25
+                cv2.putText(img, line, (x, y), font, 0.6, (255, 255, 255), 2)
 
             ret, buffer = cv2.imencode(".jpg", img)
             if ret:
@@ -968,10 +980,179 @@ Generated at: {datetime.now().isoformat()}"""
                 response.headers["Cache-Control"] = "no-cache"
                 return response
         except (cv2.error, ValueError, TypeError) as e:
-            self.logger.debug(f"Failed to generate thermal preview: {e}")
+            logger.debug(f"Failed to generate thermal preview: {e}")
             pass
 
         return self._generate_placeholder_image("IR Camera\nThermal Preview")
+    
+    def _get_real_rgb_frame(self):
+        """Get real RGB camera frame from connected Android devices."""
+        try:
+            if (
+                self.controller
+                and hasattr(self.controller, "android_device_manager")
+                and self.controller.android_device_manager
+            ):
+                device_manager = self.controller.android_device_manager
+                devices = device_manager.get_connected_devices() or {}
+                
+                for device_id, device_info in devices.items():
+                    if "camera" in device_info.get("capabilities", []):
+                        # Try to get latest RGB frame from Android device
+                        rgb_frame = device_manager.get_latest_rgb_frame(device_id)
+                        if rgb_frame is not None:
+                            return self._convert_frame_to_response(rgb_frame)
+            
+            return None
+            
+        except Exception as e:
+            logger.debug(f"Could not get real RGB frame: {e}")
+            return None
+    
+    def _get_real_thermal_frame_web(self):
+        """Get real thermal camera frame from connected Android devices for web display."""
+        try:
+            if (
+                self.controller
+                and hasattr(self.controller, "android_device_manager")
+                and self.controller.android_device_manager
+            ):
+                device_manager = self.controller.android_device_manager
+                devices = device_manager.get_connected_devices() or {}
+                
+                for device_id, device_info in devices.items():
+                    if "thermal" in device_info.get("capabilities", []):
+                        # Try to get latest thermal frame from Android device
+                        thermal_frame = device_manager.get_latest_thermal_frame(device_id)
+                        if thermal_frame is not None:
+                            return self._convert_thermal_frame_to_response(thermal_frame)
+            
+            return None
+            
+        except Exception as e:
+            logger.debug(f"Could not get real thermal frame: {e}")
+            return None
+    
+    def _check_thermal_device_status(self):
+        """Check status of thermal-capable devices."""
+        status = {
+            "devices_connected": 0,
+            "thermal_devices": 0,
+            "active_thermal_streams": 0
+        }
+        
+        try:
+            if (
+                self.controller
+                and hasattr(self.controller, "android_device_manager")
+                and self.controller.android_device_manager
+            ):
+                device_manager = self.controller.android_device_manager
+                devices = device_manager.get_connected_devices() or {}
+                
+                status["devices_connected"] = len(devices)
+                
+                for device_id, device_info in devices.items():
+                    if "thermal" in device_info.get("capabilities", []):
+                        status["thermal_devices"] += 1
+                        # Check if thermal stream is active
+                        if device_info.get("thermal_streaming", False):
+                            status["active_thermal_streams"] += 1
+        
+        except Exception as e:
+            logger.debug(f"Error checking thermal device status: {e}")
+        
+        return status
+    
+    def _convert_frame_to_response(self, frame):
+        """Convert camera frame to HTTP response."""
+        try:
+            import io
+            import cv2
+            import numpy as np
+            from flask import Response
+            
+            if isinstance(frame, np.ndarray):
+                ret, buffer = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+                if ret:
+                    response = Response(io.BytesIO(buffer).read(), mimetype="image/jpeg")
+                    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                    response.headers["Pragma"] = "no-cache"
+                    response.headers["Expires"] = "0"
+                    return response
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error converting frame to response: {e}")
+            return None
+    
+    def _convert_thermal_frame_to_response(self, thermal_data):
+        """Convert thermal data to HTTP response with thermal colormap."""
+        try:
+            import io
+            import cv2
+            import numpy as np
+            from flask import Response
+            
+            if isinstance(thermal_data, np.ndarray):
+                # Apply thermal colormap
+                colored_frame = self._apply_thermal_colormap_web(thermal_data)
+                
+                ret, buffer = cv2.imencode(".jpg", colored_frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+                if ret:
+                    response = Response(io.BytesIO(buffer).read(), mimetype="image/jpeg")
+                    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                    response.headers["Pragma"] = "no-cache"  
+                    response.headers["Expires"] = "0"
+                    return response
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error converting thermal frame to response: {e}")
+            return None
+    
+    def _apply_thermal_colormap_web(self, thermal_array):
+        """Apply thermal colormap to thermal data for web display."""
+        try:
+            import numpy as np
+            
+            # Normalize to 0-255 if needed
+            if thermal_array.dtype != np.uint8:
+                thermal_normalized = ((thermal_array - thermal_array.min()) / 
+                                    (thermal_array.max() - thermal_array.min()) * 255).astype(np.uint8)
+            else:
+                thermal_normalized = thermal_array
+            
+            # Create RGB frame
+            height, width = thermal_normalized.shape
+            colored_frame = np.zeros((height, width, 3), dtype=np.uint8)
+            
+            # Apply heat map coloring: blue -> purple -> red -> orange -> yellow -> white
+            for y in range(height):
+                for x in range(width):
+                    intensity = thermal_normalized[y, x]
+                    
+                    if intensity < 51:  # Blue to purple (cold)
+                        colored_frame[y, x] = [intensity * 5, 0, 255]
+                    elif intensity < 102:  # Purple to red  
+                        factor = intensity - 51
+                        colored_frame[y, x] = [255, 0, 255 - factor * 5]
+                    elif intensity < 153:  # Red to orange
+                        factor = intensity - 102
+                        colored_frame[y, x] = [255, factor * 5, 0]
+                    elif intensity < 204:  # Orange to yellow
+                        factor = intensity - 153
+                        colored_frame[y, x] = [255, 255, factor * 5]
+                    else:  # Yellow to white (hot)
+                        colored_frame[y, x] = [255, 255, 255]
+            
+            return colored_frame
+            
+        except Exception as e:
+            logger.error(f"Error applying thermal colormap: {e}")
+            return thermal_array
 
     def _setup_socket_handlers(self):
 

@@ -393,50 +393,163 @@ class DeviceConnectionManager @Inject constructor(
                 
                 val currentConfig = networkConfiguration.getServerConfiguration()
                 
-                // List of common IPs to try based on current network
+                // Enhanced discovery with multiple network detection strategies
+                val discoveredServers = mutableListOf<String>()
+                
+                // Strategy 1: Try configured IP first
+                discoveredServers.add(currentConfig.serverIp)
+                
+                // Strategy 2: Auto-detect network ranges from device's current network configuration
+                val networkRanges = detectCurrentNetworkRanges()
+                discoveredServers.addAll(networkRanges)
+                
+                // Strategy 3: Common default network ranges  
                 val baseIp = currentConfig.serverIp.substringBeforeLast(".")
-                val ipsToTry = listOf(
-                    currentConfig.serverIp, // Try configured IP first
+                discoveredServers.addAll(listOf(
                     "$baseIp.100",
                     "$baseIp.101", 
                     "$baseIp.1",   // Router
                     "$baseIp.10",
                     "$baseIp.50",
-                    "192.168.1.100",
-                    "192.168.0.100",
-                    "10.0.0.100"
-                )
+                    "$baseIp.254"  // Common high IP
+                ))
                 
-                for (ip in ipsToTry) {
+                // Strategy 4: Cross-subnet discovery for common enterprise/home networks
+                discoveredServers.addAll(listOf(
+                    "192.168.1.100", "192.168.1.101", "192.168.1.10",
+                    "192.168.0.100", "192.168.0.101", "192.168.0.10", 
+                    "10.0.0.100", "10.0.0.101", "10.0.0.10",
+                    "172.16.0.100", "172.16.0.101", "172.16.0.10"
+                ))
+                
+                // Remove duplicates and test each IP
+                val uniqueIps = discoveredServers.distinct()
+                logger.info("Testing ${uniqueIps.size} potential server addresses...")
+                
+                for (ip in uniqueIps) {
                     try {
                         logger.debug("Trying PC server at: $ip:${currentConfig.jsonPort}")
                         
+                        // Test connection with shorter timeout for faster discovery
                         val socket = java.net.Socket()
-                        socket.connect(
-                            java.net.InetSocketAddress(ip, currentConfig.jsonPort), 
-                            2000  // 2 second timeout
-                        )
-                        socket.close()
+                        val success = try {
+                            socket.connect(
+                                java.net.InetSocketAddress(ip, currentConfig.jsonPort), 
+                                1500  // 1.5 second timeout for faster discovery
+                            )
+                            true
+                        } catch (e: Exception) {
+                            false
+                        } finally {
+                            try { socket.close() } catch (e: Exception) { }
+                        }
                         
-                        logger.info("Found responsive server at: $ip:${currentConfig.jsonPort}")
-                        return@withContext ServerConfiguration(
-                            serverIp = ip,
-                            legacyPort = currentConfig.legacyPort,
-                            jsonPort = currentConfig.jsonPort
-                        )
+                        if (success) {
+                            logger.info("✅ Found responsive PC server at: $ip:${currentConfig.jsonPort}")
+                            
+                            // Verify it's actually our PC server by trying a quick handshake
+                            if (verifyPCServerIdentity(ip, currentConfig.jsonPort)) {
+                                logger.info("✅ Verified PC server identity at: $ip:${currentConfig.jsonPort}")
+                                return@withContext ServerConfiguration(
+                                    serverIp = ip,
+                                    legacyPort = currentConfig.legacyPort,
+                                    jsonPort = currentConfig.jsonPort
+                                )
+                            } else {
+                                logger.debug("Server at $ip responded but is not our PC server")
+                            }
+                        }
                         
                     } catch (e: Exception) {
                         logger.debug("No server found at $ip: ${e.message}")
                     }
                 }
                 
-                logger.warning("No PC server discovered on local network")
+                logger.warning("🔍 No PC server discovered on local network")
+                logger.info("💡 Discovery suggestions:")
+                logger.info("  • Ensure PC server is running: python pc_server_helper.py --start")
+                logger.info("  • Check firewall settings on PC")
+                logger.info("  • Verify both devices are on same network") 
+                logger.info("  • Try manual IP configuration in Android app settings")
+                
                 null
                 
             } catch (e: Exception) {
                 logger.error("Error during PC server discovery", e)
                 null
             }
+        }
+    }
+    
+    private fun detectCurrentNetworkRanges(): List<String> {
+        return try {
+            val networkRanges = mutableListOf<String>()
+            
+            // Get current device's network interfaces
+            val networkInterfaces = java.net.NetworkInterface.getNetworkInterfaces()
+            
+            while (networkInterfaces.hasMoreElements()) {
+                val networkInterface = networkInterfaces.nextElement()
+                
+                if (!networkInterface.isUp || networkInterface.isLoopback) continue
+                
+                val inetAddresses = networkInterface.inetAddresses
+                while (inetAddresses.hasMoreElements()) {
+                    val inetAddress = inetAddresses.nextElement()
+                    
+                    if (inetAddress is java.net.Inet4Address && !inetAddress.isLoopbackAddress) {
+                        val hostAddress = inetAddress.hostAddress
+                        if (hostAddress != null) {
+                            // Generate potential server IPs in same subnet
+                            val subnet = hostAddress.substringBeforeLast(".")
+                            networkRanges.addAll(listOf(
+                                "$subnet.100", "$subnet.101", "$subnet.102",
+                                "$subnet.10", "$subnet.50", "$subnet.1"
+                            ))
+                        }
+                    }
+                }
+            }
+            
+            logger.debug("Auto-detected network ranges: $networkRanges")
+            networkRanges.distinct()
+            
+        } catch (e: Exception) {
+            logger.warning("Failed to auto-detect network ranges: ${e.message}")
+            emptyList()
+        }
+    }
+    
+    private suspend fun verifyPCServerIdentity(ip: String, port: Int): Boolean {
+        return try {
+            // Quick identity verification - try to connect and send a ping
+            val socket = java.net.Socket()
+            socket.connect(java.net.InetSocketAddress(ip, port), 2000)
+            
+            // Send a simple ping message to verify it's our server
+            val output = socket.getOutputStream()
+            val testMessage = """{"type":"ping","timestamp":${System.currentTimeMillis()}}"""
+            val messageBytes = testMessage.toByteArray()
+            
+            // Send length header + message (matching PC server protocol)
+            output.write(java.nio.ByteBuffer.allocate(4).putInt(messageBytes.size).array())
+            output.write(messageBytes)
+            output.flush()
+            
+            // Try to read response (with timeout)
+            socket.soTimeout = 2000
+            val input = socket.getInputStream()
+            val lengthBytes = ByteArray(4)
+            val bytesRead = input.read(lengthBytes)
+            
+            socket.close()
+            
+            // If we got a response with the expected protocol, it's likely our server
+            bytesRead == 4
+            
+        } catch (e: Exception) {
+            logger.debug("Server identity verification failed for $ip: ${e.message}")
+            false
         }
     }
 
