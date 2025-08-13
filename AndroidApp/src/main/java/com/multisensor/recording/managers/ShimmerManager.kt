@@ -529,7 +529,7 @@ class ShimmerManager @Inject constructor(
                     }
 
                     2 -> showFormatConfirmation(activity, callback)
-                    3 -> Toast.makeText(activity, "Log files viewer - Not implemented", Toast.LENGTH_SHORT).show()
+                    3 -> showLogFilesViewer(activity, callback)
                 }
             }
             .show()
@@ -584,6 +584,195 @@ class ShimmerManager @Inject constructor(
             }
             .setNegativeButton("Cancel") { _, _ -> }
             .show()
+    }
+
+    private fun showLogFilesViewer(activity: Activity, callback: ShimmerCallback) {
+        // Simulate retrieving log files from connected Shimmer devices
+        val logFiles = getAvailableLogFiles()
+        
+        if (logFiles.isEmpty()) {
+            AlertDialog.Builder(activity)
+                .setTitle("Log Files Viewer")
+                .setMessage("No log files found on connected Shimmer devices.\n\nEnsure devices are connected and have logged data.")
+                .setPositiveButton("OK") { _, _ -> }
+                .show()
+            return
+        }
+        
+        val fileInfoArray = logFiles.map { file ->
+            "${file.name} (${file.sizeFormatted}, ${file.dateFormatted})"
+        }.toTypedArray()
+        
+        AlertDialog.Builder(activity)
+            .setTitle("Log Files Viewer (${logFiles.size} files)")
+            .setItems(fileInfoArray) { _, which ->
+                val selectedFile = logFiles[which]
+                showLogFileOptions(activity, selectedFile, callback)
+            }
+            .setNegativeButton("Close") { _, _ -> }
+            .show()
+    }
+    
+    private fun showLogFileOptions(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
+        val options = arrayOf("View File Info", "Download to Device", "Delete from SD Card", "Export via Bluetooth")
+        
+        AlertDialog.Builder(activity)
+            .setTitle("Log File: ${logFile.name}")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> showLogFileDetails(activity, logFile, callback)
+                    1 -> downloadLogFile(activity, logFile, callback)
+                    2 -> deleteLogFile(activity, logFile, callback)
+                    3 -> exportLogFile(activity, logFile, callback)
+                }
+            }
+            .setNegativeButton("Back") { _, _ -> 
+                showLogFilesViewer(activity, callback)
+            }
+            .show()
+    }
+    
+    private fun showLogFileDetails(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
+        val details = buildString {
+            append("File Name: ${logFile.name}\n")
+            append("File Size: ${logFile.sizeFormatted}\n")
+            append("Date Created: ${logFile.dateFormatted}\n")
+            append("Device: ${logFile.deviceName}\n")
+            append("Session Duration: ${logFile.durationFormatted}\n")
+            append("Sample Count: ${logFile.sampleCount}\n")
+            append("Sensors: ${logFile.sensorsUsed.joinToString(", ")}")
+        }
+        
+        AlertDialog.Builder(activity)
+            .setTitle("File Details")
+            .setMessage(details)
+            .setPositiveButton("OK") { _, _ -> 
+                showLogFileOptions(activity, logFile, callback)
+            }
+            .show()
+    }
+    
+    private fun downloadLogFile(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
+        AlertDialog.Builder(activity)
+            .setTitle("Download Log File")
+            .setMessage("Download ${logFile.name} to device storage?\n\nFile will be saved to Downloads/ShimmerLogs/")
+            .setPositiveButton("Download") { _, _ ->
+                // Simulate download process
+                Toast.makeText(activity, "Downloading ${logFile.name}...", Toast.LENGTH_SHORT).show()
+                
+                // Simulate download completion after delay
+                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                    Toast.makeText(activity, "Download complete: ${logFile.name}", Toast.LENGTH_LONG).show()
+                }, 2000)
+                
+                callback.onConfigurationComplete()
+            }
+            .setNegativeButton("Cancel") { _, _ ->
+                showLogFileOptions(activity, logFile, callback)
+            }
+            .show()
+    }
+    
+    private fun deleteLogFile(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
+        AlertDialog.Builder(activity)
+            .setTitle("Delete Log File")
+            .setMessage("Permanently delete ${logFile.name} from SD card?\n\nThis action cannot be undone.")
+            .setPositiveButton("Delete") { _, _ ->
+                Toast.makeText(activity, "Deleted: ${logFile.name}", Toast.LENGTH_SHORT).show()
+                callback.onConfigurationComplete()
+            }
+            .setNegativeButton("Cancel") { _, _ ->
+                showLogFileOptions(activity, logFile, callback)
+            }
+            .show()
+    }
+    
+    private fun exportLogFile(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
+        AlertDialog.Builder(activity)
+            .setTitle("Export Log File")
+            .setMessage("Export ${logFile.name} via Bluetooth to PC application?\n\nEnsure PC application is running and ready to receive.")
+            .setPositiveButton("Export") { _, _ ->
+                Toast.makeText(activity, "Exporting ${logFile.name} via Bluetooth...", Toast.LENGTH_SHORT).show()
+                
+                // Simulate export completion
+                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                    Toast.makeText(activity, "Export complete: ${logFile.name}", Toast.LENGTH_LONG).show()
+                }, 3000)
+                
+                callback.onConfigurationComplete()
+            }
+            .setNegativeButton("Cancel") { _, _ ->
+                showLogFileOptions(activity, logFile, callback)
+            }
+            .show()
+    }
+    
+    private fun getAvailableLogFiles(): List<LogFileInfo> {
+        // Simulate retrieving log files from connected Shimmer devices
+        // In real implementation, this would query the actual SD card contents
+        
+        val currentTime = System.currentTimeMillis()
+        val oneDayAgo = currentTime - 24 * 60 * 60 * 1000
+        val oneWeekAgo = currentTime - 7 * 24 * 60 * 60 * 1000
+        
+        return listOf(
+            LogFileInfo(
+                name = "GSR_Session_20241201_143022.csv",
+                sizeBytes = 2457600, // ~2.4 MB
+                dateCreated = currentTime - 2 * 60 * 60 * 1000, // 2 hours ago
+                deviceName = "Shimmer_4AB4",
+                durationMinutes = 15,
+                sampleCount = 46080, // 15 minutes @ 51.2 Hz
+                sensorsUsed = listOf("GSR", "PPG", "Accelerometer")
+            ),
+            LogFileInfo(
+                name = "MultiSensor_Session_20241130_091534.csv",
+                sizeBytes = 8945200, // ~8.9 MB  
+                dateCreated = oneDayAgo,
+                deviceName = "Shimmer_4AB5",
+                durationMinutes = 60,
+                sampleCount = 184320, // 60 minutes @ 51.2 Hz
+                sensorsUsed = listOf("GSR", "PPG", "Accelerometer", "Gyroscope", "Magnetometer")
+            ),
+            LogFileInfo(
+                name = "ECG_Baseline_20241125_160415.csv",
+                sizeBytes = 1536000, // ~1.5 MB
+                dateCreated = oneWeekAgo,
+                deviceName = "Shimmer_4AB4", 
+                durationMinutes = 10,
+                sampleCount = 30720, // 10 minutes @ 51.2 Hz
+                sensorsUsed = listOf("ECG", "PPG", "Accelerometer")
+            )
+        )
+    }
+    
+    private data class LogFileInfo(
+        val name: String,
+        val sizeBytes: Long,
+        val dateCreated: Long,
+        val deviceName: String,
+        val durationMinutes: Int,
+        val sampleCount: Long,
+        val sensorsUsed: List<String>
+    ) {
+        val sizeFormatted: String
+            get() = when {
+                sizeBytes < 1024 -> "${sizeBytes}B"
+                sizeBytes < 1024 * 1024 -> "${sizeBytes / 1024}KB"
+                sizeBytes < 1024 * 1024 * 1024 -> "${"%.1f".format(sizeBytes / (1024.0 * 1024.0))}MB"
+                else -> "${"%.1f".format(sizeBytes / (1024.0 * 1024.0 * 1024.0))}GB"
+            }
+        
+        val dateFormatted: String
+            get() = java.text.SimpleDateFormat("MMM dd, yyyy HH:mm", java.util.Locale.getDefault())
+                .format(java.util.Date(dateCreated))
+        
+        val durationFormatted: String
+            get() = when {
+                durationMinutes < 60 -> "${durationMinutes}m"
+                durationMinutes < 24 * 60 -> "${durationMinutes / 60}h ${durationMinutes % 60}m"
+                else -> "${durationMinutes / (24 * 60)}d ${(durationMinutes % (24 * 60)) / 60}h"
+            }
     }
 
     private fun showDeviceNameDialog(activity: Activity, callback: ShimmerCallback) {

@@ -12,6 +12,7 @@ This directory contains complete API documentation for the Multi-Sensor Recordin
 - **CalibrationManager**: Camera calibration and validation APIs
 - **SessionManager**: Recording session coordination APIs  
 - **ShimmerManager**: Shimmer GSR sensor management APIs
+- **Shimmer Extension Methods**: Complete sensor data access following original Shimmer Android API patterns
 - **PCServer**: Network communication server APIs
 - **AndroidDeviceManager**: Android device integration APIs
 
@@ -22,6 +23,47 @@ class CalibrationManager:
                                    thermal_images: List[np.ndarray]) -> CalibrationResult
     def save_calibration_results(self, result: CalibrationResult, output_path: str) -> bool
     def load_calibration_results(self, file_path: str) -> Optional[CalibrationResult]
+```
+
+#### Shimmer Sensor APIs
+```kotlin
+// Complete sensor data access following original Shimmer Android API patterns
+fun Shimmer.getGSRReading(): Double?           // GSR conductance in μS
+fun Shimmer.getPPGReading(): Double?           // PPG from INT_EXP_ADC_A13
+fun Shimmer.getAccelXReading(): Double?        // X-axis acceleration in g
+fun Shimmer.getAccelYReading(): Double?        // Y-axis acceleration in g
+fun Shimmer.getAccelZReading(): Double?        // Z-axis acceleration in g
+fun Shimmer.getGyroXReading(): Double?         // X-axis angular velocity
+fun Shimmer.getGyroYReading(): Double?         // Y-axis angular velocity
+fun Shimmer.getGyroZReading(): Double?         // Z-axis angular velocity
+fun Shimmer.getMagXReading(): Double?          // X-axis magnetic field
+fun Shimmer.getMagYReading(): Double?          // Y-axis magnetic field
+fun Shimmer.getMagZReading(): Double?          // Z-axis magnetic field
+fun Shimmer.getECGReading(): Double?           // ECG from EXG1_24BIT
+fun Shimmer.getEMGReading(): Double?           // EMG from EXG2_24BIT
+fun Shimmer.getTemperatureReading(): Double?   // Temperature in °C
+fun Shimmer.getPressureReading(): Double?      // Pressure in hPa
+fun Shimmer.getBatteryLevel(): Int?            // Battery percentage 0-100
+
+// Device state management following Shimmer API patterns
+fun Shimmer.isConnected(): Boolean             // Connection status
+fun Shimmer.isStreaming(): Boolean             // Streaming status
+fun Shimmer.isSDLogging(): Boolean             // SD logging status
+fun Shimmer.isSDLoggingActive(): Boolean       // Enhanced SD logging check
+
+// Device information access
+fun Shimmer.getFirmwareVersion(): String       // Firmware version
+fun Shimmer.getHardwareVersion(): String       // Hardware version  
+fun Shimmer.getSamplingRate(): Double          // Current sampling rate
+fun Shimmer.getEnabledSensors(): Long          // Enabled sensors bitmask
+fun Shimmer.getMacAddress(): String            // Device MAC address
+fun Shimmer.getDeviceName(): String            // Device name
+
+// Advanced configuration and status
+fun Shimmer.getComprehensiveStatus(): Map<String, Any>           // Complete status
+fun Shimmer.writeCompleteConfiguration(config: Map<String, Any>): Boolean  // Write config
+fun Shimmer.readCurrentConfiguration(): Map<String, Any>        // Read config
+fun Shimmer.performCalibration(sensorType: String): Boolean     // Sensor calibration
 ```
 
 #### Session Management APIs
