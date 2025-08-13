@@ -1,187 +1,417 @@
 import base64
 import json
-import os
+import queue
 import socket
 import struct
 import threading
 import time
-from typing import Any, Dict, List, Optional
-from PyQt5.QtCore import QThread, pyqtSignal
+import weakref
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Any, Callable, Dict, List, Optional, Tuple
+from PyQt5.QtCore import QMutex, QMutexLocker, QThread, QTimer, pyqtSignal
 from ..utils.logging_config import get_logger
 logger = get_logger(__name__)
+class MessagePriority(Enum):
+    CRITICAL = 1
+    HIGH = 2
+    NORMAL = 3
+    LOW = 4
+class ConnectionState(Enum):
+    DISCONNECTED = auto()
+    CONNECTING = auto()
+    CONNECTED = auto()
+    RECONNECTING = auto()
+    ERROR = auto()
+@dataclass
+class NetworkMessage:
+    type: str
+    payload: Dict[str, Any]
+    priority: MessagePriority = MessagePriority.NORMAL
+    timestamp: float = field(default_factory=time.time)
+    retry_count: int = 0
+    max_retries: int = 3
+    timeout: float = 30.0
+    requires_ack: bool = False
+    message_id: Optional[str] = None
+@dataclass
+class ConnectionStats:
+    connected_at: float = field(default_factory=time.time)
+    messages_sent: int = 0
+    messages_received: int = 0
+    bytes_sent: int = 0
+    bytes_received: int = 0
+    last_heartbeat: float = field(default_factory=time.time)
+    reconnection_count: int = 0
+    error_count: int = 0
+    average_latency: float = 0.0
+    latency_samples: deque = field(default_factory=lambda: deque(maxlen=100))
+    min_latency: float = float("inf")
+    max_latency: float = 0.0
+    jitter: float = 0.0
+    packet_loss_rate: float = 0.0
+    ping_count: int = 0
+    pong_count: int = 0
 class RemoteDevice:
     def __init__(
-        self, device_id: str, capabilities: List[str], client_socket: socket.socket
+        self,
+        device_id: str,
+        capabilities: List[str],
+        client_socket: socket.socket,
+        address: Tuple[str, int],
     ):
         self.device_id = device_id
         self.capabilities = capabilities
         self.client_socket = client_socket
-        self.connected = True
-        self.last_seen = time.time()
-        self.status = {
-            "battery": None,
-            "temperature": None,
-            "storage": None,
-            "recording": False,
-            "last_update": time.time(),
-        }
-        self.connection_stats = {
-            "connected_at": time.time(),
-            "messages_received": 0,
-            "messages_sent": 0,
-            "last_activity": time.time(),
-        }
-        self.has_camera = "camera" in capabilities
-        self.has_thermal = "thermal" in capabilities
-        self.has_imu = "imu" in capabilities
-        self.has_gsr = "gsr" in capabilities
+        self.address = address
+        self.state = ConnectionState.CONNECTED
+        self.mutex = QMutex()
+        self.outbound_queue = queue.PriorityQueue()
+        self.pending_acks = {}
+        self.stats = ConnectionStats()
+        self.last_heartbeat = time.time()
+        self.heartbeat_interval = 5.0
+        self.heartbeat_timeout = 15.0
+        self.streaming_quality = "medium"
+        self.max_frame_rate = 15
+        self.last_frame_time = 0.0
+        self.send_buffer_size = 64 * 1024
+        self.recv_buffer_size = 64 * 1024
+        self.consecutive_errors = 0
+        self.max_consecutive_errors = 5
         logger.info(
-            f"RemoteDevice created: {device_id} with capabilities: {capabilities}"
+            f"Enhanced RemoteDevice created: {device_id} @ {address[0]}:{address[1]}"
         )
-    def update_status(self, status_data: Dict[str, Any]):
-        self.status.update(status_data)
-        self.status["last_update"] = time.time()
-        self.last_seen = time.time()
-        self.connection_stats["last_activity"] = time.time()
-        logger.debug(f"Device {self.device_id} status updated: {status_data}")
-    def increment_message_count(self, message_type: str = "received"):
-        if message_type == "received":
-            self.connection_stats["messages_received"] += 1
-        elif message_type == "sent":
-            self.connection_stats["messages_sent"] += 1
-        self.connection_stats["last_activity"] = time.time()
-        self.last_seen = time.time()
-    def is_alive(self, timeout_seconds: int = 30) -> bool:
-        return time.time() - self.last_seen < timeout_seconds
-    def get_connection_duration(self) -> float:
-        return time.time() - self.connection_stats["connected_at"]
-    def get_device_info(self) -> Dict[str, Any]:
-        return {
-            "device_id": self.device_id,
-            "capabilities": self.capabilities,
-            "connected": self.connected,
-            "status": self.status.copy(),
-            "connection_stats": self.connection_stats.copy(),
-            "last_seen": self.last_seen,
-            "connection_duration": self.get_connection_duration(),
-            "is_alive": self.is_alive(),
-        }
-    def disconnect(self):
-        self.connected = False
-        if self.client_socket:
-            try:
-                self.client_socket.close()
-            except:
-                pass
-        logger.info(
-            f"RemoteDevice {self.device_id} disconnected after {self.get_connection_duration():.1f} seconds"
-        )
-class JsonSocketServer(QThread):
-    device_connected = pyqtSignal(str, list)
-    device_disconnected = pyqtSignal(str)
-    status_received = pyqtSignal(str, dict)
-    ack_received = pyqtSignal(str, str, bool, str)
-    preview_frame_received = pyqtSignal(str, str, str)
-    sensor_data_received = pyqtSignal(str, dict)
-    notification_received = pyqtSignal(str, str, dict)
-    error_occurred = pyqtSignal(str, str)
+    def is_alive(self) -> bool:
+        with QMutexLocker(self.mutex):
+            return time.time() - self.last_heartbeat < self.heartbeat_timeout
+    def should_send_frame(self) -> bool:
+        current_time = time.time()
+        frame_interval = 1.0 / self.max_frame_rate
+        if current_time - self.last_frame_time >= frame_interval:
+            self.last_frame_time = current_time
+            return True
+        return False
+    def adapt_streaming_quality(self, network_latency: float, error_rate: float):
+        with QMutexLocker(self.mutex):
+            if error_rate > 0.1 or network_latency > 200:
+                self.streaming_quality = "low"
+                self.max_frame_rate = 5
+            elif error_rate < 0.05 and network_latency < 50:
+                self.streaming_quality = "high"
+                self.max_frame_rate = 30
+            else:
+                self.streaming_quality = "medium"
+                self.max_frame_rate = 15
+    def queue_message(self, message: NetworkMessage):
+        priority_value = message.priority.value
+        self.outbound_queue.put((priority_value, time.time(), message))
+    def get_next_message(self, timeout: float = 0.1) -> Optional[NetworkMessage]:
+        try:
+            _, _, message = self.outbound_queue.get(timeout=timeout)
+            return message
+        except queue.Empty:
+            return None
+    def update_latency(self, latency: float):
+        with QMutexLocker(self.mutex):
+            self.stats.latency_samples.append(latency)
+            self.stats.min_latency = min(self.stats.min_latency, latency)
+            self.stats.max_latency = max(self.stats.max_latency, latency)
+            if self.stats.latency_samples:
+                self.stats.average_latency = sum(self.stats.latency_samples) / len(
+                    self.stats.latency_samples
+                )
+                if len(self.stats.latency_samples) >= 2:
+                    variance = sum(
+                        (x - self.stats.average_latency) ** 2
+                        for x in self.stats.latency_samples
+                    ) / len(self.stats.latency_samples)
+                    self.stats.jitter = variance**0.5
+                if self.stats.ping_count > 0:
+                    self.stats.packet_loss_rate = max(
+                        0,
+                        (self.stats.ping_count - self.stats.pong_count)
+                        / self.stats.ping_count
+                        * 100,
+                    )
+    def update_ping_stats(self, is_response: bool = False):
+        with QMutexLocker(self.mutex):
+            if is_response:
+                self.stats.pong_count += 1
+            else:
+                self.stats.ping_count += 1
+    def increment_error_count(self):
+        with QMutexLocker(self.mutex):
+            self.stats.error_count += 1
+            self.consecutive_errors += 1
+    def reset_error_count(self):
+        with QMutexLocker(self.mutex):
+            self.consecutive_errors = 0
+    def should_reconnect(self) -> bool:
+        with QMutexLocker(self.mutex):
+            return self.consecutive_errors >= self.max_consecutive_errors
+    def get_status_summary(self) -> Dict[str, Any]:
+        with QMutexLocker(self.mutex):
+            return {
+                "device_id": self.device_id,
+                "state": self.state.name,
+                "capabilities": self.capabilities,
+                "address": f"{self.address[0]}:{self.address[1]}",
+                "is_alive": self.is_alive(),
+                "streaming_quality": self.streaming_quality,
+                "stats": {
+                    "messages_sent": self.stats.messages_sent,
+                    "messages_received": self.stats.messages_received,
+                    "bytes_sent": self.stats.bytes_sent,
+                    "bytes_received": self.stats.bytes_received,
+                    "error_count": self.stats.error_count,
+                    "average_latency": round(self.stats.average_latency, 2),
+                    "min_latency": (
+                        round(self.stats.min_latency, 2)
+                        if self.stats.min_latency != float("inf")
+                        else 0
+                    ),
+                    "max_latency": round(self.stats.max_latency, 2),
+                    "jitter": round(self.stats.jitter, 2),
+                    "packet_loss_rate": round(self.stats.packet_loss_rate, 2),
+                    "ping_count": self.stats.ping_count,
+                    "pong_count": self.stats.pong_count,
+                    "connection_duration": round(
+                        time.time() - self.stats.connected_at, 1
+                    ),
+                    "latency_samples": len(self.stats.latency_samples),
+                },
+            }
+class DeviceServer(QThread):
+    device_connected = pyqtSignal(str, dict)
+    device_disconnected = pyqtSignal(str, str)
+    device_status_changed = pyqtSignal(str, str)
+    message_received = pyqtSignal(str, dict)
+    message_sent = pyqtSignal(str, dict)
+    message_failed = pyqtSignal(str, dict, str)
+    preview_frame_received = pyqtSignal(str, str, bytes, dict)
+    streaming_quality_changed = pyqtSignal(str, str)
+    network_stats_updated = pyqtSignal(dict)
+    connection_quality_changed = pyqtSignal(str, float)
+    error_occurred = pyqtSignal(str, str, str)
+    warning_occurred = pyqtSignal(str, str)
     def __init__(
         self,
         host: str = "0.0.0.0",
         port: int = 9000,
-        use_newline_protocol: bool = False,
-        session_manager=None,
+        max_connections: int = 10,
+        heartbeat_interval: float = 5.0,
     ):
         super().__init__()
         self.host = host
         self.port = port
-        self.use_newline_protocol = use_newline_protocol
-        self.session_manager = session_manager
+        self.max_connections = max_connections
+        self.heartbeat_interval = heartbeat_interval
         self.server_socket: Optional[socket.socket] = None
         self.running = False
         self.devices: Dict[str, RemoteDevice] = {}
-        self.clients: Dict[str, socket.socket] = {}
-        self.client_threads: List[threading.Thread] = []
-        protocol_type = (
-            "newline-delimited" if use_newline_protocol else "length-prefixed"
-        )
-        logger.info(
-            f"JsonSocketServer initialized for {host}:{port} using {protocol_type} JSON protocol"
-        )
-    def run(self):
+        self.devices_mutex = QMutex()
+        self.client_handlers: Dict[str, threading.Thread] = {}
+        self.connection_pool = []
+        self.heartbeat_timer = QTimer()
+        self.heartbeat_timer.timeout.connect(self.send_heartbeats)
+        self.message_counter = 0
+        self.pending_messages: Dict[str, NetworkMessage] = {}
+        self.network_stats = {
+            "total_connections": 0,
+            "active_connections": 0,
+            "total_messages": 0,
+            "total_bytes": 0,
+            "error_rate": 0.0,
+            "average_latency": 0.0,
+        }
+        self.enable_compression = True
+        self.compression_threshold = 1024
+        logger.info(f"Enhanced Device Server initialized: {host}:{port}")
+    def start_server(self):
+        if self.running:
+            logger.warning("Server is already running")
+            return False
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+            self.server_socket.setsockopt(
+                socket.SOL_SOCKET, socket.SO_RCVBUF, 64 * 1024
+            )
+            self.server_socket.setsockopt(
+                socket.SOL_SOCKET, socket.SO_SNDBUF, 64 * 1024
+            )
             self.server_socket.bind((self.host, self.port))
-            self.server_socket.listen(5)
+            self.server_socket.listen(self.max_connections)
             self.running = True
-            logger.info(f"JSON Socket server started on {self.host}:{self.port}")
-            while self.running:
-                try:
-                    client_socket, address = self.server_socket.accept()
-                    client_thread = threading.Thread(
-                        target=self.handle_json_client,
-                        args=(client_socket, address),
-                        daemon=True,
-                    )
-                    client_thread.start()
-                    self.client_threads.append(client_thread)
-                except socket.error as e:
-                    if self.running:
-                        logger.error(f"JSON socket accept error: {e}")
-                        self.error_occurred.emit("server", f"Accept error: {str(e)}")
+            self.start()
+            self.heartbeat_timer.start(int(self.heartbeat_interval * 1000))
+            logger.info(f"Enhanced Device Server started on {self.host}:{self.port}")
+            return True
         except Exception as e:
-            logger.error(f"JSON socket server error: {e}")
-            self.error_occurred.emit("server", f"Server error: {str(e)}")
-        finally:
-            self.cleanup()
-    def handle_json_client(self, client_socket: socket.socket, address: tuple):
+            logger.error(f"Failed to start server: {e}")
+            self.error_occurred.emit("server", "startup", str(e))
+            return False
+    def stop_server(self):
+        logger.info("Stopping Enhanced Device Server...")
+        self.running = False
+        self.heartbeat_timer.stop()
+        with QMutexLocker(self.devices_mutex):
+            for device_id in list(self.devices.keys()):
+                self.disconnect_device(device_id, "Server shutdown")
+        if self.server_socket:
+            try:
+                self.server_socket.close()
+            except:
+                pass
+            self.server_socket = None
+        if self.isRunning():
+            self.wait(5000)
+        logger.info("Enhanced Device Server stopped")
+    def run(self):
+        while self.running and self.server_socket:
+            try:
+                client_socket, address = self.server_socket.accept()
+                if len(self.devices) >= self.max_connections:
+                    logger.warning(f"Maximum connections reached, rejecting {address}")
+                    client_socket.close()
+                    continue
+                client_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                client_socket.settimeout(30.0)
+                handler_thread = threading.Thread(
+                    target=self.handle_client_connection,
+                    args=(client_socket, address),
+                    daemon=True,
+                )
+                handler_thread.start()
+                logger.info(f"New client connection from {address[0]}:{address[1]}")
+            except socket.error as e:
+                if self.running:
+                    logger.error(f"Accept error: {e}")
+                    self.error_occurred.emit("server", "accept", str(e))
+            except Exception as e:
+                if self.running:
+                    logger.error(f"Unexpected server error: {e}")
+                    self.error_occurred.emit("server", "unexpected", str(e))
+    def handle_client_connection(
+        self, client_socket: socket.socket, address: Tuple[str, int]
+    ):
         client_addr = f"{address[0]}:{address[1]}"
         device_id = None
-        logger.info(f"JSON client connected: {client_addr}")
+        device = None
         try:
-            while self.running:
-                length_data = self.recv_exact(client_socket, 4)
-                if not length_data:
-                    break
-                message_length = struct.unpack(">I", length_data)[0]
-                if message_length <= 0 or message_length > 10 * 1024 * 1024:
-                    logger.error(f"Invalid message length: {message_length}")
-                    self.error_occurred.emit(
-                        device_id or client_addr,
-                        f"Invalid message length: {message_length}",
-                    )
-                    break
-                json_data = self.recv_exact(client_socket, message_length)
-                if not json_data:
-                    break
-                try:
-                    message = json.loads(json_data.decode("utf-8"))
-                    device_id = self.process_json_message(
-                        client_socket, client_addr, message
-                    )
-                except json.JSONDecodeError as e:
-                    logger.error(f"JSON decode error from {client_addr}: {e}")
-                    self.error_occurred.emit(
-                        device_id or client_addr, f"JSON decode error: {str(e)}"
-                    )
-        except Exception as e:
-            logger.error(f"JSON client handling error for {client_addr}: {e}")
-            self.error_occurred.emit(
-                device_id or client_addr, f"Client handling error: {str(e)}"
+            handshake_msg = self.receive_message(client_socket, timeout=10.0)
+            if not handshake_msg or handshake_msg.get("type") != "handshake":
+                logger.warning(f"Invalid handshake from {client_addr}")
+                return
+            device_id = handshake_msg.get("device_id")
+            capabilities = handshake_msg.get("capabilities", [])
+            if not device_id:
+                logger.warning(f"Missing device_id in handshake from {client_addr}")
+                return
+            device = RemoteDevice(
+                device_id, capabilities, client_socket, address
             )
+            with QMutexLocker(self.devices_mutex):
+                self.devices[device_id] = device
+                self.client_handlers[device_id] = threading.current_thread()
+            ack_msg = {
+                "type": "handshake_ack",
+                "protocol_version": 1,
+                "server_name": "Enhanced Device Server",
+                "server_version": "1.0.0",
+                "compatible": True,
+                "timestamp": time.time(),
+            }
+            self.send_message(device, ack_msg, MessagePriority.CRITICAL)
+            self.device_connected.emit(device_id, device.get_status_summary())
+            sender_thread = threading.Thread(
+                target=self.message_sender_loop, args=(device,), daemon=True
+            )
+            sender_thread.start()
+            self.message_receiver_loop(device)
+        except Exception as e:
+            logger.error(f"Client handler error for {client_addr}: {e}")
+            self.error_occurred.emit(device_id or client_addr, "handler", str(e))
         finally:
-            if device_id and device_id in self.devices:
-                device = self.devices[device_id]
-                device.disconnect()
-                del self.devices[device_id]
-                if device_id in self.clients:
-                    del self.clients[device_id]
-                self.device_disconnected.emit(device_id)
-                logger.info(f"Device {device_id} disconnected")
-            else:
-                client_socket.close()
-            logger.info(f"JSON client disconnected: {client_addr}")
+            if device_id and device:
+                self.disconnect_device(device_id, "Connection closed")
+    def message_receiver_loop(self, device: RemoteDevice):
+        while self.running and device.state == ConnectionState.CONNECTED:
+            try:
+                message = self.receive_message(device.client_socket, timeout=1.0)
+                if not message:
+                    continue
+                device.stats.messages_received += 1
+                device.last_heartbeat = time.time()
+                device.reset_error_count()
+                self.process_message(device, message)
+            except socket.timeout:
+                if not device.is_alive():
+                    logger.warning(f"Device {device.device_id} heartbeat timeout")
+                    break
+            except Exception as e:
+                logger.error(f"Receive error for {device.device_id}: {e}")
+                device.increment_error_count()
+                if device.should_reconnect():
+                    break
+    def message_sender_loop(self, device: RemoteDevice):
+        while self.running and device.state == ConnectionState.CONNECTED:
+            try:
+                message = device.get_next_message(timeout=0.5)
+                if not message:
+                    continue
+                success = self.send_message_immediate(device, message)
+                if success:
+                    device.stats.messages_sent += 1
+                    device.reset_error_count()
+                    self.message_sent.emit(device.device_id, message.payload)
+                else:
+                    device.increment_error_count()
+                    self.message_failed.emit(
+                        device.device_id, message.payload, "Send failed"
+                    )
+                    if device.should_reconnect():
+                        break
+            except Exception as e:
+                logger.error(f"Send error for {device.device_id}: {e}")
+                device.increment_error_count()
+    def send_message_immediate(
+        self, device: RemoteDevice, message: NetworkMessage
+    ) -> bool:
+        try:
+            json_data = json.dumps(message.payload).encode("utf-8")
+            if self.enable_compression and len(json_data) > self.compression_threshold:
+                pass
+            length_header = struct.pack(">I", len(json_data))
+            device.client_socket.sendall(length_header + json_data)
+            device.stats.bytes_sent += len(length_header) + len(json_data)
+            return True
+        except Exception as e:
+            logger.error(f"Failed to send message to {device.device_id}: {e}")
+            return False
+    def receive_message(
+        self, sock: socket.socket, timeout: float = 1.0
+    ) -> Optional[Dict[str, Any]]:
+        sock.settimeout(timeout)
+        try:
+            length_data = self.recv_exact(sock, 4)
+            if not length_data:
+                return None
+            message_length = struct.unpack(">I", length_data)[0]
+            if message_length <= 0 or message_length > 10 * 1024 * 1024:
+                raise ValueError(f"Invalid message length: {message_length}")
+            json_data = self.recv_exact(sock, message_length)
+            if not json_data:
+                return None
+            return json.loads(json_data.decode("utf-8"))
+        except socket.timeout:
+            return None
+        except Exception as e:
+            logger.error(f"Receive message error: {e}")
+            return None
     def recv_exact(self, sock: socket.socket, length: int) -> Optional[bytes]:
         data = b""
         while len(data) < length:
@@ -190,348 +420,259 @@ class JsonSocketServer(QThread):
                 return None
             data += chunk
         return data
-    def process_json_message(
-        self, client_socket: socket.socket, client_addr: str, message: Dict[str, Any]
-    ) -> Optional[str]:
-        message_type = message.get("type", "unknown")
-        logger.debug(f"Received JSON message from {client_addr}: {message_type}")
-        if message_type == "hello":
-            device_id = message.get("device_id", client_addr)
-            capabilities = message.get("capabilities", [])
-            remote_device = RemoteDevice(device_id, capabilities, client_socket)
-            self.devices[device_id] = remote_device
-            self.clients[device_id] = client_socket
-            self.device_connected.emit(device_id, capabilities)
-            logger.info(
-                f"Device registered: {device_id} with capabilities: {capabilities}"
-            )
-            return device_id
-        elif message_type == "status":
-            device_id = self.find_device_id(client_socket)
-            if device_id and device_id in self.devices:
-                device = self.devices[device_id]
-                status_data = {
-                    "battery": message.get("battery"),
-                    "storage": message.get("storage"),
-                    "temperature": message.get("temperature"),
-                    "recording": message.get("recording", False),
-                    "connected": message.get("connected", True),
-                    "timestamp": message.get("timestamp"),
-                }
-                device.update_status(status_data)
-                device.increment_message_count("received")
-                self.status_received.emit(device_id, status_data)
-                logger.debug(f"Status update from {device_id}: {status_data}")
-        elif message_type == "preview_frame":
-            device_id = self.find_device_id(client_socket)
-            if device_id:
-                frame_type = message.get("frame_type", "rgb")
-                frame_data = message.get("frame_data", "")
-                if frame_data:
-                    self.preview_frame_received.emit(device_id, frame_type, frame_data)
-                    logger.debug(
-                        f"Preview frame received from {device_id}: {frame_type}"
-                    )
-                else:
-                    logger.warning(f"Empty frame data from {device_id}")
-        elif message_type == "sensor_data":
-            device_id = self.find_device_id(client_socket)
-            if device_id:
-                sensor_data = {
-                    "gsr": message.get("gsr"),
-                    "ppg": message.get("ppg"),
-                    "accelerometer": message.get("accelerometer"),
-                    "gyroscope": message.get("gyroscope"),
-                    "magnetometer": message.get("magnetometer"),
-                    "timestamp": message.get("timestamp"),
-                }
-                self.sensor_data_received.emit(device_id, sensor_data)
-                logger.debug(f"Sensor data from {device_id}")
-        elif message_type == "notification":
-            device_id = self.find_device_id(client_socket)
-            if device_id:
-                event_type = message.get("event_type", "unknown")
-                event_data = message.get("event_data", {})
-                self.notification_received.emit(device_id, event_type, event_data)
-                logger.info(f"Notification from {device_id}: {event_type}")
-        elif message_type == "ack":
-            device_id = self.find_device_id(client_socket)
-            if device_id:
-                cmd = message.get("cmd", "")
-                status = message.get("status", "unknown")
-                success = status == "ok"
-                error_message = message.get("message", "")
-                self.ack_received.emit(device_id, cmd, success, error_message)
-                logger.debug(f"ACK from {device_id} for {cmd}: {status}")
-        elif message_type == "file_info":
-            device_id = self.find_device_id(client_socket)
-            if device_id and device_id in self.devices:
-                device = self.devices[device_id]
-                filename = message.get("name", "unknown")
-                filesize = message.get("size", 0)
-                device.file_transfer_state = {
-                    "filename": filename,
-                    "expected_size": filesize,
-                    "received_bytes": 0,
-                    "file_handle": None,
-                    "chunks_received": 0,
-                }
-                session_dir = self.get_session_directory()
-                if session_dir:
-                    filepath = os.path.join(session_dir, f"{device_id}_{filename}")
-                    try:
-                        device.file_transfer_state["file_handle"] = open(filepath, "wb")
-                        logger.info(
-                            f"Started receiving file {filename} from {device_id} ({filesize} bytes)"
-                        )
-                    except Exception as e:
-                        logger.error(f"Failed to create file {filepath}: {e}")
-                        device.file_transfer_state = None
-                else:
-                    logger.error(f"No session directory available for file transfer")
-                    device.file_transfer_state = None
-        elif message_type == "file_chunk":
-            device_id = self.find_device_id(client_socket)
-            if device_id and device_id in self.devices:
-                device = self.devices[device_id]
-                if (
-                    hasattr(device, "file_transfer_state")
-                    and device.file_transfer_state
-                ):
-                    seq = message.get("seq", 0)
-                    base64_data = message.get("data", "")
-                    try:
-                        chunk_data = base64.b64decode(base64_data)
-                        if device.file_transfer_state["file_handle"]:
-                            device.file_transfer_state["file_handle"].write(chunk_data)
-                            device.file_transfer_state["received_bytes"] += len(
-                                chunk_data
-                            )
-                            device.file_transfer_state["chunks_received"] += 1
-                            if seq % 100 == 0:
-                                progress = (
-                                    device.file_transfer_state["received_bytes"]
-                                    * 100.0
-                                    / device.file_transfer_state["expected_size"]
-                                )
-                                logger.debug(
-                                    f"File transfer progress from {device_id}: {progress:.1f}% ({device.file_transfer_state['received_bytes']}/{device.file_transfer_state['expected_size']} bytes)"
-                                )
-                    except Exception as e:
-                        logger.error(
-                            f"Error processing file chunk from {device_id}: {e}"
-                        )
-                else:
-                    logger.warning(
-                        f"Received file chunk from {device_id} without file_info"
-                    )
-        elif message_type == "file_end":
-            device_id = self.find_device_id(client_socket)
-            if device_id and device_id in self.devices:
-                device = self.devices[device_id]
-                if (
-                    hasattr(device, "file_transfer_state")
-                    and device.file_transfer_state
-                ):
-                    filename = message.get("name", "unknown")
-                    try:
-                        if device.file_transfer_state["file_handle"]:
-                            device.file_transfer_state["file_handle"].close()
-                        expected_size = device.file_transfer_state["expected_size"]
-                        received_size = device.file_transfer_state["received_bytes"]
-                        chunks_received = device.file_transfer_state["chunks_received"]
-                        if received_size == expected_size:
-                            logger.info(
-                                f"File transfer completed successfully: {filename} from {device_id} ({received_size} bytes, {chunks_received} chunks)"
-                            )
-                            ack_message = {
-                                "type": "file_received",
-                                "name": filename,
-                                "status": "ok",
-                            }
-                            self.send_command(device_id, ack_message)
-                        else:
-                            logger.error(
-                                f"File transfer size mismatch: expected {expected_size}, received {received_size} bytes"
-                            )
-                            ack_message = {
-                                "type": "file_received",
-                                "name": filename,
-                                "status": "error",
-                            }
-                            self.send_command(device_id, ack_message)
-                        device.file_transfer_state = None
-                    except Exception as e:
-                        logger.error(
-                            f"Error finalizing file transfer from {device_id}: {e}"
-                        )
-                        device.file_transfer_state = None
-                else:
-                    logger.warning(
-                        f"Received file_end from {device_id} without active transfer"
-                    )
+    def process_message(self, device: RemoteDevice, message: Dict[str, Any]):
+        msg_type = message.get("type", "unknown")
+        if "timestamp" in message:
+            latency = (time.time() - message["timestamp"]) * 1000
+            device.update_latency(latency)
+        if msg_type == "heartbeat":
+            self.handle_heartbeat(device, message)
+        elif msg_type == "status":
+            self.handle_status_update(device, message)
+        elif msg_type == "preview_frame":
+            self.handle_preview_frame(device, message)
+        elif msg_type == "ack":
+            self.handle_acknowledgment(device, message)
+        elif msg_type == "sensor_data":
+            self.handle_sensor_data(device, message)
         else:
-            device_id = self.find_device_id(client_socket)
-            logger.warning(
-                f"Unknown message type '{message_type}' from {device_id or client_addr}"
-            )
-        return self.find_device_id(client_socket)
-    def find_device_id(self, client_socket: socket.socket) -> Optional[str]:
-        for device_id, device in self.devices.items():
-            if device.client_socket == client_socket:
-                return device_id
-        return None
-    def send_command(self, device_id: str, command_dict: Dict[str, Any]) -> bool:
-        if device_id not in self.devices:
-            logger.warning(f"Device {device_id} not connected")
-            return False
+            self.message_received.emit(device.device_id, message)
+    def handle_preview_frame(
+        self, device: RemoteDevice, message: Dict[str, Any]
+    ):
+        if not device.should_send_frame():
+            return
+        frame_type = message.get("frame_type", "rgb")
+        image_data = message.get("image_data", "")
+        width = message.get("width", 0)
+        height = message.get("height", 0)
         try:
-            device = self.devices[device_id]
-            json_data = json.dumps(command_dict).encode("utf-8")
-            length_header = struct.pack(">I", len(json_data))
-            device.client_socket.send(length_header + json_data)
-            device.increment_message_count("sent")
-            logger.debug(
-                f"Sent command to {device_id}: {command_dict.get('type', 'unknown')}"
-            )
-            return True
-        except Exception as e:
-            logger.error(f"Error sending command to {device_id}: {e}")
-            self.error_occurred.emit(device_id, f"Command send error: {str(e)}")
-            return False
-    def broadcast_command(self, command_dict: Dict[str, Any]) -> int:
-        success_count = 0
-        for device_id in list(self.devices.keys()):
-            if self.send_command(device_id, command_dict):
-                success_count += 1
-        logger.info(f"Broadcast command to {success_count}/{len(self.devices)} devices")
-        return success_count
-    def get_connected_devices(self) -> List[str]:
-        return list(self.clients.keys())
-    def get_device_count(self) -> int:
-        return len(self.clients)
-    def is_device_connected(self, device_id: str) -> bool:
-        return device_id in self.clients
-    def stop_server(self):
-        logger.info("Stopping JSON socket server...")
-        self.running = False
-        if self.server_socket:
-            try:
-                self.server_socket.close()
-            except:
-                pass
-        for device_id, client_socket in list(self.clients.items()):
-            try:
-                client_socket.close()
-                self.device_disconnected.emit(device_id)
-            except:
-                pass
-        self.clients.clear()
-        logger.info("JSON socket server stopped")
-    def get_session_directory(self) -> Optional[str]:
-        try:
-            if self.session_manager:
-                session_folder = self.session_manager.get_session_folder()
-                if session_folder:
-                    session_dir = str(session_folder)
-                    logger.debug(
-                        f"Using SessionManager session directory: {session_dir}"
-                    )
-                    return session_dir
-                else:
-                    logger.warning(
-                        "SessionManager available but no active session found"
-                    )
-            base_dir = os.path.join(os.getcwd(), "sessions")
-            os.makedirs(base_dir, exist_ok=True)
-            import datetime
-            session_name = datetime.datetime.now().strftime("session_%Y%m%d_%H%M%S")
-            session_dir = os.path.join(base_dir, session_name)
-            os.makedirs(session_dir, exist_ok=True)
-            logger.debug(f"Fallback session directory: {session_dir}")
-            return session_dir
-        except Exception as e:
-            logger.error(f"Failed to get session directory: {e}")
-            return None
-    def request_file_from_device(
-        self, device_id: str, filepath: str, filetype: str = None
-    ) -> bool:
-        if device_id not in self.devices:
-            logger.warning(f"Device {device_id} not connected")
-            return False
-        try:
-            send_file_command = {
-                "type": "send_file",
-                "filepath": filepath,
-                "filetype": filetype,
+            image_bytes = base64.b64decode(image_data)
+            metadata = {
+                "width": width,
+                "height": height,
+                "frame_type": frame_type,
+                "quality": device.streaming_quality,
+                "timestamp": message.get("timestamp", time.time()),
             }
-            success = self.send_command(device_id, send_file_command)
-            if success:
-                logger.info(f"Requested file {filepath} from device {device_id}")
-            else:
-                logger.error(
-                    f"Failed to request file {filepath} from device {device_id}"
-                )
-            return success
+            self.preview_frame_received.emit(
+                device.device_id, frame_type, image_bytes, metadata
+            )
+            error_rate = device.stats.error_count / max(
+                1, device.stats.messages_received
+            )
+            device.adapt_streaming_quality(device.stats.average_latency, error_rate)
         except Exception as e:
-            logger.error(f"Error requesting file from device {device_id}: {e}")
-            return False
-    def request_all_session_files(self, session_id: str) -> int:
-        success_count = 0
-        for device_id, device in self.devices.items():
-            try:
-                expected_files = self.get_expected_files_for_device(
-                    device_id, session_id, device.capabilities
-                )
-                for filepath in expected_files:
-                    if self.request_file_from_device(device_id, filepath):
-                        success_count += 1
-                        import time
-                        time.sleep(0.1)
-            except Exception as e:
-                logger.error(f"Error requesting files from device {device_id}: {e}")
-        logger.info(
-            f"Requested session files from {success_count} device file combinations"
+            logger.error(f"Preview frame processing error: {e}")
+    def handle_heartbeat(self, device: RemoteDevice, message: Dict[str, Any]):
+        response = NetworkMessage(
+            type="heartbeat_response",
+            payload={
+                "type": "heartbeat_response",
+                "timestamp": time.time(),
+                "server_time": time.time(),
+            },
+            priority=MessagePriority.HIGH,
         )
-        return success_count
-    def get_expected_files_for_device(
-        self, device_id: str, session_id: str, capabilities: List[str]
-    ) -> List[str]:
-        expected_files = []
-        base_path = f"/storage/emulated/0/MultiSensorRecording/sessions/{session_id}"
-        if "rgb_video" in capabilities or "camera" in capabilities:
-            expected_files.append(f"{base_path}/{session_id}_{device_id}_rgb.mp4")
-        if "thermal" in capabilities:
-            expected_files.append(f"{base_path}/{session_id}_{device_id}_thermal.mp4")
-        if "shimmer" in capabilities:
-            expected_files.append(f"{base_path}/{session_id}_{device_id}_sensors.csv")
-        logger.debug(f"Expected files for {device_id}: {expected_files}")
-        return expected_files
-    def cleanup(self):
-        if self.server_socket:
+        device.queue_message(response)
+    def send_heartbeats(self):
+        with QMutexLocker(self.devices_mutex):
+            current_time = time.time()
+            for device in list(self.devices.values()):
+                if device.is_alive():
+                    heartbeat = NetworkMessage(
+                        type="heartbeat",
+                        payload={"type": "heartbeat", "timestamp": current_time},
+                        priority=MessagePriority.HIGH,
+                    )
+                    device.queue_message(heartbeat)
+                else:
+                    self.disconnect_device(device.device_id, "Heartbeat timeout")
+    def send_command_to_device(self, device_id: str, command: str, **kwargs) -> bool:
+        with QMutexLocker(self.devices_mutex):
+            device = self.devices.get(device_id)
+            if not device:
+                logger.warning(f"Device {device_id} not found")
+                return False
+        message = NetworkMessage(
+            type="command",
+            payload={
+                "type": "command",
+                "command": command,
+                "timestamp": time.time(),
+                **kwargs,
+            },
+            priority=MessagePriority.CRITICAL,
+            requires_ack=True,
+        )
+        device.queue_message(message)
+        return True
+    def broadcast_command(self, command: str, **kwargs) -> int:
+        count = 0
+        with QMutexLocker(self.devices_mutex):
+            for device_id in self.devices:
+                if self.send_command_to_device(device_id, command, **kwargs):
+                    count += 1
+        return count
+    def disconnect_device(self, device_id: str, reason: str = "Unknown"):
+        with QMutexLocker(self.devices_mutex):
+            device = self.devices.get(device_id)
+            if not device:
+                return
             try:
-                self.server_socket.close()
+                device.client_socket.close()
             except:
                 pass
-        for thread in self.client_threads:
-            if thread.is_alive():
-                thread.join(timeout=1.0)
-        self.client_threads.clear()
-        logger.info("JSON socket server cleanup completed")
-def decode_base64_image(base64_data: str) -> Optional[bytes]:
+            device.state = ConnectionState.DISCONNECTED
+            del self.devices[device_id]
+            if device_id in self.client_handlers:
+                del self.client_handlers[device_id]
+        self.device_disconnected.emit(device_id, reason)
+        logger.info(f"Device {device_id} disconnected: {reason}")
+    def get_network_statistics(self) -> Dict[str, Any]:
+        with QMutexLocker(self.devices_mutex):
+            stats = {
+                "active_devices": len(self.devices),
+                "total_connections": self.network_stats["total_connections"],
+                "overall_stats": {
+                    "total_messages": sum(
+                        device.stats.messages_sent + device.stats.messages_received
+                        for device in self.devices.values()
+                    ),
+                    "total_bytes": sum(
+                        device.stats.bytes_sent + device.stats.bytes_received
+                        for device in self.devices.values()
+                    ),
+                    "average_latency": self._calculate_overall_latency(),
+                    "network_quality": self._assess_overall_network_quality(),
+                },
+                "devices": {},
+            }
+            for device_id, device in self.devices.items():
+                stats["devices"][device_id] = device.get_status_summary()
+        return stats
+    def _calculate_overall_latency(self) -> float:
+        if not self.devices:
+            return 0.0
+        total_latency = 0.0
+        device_count = 0
+        for device in self.devices.values():
+            if device.stats.latency_samples:
+                total_latency += device.stats.average_latency
+                device_count += 1
+        return total_latency / device_count if device_count > 0 else 0.0
+    def _assess_overall_network_quality(self) -> str:
+        if not self.devices:
+            return "unknown"
+        avg_latency = self._calculate_overall_latency()
+        if avg_latency < 50:
+            return "excellent"
+        elif avg_latency < 100:
+            return "good"
+        elif avg_latency < 200:
+            return "fair"
+        else:
+            return "poor"
+    def get_device_latency_statistics(self, device_id: str) -> Dict[str, Any]:
+        with QMutexLocker(self.devices_mutex):
+            device = self.devices.get(device_id)
+            if not device:
+                return {"error": f"Device {device_id} not found"}
+            with QMutexLocker(device.mutex):
+                return {
+                    "device_id": device_id,
+                    "average_latency": device.stats.average_latency,
+                    "min_latency": (
+                        device.stats.min_latency
+                        if device.stats.min_latency != float("inf")
+                        else 0
+                    ),
+                    "max_latency": device.stats.max_latency,
+                    "jitter": device.stats.jitter,
+                    "packet_loss_rate": device.stats.packet_loss_rate,
+                    "ping_count": device.stats.ping_count,
+                    "pong_count": device.stats.pong_count,
+                    "sample_count": len(device.stats.latency_samples),
+                    "recent_samples": (
+                        list(device.stats.latency_samples)[-10:]
+                        if device.stats.latency_samples
+                        else []
+                    ),
+                }
+    def handle_status_update(
+        self, device: RemoteDevice, message: Dict[str, Any]
+    ):
+        storage = message.get("storage", "")
+        if isinstance(storage, str) and storage.startswith("ping:"):
+            self.handle_ping_message(
+                device, storage, message.get("timestamp", time.time())
+            )
+        else:
+            status_data = {k: v for k, v in message.items() if k != "type"}
+            self.message_received.emit(device.device_id, message)
+    def handle_ping_message(
+        self, device: RemoteDevice, ping_data: str, original_timestamp: float
+    ):
+        try:
+            parts = ping_data.split(":")
+            if len(parts) >= 4:
+                ping_id = parts[1]
+                ping_timestamp = float(parts[2])
+                sequence = int(parts[3])
+                current_time = time.time()
+                pong_data = f"pong:{ping_id}:{ping_timestamp}:{current_time}:{sequence}"
+                response = NetworkMessage(
+                    type="status",
+                    payload={
+                        "type": "status",
+                        "storage": pong_data,
+                        "timestamp": current_time,
+                        "battery": None,
+                        "temperature": None,
+                        "recording": False,
+                        "connected": True,
+                    },
+                    priority=MessagePriority.HIGH,
+                )
+                device.queue_message(response)
+                ping_latency = (current_time - ping_timestamp) * 1000
+                device.update_latency(ping_latency / 2)
+                device.update_ping_stats(is_response=True)
+                logger.debug(
+                    f"Responded to ping {ping_id} from {device.device_id}, RTT: {ping_latency:.2f}ms"
+                )
+        except Exception as e:
+            logger.error(f"Error handling ping message: {e}")
+    def handle_acknowledgment(
+        self, device: RemoteDevice, message: Dict[str, Any]
+    ):
+        message_id = message.get("message_id")
+        success = message.get("success", False)
+        if message_id in self.pending_messages:
+            del self.pending_messages[message_id]
+        self.message_received.emit(device.device_id, message)
+    def handle_sensor_data(self, device: RemoteDevice, message: Dict[str, Any]):
+        self.message_received.emit(device.device_id, message)
+    def send_message(
+        self,
+        device: RemoteDevice,
+        message_data: Dict[str, Any],
+        priority: MessagePriority = MessagePriority.NORMAL,
+    ) -> bool:
+        message = NetworkMessage(
+            type=message_data.get("type", "unknown"),
+            payload=message_data,
+            priority=priority,
+        )
+        device.queue_message(message)
+        return True
+def create_command_message(command: str, **kwargs) -> Dict[str, Any]:
+    return {"type": "command", "command": command, "timestamp": time.time(), **kwargs}
+def decode_base64_image(data: str) -> Optional[bytes]:
     try:
-        if base64_data.startswith("data:image/"):
-            base64_data = base64_data.split(",", 1)[1]
-        return base64.b64decode(base64_data)
+        if data.startswith("data:"):
+            data = data.split(",", 1)[1]
+        return base64.b64decode(data)
     except Exception as e:
-        logger.error(f"Error decoding base64 image: {e}")
+        logger.error(f"Base64 decode error: {e}")
         return None
-def create_command_message(command_type: str, **kwargs) -> Dict[str, Any]:
-    import time
-    command = {
-        "type": "command",
-        "command": command_type,
-        "timestamp": time.time(),
-        **kwargs,
-    }
-    return command

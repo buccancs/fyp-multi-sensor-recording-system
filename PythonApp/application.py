@@ -5,7 +5,7 @@ from ..network.device_server import JsonSocketServer
 from ..session.session_logger import get_session_logger
 from ..session.session_manager import SessionManager
 from ..utils.logging_config import get_logger
-from .gui.enhanced_ui_main_window import EnhancedMainWindow
+from .gui.main_window import MainWindow
 from .webcam.webcam_capture import WebcamCapture
 class Application(QObject):
     def __init__(self):
@@ -27,8 +27,8 @@ class Application(QObject):
             raise
     def create_main_window(self):
         try:
-            self.main_window = EnhancedMainWindow()
-            self.logger.info("Created enhanced main window")
+            self.main_window = MainWindow()
+            self.logger.info("Created main window")
             return self.main_window
         except Exception as e:
             self.logger.error(f"failed to create main window: {e}")

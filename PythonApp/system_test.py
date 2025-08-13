@@ -63,12 +63,12 @@ def test_gui_components():
         label = QLabel("Test Label")
         print("[PASS] Basic widgets created successfully")
         try:
-            from PythonApp.gui.enhanced_ui_main_window import EnhancedMainWindow
-            enhanced_window = EnhancedMainWindow()
-            print("[PASS] Enhanced main window created successfully")
-            enhanced_window.close()
+            from PythonApp.gui.main_window import MainWindow
+            main_window_test = MainWindow()
+            print("[PASS] Main window created successfully")
+            main_window_test.close()
         except Exception as e:
-            print(f"[WARN] Enhanced main window creation failed: {e}")
+            print(f"[WARN] Main window creation failed: {e}")
         app.quit()
         return True
     except Exception as e:
