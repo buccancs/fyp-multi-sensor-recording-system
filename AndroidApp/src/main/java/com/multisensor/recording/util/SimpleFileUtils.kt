@@ -21,6 +21,11 @@ object SimpleFileUtils {
         return File(context.getExternalFilesDir(null), fileName)
     }
 
+    fun createRawFile(context: Context, sessionId: String, count: Int): File {
+        val fileName = "raw_${sessionId}_${String.format("%04d", count)}.dng"
+        return File(context.getExternalFilesDir(null), fileName)
+    }
+
     fun saveTextFile(context: Context, fileName: String, content: String): Boolean {
         return try {
             val file = File(context.getExternalFilesDir(null), fileName)
