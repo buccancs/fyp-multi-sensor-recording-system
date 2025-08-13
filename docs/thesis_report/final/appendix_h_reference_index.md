@@ -113,8 +113,7 @@ Desktop Controller:
 - Network: Gigabit Ethernet preferred, 802.11ac WiFi minimum [19,21]
 
 Mobile Devices:
-- Primary: Samsung Galaxy S10/S21/A52 (Android 12+) [13]
-- Alternative: Google Pixel 6/7 Pro, OnePlus 9/10 Pro
+- Primary: Samsung Galaxy S22 (Android 15) [13]
 - Requirements: Camera2 API, USB-C OTG, 6GB+ RAM [13,16]
 
 Sensor Hardware:

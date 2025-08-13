@@ -141,11 +141,8 @@ print(f'Generated: {sync_csv}, {calib_csv}, {network_csv}')
 
 ## H.3 Device Testing (Samsung Hardware)
 
-### Supported Samsung Devices
-- Samsung Galaxy S10 (Android 11+)
-- Samsung Galaxy S21 (Android 12+) 
-- Samsung Galaxy A52 (Android 11+)
-- Samsung Galaxy A54 (Android 13+)
+### Targeted Samsung Device
+- Samsung Galaxy S22 (Android 15)
 
 ### Device Testing Procedure
 ```bash
@@ -193,13 +190,13 @@ print('Run Android app to test socket communication')
 adb shell getprop | grep -E "ro.build.version|ro.product.model|ro.product.brand"
 
 # Example output:
-# [ro.build.version.release]: [13]
+# [ro.build.version.release]: [15]
 # [ro.product.brand]: [samsung]
-# [ro.product.model]: [SM-A546E]
+# [ro.product.model]: [SM-S901B]
 
 # Document test results in format:
-# Device: Samsung Galaxy A54 (SM-A546E)
-# OS Version: Android 13 
+# Device: Samsung Galaxy S22 (SM-S901E/SM-S901B)
+# OS Version: Android 15
 # Test Result: PASS - All instrumentation tests passed
 # Socket Communication: PASS - ACK received within 100ms
 # Notes: No deviations or failures observed

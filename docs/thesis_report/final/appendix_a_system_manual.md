@@ -50,10 +50,7 @@ Hardware Compatibility:
 - Sensors: Accelerometer, gyroscope, magnetometer for device orientation
 
 Validated Device Models:
-- Samsung Galaxy S22/S22+/S22 Ultra (primary recommendation)
-- Samsung Galaxy S21/S21+/S21 Ultra
-- Google Pixel 6/6 Pro/7/7 Pro
-- OnePlus 9/9 Pro/10/10 Pro
+- Samsung Galaxy S22 (Android 15) - primary target platform
 
 ### A.2.3 Sensor Hardware Specifications
 
