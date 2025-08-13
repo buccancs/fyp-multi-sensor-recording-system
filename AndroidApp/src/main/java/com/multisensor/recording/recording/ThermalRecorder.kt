@@ -16,6 +16,7 @@ import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ThermalCameraSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,6 +29,16 @@ constructor(
     private val logger: Logger,
     private val thermalSettings: ThermalCameraSettings,
 ) {
+    data class ThermalCameraStatus(
+        val isAvailable: Boolean = false,
+        val isRecording: Boolean = false,
+        val isPreviewActive: Boolean = false,
+        val deviceName: String = "No Device",
+        val width: Int = 256,
+        val height: Int = 192,
+        val frameRate: Int = 25,
+        val frameCount: Long = 0L
+    )
     companion object {
         private val SUPPORTED_PRODUCT_IDS = intArrayOf(
             0x3901, 0x5840, 0x5830, 0x5838, 0x5841, 0x5842, 0x3902, 0x3903
@@ -43,10 +54,19 @@ constructor(
     private var ircmd: IRCMD? = null
     private var topdonUsbMonitor: USBMonitor? = null
     private var previewSurface: SurfaceView? = null
+    private var isRecording = AtomicBoolean(false)
+    private var frameCount = AtomicLong(0L)
+    private var currentSessionId: String? = null
 
     fun initialize(previewSurface: SurfaceView? = null): Boolean {
+        return initialize(previewSurface, null)
+    }
+
+    fun initialize(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean {
         return try {
             logger.info("Initializing ThermalRecorder")
+            logger.info("Loaded thermal configuration:")
+            logger.info(thermalSettings.getConfigSummary())
 
             this.previewSurface = previewSurface
             usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
@@ -57,6 +77,9 @@ constructor(
             isInitialized.set(true)
             logger.info("ThermalRecorder initialized successfully")
             true
+        } catch (e: SecurityException) {
+            logger.error("Security exception initializing thermal recorder", e)
+            false
         } catch (e: Exception) {
             logger.error("Thermal camera initialization failed", e)
             false
@@ -71,8 +94,11 @@ constructor(
             }
 
             if (currentDevice == null) {
-                logger.warning("No thermal device connected")
-                return false
+                logger.warning("No thermal camera device connected, attempting device discovery...")
+                checkForConnectedDevices()
+                if (currentDevice == null) {
+                    return false
+                }
             }
 
             if (isPreviewActive.get()) {
@@ -89,8 +115,8 @@ constructor(
         }
     }
 
-    fun stopPreview() {
-        try {
+    fun stopPreview(): Boolean {
+        return try {
             if (isPreviewActive.get()) {
                 try {
                     val stopPreviewMethod = uvcCamera?.javaClass?.getMethod("stopPreview")
@@ -102,15 +128,18 @@ constructor(
                 }
                 isPreviewActive.set(false)
             }
+            true
         } catch (e: Exception) {
             logger.error("Error stopping thermal preview", e)
             // Force reset preview state even if stop failed
             isPreviewActive.set(false)
+            false
         }
     }
 
     fun cleanup() {
         try {
+            logger.info("Cleaning up ThermalRecorder")
             stopPreview()
             cleanupCameraResources()
 
@@ -118,12 +147,16 @@ constructor(
             topdonUsbMonitor = null
 
             isInitialized.set(false)
-            logger.info("Thermal camera cleanup completed")
+            isRecording.set(false)
+            frameCount.set(0L)
+            currentSessionId = null
+            logger.info("ThermalRecorder cleanup completed")
         } catch (e: Exception) {
             logger.error("Error during thermal camera cleanup", e)
             // Force cleanup states even if errors occurred
             isInitialized.set(false)
             isPreviewActive.set(false)
+            isRecording.set(false)
         }
     }
 
@@ -165,13 +198,17 @@ constructor(
         }
     }
 
-    fun getThermalCameraStatus(): String {
-        return when {
-            !isInitialized.get() -> "Not initialized"
-            currentDevice == null -> "No device connected"
-            isPreviewActive.get() -> "Active"
-            else -> "Connected"
-        }
+    fun getThermalCameraStatus(): ThermalCameraStatus {
+        return ThermalCameraStatus(
+            isAvailable = isInitialized.get() && currentDevice != null,
+            isRecording = isRecording.get(),
+            isPreviewActive = isPreviewActive.get(),
+            deviceName = currentDevice?.deviceName ?: "No Device",
+            width = 256,
+            height = 192,
+            frameRate = 25,
+            frameCount = frameCount.get()
+        )
     }
 
     fun startRecording(sessionId: String): Boolean {
@@ -181,11 +218,24 @@ constructor(
                 return false
             }
 
-            // Start preview if not already active
-            if (!isPreviewActive.get()) {
-                startPreview()
+            if (isRecording.get()) {
+                logger.warning("Recording already in progress")
+                return false
             }
 
+            // Start preview if not already active
+            if (!isPreviewActive.get()) {
+                val previewStarted = startPreview()
+                if (!previewStarted) {
+                    logger.error("Failed to start preview for recording")
+                    return false
+                }
+            }
+
+            currentSessionId = sessionId
+            isRecording.set(true)
+            frameCount.set(0L)
+            
             logger.info("Starting thermal recording for session: $sessionId")
             true
         } catch (e: Exception) {
@@ -194,17 +244,32 @@ constructor(
         }
     }
 
-    fun stopRecording() {
-        try {
-            logger.info("Thermal recording stopped")
-            // Keep preview running, just stop recording
+    fun stopRecording(): Boolean {
+        return try {
+            if (!isRecording.get()) {
+                logger.warning("No recording in progress")
+                return false
+            }
+
+            isRecording.set(false)
+            val finalFrameCount = frameCount.get()
+            logger.info("Stopping thermal recording")
+            logger.info("Thermal recording stopped - Final frame count: $finalFrameCount")
+            
+            currentSessionId = null
+            true
         } catch (e: Exception) {
             logger.error("Error stopping thermal recording", e)
+            // Force reset recording state even if stop failed
+            isRecording.set(false)
+            currentSessionId = null
+            false
         }
     }
 
     fun setPreviewStreamer(streamer: Any) {
-        // Preview streaming not implemented in simplified version
+        logger.debug("Setting preview streamer: ${streamer.javaClass.simpleName}")
+        // Preview streaming integration can be implemented here when needed
     }
 
     fun captureCalibrationImage(filePath: String): Boolean {

@@ -365,10 +365,11 @@ class RecordingService : Service() {
     private fun getThermalStatus(): String =
         try {
             val status = thermalRecorder.getThermalCameraStatus()
-            when (status) {
-                "Active" -> "recording"
-                "Connected" -> "ready"
-                "Not initialized", "No device connected" -> "unavailable"
+            when {
+                status.isRecording -> "recording"
+                status.isAvailable && status.isPreviewActive -> "ready"
+                status.isAvailable -> "connected"
+                !status.isAvailable -> "unavailable"
                 else -> "unknown"
             }
         } catch (e: SecurityException) {
