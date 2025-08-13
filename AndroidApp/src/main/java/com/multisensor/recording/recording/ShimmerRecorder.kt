@@ -2976,9 +2976,10 @@ fun Shimmer.getECGReading(): Double? {
     return try {
         val latestObjectCluster = getLatestReceivedData()
         if (latestObjectCluster != null) {
-            val ecgFormats = latestObjectCluster.getCollectionOfFormatClusters(
-                Configuration.Shimmer3.ObjectClusterSensorName.EXG1_24BIT
-            )
+            // Try multiple ECG sensor names that might be available
+            val ecgFormats = latestObjectCluster.getCollectionOfFormatClusters("ECG") 
+                ?: latestObjectCluster.getCollectionOfFormatClusters("EXG1")
+                ?: latestObjectCluster.getCollectionOfFormatClusters("ExG 1")
             val ecgCluster = ObjectCluster.returnFormatCluster(ecgFormats, "CAL") as? FormatCluster
             ecgCluster?.mData
         } else {
@@ -2997,9 +2998,10 @@ fun Shimmer.getEMGReading(): Double? {
     return try {
         val latestObjectCluster = getLatestReceivedData()
         if (latestObjectCluster != null) {
-            val emgFormats = latestObjectCluster.getCollectionOfFormatClusters(
-                Configuration.Shimmer3.ObjectClusterSensorName.EXG2_24BIT
-            )
+            // Try multiple EMG sensor names that might be available
+            val emgFormats = latestObjectCluster.getCollectionOfFormatClusters("EMG")
+                ?: latestObjectCluster.getCollectionOfFormatClusters("EXG2")
+                ?: latestObjectCluster.getCollectionOfFormatClusters("ExG 2")
             val emgCluster = ObjectCluster.returnFormatCluster(emgFormats, "CAL") as? FormatCluster
             emgCluster?.mData
         } else {
@@ -3018,9 +3020,10 @@ fun Shimmer.getTemperatureReading(): Double? {
     return try {
         val latestObjectCluster = getLatestReceivedData()
         if (latestObjectCluster != null) {
-            val tempFormats = latestObjectCluster.getCollectionOfFormatClusters(
-                Configuration.Shimmer3.ObjectClusterSensorName.TEMPERATURE
-            )
+            // Try multiple temperature sensor names that might be available
+            val tempFormats = latestObjectCluster.getCollectionOfFormatClusters("Temperature")
+                ?: latestObjectCluster.getCollectionOfFormatClusters("TEMP")
+                ?: latestObjectCluster.getCollectionOfFormatClusters("Temp")
             val tempCluster = ObjectCluster.returnFormatCluster(tempFormats, "CAL") as? FormatCluster
             tempCluster?.mData
         } else {
@@ -3039,9 +3042,10 @@ fun Shimmer.getPressureReading(): Double? {
     return try {
         val latestObjectCluster = getLatestReceivedData()
         if (latestObjectCluster != null) {
-            val pressureFormats = latestObjectCluster.getCollectionOfFormatClusters(
-                Configuration.Shimmer3.ObjectClusterSensorName.PRESSURE
-            )
+            // Try multiple pressure sensor names that might be available
+            val pressureFormats = latestObjectCluster.getCollectionOfFormatClusters("Pressure")
+                ?: latestObjectCluster.getCollectionOfFormatClusters("PRESS")
+                ?: latestObjectCluster.getCollectionOfFormatClusters("Press")
             val pressureCluster = ObjectCluster.returnFormatCluster(pressureFormats, "CAL") as? FormatCluster
             pressureCluster?.mData
         } else {
