@@ -12,7 +12,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 # Import new security and discovery features
 try:
-    from .enhanced_security import SecurityConfig, TokenManager, SecureSocketWrapper, RuntimeSecurityChecker
+    from .security import SecurityConfig, TokenManager, SecureSocketWrapper, RuntimeSecurityChecker
     from .zeroconf_discovery import MultiSensorDiscovery
     from .lsl_integration import LSLStreamer, DefaultLSLStreams, push_sync_marker
     from .file_integrity import SecureFileTransfer, FileIntegrityVerifier

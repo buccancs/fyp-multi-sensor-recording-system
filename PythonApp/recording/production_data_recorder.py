@@ -21,7 +21,7 @@ from pathlib import Path
 import json
 import hashlib
 
-from .comprehensive_data_recorder import (
+from .data_recorder import (
     RecordingSession, CSVDataLogger, VideoRecorder, 
     AudioRecorder, DataPackager
 )
