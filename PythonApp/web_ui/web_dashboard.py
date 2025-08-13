@@ -794,15 +794,20 @@ Generated at: {datetime.now().isoformat()}"""
         @self.app.route("/api/camera/rgb/preview")
         def api_camera_rgb_preview():
             try:
+                # Check if webcam capture is available and running
                 if (
                     self.controller
                     and hasattr(self.controller, "webcam_capture")
                     and self.controller.webcam_capture
                 ):
+                    # First check if preview is running, if not try to start it
+                    if not self.controller.webcam_capture.is_previewing:
+                        logger.debug("Starting webcam preview for API request")
+                        self.controller.webcam_capture.start_preview()
+                        
                     frame = self.controller.webcam_capture.get_current_frame()
                     if frame is not None:
                         import io
-
                         import cv2
                         from flask import Response
 
@@ -820,6 +825,7 @@ Generated at: {datetime.now().isoformat()}"""
                             response.headers["Expires"] = "0"
                             return response
 
+                # Fallback to placeholder image
                 return self._generate_placeholder_image(
                     "RGB Camera\nPreview Not Available"
                 )
@@ -899,6 +905,110 @@ Generated at: {datetime.now().isoformat()}"""
             except Exception as e:
                 logger.error(f"IR capture error: {e}")
                 return jsonify({"success": False, "error": str(e)}), 500
+
+        @self.app.route("/api/camera/connect", methods=["POST"])
+        def api_camera_connect():
+            """Start camera preview/connection"""
+            try:
+                camera_type = request.json.get("type", "rgb") if request.json else "rgb"
+                
+                if camera_type == "rgb":
+                    if (
+                        self.controller
+                        and hasattr(self.controller, "webcam_capture")
+                        and self.controller.webcam_capture
+                    ):
+                        if not self.controller.webcam_capture.is_previewing:
+                            self.controller.webcam_capture.start_preview()
+                            logger.info("RGB camera preview started via API")
+                            return jsonify({"success": True, "message": "RGB camera connected", "status": "previewing"})
+                        else:
+                            return jsonify({"success": True, "message": "RGB camera already connected", "status": "previewing"})
+                    else:
+                        return jsonify({"success": False, "error": "RGB camera not available"}), 400
+                        
+                elif camera_type == "ir":
+                    # For IR camera, we would connect to Android device
+                    logger.info("IR camera connect requested (Android device required)")
+                    return jsonify({"success": True, "message": "IR camera connect requested", "note": "Requires Android device"})
+                    
+                else:
+                    return jsonify({"success": False, "error": "Unknown camera type"}), 400
+                    
+            except Exception as e:
+                logger.error(f"Camera connect error: {e}")
+                return jsonify({"success": False, "error": str(e)}), 500
+
+        @self.app.route("/api/camera/disconnect", methods=["POST"])
+        def api_camera_disconnect():
+            """Stop camera preview/connection"""
+            try:
+                camera_type = request.json.get("type", "rgb") if request.json else "rgb"
+                
+                if camera_type == "rgb":
+                    if (
+                        self.controller
+                        and hasattr(self.controller, "webcam_capture")
+                        and self.controller.webcam_capture
+                    ):
+                        if self.controller.webcam_capture.is_previewing:
+                            self.controller.webcam_capture.stop_preview()
+                            logger.info("RGB camera preview stopped via API")
+                            return jsonify({"success": True, "message": "RGB camera disconnected", "status": "disconnected"})
+                        else:
+                            return jsonify({"success": True, "message": "RGB camera already disconnected", "status": "disconnected"})
+                    else:
+                        return jsonify({"success": False, "error": "RGB camera not available"}), 400
+                        
+                elif camera_type == "ir":
+                    # For IR camera, we would disconnect from Android device
+                    logger.info("IR camera disconnect requested")
+                    return jsonify({"success": True, "message": "IR camera disconnect requested", "note": "Requires Android device"})
+                    
+                else:
+                    return jsonify({"success": False, "error": "Unknown camera type"}), 400
+                    
+            except Exception as e:
+                logger.error(f"Camera disconnect error: {e}")
+                return jsonify({"success": False, "error": str(e)}), 500
+
+        @self.app.route("/api/camera/status")
+        def api_camera_status():
+            """Get camera connection status"""
+            try:
+                status = {
+                    "rgb": {"connected": False, "previewing": False, "available": False},
+                    "ir": {"connected": False, "previewing": False, "available": False}
+                }
+                
+                # Check RGB camera status
+                if (
+                    self.controller
+                    and hasattr(self.controller, "webcam_capture")
+                    and self.controller.webcam_capture
+                ):
+                    status["rgb"]["available"] = True
+                    status["rgb"]["connected"] = self.controller.webcam_capture._camera_available or self.controller.webcam_capture._use_mock_frames
+                    status["rgb"]["previewing"] = self.controller.webcam_capture.is_previewing
+                    
+                # Check IR camera status (Android device)
+                if (
+                    self.controller
+                    and hasattr(self.controller, "android_device_manager")
+                    and self.controller.android_device_manager
+                ):
+                    devices = self.controller.android_device_manager.get_connected_devices() or {}
+                    for device_id, device_info in devices.items():
+                        if "thermal" in device_info.get("capabilities", []):
+                            status["ir"]["available"] = True
+                            status["ir"]["connected"] = True
+                            break
+                            
+                return jsonify(status)
+                
+            except Exception as e:
+                logger.error(f"Camera status error: {e}")
+                return jsonify({"rgb": {"connected": False, "previewing": False, "available": False}, "ir": {"connected": False, "previewing": False, "available": False}})
 
     def _generate_placeholder_image(self, text="Camera\nNot Available"):
         try:

@@ -30,6 +30,9 @@ class SystemMonitor:
         self.monitor_thread = None
         self.system_info = self._get_system_info()
         self._last_update = time.time()
+        self._camera_detection_failures = 0
+        self._max_camera_failures = 3
+        self._use_mock_cameras = os.environ.get('MSR_USE_MOCK_CAMERAS', 'false').lower() == 'true'
     def _get_system_info(self) -> Dict[str, Any]:
         try:
             return {
@@ -166,33 +169,91 @@ class SystemMonitor:
     def detect_webcams(self) -> List[Dict[str, Any]]:
         if not OPENCV_AVAILABLE:
             logger.warning("OpenCV not available, cannot detect webcams")
-            return []
+            return self._get_mock_cameras() if self._use_mock_cameras else []
+            
+        # If we've had too many failures, use mock cameras or return empty
+        if self._camera_detection_failures >= self._max_camera_failures:
+            if self._use_mock_cameras:
+                return self._get_mock_cameras()
+            else:
+                logger.debug("Camera detection disabled due to repeated failures")
+                return []
+                
         webcams = []
         try:
-            for index in range(10):
-                cap = cv2.VideoCapture(index)
-                if cap.isOpened():
-                    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-                    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-                    fps = cap.get(cv2.CAP_PROP_FPS)
-                    webcams.append(
-                        {
-                            "index": index,
-                            "name": f"Camera {index}",
-                            "resolution": f"{width}x{height}",
-                            "fps": fps,
-                            "status": "available",
-                        }
-                    )
-                    cap.release()
-                else:
-                    cap.release()
-                    break
-            logger.info(f"Detected {len(webcams)} webcam(s)")
+            # Suppress OpenCV error output to reduce noise
+            import os
+            os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'
+            
+            for index in range(5):  # Reduced range to avoid excessive polling
+                cap = None
+                try:
+                    cap = cv2.VideoCapture(index)
+                    # Quick check - don't hang on non-existent cameras
+                    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+                    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+                    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+                    
+                    if cap.isOpened():
+                        # Try to read a frame to confirm camera is actually working
+                        ret, frame = cap.read()
+                        if ret and frame is not None:
+                            width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+                            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+                            fps = cap.get(cv2.CAP_PROP_FPS)
+                            webcams.append(
+                                {
+                                    "index": index,
+                                    "name": f"Camera {index}",
+                                    "resolution": f"{width}x{height}",
+                                    "fps": fps,
+                                    "status": "available",
+                                }
+                            )
+                            logger.debug(f"Detected working camera at index {index}")
+                        cap.release()
+                    else:
+                        cap.release()
+                        break  # Stop checking after first unavailable camera
+                except Exception as camera_error:
+                    if cap:
+                        cap.release()
+                    logger.debug(f"Camera {index} not accessible: {camera_error}")
+                    break  # Stop on first error to avoid excessive polling
+                    
+            if len(webcams) > 0:
+                logger.info(f"Detected {len(webcams)} working webcam(s)")
+                self._camera_detection_failures = 0  # Reset failure count on success
+            else:
+                self._camera_detection_failures += 1
+                logger.debug(f"No webcams detected (failure count: {self._camera_detection_failures})")
+                
             return webcams
         except Exception as e:
-            logger.error(f"Error detecting webcams: {e}")
-            return []
+            self._camera_detection_failures += 1
+            logger.error(f"Error detecting webcams (failure count: {self._camera_detection_failures}): {e}")
+            return self._get_mock_cameras() if self._use_mock_cameras else []
+            
+    def _get_mock_cameras(self) -> List[Dict[str, Any]]:
+        """Return mock camera data for testing environments"""
+        return [
+            {
+                "index": 0,
+                "name": "Mock Logitech 4K Brio",
+                "resolution": "1920x1080",
+                "fps": 30.0,
+                "status": "available",
+                "mock": True,
+            },
+            {
+                "index": 1,
+                "name": "Mock Thermal Camera",
+                "resolution": "640x480",
+                "fps": 9.0,
+                "status": "available",
+                "mock": True,
+            }
+        ]
     def detect_bluetooth_devices(self) -> List[Dict[str, Any]]:
         bluetooth_devices = []
         try:

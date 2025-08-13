@@ -33,15 +33,37 @@ class WebcamCapture(QThread):
         self.output_directory = "recordings"
         self.last_frame: Optional[np.ndarray] = None
         self.frame_lock = threading.Lock()
+        self._camera_available = False
+        self._use_mock_frames = os.environ.get('MSR_USE_MOCK_CAMERAS', 'false').lower() == 'true'
         print(
-            f"[DEBUG_LOG] WebcamCapture initialized with camera {camera_index}, preview FPS: {preview_fps}"
+            f"[DEBUG_LOG] WebcamCapture initialized with camera {camera_index}, preview FPS: {preview_fps}, mock mode: {self._use_mock_frames}"
         )
     def initialize_camera(self) -> bool:
         try:
+            # Suppress OpenCV error output
+            os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'
+            
             self.cap = cv2.VideoCapture(self.camera_index)
             if not self.cap.isOpened():
-                self.error_occurred.emit(f"Could not open camera {self.camera_index}")
-                return False
+                error_msg = f"Could not open camera {self.camera_index}"
+                if not self._use_mock_frames:
+                    self.error_occurred.emit(error_msg)
+                print(f"[DEBUG_LOG] {error_msg}")
+                self._camera_available = False
+                return self._use_mock_frames  # Return success if using mock frames
+                
+            # Test if camera actually works
+            ret, test_frame = self.cap.read()
+            if not ret or test_frame is None:
+                error_msg = f"Camera {self.camera_index} opened but cannot read frames"
+                if not self._use_mock_frames:
+                    self.error_occurred.emit(error_msg)
+                print(f"[DEBUG_LOG] {error_msg}")
+                self.cap.release()
+                self.cap = None
+                self._camera_available = False
+                return self._use_mock_frames
+                
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.recording_resolution[0])
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.recording_resolution[1])
             self.cap.set(cv2.CAP_PROP_FPS, self.recording_fps)
@@ -49,6 +71,7 @@ class WebcamCapture(QThread):
             actual_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
             actual_fps = self.cap.get(cv2.CAP_PROP_FPS)
             self.recording_resolution = actual_width, actual_height
+            self._camera_available = True
             self.status_changed.emit(
                 f"Camera initialized: {actual_width}x{actual_height} @ {actual_fps:.1f} FPS"
             )
@@ -58,9 +81,14 @@ class WebcamCapture(QThread):
             return True
         except Exception as e:
             error_msg = f"Error initializing camera: {str(e)}"
-            self.error_occurred.emit(error_msg)
+            if not self._use_mock_frames:
+                self.error_occurred.emit(error_msg)
             print(f"[DEBUG_LOG] {error_msg}")
-            return False
+            self._camera_available = False
+            if self.cap:
+                self.cap.release()
+                self.cap = None
+            return self._use_mock_frames
     def start_preview(self):
         if not self.cap or not self.cap.isOpened():
             if not self.initialize_camera():
@@ -146,14 +174,28 @@ class WebcamCapture(QThread):
         while self.running:
             try:
                 current_time = time.time()
-                ret, frame = self.cap.read()
-                if not ret:
-                    self.error_occurred.emit("Failed to capture frame from webcam")
+                
+                # Get frame from camera or generate mock frame
+                if self._camera_available and self.cap and self.cap.isOpened():
+                    ret, frame = self.cap.read()
+                    if not ret:
+                        if self._use_mock_frames:
+                            frame = self._generate_mock_frame()
+                        else:
+                            self.error_occurred.emit("Failed to capture frame from webcam")
+                            break
+                elif self._use_mock_frames:
+                    frame = self._generate_mock_frame()
+                else:
+                    self.error_occurred.emit("No camera available and mock frames disabled")
                     break
+                    
                 with self.frame_lock:
                     self.last_frame = frame.copy()
+                    
                 if self.is_recording and self.video_writer:
                     self.video_writer.write(frame)
+                    
                 if (
                     self.is_previewing
                     and current_time - last_frame_time >= self.frame_interval
@@ -162,6 +204,7 @@ class WebcamCapture(QThread):
                     if preview_pixmap:
                         self.frame_ready.emit(preview_pixmap)
                     last_frame_time = current_time
+                    
                 time.sleep(0.01)
             except Exception as e:
                 error_msg = f"Error in webcam capture loop: {str(e)}"
@@ -169,6 +212,39 @@ class WebcamCapture(QThread):
                 print(f"[DEBUG_LOG] {error_msg}")
                 break
         print("[DEBUG_LOG] Webcam capture thread ended")
+        
+    def _generate_mock_frame(self) -> np.ndarray:
+        """Generate a mock camera frame for testing when no camera is available"""
+        height, width = self.recording_resolution[1], self.recording_resolution[0]
+        
+        # Create gradient background
+        frame = np.zeros((height, width, 3), dtype=np.uint8)
+        for y in range(height):
+            intensity = int((y / height) * 255)
+            frame[y, :, 0] = intensity * 0.3  # Blue
+            frame[y, :, 1] = intensity * 0.6  # Green  
+            frame[y, :, 2] = intensity * 0.9  # Red
+            
+        # Add some dynamic elements
+        import time
+        t = time.time()
+        center_x, center_y = width // 2, height // 2
+        radius = int(50 + 30 * np.sin(t * 2))
+        
+        # Draw moving circle
+        cv2.circle(frame, (center_x, center_y), radius, (255, 255, 255), 2)
+        
+        # Add text overlay
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        text = f"Mock Camera {self.camera_index}"
+        text_size = cv2.getTextSize(text, font, 1, 2)[0]
+        text_x = (width - text_size[0]) // 2
+        text_y = 50
+        
+        cv2.putText(frame, text, (text_x, text_y), font, 1, (255, 255, 255), 2)
+        cv2.putText(frame, f"Time: {t:.1f}", (20, height - 20), font, 0.7, (255, 255, 255), 2)
+        
+        return frame
     def frame_to_pixmap(
         self, frame: np.ndarray, max_width: int = 640, max_height: int = 480
     ) -> Optional[QPixmap]:

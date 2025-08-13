@@ -78,6 +78,13 @@ class WebController:
         self._current_session_id = None
         self._monitoring_thread = None
         self._running = False
+        
+        # Add monitoring control variables
+        self._device_check_failures = 0
+        self._max_device_failures = 5
+        self._device_check_interval = 5  # Start with 5 seconds instead of 2
+        self._last_device_check = 0
+        
         logger.info("WebController initialized")
     def inject_dependencies(
         self,
@@ -244,10 +251,17 @@ class WebController:
     def _monitoring_loop(self):
         while self._running:
             try:
+                current_time = time.time()
+                
                 self._check_session_status()
-                self._check_device_status()
+                
+                # Only check device status periodically and with backoff on failures
+                if current_time - self._last_device_check >= self._device_check_interval:
+                    self._check_device_status()
+                    self._last_device_check = current_time
+                    
                 self._check_sensor_data()
-                time.sleep(2)
+                time.sleep(1)  # Shorter sleep for responsiveness
             except Exception as e:
                 logger.error(f"Error in monitoring loop: {e}")
                 time.sleep(5)
@@ -276,7 +290,9 @@ class WebController:
             logger.error(f"Error checking session status: {e}")
     def _check_device_status(self):
         try:
-            import random
+            device_found = False
+            
+            # Check Shimmer devices
             real_shimmer_devices = {}
             if self.shimmer_manager and hasattr(
                 self.shimmer_manager, "get_all_device_status"
@@ -286,9 +302,10 @@ class WebController:
                         self.shimmer_manager.get_all_device_status() or {}
                     )
                 except Exception as e:
-                    logging.debug(f"Error getting shimmer device status: {e}")
-                    pass
+                    logger.debug(f"Error getting shimmer device status: {e}")
+                    
             if real_shimmer_devices:
+                device_found = True
                 for device_id, status in real_shimmer_devices.items():
                     self.device_status_received.emit(
                         device_id,
@@ -306,6 +323,8 @@ class WebController:
                             "mac_address": status.get("mac_address", "Unknown"),
                         },
                     )
+                    
+            # Check Android devices
             real_android_devices = {}
             if self.android_device_manager and hasattr(
                 self.android_device_manager, "get_connected_devices"
@@ -315,9 +334,10 @@ class WebController:
                         self.android_device_manager.get_connected_devices() or {}
                     )
                 except Exception as e:
-                    logging.debug(f"Error getting android device status: {e}")
-                    pass
+                    logger.debug(f"Error getting android device status: {e}")
+                    
             if real_android_devices:
+                device_found = True
                 for device_id, device_info in real_android_devices.items():
                     self.device_status_received.emit(
                         device_id,
@@ -335,35 +355,49 @@ class WebController:
                             "last_heartbeat": device_info.get("last_heartbeat", 0),
                         },
                     )
+                    
+            # Check webcams (with improved error handling)
             real_webcams = []
             try:
                 from ..utils.system_monitor import get_system_monitor
                 system_monitor = get_system_monitor()
                 real_webcams = system_monitor.detect_webcams()
-            except:
-                if self.webcam_capture and hasattr(
-                    self.webcam_capture, "get_available_cameras"
-                ):
-                    try:
-                        real_webcams = self.webcam_capture.get_available_cameras() or []
-                    except:
-                        pass
+            except Exception as e:
+                logger.debug(f"Error detecting webcams via system monitor: {e}")
+                
             if real_webcams:
+                device_found = True
                 for camera_info in real_webcams:
                     camera_id = f"webcam_{camera_info.get('index', 0)}"
                     self.device_status_received.emit(
                         camera_id,
                         {
                             "type": "webcam",
-                            "status": camera_info.get("status", "active"),
+                            "status": camera_info.get("status", "available"),
                             "name": camera_info.get(
                                 "name", f"Camera {camera_info.get('index', 0)}"
                             ),
                             "resolution": camera_info.get("resolution", "Unknown"),
                             "fps": camera_info.get("fps", 30),
                             "recording": False,
+                            "mock": camera_info.get("mock", False),
                         },
                     )
+            
+            # Adaptive polling based on device detection success
+            if device_found:
+                self._device_check_failures = 0
+                self._device_check_interval = 5  # Normal interval
+            else:
+                self._device_check_failures += 1
+                # Exponential backoff: 5, 10, 20, 30 seconds max
+                self._device_check_interval = min(30, 5 * (2 ** min(self._device_check_failures, 3)))
+                logger.debug(f"No devices detected, increasing check interval to {self._device_check_interval}s")
+                
+        except Exception as e:
+            self._device_check_failures += 1
+            self._device_check_interval = min(30, 5 * (2 ** min(self._device_check_failures, 3)))
+            logger.error(f"Error checking device status (interval now {self._device_check_interval}s): {e}")
         except Exception as e:
             logger.error(f"Error checking device status: {e}")
     def _check_sensor_data(self):
