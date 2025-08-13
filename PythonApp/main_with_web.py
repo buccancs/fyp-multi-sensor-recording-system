@@ -14,10 +14,10 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 try:
-    from PythonApp.gui.enhanced_ui_main_window import EnhancedMainWindow
+    from PythonApp.gui.main_window import MainWindow
 except ImportError:
-    logger.error("Enhanced UI main window not available")
-    EnhancedMainWindow = None
+    logger.error("Main window not available")
+    MainWindow = None
 try:
     from PythonApp.gui.main_controller import MainController
     MAIN_CONTROLLER_AVAILABLE = True
@@ -147,13 +147,13 @@ class EnhancedApplicationWithWebUI:
             logger.error(f"Failed to setup backend services: {e}")
             return False
     def setup_desktop_ui(self):
-        if EnhancedMainWindow is None:
+        if MainWindow is None:
             logger.error("No desktop UI components available")
             return False
         try:
-            self.main_window = EnhancedMainWindow()
+            self.main_window = MainWindow()
             self.main_window.setWindowTitle(
-                "Multi-Sensor Recording System - Enhanced UI + Web Dashboard"
+                "Multi-Sensor Recording System - UI + Web Dashboard"
             )
             if WEB_UI_AVAILABLE:
                 self._add_web_dashboard_integration()

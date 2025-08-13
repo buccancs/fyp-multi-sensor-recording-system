@@ -19,9 +19,9 @@ pytestmark = pytest.mark.xvfb
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'PythonApp'))
 
 try:
-    from PythonApp.gui.enhanced_ui_main_window import EnhancedMainWindow
+    from PythonApp.gui.main_window import MainWindow
 except ImportError:
-    EnhancedMainWindow = None
+    MainWindow = None
 
 
 @pytest.fixture(scope="session")
@@ -42,10 +42,10 @@ def qapp():
 @pytest.fixture
 def main_window(qapp, qtbot):
     """Create main window for testing."""
-    if EnhancedMainWindow is None:
-        pytest.skip("EnhancedMainWindow not available")
+    if MainWindow is None:
+        pytest.skip("MainWindow not available")
     
-    window = EnhancedMainWindow()
+    window = MainWindow()
     qtbot.addWidget(window)
     return window
 
