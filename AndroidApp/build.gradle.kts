@@ -10,6 +10,9 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
     id("jacoco")
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+    // Firebase plugins
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -168,6 +171,14 @@ android {
 }
 
 dependencies {
+
+    // Firebase BOM - manages all Firebase library versions
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     // Compose BOM
     implementation(platform(libs.androidx.compose.bom))

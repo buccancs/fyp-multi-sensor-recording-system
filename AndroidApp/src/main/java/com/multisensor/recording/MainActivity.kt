@@ -22,7 +22,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.multisensor.recording.databinding.ActivityMainFragmentsBinding
+import com.multisensor.recording.firebase.FirebaseAnalyticsService
 import com.multisensor.recording.ui.MainUiState
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.OnboardingActivity
@@ -43,11 +45,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var sharedPreferences: SharedPreferences
+    
     @Inject
     lateinit var logger: Logger
+    
+    @Inject
+    lateinit var firebaseAnalyticsService: FirebaseAnalyticsService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+
+        // Initialize Firebase Analytics for app launch
+        firebaseAnalyticsService.setUserProperty("user_type", "researcher")
 
         if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
@@ -75,12 +84,15 @@ class MainActivity : AppCompatActivity() {
             logger.info("MainActivity initialized with Compose UI")
         } catch (e: SecurityException) {
             logger.error("Permission error during MainActivity Compose initialization: ${e.message}", e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             showErrorDialog("Permission Error", "Application requires additional permissions: ${e.message}")
         } catch (e: IllegalStateException) {
             logger.error("Invalid state during MainActivity Compose initialization: ${e.message}", e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             showErrorDialog("State Error", "Failed to initialize application state: ${e.message}")
         } catch (e: RuntimeException) {
             logger.error("Runtime error during MainActivity Compose initialization: ${e.message}", e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             showErrorDialog("Initialization Error", "Failed to initialize the application: ${e.message}")
         }
     }
