@@ -33,6 +33,11 @@ class UsbController @Inject constructor(
         private const val PREF_DEVICE_FILTERS = "device_filters"
         private const val PREF_CALIBRATION_STATES = "calibration_states"
         private const val PREF_PRIORITY_CONFIG = "priority_config"
+        
+        // Adaptive scanning constants
+        private const val MAX_SCANNING_FAILURES = 3
+        private const val MAX_SCANNING_INTERVAL_MS = 30000L
+        private const val SCANNING_BACKOFF_MULTIPLIER = 2
     }
 
     data class DeviceProfile(
@@ -88,6 +93,11 @@ class UsbController @Inject constructor(
     private var isScanning = false
     private var lastKnownDevices = mutableSetOf<String>()
     private val scanningHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    
+    // Adaptive scanning failure tracking
+    private var scanningFailureCount = 0
+    private var currentScanningInterval = SCANNING_INTERVAL_MS
+    private var lastScanFailureTime = 0L
 
     fun setCallback(callback: UsbCallback) {
         this.callback = callback
@@ -303,19 +313,19 @@ class UsbController @Inject constructor(
         isScanning = true
         android.util.Log.d(
             "UsbController",
-            "[DEBUG_LOG] Starting periodic USB device scanning (${SCANNING_INTERVAL_MS}ms interval)"
+            "[DEBUG_LOG] Starting periodic USB device scanning (${currentScanningInterval}ms interval, failures: $scanningFailureCount)"
         )
 
         val scanningRunnable = object : Runnable {
             override fun run() {
                 if (isScanning) {
                     scanForDevices(context)
-                    scanningHandler.postDelayed(this, SCANNING_INTERVAL_MS)
+                    scanningHandler.postDelayed(this, currentScanningInterval)
                 }
             }
         }
 
-        scanningHandler.postDelayed(scanningRunnable, SCANNING_INTERVAL_MS)
+        scanningHandler.postDelayed(scanningRunnable, currentScanningInterval)
     }
 
     fun stopPeriodicScanning() {
@@ -362,10 +372,57 @@ class UsbController @Inject constructor(
             }
 
             lastKnownDevices = currentDeviceNames.toMutableSet()
+            
+            // Reset failure count and interval on successful scan
+            if (scanningFailureCount > 0) {
+                android.util.Log.d("UsbController", "[DEBUG_LOG] USB scanning recovered, resetting failure count")
+                scanningFailureCount = 0
+                currentScanningInterval = SCANNING_INTERVAL_MS
+            }
 
+        } catch (e: SecurityException) {
+            handleScanFailure("Security exception during USB scanning: ${e.message}")
         } catch (e: Exception) {
-            android.util.Log.e("UsbController", "[DEBUG_LOG] Error during USB device scanning: ${e.message}")
+            handleScanFailure("Error during USB device scanning: ${e.message}")
         }
+    }
+    
+    private fun handleScanFailure(reason: String) {
+        scanningFailureCount++
+        lastScanFailureTime = System.currentTimeMillis()
+        
+        // Apply adaptive interval based on failure count
+        currentScanningInterval = when (scanningFailureCount) {
+            1 -> SCANNING_INTERVAL_MS * 2          // 10s
+            2 -> SCANNING_INTERVAL_MS * 4          // 20s  
+            else -> MAX_SCANNING_INTERVAL_MS       // 30s
+        }
+        
+        // Reduce logging noise after multiple failures
+        if (scanningFailureCount <= MAX_SCANNING_FAILURES) {
+            android.util.Log.w("UsbController", "[DEBUG_LOG] USB scanning failed (count: $scanningFailureCount, next interval: ${currentScanningInterval}ms): $reason")
+        } else if (scanningFailureCount % 5 == 0) {
+            // Only log every 5th failure after threshold to reduce noise
+            android.util.Log.d("UsbController", "[DEBUG_LOG] USB scanning still failing after $scanningFailureCount attempts")
+        }
+    }
+    
+    /**
+     * Get USB scanning status information for monitoring
+     */
+    fun getUsbScanningStatus(): Map<String, Any> {
+        return mapOf(
+            "isScanning" to isScanning,
+            "currentInterval" to currentScanningInterval,
+            "defaultInterval" to SCANNING_INTERVAL_MS,
+            "maxInterval" to MAX_SCANNING_INTERVAL_MS,
+            "failureCount" to scanningFailureCount,
+            "maxFailures" to MAX_SCANNING_FAILURES,
+            "lastFailureTime" to lastScanFailureTime,
+            "connectedDeviceCount" to connectedSupportedDevices.size,
+            "adaptiveScaling" to (scanningFailureCount > 0),
+            "nextScanInterval" to if (isScanning) currentScanningInterval else 0L
+        )
     }
 
     fun getUsbStatusSummary(context: Context): String {
