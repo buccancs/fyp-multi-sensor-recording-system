@@ -27,23 +27,19 @@ import java.util.concurrent.TimeUnit
 class ConnectionManagerTest {
 
     private lateinit var context: Context
-    private lateinit var connectionManager: ConnectionManager
-    private lateinit var mockNetworkController: NetworkController
-    private lateinit var testHost: String
-    private lateinit var testPort: Int
+    private lateinit var connectionManager: ConnectionManager  
+    private lateinit var mockLogger: Logger
+    private var testHost: String = "192.168.1.100"
+    private var testPort: Int = 8080
 
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
-        mockNetworkController = mockk()
+        mockLogger = mockk(relaxed = true)
         testHost = "192.168.1.100"
         testPort = 8080
         
-        // Mock network controller behavior
-        every { mockNetworkController.isNetworkAvailable() } returns true
-        every { mockNetworkController.getLocalIpAddress() } returns "192.168.1.101"
-        
-        connectionManager = ConnectionManager(context, mockNetworkController)
+        connectionManager = ConnectionManager(mockLogger)
     }
 
     @After

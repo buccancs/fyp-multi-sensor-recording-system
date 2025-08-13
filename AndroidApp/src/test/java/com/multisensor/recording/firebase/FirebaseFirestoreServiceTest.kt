@@ -25,6 +25,7 @@ import java.util.Date
 class FirebaseFirestoreServiceTest {
 
     private lateinit var mockFirestore: FirebaseFirestore
+    private lateinit var mockAuthService: FirebaseAuthService
     private lateinit var mockCollection: CollectionReference
     private lateinit var mockDocument: DocumentReference
     private lateinit var mockDocumentSnapshot: DocumentSnapshot
@@ -35,12 +36,13 @@ class FirebaseFirestoreServiceTest {
     @BeforeEach
     fun setup() {
         mockFirestore = mockk(relaxed = true)
+        mockAuthService = mockk(relaxed = true)
         mockCollection = mockk(relaxed = true)
         mockDocument = mockk(relaxed = true)
         mockDocumentSnapshot = mockk(relaxed = true)
         mockQuery = mockk(relaxed = true)
         mockQuerySnapshot = mockk(relaxed = true)
-        firebaseFirestoreService = FirebaseFirestoreService(mockFirestore)
+        firebaseFirestoreService = FirebaseFirestoreService(mockFirestore, mockAuthService)
 
         every { mockFirestore.collection(any()) } returns mockCollection
         every { mockCollection.document(any()) } returns mockDocument

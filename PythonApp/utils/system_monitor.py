@@ -98,7 +98,7 @@ def get_simple_monitor():
     if _global_simple_monitor is None:
         _global_simple_monitor = SystemMonitor()
     return _global_simple_monitor
-            return {}
+
     def get_cpu_usage(self) -> Dict[str, Any]:
         try:
             cpu_percent = psutil.cpu_percent(interval=0.1)
