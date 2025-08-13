@@ -88,6 +88,14 @@ class EnhancedMainWindow(QMainWindow):
         self.connect_enhanced_stimulus_signals()
         self.init_placeholder_data()
         self.show_vlc_status()
+        self.setup_demo_preview_simulation()
+    
+    def setup_demo_preview_simulation(self):
+        """Set up demo simulation for preview functionality."""
+        # Timer for simulating live feed updates
+        self.preview_timer = QTimer()
+        self.preview_timer.timeout.connect(self.update_demo_previews)
+        self.preview_timer.start(2000)  # Update every 2 seconds
     
     def init_placeholder_data(self):
         """Initialize placeholder data for testing."""
@@ -154,6 +162,8 @@ class EnhancedMainWindow(QMainWindow):
     def create_enhanced_toolbar(self):
         toolbar = self.addToolBar("EnhancedControls")
         toolbar.setMovable(False)
+        
+        # Connection controls
         connect_action = QAction("Connect", self)
         connect_action.triggered.connect(self.handle_connect)
         toolbar.addAction(connect_action)
@@ -161,6 +171,8 @@ class EnhancedMainWindow(QMainWindow):
         disconnect_action.triggered.connect(self.handle_disconnect)
         toolbar.addAction(disconnect_action)
         toolbar.addSeparator()
+        
+        # Session management with visual indicators
         start_action = QAction("Start Session", self)
         start_action.triggered.connect(self.handle_start)
         toolbar.addAction(start_action)
@@ -168,14 +180,31 @@ class EnhancedMainWindow(QMainWindow):
         stop_action.triggered.connect(self.handle_stop)
         toolbar.addAction(stop_action)
         toolbar.addSeparator()
+        
+        # Session status indicator
+        session_label = QLabel("Session:")
+        toolbar.addWidget(session_label)
+        self.session_status_indicator = QLabel("●")
+        self.session_status_indicator.setStyleSheet("color: red; font-size: 14px;")
+        self.session_status_indicator.setToolTip("Session Status: Inactive")
+        toolbar.addWidget(self.session_status_indicator)
+        
+        self.session_status_label = QLabel("Inactive")
+        self.session_status_label.setStyleSheet("color: red; font-weight: bold;")
+        toolbar.addWidget(self.session_status_label)
+        toolbar.addSeparator()
+        
+        # Backend status
         backend_label = QLabel("Backend:")
         toolbar.addWidget(backend_label)
         self.backend_status_label = QLabel("Qt")
         self.backend_status_label.setStyleSheet(
-            "QLabel { colour: #0066cc; font-weight: bold; }"
+            "QLabel { color: #0066cc; font-weight: bold; }"
         )
         toolbar.addWidget(self.backend_status_label)
         toolbar.addSeparator()
+        
+        # Performance indicator
         perf_label = QLabel("Performance:")
         toolbar.addWidget(perf_label)
         self.performance_indicator = QProgressBar()
@@ -184,6 +213,15 @@ class EnhancedMainWindow(QMainWindow):
         self.performance_indicator.setMaximumWidth(100)
         self.performance_indicator.setFormat("%p%")
         toolbar.addWidget(self.performance_indicator)
+        toolbar.addSeparator()
+        
+        # Device count indicator
+        devices_label = QLabel("Devices:")
+        toolbar.addWidget(devices_label)
+        self.connected_devices_label = QLabel("0/4")
+        self.connected_devices_label.setStyleSheet("font-weight: bold; color: #666;")
+        self.connected_devices_label.setToolTip("Connected devices / Total devices")
+        toolbar.addWidget(self.connected_devices_label)
     def create_enhanced_central_widget(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -885,14 +923,84 @@ Troubleshooting:
         self.log_message(f"Webcam error: {error}", "Errors")
     def on_webcam_status_changed(self, status):
         self.log_message(f"Webcam status: {status}", "Recording")
-    def handle_connect(self):
-        self.log_message("Connect action triggered", "Network")
-    def handle_disconnect(self):
-        self.log_message("Disconnect action triggered", "Network")
     def handle_start(self):
+        """Handle start session with visual indicators."""
         self.log_message("Start session action triggered", "Session")
+        
+        # Update session status indicators
+        self.session_status_indicator.setStyleSheet("color: green; font-size: 14px;")
+        self.session_status_indicator.setToolTip("Session Status: Active")
+        self.session_status_label.setText("Recording")
+        self.session_status_label.setStyleSheet("color: green; font-weight: bold;")
+        
+        # Update status bar
+        self.status_message.setText("Recording session active")
+        
+        # Start performance monitoring
+        self.performance_timer.start()
+        
+        self.log_message("Recording session started with visual indicators", "Session")
+    
     def handle_stop(self):
+        """Handle stop session with visual indicators."""
         self.log_message("Stop action triggered", "Session")
+        
+        # Update session status indicators
+        self.session_status_indicator.setStyleSheet("color: red; font-size: 14px;")
+        self.session_status_indicator.setToolTip("Session Status: Inactive")
+        self.session_status_label.setText("Inactive")
+        self.session_status_label.setStyleSheet("color: red; font-weight: bold;")
+        
+        # Update status bar
+        self.status_message.setText("Session stopped")
+        
+        # Stop performance monitoring
+        self.performance_timer.stop()
+        
+        self.log_message("Recording session stopped", "Session")
+    
+    def handle_connect(self):
+        """Handle device connection with visual indicators."""
+        self.log_message("Connect action triggered", "Network")
+        
+        # Simulate connecting devices
+        connected_count = 0
+        for device_type, feed_info in self.device_feed_grid.items():
+            if feed_info['status_indicator'].styleSheet().find('red') != -1:
+                # "Connect" this device
+                feed_info['status_indicator'].setStyleSheet("color: green; font-size: 16px;")
+                feed_info['connect_btn'].setText("Disconnect")
+                feed_info['record_btn'].setEnabled(True)
+                connected_count += 1
+                break  # Connect one device at a time for demo
+        
+        # Update device count indicator
+        total_devices = len(self.device_feed_grid)
+        current_connected = sum(1 for feed_info in self.device_feed_grid.values() 
+                               if feed_info['status_indicator'].styleSheet().find('green') != -1)
+        
+        self.connected_devices_label.setText(f"{current_connected}/{total_devices}")
+        
+        if current_connected > 0:
+            self.connected_devices_label.setStyleSheet("font-weight: bold; color: green;")
+        
+        self.log_message(f"Device connected. Total connected: {current_connected}/{total_devices}", "Network")
+    
+    def handle_disconnect(self):
+        """Handle device disconnection with visual indicators."""
+        self.log_message("Disconnect action triggered", "Network")
+        
+        # Disconnect all devices
+        for device_type, feed_info in self.device_feed_grid.items():
+            feed_info['status_indicator'].setStyleSheet("color: red; font-size: 16px;")
+            feed_info['connect_btn'].setText("Connect")
+            feed_info['record_btn'].setEnabled(False)
+        
+        # Update device count indicator
+        self.connected_devices_label.setText("0/4")
+        self.connected_devices_label.setStyleSheet("font-weight: bold; color: red;")
+        
+        self.log_message("All devices disconnected", "Network")
     def show_settings_dialog(self):
         self.log_message("Settings dialog requested", "System")
     def toggle_log_dock(self, visible):
@@ -1146,5 +1254,37 @@ Benefits:
     def update_timing_precision_display(self):
         """Update timing precision display."""
         self.timing_precision_label.setText("Timing: ±0.5ms")
+    
+    def update_demo_previews(self):
+        """Update demo preview displays to simulate live feeds."""
+        import random
+        
+        for device_type, feed_info in self.device_feed_grid.items():
+            # Only update if device is "connected" (green status)
+            if feed_info['status_indicator'].styleSheet().find('green') != -1:
+                # Simulate different types of feed data
+                if device_type == "Android RGB":
+                    feed_info['feed_display'].setText(f"RGB Feed\n{random.randint(1920, 1920)}x{random.randint(1080, 1080)}\n{random.randint(28, 32)} fps")
+                elif device_type == "Thermal Camera":
+                    temp = random.randint(20, 35)
+                    feed_info['feed_display'].setText(f"Thermal Feed\n256x192\nTemp: {temp}°C")
+                elif device_type == "Shimmer GSR":
+                    gsr_value = random.randint(5, 25)
+                    feed_info['feed_display'].setText(f"GSR Data\n{gsr_value}.{random.randint(10, 99)} μS\n128 Hz")
+                elif device_type == "PC Webcam":
+                    feed_info['feed_display'].setText(f"PC Webcam\n1280x720\n{random.randint(25, 30)} fps")
+                
+                # Update background color to indicate active feed
+                feed_info['feed_display'].setStyleSheet(
+                    "border: 1px solid green; background-color: #1a2a1a; "
+                    "color: lightgreen; text-align: center; font-size: 10px;"
+                )
+            else:
+                # Reset to default for disconnected devices
+                feed_info['feed_display'].setText("No Feed")
+                feed_info['feed_display'].setStyleSheet(
+                    "border: 1px solid gray; background-color: #2a2a2a; "
+                    "color: white; text-align: center;"
+                )
 
 import time
