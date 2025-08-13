@@ -46,7 +46,7 @@ constructor(
 
     fun initialize(previewSurface: SurfaceView? = null): Boolean {
         return try {
-            logger.info("Initializing thermal camera...")
+            logger.info("Initializing ThermalRecorder")
 
             this.previewSurface = previewSurface
             usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
@@ -55,7 +55,7 @@ constructor(
             checkForConnectedDevices()
 
             isInitialized.set(true)
-            logger.info("Thermal camera initialized")
+            logger.info("ThermalRecorder initialized successfully")
             true
         } catch (e: Exception) {
             logger.error("Thermal camera initialization failed", e)
@@ -177,7 +177,7 @@ constructor(
     fun startRecording(sessionId: String): Boolean {
         return try {
             if (!isInitialized.get()) {
-                logger.error("Thermal camera not initialized")
+                logger.error("ThermalRecorder not initialized")
                 return false
             }
 
@@ -186,7 +186,7 @@ constructor(
                 startPreview()
             }
 
-            logger.info("Thermal recording started for session: $sessionId")
+            logger.info("Starting thermal recording for session: $sessionId")
             true
         } catch (e: Exception) {
             logger.error("Failed to start thermal recording", e)
