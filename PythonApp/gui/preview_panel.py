@@ -132,24 +132,145 @@ class PreviewPanel(QTabWidget):
             pixmap = self.generate_thermal_preview()
             if pixmap:
                 self.ir_camera_label.setPixmap(pixmap)
-                self.ir_status_label.setText("IR Camera: Active (Simulated)")
+                
+                # Check if we're getting real thermal data
+                real_data_available = self._get_real_thermal_frame() is not None
+                if real_data_available:
+                    self.ir_status_label.setText("IR Camera: Active (Real Data)")
+                    self.ir_status_label.setStyleSheet("color: #00aa00; padding: 5px;")  # Green for real data
+                else:
+                    self.ir_status_label.setText("IR Camera: Active (Simulated - Waiting for Android Device)")
+                    self.ir_status_label.setStyleSheet("color: #aa6600; padding: 5px;")  # Orange for simulated
         except Exception as e:
             logger.error(f"Error updating IR preview: {e}")
             self.ir_status_label.setText(f"IR Camera: Error - {str(e)}")
+            self.ir_status_label.setStyleSheet("color: #aa0000; padding: 5px;")  # Red for error
     def generate_thermal_preview(self):
+        """Generate thermal camera preview from real Android device data or fallback to simulation."""
+        try:
+            # Try to get real thermal data from connected Android devices first
+            real_frame = self._get_real_thermal_frame()
+            if real_frame is not None:
+                return real_frame
+            
+            # Fallback to simulation if no real data available
+            return self._generate_simulated_thermal_frame()
+            
+        except Exception as e:
+            logger.error(f"Error generating thermal preview: {e}")
+            return None
+    
+    def _get_real_thermal_frame(self):
+        """Attempt to get real thermal camera frame from connected Android devices."""
+        try:
+            # Check if we have access to the main controller with Android device manager
+            if hasattr(self.parent(), 'android_device_manager') and self.parent().android_device_manager:
+                device_manager = self.parent().android_device_manager
+                connected_devices = device_manager.get_connected_devices()
+                
+                for device_id, device_info in connected_devices.items():
+                    if 'thermal' in device_info.get('capabilities', []):
+                        # Try to get latest thermal frame from this device
+                        thermal_frame = device_manager.get_latest_thermal_frame(device_id)
+                        if thermal_frame is not None:
+                            return self._convert_thermal_data_to_pixmap(thermal_frame)
+            
+            # Alternative: Check if there's a PC server with thermal data
+            if hasattr(self.parent(), 'pc_server') and self.parent().pc_server:
+                pc_server = self.parent().pc_server
+                devices = pc_server.get_connected_devices()
+                
+                for device_id, device in devices.items():
+                    if 'thermal' in device.capabilities:
+                        # This would need to be implemented in the PC server
+                        # thermal_data = pc_server.get_latest_thermal_data(device_id)
+                        # if thermal_data:
+                        #     return self._convert_thermal_data_to_pixmap(thermal_data)
+                        pass
+            
+            return None
+            
+        except Exception as e:
+            logger.debug(f"Could not get real thermal frame: {e}")
+            return None
+    
+    def _convert_thermal_data_to_pixmap(self, thermal_data):
+        """Convert thermal data array to QPixmap for display."""
+        try:
+            import numpy as np
+            from PyQt5.QtGui import QImage
+            
+            if isinstance(thermal_data, np.ndarray):
+                # Normalize thermal data to 0-255 range
+                if thermal_data.dtype != np.uint8:
+                    thermal_normalized = ((thermal_data - thermal_data.min()) / 
+                                        (thermal_data.max() - thermal_data.min()) * 255).astype(np.uint8)
+                else:
+                    thermal_normalized = thermal_data
+                
+                # Apply thermal colormap (heat map)
+                colored_frame = self._apply_thermal_colormap(thermal_normalized)
+                
+                h, w, ch = colored_frame.shape
+                bytes_per_line = ch * w
+                q_image = QImage(colored_frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
+                pixmap = QPixmap.fromImage(q_image)
+                return pixmap.scaled(400, 300, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error converting thermal data to pixmap: {e}")
+            return None
+    
+    def _apply_thermal_colormap(self, thermal_array):
+        """Apply thermal colormap to grayscale thermal data."""
+        import numpy as np
+        
+        # Create RGB frame
+        height, width = thermal_array.shape
+        colored_frame = np.zeros((height, width, 3), dtype=np.uint8)
+        
+        # Apply heat map coloring: blue -> purple -> red -> yellow -> white
+        for y in range(height):
+            for x in range(width):
+                intensity = thermal_array[y, x]
+                
+                if intensity < 51:  # Blue to purple (cold)
+                    colored_frame[y, x] = [intensity * 5, 0, 255]
+                elif intensity < 102:  # Purple to red
+                    factor = intensity - 51
+                    colored_frame[y, x] = [255, 0, 255 - factor * 5]
+                elif intensity < 153:  # Red to orange
+                    factor = intensity - 102
+                    colored_frame[y, x] = [255, factor * 5, 0]
+                elif intensity < 204:  # Orange to yellow
+                    factor = intensity - 153
+                    colored_frame[y, x] = [255, 255, factor * 5]
+                else:  # Yellow to white (hot)
+                    factor = intensity - 204
+                    colored_frame[y, x] = [255, 255, 255]
+        
+        return colored_frame
+    
+    def _generate_simulated_thermal_frame(self):
+        """Generate simulated thermal frame when no real data is available."""
         try:
             import time
             import numpy as np
             from PyQt5.QtGui import QImage
+            
             width, height = 320, 240
             frame = np.zeros((height, width, 3), dtype=np.uint8)
             time_factor = time.time() * 2
+            
             for y in range(height):
                 for x in range(width):
                     center_x, center_y = width // 2, height // 2
                     distance = np.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
                     intensity = int(127 + 127 * np.sin(distance * 0.1 + time_factor))
                     intensity = max(0, min(255, intensity))
+                    
                     if intensity < 85:
                         frame[y, x] = [intensity * 3, 0, 255 - intensity * 2]
                     elif intensity < 170:
@@ -160,6 +281,8 @@ class PreviewPanel(QTabWidget):
                         ]
                     else:
                         frame[y, x] = [255, 255, (intensity - 170) * 3]
+            
+            # Add simulated heat spots
             import random
             for _ in range(3):
                 hot_x = random.randint(50, width - 50)
@@ -169,13 +292,15 @@ class PreviewPanel(QTabWidget):
                         if 0 <= hot_x + dx < width and 0 <= hot_y + dy < height:
                             if dx * dx + dy * dy <= 225:
                                 frame[hot_y + dy, hot_x + dx] = [255, 255, 200]
+            
             h, w, ch = frame.shape
             bytes_per_line = ch * w
             q_image = QImage(frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(q_image)
             return pixmap.scaled(400, 300, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            
         except Exception as e:
-            logger.error(f"Error generating thermal preview: {e}")
+            logger.error(f"Error generating simulated thermal frame: {e}")
             return None
     def capture_ir_frame(self):
         try:
