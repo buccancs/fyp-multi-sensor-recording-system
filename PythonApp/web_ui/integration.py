@@ -5,11 +5,11 @@ import time
 from typing import Any, Dict, Optional
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
-    from web_ui.web_dashboard import WebDashboardServer
+    from .web_dashboard import WebDashboardServer
 except ImportError:
     WebDashboardServer = None
 try:
-    from web_ui.web_controller import (
+    from .web_controller import (
         WebController,
         create_web_controller_with_real_components,
     )
@@ -19,7 +19,7 @@ except ImportError:
     create_web_controller_with_real_components = None
     WEB_CONTROLLER_AVAILABLE = False
 try:
-    from utils.logging_config import get_logger
+    from ..utils.logging_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)

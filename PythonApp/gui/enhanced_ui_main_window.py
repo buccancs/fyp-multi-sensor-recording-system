@@ -64,11 +64,48 @@ class ModernButton(QPushButton):
         self.update_style()
     def update_style(self):
         if self.primary:
-            self.setStyleSheet(
-            )
+            self.setStyleSheet("""
+                QPushButton {
+                    background-color: #0078d4;
+                    color: white;
+                    border: 1px solid #106ebe;
+                    border-radius: 4px;
+                    padding: 8px 16px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: #106ebe;
+                }
+                QPushButton:pressed {
+                    background-color: #005a9e;
+                }
+                QPushButton:disabled {
+                    background-color: #cccccc;
+                    color: #888888;
+                    border: 1px solid #aaaaaa;
+                }
+            """)
         else:
-            self.setStyleSheet(
-            )
+            self.setStyleSheet("""
+                QPushButton {
+                    background-color: #f3f2f1;
+                    color: #323130;
+                    border: 1px solid #d2d0ce;
+                    border-radius: 4px;
+                    padding: 8px 16px;
+                }
+                QPushButton:hover {
+                    background-color: #edebe9;
+                }
+                QPushButton:pressed {
+                    background-color: #e1dfdd;
+                }
+                QPushButton:disabled {
+                    background-color: #f3f2f1;
+                    color: #a19f9d;
+                    border: 1px solid #edebe9;
+                }
+            """)
 class StatusIndicator(QWidget):
     def __init__(self, status="disconnected", parent=None):
         super().__init__(parent)
@@ -94,8 +131,24 @@ class ModernGroupBox(QGroupBox):
     def __init__(self, title="", parent=None):
         super().__init__(title, parent)
         self.setFont(QFont("Segoe UI", 9, QFont.Bold))
-        self.setStyleSheet(
-        )
+        self.setStyleSheet("""
+            QGroupBox {
+                font: bold 10px 'Segoe UI';
+                border: 2px solid #d1d1d1;
+                border-radius: 8px;
+                margin-top: 12px;
+                padding: 12px;
+                background-color: #fafafa;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                subcontrol-position: top left;
+                left: 15px;
+                padding: 2px 8px 2px 8px;
+                background-color: #fafafa;
+                color: #323130;
+            }
+        """)
 class EnhancedMainWindow(QMainWindow):
     device_connected = pyqtSignal(str)
     recording_started = pyqtSignal()
@@ -112,8 +165,45 @@ class EnhancedMainWindow(QMainWindow):
         self.setup_connections()
         logger.info("Enhanced Main Window initialized")
     def setup_styling(self):
-        self.setStyleSheet(
-        )
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #f0f0f0;
+                color: #333333;
+            }
+            QGroupBox {
+                font: bold 10px;
+                border: 2px solid #cccccc;
+                border-radius: 5px;
+                margin-top: 1ex;
+                padding: 10px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px 0 5px;
+            }
+            QPushButton {
+                background-color: #e0e0e0;
+                border: 1px solid #cccccc;
+                border-radius: 4px;
+                padding: 8px 16px;
+                font: 9px;
+            }
+            QPushButton:hover {
+                background-color: #d0d0d0;
+            }
+            QPushButton:pressed {
+                background-color: #c0c0c0;
+            }
+            QLabel {
+                color: #333333;
+            }
+            QTextEdit {
+                background-color: white;
+                border: 1px solid #cccccc;
+                border-radius: 4px;
+            }
+        """)
     def setup_ui(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -193,8 +283,16 @@ class EnhancedMainWindow(QMainWindow):
         self.preview_label = QLabel("Video Preview Area")
         self.preview_label.setAlignment(Qt.AlignCenter)
         self.preview_label.setMinimumHeight(400)
-        self.preview_label.setStyleSheet(
-        )
+        self.preview_label.setStyleSheet("""
+            QLabel {
+                background-color: #2a2a2a;
+                border: 2px solid #555555;
+                border-radius: 8px;
+                color: #cccccc;
+                font: 12px 'Segoe UI';
+                padding: 20px;
+            }
+        """)
         preview_layout.addWidget(self.preview_label)
         layout.addWidget(preview_group)
         controls_group = ModernGroupBox("Stimulus Controls")

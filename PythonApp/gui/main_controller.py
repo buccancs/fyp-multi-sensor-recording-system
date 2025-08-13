@@ -4,8 +4,8 @@ from ..network.device_server import JsonSocketServer
 from ..session.session_logger import get_session_logger
 from ..session.session_manager import SessionManager
 from ..utils.logging_config import get_logger
-from .gui.stimulus_controller import StimulusController
-from .webcam.webcam_capture import WebcamCapture
+from ..gui.stimulus_controller import StimulusController
+from ..webcam.webcam_capture import WebcamCapture
 class MainController(QObject):
     server_status_changed = pyqtSignal(bool)
     webcam_status_changed = pyqtSignal(str)
@@ -213,7 +213,7 @@ class MainController(QObject):
         try:
             if not self._json_server:
                 raise RuntimeError("JSON server not injected")
-            from network.device_server import create_command_message
+            from PythonApp.network.device_server import create_command_message
             command_dict = create_command_message(command, **params or {})
             self._json_server.send_command(device_id, command_dict)
             self.logger.debug(f"Command sent to {device_id}: {command}")
@@ -226,7 +226,7 @@ class MainController(QObject):
         try:
             if not self._json_server:
                 raise RuntimeError("JSON server not injected")
-            from network.device_server import create_command_message
+            from PythonApp.network.device_server import create_command_message
             command_dict = create_command_message(command, **params or {})
             self._json_server.broadcast_command(command_dict)
             self.logger.debug(f"Command broadcast: {command}")

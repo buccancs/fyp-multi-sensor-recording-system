@@ -4,8 +4,8 @@ import sys
 import time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
-    from utils.logging_config import get_logger
-    from web_ui.integration import WebDashboardIntegration
+    from PythonApp.utils.logging_config import get_logger
+    from PythonApp.web_ui.integration import WebDashboardIntegration
     logger = get_logger(__name__)
 except ImportError as e:
     print(f"Import error: {e}")

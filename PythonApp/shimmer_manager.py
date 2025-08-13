@@ -25,7 +25,7 @@ try:
 except ImportError:
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
-    from shimmer.shimmer_imports import (
+    from PythonApp.shimmer.shimmer_imports import (
         DEFAULT_BAUDRATE,
         DataPacket,
         Serial,
