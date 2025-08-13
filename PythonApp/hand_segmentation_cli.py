@@ -41,25 +41,39 @@ Examples:
     --output-masks
 """
 
+def _add_subcommands(parser):
+    """Add subcommands to the argument parser."""
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    # List sessions command
+    subparsers.add_parser("list-sessions", help="List available sessions that contain videos")
+
+    # Process session command
+    session_parser = subparsers.add_parser("process-session", help="Process all videos in a session")
+    session_parser.add_argument("session_id", help="Session ID to process")
+    add_processing_args(session_parser)
+
+    # Process video command
+    video_parser = subparsers.add_parser("process-video", help="Process a single video file")
+    video_parser.add_argument("video_path", help="Path to video file")
+    video_parser.add_argument("--output-dir", help="Output directory (default: same directory as video)")
+    add_processing_args(video_parser)
+
+    # Status command
+    status_parser = subparsers.add_parser("status", help="Check processing status of a session")
+    status_parser.add_argument("session_id", help="Session ID to check")
+
+    # Cleanup command
+    cleanup_parser = subparsers.add_parser("cleanup", help="Clean up segmentation outputs for a session")
+    cleanup_parser.add_argument("session_id", help="Session ID to clean up")
+
 def _setup_argument_parser():
     parser = argparse.ArgumentParser(
         description="CLI for hand segmentation processing",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=_get_help_examples()
     )
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
-    subparsers.add_parser("list-sessions", help="List available sessions that contain videos")
-    session_parser = subparsers.add_parser("process-session", help="Process all videos in a session")
-    session_parser.add_argument("session_id", help="Session ID to process")
-    add_processing_args(session_parser)
-    video_parser = subparsers.add_parser("process-video", help="Process a single video file")
-    video_parser.add_argument("video_path", help="Path to video file")
-    video_parser.add_argument("--output-dir", help="Output directory (default: same directory as video)")
-    add_processing_args(video_parser)
-    status_parser = subparsers.add_parser("status", help="Check processing status of a session")
-    status_parser.add_argument("session_id", help="Session ID to check")
-    cleanup_parser = subparsers.add_parser("cleanup", help="Clean up segmentation outputs for a session")
-    cleanup_parser.add_argument("session_id", help="Session ID to clean up")
+    _add_subcommands(parser)
     return parser
 def _execute_command(processor, args):
     try:

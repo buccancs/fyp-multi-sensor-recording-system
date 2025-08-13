@@ -106,6 +106,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Enhanced UI Main Window Styling Fix (2025-08-13)**
+  - Fixed multiple incomplete setStyleSheet() calls in `PythonApp/gui/enhanced_ui_main_window.py` that were preventing application startup
+  - Fixed empty setStyleSheet() call in EnhancedMainWindow.setup_styling() method by adding comprehensive CSS styling for main window components
+  - Fixed empty setStyleSheet() call in preview_label setup by adding dark theme styling for video preview area
+  - Fixed incomplete setStyleSheet() calls in ModernButton class for both primary and non-primary button styles with hover and pressed states
+  - Fixed incomplete setStyleSheet() call in ModernGroupBox class with proper group box styling and title positioning
+  - Application now starts successfully and displays the Enhanced Main Window interface
+  - Resolved TypeError: "setStyleSheet(self, styleSheet: Optional[str]): not enough arguments" that was causing fatal startup errors
+  - All CSS styling follows modern UI design principles with proper colors, borders, and interactions
+
+- **Hand Segmentation CLI Missing Function Fix (2025-08-13)**
+  - Fixed unresolved reference '_add_subcommands' in `PythonApp/hand_segmentation_cli.py`
+  - Created missing `_add_subcommands()` function by extracting subcommand logic from `_setup_argument_parser()`
+  - Implemented proper subcommand structure with list-sessions, process-session, process-video, status, and cleanup commands
+  - Cleaned up code duplication between `_create_argument_parser()` and `_setup_argument_parser()` functions
+  - Verified CLI functionality with successful help command execution showing all available subcommands
+  - Maintains ASCII-safe characters and follows project coding conventions
+
 - **Comprehensive Python Import System Fixes (2025-08-13)**
   - Completed systematic fix of all remaining Python import issues throughout the entire PythonApp codebase
   - **Files Fixed**:
