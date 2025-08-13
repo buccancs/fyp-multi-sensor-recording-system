@@ -76,6 +76,7 @@ This research platform enables contactless GSR prediction through synchronised m
 - **🧪 Virtual Test Environment**: Complete system simulation without hardware dependencies
 - **⚡ Real-time Processing**: Live data analysis and visualisation with sub-millisecond precision
 - **🔄 Enhanced UI Architecture**: Unified components eliminating code duplication and providing consistent user experience
+- **🔥 Firebase Integration**: Cloud analytics, data storage, and monitoring for research workflows
 
 ## ✨ Key Features
 
@@ -100,6 +101,14 @@ This research platform enables contactless GSR prediction through synchronised m
 - **File Transfer**: Secure video and thermal data transmission
 - **Heartbeat Monitoring**: Connection health and automatic recovery
 - **Enhanced Device Coordination**: Improved initialization timing and error recovery
+
+### 🔥 Firebase Cloud Integration
+- **Analytics Tracking**: Research event monitoring and usage insights
+- **Cloud Storage**: Automatic backup of video and sensor data files
+- **Firestore Database**: Research session metadata and experimental data
+- **Crash Reporting**: Enhanced stability monitoring with Crashlytics
+- **Real-time Sync**: Cross-device data synchronization for research teams
+- **Research Dashboard**: Firebase status monitoring and integration testing
 
 ### 🧪 Comprehensive Testing Framework
 - **4 Test Scenarios**: Quick (1min), CI (3min), Stress (30min), Sync validation
@@ -479,9 +488,10 @@ This project is licensed under the MIT Licence - see the [LICENCE](LICENCE) file
 - **[🚀 Run Tests Now](./run_local_test.sh)** - One-click local testing
 - **[📊 GitHub Actions](https://github.com/buccancs/bucika_gsr/actions)** - Live CI/CD status
 - **[📚 Architecture Documentation](architecture.md)** - System architecture overview
+- **[🔥 Firebase Integration Guide](docs/FIREBASE_INTEGRATION.md)** - Cloud services documentation
 - **[🛠️ Troubleshooting](tests/integration/virtual_environment/TROUBLESHOOTING.md)** - Issue resolution
 - **[🧪 Test Documentation](tests/integration/virtual_environment/)** - Comprehensive test guides
 
 ---
 
-**Status**: ✅ **Production Ready** | 🧪 **Fully Tested** | 🚀 **CI/CD Integrated** | 📱 **Hardware-Free Testing**
+**Status**: ✅ **Production Ready** | 🧪 **Fully Tested** | 🚀 **CI/CD Integrated** | 📱 **Hardware-Free Testing** | 🔥 **Firebase Enabled**
