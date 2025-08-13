@@ -337,9 +337,9 @@ class WebController:
                     )
             real_webcams = []
             try:
-                from ..utils.system_monitor import get_system_monitor
-                system_monitor = get_system_monitor()
-                real_webcams = system_monitor.detect_webcams()
+                from ..utils.system_monitor import get_simple_monitor
+                system_monitor = get_simple_monitor()
+                real_webcams = system_monitor.detect_webcams() if hasattr(system_monitor, 'detect_webcams') else []
             except:
                 if self.webcam_capture and hasattr(
                     self.webcam_capture, "get_available_cameras"

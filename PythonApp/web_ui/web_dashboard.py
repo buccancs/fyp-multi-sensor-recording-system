@@ -23,12 +23,12 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 try:
-    from PythonApp.utils.system_monitor import get_system_monitor
+    from PythonApp.utils.system_monitor import get_simple_monitor
     SYSTEM_MONITOR_AVAILABLE = True
 except ImportError:
     logger.warning("System monitor not available")
     SYSTEM_MONITOR_AVAILABLE = False
-    get_system_monitor = lambda: None
+    get_simple_monitor = lambda: None
 class WebDashboardServer:
     def __init__(
         self,
@@ -265,7 +265,7 @@ class WebDashboardServer:
                     )
                 elif device_type == "webcam":
                     if SYSTEM_MONITOR_AVAILABLE:
-                        system_monitor = get_system_monitor()
+                        system_monitor = get_simple_monitor()
                         webcams = system_monitor.detect_webcams()
                         if any(cam["index"] == int(device_id) for cam in webcams):
                             return jsonify(
@@ -340,7 +340,7 @@ class WebDashboardServer:
                     test_results = self.controller.test_webcam(webcam_id)
                     return jsonify({"success": True, "test_results": test_results})
                 elif SYSTEM_MONITOR_AVAILABLE:
-                    system_monitor = get_system_monitor()
+                    system_monitor = get_simple_monitor()
                     webcams = system_monitor.detect_webcams()
                     try:
                         webcam_index = int(webcam_id) if webcam_id else 0
@@ -414,7 +414,7 @@ class WebDashboardServer:
                             500,
                         )
                 elif SYSTEM_MONITOR_AVAILABLE:
-                    system_monitor = get_system_monitor()
+                    system_monitor = get_simple_monitor()
                     webcams = system_monitor.detect_webcams()
                     try:
                         webcam_index = int(webcam_id) if webcam_id else 0
@@ -530,7 +530,7 @@ class WebDashboardServer:
         def api_system_status():
             try:
                 if SYSTEM_MONITOR_AVAILABLE:
-                    system_monitor = get_system_monitor()
+                    system_monitor = get_simple_monitor()
                     status = system_monitor.get_complete_status()
                     return jsonify({"success": True, "status": status})
                 else:

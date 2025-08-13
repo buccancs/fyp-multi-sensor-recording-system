@@ -1,53 +1,126 @@
-import gc
-import json
-import logging
-import os
-import threading
+"""
+Performance optimization interface - delegates to unified system monitoring.
+
+This module provides performance optimization functionality while using
+the unified system monitoring and optimization features.
+"""
+
 import time
-import tracemalloc
-import weakref
-from collections import defaultdict, deque
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Any, Callable, Dict, List, Optional
-import psutil
-@dataclass
-class PerformanceMetrics:
-    timestamp: float
-    cpu_percent: float
-    memory_mb: float
-    memory_percent: float
-    network_bytes_sent: int
-    network_bytes_recv: int
-    disk_io_read: int
-    disk_io_write: int
-    thread_count: int
-    process_count: int
-    gpu_usage: Optional[float] = None
-    gpu_memory_mb: Optional[float] = None
-@dataclass
-class ResourceLimits:
-    max_memory_mb: float = 2048.0
-    max_cpu_percent: float = 80.0
-    max_network_mbps: float = 100.0
-    max_threads: int = 16
-    memory_warning_threshold: float = 0.8
-    cpu_warning_threshold: float = 0.7
-    cleanup_interval_seconds: int = 300
-@dataclass
-class OptimizationConfig:
-    enable_memory_optimization: bool = True
-    enable_cpu_optimization: bool = True
-    enable_network_optimization: bool = True
-    enable_automatic_cleanup: bool = True
-    enable_adaptive_quality: bool = True
-    enable_graceful_degradation: bool = True
-    enable_hardware_acceleration: bool = True
-    enable_profiling_integration: bool = True
-    monitoring_interval_seconds: float = 1.0
-    history_retention_minutes: int = 60
-    alert_threshold_violations: int = 3
+from typing import Dict, Any, Optional
+
+from .shared_protocols.system_monitoring import (
+    get_system_monitor,
+    PerformanceMetrics,
+    ResourceLimits
+)
+
+try:
+    from .utils.logging_config import get_logger
+    logger = get_logger(__name__)
+except ImportError:
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+
+class PerformanceOptimizer:
+    """
+    Performance optimization interface that delegates to unified system monitoring.
+    
+    Provides backwards compatibility while using the consolidated monitoring system.
+    """
+    
+    def __init__(self):
+        self._monitor = get_system_monitor()
+        self.optimization_active = False
+        logger.info("Performance optimizer initialized using unified monitoring")
+    
+    def start_optimization(self):
+        """Start performance optimization."""
+        try:
+            self._monitor.optimize_for_recording()
+            self._monitor.start_monitoring()
+            self.optimization_active = True
+            logger.info("Performance optimization started")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to start performance optimization: {e}")
+            return False
+    
+    def stop_optimization(self):
+        """Stop performance optimization."""
+        try:
+            self._monitor.optimize_for_idle()
+            self.optimization_active = False
+            logger.info("Performance optimization stopped")
+        except Exception as e:
+            logger.error(f"Error stopping performance optimization: {e}")
+    
+    def get_performance_metrics(self) -> Optional[Dict[str, Any]]:
+        """Get current performance metrics."""
+        metrics = self._monitor.get_current_metrics()
+        return metrics.__dict__ if metrics else None
+    
+    def get_optimization_recommendations(self) -> Dict[str, Any]:
+        """Get optimization recommendations based on current metrics."""
+        health_report = self._monitor.get_system_health_report()
+        
+        recommendations = []
+        
+        if health_report.get("status") == "critical":
+            recommendations.append("System is under heavy load - consider reducing quality settings")
+        elif health_report.get("status") == "warning":
+            recommendations.append("System performance degraded - monitor closely")
+        
+        current = health_report.get("current", {})
+        if current.get("memory_percent", 0) > 80:
+            recommendations.append("High memory usage - consider enabling more aggressive cleanup")
+        
+        if current.get("cpu_percent", 0) > 80:
+            recommendations.append("High CPU usage - consider reducing processing load")
+        
+        return {
+            "timestamp": time.time(),
+            "status": health_report.get("status", "unknown"),
+            "recommendations": recommendations,
+            "current_metrics": current
+        }
+    
+    def perform_cleanup(self):
+        """Trigger system cleanup."""
+        self._monitor.perform_cleanup()
+    
+    def is_system_ready_for_recording(self) -> bool:
+        """Check if system is ready for recording."""
+        health_report = self._monitor.get_system_health_report()
+        return health_report.get("status") in ["good", "warning"]
+
+
+# Global instance for backwards compatibility
+_global_optimizer = None
+
+
+def get_performance_optimizer() -> PerformanceOptimizer:
+    """Get the global performance optimizer instance."""
+    global _global_optimizer
+    if _global_optimizer is None:
+        _global_optimizer = PerformanceOptimizer()
+    return _global_optimizer
+
+
+def optimize_for_recording():
+    """Optimize system for recording."""
+    return get_performance_optimizer().start_optimization()
+
+
+def optimize_for_idle():
+    """Optimize system for idle state."""
+    get_performance_optimizer().stop_optimization()
+
+
+def get_performance_status():
+    """Get current performance status."""
+    return get_performance_optimizer().get_optimization_recommendations()
     max_memory_mb: float = 2048.0
     max_cpu_percent: float = 80.0
     max_network_mbps: float = 100.0
