@@ -8,6 +8,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import com.multisensor.recording.firebase.FirebaseAuthService
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
