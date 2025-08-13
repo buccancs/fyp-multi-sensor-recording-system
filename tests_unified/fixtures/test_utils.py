@@ -275,19 +275,23 @@ def assert_timing_within_bounds(actual_time: float, min_time: float, max_time: f
     assert min_time <= actual_time <= max_time, \
         f"Expected timing between {min_time}s and {max_time}s, got {actual_time}s"
 
-def create_mock_test_data(data_type: str, length: int = 100) -> list:
-    """Create mock test data of specified type and length"""
-    import random
+def create_test_data_placeholder(data_type: str, length: int = 100) -> list:
+    """DEPRECATED: Mock test data creation is not allowed for academic evaluation.
     
-    if data_type == "gsr":
-        return [random.uniform(0.1, 1.0) for _ in range(length)]
-    elif data_type == "thermal":
-        return [[random.uniform(20.0, 40.0) for _ in range(10)] for _ in range(length)]
-    elif data_type == "timestamp":
-        base_time = 1000000
-        return [base_time + i * 10 for i in range(length)]
-    else:
-        return [random.random() for _ in range(length)]
+    This function is preserved only for unit testing of data structure validation.
+    It must NOT be used for generating measurement artifacts or evaluation results.
+    
+    For Samsung S22 Android 15 academic evaluation, use only REAL data sources:
+    - Actual Samsung S22 device measurements
+    - Real sensor data from Shimmer3 GSR+ hardware
+    - Authentic network timing measurements
+    - Real camera calibration results
+    """
+    raise RuntimeError(
+        "ACADEMIC INTEGRITY VIOLATION: create_mock_test_data() is not allowed for Samsung S22 Android 15 evaluation. "
+        "Academic evaluation requires REAL data from actual hardware, not mock/fake/simulated data. "
+        "Use actual Samsung S22 Android 15 device measurements only."
+    )
 
 # Test data validation utilities
 def validate_test_data_structure(data: Dict[str, Any], expected_keys: list) -> bool:
@@ -313,7 +317,7 @@ __all__ = [
     "hardware_test",
     "assert_within_tolerance",
     "assert_timing_within_bounds",
-    "create_mock_test_data",
+    "create_test_data_placeholder",  # DEPRECATED: Academic integrity warning only
     "validate_test_data_structure",
     "validate_test_results"
 ]

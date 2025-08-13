@@ -853,9 +853,9 @@ technically accurate**. Ensure the following to support this:
   appendices, list the exact components and setup configurations used.
   For instance:
 - Hardware components with model numbers (e.g., *Topdon TC thermal
-  camera, Shimmer3 GSR+ device, Samsung Galaxy S10 phone* for the mobile
+  camera, Shimmer3 GSR+ device, Samsung Galaxy S22 phone* for the mobile
   app).
-- Software environment (e.g., *Android 12, Python 3.9, specific library
+- Software environment (e.g., *Android 15, Python 3.9, specific library
   versions*).
 - Configuration files or settings (if your system has a config file,
   include a sample of it in an appendix or repository).

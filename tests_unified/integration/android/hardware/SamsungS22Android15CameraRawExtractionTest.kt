@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-class SamsungS21S22CameraRawExtractionTest {
+class SamsungS22Android15CameraRawExtractionTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -74,7 +74,7 @@ class SamsungS21S22CameraRawExtractionTest {
 
         Thread.sleep(2000)
 
-        println("[SAMSUNG_TEST] Setup complete for Samsung S21/S22 camera testing")
+        println("[SAMSUNG_TEST] Setup complete for Samsung S22 Android 15 camera testing")
     }
 
     @After
@@ -94,27 +94,33 @@ class SamsungS21S22CameraRawExtractionTest {
     }
 
     @Test
-    fun test1_samsungDeviceDetectionAndHardwareValidation() {
-        println("[SAMSUNG_TEST] Starting Samsung S21/S22 device detection...")
+    fun test1_samsungS22Android15DeviceDetectionAndHardwareValidation() {
+        println("[SAMSUNG_TEST] Starting Samsung S22 Android 15 device detection...")
 
         val deviceModel = android.os.Build.MODEL.uppercase()
         val deviceManufacturer = android.os.Build.MANUFACTURER.uppercase()
+        val androidVersion = android.os.Build.VERSION.RELEASE
 
         println("[SAMSUNG_TEST] Device: $deviceManufacturer $deviceModel")
+        println("[SAMSUNG_TEST] Android Version: $androidVersion")
         println("[SAMSUNG_TEST] SDK: ${android.os.Build.VERSION.SDK_INT}")
 
         val isSamsungDevice = deviceManufacturer.contains("SAMSUNG")
-        val isSamsungS21S22 =
-            deviceModel.contains("SM-G99") || deviceModel.contains("S21") || deviceModel.contains("S22")
+        val isSamsungS22 = deviceModel.contains("SM-S901") || deviceModel.contains("S22")
+        val isAndroid15 = androidVersion.startsWith("15") || android.os.Build.VERSION.SDK_INT >= 35
 
         if (!isSamsungDevice) {
             println("[SAMSUNG_TEST] WARNING: Not a Samsung device - test results may not be applicable")
         }
 
-        if (isSamsungS21S22) {
-            println("[SAMSUNG_TEST] ✓ Samsung S21/S22 device detected - proceeding with specialised tests")
+        if (!isAndroid15) {
+            println("[SAMSUNG_TEST] WARNING: Not Android 15 - test results may differ from target platform")
+        }
+
+        if (isSamsungS22 && isAndroid15) {
+            println("[SAMSUNG_TEST] ✓ Samsung S22 Android 15 device detected - proceeding with specialized tests")
         } else {
-            println("[SAMSUNG_TEST] INFO: Not S21/S22 specifically, but will test Samsung camera capabilities")
+            println("[SAMSUNG_TEST] INFO: Target device is Samsung S22 Android 15, but will test available Samsung capabilities")
         }
 
         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -137,7 +143,7 @@ class SamsungS21S22CameraRawExtractionTest {
 
                 if (isLevel3) {
                     level3CameraFound = true
-                    println("[SAMSUNG_TEST] ✓ LEVEL_3 camera found - optimal for Samsung S21/S22")
+                    println("[SAMSUNG_TEST] ✓ LEVEL_3 camera found - optimal for Samsung S22 Android 15")
                 }
 
                 if (hasRawCapability) {
@@ -149,21 +155,21 @@ class SamsungS21S22CameraRawExtractionTest {
 
         assertTrue("[SAMSUNG_TEST] No RAW capable camera found", rawCapableCameraFound)
 
-        if (isSamsungS21S22) {
-            assertTrue("[SAMSUNG_TEST] Samsung S21/S22 should have LEVEL_3 camera", level3CameraFound)
+        if (isSamsungS22 && isAndroid15) {
+            assertTrue("[SAMSUNG_TEST] Samsung S22 Android 15 should have LEVEL_3 camera", level3CameraFound)
         }
     }
 
     @Test
-    fun test2_samsungCameraInitializationAndRawSetup() = runBlocking {
-        println("[SAMSUNG_TEST] Starting Samsung camera initialization...")
+    fun test2_samsungS22CameraInitializationAndRawSetup() = runBlocking {
+        println("[SAMSUNG_TEST] Starting Samsung S22 camera initialization...")
 
         val initResult = withTimeout(15000) {
             cameraRecorder.initialize(textureView)
         }
 
-        assertTrue("[SAMSUNG_TEST] Samsung camera initialization failed", initResult)
-        println("[SAMSUNG_TEST] ✓ Samsung camera initialized successfully")
+        assertTrue("[SAMSUNG_TEST] Samsung S22 camera initialization failed", initResult)
+        println("[SAMSUNG_TEST] ✓ Samsung S22 camera initialized successfully")
 
         val surfaceAvailableLatch = CountDownLatch(1)
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
@@ -187,7 +193,7 @@ class SamsungS21S22CameraRawExtractionTest {
             surfaceAvailableLatch.await(10, TimeUnit.SECONDS)
         )
 
-        println("[SAMSUNG_TEST] ✓ Samsung camera surface ready")
+        println("[SAMSUNG_TEST] ✓ Samsung S22 camera surface ready")
     }
 
     @Test
@@ -236,8 +242,8 @@ class SamsungS21S22CameraRawExtractionTest {
     }
 
     @Test
-    fun test4_samsungDngFileValidationAndMetadata() = runBlocking {
-        println("[SAMSUNG_TEST] Starting Samsung DNG file validation...")
+    fun test4_samsungS22DngFileValidationAndMetadata() = runBlocking {
+        println("[SAMSUNG_TEST] Starting Samsung S22 DNG file validation...")
 
         val initResult = cameraRecorder.initialize(textureView)
         assertTrue("[SAMSUNG_TEST] Camera initialization failed", initResult)
@@ -269,7 +275,7 @@ class SamsungS21S22CameraRawExtractionTest {
             validateDngFileHeader(dngFile)
         }
 
-        println("[SAMSUNG_TEST] ✓ Samsung DNG files validation completed")
+        println("[SAMSUNG_TEST] ✓ Samsung S22 DNG files validation completed")
         currentSession = finalSession
     }
 
@@ -316,8 +322,8 @@ class SamsungS21S22CameraRawExtractionTest {
     }
 
     @Test
-    fun test6_samsungCameraCharacteristicsValidation() {
-        println("[SAMSUNG_TEST] Starting Samsung camera characteristics validation...")
+    fun test6_samsungS22CameraCharacteristicsValidation() {
+        println("[SAMSUNG_TEST] Starting Samsung S22 camera characteristics validation...")
 
         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         var samsungOptimalCameraFound = false
@@ -377,9 +383,9 @@ class SamsungS21S22CameraRawExtractionTest {
         )
 
         if (samsungOptimalCameraFound) {
-            println("[SAMSUNG_TEST] ✓ Samsung S21/S22 optimal camera characteristics validated")
+            println("[SAMSUNG_TEST] ✓ Samsung S22 optimal camera characteristics validated")
         } else {
-            println("[SAMSUNG_TEST] WARNING: Optimal Samsung characteristics not found - may affect stage 3 RAW quality")
+            println("[SAMSUNG_TEST] WARNING: Optimal Samsung S22 characteristics not found - may affect stage 3 RAW quality")
         }
     }
 

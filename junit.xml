@@ -1,1 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="13" time="0.853" timestamp="2025-08-13T11:36:37.362564+00:00" hostname="pkrvmsl9tci6h6u"><testcase classname="tests_unified.system.workflows.system_test" name="test_gui_components" time="0.037" /><testcase classname="tests_unified.system.workflows.system_test" name="test_python_environment" time="0.334" /><testcase classname="tests_unified.system.workflows.system_test" name="test_network_capabilities" time="0.002" /><testcase classname="tests_unified.system.workflows.system_test" name="test_system_integration" time="0.001" /><testcase classname="tests_unified.system.workflows.system_test" name="test_file_operations" time="0.002" /><testcase classname="tests_unified.system.workflows.system_test" name="test_data_processing" time="0.289" /><testcase classname="tests_unified.system.workflows.system_test" name="test_opencv_functionality" time="0.004" /><testcase classname="tests_unified.system.test_new_features" name="test_enhanced_security" time="0.004" /><testcase classname="tests_unified.system.test_new_features" name="test_lsl_integration" time="0.081" /><testcase classname="tests_unified.system.test_new_features" name="test_zeroconf_discovery" time="0.019" /><testcase classname="tests_unified.system.test_new_features" name="test_integration_with_existing_system" time="0.008" /><testcase classname="tests_unified.system.test_new_features" name="test_enhanced_pc_server" time="0.001" /><testcase classname="tests_unified.system.test_new_features" name="test_file_integrity" time="0.002" /></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.232" timestamp="2025-08-13T13:20:47.653687+00:00" hostname="pkrvmsl9tci6h6u"><testcase classname="" name="tests_unified.unit.python.test_memory_leak_detector" time="0.000"><error message="collection failure">tests_unified/performance/endurance/endurance_testing.py:20: in &lt;module&gt;
+    from ...utils.logging_config import get_logger
+E   ModuleNotFoundError: No module named 'tests_unified.utils'
+
+During handling of the above exception, another exception occurred:
+../../../.local/lib/python3.12/site-packages/_pytest/python.py:498: in importtestmodule
+    mod = import_path(
+../../../.local/lib/python3.12/site-packages/_pytest/pathlib.py:587: in import_path
+    importlib.import_module(module_name)
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;frozen importlib._bootstrap&gt;:1387: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+../../../.local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:186: in exec_module
+    exec(co, module.__dict__)
+tests_unified/unit/python/test_memory_leak_detector.py:25: in &lt;module&gt;
+    from tests_unified.performance.endurance.endurance_testing import EnduranceTestConfig, MemoryLeakDetector
+tests_unified/performance/endurance/endurance_testing.py:31: in &lt;module&gt;
+    from PythonApp.utils.system_monitor import get_system_monitor
+E     File "/home/runner/work/bucika_gsr/bucika_gsr/PythonApp/utils/system_monitor.py", line 101
+E       return {}
+E   IndentationError: unexpected indent</error></testcase></testsuite></testsuites>

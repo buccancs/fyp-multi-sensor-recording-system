@@ -553,11 +553,13 @@ Tests are designed to be independent and can run in any order. Each test:
 
 ### Research Standards
 
-The framework adheres to UCL academic standards:
+The framework adheres to UCL academic standards for Samsung S22 Android 15 evaluation:
 - **Reproducibility**: All tests include detailed setup and configuration documentation
 - **Traceability**: Requirements mapping ensures thesis claims are validated
 - **Documentation**: Comprehensive documentation following academic writing guidelines
-- **Integrity**: No fake data or mock results in validation testing
+- **ACADEMIC INTEGRITY**: **ZERO TOLERANCE for fake data, mock results, or simulated measurements in validation testing**
+- **Real Hardware Only**: All measurement artifacts must come from actual Samsung S22 Android 15 devices
+- **Authentic Data**: GSR measurements must use real Shimmer3 GSR+ hardware, thermal data from real cameras
 
 ### Thesis Integration
 

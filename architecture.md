@@ -504,7 +504,41 @@ graph TB
 
 ### 7. Testing and Quality Assurance System
 
-The system includes comprehensive testing infrastructure ensuring research-grade reliability and validation with enhanced coverage from recent testing improvements, including comprehensive tests for unified UI components and camera switching functionality.
+The system includes comprehensive testing infrastructure ensuring research-grade reliability and validation with enhanced coverage from recent testing improvements, including comprehensive tests for unified UI components and camera switching functionality. The testing strategy supports Chapter 5 evaluation requirements with quantitative evidence collection, reproducible measurements, and automated validation protocols.
+
+#### Chapter 5 Testing Strategy and Matrix
+
+The testing strategy implements a four-tier approach designed to satisfy academic evaluation requirements while ensuring system reliability and performance validation.
+
+**Testing Strategy Matrix**:
+
+| Test Level | Coverage Target | Test Types | Artifacts Generated | Chapter 5 Evidence |
+|------------|----------------|------------|-------------------|-------------------|
+| **Unit Tests** | Android: 90% line coverage<br/>Python: 95% branch coverage | JUnit+Robolectric (Android)<br/>pytest (Python)<br/>Lint/Static Analysis | JUnit XML, JaCoCo HTML<br/>Coverage reports<br/>Lint reports | Component reliability validation |
+| **Integration Tests** | Multi-device coordination<br/>Network protocols<br/>Cross-platform compatibility | Multi-device sync simulation<br/>Network loopback testing<br/>Android to PC instrumentation | Synchronization CSV data<br/>Protocol validation logs<br/>Performance benchmarks | System coordination evidence |
+| **System Performance** | 8-hour endurance target<br/>Memory leak detection<br/>Resource stability | Endurance testing<br/>Memory leak validation<br/>CPU/thread monitoring | Performance metrics CSV<br/>Memory usage timeseries<br/>Resource stability reports | Performance claims validation |
+| **Measurement Collection** | Quantitative evidence<br/>Reproducible data<br/>Academic standards | Accuracy measurements<br/>Calibration validation<br/>Network performance analysis | drift_results.csv<br/>calib_metrics.csv<br/>net_bench.csv | Quantitative claims support |
+
+**CI/CD Test Execution Lanes**:
+
+1. **Fast Lane** (Every commit): Unit tests, lint/static analysis, coverage gates
+2. **Nightly** (Daily): Integration tests, 1-hour endurance, measurement collection  
+3. **Release** (Major releases): Full 8-hour endurance, complete scalability testing
+
+**Measurement Evidence Collection**:
+
+The testing framework generates quantitative evidence required for Chapter 5 evaluation through automated measurement collection:
+
+- **Synchronization Accuracy**: Median drift and IQR measurements across multiple sessions with outlier documentation (WiFi roaming events)
+- **Calibration Accuracy**: Intrinsic reprojection error for RGB/thermal cameras, cross-modal registration error, temporal alignment accuracy
+- **Network Performance**: 95th percentile latency under different RTTs, TLS overhead quantification, scalability to 6+ nodes
+- **UI Responsiveness**: Thread latency during device discovery, Espresso automation flows, setup time metrics
+- **Device Reliability**: Mean time to disconnect, reconnection success rates, heartbeat protocol impact analysis
+- **Cross-platform Validation**: Windows/Android path normalization round-trip testing without data loss
+
+**Reproducibility Framework**:
+
+All measurements include deterministic reproduction scripts with fixed random seeds and documented environment specifications. Test artifacts are timestamped and include both raw data (CSV format) and processed visualizations (PNG plots backed by CSV data).
 
 #### Test Framework Architecture
 
