@@ -389,91 +389,22 @@ constructor(
         return try {
             logger.info("Starting thermal preview...")
 
-            // Enhanced validation with retry logic
-            var initializationSuccess = false
-            var retryCount = 0
-            val maxRetries = 3
-            
-            while (!initializationSuccess && retryCount < maxRetries) {
-                logger.info("Thermal preview initialization attempt ${retryCount + 1}/$maxRetries")
-                
+            // Check if components are initialized
+            if (currentDevice == null) {
+                logger.warning("No thermal camera device connected")
+                checkForConnectedDevices()
                 if (currentDevice == null) {
-                    logger.warning("No thermal camera device connected, attempting device discovery...")
-                    checkForConnectedDevices()
-                    if (currentDevice == null) {
-                        logger.error("No thermal camera device found after discovery")
-                        retryCount++
-                        if (retryCount < maxRetries) {
-                            Thread.sleep(1000) // Wait before retry
-                        }
-                        continue
-                    }
+                    logger.error("No thermal camera device found")
+                    return false
                 }
-
-                if (uvcCamera == null) {
-                    logger.warning("UVC camera not initialized, attempting re-initialization...")
-                    currentDevice?.let { device ->
-                        // Try to reinitialize the camera
-                        try {
-                            val uvcBuilder = ConcreateUVCBuilder()
-                            uvcCamera = uvcBuilder
-                                .setUVCType(UVCType.USB_UVC)
-                                .build()
-                            
-                            if (uvcCamera != null) {
-                                logger.info("UVC camera re-initialized successfully")
-                            }
-                        } catch (e: Exception) {
-                            logger.warning("Failed to re-initialize UVC camera: ${e.message}")
-                        }
-                    }
-                    
-                    if (uvcCamera == null) {
-                        logger.error("UVC camera still not initialized after retry")
-                        retryCount++
-                        if (retryCount < maxRetries) {
-                            Thread.sleep(1000) // Wait before retry
-                        }
-                        continue
-                    }
-                }
-
-                if (ircmd == null) {
-                    logger.warning("IRCMD not initialized, attempting re-initialization...")
-                    try {
-                        val ircmdBuilder = ConcreteIRCMDBuilder()
-                        ircmd = ircmdBuilder
-                            .setIrcmdType(IRCMDType.USB_IR_256_384)
-                            .setIdCamera(uvcCamera?.getNativePtr() ?: 0L)
-                            .build()
-                        
-                        if (ircmd != null) {
-                            logger.info("IRCMD re-initialized successfully")
-                        }
-                    } catch (e: Exception) {
-                        logger.warning("Failed to re-initialize IRCMD: ${e.message}")
-                    }
-                    
-                    if (ircmd == null) {
-                        logger.error("IRCMD still not initialized after retry")
-                        retryCount++
-                        if (retryCount < maxRetries) {
-                            Thread.sleep(1000) // Wait before retry
-                        }
-                        continue
-                    }
-                }
-                
-                initializationSuccess = true
             }
-            
-            if (!initializationSuccess) {
-                logger.error("Failed to initialize thermal camera components after $maxRetries attempts")
+
+            if (uvcCamera == null || ircmd == null) {
+                logger.error("Thermal camera components not initialized (uvcCamera=${uvcCamera != null}, ircmd=${ircmd != null})")
                 return false
             }
 
             logger.debug("Setting up thermal frame callback...")
-
             uvcCamera?.setFrameCallback(
                 object : IFrameCallback {
                     override fun onFrame(frameData: ByteArray) {
