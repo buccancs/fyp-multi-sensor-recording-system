@@ -20,6 +20,8 @@ import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 import com.multisensor.recording.util.SimpleFileUtils
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class CameraRecorder
