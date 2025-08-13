@@ -68,6 +68,20 @@ constructor(
 
         private const val THERMAL_FILE_HEADER_SIZE = 16
         private const val TIMESTAMP_SIZE = 8
+        
+        // Camera detection failure tracking constants
+        private const val MAX_CAMERA_FAILURES = 3
+        private const val MOCK_CAMERAS_ENV_KEY = "MSR_USE_MOCK_CAMERAS"
+    }
+
+    init {
+        // Initialize environment settings for mock cameras
+        useMockCameras = System.getenv(MOCK_CAMERAS_ENV_KEY)?.lowercase() == "true" ||
+                        System.getProperty(MOCK_CAMERAS_ENV_KEY)?.lowercase() == "true"
+        
+        if (useMockCameras) {
+            logger.info("Mock thermal cameras enabled via environment variable")
+        }
     }
 
     private var previewStreamer: PreviewStreamer? = null
@@ -100,6 +114,11 @@ constructor(
     private var currentThermalConfig: ThermalCameraSettings.ThermalConfig? = null
 
     private var previewSurface: SurfaceView? = null
+    
+    // Camera detection failure tracking
+    private var cameraDetectionFailures = 0
+    private var useMockCameras: Boolean = false
+    private var lastFailureTime = 0L
 
     private val usbPermissionReceiver =
         object : BroadcastReceiver() {
@@ -484,22 +503,92 @@ constructor(
         )
 
     fun isThermalCameraAvailable(): Boolean {
+        // Return mock camera if failures exceed threshold and mock cameras are enabled
+        if (cameraDetectionFailures >= MAX_CAMERA_FAILURES) {
+            if (useMockCameras) {
+                logger.debug("Returning mock thermal camera due to repeated failures (count: $cameraDetectionFailures)")
+                return true
+            } else {
+                logger.debug("Thermal camera detection disabled due to repeated failures (count: $cameraDetectionFailures)")
+                return false
+            }
+        }
+        
         try {
             if (usbManager == null) {
+                incrementFailureCount("USB manager not available")
                 return false
             }
 
-            val usbDevices = usbManager?.deviceList ?: return false
+            val usbDevices = usbManager?.deviceList ?: run {
+                incrementFailureCount("USB device list unavailable")
+                return false
+            }
+            
             val supportedDevice = usbDevices.values.find { device ->
                 device.vendorId == 0x0BDA &&
                         SUPPORTED_PRODUCT_IDS.contains(device.productId)
             }
 
-            return supportedDevice != null && isInitialized.get()
+            val isAvailable = supportedDevice != null && isInitialized.get()
+            
+            if (isAvailable) {
+                // Reset failure count on successful detection
+                cameraDetectionFailures = 0
+                logger.debug("Topdon TC001 thermal camera detected and available")
+            } else {
+                incrementFailureCount("No supported Topdon thermal camera found")
+            }
+            
+            return isAvailable
+        } catch (e: SecurityException) {
+            incrementFailureCount("Security exception accessing USB devices: ${e.message}")
+            return false
         } catch (e: Exception) {
-            logger.error("Failed to check thermal camera availability", e)
+            incrementFailureCount("Error checking thermal camera availability: ${e.message}")
             return false
         }
+    }
+    
+    private fun incrementFailureCount(reason: String) {
+        cameraDetectionFailures++
+        lastFailureTime = System.currentTimeMillis()
+        
+        // Only log warnings after multiple failures to reduce noise
+        if (cameraDetectionFailures == 1) {
+            logger.debug("Thermal camera detection failed: $reason (attempt $cameraDetectionFailures)")
+        } else if (cameraDetectionFailures == MAX_CAMERA_FAILURES) {
+            logger.warning("Thermal camera detection failed $MAX_CAMERA_FAILURES times, switching to mock mode if enabled. Reason: $reason")
+        } else if (cameraDetectionFailures > MAX_CAMERA_FAILURES) {
+            // Reduce logging frequency after threshold exceeded
+            if ((cameraDetectionFailures - MAX_CAMERA_FAILURES) % 10 == 0) {
+                logger.debug("Thermal camera still unavailable after ${cameraDetectionFailures} attempts")
+            }
+        }
+    }
+    
+    /**
+     * Get thermal camera information including mock camera details
+     */
+    fun getThermalCameraInfo(): Map<String, Any> {
+        val isAvailable = isThermalCameraAvailable()
+        val isMockMode = cameraDetectionFailures >= MAX_CAMERA_FAILURES && useMockCameras
+        
+        return mapOf(
+            "available" to isAvailable,
+            "mock" to isMockMode,
+            "name" to if (isMockMode) "Mock Topdon TC001" else "Topdon TC001",
+            "resolution" to "${THERMAL_WIDTH}x${THERMAL_HEIGHT}",
+            "fps" to THERMAL_FRAME_RATE,
+            "failures" to cameraDetectionFailures,
+            "mockEnabled" to useMockCameras,
+            "deviceName" to (currentDevice?.deviceName ?: if (isMockMode) "Mock Topdon TC001" else null),
+            "status" to when {
+                isMockMode -> "mock"
+                isAvailable -> "available"
+                else -> "unavailable"
+            }
+        )
     }
 
     private fun onFrameReceived(

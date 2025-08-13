@@ -59,6 +59,18 @@ class DeviceConnectionManager @Inject constructor(
 
     private val _connectionState = MutableStateFlow(DeviceConnectionState())
     val connectionState: StateFlow<DeviceConnectionState> = _connectionState.asStateFlow()
+    
+    // Adaptive refresh interval tracking
+    private var refreshFailureCount = 0
+    private var lastRefreshTime = 0L
+    private var currentRefreshInterval = DEFAULT_REFRESH_INTERVAL_MS
+    
+    companion object {
+        private const val DEFAULT_REFRESH_INTERVAL_MS = 5000L
+        private const val MAX_REFRESH_INTERVAL_MS = 30000L
+        private const val MAX_REFRESH_FAILURES = 3
+        private const val EXPONENTIAL_BACKOFF_MULTIPLIER = 2
+    }
 
     suspend fun initializeAllDevices(
         textureView: TextureView? = null,
@@ -351,33 +363,94 @@ class DeviceConnectionManager @Inject constructor(
 
     suspend fun refreshDeviceStatus(): Result<String> {
         return try {
-            logger.info("Refreshing device status...")
+            // Check if we should throttle refresh based on recent failures
+            val currentTime = System.currentTimeMillis()
+            if (refreshFailureCount > 0 && (currentTime - lastRefreshTime) < currentRefreshInterval) {
+                logger.debug("Throttling device status refresh (failures: $refreshFailureCount, interval: ${currentRefreshInterval}ms)")
+                return Result.success("Throttled refresh")
+            }
+            
+            lastRefreshTime = currentTime
+            logger.info("Refreshing device status... (attempt after $refreshFailureCount failures)")
 
-            val cameraConnected = cameraRecorder.isConnected
+            // Use error-resistant checking for each device type
+            val cameraConnected = try {
+                cameraRecorder.isConnected
+            } catch (e: Exception) {
+                logger.debug("Camera status check failed: ${e.message}")
+                false
+            }
 
-            val thermalConnected = thermalRecorder.isThermalCameraAvailable()
+            val thermalConnected = try {
+                thermalRecorder.isThermalCameraAvailable()
+            } catch (e: Exception) {
+                logger.debug("Thermal camera status check failed: ${e.message}")
+                false
+            }
 
-            val shimmerStatus = shimmerRecorder.getShimmerStatus()
+            val shimmerStatus = try {
+                shimmerRecorder.getShimmerStatus()
+            } catch (e: Exception) {
+                logger.debug("Shimmer status check failed: ${e.message}")
+                ShimmerRecorder.ShimmerStatus(false, emptyList())
+            }
             val shimmerConnected = shimmerStatus.isConnected
 
-            val pcConnected = jsonSocketClient.isConnected()
+            val pcConnected = try {
+                jsonSocketClient.isConnected()
+            } catch (e: Exception) {
+                logger.debug("PC connection status check failed: ${e.message}")
+                false
+            }
 
             _connectionState.value = _connectionState.value.copy(
                 cameraConnected = cameraConnected,
                 thermalConnected = thermalConnected,
                 shimmerConnected = shimmerConnected,
-                pcConnected = pcConnected
+                pcConnected = pcConnected,
+                connectionError = null
             )
 
+            // Reset failure count and interval on successful refresh
+            refreshFailureCount = 0
+            currentRefreshInterval = DEFAULT_REFRESH_INTERVAL_MS
+
             val summary = "Status: Camera=$cameraConnected, Thermal=$thermalConnected, Shimmer=$shimmerConnected, PC=$pcConnected"
-            logger.info("Device status refreshed: $summary")
+            logger.info("Device status refreshed successfully: $summary")
 
             Result.success(summary)
 
         } catch (e: Exception) {
-            logger.error("Device status refresh error", e)
+            // Increment failure count and apply exponential backoff
+            refreshFailureCount++
+            currentRefreshInterval = when (refreshFailureCount) {
+                1 -> DEFAULT_REFRESH_INTERVAL_MS * 2  // 10s
+                2 -> DEFAULT_REFRESH_INTERVAL_MS * 4  // 20s
+                else -> MAX_REFRESH_INTERVAL_MS       // 30s
+            }
+            
+            _connectionState.value = _connectionState.value.copy(
+                connectionError = "Refresh failed: ${e.message}"
+            )
+            
+            logger.error("Device status refresh error (failure $refreshFailureCount, next interval: ${currentRefreshInterval}ms)", e)
             Result.failure(e)
         }
+    }
+    
+    /**
+     * Get refresh status information for monitoring
+     */
+    fun getRefreshStatus(): Map<String, Any> {
+        return mapOf(
+            "currentInterval" to currentRefreshInterval,
+            "defaultInterval" to DEFAULT_REFRESH_INTERVAL_MS,
+            "maxInterval" to MAX_REFRESH_INTERVAL_MS,
+            "failureCount" to refreshFailureCount,
+            "lastRefreshTime" to lastRefreshTime,
+            "isThrottled" to (refreshFailureCount > 0 && 
+                             (System.currentTimeMillis() - lastRefreshTime) < currentRefreshInterval)
+        )
     }
 
     fun getCurrentState(): DeviceConnectionState = _connectionState.value
