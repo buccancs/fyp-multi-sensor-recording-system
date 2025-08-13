@@ -247,9 +247,9 @@ class SystemMonitor:
             },
             {
                 "index": 1,
-                "name": "Mock Thermal Camera",
-                "resolution": "640x480",
-                "fps": 9.0,
+                "name": "Mock Topdon TC001",
+                "resolution": "256x192",
+                "fps": 25.0,
                 "status": "available",
                 "mock": True,
             }

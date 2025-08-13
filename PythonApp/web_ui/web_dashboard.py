@@ -1010,6 +1010,37 @@ Generated at: {datetime.now().isoformat()}"""
                 logger.error(f"Camera status error: {e}")
                 return jsonify({"rgb": {"connected": False, "previewing": False, "available": False}, "ir": {"connected": False, "previewing": False, "available": False}})
 
+        @self.app.route("/api/test/cameras")
+        def api_test_cameras():
+            """Test camera detection and return available cameras"""
+            try:
+                cameras = []
+                
+                # Get cameras from system monitor
+                if SYSTEM_MONITOR_AVAILABLE:
+                    system_monitor = get_system_monitor()
+                    detected_cameras = system_monitor.detect_webcams()
+                    for camera in detected_cameras:
+                        cameras.append({
+                            "name": camera.get("name", f"Camera {camera.get('index', 0)}"),
+                            "resolution": camera.get("resolution", "Unknown"),
+                            "fps": camera.get("fps", 30.0),
+                            "mock": camera.get("mock", False)
+                        })
+                        
+                return jsonify({
+                    "cameras": cameras,
+                    "success": True
+                })
+                
+            except Exception as e:
+                logger.error(f"Camera test error: {e}")
+                return jsonify({
+                    "cameras": [],
+                    "success": False,
+                    "error": str(e)
+                }), 500
+
     def _generate_placeholder_image(self, text="Camera\nNot Available"):
         try:
             import io
