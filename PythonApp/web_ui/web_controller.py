@@ -337,7 +337,7 @@ class WebController:
                     )
             real_webcams = []
             try:
-                from utils.system_monitor import get_system_monitor
+                from ..utils.system_monitor import get_system_monitor
                 system_monitor = get_system_monitor()
                 real_webcams = system_monitor.detect_webcams()
             except:

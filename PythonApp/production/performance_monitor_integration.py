@@ -22,7 +22,7 @@ except ImportError:
         GracefulDegradationManager, PerformanceThresholds,
         SystemMetrics, PerformanceLevel
     )
-    from utils.logging_config import get_logger
+    from PythonApp.utils.logging_config import get_logger
 class PerformanceMonitorIntegration:
     def __init__(self, config_file: Optional[str] = None):
         self.logger = get_logger(__name__)

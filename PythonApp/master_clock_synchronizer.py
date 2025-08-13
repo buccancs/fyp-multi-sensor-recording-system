@@ -7,14 +7,14 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from typing import Callable, Dict, List, Optional, Set, Tuple
 import ntplib
-from network.pc_server import (
+from PythonApp.network.pc_server import (
     JsonMessage,
     PCServer,
     StartRecordCommand,
     StopRecordCommand,
 )
-from utils.logging_config import get_logger
-from ntp_time_server import NTPTimeServer
+from PythonApp.utils.logging_config import get_logger
+from PythonApp.ntp_time_server import NTPTimeServer
 logger = get_logger(__name__)
 @dataclass
 class SyncStatus:

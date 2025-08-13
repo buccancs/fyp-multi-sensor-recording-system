@@ -17,13 +17,13 @@ except ImportError:
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
-    from utils.logging_config import get_logger
+    from PythonApp.utils.logging_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 try:
-    from utils.system_monitor import get_system_monitor
+    from PythonApp.utils.system_monitor import get_system_monitor
     SYSTEM_MONITOR_AVAILABLE = True
 except ImportError:
     logger.warning("System monitor not available")

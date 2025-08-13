@@ -1,12 +1,19 @@
 import os
 import sys
+from pathlib import Path
+
+# Add project root to Python path for absolute imports
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 from PyQt5.QtCore import Qt, qVersion
 from PyQt5.QtWidgets import QApplication
-from .utils.logging_config import AppLogger, get_logger
+from PythonApp.utils.logging_config import AppLogger, get_logger
 log_level = os.environ.get("MSR_LOG_LEVEL", "INFO")
 AppLogger.set_level(log_level)
-from .gui.enhanced_ui_main_window import EnhancedMainWindow
-from .production.runtime_security_checker import validate_runtime_security, SecurityValidationError
+from PythonApp.gui.enhanced_ui_main_window import EnhancedMainWindow
+from PythonApp.production.runtime_security_checker import validate_runtime_security, SecurityValidationError
 logger = get_logger(__name__)
 def main():
     logger.info(
