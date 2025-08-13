@@ -36,6 +36,7 @@ jobs:
         [ -f "pyproject.toml" ] && echo "✅ Python project configuration found"
         [ -f "build.gradle" ] && echo "✅ Android project configuration found"
         [ -d "tests_unified" ] && echo "✅ Unified test framework found"
+        [ -d "shared_protocols" ] && echo "✅ Shared protocols module found"
         [ -f ".github/workflows/main-ci-cd.yml" ] && echo "✅ Main CI/CD workflow found"
 
   # Python testing and validation
@@ -74,15 +75,15 @@ jobs:
         
         # Format checking (non-blocking for quick feedback)
         echo "::group::Black formatting check"
-        black --check --diff PythonApp/ || echo "::warning::Code formatting issues found"
+        black --check --diff PythonApp/ shared_protocols/ || echo "::warning::Code formatting issues found"
         echo "::endgroup::"
         
         echo "::group::Import sorting check"
-        isort --check-only --diff PythonApp/ || echo "::warning::Import sorting issues found"
+        isort --check-only --diff PythonApp/ shared_protocols/ || echo "::warning::Import sorting issues found"
         echo "::endgroup::"
         
         echo "::group::Flake8 linting"
-        flake8 PythonApp/ --count --select=E9,F63,F7,F82 --show-source --statistics || echo "::warning::Syntax errors found"
+        flake8 PythonApp/ shared_protocols/ --count --select=E9,F63,F7,F82 --show-source --statistics || echo "::warning::Syntax errors found"
         echo "::endgroup::"
     
     - name: Security scan (quick)
@@ -91,7 +92,7 @@ jobs:
         pip install bandit safety
         
         # Quick security checks
-        bandit -r PythonApp/ -ll -i || echo "::warning::Security issues found"
+        bandit -r PythonApp/ shared_protocols/ -ll -i || echo "::warning::Security issues found"
         safety check --short-report || echo "::warning::Vulnerable dependencies found"
     
     - name: Unit tests
@@ -100,7 +101,7 @@ jobs:
         mkdir -p htmlcov
         
         # Run unified testing framework for unit tests in quick mode
-        python run_local_tests.py quick
+        python tests_unified/runners/run_unified_tests.py --level unit --mode ci --quick
     
     - name: Upload Python coverage
       uses: codecov/codecov-action@v4
@@ -219,7 +220,10 @@ jobs:
     - name: Run quick virtual environment test
       run: |
         echo "🌐 Running quick virtual environment test..."
-        if [ -d "tests/integration/virtual_environment" ]; then
+        if [ -d "tests_unified/integration/virtual_environment" ]; then
+          cd tests_unified/integration/virtual_environment
+          python test_runner.py --scenario quick --devices 2 --duration 0.5 --verbose || echo "::warning::Virtual environment test failed"
+        elif [ -d "tests/integration/virtual_environment" ]; then
           cd tests/integration/virtual_environment
           python test_runner.py --scenario quick --devices 2 --duration 0.5 --verbose || echo "::warning::Virtual environment test failed"
         else
