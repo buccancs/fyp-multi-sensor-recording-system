@@ -4,7 +4,7 @@
 [![Performance Tests](https://github.com/buccancs/bucika_gsr/workflows/Performance%20Monitoring/badge.svg)](https://github.com/buccancs/bucika_gsr/actions/workflows/performance-monitoring.yml)
 [![Code Quality](https://github.com/buccancs/bucika_gsr/workflows/Enhanced%20Code%20Quality/badge.svg)](https://github.com/buccancs/bucika_gsr/actions/workflows/enhanced_code_quality.yml)
 
-A comprehensive research platform for contactless Galvanic Skin Response (GSR) prediction using multi-sensor data fusion, featuring synchronised Android mobile applications and PC-based data recording with real-time analysis capabilities.
+A comprehensive research platform for contactless Galvanic Skin Response (GSR) prediction using multi-sensor data fusion, featuring synchronised Android mobile applications and PC-based data recording with real-time analysis capabilities. **Now with unified architecture eliminating code duplication across platforms through consolidated calibration, recording, and monitoring systems.**
 
 ## 🚀 Quick Start (30 seconds)
 
@@ -68,17 +68,26 @@ python tests_unified/runners/run_unified_tests.py --validate-requirements
 
 ## 📱 System Overview
 
-This research platform enables contactless GSR prediction through synchronised multi-sensor data collection:
+This research platform enables contactless GSR prediction through synchronised multi-sensor data collection with **unified architecture eliminating code duplication**:
 
 - **📱 Android Mobile Application**: Real-time RGB video and thermal imaging capture with unified UI architecture and camera switching capabilities
 - **🖥️ PC Controller Application**: Centralized data recording and synchronisation with enhanced device coordination
 - **📊 Shimmer GSR Sensors**: Ground truth physiological measurements with improved initialization timing
 - **🧪 Virtual Test Environment**: Complete system simulation without hardware dependencies
 - **⚡ Real-time Processing**: Live data analysis and visualisation with sub-millisecond precision
+- **🔄 Unified Architecture**: **Consolidated calibration, recording, and monitoring systems** eliminating duplication between Android and Python platforms
+- **🌐 Shared Protocols**: Common data structures and network protocols ensuring consistency across platforms
 - **🔄 Enhanced UI Architecture**: Unified components eliminating code duplication and providing consistent user experience
 - **🔥 Firebase Integration**: Cloud analytics, data storage, and monitoring for research workflows
 
 ## ✨ Key Features
+
+### 🔧 Unified Architecture & Code Consolidation
+- **Consolidated Calibration System**: Single unified CalibrationManager eliminating duplicate implementations
+- **Unified Data Recording**: Comprehensive UnifiedDataRecorder consolidating separate recording systems
+- **Consolidated Logging Framework**: Single logging system with backwards compatibility across platforms
+- **Shared Protocol Framework**: Common data structures and network protocols for Android and Python apps
+- **System Monitoring**: Unified performance optimization and resource management
 
 ### 🔧 Hardware-Free Testing
 - **Virtual Device Simulation**: Test with 2-6 simulated Android devices
@@ -86,11 +95,11 @@ This research platform enables contactless GSR prediction through synchronised m
 - **Complete Protocol Simulation**: Full message exchange and file transfer
 - **No Physical Dependencies**: Test entire system without hardware
 
-### 📊 Multi-Sensor Data Fusion with Enhanced UI
+### 📊 Multi-Sensor Data Fusion with Unified Components
 - **Synchronised Recording**: Precise timestamp alignment across all sensors with improved initialization coordination
 - **Multiple Data Streams**: GSR, RGB video, thermal imaging, device metadata
 - **Camera Preview Switching**: Toggle between RGB and thermal camera views with real-time preview control
-- **Unified UI Architecture**: Streamlined components eliminating 500+ lines of duplicate code
+- **Unified Architecture**: **Consolidated components eliminating code duplication** between platforms
 - **Enhanced Error Handling**: Improved camera initialization timing preventing "CameraRecorder not initialized" errors
 - **Real-time Visualisation**: Live data monitoring and analysis with consistent UI patterns
 - **Data Export**: CSV, JSON, and binary formats for research analysis
@@ -249,11 +258,11 @@ python test_performance_benchmarks.py --profile
 - **✅ Performance Testing**: Memory leak detection and resource monitoring
 - **✅ Real PC Integration**: End-to-end validation with actual PC application
 
-## 🔧 Unified Testing Framework
+## 🛠️ Unified Testing Framework
 
 ### Consolidated Research-Grade Testing Infrastructure
 
-All testing has been consolidated into a single, comprehensive framework that eliminates duplication and provides consistent execution across all test types.
+All testing has been consolidated into a single, comprehensive framework that **eliminates duplication** and provides consistent execution across all test types. **Code consolidation has unified calibration, recording, and monitoring systems** with full backwards compatibility.
 
 **Quick Start - Recommended:**
 ```bash
@@ -316,9 +325,16 @@ python tests_unified/runners/run_unified_tests.py --category visual
 
 **Key Consolidation Benefits:**
 - ✅ **Single Source of Truth**: All tests in `tests_unified/` directory
-- ✅ **Eliminated Duplication**: Merged separate `evaluation_suite/` into unified structure
+- ✅ **Eliminated Code Duplication**: **Unified calibration, recording, and logging systems**
 - ✅ **Consistent Execution**: Universal test runners work across all platforms
 - ✅ **Improved CI/CD**: Streamlined GitHub workflows with faster execution
+- ✅ **Shared Protocols**: Common data structures and network protocols for both Android and Python platforms
+
+**Architecture Improvements:**
+- **Consolidated CalibrationManager**: Single implementation replacing duplicate classes
+- **Unified DataRecorder**: Comprehensive recording system with production-grade validation
+- **Shared Logging Framework**: Backwards-compatible logging with enhanced features
+- **Common Protocols**: Standardized data structures in `shared_protocols/` module
 
 **Requirements Coverage:** 15/15 FR/NFR requirements (100%) with automated validation
 **Academic Compliance:** Full traceability aligned with thesis documentation
@@ -420,16 +436,23 @@ powershell -File setup_dev_environment.ps1
 bucika_gsr/
 ├── AndroidApp/                    # Android mobile application
 ├── PythonApp/                     # PC controller application  
+│   ├── calibration/              # Unified calibration system
+│   ├── recording/                # Consolidated data recording
+│   ├── utils/                    # Unified logging and utilities
+│   └── session/                  # Session management
+├── shared_protocols/              # Common data structures and protocols
+│   ├── data_structures.py        # Shared data formats
+│   ├── network_protocol.py       # Common message formats
+│   └── system_monitoring.py      # Unified monitoring
+├── tests_unified/                 # Consolidated test framework
+│   ├── unit/                     # Unit tests
+│   ├── integration/              # Integration tests
+│   ├── system/                   # System tests
+│   └── performance/              # Performance benchmarks
 ├── tests/
 │   └── integration/
 │       └── virtual_environment/   # Virtual test framework
-│           ├── run_virtual_test.sh       # Main test runner
-│           ├── setup_dev_environment.sh  # Automated setup
-│           ├── test_runner.py           # Python test orchestrator
-│           ├── virtual_device_client.py # Virtual device simulation
-│           └── synthetic_data_generator.py # Test data generation
 ├── .github/workflows/             # CI/CD automation
-├── protocol/                      # Communication specifications
 ├── docs/                         # Additional documentation
 └── run_local_test.sh             # One-click local testing
 ```

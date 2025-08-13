@@ -8,10 +8,17 @@ from ..utils.logging_config import get_logger
 from .calibration_processor import CalibrationProcessor
 from .calibration_result import CalibrationResult
 logger = get_logger(__name__)
-class CalibrationManager:
+
+# Import the unified CalibrationManager from calibration.py to avoid duplication
+from .calibration import CalibrationManager as UnifiedCalibrationManager
+
+class CalibrationManager(UnifiedCalibrationManager):
     def __init__(self, output_dir: str = "calibration_data"):
+        # Initialize the base unified calibration manager
+        super().__init__()
+        
         self.logger = get_logger(__name__)
-        self.logger.info(f"for initialized")
+        self.logger.info(f"Enhanced CalibrationManager initialized")
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.processor = CalibrationProcessor()
@@ -20,8 +27,6 @@ class CalibrationManager:
         self.captured_frames = []
         self.calibration_results = {}
         self.pattern_type = "chessboard"
-        self.chessboard_size = 9, 6
-        self.square_size = 25.0
         self.min_images = 10
         self.is_capturing = False
         self.capture_count = {}

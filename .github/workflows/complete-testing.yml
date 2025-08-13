@@ -128,7 +128,7 @@ jobs:
         
         case "${{ matrix.test-category }}" in
           "unit")
-            python run_local_tests.py pc
+            python tests_unified/runners/run_unified_tests.py --level unit --mode ci --verbose
             ;;
           "integration")
             python tests_unified/runners/run_unified_tests.py --level integration --mode research --extended --verbose
@@ -149,6 +149,7 @@ jobs:
         path: |
           tests_unified/reports/
           htmlcov/
+          coverage.xml
         retention-days: 30
 
   # Extended Android testing
@@ -402,7 +403,7 @@ jobs:
         adb install AndroidApp/build/outputs/apk/dev/debug/AndroidApp-dev-debug.apk
         
         # Run E2E tests
-        xvfb-run -a pytest tests/e2e/ -m "e2e" \
+        xvfb-run -a pytest tests_unified/e2e/ -m "e2e" \
           --timeout=600 --tb=short -v \
           --junitxml=junit-e2e.xml
     
@@ -413,6 +414,8 @@ jobs:
         name: e2e-test-results
         path: |
           junit-e2e.xml
+          tests_unified/e2e/screenshots/
+          tests_unified/e2e/test_results/
           tests/e2e/screenshots/
           tests/e2e/test_results/
         retention-days: 30
@@ -489,6 +492,8 @@ jobs:
           benchmark.json
           performance_reports/
           tests_unified/reports/performance/
+          performance_results.json
+          benchmark.json
         retention-days: 90
 
   # Virtual Environment Testing
@@ -529,7 +534,15 @@ jobs:
       run: |
         echo "🌐 Running virtual environment tests: ${{ matrix.scenario }} with ${{ matrix.device_count }} devices"
         
-        if [ -d "tests/integration/virtual_environment" ]; then
+        if [ -d "tests_unified/integration/virtual_environment" ]; then
+          cd tests_unified/integration/virtual_environment
+          xvfb-run -a --server-args="-screen 0 1024x768x24" \
+            python test_runner.py \
+            --scenario ${{ matrix.scenario }} \
+            --devices ${{ matrix.device_count }} \
+            --duration 3.0 \
+            --verbose
+        elif [ -d "tests/integration/virtual_environment" ]; then
           cd tests/integration/virtual_environment
           xvfb-run -a --server-args="-screen 0 1024x768x24" \
             python test_runner.py \
@@ -544,7 +557,15 @@ jobs:
     
     - name: Validate results
       run: |
-        cd tests/integration/virtual_environment
+        if [ -d "tests_unified/integration/virtual_environment" ]; then
+          cd tests_unified/integration/virtual_environment
+        elif [ -d "tests/integration/virtual_environment" ]; then
+          cd tests/integration/virtual_environment
+        else
+          echo "Virtual environment tests not found"
+          exit 1
+        fi
+        
         if [ -f test_results/*_report.json ]; then
           echo "Test report found:"
           cat test_results/*_report.json | jq '.summary'
@@ -564,7 +585,9 @@ jobs:
       if: always()
       with:
         name: virtual-env-results-${{ matrix.scenario }}-${{ matrix.device_count }}
-        path: tests/integration/virtual_environment/test_results/
+        path: |
+          tests_unified/integration/virtual_environment/test_results/
+          tests/integration/virtual_environment/test_results/
         retention-days: 30
 
   # Hardware-in-the-loop testing (requires self-hosted runner)
@@ -595,10 +618,15 @@ jobs:
         echo "🔧 Validating hardware test environment..."
         python -c "
         import sys
-        sys.path.append('tests/hardware')
-        from hardware_utils import validate_test_environment
+        sys.path.append('tests_unified/hardware')
+        try:
+            from hardware_utils import validate_test_environment
+            result = validate_test_environment()
+        except ImportError:
+            sys.path.append('tests/hardware')
+            from hardware_utils import validate_test_environment
+            result = validate_test_environment()
         
-        result = validate_test_environment()
         print(f'Hardware test environment ready: {result[\"ready\"]}')
         
         if not result['ready']:
@@ -610,7 +638,7 @@ jobs:
       timeout-minutes: 60
       run: |
         echo "🔗 Running hardware-in-the-loop tests..."
-        pytest tests/hardware/ -m "hardware_loop" \
+        pytest tests_unified/hardware/ -m "hardware_loop" \
           --timeout=300 --tb=short -v \
           --junitxml=junit-hardware.xml
     
@@ -621,6 +649,7 @@ jobs:
         name: hardware-test-results
         path: |
           junit-hardware.xml
+          tests_unified/hardware/test_results/
           tests/hardware/test_results/
         retention-days: 30
 

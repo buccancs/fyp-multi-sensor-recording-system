@@ -1,6 +1,22 @@
 # GitHub Workflows Documentation
 
-This document describes the consolidated GitHub workflows for the Multi-Sensor Recording System (GSR) project.
+This document describes the consolidated GitHub workflows for the Multi-Sensor Recording System (GSR) project, updated to reflect the recent code consolidation and unified architecture.
+
+## Recent Updates (Code Consolidation)
+
+### Unified Test Framework Integration
+The workflows have been updated to use the new **unified testing framework** (`tests_unified/`) that consolidates:
+- ✅ All Python and Android tests into `tests_unified/` directory structure
+- ✅ Shared protocols module (`shared_protocols/`) for cross-platform standards  
+- ✅ Unified test runner (`tests_unified/runners/run_unified_tests.py`)
+- ✅ Consolidated calibration, data recording, and logging systems
+- ✅ Backwards compatibility maintained through delegation patterns
+
+### Key Architectural Changes
+- **Test Consolidation**: Moved from fragmented test directories to unified `tests_unified/` structure
+- **Shared Protocols**: New `shared_protocols/` module standardizes data structures across Android and Python
+- **Code Deduplication**: Eliminated duplicate CalibrationManager, DataRecorder, and logging implementations
+- **Enhanced Coverage**: Quality checks now include both `PythonApp/` and `shared_protocols/` modules
 
 ## Overview
 
@@ -13,10 +29,10 @@ The workflows have been consolidated from 10 fragmented workflows into 4 focused
 **Runtime:** ~15-20 minutes  
 
 **Components:**
-- Quick validation and cache management
-- Python validation (formatting, linting, security, unit tests)
-- Android validation (linting, static analysis, build, unit tests)
-- Integration tests (conditional)
+- Quick validation and cache management with unified structure validation
+- Python validation (formatting, linting, security, unit tests) including `shared_protocols/`
+- Android validation (linting, static analysis, build, unit tests) with consolidated test paths
+- Integration tests using unified test runner
 - Validation summary with PR comments
 
 **Key Features:**
@@ -33,12 +49,12 @@ The workflows have been consolidated from 10 fragmented workflows into 4 focused
 **Runtime:** ~60-90 minutes  
 
 **Test Suites:**
-- **Python Extended:** Unit, integration, system, evaluation tests
-- **Android Extended:** Unit, instrumented, UI, compatibility tests (multiple API levels)
-- **End-to-End:** Full system tests with Android emulator and web dashboard
-- **Performance:** Benchmarking and performance validation
-- **Virtual Environment:** Multi-device simulation tests
-- **Hardware-in-Loop:** Physical hardware testing (requires self-hosted runner)
+- **Python Extended:** Unit, integration, system, evaluation tests using unified test runner
+- **Android Extended:** Unit, instrumented, UI, compatibility tests (multiple API levels) 
+- **End-to-End:** Full system tests with Android emulator and web dashboard via `tests_unified/e2e/`
+- **Performance:** Benchmarking and performance validation through unified performance framework
+- **Virtual Environment:** Multi-device simulation tests supporting both legacy and unified paths
+- **Hardware-in-Loop:** Physical hardware testing via `tests_unified/hardware/` (requires self-hosted runner)
 
 **Key Features:**
 - Configurable test matrix based on trigger
@@ -55,11 +71,11 @@ The workflows have been consolidated from 10 fragmented workflows into 4 focused
 
 **Analysis Components:**
 - **Python Security & Quality:**
-  - Vulnerability scanning (Safety, pip-audit, Bandit)
-  - Code quality analysis (Black, isort, flake8, pylint)
-  - Complexity analysis (Radon, xenon)
-  - Type checking (MyPy)
-  - Quality scoring system
+  - Vulnerability scanning (Safety, pip-audit, Bandit) across `PythonApp/` and `shared_protocols/`
+  - Code quality analysis (Black, isort, flake8, pylint) with unified module coverage
+  - Complexity analysis (Radon, xenon) including shared protocols
+  - Type checking (MyPy) across consolidated codebase
+  - Quality scoring system with enhanced metrics
 
 - **Android Security & Quality:**
   - Security analysis (hardcoded credentials, insecure configs)
@@ -67,8 +83,8 @@ The workflows have been consolidated from 10 fragmented workflows into 4 focused
   - Complexity metrics extraction
 
 - **Qodana Analysis:** JetBrains comprehensive code analysis
-- **Privacy Compliance:** GDPR and privacy regulation testing
-- **Technical Debt Analysis:** Debt tracking and metrics
+- **Privacy Compliance:** GDPR and privacy regulation testing via `tests_unified/security/` (with fallback support)
+- **Technical Debt Analysis:** Debt tracking and metrics across unified codebase
 
 **Key Features:**
 - Overall quality scoring (0-10 scale)

@@ -2,6 +2,35 @@
 
 A comprehensive, research-grade testing framework for the Multi-Sensor Recording System that consolidates all testing infrastructure into a single, coherent system with automated requirements validation and CI/CD integration.
 
+## 📋 Test Consolidation
+
+**COMPLETED**: All tests from AndroidApp and PythonApp have been consolidated into this unified framework:
+
+### Android Tests (from AndroidApp/src/test and AndroidApp/src/androidTest)
+- **Unit Tests**: `tests_unified/unit/android/`
+  - Session management tests
+  - Controller tests (Shimmer, Calibration, Recording, etc.)
+  - Streaming and calibration tests
+  - Test fixtures and utilities
+- **Integration Tests**: `tests_unified/integration/android/`
+  - Hardware integration tests (Bluetooth, Camera, Thermal)
+  - UI and navigation tests
+  - Device permission and configuration tests
+
+### Python Tests (from PythonApp/)
+- **System Tests**: `tests_unified/system/python_system_test.py`
+- **Performance Tests**: `tests_unified/performance/production/`
+  - Endurance testing suites
+  - Device diversity testing
+  - Security scanning and runtime checks
+  - Performance monitoring and optimization
+
+### Eliminated Duplication
+- Removed duplicate performance benchmark files
+- Consolidated endurance testing with unified imports
+- Fixed import paths to work with consolidated structure
+- Maintained all test functionality while reducing maintenance overhead
+
 ## 🚀 Quick Start
 
 ### Cross-Platform Local Testing (30 seconds)

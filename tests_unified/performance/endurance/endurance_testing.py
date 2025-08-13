@@ -17,17 +17,19 @@ from typing import Any, Dict, List, Optional, Callable
 import weakref
 import psutil
 try:
-    from ..utils.logging_config import get_logger
-    from ..utils.system_monitor import get_system_monitor
-    from .performance_benchmark import PerformanceProfiler
-    from ..performance_optimizer import PerformanceManager, OptimizationConfig
+    from ...utils.logging_config import get_logger
+    from ...utils.system_monitor import get_system_monitor
+    from ..benchmarks.performance_benchmark import PerformanceProfiler
+    from ...performance_optimizer import PerformanceManager, OptimizationConfig
 except ImportError:
     import sys
     current_dir = Path(__file__).parent
-    sys.path.insert(0, str(current_dir.parent))
-    from utils.logging_config import get_logger
-    from utils.system_monitor import get_system_monitor
-    from performance_optimizer import PerformanceManager, OptimizationConfig
+    project_root = current_dir.parent.parent.parent
+    sys.path.insert(0, str(project_root))
+    sys.path.insert(0, str(project_root / "PythonApp"))
+    from PythonApp.utils.logging_config import get_logger
+    from PythonApp.utils.system_monitor import get_system_monitor
+    from PythonApp.performance_optimizer import PerformanceManager, OptimizationConfig
 @dataclass
 class EnduranceTestConfig:
     duration_hours: float = 8.0

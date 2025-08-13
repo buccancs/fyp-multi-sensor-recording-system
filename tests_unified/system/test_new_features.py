@@ -67,7 +67,7 @@ def test_zeroconf_discovery():
 @pytest.mark.system
 def test_enhanced_security():
     """Test enhanced security features."""
-    from PythonApp.network.enhanced_security import (
+    from PythonApp.network.security import (
         SecurityConfig, TokenManager, RuntimeSecurityChecker
     )
     
@@ -234,7 +234,7 @@ def test_integration_with_existing_system():
         from PythonApp.network.pc_server import PCServer
         from PythonApp.network import lsl_integration
         from PythonApp.network import zeroconf_discovery
-        from PythonApp.network import enhanced_security
+        from PythonApp.network import security
         from PythonApp.network import file_integrity
         
         # All imports should work

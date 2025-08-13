@@ -7,8 +7,9 @@ import time
 import traceback
 from pathlib import Path
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
-project_root = Path(__file__).parent.parent
+project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(project_root / "PythonApp"))
 def test_python_environment():
     print("Testing Python environment...")
     dependencies = {

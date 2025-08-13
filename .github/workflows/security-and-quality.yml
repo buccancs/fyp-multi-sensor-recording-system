@@ -69,8 +69,8 @@ jobs:
         
         # Code security analysis
         echo "::group::Code security analysis (Bandit)"
-        bandit -r PythonApp/ -f json -o security-reports/bandit-report.json || true
-        bandit -r PythonApp/ -ll
+        bandit -r PythonApp/ shared_protocols/ -f json -o security-reports/bandit-report.json || true
+        bandit -r PythonApp/ shared_protocols/ -ll
         echo "::endgroup::"
         
         # Check for critical vulnerabilities
@@ -98,36 +98,36 @@ jobs:
         
         # Formatting and style checks
         echo "::group::Code formatting (Black)"
-        black --check --diff PythonApp/ > quality-reports/black-report.txt || true
+        black --check --diff PythonApp/ shared_protocols/ > quality-reports/black-report.txt || true
         echo "::endgroup::"
         
         echo "::group::Import sorting (isort)"
-        isort --check-only --diff PythonApp/ > quality-reports/isort-report.txt || true
+        isort --check-only --diff PythonApp/ shared_protocols/ > quality-reports/isort-report.txt || true
         echo "::endgroup::"
         
         echo "::group::Style checking (flake8)"
-        flake8 PythonApp/ --output-file=quality-reports/flake8-report.txt || true
+        flake8 PythonApp/ shared_protocols/ --output-file=quality-reports/flake8-report.txt || true
         echo "::endgroup::"
         
         echo "::group::Static analysis (pylint)"
-        pylint PythonApp/ --output-format=json > quality-reports/pylint-report.json || true
+        pylint PythonApp/ shared_protocols/ --output-format=json > quality-reports/pylint-report.json || true
         echo "::endgroup::"
         
         # Complexity analysis
         echo "::group::Complexity analysis"
-        radon cc PythonApp/ --json > quality-reports/cyclomatic-complexity.json
-        radon mi PythonApp/ --json > quality-reports/maintainability-index.json
-        radon hal PythonApp/ --json > quality-reports/halstead-complexity.json
+        radon cc PythonApp/ shared_protocols/ --json > quality-reports/cyclomatic-complexity.json
+        radon mi PythonApp/ shared_protocols/ --json > quality-reports/maintainability-index.json
+        radon hal PythonApp/ shared_protocols/ --json > quality-reports/halstead-complexity.json
         echo "::endgroup::"
         
         # Type checking
         echo "::group::Type checking (MyPy)"
-        mypy PythonApp/ --json-report quality-reports/mypy-report || true
+        mypy PythonApp/ shared_protocols/ --json-report quality-reports/mypy-report || true
         echo "::endgroup::"
         
         # Check complexity thresholds
         echo "::group::Complexity threshold validation"
-        COMPLEX_FUNCTIONS=$(xenon --max-absolute C --max-modules B --max-average A PythonApp/ 2>&1 | grep -c "too complex" || echo "0")
+        COMPLEX_FUNCTIONS=$(xenon --max-absolute C --max-modules B --max-average A PythonApp/ shared_protocols/ 2>&1 | grep -c "too complex" || echo "0")
         echo "complex_functions=$COMPLEX_FUNCTIONS" >> $GITHUB_OUTPUT
         echo "::endgroup::"
     
@@ -375,7 +375,10 @@ jobs:
         echo "🔐 Running privacy compliance tests..."
         
         # Run privacy-specific tests if they exist
-        if [ -f "tests/security/test_privacy_compliance.py" ]; then
+        if [ -f "tests_unified/security/test_privacy_compliance.py" ]; then
+          python -m pytest tests_unified/security/test_privacy_compliance.py -v --tb=short \
+            --json-report --json-report-file=privacy-test-report.json || true
+        elif [ -f "tests/security/test_privacy_compliance.py" ]; then
           python -m pytest tests/security/test_privacy_compliance.py -v --tb=short \
             --json-report --json-report-file=privacy-test-report.json || true
         else
@@ -384,7 +387,9 @@ jobs:
         fi
         
         # Run TLS authentication tests if they exist
-        if [ -f "tests/security/test_tls_authentication.py" ]; then
+        if [ -f "tests_unified/security/test_tls_authentication.py" ]; then
+          python -m pytest tests_unified/security/test_tls_authentication.py -v --tb=short || true
+        elif [ -f "tests/security/test_tls_authentication.py" ]; then
           python -m pytest tests/security/test_tls_authentication.py -v --tb=short || true
         else
           echo "::warning::TLS authentication tests not found"
