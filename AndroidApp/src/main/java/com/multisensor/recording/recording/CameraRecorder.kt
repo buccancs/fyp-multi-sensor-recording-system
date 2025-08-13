@@ -580,7 +580,6 @@ constructor(
             }
         }
     }
-    }
 
     private fun generateRawFilePath(sessionId: String, count: Int): File {
         return SimpleFileUtils.createRawFile(context, sessionId, count)
@@ -639,4 +638,5 @@ constructor(
             logger.error("Error stopping background thread", e)
         }
     }
+}
 }
