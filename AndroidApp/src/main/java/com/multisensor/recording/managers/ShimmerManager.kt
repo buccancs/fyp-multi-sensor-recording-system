@@ -183,41 +183,40 @@ class ShimmerManager @Inject constructor(
     private fun launchShimmerDeviceDialog(activity: Activity, callback: ShimmerCallback) {
         android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Launching Shimmer device selection dialog")
 
-        try {
-            val intent = android.content.Intent(
-                activity,
-                com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog::class.java
-            )
+        val intent = android.content.Intent(
+            activity,
+            com.shimmerresearch.android.guiUtilities.ShimmerBluetoothDialog::class.java
+        )
 
-            val options = arrayOf(
-                "Shimmer3-GSR+ (Bluetooth Classic)",
-                "Shimmer3-GSR+ (BLE)",
-                "Scan for devices",
-                "Enter MAC address manually"
-            )
+        val options = arrayOf(
+            "Shimmer3-GSR+ (Bluetooth Classic)",
+            "Shimmer3-GSR+ (BLE)",
+            "Scan for devices",
+            "Enter MAC address manually"
+        )
 
-            android.app.AlertDialog.Builder(activity)
-                .setTitle("Select Shimmer Device")
-                .setItems(options) { _, which ->
-                    when (which) {
-                        0 -> {
-                            val address = "00:06:66:68:4A:B4"
-                            val name = "Shimmer_4AB4"
-                            android.util.Log.d(
-                                "ShimmerManager",
-                                "[DEBUG_LOG] Selected Classic BT device: $name ($address)"
-                            )
+        android.app.AlertDialog.Builder(activity)
+            .setTitle("Select Shimmer Device")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> {
+                        val address = "00:06:66:68:4A:B4"
+                        val name = "Shimmer_4AB4"
+                        android.util.Log.d(
+                            "ShimmerManager",
+                            "[DEBUG_LOG] Selected Classic BT device: $name ($address)"
+                        )
 
-                            saveDeviceConnectionState(address, name, ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC)
-                            callback.onDeviceSelected(address, name)
-                        }
+                        saveDeviceConnectionState(address, name, ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC)
+                        callback.onDeviceSelected(address, name)
+                    }
 
-                        1 -> {
-                            val address = "00:06:66:68:4A:B5"
-                            val name = "Shimmer_4AB5"
-                            android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Selected BLE device: $name ($address)")
+                    1 -> {
+                        val address = "00:06:66:68:4A:B5"
+                        val name = "Shimmer_4AB5"
+                        android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Selected BLE device: $name ($address)")
 
-                            saveDeviceConnectionState(address, name, ShimmerBluetoothManagerAndroid.BT_TYPE.BLE)
+                        saveDeviceConnectionState(address, name, ShimmerBluetoothManagerAndroid.BT_TYPE.BLE)
                             callback.onDeviceSelected(address, name)
                         }
 
@@ -230,16 +229,11 @@ class ShimmerManager @Inject constructor(
                         }
                     }
                 }
-                .setNegativeButton("Cancel") { _, _ ->
-                    android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Device selection cancelled")
-                    callback.onDeviceSelectionCancelled()
-                }
-                .show()
-
-        } catch (e: Exception) {
-            android.util.Log.e("ShimmerManager", "[DEBUG_LOG] Error launching Shimmer dialog: ${e.message}")
-            callback.onError("Failed to launch device selection: ${e.message}")
-        }
+            .setNegativeButton("Cancel") { _, _ ->
+                android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Device selection cancelled")
+                callback.onDeviceSelectionCancelled()
+            }
+            .show()
     }
 
     private fun showScanningDialog(activity: Activity, callback: ShimmerCallback) {
@@ -331,49 +325,45 @@ class ShimmerManager @Inject constructor(
     fun showSensorConfiguration(activity: Activity, callback: ShimmerCallback) {
         android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Showing Shimmer sensor configuration")
 
-        try {
-            val sensors = arrayOf(
-                "GSR (Galvanic Skin Response)",
-                "PPG (Photoplethysmography)",
-                "Accelerometer",
-                "Gyroscope",
-                "Magnetometer",
-                "ECG (Electrocardiogram)",
-                "EMG (Electromyography)",
-                "Battery Monitor"
-            )
+        val sensors = arrayOf(
+            "GSR (Galvanic Skin Response)",
+            "PPG (Photoplethysmography)",
+            "Accelerometer",
+            "Gyroscope",
+            "Magnetometer",
+            "ECG (Electrocardiogram)",
+            "EMG (Electromyography)",
+            "Battery Monitor"
+        )
 
-            val checkedItems = booleanArrayOf(true, true, true, false, false, false, false, true)
+        val checkedItems = booleanArrayOf(true, true, true, false, false, false, false, true)
 
-            android.app.AlertDialog.Builder(activity)
-                .setTitle("Configure Shimmer Sensors")
-                .setMultiChoiceItems(sensors, checkedItems) { _, which, isChecked ->
-                    checkedItems[which] = isChecked
-                }
-                .setPositiveButton("Apply Configuration") { _, _ ->
-                    val enabledSensors = mutableListOf<String>()
-                    checkedItems.forEachIndexed { index, enabled ->
-                        if (enabled) {
-                            enabledSensors.add(sensors[index])
-                        }
+        android.app.AlertDialog.Builder(activity)
+            .setTitle("Configure Shimmer Sensors")
+            .setMultiChoiceItems(sensors, checkedItems) { _, which, isChecked ->
+                checkedItems[which] = isChecked
+            }
+            .setPositiveButton("Apply Configuration") { _, _ ->
+                val enabledSensors = mutableListOf<String>()
+                checkedItems.forEachIndexed { index, enabled ->
+                    if (enabled) {
+                        enabledSensors.add(sensors[index])
                     }
-                    android.util.Log.d(
-                        "ShimmerManager",
-                        "[DEBUG_LOG] Sensor configuration applied: ${enabledSensors.joinToString()}"
-                    )
-                    callback.onConfigurationComplete()
                 }
-                .setNegativeButton("Cancel") { _, _ ->
-                    android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Sensor configuration cancelled")
-                }
-                .setNeutralButton("Advanced...") { _, _ ->
-                    showAdvancedSensorConfiguration(activity, callback)
-                }
-                .show()
-
-        } catch (e: Exception) {
-            android.util.Log.e("ShimmerManager", "[DEBUG_LOG] Error showing sensor configuration: ${e.message}")
-            callback.onError("Failed to show sensor configuration: ${e.message}")
+                android.util.Log.d(
+                    "ShimmerManager",
+                    "[DEBUG_LOG] Sensor configuration applied: ${enabledSensors.joinToString()}"
+                )
+                callback.onConfigurationComplete()
+            }
+            .setNegativeButton("Cancel") { _, _ ->
+                android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Sensor configuration cancelled")
+            }
+            .setNeutralButton("Advanced...") { _, _ ->
+                showAdvancedSensorConfiguration(activity, callback)
+            }
+            .show()
+    }
         }
     }
 
@@ -1334,47 +1324,31 @@ class ShimmerManager @Inject constructor(
     }
 
     private fun getLastConnectedDeviceInfo(): DeviceInfo? {
-        return try {
-            val prefs = context.getSharedPreferences(SHIMMER_PREFS_NAME, Context.MODE_PRIVATE)
-            val deviceAddress = prefs.getString(PREF_LAST_DEVICE_ADDRESS, null)
-            val deviceName = prefs.getString(PREF_LAST_DEVICE_NAME, null)
-            val btTypeName = prefs.getString(PREF_LAST_BT_TYPE, null)
+        val prefs = context.getSharedPreferences(SHIMMER_PREFS_NAME, Context.MODE_PRIVATE)
+        val deviceAddress = prefs.getString(PREF_LAST_DEVICE_ADDRESS, null)
+        val deviceName = prefs.getString(PREF_LAST_DEVICE_NAME, null)
+        val btTypeName = prefs.getString(PREF_LAST_BT_TYPE, null)
 
-            if (deviceAddress != null && deviceName != null && btTypeName != null) {
-                val btType = try {
-                    ShimmerBluetoothManagerAndroid.BT_TYPE.valueOf(btTypeName)
-                } catch (e: IllegalArgumentException) {
-                    ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
-                }
-
-                DeviceInfo(deviceAddress, deviceName, btType)
-            } else {
-                null
+        return if (deviceAddress != null && deviceName != null && btTypeName != null) {
+            val btType = try {
+                ShimmerBluetoothManagerAndroid.BT_TYPE.valueOf(btTypeName)
+            } catch (e: IllegalArgumentException) {
+                ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
             }
-        } catch (e: Exception) {
-            android.util.Log.e("ShimmerManager", "[DEBUG_LOG] Failed to get last device info: ${e.message}")
+            DeviceInfo(deviceAddress, deviceName, btType)
+        } else {
             null
         }
     }
 
     private fun getConnectionCount(): Int {
-        return try {
-            val prefs = context.getSharedPreferences(SHIMMER_PREFS_NAME, Context.MODE_PRIVATE)
-            prefs.getInt(PREF_CONNECTION_COUNT, 0)
-        } catch (e: Exception) {
-            android.util.Log.e("ShimmerManager", "[DEBUG_LOG] Failed to get connection count: ${e.message}")
-            0
-        }
+        val prefs = context.getSharedPreferences(SHIMMER_PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getInt(PREF_CONNECTION_COUNT, 0)
     }
 
     fun hasPreviouslyConnectedDevice(): Boolean {
-        return try {
-            val prefs = context.getSharedPreferences(SHIMMER_PREFS_NAME, Context.MODE_PRIVATE)
-            prefs.getString(PREF_LAST_DEVICE_ADDRESS, null) != null
-        } catch (e: Exception) {
-            android.util.Log.e("ShimmerManager", "[DEBUG_LOG] Failed to check previous device: ${e.message}")
-            false
-        }
+        val prefs = context.getSharedPreferences(SHIMMER_PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(PREF_LAST_DEVICE_ADDRESS, null) != null
     }
 
     fun getLastConnectedDeviceDisplayName(): String {

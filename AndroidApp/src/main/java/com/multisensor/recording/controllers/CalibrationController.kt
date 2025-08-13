@@ -418,22 +418,17 @@ class CalibrationController @Inject constructor(
     }
 
     private fun getLastCalibrationInfo(context: Context): String {
-        return try {
-            val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
-            val calibrationId = prefs.getString(PREF_LAST_CALIBRATION_ID, null)
-            val lastTime = prefs.getLong(PREF_LAST_CALIBRATION_TIME, 0L)
-            val success = prefs.getBoolean(PREF_LAST_CALIBRATION_SUCCESS, false)
+        val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
+        val calibrationId = prefs.getString(PREF_LAST_CALIBRATION_ID, null)
+        val lastTime = prefs.getLong(PREF_LAST_CALIBRATION_TIME, 0L)
+        val success = prefs.getBoolean(PREF_LAST_CALIBRATION_SUCCESS, false)
 
-            if (calibrationId != null && lastTime > 0) {
-                val timeFormat = java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.getDefault())
-                val status = if (success) "✓" else "✗"
-                "$status $calibrationId (${timeFormat.format(java.util.Date(lastTime))})"
-            } else {
-                "None"
-            }
-        } catch (e: Exception) {
-            android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to get last calibration info: ${e.message}")
-            "Error retrieving info"
+        return if (calibrationId != null && lastTime > 0) {
+            val timeFormat = java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.getDefault())
+            val status = if (success) "✓" else "✗"
+            "$status $calibrationId (${timeFormat.format(java.util.Date(lastTime))})"
+        } else {
+            "None"
         }
     }
 
