@@ -121,21 +121,52 @@ class DeviceConnectionManager @Inject constructor(
             if (textureView != null) {
                 val success = cameraRecorder.initialize(textureView)
                 if (success) {
-                    // Give the camera a moment to fully initialize before starting preview
-                    kotlinx.coroutines.delay(500)
+                    // Wait longer for camera hardware to stabilize and ensure TextureView is ready
+                    kotlinx.coroutines.delay(1000)
                     
-                    // Start a preview-only session to show camera feed
-                    try {
-                        logger.info("Starting camera preview session...")
-                        val previewSession = cameraRecorder.startSession(recordVideo = false, captureRaw = false)
-                        if (previewSession != null) {
-                            logger.info("Camera preview started successfully")
-                        } else {
-                            logger.warning("Camera preview failed to start, but camera is initialized")
+                    // Retry preview start with exponential backoff
+                    var previewStarted = false
+                    var retryCount = 0
+                    val maxRetries = 3
+                    
+                    while (!previewStarted && retryCount < maxRetries) {
+                        try {
+                            logger.info("Starting camera preview session (attempt ${retryCount + 1}/$maxRetries)...")
+                            
+                            // Check TextureView availability before attempting preview
+                            if (!textureView.isAvailable) {
+                                logger.warning("TextureView not available, waiting...")
+                                kotlinx.coroutines.delay(500)
+                                retryCount++
+                                continue
+                            }
+                            
+                            val previewSession = cameraRecorder.startSession(recordVideo = false, captureRaw = false)
+                            if (previewSession != null) {
+                                logger.info("Camera preview started successfully on attempt ${retryCount + 1}")
+                                previewStarted = true
+                            } else {
+                                logger.warning("Camera preview failed to start on attempt ${retryCount + 1}")
+                                retryCount++
+                                if (retryCount < maxRetries) {
+                                    // Exponential backoff: 500ms, 1000ms, 2000ms
+                                    val delayMs = 500L * (1 shl retryCount)
+                                    kotlinx.coroutines.delay(delayMs)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            logger.warning("Failed to start camera preview on attempt ${retryCount + 1}: ${e.message}")
+                            retryCount++
+                            if (retryCount < maxRetries) {
+                                // Exponential backoff: 500ms, 1000ms, 2000ms
+                                val delayMs = 500L * (1 shl retryCount)
+                                kotlinx.coroutines.delay(delayMs)
+                            }
                         }
-                    } catch (e: Exception) {
-                        logger.warning("Failed to start camera preview: ${e.message}")
-                        // Don't fail initialization if preview fails - the camera is still initialized
+                    }
+                    
+                    if (!previewStarted) {
+                        logger.warning("Camera preview failed to start after $maxRetries attempts, but camera is initialized")
                     }
                     
                     _connectionState.value = _connectionState.value.copy(cameraConnected = true)
@@ -157,16 +188,56 @@ class DeviceConnectionManager @Inject constructor(
 
     private suspend fun initializeThermalCamera(surfaceView: SurfaceView?): Result<Unit> {
         return try {
-            val success = thermalRecorder.initialize(surfaceView)
-            if (success) {
-                val previewStarted = thermalRecorder.startPreview()
-                _connectionState.value = _connectionState.value.copy(thermalConnected = success)
-                logger.info("Thermal camera initialized: preview=${previewStarted}")
-                Result.success(Unit)
-            } else {
-                logger.warning("Thermal camera not available")
-                Result.failure(RuntimeException("Thermal camera not available"))
+            logger.info("Initializing thermal camera with enhanced retry logic...")
+            
+            var initSuccess = false
+            var retryCount = 0
+            val maxRetries = 3
+            
+            while (!initSuccess && retryCount < maxRetries) {
+                logger.info("Thermal camera initialization attempt ${retryCount + 1}/$maxRetries")
+                
+                val success = thermalRecorder.initialize(surfaceView)
+                if (success) {
+                    // Wait a bit for hardware to stabilize
+                    kotlinx.coroutines.delay(1000)
+                    
+                    // Try starting preview with backoff
+                    var previewStarted = false
+                    var previewRetries = 0
+                    val maxPreviewRetries = 3
+                    
+                    while (!previewStarted && previewRetries < maxPreviewRetries) {
+                        logger.info("Attempting thermal preview start (${previewRetries + 1}/$maxPreviewRetries)")
+                        
+                        previewStarted = thermalRecorder.startPreview()
+                        if (!previewStarted) {
+                            previewRetries++
+                            if (previewRetries < maxPreviewRetries) {
+                                val delayMs = 500L * (1 shl previewRetries) // 1s, 2s, 4s
+                                logger.info("Thermal preview failed, retrying in ${delayMs}ms...")
+                                kotlinx.coroutines.delay(delayMs)
+                            }
+                        }
+                    }
+                    
+                    _connectionState.value = _connectionState.value.copy(thermalConnected = success)
+                    logger.info("Thermal camera initialized: preview=${previewStarted}")
+                    initSuccess = true
+                    return Result.success(Unit)
+                } else {
+                    logger.warning("Thermal camera initialization failed on attempt ${retryCount + 1}")
+                    retryCount++
+                    if (retryCount < maxRetries) {
+                        val delayMs = 1000L * retryCount // 1s, 2s, 3s
+                        logger.info("Retrying thermal initialization in ${delayMs}ms...")
+                        kotlinx.coroutines.delay(delayMs)
+                    }
+                }
             }
+            
+            logger.warning("Thermal camera not available after $maxRetries attempts")
+            Result.failure(RuntimeException("Thermal camera not available"))
         } catch (e: Exception) {
             logger.error("Thermal camera initialization error", e)
             Result.failure(e)

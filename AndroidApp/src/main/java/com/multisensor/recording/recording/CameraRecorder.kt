@@ -84,7 +84,7 @@ constructor(
         private const val THREAD_NAME = "CameraRecorder"
         private const val VIDEO_FRAME_RATE = 30
         private const val VIDEO_BIT_RATE = 10_000_000
-        private const val CAMERA_LOCK_TIMEOUT_MS = 2500L
+        private const val CAMERA_LOCK_TIMEOUT_MS = 10_000L // Increased to 10 seconds for better reliability
 
         private val ORIENTATIONS =
             mapOf(
@@ -175,6 +175,39 @@ constructor(
                     if (isSessionActive) {
                         logger.warning("Camera session already active")
                         return@withContext currentSessionInfo
+                    }
+
+                    // Additional validation for preview-only sessions
+                    if (!recordVideo && !captureRaw) {
+                        // Ensure TextureView and surface are ready for preview
+                        val textureView = this@CameraRecorder.textureView
+                        if (textureView == null) {
+                            logger.error("TextureView not available for preview session")
+                            return@withContext null
+                        }
+                        
+                        if (!textureView.isAvailable) {
+                            logger.warning("TextureView not yet available, waiting briefly...")
+                            kotlinx.coroutines.delay(200)
+                            
+                            if (!textureView.isAvailable) {
+                                logger.error("TextureView still not available for preview session")
+                                return@withContext null
+                            }
+                        }
+                        
+                        if (previewSurface == null) {
+                            logger.warning("Preview surface not ready, attempting setup...")
+                            setupTextureViewSurface()
+                            
+                            // Wait a bit for surface setup
+                            kotlinx.coroutines.delay(300)
+                            
+                            if (previewSurface == null) {
+                                logger.error("Preview surface setup failed")
+                                return@withContext null
+                            }
+                        }
                     }
 
                     val sessionId = "Session_${System.currentTimeMillis()}"
@@ -551,11 +584,29 @@ constructor(
 
                 logger.info("Setting up TextureView surface...")
 
+                // Wait for TextureView to be properly laid out and ready
+                var retryCount = 0
+                val maxRetries = 10
+                while (!textureView.isAvailable && retryCount < maxRetries) {
+                    logger.debug("TextureView not yet available, waiting... (attempt ${retryCount + 1}/$maxRetries)")
+                    kotlinx.coroutines.delay(100)
+                    retryCount++
+                }
+
                 if (textureView.isAvailable) {
-                    logger.debug("SurfaceTexture already available")
-                    textureView.surfaceTexture?.let { configureSurfaceTexture(it) }
+                    logger.debug("SurfaceTexture is available after $retryCount attempts")
+                    textureView.surfaceTexture?.let { surfaceTexture ->
+                        // Validate the surface texture before configuring
+                        if (!surfaceTexture.isReleased) {
+                            configureSurfaceTexture(surfaceTexture)
+                        } else {
+                            logger.warning("SurfaceTexture is released, cannot configure")
+                        }
+                    } ?: run {
+                        logger.warning("SurfaceTexture is null despite TextureView being available")
+                    }
                 } else {
-                    logger.debug("Waiting for SurfaceTexture to become available")
+                    logger.warning("TextureView still not available after ${maxRetries * 100}ms, setting up listener")
 
                     textureView.surfaceTextureListener =
                         object : TextureView.SurfaceTextureListener {
@@ -565,7 +616,11 @@ constructor(
                                 height: Int,
                             ) {
                                 logger.debug("SurfaceTexture became available: ${width}x$height")
-                                configureSurfaceTexture(surface)
+                                if (!surface.isReleased) {
+                                    configureSurfaceTexture(surface)
+                                } else {
+                                    logger.warning("SurfaceTexture is released on availability callback")
+                                }
                             }
 
                             override fun onSurfaceTextureSizeChanged(
@@ -574,7 +629,9 @@ constructor(
                                 height: Int,
                             ) {
                                 logger.debug("SurfaceTexture size changed: ${width}x$height")
-                                configureTransform(width, height)
+                                if (!surface.isReleased) {
+                                    configureTransform(width, height)
+                                }
                             }
 
                             override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
@@ -585,6 +642,7 @@ constructor(
                             }
 
                             override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
+                                // No action needed for frame updates
                             }
                         }
                 }
@@ -601,13 +659,30 @@ constructor(
                 return
             }
 
+            // Validate surface texture state before configuration
+            if (surfaceTexture.isReleased) {
+                logger.error("Cannot configure released SurfaceTexture")
+                return
+            }
+
+            logger.debug("Configuring SurfaceTexture with size: ${previewSize.width}x${previewSize.height}")
+            
             surfaceTexture.setDefaultBufferSize(previewSize.width, previewSize.height)
 
+            // Release existing surface before creating new one
+            previewSurface?.release()
             previewSurface = Surface(surfaceTexture)
 
             logger.info("Preview surface configured: ${previewSize.width}x${previewSize.height}")
 
-            textureView?.let { configureTransform(it.width, it.height) }
+            // Configure transform matrix after surface is set up
+            textureView?.let { tv ->
+                if (tv.width > 0 && tv.height > 0) {
+                    configureTransform(tv.width, tv.height)
+                } else {
+                    logger.warning("TextureView dimensions not yet available for transform configuration")
+                }
+            }
         } catch (e: Exception) {
             logger.error("Failed to configure SurfaceTexture", e)
         }
