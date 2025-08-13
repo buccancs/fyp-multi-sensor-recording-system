@@ -143,99 +143,93 @@ class UIController @Inject constructor() {
     fun initializeUIComponents() {
         android.util.Log.d("UIController", "[DEBUG_LOG] Initializing consolidated UI components")
 
-        try {
-            val context = callback?.getContext() ?: throw IllegalStateException("Context not available")
-
-            pcStatusIndicator = StatusIndicatorView(context).apply {
-                setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "PC: Waiting for PC...")
-                setTextColor(android.R.color.white)
-            }
-
-            shimmerStatusIndicator = StatusIndicatorView(context).apply {
-                setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "Shimmer: Disconnected")
-                setTextColor(android.R.color.white)
-            }
-
-            thermalStatusIndicator = StatusIndicatorView(context).apply {
-                setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "Thermal: Disconnected")
-                setTextColor(android.R.color.white)
-            }
-
-            recordingButtonPair = ActionButtonPair(context).apply {
-                setButtons("Start Recording", "Stop Recording")
-                setButtonsEnabled(true, false)
-            }
-
-            callback?.onUIComponentsInitialized()
-            android.util.Log.d("UIController", "[DEBUG_LOG] Consolidated UI components initialized successfully")
-        } catch (e: Exception) {
-            android.util.Log.e("UIController", "[DEBUG_LOG] Failed to initialize UI components: ${e.message}")
-            callback?.onUIError("Failed to initialize UI components: ${e.message}")
+        val context = callback?.getContext() ?: run {
+            android.util.Log.e("UIController", "[DEBUG_LOG] Context not available")
+            callback?.onUIError("Context not available")
+            return
         }
+
+        pcStatusIndicator = StatusIndicatorView(context).apply {
+            setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "PC: Waiting for PC...")
+            setTextColor(android.R.color.white)
+        }
+
+        shimmerStatusIndicator = StatusIndicatorView(context).apply {
+            setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "Shimmer: Disconnected")
+            setTextColor(android.R.color.white)
+        }
+
+        thermalStatusIndicator = StatusIndicatorView(context).apply {
+            setStatus(StatusIndicatorView.StatusType.DISCONNECTED, "Thermal: Disconnected")
+            setTextColor(android.R.color.white)
+        }
+
+        recordingButtonPair = ActionButtonPair(context).apply {
+            setButtons("Start Recording", "Stop Recording")
+            setButtonsEnabled(true, false)
+        }
+
+        callback?.onUIComponentsInitialized()
+        android.util.Log.d("UIController", "[DEBUG_LOG] Consolidated UI components initialized successfully")
     }
 
     fun updateUIFromState(state: MainUiState) {
         android.util.Log.d("UIController", "[DEBUG_LOG] Updating UI from centralized state")
 
         callback?.runOnUiThread {
-            try {
-                saveUIState(state)
+            saveUIState(state)
 
-                callback?.getStatusText()?.text = state.statusText
+            callback?.getStatusText()?.text = state.statusText
 
-                if (::recordingButtonPair.isInitialized) {
-                    recordingButtonPair.setButtonsEnabled(state.canStartRecording, state.canStopRecording)
-                }
-
-                callback?.getStartRecordingButton()?.isEnabled = state.canStartRecording
-                callback?.getStopRecordingButton()?.isEnabled = state.canStopRecording
-
-                callback?.getCalibrationButton()?.isEnabled = state.canRunCalibration
-
-                updateStatusIndicatorsWithAccessibility(state)
-
-                updateConnectionIndicator(callback?.getPcConnectionIndicator(), state.isPcConnected)
-                updateConnectionIndicator(callback?.getShimmerConnectionIndicator(), state.isShimmerConnected)
-                updateConnectionIndicator(callback?.getThermalConnectionIndicator(), state.isThermalConnected)
-
-                callback?.getPcConnectionStatus()?.text =
-                    "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
-                callback?.getShimmerConnectionStatus()?.text =
-                    "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
-                callback?.getThermalConnectionStatus()?.text =
-                    "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
-
-                updateBatteryLevelDisplay(state.batteryLevel)
-
-                updateRecordingIndicator(state.isRecording)
-
-                updateStreamingIndicator(
-                    state.isStreaming,
-                    state.streamingFrameRate.toInt(),
-                    state.streamingDataSize.toString()
-                )
-
-                callback?.getRequestPermissionsButton()?.visibility =
-                    if (state.showPermissionsButton) View.VISIBLE else View.GONE
-
-                state.errorMessage?.let { errorMsg ->
-                    if (state.showErrorDialog) {
-                        callback?.showToast(errorMsg, android.widget.Toast.LENGTH_LONG)
-                        android.util.Log.d("UIController", "[DEBUG_LOG] Error displayed, clearing from state")
-                    }
-                }
-
-                state.currentSessionInfo?.let { sessionInfo ->
-                    updateSessionInfoDisplay(sessionInfo)
-                }
-
-                updateShimmerStatusWithAccessibility(state)
-
-                callback?.onUIStateUpdated(state)
-            } catch (e: Exception) {
-                android.util.Log.e("UIController", "[DEBUG_LOG] Error updating UI from state: ${e.message}")
-                callback?.onUIError("Failed to update UI: ${e.message}")
+            if (::recordingButtonPair.isInitialized) {
+                recordingButtonPair.setButtonsEnabled(state.canStartRecording, state.canStopRecording)
             }
+
+            callback?.getStartRecordingButton()?.isEnabled = state.canStartRecording
+            callback?.getStopRecordingButton()?.isEnabled = state.canStopRecording
+
+            callback?.getCalibrationButton()?.isEnabled = state.canRunCalibration
+
+            updateStatusIndicatorsWithAccessibility(state)
+
+            updateConnectionIndicator(callback?.getPcConnectionIndicator(), state.isPcConnected)
+            updateConnectionIndicator(callback?.getShimmerConnectionIndicator(), state.isShimmerConnected)
+            updateConnectionIndicator(callback?.getThermalConnectionIndicator(), state.isThermalConnected)
+
+            callback?.getPcConnectionStatus()?.text =
+                "PC: ${if (state.isPcConnected) "Connected" else "Waiting for PC..."}"
+            callback?.getShimmerConnectionStatus()?.text =
+                "Shimmer: ${if (state.isShimmerConnected) "Connected" else "Disconnected"}"
+            callback?.getThermalConnectionStatus()?.text =
+                "Thermal: ${if (state.isThermalConnected) "Connected" else "Disconnected"}"
+
+            updateBatteryLevelDisplay(state.batteryLevel)
+
+            updateRecordingIndicator(state.isRecording)
+
+            updateStreamingIndicator(
+                state.isStreaming,
+                state.streamingFrameRate.toInt(),
+                state.streamingDataSize.toString()
+            )
+
+            callback?.getRequestPermissionsButton()?.visibility =
+                if (state.showPermissionsButton) View.VISIBLE else View.GONE
+
+            state.errorMessage?.let { errorMsg ->
+                if (state.showErrorDialog) {
+                    callback?.showToast(errorMsg, android.widget.Toast.LENGTH_LONG)
+                    android.util.Log.d("UIController", "[DEBUG_LOG] Error displayed, clearing from state")
+                }
+            }
+
+            state.currentSessionInfo?.let { sessionInfo ->
+                updateSessionInfoDisplay(sessionInfo)
+            }
+
+            updateShimmerStatusWithAccessibility(state)
+
+            callback?.onUIStateUpdated(state)
         }
     }
 

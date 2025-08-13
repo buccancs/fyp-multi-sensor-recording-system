@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -95,74 +96,65 @@ fun RecordingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(4.dp), // Reduced padding from 16.dp to 4.dp
+            verticalArrangement = Arrangement.spacedBy(8.dp) // Reduced spacing from 16.dp to 8.dp
         ) {
-            SessionStatusCard(
-                sessionStatus = when {
-                    uiState.isRecording -> "Recording"
-                    uiState.isInitialized -> "Ready"
-                    else -> "Initializing"
-                },
-                deviceConnections = mapOf(
-                    "Camera" to if (uiState.isCameraConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED,
-                    "Thermal" to if (uiState.isThermalConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED,
-                    "GSR" to if (uiState.isGsrConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED,
-                    "PC Connection" to if (uiState.isPcConnected) DeviceStatus.CONNECTED else DeviceStatus.DISCONNECTED
-                )
-            )
-            
-            // Camera Preview Switch
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            // Compact session status display
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                Text(
+                    text = when {
+                        uiState.isRecording -> "Recording"
+                        uiState.isInitialized -> "Ready"
+                        else -> "Initializing"
+                    },
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (uiState.isRecording) RecordingActive else MaterialTheme.colorScheme.onSurface
+                )
+                
+                // Compact camera switch
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = "Camera Preview",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        text = "RGB",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (!showThermalCamera) MaterialTheme.colorScheme.primary 
+                               else MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = "RGB",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = if (!showThermalCamera) MaterialTheme.colorScheme.primary 
-                                   else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Switch(
-                            checked = showThermalCamera,
-                            onCheckedChange = { showThermalCamera = it }
-                        )
-                        Text(
-                            text = "Thermal",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = if (showThermalCamera) MaterialTheme.colorScheme.primary 
-                                   else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    Switch(
+                        checked = showThermalCamera,
+                        onCheckedChange = { showThermalCamera = it },
+                        modifier = Modifier.scale(0.8f) // Smaller switch
+                    )
+                    Text(
+                        text = "Thermal",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (showThermalCamera) MaterialTheme.colorScheme.primary 
+                               else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 
             // Camera Preview - Always create both views for initialization, but only display one
-            Box {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f) // Take up all remaining space
+            ) {
                 // RGB Camera Preview - Always present for initialization
                 CameraPreview(
                     isRecording = uiState.isRecording,
                     onTextureViewReady = { textureView ->
                         cameraTextureView = textureView
                     },
-                    modifier = if (!showThermalCamera) Modifier else Modifier.size(0.dp)
+                    modifier = if (!showThermalCamera) Modifier.fillMaxSize() else Modifier.size(0.dp)
                 )
 
                 // Thermal Camera Preview - Always present for initialization
@@ -171,14 +163,14 @@ fun RecordingScreen(
                     onSurfaceViewReady = { surfaceView ->
                         thermalSurfaceView = surfaceView
                     },
-                    modifier = if (showThermalCamera) Modifier else Modifier.size(0.dp)
+                    modifier = if (showThermalCamera) Modifier.fillMaxSize() else Modifier.size(0.dp)
                 )
             }
 
-            ColorPaletteSelector(
-                currentPalette = uiState.colorPalette,
-                onPaletteSelect = {  }
-            )
+            // ColorPaletteSelector(
+            //     currentPalette = uiState.colorPalette,
+            //     onPaletteSelect = {  }
+            // )
         }
     }
 }

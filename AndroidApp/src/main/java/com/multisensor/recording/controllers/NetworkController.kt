@@ -51,14 +51,11 @@ class NetworkController @Inject constructor() {
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
     private var isNetworkMonitoringActive = false
     private var lastKnownNetworkType = "Unknown"
-    private var connectionRetryCount = 0
-    private val maxRetryAttempts = 3
 
     private var streamingJob: Job? = null
     private var streamingScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var streamingStartTime = 0L
     private var totalBytesTransmitted = 0L
-    private var currentStreamingQuality = StreamingQuality.MEDIUM
     private var isRecoveryInProgress = false
 
     private var currentStreamingProtocol = StreamingProtocol.UDP
@@ -85,128 +82,70 @@ class NetworkController @Inject constructor() {
     }
 
     fun startNetworkMonitoring(context: Context) {
-        if (isNetworkMonitoringActive) {
-            android.util.Log.d("NetworkController", "[DEBUG_LOG] Network monitoring already active")
-            return
-        }
+        if (isNetworkMonitoringActive) return
 
-        try {
-            connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val networkRequest = NetworkRequest.Builder()
-                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-                    .build()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val networkRequest = NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                .build()
 
-                networkCallback = object : ConnectivityManager.NetworkCallback() {
-                    override fun onAvailable(network: Network) {
-                        android.util.Log.d("NetworkController", "[DEBUG_LOG] Network available: $network")
-                        handleNetworkAvailable(context, network)
-                    }
-
-                    override fun onLost(network: Network) {
-                        android.util.Log.d("NetworkController", "[DEBUG_LOG] Network lost: $network")
-                        handleNetworkLost(context, network)
-                    }
-
-                    override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-                        android.util.Log.d("NetworkController", "[DEBUG_LOG] Network capabilities changed: $network")
-                        handleNetworkCapabilitiesChanged(context, network, networkCapabilities)
-                    }
-
-                    override fun onUnavailable() {
-                        android.util.Log.w("NetworkController", "[DEBUG_LOG] Network unavailable")
-                        handleNetworkUnavailable(context)
-                    }
+            networkCallback = object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    handleNetworkAvailable(context, network)
                 }
 
-                connectivityManager?.registerNetworkCallback(networkRequest, networkCallback!!)
-                isNetworkMonitoringActive = true
-                android.util.Log.i("NetworkController", "[DEBUG_LOG] Network monitoring started successfully")
+                override fun onLost(network: Network) {
+                    handleNetworkLost(context, network)
+                }
 
-                val currentNetwork = connectivityManager?.activeNetwork
-                if (currentNetwork != null) {
-                    handleNetworkAvailable(context, currentNetwork)
-                } else {
+                override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+                    handleNetworkCapabilitiesChanged(context, network, networkCapabilities)
+                }
+
+                override fun onUnavailable() {
                     handleNetworkUnavailable(context)
                 }
-
-            } else {
-                android.util.Log.w("NetworkController", "[DEBUG_LOG] Network monitoring requires API level 24+")
-                val isConnected = NetworkUtils.isNetworkConnected(context)
-                handleNetworkConnectivityChange(isConnected)
             }
 
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: SecurityException) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Permission error starting network monitoring: ${e.message}")
-            callback?.onStreamingError("Permission error starting network monitoring: ${e.message}")
-        } catch (e: IllegalStateException) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Invalid state starting network monitoring: ${e.message}")
-            callback?.onStreamingError("Invalid state starting network monitoring: ${e.message}")
-        } catch (e: RuntimeException) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Runtime error starting network monitoring: ${e.message}")
-            callback?.onStreamingError("Runtime error starting network monitoring: ${e.message}")
+            connectivityManager?.registerNetworkCallback(networkRequest, networkCallback!!)
+            isNetworkMonitoringActive = true
+
+            val currentNetwork = connectivityManager?.activeNetwork
+            if (currentNetwork != null) {
+                handleNetworkAvailable(context, currentNetwork)
+            } else {
+                handleNetworkUnavailable(context)
+            }
+        } else {
+            val isConnected = NetworkUtils.isNetworkConnected(context)
+            handleNetworkConnectivityChange(isConnected)
         }
     }
 
     fun stopNetworkMonitoring() {
-        try {
-            networkCallback?.let { callback ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    connectivityManager?.unregisterNetworkCallback(callback)
-                }
+        networkCallback?.let { callback ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                connectivityManager?.unregisterNetworkCallback(callback)
             }
-            isNetworkMonitoringActive = false
-            networkCallback = null
-            connectivityManager = null
-            android.util.Log.i("NetworkController", "[DEBUG_LOG] Network monitoring stopped")
-
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: SecurityException) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Permission error stopping network monitoring: ${e.message}")
-        } catch (e: IllegalStateException) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Invalid state stopping network monitoring: ${e.message}")
-        } catch (e: RuntimeException) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Runtime error stopping network monitoring: ${e.message}")
         }
+        isNetworkMonitoringActive = false
+        networkCallback = null
+        connectivityManager = null
     }
 
     private fun handleNetworkAvailable(context: Context, network: Network) {
         val networkType = NetworkUtils.getNetworkType(context)
         lastKnownNetworkType = networkType
-        connectionRetryCount = 0
-
-        android.util.Log.i("NetworkController", "[DEBUG_LOG] Network available: $networkType")
-
         callback?.onNetworkStatusChanged(true)
-
-        if (isRecoveryInProgress && isStreamingActive) {
-            android.util.Log.i(
-                "NetworkController",
-                "[DEBUG_LOG] Attempting streaming recovery on network: $networkType"
-            )
-            callback?.onNetworkRecovery(networkType)
-            isRecoveryInProgress = false
-        }
     }
 
     private fun handleNetworkLost(context: Context, network: Network) {
-        android.util.Log.w("NetworkController", "[DEBUG_LOG] Network lost: $network")
-
         val isStillConnected = NetworkUtils.isNetworkConnected(context)
-
         if (!isStillConnected) {
             handleNetworkConnectivityChange(false)
-
-            if (isStreamingActive) {
-                isRecoveryInProgress = true
-                callback?.onStreamingError("Network connection lost - attempting recovery...")
-                attemptStreamingRecovery(context)
-            }
         }
     }
 
@@ -218,11 +157,6 @@ class NetworkController @Inject constructor() {
         val hasInternet = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         val isValidated = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
 
-        android.util.Log.d(
-            "NetworkController",
-            "[DEBUG_LOG] Network capabilities - Internet: $hasInternet, Validated: $isValidated"
-        )
-
         if (hasInternet && isValidated) {
             handleNetworkAvailable(context, network)
         } else {
@@ -231,45 +165,9 @@ class NetworkController @Inject constructor() {
     }
 
     private fun handleNetworkUnavailable(context: Context) {
-        android.util.Log.w("NetworkController", "[DEBUG_LOG] No network available")
         handleNetworkConnectivityChange(false)
-
         if (isStreamingActive) {
-            isRecoveryInProgress = true
             callback?.onStreamingError("No network available - streaming paused")
-        }
-    }
-
-    private fun attemptStreamingRecovery(context: Context) {
-        if (connectionRetryCount >= maxRetryAttempts) {
-            android.util.Log.e("NetworkController", "[DEBUG_LOG] Max retry attempts reached, giving up recovery")
-            callback?.onStreamingError("Network recovery failed after $maxRetryAttempts attempts")
-            isRecoveryInProgress = false
-            return
-        }
-
-        connectionRetryCount++
-        android.util.Log.i(
-            "NetworkController",
-            "[DEBUG_LOG] Attempting streaming recovery (attempt $connectionRetryCount/$maxRetryAttempts)"
-        )
-
-        streamingScope.launch {
-            delay(2000L * connectionRetryCount)
-
-            if (NetworkUtils.isNetworkConnected(context)) {
-                val networkType = NetworkUtils.getNetworkType(context)
-                android.util.Log.i("NetworkController", "[DEBUG_LOG] Network recovered: $networkType")
-                callback?.onNetworkRecovery(networkType)
-                isRecoveryInProgress = false
-                connectionRetryCount = 0
-            } else if (connectionRetryCount < maxRetryAttempts) {
-                attemptStreamingRecovery(context)
-            } else {
-                android.util.Log.e("NetworkController", "[DEBUG_LOG] Network recovery failed")
-                callback?.onStreamingError("Network recovery failed - please check connection")
-                isRecoveryInProgress = false
-            }
         }
     }
 
@@ -848,7 +746,6 @@ class NetworkController @Inject constructor() {
         streamingStartTime = 0L
         totalBytesTransmitted = 0L
 
-        connectionRetryCount = 0
         isRecoveryInProgress = false
         lastKnownNetworkType = "Unknown"
 
@@ -982,7 +879,6 @@ class NetworkController @Inject constructor() {
             "current_quality" to currentStreamingQuality.displayName,
             "network_monitoring_active" to isNetworkMonitoringActive,
             "recovery_in_progress" to isRecoveryInProgress,
-            "connection_retry_count" to connectionRetryCount,
             "last_known_network_type" to lastKnownNetworkType
         )
     }

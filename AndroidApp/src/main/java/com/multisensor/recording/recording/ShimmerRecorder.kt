@@ -261,180 +261,138 @@ constructor(
         try {
             logger.debug("Converting ObjectCluster from device: $deviceId")
 
-            try {
-                val timestampFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.TIMESTAMP)
-                val timestampCluster = ObjectCluster.returnFormatCluster(timestampFormats, "CAL") as? FormatCluster
-                timestampCluster?.let {
-                    deviceTimestamp = it.mData.toLong()
-                    logger.debug("Extracted device timestamp: $deviceTimestamp")
-                }
-            } catch (e: Exception) {
-                logger.debug("Could not extract timestamp, using system time: ${e.message}")
+            // Extract timestamp - use safe operations instead of try-catch
+            val timestampFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.TIMESTAMP)
+            val timestampCluster = ObjectCluster.returnFormatCluster(timestampFormats, "CAL") as? FormatCluster
+            timestampCluster?.let {
+                deviceTimestamp = it.mData.toLong()
+                logger.debug("Extracted device timestamp: $deviceTimestamp")
             }
 
-            try {
-                val gsrFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GSR_CONDUCTANCE)
-                val gsrCluster = ObjectCluster.returnFormatCluster(gsrFormats, "CAL") as? FormatCluster
-                gsrCluster?.let {
-                    sensorValues[SensorChannel.GSR] = it.mData
-                    logger.debug("Extracted GSR: ${it.mData} µS")
-                }
-            } catch (e: Exception) {
-                logger.debug("Could not extract GSR data: ${e.message}")
+            // Extract GSR data
+            val gsrFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GSR_CONDUCTANCE)
+            val gsrCluster = ObjectCluster.returnFormatCluster(gsrFormats, "CAL") as? FormatCluster
+            gsrCluster?.let {
+                sensorValues[SensorChannel.GSR] = it.mData
+                logger.debug("Extracted GSR: ${it.mData} µS")
             }
 
-            try {
-                val ppgFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.INT_EXP_ADC_A13)
-                val ppgCluster = ObjectCluster.returnFormatCluster(ppgFormats, "CAL") as? FormatCluster
-                ppgCluster?.let {
-                    sensorValues[SensorChannel.PPG] = it.mData
-                    logger.debug("Extracted PPG: ${it.mData}")
-                }
-            } catch (e: Exception) {
-                logger.debug("Could not extract PPG data: ${e.message}")
+            // Extract PPG data
+            val ppgFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.INT_EXP_ADC_A13)
+            val ppgCluster = ObjectCluster.returnFormatCluster(ppgFormats, "CAL") as? FormatCluster
+            ppgCluster?.let {
+                sensorValues[SensorChannel.PPG] = it.mData
+                logger.debug("Extracted PPG: ${it.mData}")
             }
 
-            try {
-                val accelXFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_X)
-                val accelXCluster = ObjectCluster.returnFormatCluster(accelXFormats, "CAL") as? FormatCluster
-                accelXCluster?.let {
-                    sensorValues[SensorChannel.ACCEL_X] = it.mData
-                    logger.debug("Extracted Accel X: ${it.mData} g")
-                }
-
-                val accelYFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_Y)
-                val accelYCluster = ObjectCluster.returnFormatCluster(accelYFormats, "CAL") as? FormatCluster
-                accelYCluster?.let {
-                    sensorValues[SensorChannel.ACCEL_Y] = it.mData
-                    logger.debug("Extracted Accel Y: ${it.mData} g")
-                }
-
-                val accelZFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_Z)
-                val accelZCluster = ObjectCluster.returnFormatCluster(accelZFormats, "CAL") as? FormatCluster
-                accelZCluster?.let {
-                    sensorValues[SensorChannel.ACCEL_Z] = it.mData
-                    logger.debug("Extracted Accel Z: ${it.mData} g")
-                }
-
-                if (sensorValues.containsKey(SensorChannel.ACCEL_X)) {
-                    sensorValues[SensorChannel.ACCEL] = sensorValues[SensorChannel.ACCEL_X] ?: 0.0
-                }
-            } catch (e: Exception) {
-                logger.debug("Could not extract accelerometer data: ${e.message}")
+            // Extract accelerometer data
+            val accelXFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_X)
+            val accelXCluster = ObjectCluster.returnFormatCluster(accelXFormats, "CAL") as? FormatCluster
+            accelXCluster?.let {
+                sensorValues[SensorChannel.ACCEL_X] = it.mData
+                logger.debug("Extracted Accel X: ${it.mData} g")
             }
 
-            try {
-                val gyroXFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_X)
-                val gyroXCluster = ObjectCluster.returnFormatCluster(gyroXFormats, "CAL") as? FormatCluster
-                gyroXCluster?.let {
-                    sensorValues[SensorChannel.GYRO_X] = it.mData
-                    logger.debug("Extracted Gyro X: ${it.mData} °/s")
-                }
-
-                val gyroYFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_Y)
-                val gyroYCluster = ObjectCluster.returnFormatCluster(gyroYFormats, "CAL") as? FormatCluster
-                gyroYCluster?.let {
-                    sensorValues[SensorChannel.GYRO_Y] = it.mData
-                    logger.debug("Extracted Gyro Y: ${it.mData} °/s")
-                }
-
-                val gyroZFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_Z)
-                val gyroZCluster = ObjectCluster.returnFormatCluster(gyroZFormats, "CAL") as? FormatCluster
-                gyroZCluster?.let {
-                    sensorValues[SensorChannel.GYRO_Z] = it.mData
-                    logger.debug("Extracted Gyro Z: ${it.mData} °/s")
-                }
-
-                if (sensorValues.containsKey(SensorChannel.GYRO_X)) {
-                    sensorValues[SensorChannel.GYRO] = sensorValues[SensorChannel.GYRO_X] ?: 0.0
-                }
-            } catch (e: Exception) {
-                logger.debug("Could not extract gyroscope data: ${e.message}")
+            val accelYFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_Y)
+            val accelYCluster = ObjectCluster.returnFormatCluster(accelYFormats, "CAL") as? FormatCluster
+            accelYCluster?.let {
+                sensorValues[SensorChannel.ACCEL_Y] = it.mData
+                logger.debug("Extracted Accel Y: ${it.mData} g")
             }
 
-            try {
-                val magXFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_X)
-                val magXCluster = ObjectCluster.returnFormatCluster(magXFormats, "CAL") as? FormatCluster
-                magXCluster?.let {
-                    sensorValues[SensorChannel.MAG_X] = it.mData
-                    logger.debug("Extracted Mag X: ${it.mData} gauss")
-                }
-
-                val magYFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_Y)
-                val magYCluster = ObjectCluster.returnFormatCluster(magYFormats, "CAL") as? FormatCluster
-                magYCluster?.let {
-                    sensorValues[SensorChannel.MAG_Y] = it.mData
-                    logger.debug("Extracted Mag Y: ${it.mData} gauss")
-                }
-
-                val magZFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_Z)
-                val magZCluster = ObjectCluster.returnFormatCluster(magZFormats, "CAL") as? FormatCluster
-                magZCluster?.let {
-                    sensorValues[SensorChannel.MAG_Z] = it.mData
-                    logger.debug("Extracted Mag Z: ${it.mData} gauss")
-                }
-
-                if (sensorValues.containsKey(SensorChannel.MAG_X)) {
-                    sensorValues[SensorChannel.MAG] = sensorValues[SensorChannel.MAG_X] ?: 0.0
-                }
-            } catch (e: Exception) {
-                logger.debug("Could not extract magnetometer data: ${e.message}")
+            val accelZFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.ACCEL_LN_Z)
+            val accelZCluster = ObjectCluster.returnFormatCluster(accelZFormats, "CAL") as? FormatCluster
+            accelZCluster?.let {
+                sensorValues[SensorChannel.ACCEL_Z] = it.mData
+                logger.debug("Extracted Accel Z: ${it.mData} g")
             }
 
-            try {
-                val ecgFormats =
-                    objectCluster.getCollectionOfFormatClusters("ECG")
-                val ecgCluster = ObjectCluster.returnFormatCluster(ecgFormats, "CAL") as? FormatCluster
-                ecgCluster?.let {
-                    sensorValues[SensorChannel.ECG] = it.mData
-                    logger.debug("Extracted ECG: ${it.mData} mV")
-                }
-            } catch (e: Exception) {
-                logger.debug("Could not extract ECG data: ${e.message}")
+            if (sensorValues.containsKey(SensorChannel.ACCEL_X)) {
+                sensorValues[SensorChannel.ACCEL] = sensorValues[SensorChannel.ACCEL_X] ?: 0.0
             }
 
-            try {
-                val emgFormats =
-                    objectCluster.getCollectionOfFormatClusters("EMG")
-                val emgCluster = ObjectCluster.returnFormatCluster(emgFormats, "CAL") as? FormatCluster
-                emgCluster?.let {
-                    sensorValues[SensorChannel.EMG] = it.mData
-                    logger.debug("Extracted EMG: ${it.mData} mV")
-                }
-            } catch (e: Exception) {
-                logger.debug("Could not extract EMG data: ${e.message}")
+            // Extract gyroscope data
+            val gyroXFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_X)
+            val gyroXCluster = ObjectCluster.returnFormatCluster(gyroXFormats, "CAL") as? FormatCluster
+            gyroXCluster?.let {
+                sensorValues[SensorChannel.GYRO_X] = it.mData
+                logger.debug("Extracted Gyro X: ${it.mData} °/s")
             }
 
-            try {
-                val batteryFormats =
-                    objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.BATTERY)
-                val batteryCluster = ObjectCluster.returnFormatCluster(batteryFormats, "CAL") as? FormatCluster
-                batteryCluster?.let {
-                    val voltage = it.mData
-                    batteryLevel = when {
-                        voltage >= 3.7 -> 100
-                        voltage >= 3.6 -> 80
-                        voltage >= 3.5 -> 60
-                        voltage >= 3.4 -> 40
-                        voltage >= 3.3 -> 20
-                        else -> 10
-                    }
-                    logger.debug("Extracted Battery: ${voltage}V (${batteryLevel}%)")
+            val gyroYFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_Y)
+            val gyroYCluster = ObjectCluster.returnFormatCluster(gyroYFormats, "CAL") as? FormatCluster
+            gyroYCluster?.let {
+                sensorValues[SensorChannel.GYRO_Y] = it.mData
+                logger.debug("Extracted Gyro Y: ${it.mData} °/s")
+            }
+
+            val gyroZFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.GYRO_Z)
+            val gyroZCluster = ObjectCluster.returnFormatCluster(gyroZFormats, "CAL") as? FormatCluster
+            gyroZCluster?.let {
+                sensorValues[SensorChannel.GYRO_Z] = it.mData
+                logger.debug("Extracted Gyro Z: ${it.mData} °/s")
+            }
+
+            if (sensorValues.containsKey(SensorChannel.GYRO_X)) {
+                sensorValues[SensorChannel.GYRO] = sensorValues[SensorChannel.GYRO_X] ?: 0.0
+            }
+
+            // Extract magnetometer data
+            val magXFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_X)
+            val magXCluster = ObjectCluster.returnFormatCluster(magXFormats, "CAL") as? FormatCluster
+            magXCluster?.let {
+                sensorValues[SensorChannel.MAG_X] = it.mData
+                logger.debug("Extracted Mag X: ${it.mData} gauss")
+            }
+
+            val magYFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_Y)
+            val magYCluster = ObjectCluster.returnFormatCluster(magYFormats, "CAL") as? FormatCluster
+            magYCluster?.let {
+                sensorValues[SensorChannel.MAG_Y] = it.mData
+                logger.debug("Extracted Mag Y: ${it.mData} gauss")
+            }
+
+            val magZFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.MAG_Z)
+            val magZCluster = ObjectCluster.returnFormatCluster(magZFormats, "CAL") as? FormatCluster
+            magZCluster?.let {
+                sensorValues[SensorChannel.MAG_Z] = it.mData
+                logger.debug("Extracted Mag Z: ${it.mData} gauss")
+            }
+
+            if (sensorValues.containsKey(SensorChannel.MAG_X)) {
+                sensorValues[SensorChannel.MAG] = sensorValues[SensorChannel.MAG_X] ?: 0.0
+            }
+
+            // Extract ECG data
+            val ecgFormats = objectCluster.getCollectionOfFormatClusters("ECG")
+            val ecgCluster = ObjectCluster.returnFormatCluster(ecgFormats, "CAL") as? FormatCluster
+            ecgCluster?.let {
+                sensorValues[SensorChannel.ECG] = it.mData
+                logger.debug("Extracted ECG: ${it.mData} mV")
+            }
+
+            // Extract EMG data
+            val emgFormats = objectCluster.getCollectionOfFormatClusters("EMG")
+            val emgCluster = ObjectCluster.returnFormatCluster(emgFormats, "CAL") as? FormatCluster
+            emgCluster?.let {
+                sensorValues[SensorChannel.EMG] = it.mData
+                logger.debug("Extracted EMG: ${it.mData} mV")
+            }
+
+            // Extract battery data
+            val batteryFormats = objectCluster.getCollectionOfFormatClusters(Configuration.Shimmer3.ObjectClusterSensorName.BATTERY)
+            val batteryCluster = ObjectCluster.returnFormatCluster(batteryFormats, "CAL") as? FormatCluster
+            batteryCluster?.let {
+                val voltage = it.mData
+                batteryLevel = when {
+                    voltage >= 3.7 -> 100
+                    voltage >= 3.6 -> 80
+                    voltage >= 3.5 -> 60
+                    voltage >= 3.4 -> 40
+                    voltage >= 3.3 -> 20
+                    else -> 10
                 }
-            } catch (e: Exception) {
-                logger.debug("Could not extract battery data: ${e.message}")
+                logger.debug("Extracted Battery: ${voltage}V (${batteryLevel}%)")
             }
 
             logger.debug("Successfully extracted ${sensorValues.size} sensor values from ObjectCluster")
@@ -453,17 +411,12 @@ constructor(
     }
 
     private fun extractSequenceNumber(objectCluster: ObjectCluster): Long {
-        return try {
-            val sequenceFormats = objectCluster.getCollectionOfFormatClusters("SequenceNumber")
-            if (sequenceFormats != null && sequenceFormats.isNotEmpty()) {
-                val sequenceCluster = ObjectCluster.returnFormatCluster(sequenceFormats, "CAL") as? FormatCluster
-                sequenceCluster?.mData?.toLong() ?: 0L
-            } else {
-                System.currentTimeMillis()
-            }
-        } catch (e: Exception) {
-            logger.debug("Could not extract sequence number: ${e.message}")
-            0L
+        val sequenceFormats = objectCluster.getCollectionOfFormatClusters("SequenceNumber")
+        return if (sequenceFormats != null && sequenceFormats.isNotEmpty()) {
+            val sequenceCluster = ObjectCluster.returnFormatCluster(sequenceFormats, "CAL") as? FormatCluster
+            sequenceCluster?.mData?.toLong() ?: System.currentTimeMillis()
+        } else {
+            System.currentTimeMillis()
         }
     }
 
@@ -499,59 +452,55 @@ constructor(
                     return@withContext emptyList()
                 }
 
-                try {
-                    val pairedDevices = bluetoothAdapter.bondedDevices
-                    logger.info("Total paired Bluetooth devices: ${pairedDevices?.size ?: 0}")
+                val pairedDevices = bluetoothAdapter.bondedDevices ?: return@withContext emptyList()
+                logger.info("Total paired Bluetooth devices: ${pairedDevices.size}")
 
-                    pairedDevices?.forEachIndexed { index, device ->
-                        logger.info("Paired device $index:")
-                        logger.info("  Name: '${device.name}'")
-                        logger.info("  Address: '${device.address}'")
-                        logger.info("  Type: ${device.type}")
-                        logger.info("  Bond State: ${device.bondState}")
+                pairedDevices.forEachIndexed { index, device ->
+                    logger.info("Paired device $index:")
+                    logger.info("  Name: '${device.name}'")
+                    logger.info("  Address: '${device.address}'")
+                    logger.info("  Type: ${device.type}")
+                    logger.info("  Bond State: ${device.bondState}")
 
+                    val nameContainsShimmer = device.name?.contains("Shimmer", ignoreCase = true) == true
+                    val nameContainsRN42 = device.name?.contains("RN42", ignoreCase = true) == true
+                    val matchesCriteria = nameContainsShimmer || nameContainsRN42
+
+                    logger.info("  Name contains 'Shimmer': $nameContainsShimmer")
+                    logger.info("  Name contains 'RN42': $nameContainsRN42")
+                    logger.info("  Matches Shimmer criteria: $matchesCriteria")
+                    logger.info("  ---")
+                }
+
+                val shimmerDevices = pairedDevices
+                    .filter { device ->
                         val nameContainsShimmer = device.name?.contains("Shimmer", ignoreCase = true) == true
                         val nameContainsRN42 = device.name?.contains("RN42", ignoreCase = true) == true
-                        val matchesCriteria = nameContainsShimmer || nameContainsRN42
+                        nameContainsShimmer || nameContainsRN42
+                    }.map { it.address }
 
-                        logger.info("  Name contains 'Shimmer': $nameContainsShimmer")
-                        logger.info("  Name contains 'RN42': $nameContainsRN42")
-                        logger.info("  Matches Shimmer criteria: $matchesCriteria")
-                        logger.info("  ---")
-                    }
-
-                    val shimmerDevices =
-                        pairedDevices
-                            .filter { device ->
-                                val nameContainsShimmer = device.name?.contains("Shimmer", ignoreCase = true) == true
-                                val nameContainsRN42 = device.name?.contains("RN42", ignoreCase = true) == true
-                                nameContainsShimmer || nameContainsRN42
-                            }.map { it.address }
-
-                    logger.info("Filtered Shimmer devices found: ${shimmerDevices.size}")
-                    shimmerDevices.forEach { address ->
-                        logger.info("  Shimmer device address: $address")
-                    }
-
-                    if (shimmerDevices.isEmpty()) {
-                        logger.error("No Shimmer devices found in paired devices!")
-                        logger.info("To resolve this issue:")
-                        logger.info("1. Ensure Shimmer device is paired in Android Bluetooth settings")
-                        logger.info("2. Use PIN 1234 when pairing")
-                        logger.info("3. Verify device name contains 'Shimmer' or 'RN42'")
-                        logger.info("4. Check that device is properly bonded (not just connected)")
-                    } else {
-                        logger.info("Successfully found ${shimmerDevices.size} Shimmer devices")
-                    }
-
-                    logger.info("=== END SHIMMER DEVICE DISCOVERY DIAGNOSTIC ===")
-
-                    shimmerDevices
-                } catch (e: SecurityException) {
-                    logger.error("Security exception accessing Bluetooth devices: ${e.message}", e)
-                    logger.error("This may indicate missing Bluetooth permissions")
-                    emptyList()
+                logger.info("Filtered Shimmer devices found: ${shimmerDevices.size}")
+                shimmerDevices.forEach { address ->
+                    logger.info("  Shimmer device address: $address")
                 }
+
+                if (shimmerDevices.isEmpty()) {
+                    logger.error("No Shimmer devices found in paired devices!")
+                    logger.info("To resolve this issue:")
+                    logger.info("1. Ensure Shimmer device is paired in Android Bluetooth settings")
+                    logger.info("2. Use PIN 1234 when pairing")
+                    logger.info("3. Verify device name contains 'Shimmer' or 'RN42'")
+                    logger.info("4. Check that device is properly bonded (not just connected)")
+                } else {
+                    logger.info("Successfully found ${shimmerDevices.size} Shimmer devices")
+                }
+
+                logger.info("=== END SHIMMER DEVICE DISCOVERY DIAGNOSTIC ===")
+                shimmerDevices
+            } catch (e: SecurityException) {
+                logger.error("Security exception accessing Bluetooth devices: ${e.message}", e)
+                logger.error("This may indicate missing Bluetooth permissions")
+                emptyList()
             } catch (e: Exception) {
                 logger.error("Failed to scan for Shimmer devices: ${e.message}", e)
                 emptyList()
@@ -644,44 +593,19 @@ constructor(
             }
         }
 
-    suspend fun connectDevicesWithRetry(
-        deviceAddresses: List<String>,
-        maxRetries: Int = 3,
-    ): List<String> =
+    suspend fun connectDevices(deviceAddresses: List<String>): List<String> =
         withContext(Dispatchers.IO) {
             val successfulConnections = mutableListOf<String>()
 
             deviceAddresses.forEach { macAddress ->
-                var retryCount = 0
-                var connected = false
-
-                while (!connected && retryCount < maxRetries) {
-                    try {
-                        logger.info("Attempting to connect to device: $macAddress (attempt ${retryCount + 1}/$maxRetries)")
-
-                        connected = connectSingleDeviceInternal(macAddress, "Shimmer3-GSR+")
-
-                        if (connected) {
-                            successfulConnections.add(macAddress)
-                            logger.info("Successfully connected to device: $macAddress")
-                        } else {
-                            retryCount++
-                            if (retryCount < maxRetries) {
-                                logger.warning("Connection failed, retrying in ${RECONNECTION_DELAY_MS}ms...")
-                                delay(RECONNECTION_DELAY_MS)
-                            }
-                        }
-                    } catch (e: Exception) {
-                        retryCount++
-                        logger.error("Connection attempt failed for device $macAddress: ${e.message}", e)
-                        if (retryCount < maxRetries) {
-                            delay(RECONNECTION_DELAY_MS)
-                        }
-                    }
-                }
-
-                if (!connected) {
-                    logger.error("Failed to connect to device $macAddress after $maxRetries attempts")
+                logger.info("Attempting to connect to device: $macAddress")
+                
+                val connected = connectSingleDeviceInternal(macAddress, "Shimmer3-GSR+")
+                if (connected) {
+                    successfulConnections.add(macAddress)
+                    logger.info("Successfully connected to device: $macAddress")
+                } else {
+                    logger.error("Failed to connect to device: $macAddress")
                 }
             }
 

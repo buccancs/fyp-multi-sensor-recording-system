@@ -48,9 +48,9 @@ fun MainNavigation(
                 }
             )
         },
-        bottomBar = {
-            EnhancedBottomNavigation(navController = navController)
-        },
+        // bottomBar = {
+        //     EnhancedBottomNavigation(navController = navController)
+        // },
         floatingActionButton = {
             // Only show FAB for screens that need one
             val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -119,35 +119,18 @@ class DeviceConnectionManager @Inject constructor(
     private suspend fun initializeCamera(textureView: TextureView?): Result<Unit> {
         return try {
             if (textureView != null) {
+                logger.info("Initializing camera...")
                 val success = cameraRecorder.initialize(textureView)
                 if (success) {
-                    // Give the camera a moment to fully initialize before starting preview
-                    kotlinx.coroutines.delay(500)
-                    
-                    // Start a preview-only session to show camera feed
-                    try {
-                        logger.info("Starting camera preview session...")
-                        val previewSession = cameraRecorder.startSession(recordVideo = false, captureRaw = false)
-                        if (previewSession != null) {
-                            logger.info("Camera preview started successfully")
-                        } else {
-                            logger.warning("Camera preview failed to start, but camera is initialized")
-                        }
-                    } catch (e: Exception) {
-                        logger.warning("Failed to start camera preview: ${e.message}")
-                        // Don't fail initialization if preview fails - the camera is still initialized
-                    }
-                    
+                    val previewSession = cameraRecorder.startSession(recordVideo = false, captureRaw = false)
                     _connectionState.value = _connectionState.value.copy(cameraConnected = true)
                     logger.info("Camera initialized successfully")
                     Result.success(Unit)
                 } else {
-                    logger.error("Camera initialization returned false")
                     Result.failure(RuntimeException("Camera initialization failed"))
                 }
             } else {
-                logger.warning("No TextureView provided for camera initialization")
-                Result.failure(IllegalArgumentException("TextureView required for camera"))
+                Result.failure(IllegalArgumentException("TextureView required"))
             }
         } catch (e: Exception) {
             logger.error("Camera initialization error", e)
@@ -157,14 +140,14 @@ class DeviceConnectionManager @Inject constructor(
 
     private suspend fun initializeThermalCamera(surfaceView: SurfaceView?): Result<Unit> {
         return try {
+            logger.info("Initializing thermal camera...")
             val success = thermalRecorder.initialize(surfaceView)
             if (success) {
                 val previewStarted = thermalRecorder.startPreview()
                 _connectionState.value = _connectionState.value.copy(thermalConnected = success)
-                logger.info("Thermal camera initialized: preview=${previewStarted}")
+                logger.info("Thermal camera initialized")
                 Result.success(Unit)
             } else {
-                logger.warning("Thermal camera not available")
                 Result.failure(RuntimeException("Thermal camera not available"))
             }
         } catch (e: Exception) {

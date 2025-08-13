@@ -114,18 +114,9 @@ class CalibrationController @Inject constructor(
     }
 
     fun initialize() {
-        try {
-            mediaActionSound = MediaActionSound()
-            android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration controller initialized")
-
-            callback?.getContext()?.let { context ->
-                restoreSessionState(context)
-            }
-        } catch (e: Exception) {
-            android.util.Log.e(
-                "CalibrationController",
-                "[DEBUG_LOG] Failed to initialize MediaActionSound: ${e.message}"
-            )
+        mediaActionSound = MediaActionSound()
+        callback?.getContext()?.let { context ->
+            restoreSessionState(context)
         }
     }
 
@@ -157,70 +148,47 @@ class CalibrationController @Inject constructor(
         callback?.onCalibrationStarted()
 
         lifecycleScope.launch {
-            try {
-                val result = calibrationCaptureManager.captureCalibrationImages(
-                    calibrationId = null,
-                    captureRgb = true,
-                    captureThermal = true,
-                    highResolution = true
+            val result = calibrationCaptureManager.captureCalibrationImages(
+                calibrationId = null,
+                captureRgb = true,
+                captureThermal = true,
+                highResolution = true
+            )
+
+            if (result.success) {
+                val quality = calculateCalibrationQuality(result)
+                qualityMetrics.add(quality)
+
+                currentSessionState = currentSessionState?.copy(
+                    completedPoints = currentSessionState!!.completedPoints + 1,
+                    lastUpdateTimestamp = System.currentTimeMillis()
                 )
 
-                if (result.success) {
-                    android.util.Log.d(
-                        "CalibrationController",
-                        "[DEBUG_LOG] Calibration capture successful: ${result.calibrationId}"
-                    )
-
-                    val quality = calculateCalibrationQuality(result)
-                    qualityMetrics.add(quality)
-
-                    currentSessionState = currentSessionState?.copy(
-                        completedPoints = currentSessionState!!.completedPoints + 1,
-                        lastUpdateTimestamp = System.currentTimeMillis()
-                    )
-
-                    callback?.getContext()?.let { context ->
-                        saveCalibrationHistory(context, result.calibrationId, true, quality)
-                        saveSessionState(context, currentSessionState!!)
-                    }
-
-                    callback?.runOnUiThread {
-                        triggerCalibrationCaptureSuccess(result.calibrationId, quality)
-                    }
-
-                    if (currentSessionState?.completedPoints == currentSessionState?.totalPoints || pattern == CalibrationPattern.SINGLE_POINT) {
-                        completeCalibrationSession(result.calibrationId)
-                    }
-
-                    callback?.onCalibrationCompleted(result.calibrationId)
-                } else {
-                    android.util.Log.e(
-                        "CalibrationController",
-                        "[DEBUG_LOG] Calibration capture failed: ${result.errorMessage}"
-                    )
-
-                    callback?.getContext()?.let { context ->
-                        saveCalibrationHistory(context, "failed_${System.currentTimeMillis()}", false)
-                        clearSessionState(context)
-                    }
-
-                    callback?.runOnUiThread {
-                        callback?.showToast("Calibration capture failed: ${result.errorMessage}", Toast.LENGTH_LONG)
-                    }
-
-                    callback?.onCalibrationFailed(result.errorMessage ?: "Unknown error")
-                }
-            } catch (e: Exception) {
-                android.util.Log.e("CalibrationController", "[DEBUG_LOG] Error during calibration capture", e)
-                callback?.runOnUiThread {
-                    callback?.showToast("Calibration error: ${e.message}", Toast.LENGTH_LONG)
-                }
-
                 callback?.getContext()?.let { context ->
+                    saveCalibrationHistory(context, result.calibrationId, true, quality)
+                    saveSessionState(context, currentSessionState!!)
+                }
+
+                callback?.runOnUiThread {
+                    triggerCalibrationCaptureSuccess(result.calibrationId, quality)
+                }
+
+                if (currentSessionState?.completedPoints == currentSessionState?.totalPoints || pattern == CalibrationPattern.SINGLE_POINT) {
+                    completeCalibrationSession(result.calibrationId)
+                }
+
+                callback?.onCalibrationCompleted(result.calibrationId)
+            } else {
+                callback?.getContext()?.let { context ->
+                    saveCalibrationHistory(context, "failed_${System.currentTimeMillis()}", false)
                     clearSessionState(context)
                 }
 
-                callback?.onCalibrationFailed("Calibration error: ${e.message}")
+                callback?.runOnUiThread {
+                    callback?.showToast("Calibration capture failed: ${result.errorMessage}", Toast.LENGTH_LONG)
+                }
+
+                callback?.onCalibrationFailed(result.errorMessage ?: "Unknown error")
             }
         }
     }
@@ -269,30 +237,14 @@ class CalibrationController @Inject constructor(
                 )
 
                 Handler(Looper.getMainLooper()).postDelayed({
-                    try {
-                        contentView.removeView(flashOverlay)
-                        android.util.Log.d("CalibrationController", "[DEBUG_LOG] Screen flash effect completed")
-                    } catch (e: Exception) {
-                        android.util.Log.w(
-                            "CalibrationController",
-                            "[DEBUG_LOG] Error removing flash overlay: ${e.message}"
-                        )
-                    }
+                    contentView.removeView(flashOverlay)
                 }, 150)
             }
         }
     }
 
     private fun triggerCalibrationAudioFeedback() {
-        try {
-            mediaActionSound?.play(MediaActionSound.SHUTTER_CLICK)
-            android.util.Log.d(
-                "CalibrationController",
-                "[DEBUG_LOG] Camera shutter sound played for calibration feedback"
-            )
-        } catch (e: Exception) {
-            android.util.Log.w("CalibrationController", "[DEBUG_LOG] Failed to play shutter sound: ${e.message}")
-        }
+        mediaActionSound?.play(MediaActionSound.SHUTTER_CLICK)
     }
 
     private fun showCalibrationGuidance(quality: CalibrationQuality? = null) {
@@ -314,41 +266,19 @@ class CalibrationController @Inject constructor(
     }
 
     fun testFlashSync(lifecycleScope: LifecycleCoroutineScope) {
-        android.util.Log.d("CalibrationController", "[DEBUG_LOG] Testing flash sync signal")
-
         lifecycleScope.launch {
-            try {
-                callback?.runOnUiThread {
-                    triggerScreenFlash()
-                    callback?.showToast("🔆 Flash sync signal triggered!")
-                }
-
-                android.util.Log.d("CalibrationController", "[DEBUG_LOG] Flash sync test completed successfully")
-                callback?.onSyncTestCompleted(true, "Flash sync signal triggered successfully")
-            } catch (e: Exception) {
-                android.util.Log.e("CalibrationController", "[DEBUG_LOG] Error during flash sync test", e)
-                callback?.runOnUiThread {
-                    callback?.showToast("Flash sync test failed: ${e.message}", Toast.LENGTH_LONG)
-                }
-                callback?.onSyncTestCompleted(false, "Flash sync test failed: ${e.message}")
+            callback?.runOnUiThread {
+                triggerScreenFlash()
+                callback?.showToast("🔆 Flash sync signal triggered!")
             }
+            callback?.onSyncTestCompleted(true, "Flash sync signal triggered successfully")
         }
     }
 
     fun testBeepSync() {
-        android.util.Log.d("CalibrationController", "[DEBUG_LOG] Testing beep sync signal")
-
-        try {
-            triggerCalibrationAudioFeedback()
-            callback?.showToast("🔊 Beep sync signal triggered!")
-
-            android.util.Log.d("CalibrationController", "[DEBUG_LOG] Beep sync test completed successfully")
-            callback?.onSyncTestCompleted(true, "Beep sync signal triggered successfully")
-        } catch (e: Exception) {
-            android.util.Log.e("CalibrationController", "[DEBUG_LOG] Error during beep sync test", e)
-            callback?.showToast("Beep sync test failed: ${e.message}", Toast.LENGTH_LONG)
-            callback?.onSyncTestCompleted(false, "Beep sync test failed: ${e.message}")
-        }
+        triggerCalibrationAudioFeedback()
+        callback?.showToast("🔊 Beep sync signal triggered!")
+        callback?.onSyncTestCompleted(true, "Beep sync signal triggered successfully")
     }
 
     fun testClockSync(lifecycleScope: LifecycleCoroutineScope) {
@@ -440,13 +370,8 @@ class CalibrationController @Inject constructor(
     }
 
     fun cleanup() {
-        try {
-            mediaActionSound?.release()
-            mediaActionSound = null
-            android.util.Log.d("CalibrationController", "[DEBUG_LOG] Calibration controller resources cleaned up")
-        } catch (e: Exception) {
-            android.util.Log.w("CalibrationController", "[DEBUG_LOG] Error during cleanup: ${e.message}")
-        }
+        mediaActionSound?.release()
+        mediaActionSound = null
     }
 
     fun isSyncValidForCalibration(): Boolean {
@@ -493,33 +418,23 @@ class CalibrationController @Inject constructor(
     }
 
     private fun getLastCalibrationInfo(context: Context): String {
-        return try {
-            val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
-            val calibrationId = prefs.getString(PREF_LAST_CALIBRATION_ID, null)
-            val lastTime = prefs.getLong(PREF_LAST_CALIBRATION_TIME, 0L)
-            val success = prefs.getBoolean(PREF_LAST_CALIBRATION_SUCCESS, false)
+        val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
+        val calibrationId = prefs.getString(PREF_LAST_CALIBRATION_ID, null)
+        val lastTime = prefs.getLong(PREF_LAST_CALIBRATION_TIME, 0L)
+        val success = prefs.getBoolean(PREF_LAST_CALIBRATION_SUCCESS, false)
 
-            if (calibrationId != null && lastTime > 0) {
-                val timeFormat = java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.getDefault())
-                val status = if (success) "✓" else "✗"
-                "$status $calibrationId (${timeFormat.format(java.util.Date(lastTime))})"
-            } else {
-                "None"
-            }
-        } catch (e: Exception) {
-            android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to get last calibration info: ${e.message}")
-            "Error retrieving info"
+        return if (calibrationId != null && lastTime > 0) {
+            val timeFormat = java.text.SimpleDateFormat("MMM dd, HH:mm", java.util.Locale.getDefault())
+            val status = if (success) "✓" else "✗"
+            "$status $calibrationId (${timeFormat.format(java.util.Date(lastTime))})"
+        } else {
+            "None"
         }
     }
 
     private fun getCalibrationCount(context: Context): Int {
-        return try {
-            val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
-            prefs.getInt(PREF_CALIBRATION_COUNT, 0)
-        } catch (e: Exception) {
-            android.util.Log.e("CalibrationController", "[DEBUG_LOG] Failed to get calibration count: ${e.message}")
-            0
-        }
+        val prefs = context.getSharedPreferences(CALIBRATION_PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getInt(PREF_CALIBRATION_COUNT, 0)
     }
 
     private fun saveSessionState(context: Context, sessionState: CalibrationSessionState) {
