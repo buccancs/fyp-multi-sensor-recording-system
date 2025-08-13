@@ -104,6 +104,14 @@ This research platform enables contactless GSR prediction through synchronised m
 - **Real-time Visualisation**: Live data monitoring and analysis with consistent UI patterns
 - **Data Export**: CSV, JSON, and binary formats for research analysis
 
+### 🌡️ Topdon Thermal Camera Integration
+- **Production-Ready Implementation**: Complete Topdon TC001/TC001+ thermal camera support with reflection-based API safety
+- **Hardware Compatibility**: Support for USB-C OTG connected thermal cameras with automatic device detection
+- **Comprehensive Status Monitoring**: Real-time thermal camera status, frame counting, and quality assessment
+- **Thermal Calibration**: Advanced calibration image capture with multiple capture method fallbacks
+- **Error Recovery**: Graceful handling of hardware disconnection and progressive retry logic
+- **Preview Integration**: Seamless thermal preview display with 256x192@25fps capability
+
 ### 🌐 Network Communication
 - **Bluetooth Low Energy (BLE)**: Efficient mobile-PC communication
 - **JSON Protocol**: Structured message exchange and control
@@ -511,6 +519,7 @@ This project is licensed under the MIT Licence - see the [LICENCE](LICENCE) file
 - **[🚀 Run Tests Now](./run_local_test.sh)** - One-click local testing
 - **[📊 GitHub Actions](https://github.com/buccancs/bucika_gsr/actions)** - Live CI/CD status
 - **[📚 Architecture Documentation](architecture.md)** - System architecture overview
+- **[🌡️ Thermal Camera Integration](docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md)** - Topdon thermal camera setup and API guide
 - **[🔥 Firebase Integration Guide](docs/FIREBASE_INTEGRATION.md)** - Cloud services documentation
 - **[🛠️ Troubleshooting](tests/integration/virtual_environment/TROUBLESHOOTING.md)** - Issue resolution
 - **[🧪 Test Documentation](tests/integration/virtual_environment/)** - Comprehensive test guides
