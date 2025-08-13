@@ -128,11 +128,9 @@ class RecordingController @Inject constructor() {
             totalRecordingTime = prefs.getLong(KEY_TOTAL_RECORDING_TIME, 0L)
 
             val qualityName = prefs.getString(KEY_QUALITY_SETTING, RecordingQuality.MEDIUM.name)
-            currentQuality = try {
-                RecordingQuality.valueOf(qualityName ?: RecordingQuality.MEDIUM.name)
-            } catch (e: IllegalArgumentException) {
-                RecordingQuality.MEDIUM
-            }
+            currentQuality = qualityName?.let { name ->
+                RecordingQuality.values().firstOrNull { it.name == name }
+            } ?: RecordingQuality.MEDIUM
 
             val sessionId = prefs.getString(KEY_CURRENT_SESSION_ID, null)
             if (sessionId != null) {
@@ -152,48 +150,37 @@ class RecordingController @Inject constructor() {
     }
 
     private fun saveRecordingState(context: Context) {
-        try {
-            val prefs = context.getSharedPreferences(RECORDING_PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = context.getSharedPreferences(RECORDING_PREFS_NAME, Context.MODE_PRIVATE)
 
-            val recordingState = RecordingState(
-                isRecording = currentSession != null && !currentSession!!.isComplete,
-                currentSessionId = currentSession?.sessionId,
-                sessionStartTime = currentSession?.startTime ?: 0L,
-                lastUpdateTime = System.currentTimeMillis(),
-                recordingParameters = mapOf(
-                    "quality" to currentQuality.name,
-                    "totalRecordingTime" to totalRecordingTime,
-                    "sessionCount" to sessionHistory.size,
-                    "isAnalyticsEnabled" to isAnalyticsEnabled
-                ),
-                errorCount = sessionHistory.count { it.hasErrors }
-            )
+        val recordingState = RecordingState(
+            isRecording = currentSession != null && !currentSession!!.isComplete,
+            currentSessionId = currentSession?.sessionId,
+            sessionStartTime = currentSession?.startTime ?: 0L,
+            lastUpdateTime = System.currentTimeMillis(),
+            recordingParameters = mapOf(
+                "quality" to currentQuality.name,
+                "totalRecordingTime" to totalRecordingTime,
+                "sessionCount" to sessionHistory.size,
+                "isAnalyticsEnabled" to isAnalyticsEnabled
+            ),
+            errorCount = sessionHistory.count { it.hasErrors }
+        )
 
-            val stateJson = JSONObject().apply {
-                put("isRecording", recordingState.isRecording)
-                put("currentSessionId", recordingState.currentSessionId ?: "")
-                put("sessionStartTime", recordingState.sessionStartTime)
-                put("lastUpdateTime", recordingState.lastUpdateTime)
-                put("recordingParameters", JSONObject(recordingState.recordingParameters))
-                put("errorCount", recordingState.errorCount)
-            }
-
-            prefs.edit().apply {
-                putString(PREF_RECORDING_STATE, stateJson.toString())
-                apply()
-            }
-
-            currentRecordingState = recordingState
-            android.util.Log.d("RecordingController", "[DEBUG_LOG] Enhanced recording state saved")
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: SecurityException) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Security exception saving recording state - check permissions: ${e.message}")
-        } catch (e: IOException) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] IO error saving recording state: ${e.message}")
-        } catch (e: RuntimeException) {
-            android.util.Log.e("RecordingController", "[DEBUG_LOG] Runtime error saving recording state: ${e.message}")
+        val stateJson = JSONObject().apply {
+            put("isRecording", recordingState.isRecording)
+            put("currentSessionId", recordingState.currentSessionId ?: "")
+            put("sessionStartTime", recordingState.sessionStartTime)
+            put("lastUpdateTime", recordingState.lastUpdateTime)
+            put("recordingParameters", JSONObject(recordingState.recordingParameters))
+            put("errorCount", recordingState.errorCount)
         }
+
+        prefs.edit().apply {
+            putString(PREF_RECORDING_STATE, stateJson.toString())
+            apply()
+        }
+
+        currentRecordingState = recordingState
     }
 
     private fun restoreRecordingState(context: Context) {
