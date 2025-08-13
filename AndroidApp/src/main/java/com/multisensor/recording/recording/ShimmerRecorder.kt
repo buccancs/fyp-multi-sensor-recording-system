@@ -599,7 +599,7 @@ constructor(
 
             deviceAddresses.forEach { macAddress ->
                 logger.info("Attempting to connect to device: $macAddress")
-                
+
                 val connected = connectSingleDeviceInternal(macAddress, "Shimmer3-GSR+")
                 if (connected) {
                     successfulConnections.add(macAddress)
@@ -813,7 +813,7 @@ constructor(
         return variance
     }
 
-    suspend fun connectDevices(deviceAddresses: List<String>): Boolean =
+    suspend fun connectDevicesWithStatus(deviceAddresses: List<String>): Boolean =
         withContext(Dispatchers.IO) {
             try {
                 logger.info("Connecting to ${deviceAddresses.size} Shimmer devices...")
@@ -1483,7 +1483,7 @@ constructor(
         return try {
             val shimmer = shimmerDevices[deviceId]
             val device = connectedDevices[deviceId]
-            
+
             if (shimmer != null && device?.isConnected() == true) {
                 // Try to get real GSR reading from hardware
                 val realGSRReading = shimmer.getGSRReading()
@@ -1492,7 +1492,7 @@ constructor(
                     return realGSRReading
                 }
             }
-            
+
             // Fallback to physiological model (not random data)
             generatePhysiologicalGSRModel(deviceId)
         } catch (e: Exception) {
@@ -1500,7 +1500,7 @@ constructor(
             generatePhysiologicalGSRModel(deviceId)
         }
     }
-    
+
     /**
      * Generates physiologically realistic GSR data based on human response patterns.
      * Not random - based on actual GSR physiology and time-dependent patterns.
@@ -1508,27 +1508,27 @@ constructor(
     private fun generatePhysiologicalGSRModel(deviceId: String): Double {
         val timeMs = System.currentTimeMillis()
         val timeMinutes = timeMs / 60000.0
-        
+
         // Base conductance (typical resting GSR: 2-10 μS)
         val baseGSR = 2.5
-        
+
         // Slow drift due to hydration and temperature (5-10 minute cycles)
         val slowDrift = kotlin.math.sin(timeMinutes * kotlin.math.PI / 7.0) * 0.3
-        
+
         // Breathing-related variations (15-20 breaths per minute)
         val breathingRate = 18.0 // breaths per minute
         val breathing = kotlin.math.sin(timeMinutes * 2 * kotlin.math.PI * breathingRate) * 0.1
-        
+
         // Spontaneous fluctuations (every 1-3 minutes)
         val spontaneous = kotlin.math.sin(timeMinutes * 2 * kotlin.math.PI / 2.5) * 0.2
-        
+
         // Small physiological noise (NOT random - based on skin resistance variation)
         val deviceHash = deviceId.hashCode().toDouble()
         val physiologicalVariation = kotlin.math.sin(timeMs * 0.001 + deviceHash) * 0.05
-        
+
         val finalGSR = (baseGSR + slowDrift + breathing + spontaneous + physiologicalVariation)
             .coerceIn(0.5, 15.0) // Realistic GSR range
-            
+
         logger.debug("Generated physiological GSR model: $finalGSR μS for device $deviceId")
         return finalGSR
     }
@@ -1541,7 +1541,7 @@ constructor(
         return try {
             val shimmer = shimmerDevices[deviceId]
             val device = connectedDevices[deviceId]
-            
+
             if (shimmer != null && device?.isConnected() == true) {
                 // Try to get real PPG reading from hardware
                 val realPPGReading = shimmer.getPPGReading()
@@ -1550,7 +1550,7 @@ constructor(
                     return realPPGReading
                 }
             }
-            
+
             // Fallback to physiological heart rate model
             generatePhysiologicalPPGModel(deviceId)
         } catch (e: Exception) {
@@ -1558,34 +1558,34 @@ constructor(
             generatePhysiologicalPPGModel(deviceId)
         }
     }
-    
+
     /**
      * Generates physiologically realistic PPG data based on human heart rate patterns.
      */
     private fun generatePhysiologicalPPGModel(deviceId: String): Double {
         val timeSeconds = System.currentTimeMillis() / 1000.0
-        
+
         // Realistic heart rate (60-80 BPM at rest)
         val baseHeartRate = 72.0 // BPM
-        
+
         // Heart rate variability (normal: 20-50ms RMSSD)
         val hrVariability = kotlin.math.sin(timeSeconds * 0.1) * 5.0
         val currentHeartRate = baseHeartRate + hrVariability
-        
+
         // PPG waveform components
         val heartComponent = kotlin.math.sin(2 * kotlin.math.PI * currentHeartRate / 60.0 * timeSeconds) * 100
         val dicroticNotch = kotlin.math.sin(4 * kotlin.math.PI * currentHeartRate / 60.0 * timeSeconds) * 20
-        
+
         // Respiratory modulation (breathing affects PPG amplitude)
-        val respiratoryRate = 16.0 // breaths per minute  
+        val respiratoryRate = 16.0 // breaths per minute
         val respiratoryModulation = kotlin.math.sin(2 * kotlin.math.PI * respiratoryRate / 60.0 * timeSeconds) * 30
-        
+
         // Baseline offset and physiological variation
         val baseline = 2048.0
         val deviceSpecificOffset = (deviceId.hashCode() % 100).toDouble()
-        
+
         val finalPPG = baseline + heartComponent + dicroticNotch + respiratoryModulation + deviceSpecificOffset
-        
+
         logger.debug("Generated physiological PPG model: $finalPPG for device $deviceId")
         return finalPPG
     }
@@ -1598,7 +1598,7 @@ constructor(
         return try {
             val shimmer = shimmerDevices[deviceId]
             val device = connectedDevices[deviceId]
-            
+
             if (shimmer != null && device?.isConnected() == true) {
                 // Try to get real accelerometer reading from hardware
                 val realAccelReading = when (axis.lowercase()) {
@@ -1607,13 +1607,13 @@ constructor(
                     "z" -> shimmer.getAccelZReading()
                     else -> null
                 }
-                
+
                 if (realAccelReading != null && realAccelReading.isFinite()) {
                     logger.debug("Retrieved real $axis-axis accel: $realAccelReading g from device $deviceId")
                     return realAccelReading
                 }
             }
-            
+
             // Fallback to physiological motion model
             generatePhysiologicalMotionModel(deviceId, axis)
         } catch (e: Exception) {
@@ -1621,20 +1621,20 @@ constructor(
             generatePhysiologicalMotionModel(deviceId, axis)
         }
     }
-    
+
     /**
      * Generates physiologically realistic motion data based on human movement patterns.
      */
     private fun generatePhysiologicalMotionModel(deviceId: String, axis: String): Double {
         val timeSeconds = System.currentTimeMillis() / 1000.0
-        
+
         // Base gravity component (device orientation dependent)
         val gravityComponent = when (axis.lowercase()) {
             "z" -> 1.0  // Assuming Z-axis typically points up
             "x", "y" -> 0.0
             else -> 0.0
         }
-        
+
         // Breathing-related chest movement (affects accelerometer)
         val breathingRate = 16.0 // breaths per minute
         val breathingAmplitude = when (axis.lowercase()) {
@@ -1644,20 +1644,20 @@ constructor(
             else -> 0.0
         }
         val breathing = kotlin.math.sin(2 * kotlin.math.PI * breathingRate / 60.0 * timeSeconds) * breathingAmplitude
-        
+
         // Heart rate-related micromovements (ballistocardiography)
         val heartRate = 72.0 // BPM
         val heartAmplitude = 0.003 // Very small heart-related movements
         val heartMovement = kotlin.math.sin(2 * kotlin.math.PI * heartRate / 60.0 * timeSeconds) * heartAmplitude
-        
+
         // Small postural adjustments (every few minutes)
         val posturalAdjustment = kotlin.math.sin(timeSeconds * 0.01) * 0.01
-        
+
         // Device-specific calibration offset
         val deviceOffset = (deviceId.hashCode() % 1000) / 10000.0
-        
+
         val finalAccel = gravityComponent + breathing + heartMovement + posturalAdjustment + deviceOffset
-        
+
         logger.debug("Generated physiological motion model ($axis): $finalAccel g for device $deviceId")
         return finalAccel
     }
@@ -1670,7 +1670,7 @@ constructor(
         return try {
             val shimmer = shimmerDevices[deviceId]
             val device = connectedDevices[deviceId]
-            
+
             if (shimmer != null && device?.isConnected() == true) {
                 // Try to get real battery level from hardware
                 val realBatteryLevel = shimmer.getBatteryLevel()
@@ -1679,7 +1679,7 @@ constructor(
                     return realBatteryLevel
                 }
             }
-            
+
             // Fallback to realistic battery discharge model
             generateRealisticBatteryModel(deviceId)
         } catch (e: Exception) {
@@ -1687,29 +1687,29 @@ constructor(
             generateRealisticBatteryModel(deviceId)
         }
     }
-    
+
     /**
      * Generates realistic battery discharge curve based on device usage patterns.
      */
     private fun generateRealisticBatteryModel(deviceId: String): Int {
         val deviceStartTime = deviceStartTimes[deviceId] ?: System.currentTimeMillis()
         val runtimeHours = (System.currentTimeMillis() - deviceStartTime) / 3600000.0
-        
+
         // Typical Shimmer battery life: 8-12 hours continuous recording
         val batteryCapacityHours = 10.0
         val linearDischarge = (100.0 * (1.0 - runtimeHours / batteryCapacityHours)).coerceIn(0.0, 100.0)
-        
+
         // Add realistic battery curve (batteries discharge faster when low)
         val dischargeAcceleration = if (linearDischarge < 20) {
             (linearDischarge / 20.0).pow(1.5) * linearDischarge
         } else {
             linearDischarge
         }
-        
+
         // Device-specific variations (some devices have better batteries)
         val deviceVariation = (deviceId.hashCode() % 10).toDouble()
         val finalBattery = (dischargeAcceleration + deviceVariation).coerceIn(0.0, 100.0).toInt()
-        
+
         logger.debug("Generated realistic battery model: $finalBattery% for device $deviceId")
         return finalBattery
     }
@@ -1722,7 +1722,7 @@ constructor(
         return try {
             val shimmer = shimmerDevices[deviceId]
             val device = connectedDevices[deviceId]
-            
+
             if (shimmer != null && device?.isConnected() == true) {
                 // Assess signal quality based on actual data characteristics
                 val recentSamples = dataQueues[deviceId]?.toList()?.takeLast(10) ?: emptyList()
@@ -1730,7 +1730,7 @@ constructor(
                     return assessDataQuality(recentSamples, deviceId)
                 }
             }
-            
+
             // Fallback to connection-based quality assessment
             generateRealisticQualityAssessment(deviceId)
         } catch (e: Exception) {
@@ -1738,57 +1738,57 @@ constructor(
             "Poor"
         }
     }
-    
+
     /**
      * Assesses signal quality based on actual sensor data characteristics.
      */
     private fun assessDataQuality(samples: List<SensorSample>, deviceId: String): String {
         if (samples.isEmpty()) return "Poor"
-        
+
         // Analyze GSR signal stability
         val gsrValues = samples.mapNotNull { it.sensorValues[SensorChannel.GSR] }
         val gsrVariance = if (gsrValues.size > 1) {
             val mean = gsrValues.average()
             gsrValues.map { (it - mean) * (it - mean) }.average()
         } else 0.0
-        
+
         // Analyze signal-to-noise ratio
         val snr = if (gsrVariance > 0) {
             val signal = gsrValues.average()
             val noise = kotlin.math.sqrt(gsrVariance)
             signal / noise
         } else 0.0
-        
+
         // Assess timestamp consistency
         val timestamps = samples.map { it.systemTimestamp }
         val timestampDiffs = timestamps.zipWithNext { a, b -> b - a }
         val avgInterval = timestampDiffs.average()
         val intervalVariance = timestampDiffs.map { (it - avgInterval) * (it - avgInterval) }.average()
         val timestampStability = if (avgInterval > 0) 1.0 - (kotlin.math.sqrt(intervalVariance) / avgInterval) else 0.0
-        
+
         // Combined quality score
         val qualityScore = (snr * 0.4 + timestampStability * 0.6).coerceIn(0.0, 1.0)
-        
+
         val quality = when {
             qualityScore > 0.8 -> "Excellent"
             qualityScore > 0.6 -> "Good"
             qualityScore > 0.4 -> "Fair"
             else -> "Poor"
         }
-        
+
         logger.debug("Assessed signal quality: $quality (score: $qualityScore) for device $deviceId")
         return quality
     }
-    
+
     /**
      * Generates realistic quality assessment based on device connection status and history.
      */
     private fun generateRealisticQualityAssessment(deviceId: String): String {
         val device = connectedDevices[deviceId]
         val isConnected = device?.isConnected() ?: false
-        
+
         if (!isConnected) return "Poor"
-        
+
         // Consider battery level impact on quality
         val batteryLevel = getRealBatteryLevel(deviceId)
         val batteryQuality = when {
@@ -1797,14 +1797,14 @@ constructor(
             batteryLevel > 10 -> 0.4
             else -> 0.2
         }
-        
+
         // Consider connection duration (newer connections may be less stable)
         val startTime = deviceStartTimes[deviceId] ?: System.currentTimeMillis()
         val connectionMinutes = (System.currentTimeMillis() - startTime) / 60000.0
         val connectionQuality = kotlin.math.min(connectionMinutes / 5.0, 1.0) // Stabilizes after 5 minutes
-        
+
         val overallQuality = (batteryQuality * 0.6 + connectionQuality * 0.4)
-        
+
         return when {
             overallQuality > 0.8 -> "Excellent"
             overallQuality > 0.6 -> "Good"
@@ -1812,7 +1812,7 @@ constructor(
             else -> "Poor"
         }
     }
-    
+
     // Track device start times for realistic battery modeling
     private val deviceStartTimes = mutableMapOf<String, Long>()
 
@@ -2308,7 +2308,7 @@ fun Shimmer.getGSRReading(): Double? {
 }
 
 /**
- * Extension method to get current PPG reading from Shimmer device  
+ * Extension method to get current PPG reading from Shimmer device
  * Implements proper PPG data retrieval following Shimmer API patterns
  */
 fun Shimmer.getPPGReading(): Double? {
@@ -2479,7 +2479,7 @@ fun Shimmer.getLatestReceivedData(): ObjectCluster? {
                 null
             }
         }
-        
+
         latestDataMethod?.invoke(this) as? ObjectCluster
     } catch (e: Exception) {
         null
@@ -2521,7 +2521,7 @@ private fun Shimmer.getCurrentGSRADCValue(): Double? {
                 null
             }
         }
-        
+
         gsrMethod?.invoke(this) as? Double
     } catch (e: Exception) {
         null
@@ -2544,7 +2544,7 @@ private fun Shimmer.getCurrentGSRRange(): Int? {
                 null
             }
         }
-        
+
         rangeMethod?.invoke(this) as? Int
     } catch (e: Exception) {
         0 // Default range
@@ -2567,7 +2567,7 @@ private fun Shimmer.getShimmerState(): ShimmerBluetooth.BT_STATE {
                 null
             }
         }
-        
+
         val state = stateMethod?.invoke(this)
         if (state is ShimmerBluetooth.BT_STATE) {
             state
@@ -2591,26 +2591,26 @@ private fun Shimmer.getShimmerState(): ShimmerBluetooth.BT_STATE {
 private fun generatePhysiologicalGSRValue(): Double {
     val timeMs = System.currentTimeMillis()
     val timeSeconds = (timeMs / 1000.0)
-    
+
     // Base conductance (typical resting: 2-10 μS)
     val baseGSR = 3.5
-    
+
     // Slow drift due to hydration and temperature (5-10 minute cycles)
     val slowDrift = sin(timeSeconds * PI / 420.0) * 0.3 // 7 minute cycle
-    
+
     // Breathing-related variations (15-20 breaths per minute)
     val breathingRate = 18.0 / 60.0 // Convert to Hz
     val breathing = sin(timeSeconds * 2 * PI * breathingRate) * 0.1
-    
+
     // Spontaneous fluctuations (every 1-3 minutes)
     val spontaneous = sin(timeSeconds * 2 * PI / 150.0) * 0.2 // 2.5 minute cycle
-    
+
     // Small physiological noise (based on skin resistance variation)
     val physiologicalVariation = sin(timeMs * 0.001) * 0.05
-    
+
     val finalGSR = (baseGSR + slowDrift + breathing + spontaneous + physiologicalVariation)
         .coerceIn(0.5, 15.0) // Realistic GSR range
-        
+
     return finalGSR
 }
 
@@ -2633,7 +2633,7 @@ fun Shimmer.getFirmwareVersion(): String {
                 null
             }
         }
-        
+
         fwMethod?.invoke(this) as? String ?: "3.2.3" // Default firmware version
     } catch (e: Exception) {
         "3.2.3"
@@ -2654,7 +2654,7 @@ fun Shimmer.getHardwareVersion(): String {
                 null
             }
         }
-        
+
         hwMethod?.invoke(this) as? String ?: "3.0" // Default hardware version
     } catch (e: Exception) {
         "3.0"
@@ -2675,7 +2675,7 @@ fun Shimmer.getSamplingRate(): Double {
                 null
             }
         }
-        
+
         rateMethod?.invoke(this) as? Double ?: 51.2 // Default sampling rate
     } catch (e: Exception) {
         51.2
@@ -2696,7 +2696,7 @@ fun Shimmer.getEnabledSensors(): Long {
                 null
             }
         }
-        
+
         sensorsMethod?.invoke(this) as? Long ?: 0x84L // Default: GSR + Accel
     } catch (e: Exception) {
         0x84L
@@ -2742,7 +2742,7 @@ fun Shimmer.getMacAddress(): String {
                 null
             }
         }
-        
+
         macMethod?.invoke(this) as? String ?: "00:00:00:00:00:00"
     } catch (e: Exception) {
         "00:00:00:00:00:00"
@@ -2763,7 +2763,7 @@ fun Shimmer.getDeviceName(): String {
                 null
             }
         }
-        
+
         nameMethod?.invoke(this) as? String ?: "Shimmer3-GSR+"
     } catch (e: Exception) {
         "Shimmer3-GSR+"
@@ -2901,7 +2901,7 @@ fun Shimmer.getECGReading(): Double? {
         val latestObjectCluster = getLatestReceivedData()
         if (latestObjectCluster != null) {
             // Try multiple ECG sensor names that might be available
-            val ecgFormats = latestObjectCluster.getCollectionOfFormatClusters("ECG") 
+            val ecgFormats = latestObjectCluster.getCollectionOfFormatClusters("ECG")
                 ?: latestObjectCluster.getCollectionOfFormatClusters("EXG1")
                 ?: latestObjectCluster.getCollectionOfFormatClusters("ExG 1")
             val ecgCluster = ObjectCluster.returnFormatCluster(ecgFormats, "CAL") as? FormatCluster
@@ -2915,7 +2915,7 @@ fun Shimmer.getECGReading(): Double? {
 }
 
 /**
- * Extension method to get current EMG reading from Shimmer device  
+ * Extension method to get current EMG reading from Shimmer device
  * Implements proper EMG data retrieval following Shimmer API patterns
  */
 fun Shimmer.getEMGReading(): Double? {
@@ -3068,7 +3068,7 @@ fun Shimmer.performCalibration(sensorType: String): Boolean {
 fun Shimmer.writeCompleteConfiguration(config: Map<String, Any>): Boolean {
     return try {
         var success = true
-        
+
         config["samplingRate"]?.let { rate ->
             if (rate is Double) {
                 try {
@@ -3079,7 +3079,7 @@ fun Shimmer.writeCompleteConfiguration(config: Map<String, Any>): Boolean {
                 }
             }
         }
-        
+
         config["gsrRange"]?.let { range ->
             if (range is Int) {
                 try {
@@ -3089,7 +3089,7 @@ fun Shimmer.writeCompleteConfiguration(config: Map<String, Any>): Boolean {
                 }
             }
         }
-        
+
         config["accelRange"]?.let { range ->
             if (range is Int) {
                 try {
@@ -3099,7 +3099,7 @@ fun Shimmer.writeCompleteConfiguration(config: Map<String, Any>): Boolean {
                 }
             }
         }
-        
+
         config["enabledSensors"]?.let { sensors ->
             if (sensors is Long) {
                 try {
@@ -3110,7 +3110,7 @@ fun Shimmer.writeCompleteConfiguration(config: Map<String, Any>): Boolean {
                 }
             }
         }
-        
+
         success
     } catch (e: Exception) {
         false

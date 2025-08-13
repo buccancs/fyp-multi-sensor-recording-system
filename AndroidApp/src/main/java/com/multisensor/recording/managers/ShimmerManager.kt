@@ -364,8 +364,6 @@ class ShimmerManager @Inject constructor(
             }
             .show()
     }
-        }
-    }
 
     private fun showAdvancedSensorConfiguration(activity: Activity, callback: ShimmerCallback) {
         android.util.Log.d("ShimmerManager", "[DEBUG_LOG] Showing advanced sensor configuration")
@@ -579,7 +577,7 @@ class ShimmerManager @Inject constructor(
     private fun showLogFilesViewer(activity: Activity, callback: ShimmerCallback) {
         // Simulate retrieving log files from connected Shimmer devices
         val logFiles = getAvailableLogFiles()
-        
+
         if (logFiles.isEmpty()) {
             AlertDialog.Builder(activity)
                 .setTitle("Log Files Viewer")
@@ -588,11 +586,11 @@ class ShimmerManager @Inject constructor(
                 .show()
             return
         }
-        
+
         val fileInfoArray = logFiles.map { file ->
             "${file.name} (${file.sizeFormatted}, ${file.dateFormatted})"
         }.toTypedArray()
-        
+
         AlertDialog.Builder(activity)
             .setTitle("Log Files Viewer (${logFiles.size} files)")
             .setItems(fileInfoArray) { _, which ->
@@ -602,10 +600,10 @@ class ShimmerManager @Inject constructor(
             .setNegativeButton("Close") { _, _ -> }
             .show()
     }
-    
+
     private fun showLogFileOptions(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
         val options = arrayOf("View File Info", "Download to Device", "Delete from SD Card", "Export via Bluetooth")
-        
+
         AlertDialog.Builder(activity)
             .setTitle("Log File: ${logFile.name}")
             .setItems(options) { _, which ->
@@ -616,12 +614,12 @@ class ShimmerManager @Inject constructor(
                     3 -> exportLogFile(activity, logFile, callback)
                 }
             }
-            .setNegativeButton("Back") { _, _ -> 
+            .setNegativeButton("Back") { _, _ ->
                 showLogFilesViewer(activity, callback)
             }
             .show()
     }
-    
+
     private fun showLogFileDetails(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
         val details = buildString {
             append("File Name: ${logFile.name}\n")
@@ -632,16 +630,16 @@ class ShimmerManager @Inject constructor(
             append("Sample Count: ${logFile.sampleCount}\n")
             append("Sensors: ${logFile.sensorsUsed.joinToString(", ")}")
         }
-        
+
         AlertDialog.Builder(activity)
             .setTitle("File Details")
             .setMessage(details)
-            .setPositiveButton("OK") { _, _ -> 
+            .setPositiveButton("OK") { _, _ ->
                 showLogFileOptions(activity, logFile, callback)
             }
             .show()
     }
-    
+
     private fun downloadLogFile(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
         AlertDialog.Builder(activity)
             .setTitle("Download Log File")
@@ -649,12 +647,12 @@ class ShimmerManager @Inject constructor(
             .setPositiveButton("Download") { _, _ ->
                 // Simulate download process
                 Toast.makeText(activity, "Downloading ${logFile.name}...", Toast.LENGTH_SHORT).show()
-                
+
                 // Simulate download completion after delay
                 android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                     Toast.makeText(activity, "Download complete: ${logFile.name}", Toast.LENGTH_LONG).show()
                 }, 2000)
-                
+
                 callback.onConfigurationComplete()
             }
             .setNegativeButton("Cancel") { _, _ ->
@@ -662,7 +660,7 @@ class ShimmerManager @Inject constructor(
             }
             .show()
     }
-    
+
     private fun deleteLogFile(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
         AlertDialog.Builder(activity)
             .setTitle("Delete Log File")
@@ -676,19 +674,19 @@ class ShimmerManager @Inject constructor(
             }
             .show()
     }
-    
+
     private fun exportLogFile(activity: Activity, logFile: LogFileInfo, callback: ShimmerCallback) {
         AlertDialog.Builder(activity)
             .setTitle("Export Log File")
             .setMessage("Export ${logFile.name} via Bluetooth to PC application?\n\nEnsure PC application is running and ready to receive.")
             .setPositiveButton("Export") { _, _ ->
                 Toast.makeText(activity, "Exporting ${logFile.name} via Bluetooth...", Toast.LENGTH_SHORT).show()
-                
+
                 // Simulate export completion
                 android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                     Toast.makeText(activity, "Export complete: ${logFile.name}", Toast.LENGTH_LONG).show()
                 }, 3000)
-                
+
                 callback.onConfigurationComplete()
             }
             .setNegativeButton("Cancel") { _, _ ->
@@ -696,15 +694,15 @@ class ShimmerManager @Inject constructor(
             }
             .show()
     }
-    
+
     private fun getAvailableLogFiles(): List<LogFileInfo> {
         // Simulate retrieving log files from connected Shimmer devices
         // In real implementation, this would query the actual SD card contents
-        
+
         val currentTime = System.currentTimeMillis()
         val oneDayAgo = currentTime - 24 * 60 * 60 * 1000
         val oneWeekAgo = currentTime - 7 * 24 * 60 * 60 * 1000
-        
+
         return listOf(
             LogFileInfo(
                 name = "GSR_Session_20241201_143022.csv",
@@ -717,7 +715,7 @@ class ShimmerManager @Inject constructor(
             ),
             LogFileInfo(
                 name = "MultiSensor_Session_20241130_091534.csv",
-                sizeBytes = 8945200, // ~8.9 MB  
+                sizeBytes = 8945200, // ~8.9 MB
                 dateCreated = oneDayAgo,
                 deviceName = "Shimmer_4AB5",
                 durationMinutes = 60,
@@ -728,14 +726,14 @@ class ShimmerManager @Inject constructor(
                 name = "ECG_Baseline_20241125_160415.csv",
                 sizeBytes = 1536000, // ~1.5 MB
                 dateCreated = oneWeekAgo,
-                deviceName = "Shimmer_4AB4", 
+                deviceName = "Shimmer_4AB4",
                 durationMinutes = 10,
                 sampleCount = 30720, // 10 minutes @ 51.2 Hz
                 sensorsUsed = listOf("ECG", "PPG", "Accelerometer")
             )
         )
     }
-    
+
     private data class LogFileInfo(
         val name: String,
         val sizeBytes: Long,
@@ -752,11 +750,11 @@ class ShimmerManager @Inject constructor(
                 sizeBytes < 1024 * 1024 * 1024 -> "${"%.1f".format(sizeBytes / (1024.0 * 1024.0))}MB"
                 else -> "${"%.1f".format(sizeBytes / (1024.0 * 1024.0 * 1024.0))}GB"
             }
-        
+
         val dateFormatted: String
             get() = java.text.SimpleDateFormat("MMM dd, yyyy HH:mm", java.util.Locale.getDefault())
                 .format(java.util.Date(dateCreated))
-        
+
         val durationFormatted: String
             get() = when {
                 durationMinutes < 60 -> "${durationMinutes}m"
@@ -950,7 +948,7 @@ class ShimmerManager @Inject constructor(
         // Replace random checks with real SD card status assessment
         return assessRealSDCardStatus()
     }
-    
+
     /**
      * Assess real SD card status based on device communication and stored state
      */
@@ -959,12 +957,12 @@ class ShimmerManager @Inject constructor(
             if (!isConnected || connectedShimmer == null) {
                 return SDCardStatus(false, "Device not connected")
             }
-            
+
             // Try to get real SD card status from device
             val deviceStatusOk = assessDeviceResponseQuality()
             val batteryLevel = lastKnownBatteryLevel
             val connectionTime = System.currentTimeMillis() - connectionStartTime
-            
+
             // Assess based on device health indicators
             return when {
                 !deviceStatusOk -> SDCardStatus(false, "Device communication error")
@@ -986,7 +984,7 @@ class ShimmerManager @Inject constructor(
             return SDCardStatus(false, "Error checking SD card: ${e.message}")
         }
     }
-    
+
     /**
      * Calculate SD card health score based on device indicators
      */
@@ -994,7 +992,7 @@ class ShimmerManager @Inject constructor(
         val batteryFactor = lastKnownBatteryLevel / 100.0
         val connectionFactor = if (isConnected) 1.0 else 0.0
         val timeFactor = kotlin.math.min((System.currentTimeMillis() - connectionStartTime) / 60000.0, 1.0)
-        
+
         return (batteryFactor * 0.4 + connectionFactor * 0.4 + timeFactor * 0.2).coerceIn(0.0, 1.0)
     }
 
@@ -1593,7 +1591,7 @@ class ShimmerManager @Inject constructor(
         val supportedFeatures: Set<String> = emptySet(),
         val errorCount: Int = 0
     )
-    
+
     /**
      * Assess SD logging success based on real device status indicators
      */
@@ -1603,7 +1601,7 @@ class ShimmerManager @Inject constructor(
             val batteryAdequate = lastKnownBatteryLevel > 15
             val connectionStable = isConnected && System.currentTimeMillis() - connectionStartTime > 10000
             val sdCardReady = calculateSDCardHealthScore() > 0.7
-            
+
             val successProbability = when {
                 deviceHealth > 0.8 && batteryAdequate && connectionStable && sdCardReady -> 0.95
                 deviceHealth > 0.6 && batteryAdequate && connectionStable -> 0.85
@@ -1611,20 +1609,20 @@ class ShimmerManager @Inject constructor(
                 deviceHealth > 0.2 -> 0.50
                 else -> 0.20
             }
-            
+
             // Use deterministic success based on conditions rather than random
             val currentTime = System.currentTimeMillis()
             val deterministic = (currentTime % 100) / 100.0
-            
+
             android.util.Log.d(TAG_SD_LOGGING, "SD logging assessment: health=$deviceHealth, battery=$batteryAdequate, stable=$connectionStable, sdReady=$sdCardReady, prob=$successProbability")
-            
+
             deterministic < successProbability
         } catch (e: Exception) {
             android.util.Log.e(TAG_SD_LOGGING, "Error assessing SD logging success: ${e.message}")
             false
         }
     }
-    
+
     /**
      * Assess SD logging termination success based on device state
      */
@@ -1633,27 +1631,27 @@ class ShimmerManager @Inject constructor(
             val deviceResponding = assessDeviceResponseQuality()
             val connectionActive = isConnected
             val batteryOk = lastKnownBatteryLevel > 5
-            
+
             val terminationProbability = when {
                 deviceResponding && connectionActive && batteryOk -> 0.98
                 deviceResponding && connectionActive -> 0.90
                 connectionActive -> 0.75
                 else -> 0.30
             }
-            
+
             // Use deterministic assessment based on device conditions
             val currentTime = System.currentTimeMillis()
             val deterministic = ((currentTime / 100) % 100) / 100.0
-            
+
             android.util.Log.d(TAG_SD_LOGGING, "SD termination assessment: responding=$deviceResponding, connected=$connectionActive, battery=$batteryOk, prob=$terminationProbability")
-            
+
             deterministic < terminationProbability
         } catch (e: Exception) {
             android.util.Log.e(TAG_SD_LOGGING, "Error assessing SD termination: ${e.message}")
             false
         }
     }
-    
+
     /**
      * Assess device connection success based on device info and conditions
      */
@@ -1662,28 +1660,28 @@ class ShimmerManager @Inject constructor(
             val addressValid = deviceInfo.address.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$".toRegex())
             val nameValid = deviceInfo.name.contains("Shimmer", ignoreCase = true)
             val connectionTimeValid = System.currentTimeMillis() - connectionStartTime > 1000
-            
+
             val connectionProbability = when {
                 addressValid && nameValid && connectionTimeValid -> 0.90
                 addressValid && nameValid -> 0.80
                 addressValid -> 0.60
                 else -> 0.30
             }
-            
+
             // Use device-specific deterministic assessment
             val deviceSpecific = (deviceInfo.address.hashCode() % 100).toDouble() / 100.0
             val timeSpecific = ((System.currentTimeMillis() / 1000) % 100) / 100.0
             val combinedDeterministic = (deviceSpecific + timeSpecific) / 2.0
-            
+
             android.util.Log.d(TAG_CONNECTION, "Connection assessment: addressValid=$addressValid, nameValid=$nameValid, timeValid=$connectionTimeValid, prob=$connectionProbability")
-            
+
             combinedDeterministic < connectionProbability
         } catch (e: Exception) {
             android.util.Log.e(TAG_CONNECTION, "Error assessing connection success: ${e.message}")
             false
         }
     }
-    
+
     /**
      * Assess overall device health based on multiple indicators
      */
@@ -1696,23 +1694,23 @@ class ShimmerManager @Inject constructor(
                 lastKnownBatteryLevel > 15 -> 0.4
                 else -> 0.2
             }
-            
+
             val connectionFactor = if (isConnected) 1.0 else 0.0
-            
+
             val uptimeFactor = if (isConnected) {
                 val uptimeMinutes = (System.currentTimeMillis() - connectionStartTime) / 60000.0
                 kotlin.math.min(uptimeMinutes / 10.0, 1.0) // Stabilizes after 10 minutes
             } else 0.0
-            
+
             val capabilityFactor = deviceCapabilities.size / 7.0 // Assuming max 7 capabilities
-            
+
             (batteryFactor * 0.4 + connectionFactor * 0.3 + uptimeFactor * 0.2 + capabilityFactor * 0.1)
                 .coerceIn(0.0, 1.0)
         } catch (e: Exception) {
             0.0
         }
     }
-    
+
     /**
      * Assess device response quality based on communication patterns
      */
@@ -1725,11 +1723,11 @@ class ShimmerManager @Inject constructor(
                 System.currentTimeMillis() - connectionStartTime > 5000,
                 deviceCapabilities.isNotEmpty()
             )
-            
+
             val responseScore = responseFactors.count { it } / responseFactors.size.toDouble()
-            
+
             android.util.Log.d(TAG_CONNECTION, "Device response quality: score=$responseScore, factors=$responseFactors")
-            
+
             responseScore >= 0.6 // Require at least 60% of factors to be positive
         } catch (e: Exception) {
             android.util.Log.e(TAG_CONNECTION, "Error assessing device response quality: ${e.message}")

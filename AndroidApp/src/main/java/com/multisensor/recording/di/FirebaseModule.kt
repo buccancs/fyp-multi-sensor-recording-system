@@ -66,9 +66,10 @@ object FirebaseModule {
     @Provides
     @Singleton
     fun provideFirebaseFirestoreService(
-        firestore: FirebaseFirestore
+        firestore: FirebaseFirestore,
+        authService: FirebaseAuthService
     ): FirebaseFirestoreService {
-        return FirebaseFirestoreService(firestore)
+        return FirebaseFirestoreService(firestore, authService)
     }
 
     @Provides

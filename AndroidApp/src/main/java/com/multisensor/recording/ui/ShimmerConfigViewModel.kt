@@ -103,7 +103,7 @@ class ShimmerConfigViewModel @Inject constructor(
                 )
             }
             try {
-                val connected = shimmerRecorder.connectDevices(listOf(selectedDevice.macAddress))
+                val connected = shimmerRecorder.connectDevicesWithStatus(listOf(selectedDevice.macAddress))
                 if (connected) {
                     _uiState.update {
                         it.copy(

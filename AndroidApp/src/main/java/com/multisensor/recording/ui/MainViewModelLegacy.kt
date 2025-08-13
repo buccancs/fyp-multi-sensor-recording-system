@@ -1630,7 +1630,7 @@ constructor(
                 try {
                     val discoveredDevices = shimmerRecorder.scanAndPairDevices()
                     if (discoveredDevices.isNotEmpty()) {
-                        val shimmerConnected = shimmerRecorder.connectDevices(discoveredDevices)
+                        val shimmerConnected = shimmerRecorder.connectDevicesWithStatus(discoveredDevices)
                         if (shimmerConnected) {
                             successCount++
                             connectionResults.add("Shimmer: Connected (${discoveredDevices.size} devices)")

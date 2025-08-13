@@ -216,4 +216,11 @@ class RecordingSessionController @Inject constructor(
             Result.failure(e)
         }
     }
+
+    // Alias methods for compatibility with other naming conventions
+    suspend fun startSession(config: RecordingConfig = RecordingConfig()): Result<String> = startRecording(config)
+
+    suspend fun stopSession(): Result<String> = stopRecording()
+
+    fun getSummary(): String = _recordingState.value.sessionInfo ?: "No active session"
 }

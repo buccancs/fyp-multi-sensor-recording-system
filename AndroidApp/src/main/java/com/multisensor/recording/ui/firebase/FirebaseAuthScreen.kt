@@ -31,14 +31,14 @@ fun FirebaseAuthScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
-    
+
     // Handle successful authentication
     LaunchedEffect(uiState.isAuthenticated) {
         if (uiState.isAuthenticated) {
             onAuthSuccess()
         }
     }
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +47,7 @@ fun FirebaseAuthScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        
+
         // App logo/title
         Text(
             text = "Multi-Sensor GSR Research Platform",
@@ -56,7 +56,7 @@ fun FirebaseAuthScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        
+
         Text(
             text = "Research Authentication",
             style = MaterialTheme.typography.titleMedium,
@@ -64,7 +64,7 @@ fun FirebaseAuthScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 32.dp)
         )
-        
+
         if (uiState.isRegisterMode) {
             RegisterForm(
                 uiState = uiState,
@@ -93,9 +93,9 @@ fun FirebaseAuthScreen(
                 }
             )
         }
-        
+
         // Error message
-        if (uiState.errorMessage != null) {
+        uiState.errorMessage?.let { errorMsg ->
             Spacer(modifier = Modifier.height(16.dp))
             Card(
                 colors = CardDefaults.cardColors(
@@ -104,16 +104,16 @@ fun FirebaseAuthScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = uiState.errorMessage,
+                    text = errorMsg,
                     color = MaterialTheme.colorScheme.onErrorContainer,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(16.dp)
                 )
             }
         }
-        
+
         // Success message
-        if (uiState.successMessage != null) {
+        uiState.successMessage?.let { successMsg ->
             Spacer(modifier = Modifier.height(16.dp))
             Card(
                 colors = CardDefaults.cardColors(
@@ -122,7 +122,7 @@ fun FirebaseAuthScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = uiState.successMessage,
+                    text = successMsg,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(16.dp)
@@ -142,7 +142,7 @@ private fun LoginForm(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -158,7 +158,7 @@ private fun LoginForm(
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
-            
+
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -167,7 +167,7 @@ private fun LoginForm(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading
             )
-            
+
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -185,7 +185,7 @@ private fun LoginForm(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading
             )
-            
+
             Button(
                 onClick = { onLogin(email, password) },
                 modifier = Modifier.fillMaxWidth(),
@@ -200,7 +200,7 @@ private fun LoginForm(
                     Text("Sign In")
                 }
             }
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -212,7 +212,7 @@ private fun LoginForm(
                 ) {
                     Text("Forgot Password?", style = MaterialTheme.typography.bodySmall)
                 }
-                
+
                 TextButton(
                     onClick = onSwitchToRegister,
                     modifier = Modifier.weight(1f),
@@ -225,6 +225,7 @@ private fun LoginForm(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RegisterForm(
     uiState: FirebaseAuthUiState,
@@ -239,13 +240,13 @@ private fun RegisterForm(
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
-    
+
     val passwordsMatch = password == confirmPassword
-    val isFormValid = email.isNotBlank() && 
-                     password.length >= 6 && 
-                     passwordsMatch && 
+    val isFormValid = email.isNotBlank() &&
+                     password.length >= 6 &&
+                     passwordsMatch &&
                      uiState.displayName.isNotBlank()
-    
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -261,7 +262,7 @@ private fun RegisterForm(
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
-            
+
             OutlinedTextField(
                 value = uiState.displayName,
                 onValueChange = onUpdateDisplayName,
@@ -269,7 +270,7 @@ private fun RegisterForm(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading
             )
-            
+
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -278,7 +279,7 @@ private fun RegisterForm(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading
             )
-            
+
             // Researcher type dropdown
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -295,7 +296,7 @@ private fun RegisterForm(
                         .menuAnchor()
                         .fillMaxWidth()
                 )
-                
+
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
@@ -311,7 +312,7 @@ private fun RegisterForm(
                     }
                 }
             }
-            
+
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -332,7 +333,7 @@ private fun RegisterForm(
                     Text("Minimum 6 characters", style = MaterialTheme.typography.bodySmall)
                 }
             )
-            
+
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
@@ -356,7 +357,7 @@ private fun RegisterForm(
                     }
                 }
             )
-            
+
             Button(
                 onClick = { onRegister(email, password, uiState.displayName, uiState.selectedResearcherType) },
                 modifier = Modifier.fillMaxWidth(),
@@ -371,7 +372,7 @@ private fun RegisterForm(
                     Text("Create Account")
                 }
             }
-            
+
             TextButton(
                 onClick = onSwitchToLogin,
                 modifier = Modifier.fillMaxWidth(),

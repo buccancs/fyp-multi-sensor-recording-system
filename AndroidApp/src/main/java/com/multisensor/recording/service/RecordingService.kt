@@ -365,12 +365,11 @@ class RecordingService : Service() {
     private fun getThermalStatus(): String =
         try {
             val status = thermalRecorder.getThermalCameraStatus()
-            if (status.isRecording) {
-                "recording"
-            } else if (status.isAvailable) {
-                "ready"
-            } else {
-                "unavailable"
+            when (status) {
+                "Active" -> "recording"
+                "Connected" -> "ready"
+                "Not initialized", "No device connected" -> "unavailable"
+                else -> "unknown"
             }
         } catch (e: SecurityException) {
             logger.error("Permission error getting thermal status: ${e.message}", e)
