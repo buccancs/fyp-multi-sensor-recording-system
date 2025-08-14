@@ -20,12 +20,18 @@ import com.multisensor.recording.calibration.SyncClockManager
 import com.multisensor.recording.calibration.CalibrationManager
 import com.multisensor.recording.sensor.GsrSensor
 import com.multisensor.recording.util.PermissionManager
+import com.multisensor.recording.util.Logger
 import com.multisensor.recording.session.SessionManager
 import com.multisensor.recording.network.PcCommunicationClient
 import com.multisensor.recording.network.FaultToleranceManager
 import com.multisensor.recording.network.DataTransferManager
 import com.multisensor.recording.network.DeviceType
 import com.multisensor.recording.network.DeviceStatus
+import com.multisensor.recording.security.SecurityManager
+import com.multisensor.recording.validation.DataValidationService
+import com.multisensor.recording.performance.PerformanceMonitor
+import com.multisensor.recording.scalability.ScalabilityManager
+import com.multisensor.recording.config.ConfigurationManager
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,6 +73,13 @@ class MainActivity : ComponentActivity() {
     private lateinit var faultToleranceManager: FaultToleranceManager
     private lateinit var dataTransferManager: DataTransferManager
     private lateinit var calibrationManager: CalibrationManager
+    
+    // NFR components for complete 3.tex implementation
+    private lateinit var securityManager: SecurityManager
+    private lateinit var dataValidationService: DataValidationService
+    private lateinit var performanceMonitor: PerformanceMonitor
+    private lateinit var scalabilityManager: ScalabilityManager
+    private lateinit var configurationManager: ConfigurationManager
 
     // Recording state
     private val isRecording = AtomicBoolean(false)
@@ -122,13 +135,49 @@ class MainActivity : ComponentActivity() {
      * Initialize core components
      */
     private fun initializeComponents() {
+        // Initialize configuration manager first (NFR8)
+        configurationManager = ConfigurationManager(this)
+        val configStatus = configurationManager.initializeConfiguration()
+        if (configStatus != ConfigurationManager.ConfigurationStatus.LOADED) {
+            Logger.w(TAG, "Configuration system not properly loaded")
+        }
+        
+        // Initialize security manager (NFR5)
+        securityManager = SecurityManager(this)
+        val securityStatus = securityManager.initializeSecurity()
+        if (securityStatus != SecurityManager.SecurityStatus.SECURE) {
+            Logger.w(TAG, "Security system not properly configured")
+            showSecurityWarnings(securityManager.generateSecurityReport())
+        }
+        
+        // Initialize data validation service (NFR4)
+        dataValidationService = DataValidationService(this)
+        dataValidationService.setValidationEnabled(true)
+        
+        // Initialize performance monitor (NFR1)
+        performanceMonitor = PerformanceMonitor(this)
+        performanceMonitor.setPerformanceAlertCallback { alert ->
+            runOnUiThread {
+                showPerformanceAlert(alert)
+            }
+        }
+        performanceMonitor.startMonitoring()
+        
+        // Initialize scalability manager (NFR7)
+        scalabilityManager = ScalabilityManager(this)
+        val scalingStatus = scalabilityManager.initializeScaling()
+        if (scalingStatus != ScalabilityManager.ScalingStatus.INITIALIZED) {
+            Logger.w(TAG, "Scalability manager initialization failed")
+        }
+        
+        // Initialize existing components
         permissionManager = PermissionManager(this)
         rgbCamera = RgbCamera(this)
         thermalCamera = ThermalCamera(this)
         gsrSensor = GsrSensor(this)
         syncClockManager = SyncClockManager()
         
-        // Initialize new functional requirement components
+        // Initialize functional requirement components
         sessionManager = SessionManager(this)
         pcCommunicationClient = PcCommunicationClient()
         faultToleranceManager = FaultToleranceManager(this)
@@ -466,29 +515,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        
-        // Stop recording if active
-        if (isRecording.get()) {
-            stopRecording()
-        }
-        
-        // Release all resources
-        rgbCamera.release()
-        thermalCamera.release()
-        gsrSensor.release()
-        
-        // Cleanup new components
-        pcCommunicationClient.cleanup()
-        faultToleranceManager.cleanup()
-        dataTransferManager.cleanup()
-        
-        timerHandler.removeCallbacks(timerRunnable)
-        
-        Log.i(TAG, "MainActivity destroyed, resources released")
-    }
-
     /**
      * Setup callbacks for new functional requirement components
      */
@@ -638,5 +664,99 @@ class MainActivity : ComponentActivity() {
         // - User configuration
         // - Default gateway detection
         return "192.168.1.100" // Placeholder
+    }
+
+    /**
+     * Show security warnings from security report
+     * NFR5: Security checks at startup warn if not configured correctly
+     */
+    private fun showSecurityWarnings(report: SecurityManager.SecurityReport) {
+        if (report.hasWarnings()) {
+            val warnings = report.getWarningMessages()
+            Logger.w(TAG, "Security warnings detected: ${warnings.joinToString("; ")}")
+            
+            // Show warning dialog to user
+            runOnUiThread {
+                val warningMessage = "Security Configuration Warnings:\n\n" + 
+                                   warnings.joinToString("\n• ", "• ")
+                
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Security Warning")
+                    .setMessage(warningMessage)
+                    .setPositiveButton("Continue") { _, _ -> 
+                        // User acknowledges warnings
+                    }
+                    .setNegativeButton("Review Settings") { _, _ ->
+                        // Could open settings activity
+                        Logger.i(TAG, "User chose to review security settings")
+                    }
+                    .setCancelable(false)
+                    .show()
+            }
+        }
+    }
+
+    /**
+     * Show performance alert from performance monitor
+     * NFR1: Performance alerting for bottlenecks
+     */
+    private fun showPerformanceAlert(alert: PerformanceMonitor.PerformanceAlert) {
+        val alertColor = when (alert.severity) {
+            PerformanceMonitor.AlertSeverity.ERROR -> R.color.red
+            PerformanceMonitor.AlertSeverity.WARNING -> R.color.orange
+            PerformanceMonitor.AlertSeverity.INFO -> R.color.blue
+        }
+        
+        // Show performance alert as toast for now
+        // In a full implementation, this could be a persistent notification
+        Toast.makeText(this, "Performance Alert: ${alert.message}", Toast.LENGTH_LONG).show()
+        
+        Logger.w(TAG, "Performance alert: ${alert.type} - ${alert.message}")
+        
+        // Take automated actions based on alert type
+        when (alert.type) {
+            PerformanceMonitor.AlertType.HIGH_MEMORY_USAGE -> {
+                // Could trigger garbage collection or reduce quality
+                System.gc()
+            }
+            PerformanceMonitor.AlertType.HIGH_FRAME_DROP_RATE -> {
+                // Could reduce video quality or frame rate
+                Logger.i(TAG, "Consider reducing video quality due to frame drops")
+            }
+            PerformanceMonitor.AlertType.HIGH_SAMPLE_DROP_RATE -> {
+                // Could reduce sensor sampling rate
+                Logger.i(TAG, "Consider reducing sensor sampling rate due to sample drops")
+            }
+            else -> {
+                // Other alerts handled by monitoring
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        
+        // Stop recording if active
+        if (isRecording.get()) {
+            stopRecording()
+        }
+        
+        // Release all resources
+        rgbCamera.release()
+        thermalCamera.release()
+        gsrSensor.release()
+        
+        // Cleanup new components
+        pcCommunicationClient.cleanup()
+        faultToleranceManager.cleanup()
+        dataTransferManager.cleanup()
+        
+        // Cleanup NFR components
+        performanceMonitor.stopMonitoring()
+        scalabilityManager.cleanup()
+        
+        timerHandler.removeCallbacks(timerRunnable)
+        
+        Log.i(TAG, "MainActivity destroyed, all resources released")
     }
 }
