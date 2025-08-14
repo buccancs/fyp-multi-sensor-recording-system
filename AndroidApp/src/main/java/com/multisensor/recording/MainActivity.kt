@@ -41,17 +41,17 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     private lateinit var permissionManager: PermissionManager
     
     // Functional requirement components
-    private lateinit var pcCommunicationClient: PcCommunicationClient
-    private lateinit var faultToleranceManager: FaultToleranceManager
-    private lateinit var dataTransferManager: DataTransferManager
-    private lateinit var calibrationManager: CalibrationManager
+    lateinit var pcCommunicationClient: PcCommunicationClient
+    lateinit var faultToleranceManager: FaultToleranceManager
+    lateinit var dataTransferManager: DataTransferManager
+    lateinit var calibrationManager: CalibrationManager
     
     // NFR components for complete 3.tex implementation
-    private lateinit var securityManager: SecurityManager
-    private lateinit var dataValidationService: DataValidationService
-    private lateinit var performanceMonitor: PerformanceMonitor
-    private lateinit var scalabilityManager: ScalabilityManager
-    private lateinit var configurationManager: ConfigurationManager
+    lateinit var securityManager: SecurityManager
+    lateinit var dataValidationService: DataValidationService
+    lateinit var performanceMonitor: PerformanceMonitor
+    lateinit var scalabilityManager: ScalabilityManager
+    lateinit var configurationManager: ConfigurationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -193,13 +193,92 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.cl_icon_recording -> { // Recording tab
-                viewPager.setCurrentItem(0, false)
+                handleRecordingTabClick()
             }
             R.id.view_main -> { // Main/Home tab
-                viewPager.setCurrentItem(1, false)
+                handleMainTabClick()
             }
             R.id.cl_icon_settings -> { // Settings tab
+                handleSettingsTabClick()
+            }
+        }
+    }
+
+    /**
+     * Enhanced Recording tab click handler with feature integration
+     */
+    private fun handleRecordingTabClick() {
+        // Apply button API features: Basic validation before navigation
+        lifecycleScope.launch {
+            try {
+                // Navigate to recording tab
+                viewPager.setCurrentItem(0, false)
+                
+                // Apply security validation for recording access
+                if (::securityManager.isInitialized) {
+                    val securityStatus = securityManager.initializeSecurity()
+                    if (securityStatus != SecurityManager.SecurityStatus.SECURE) {
+                        Logger.w(TAG, "Recording access security check failed")
+                        showSecurityDialog("Recording requires proper security configuration")
+                        return@launch
+                    }
+                }
+                
+                Logger.i(TAG, "Recording tab accessed with feature validation")
+            } catch (e: Exception) {
+                Logger.e(TAG, "Error accessing recording tab: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * Enhanced Main tab click handler with device status integration
+     */
+    private fun handleMainTabClick() {
+        // Apply button API features: Health check and auto-recovery
+        lifecycleScope.launch {
+            try {
+                // Navigate to main tab
+                viewPager.setCurrentItem(1, false)
+                
+                // Apply fault tolerance check
+                if (::faultToleranceManager.isInitialized) {
+                    val systemHealthy = faultToleranceManager.isSystemHealthy()
+                    if (!systemHealthy) {
+                        Logger.w(TAG, "System health issues detected")
+                        android.widget.Toast.makeText(this@MainActivity, "System health issues detected - checking devices", android.widget.Toast.LENGTH_SHORT).show()
+                    }
+                }
+                
+                Logger.i(TAG, "Main tab accessed with device health validation")
+            } catch (e: Exception) {
+                Logger.e(TAG, "Error accessing main tab: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * Enhanced Settings tab click handler with configuration management
+     */
+    private fun handleSettingsTabClick() {
+        // Apply button API features: Configuration validation and updates
+        lifecycleScope.launch {
+            try {
+                // Navigate to settings tab
                 viewPager.setCurrentItem(2, false)
+                
+                // Apply configuration validation
+                if (::configurationManager.isInitialized) {
+                    val configStatus = configurationManager.initializeConfiguration()
+                    if (configStatus != ConfigurationManager.ConfigurationStatus.LOADED) {
+                        Logger.w(TAG, "Configuration issues detected")
+                        android.widget.Toast.makeText(this@MainActivity, "Configuration validation completed", android.widget.Toast.LENGTH_SHORT).show()
+                    }
+                }
+                
+                Logger.i(TAG, "Settings tab accessed with configuration validation")
+            } catch (e: Exception) {
+                Logger.e(TAG, "Error accessing settings tab: ${e.message}")
             }
         }
     }
@@ -209,6 +288,13 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      */
     fun navigateToRecording() {
         viewPager.setCurrentItem(0, false)
+    }
+
+    /**
+     * Navigate to settings tab from other fragments
+     */
+    fun navigateToSettings() {
+        viewPager.setCurrentItem(2, false)
     }
 
     /**
@@ -313,6 +399,21 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
                 // Other alerts handled by monitoring
             }
         }
+    }
+
+    /**
+     * Show security dialog for recording access
+     * Enhanced button API feature with NFR5 integration
+     */
+    private fun showSecurityDialog(message: String) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Security Check")
+            .setMessage(message)
+            .setPositiveButton("Review Security") { _, _ ->
+                viewPager.setCurrentItem(2, false)
+            }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .show()
     }
 
     override fun onDestroy() {

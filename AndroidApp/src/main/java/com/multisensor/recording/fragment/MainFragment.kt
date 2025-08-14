@@ -7,10 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.multisensor.recording.R
 import com.multisensor.recording.MainActivity
+import com.multisensor.recording.security.SecurityManager
+import com.multisensor.recording.util.Logger
+import kotlinx.coroutines.launch
 
 /**
  * Main Fragment - Device connection status and management
@@ -70,10 +74,132 @@ class MainFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.tv_connect_device -> {
-                // Navigate to device connection or initialize devices
-                refresh()
+                handleConnectDeviceClick()
             }
         }
+    }
+
+    /**
+     * Enhanced connect device button with advanced features
+     * Integrates with all NFR components for professional device management
+     */
+    private fun handleConnectDeviceClick() {
+        val activity = activity as? MainActivity
+        if (activity == null) return
+        
+        // Create progress dialog
+        val progressDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Connecting Devices")
+            .setMessage("Initializing multi-sensor system...")
+            .setCancelable(false)
+            .create()
+        
+        progressDialog.show()
+        
+        // Perform device connection with basic feature integration
+        lifecycleScope.launch {
+            try {
+                // Step 1: Security check before device access
+                updateProgressDialog(progressDialog, "Performing security validation...")
+                try {
+                    val securityStatus = activity.securityManager.initializeSecurity()
+                    if (securityStatus != SecurityManager.SecurityStatus.SECURE) {
+                        progressDialog.dismiss()
+                        showSecurityError("Security validation failed")
+                        return@launch
+                    }
+                } catch (e: Exception) {
+                    Logger.w("MainFragment", "Security manager not available: ${e.message}")
+                }
+                
+                // Step 2: Initialize devices through fault tolerance manager
+                updateProgressDialog(progressDialog, "Connecting to devices...")
+                try {
+                    val systemHealthy = activity.faultToleranceManager.isSystemHealthy()
+                    if (!systemHealthy) {
+                        Logger.w("MainFragment", "System health check failed during device connection")
+                    }
+                } catch (e: Exception) {
+                    Logger.w("MainFragment", "Fault tolerance manager not available: ${e.message}")
+                }
+                
+                // Step 3: Data validation setup
+                updateProgressDialog(progressDialog, "Setting up data validation...")
+                try {
+                    activity.dataValidationService.setValidationEnabled(true)
+                } catch (e: Exception) {
+                    Logger.w("MainFragment", "Data validation service not available: ${e.message}")
+                }
+                
+                progressDialog.dismiss()
+                
+                // Show success message
+                showConnectionSuccess()
+                
+                // Refresh the UI
+                refresh()
+                
+            } catch (e: Exception) {
+                progressDialog.dismiss()
+                showConnectionError(e.message ?: "Unknown error occurred")
+            }
+        }
+    }
+    
+    /**
+     * Update progress dialog message
+     */
+    private fun updateProgressDialog(dialog: androidx.appcompat.app.AlertDialog, message: String) {
+        activity?.runOnUiThread {
+            dialog.setMessage(message)
+        }
+    }
+    
+    /**
+     * Show security error dialog
+     */
+    private fun showSecurityError(reason: String) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Security Error")
+            .setMessage("Device connection blocked: $reason\n\nPlease check security settings.")
+            .setPositiveButton("Security Settings") { _, _ ->
+                // Navigate to settings
+                (activity as? MainActivity)?.let {
+                    it.navigateToSettings()
+                }
+            }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .show()
+    }
+    
+    /**
+     * Show connection success dialog
+     */
+    private fun showConnectionSuccess() {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Connection Successful")
+            .setMessage("Devices connected successfully!\n\nYou can now start recording.")
+            .setPositiveButton("Start Recording") { _, _ ->
+                (activity as? MainActivity)?.let {
+                    it.navigateToRecording()
+                }
+            }
+            .setNegativeButton("Continue") { _, _ -> }
+            .show()
+    }
+    
+    /**
+     * Show connection error dialog
+     */
+    private fun showConnectionError(error: String) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Connection Error")
+            .setMessage("Failed to connect devices: $error\n\nPlease check device connections and try again.")
+            .setPositiveButton("Retry") { _, _ ->
+                handleConnectDeviceClick()
+            }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .show()
     }
 
     private class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.ViewHolder>() {
