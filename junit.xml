@@ -1,1 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="0" time="0.036" timestamp="2025-08-14T10:09:32.389476+00:00" hostname="pkrvmsl9tci6h6u" /></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="3.779" timestamp="2025-08-14T19:53:01.488800+00:00" hostname="pkrvmsl9tci6h6u"><testcase classname="" name="tests_unified.unit.python.test_device_connectivity" time="0.000"><error message="collection failure">tests_unified/unit/python/test_device_connectivity.py:39: in &lt;module&gt;
+    from pc_server_helper import PCServerHelper
+pc_server_helper.py:39: in &lt;module&gt;
+    from PythonApp.web_launcher import main as web_launcher_main
+PythonApp/web_launcher.py:8: in &lt;module&gt;
+    from PythonApp.web_ui.integration import WebDashboardIntegration
+PythonApp/web_ui/integration.py:8: in &lt;module&gt;
+    from .web_dashboard import WebDashboardServer
+PythonApp/web_ui/web_dashboard.py:26: in &lt;module&gt;
+    from PythonApp.utils.system_monitor import get_simple_monitor
+PythonApp/utils/system_monitor.py:31: in &lt;module&gt;
+    class SystemMonitor:
+PythonApp/utils/system_monitor.py:102: in SystemMonitor
+    def get_cpu_usage(self) -&gt; Dict[str, Any]:
+                               ^^^^
+E   NameError: name 'Dict' is not defined</error></testcase><testcase classname="" name="tests_unified.unit.python.test_memory_leak_detector" time="0.000"><error message="collection failure">tests_unified/performance/endurance/endurance_testing.py:21: in &lt;module&gt;
+    from ...utils.system_monitor import get_system_monitor
+E   ModuleNotFoundError: No module named 'tests_unified.utils.system_monitor'
+
+During handling of the above exception, another exception occurred:
+tests_unified/unit/python/test_memory_leak_detector.py:25: in &lt;module&gt;
+    from tests_unified.performance.endurance.endurance_testing import EnduranceTestConfig, MemoryLeakDetector
+tests_unified/performance/endurance/endurance_testing.py:31: in &lt;module&gt;
+    from PythonApp.utils.system_monitor import get_system_monitor
+PythonApp/utils/system_monitor.py:31: in &lt;module&gt;
+    class SystemMonitor:
+PythonApp/utils/system_monitor.py:102: in SystemMonitor
+    def get_cpu_usage(self) -&gt; Dict[str, Any]:
+                               ^^^^
+E   NameError: name 'Dict' is not defined</error></testcase></testsuite></testsuites>
