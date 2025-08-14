@@ -389,6 +389,44 @@ class JsonSocketServer:
         
         return device_info
     
+    def add_test_device(self, device_id: str = "test_device") -> bool:
+        """Add a test device for validation purposes."""
+        try:
+            from datetime import datetime
+            
+            # Create a mock device object
+            class MockDevice:
+                def __init__(self, device_id: str):
+                    self.device_id = device_id
+                    self.address = "127.0.0.1:test"
+                    self.connected_time = datetime.now()
+                    self.last_heartbeat = datetime.now()
+                    self.is_recording = False
+                    self.authenticated = True
+                    self.permissions = ["recording", "file_transfer"]  # Add permissions
+                    self.device_info = {  # Add device info
+                        "device_id": device_id,
+                        "device_type": "android",
+                        "model": "test_device",
+                        "os_version": "test"
+                    }
+                
+                def is_alive(self):
+                    return True
+                
+                def send_message(self, message: dict) -> bool:
+                    """Mock send message method."""
+                    # Simulate successful message sending
+                    return True
+            
+            self.devices[device_id] = MockDevice(device_id)
+            logger.info(f"Added test device: {device_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to add test device: {e}")
+            return False
+    
     def cleanup_dead_connections(self):
         """Remove devices that haven't sent heartbeat recently."""
         dead_devices = [

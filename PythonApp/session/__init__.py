@@ -343,3 +343,37 @@ class SessionManager:
         except Exception as e:
             logger.error(f"Failed to load session history: {e}")
             self.session_history = []
+    
+    def start_session(self, session_id: str) -> bool:
+        """Start a session by ID (alias for start_recording)."""
+        # Check if the session is already active
+        if self.active_session and self.active_session.session_id == session_id:
+            return self.start_recording()
+        
+        # Find session by ID in history
+        for session in self.session_history:
+            if session.session_id == session_id:
+                self.active_session = session
+                return self.start_recording()
+        
+        logger.error(f"Session {session_id} not found")
+        return False
+    
+    def stop_session(self) -> bool:
+        """Stop the active session (alias for stop_recording)."""
+        return self.stop_recording()
+    
+    def get_active_session(self) -> Optional[SessionInfo]:
+        """Get the currently active session."""
+        return self.active_session
+    
+    def get_session_by_id(self, session_id: str) -> Optional[SessionInfo]:
+        """Get a session by its ID."""
+        if self.active_session and self.active_session.session_id == session_id:
+            return self.active_session
+        
+        for session in self.session_history:
+            if session.session_id == session_id:
+                return session
+        
+        return None

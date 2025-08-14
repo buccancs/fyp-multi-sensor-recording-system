@@ -909,3 +909,11 @@ class MainWindow(QMainWindow):
         except Exception as e:
             logger.error(f"Error during shutdown: {e}")
             event.accept()
+    
+    def start_session(self):
+        """Start a session (alias for start_recording)."""
+        self._start_recording()
+    
+    def stop_session(self):
+        """Stop a session (alias for stop_recording)."""
+        self._stop_recording()

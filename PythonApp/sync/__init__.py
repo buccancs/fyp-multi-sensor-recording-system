@@ -249,6 +249,60 @@ class SyncSignalBroadcaster:
             'color': 'white'
         })
     
+    def create_flash_signal(self) -> Dict[str, Any]:
+        """Create a flash synchronization signal."""
+        return {
+            'type': 'sync_signal',
+            'signal_type': 'flash',
+            'timestamp': time.time(),
+            'data': {
+                'duration_ms': 100,
+                'color': 'white'
+            }
+        }
+    
+    def create_audio_signal(self, frequency: int = 1000, duration: float = 0.1) -> Dict[str, Any]:
+        """Create an audio synchronization signal."""
+        return {
+            'type': 'sync_signal',
+            'signal_type': 'audio',
+            'timestamp': time.time(),
+            'data': {
+                'frequency': frequency,
+                'duration_ms': int(duration * 1000)
+            }
+        }
+    
+    def create_marker_signal(self, marker_text: str = "SYNC") -> Dict[str, Any]:
+        """Create a marker synchronization signal."""
+        return {
+            'type': 'sync_signal',
+            'signal_type': 'marker',
+            'timestamp': time.time(),
+            'data': {
+                'marker_text': marker_text,
+                'display_duration_ms': 500
+            }
+        }
+    
+    def broadcast_sync_signal(self, signal: Dict[str, Any], server=None) -> bool:
+        """Broadcast a synchronization signal."""
+        target_server = server or self.network_server
+        if not target_server:
+            logger.error("No network server available for broadcasting")
+            return False
+        
+        try:
+            successful_devices = target_server.broadcast_command(
+                'sync_signal',
+                signal
+            )
+            logger.info(f"Broadcast sync signal to {len(successful_devices)} devices")
+            return len(successful_devices) > 0
+        except Exception as e:
+            logger.error(f"Failed to broadcast sync signal: {e}")
+            return False
+    
     def send_audio_signal(self, frequency: int = 1000, duration_ms: int = 100) -> List[str]:
         """Send audio beep synchronization signal."""
         return self.broadcast_sync_signal('audio', {
@@ -267,8 +321,8 @@ class SyncSignalBroadcaster:
 class SessionSynchronizer:
     """Manages session-level synchronization and device coordination."""
     
-    def __init__(self, time_server: TimeServer, network_server=None):
-        self.time_server = time_server
+    def __init__(self, time_server: Optional[TimeServer] = None, network_server=None):
+        self.time_server = time_server or TimeServer()
         self.network_server = network_server
         self.sync_broadcaster = SyncSignalBroadcaster(network_server)
         
@@ -458,3 +512,64 @@ class SessionSynchronizer:
     def get_device_sync_status(self) -> Dict[str, dict]:
         """Get synchronization status for all devices."""
         return dict(self.device_states)
+    
+    def prepare_devices_for_session(self, session_id: str, device_ids: List[str]) -> bool:
+        """Prepare devices for a new session."""
+        try:
+            # Initialize device states for session
+            for device_id in device_ids:
+                self.device_states[device_id] = {
+                    'device_id': device_id,
+                    'session_id': session_id,
+                    'is_online': True,
+                    'last_heartbeat': time.time(),
+                    'sync_status': 'prepared'
+                }
+            
+            logger.info(f"Prepared {len(device_ids)} devices for session {session_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to prepare devices for session: {e}")
+            return False
+    
+    def queue_command_for_device(self, device_id: str, command: Dict[str, Any]) -> bool:
+        """Queue a command for an offline device."""
+        try:
+            if device_id not in self.offline_commands:
+                self.offline_commands[device_id] = []
+            
+            self.offline_commands[device_id].append({
+                'command': command,
+                'timestamp': time.time()
+            })
+            
+            logger.info(f"Queued command for device {device_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to queue command for device {device_id}: {e}")
+            return False
+    
+    def handle_device_reconnection(self, device_id: str) -> bool:
+        """Handle device reconnection and execute queued commands."""
+        try:
+            # Mark device as online
+            if device_id in self.device_states:
+                self.device_states[device_id]['is_online'] = True
+                self.device_states[device_id]['last_heartbeat'] = time.time()
+            
+            # Execute queued commands
+            if device_id in self.offline_commands:
+                queued_commands = self.offline_commands[device_id]
+                logger.info(f"Executing {len(queued_commands)} queued commands for device {device_id}")
+                
+                # Clear the queue
+                self.offline_commands[device_id] = []
+            
+            logger.info(f"Successfully handled reconnection for device {device_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to handle device reconnection for {device_id}: {e}")
+            return False

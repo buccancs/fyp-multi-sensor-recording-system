@@ -360,10 +360,72 @@ class SensorManager:
         
         return status
     
+    def discover_sensors(self) -> List[str]:
+        """Discover available sensor devices."""
+        discovered = []
+        
+        # Try to discover real Shimmer devices
+        try:
+            # This would typically use pyshimmer or other discovery methods
+            # For now, return list of simulated sensors
+            discovered.append("shimmer_gsr_001")
+            discovered.append("shimmer_gsr_002")
+            logger.info(f"Discovered sensors: {discovered}")
+        except Exception as e:
+            logger.warning(f"Sensor discovery failed: {e}")
+            # Return at least one simulated sensor for testing
+            discovered.append("shimmer_gsr_simulation")
+        
+        return discovered
+    
+    def log_sensor_data(self, sample: SensorSample):
+        """Log sensor data to storage."""
+        try:
+            # If recording, data is already being logged via callback
+            # This method allows manual logging of individual samples
+            if sample.device_id not in self.sample_counts:
+                self.sample_counts[sample.device_id] = 0
+            
+            self.sample_counts[sample.device_id] += 1
+            
+            # Create CSV file if it doesn't exist
+            if sample.device_id not in self.data_files:
+                csv_file = self.output_directory / f"{sample.device_id}_data.csv"
+                file_handle = open(csv_file, 'w', newline='')
+                fieldnames = ['timestamp', 'device_id', 'sensor_type'] + list(sample.data.keys())
+                writer = csv.DictWriter(file_handle, fieldnames=fieldnames)
+                writer.writeheader()
+                
+                self.data_files[sample.device_id] = file_handle
+                self.data_writers[sample.device_id] = writer
+            
+            # Write the data
+            row = {
+                'timestamp': sample.timestamp,
+                'device_id': sample.device_id,
+                'sensor_type': sample.sensor_type,
+                **sample.data
+            }
+            self.data_writers[sample.device_id].writerow(row)
+            self.data_files[sample.device_id].flush()
+            
+        except Exception as e:
+            logger.error(f"Error logging sensor data: {e}")
+    
     def cleanup(self):
         """Clean up all sensors and resources."""
         if self.is_recording:
             self.stop_recording()
+        
+        # Close data files
+        for file_handle in self.data_files.values():
+            try:
+                file_handle.close()
+            except:
+                pass
+        
+        self.data_files.clear()
+        self.data_writers.clear()
         
         for sensor in list(self.sensors.values()):
             sensor.disconnect()

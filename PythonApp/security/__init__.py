@@ -14,6 +14,7 @@ import hashlib
 import time
 import json
 import os
+import ipaddress
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
@@ -552,3 +553,26 @@ class SecurityManager:
     def cleanup(self):
         """Perform security cleanup tasks."""
         self.auth_manager.cleanup_expired_tokens()
+    
+    def generate_authentication_token(self, device_id: str = "default") -> str:
+        """Generate an authentication token (alias for generate_device_token)."""
+        token_value, _ = self.generate_device_token(device_id)
+        return token_value
+    
+    def validate_token(self, token: str, device_id: str = "default") -> bool:
+        """Validate an authentication token."""
+        try:
+            return self.auth_manager.validate_token(token, device_id)
+        except Exception as e:
+            logger.error(f"Error validating token: {e}")
+            return False
+    
+    def check_tls_configuration(self) -> Dict[str, Any]:
+        """Check TLS configuration and return status."""
+        return {
+            'tls_enabled': self.config.tls_enabled,
+            'certificate_exists': Path(self.config.cert_file).exists(),
+            'key_exists': Path(self.config.key_file).exists(),
+            'ssl_context_available': self.tls_manager.ssl_context is not None,
+            'configuration_valid': self.tls_manager.is_tls_enabled()
+        }

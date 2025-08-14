@@ -497,3 +497,92 @@ class TransferManager:
         except Exception as e:
             logger.error(f"Error saving transfer manifest: {e}")
             return False
+    
+    def prepare_file_transfer(self, device_id: str, file_path: str, session_id: str) -> Dict[str, Any]:
+        """Prepare a file transfer request."""
+        try:
+            file_path_obj = Path(file_path)
+            if not file_path_obj.exists():
+                raise FileNotFoundError(f"File not found: {file_path}")
+            
+            # Calculate file checksum
+            checksum = self.calculate_file_checksum(file_path)
+            file_size = file_path_obj.stat().st_size
+            
+            transfer_request = {
+                'device_id': device_id,
+                'session_id': session_id,
+                'filename': file_path_obj.name,
+                'file_size': file_size,
+                'checksum': checksum,
+                'file_path': file_path,
+                'timestamp': datetime.now().isoformat()
+            }
+            
+            logger.info(f"Prepared file transfer for {file_path_obj.name} from {device_id}")
+            return transfer_request
+            
+        except Exception as e:
+            logger.error(f"Error preparing file transfer: {e}")
+            return {}
+    
+    def calculate_file_checksum(self, file_path: str) -> str:
+        """Calculate SHA-256 checksum for a file."""
+        try:
+            hash_sha256 = hashlib.sha256()
+            with open(file_path, 'rb') as f:
+                for chunk in iter(lambda: f.read(4096), b""):
+                    hash_sha256.update(chunk)
+            
+            checksum = hash_sha256.hexdigest()
+            logger.debug(f"Calculated checksum for {file_path}: {checksum}")
+            return checksum
+            
+        except Exception as e:
+            logger.error(f"Error calculating checksum for {file_path}: {e}")
+            return ""
+    
+    def get_transfer_status(self, device_id: str, session_id: str) -> Dict[str, Any]:
+        """Get transfer status for a device and session."""
+        try:
+            status = {
+                'device_id': device_id,
+                'session_id': session_id,
+                'has_transfers': False,
+                'completed_transfers': 0,
+                'total_transfers': 0,
+                'total_bytes': 0,
+                'transferred_bytes': 0,
+                'status': 'unknown'
+            }
+            
+            if session_id in self.session_transfers:
+                session_transfers = [
+                    t for t in self.session_transfers[session_id] 
+                    if t.device_id == device_id
+                ]
+                
+                if session_transfers:
+                    status['has_transfers'] = True
+                    status['total_transfers'] = len(session_transfers)
+                    status['completed_transfers'] = len([
+                        t for t in session_transfers 
+                        if t.status == 'completed'
+                    ])
+                    status['total_bytes'] = sum(t.file_size for t in session_transfers)
+                    status['transferred_bytes'] = sum(
+                        t.progress_bytes for t in session_transfers
+                    )
+                    
+                    if status['completed_transfers'] == status['total_transfers']:
+                        status['status'] = 'completed'
+                    elif any(t.status == 'transferring' for t in session_transfers):
+                        status['status'] = 'transferring'
+                    else:
+                        status['status'] = 'pending'
+            
+            return status
+            
+        except Exception as e:
+            logger.error(f"Error getting transfer status: {e}")
+            return {'error': str(e)}
