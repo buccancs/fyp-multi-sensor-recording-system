@@ -57,6 +57,7 @@ constructor(
     private var isRecording = AtomicBoolean(false)
     private var frameCount = AtomicLong(0L)
     private var currentSessionId: String? = null
+    private var isUsbMonitoringAvailable = AtomicBoolean(false)
 
     fun initialize(previewSurface: SurfaceView? = null): Boolean {
         return initialize(previewSurface, null)
@@ -93,6 +94,7 @@ constructor(
         val isInit = isInitialized.get()
         val hasUsbManager = usbManager != null
         val hasMonitor = topdonUsbMonitor != null
+        val isUsbMonitoringAvailable = isUsbMonitoringAvailable.get()
         val isRecording = isRecording.get()
         val hasCurrentDevice = currentDevice != null
         
@@ -101,11 +103,22 @@ constructor(
             appendLine("Recorder initialized: $isInit")
             appendLine("USB manager available: $hasUsbManager")
             appendLine("USB monitor created: $hasMonitor")
+            appendLine("USB monitoring available: $isUsbMonitoringAvailable")
+            if (!isUsbMonitoringAvailable) {
+                appendLine("USB monitoring limitation: Automatic device detection disabled")
+                appendLine("Workaround: Manual device scanning is used instead")
+            }
             appendLine("Current device connected: $hasCurrentDevice")
             appendLine("Recording active: $isRecording")
             appendLine("Frame count: ${frameCount.get()}")
             if (hasCurrentDevice) {
                 appendLine("Device: ${currentDevice?.deviceName}")
+            }
+            if (!isUsbMonitoringAvailable) {
+                appendLine("")
+                appendLine("Note: On Android 13+, automatic USB device detection may be limited")
+                appendLine("due to security restrictions. The thermal camera can still function")
+                appendLine("but may require manual reconnection or app restart for new devices.")
             }
         }
     }
@@ -474,21 +487,50 @@ constructor(
         )
         try {
             topdonUsbMonitor?.register()
+            isUsbMonitoringAvailable.set(true)
             logger.info("USB monitor registered successfully")
         } catch (e: SecurityException) {
+            isUsbMonitoringAvailable.set(false)
             logger.error("Security exception initializing thermal recorder", e)
             logger.warning("USB monitoring disabled due to receiver registration requirements on Android 13+")
             logger.info("Thermal camera functionality may be limited without USB monitoring")
+            logger.info("Device discovery will use manual scanning instead of automatic USB events")
             // Don't re-throw the exception - allow the app to continue without USB monitoring
+        } catch (e: Exception) {
+            isUsbMonitoringAvailable.set(false)
+            logger.error("Unexpected error registering USB monitor", e)
+            logger.warning("USB monitoring disabled due to registration error")
         }
     }
 
     private fun checkForConnectedDevices() {
         try {
-            usbManager?.deviceList?.values?.forEach { device ->
+            val deviceList = usbManager?.deviceList?.values
+            if (deviceList.isNullOrEmpty()) {
+                logger.info("No USB devices detected")
+                return
+            }
+            
+            logger.info("Scanning ${deviceList.size} USB devices for thermal cameras...")
+            var foundSupported = false
+            
+            deviceList.forEach { device ->
                 if (isSupportedThermalCamera(device)) {
+                    foundSupported = true
                     logger.info("Found thermal camera: ${device.deviceName}")
-                    topdonUsbMonitor?.requestPermission(device)
+                    if (isUsbMonitoringAvailable.get()) {
+                        topdonUsbMonitor?.requestPermission(device)
+                    } else {
+                        logger.warning("USB monitoring unavailable - cannot request device permission automatically")
+                        logger.info("Manual device initialization may be required for: ${device.deviceName}")
+                    }
+                }
+            }
+            
+            if (!foundSupported) {
+                logger.info("No supported thermal cameras found in ${deviceList.size} connected USB devices")
+                if (!isUsbMonitoringAvailable.get()) {
+                    logger.info("Note: Limited device detection due to USB monitoring restrictions")
                 }
             }
         } catch (e: Exception) {
@@ -655,6 +697,26 @@ constructor(
             logger.info("Thermal camera disconnected")
             currentDevice = null
             stopPreview()
+        }
+    }
+
+    /**
+     * Returns whether USB monitoring is available for automatic device detection.
+     * On Android 13+ this may be false due to BroadcastReceiver security restrictions.
+     */
+    fun isUsbMonitoringAvailable(): Boolean {
+        return isUsbMonitoringAvailable.get()
+    }
+
+    /**
+     * Gets a user-friendly status message about thermal camera functionality.
+     */
+    fun getStatusMessage(): String {
+        return when {
+            !isInitialized.get() -> "Thermal camera not initialized"
+            currentDevice != null -> "Thermal camera ready: ${currentDevice?.deviceName}"
+            !isUsbMonitoringAvailable.get() -> "Thermal camera available but automatic detection limited (Android 13+ restriction)"
+            else -> "No thermal camera detected"
         }
     }
 }
