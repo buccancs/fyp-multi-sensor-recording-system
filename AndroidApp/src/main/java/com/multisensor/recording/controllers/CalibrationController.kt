@@ -3,6 +3,9 @@ package com.multisensor.recording.controllers
 import android.content.Context
 import android.graphics.Color
 import android.media.MediaActionSound
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -1670,14 +1673,31 @@ class CalibrationController @Inject constructor(
         val context = callback?.getContext()
         val networkOffset = if (context != null) {
             try {
-                val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
-                val activeNetwork = connectivityManager.activeNetworkInfo
+                val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 
-                when (activeNetwork?.type) {
-                    android.net.ConnectivityManager.TYPE_WIFI -> 10L      // WiFi usually low latency
-                    android.net.ConnectivityManager.TYPE_MOBILE -> 50L    // Mobile higher latency
-                    android.net.ConnectivityManager.TYPE_ETHERNET -> 5L   // Ethernet very low latency
-                    else -> 25L  // Default estimate
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    // Use newer API for API 23+
+                    val activeNetwork = connectivityManager.activeNetwork
+                    val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+                    
+                    when {
+                        networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> 10L
+                        networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> 50L
+                        networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) == true -> 5L
+                        else -> 25L
+                    }
+                } else {
+                    // Fallback for older API levels
+                    @Suppress("DEPRECATION")
+                    val activeNetwork = connectivityManager.activeNetworkInfo
+                    
+                    @Suppress("DEPRECATION")
+                    when (activeNetwork?.type) {
+                        ConnectivityManager.TYPE_WIFI -> 10L
+                        ConnectivityManager.TYPE_MOBILE -> 50L
+                        ConnectivityManager.TYPE_ETHERNET -> 5L
+                        else -> 25L
+                    }
                 }
             } catch (e: Exception) {
                 25L

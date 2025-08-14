@@ -1,7 +1,7 @@
 package com.multisensor.recording.firebase
 
+import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,42 +20,46 @@ class FirebaseAnalyticsService @Inject constructor(
      * Log recording session start
      */
     fun logRecordingSessionStart(sessionId: String, deviceCount: Int, experimentType: String? = null) {
-        firebaseAnalytics.logEvent("recording_session_start") {
-            param("session_id", sessionId)
-            param("device_count", deviceCount.toLong())
+        val bundle = Bundle().apply {
+            putString("session_id", sessionId)
+            putLong("device_count", deviceCount.toLong())
             if (experimentType != null) {
-                param("experiment_type", experimentType)
+                putString("experiment_type", experimentType)
             }
         }
+        firebaseAnalytics.logEvent("recording_session_start", bundle)
     }
 
     /**
      * Log recording session end
      */
     fun logRecordingSessionEnd(sessionId: String, durationMs: Long, dataSize: Long, participantCount: Int = 1) {
-        firebaseAnalytics.logEvent("recording_session_end") {
-            param("session_id", sessionId)
-            param("duration_ms", durationMs)
-            param("data_size_bytes", dataSize)
-            param("participant_count", participantCount.toLong())
+        val bundle = Bundle().apply {
+            putString("session_id", sessionId)
+            putLong("duration_ms", durationMs)
+            putLong("data_size_bytes", dataSize)
+            putLong("participant_count", participantCount.toLong())
         }
+        firebaseAnalytics.logEvent("recording_session_end", bundle)
     }
 
     /**
      * Log session pause/resume
      */
     fun logSessionPause(sessionId: String, reason: String) {
-        firebaseAnalytics.logEvent("session_paused") {
-            param("session_id", sessionId)
-            param("pause_reason", reason)
+        val bundle = Bundle().apply {
+            putString("session_id", sessionId)
+            putString("pause_reason", reason)
         }
+        firebaseAnalytics.logEvent("session_paused", bundle)
     }
 
     fun logSessionResume(sessionId: String, pauseDurationMs: Long) {
-        firebaseAnalytics.logEvent("session_resumed") {
-            param("session_id", sessionId)
-            param("pause_duration_ms", pauseDurationMs)
+        val bundle = Bundle().apply {
+            putString("session_id", sessionId)
+            putLong("pause_duration_ms", pauseDurationMs)
         }
+        firebaseAnalytics.logEvent("session_resumed", bundle)
     }
 
     // Device and Sensor Events
@@ -64,46 +68,50 @@ class FirebaseAnalyticsService @Inject constructor(
      * Log GSR sensor connection
      */
     fun logGSRSensorConnected(sensorId: String, sensorType: String = "shimmer", connectionMethod: String = "bluetooth") {
-        firebaseAnalytics.logEvent("gsr_sensor_connected") {
-            param("sensor_id", sensorId)
-            param("sensor_type", sensorType)
-            param("connection_method", connectionMethod)
+        val bundle = Bundle().apply {
+            putString("sensor_id", sensorId)
+            putString("sensor_type", sensorType)
+            putString("connection_method", connectionMethod)
         }
+        firebaseAnalytics.logEvent("gsr_sensor_connected", bundle)
     }
 
     /**
      * Log GSR sensor disconnection
      */
     fun logGSRSensorDisconnected(sensorId: String, reason: String, dataLoss: Boolean = false) {
-        firebaseAnalytics.logEvent("gsr_sensor_disconnected") {
-            param("sensor_id", sensorId)
-            param("disconnect_reason", reason)
-            param("data_loss", if (dataLoss) 1L else 0L)
+        val bundle = Bundle().apply {
+            putString("sensor_id", sensorId)
+            putString("disconnect_reason", reason)
+            putLong("data_loss", if (dataLoss) 1L else 0L)
         }
+        firebaseAnalytics.logEvent("gsr_sensor_disconnected", bundle)
     }
 
     /**
      * Log thermal camera usage
      */
     fun logThermalCameraUsed(cameraModel: String, resolution: String, frameRate: Int? = null) {
-        firebaseAnalytics.logEvent("thermal_camera_used") {
-            param("camera_model", cameraModel)
-            param("resolution", resolution)
+        val bundle = Bundle().apply {
+            putString("camera_model", cameraModel)
+            putString("resolution", resolution)
             if (frameRate != null) {
-                param("frame_rate", frameRate.toLong())
+                putLong("frame_rate", frameRate.toLong())
             }
         }
+        firebaseAnalytics.logEvent("thermal_camera_used", bundle)
     }
 
     /**
      * Log camera calibration
      */
     fun logCameraCalibration(cameraType: String, success: Boolean, errorCount: Int = 0) {
-        firebaseAnalytics.logEvent("camera_calibration") {
-            param("camera_type", cameraType)
-            param("success", if (success) 1L else 0L)
-            param("error_count", errorCount.toLong())
+        val bundle = Bundle().apply {
+            putString("camera_type", cameraType)
+            putLong("success", if (success) 1L else 0L)
+            putLong("error_count", errorCount.toLong())
         }
+        firebaseAnalytics.logEvent("camera_calibration", bundle)
     }
 
     // Data Quality and Processing Events
@@ -112,40 +120,44 @@ class FirebaseAnalyticsService @Inject constructor(
      * Log calibration event
      */
     fun logCalibrationPerformed(calibrationType: String, success: Boolean, duration: Long? = null) {
-        firebaseAnalytics.logEvent("calibration_performed") {
-            param("calibration_type", calibrationType)
-            param("success", if (success) 1L else 0L)
+        val bundle = Bundle().apply {
+            putString("calibration_type", calibrationType)
+            putLong("success", if (success) 1L else 0L)
             if (duration != null) {
-                param("duration_ms", duration)
+                putLong("duration_ms", duration)
             }
         }
+        firebaseAnalytics.logEvent("calibration_performed", bundle)
     }
 
     /**
      * Log data quality assessment
      */
     fun logDataQualityCheck(sessionId: String, qualityScore: Float, issues: List<String> = emptyList()) {
-        firebaseAnalytics.logEvent("data_quality_check") {
-            param("session_id", sessionId)
-            param("quality_score", (qualityScore * 100).toLong()) // Store as percentage
-            param("issue_count", issues.size.toLong())
+        val bundle = Bundle().apply {
+            putString("session_id", sessionId)
+            putLong("quality_score", (qualityScore * 100).toLong()) // Store as percentage
+            putLong("issue_count", issues.size.toLong())
             if (issues.isNotEmpty()) {
-                param("primary_issue", issues.first())
+                putString("primary_issue", issues.first())
             }
         }
+        firebaseAnalytics.logEvent("data_quality_check", bundle)
     }
 
     /**
      * Log synchronization events
      */
     fun logSynchronizationPerformed(deviceCount: Int, success: Boolean, timeDriftMs: Long? = null) {
-        firebaseAnalytics.logEvent("synchronization_performed") {
-            param("device_count", deviceCount.toLong())
-            param("success", if (success) 1L else 0L)
+        val bundle = Bundle().apply {
+            putLong("device_count", deviceCount.toLong())
+            putLong("success", if (success) 1L else 0L)
             if (timeDriftMs != null) {
-                param("time_drift_ms", timeDriftMs)
+                putLong("time_drift_ms", timeDriftMs)
             }
         }
+        firebaseAnalytics.logEvent("synchronization_performed", bundle)
+    }
     }
 
     // Data Export and Analysis Events
@@ -154,23 +166,25 @@ class FirebaseAnalyticsService @Inject constructor(
      * Log data export
      */
     fun logDataExport(format: String, fileSizeBytes: Long, sessionCount: Int = 1, exportType: String = "manual") {
-        firebaseAnalytics.logEvent("data_export") {
-            param("export_format", format)
-            param("file_size_bytes", fileSizeBytes)
-            param("session_count", sessionCount.toLong())
-            param("export_type", exportType)
+        val bundle = Bundle().apply {
+            putString("export_format", format)
+            putLong("file_size_bytes", fileSizeBytes)
+            putLong("session_count", sessionCount.toLong())
+            putString("export_type", exportType)
         }
+        firebaseAnalytics.logEvent("data_export", bundle)
     }
 
     /**
      * Log analysis performed
      */
     fun logAnalysisPerformed(analysisType: String, sessionId: String, processingTime: Long) {
-        firebaseAnalytics.logEvent("analysis_performed") {
-            param("analysis_type", analysisType)
-            param("session_id", sessionId)
-            param("processing_time_ms", processingTime)
+        val bundle = Bundle().apply {
+            putString("analysis_type", analysisType)
+            putString("session_id", sessionId)
+            putLong("processing_time_ms", processingTime)
         }
+        firebaseAnalytics.logEvent("analysis_performed", bundle)
     }
 
     // User and Research Context Events
@@ -179,30 +193,33 @@ class FirebaseAnalyticsService @Inject constructor(
      * Log user authentication
      */
     fun logUserAuthentication(method: String, researcherType: String) {
-        firebaseAnalytics.logEvent("user_authentication") {
-            param("auth_method", method)
-            param("researcher_type", researcherType)
+        val bundle = Bundle().apply {
+            putString("auth_method", method)
+            putString("researcher_type", researcherType)
         }
+        firebaseAnalytics.logEvent("user_authentication", bundle)
     }
 
     /**
      * Log research project creation
      */
     fun logResearchProjectCreated(projectType: String, collaboratorCount: Int) {
-        firebaseAnalytics.logEvent("research_project_created") {
-            param("project_type", projectType)
-            param("collaborator_count", collaboratorCount.toLong())
+        val bundle = Bundle().apply {
+            putString("project_type", projectType)
+            putLong("collaborator_count", collaboratorCount.toLong())
         }
+        firebaseAnalytics.logEvent("research_project_created", bundle)
     }
 
     /**
      * Log participant consent
      */
     fun logParticipantConsent(consentType: String, granted: Boolean) {
-        firebaseAnalytics.logEvent("participant_consent") {
-            param("consent_type", consentType)
-            param("granted", if (granted) 1L else 0L)
+        val bundle = Bundle().apply {
+            putString("consent_type", consentType)
+            putLong("granted", if (granted) 1L else 0L)
         }
+        firebaseAnalytics.logEvent("participant_consent", bundle)
     }
 
     // Error and Performance Events
@@ -211,33 +228,36 @@ class FirebaseAnalyticsService @Inject constructor(
      * Log system errors
      */
     fun logSystemError(errorType: String, errorMessage: String, severity: String = "medium") {
-        firebaseAnalytics.logEvent("system_error") {
-            param("error_type", errorType)
-            param("error_message", errorMessage.take(100)) // Limit message length
-            param("severity", severity)
+        val bundle = Bundle().apply {
+            putString("error_type", errorType)
+            putString("error_message", errorMessage.take(100)) // Limit message length
+            putString("severity", severity)
         }
+        firebaseAnalytics.logEvent("system_error", bundle)
     }
 
     /**
      * Log performance metrics
      */
     fun logPerformanceMetric(metricName: String, value: Long, unit: String) {
-        firebaseAnalytics.logEvent("performance_metric") {
-            param("metric_name", metricName)
-            param("metric_value", value)
-            param("metric_unit", unit)
+        val bundle = Bundle().apply {
+            putString("metric_name", metricName)
+            putLong("metric_value", value)
+            putString("metric_unit", unit)
         }
+        firebaseAnalytics.logEvent("performance_metric", bundle)
     }
 
     /**
      * Log battery usage for long sessions
      */
     fun logBatteryUsage(sessionId: String, batteryLevel: Int, duration: Long) {
-        firebaseAnalytics.logEvent("battery_usage") {
-            param("session_id", sessionId)
-            param("battery_level", batteryLevel.toLong())
-            param("session_duration_ms", duration)
+        val bundle = Bundle().apply {
+            putString("session_id", sessionId)
+            putLong("battery_level", batteryLevel.toLong())
+            putLong("session_duration_ms", duration)
         }
+        firebaseAnalytics.logEvent("battery_usage", bundle)
     }
 
     // Cloud Storage Events
@@ -246,25 +266,27 @@ class FirebaseAnalyticsService @Inject constructor(
      * Log cloud upload
      */
     fun logCloudUpload(fileType: String, fileSizeBytes: Long, success: Boolean, uploadTime: Long? = null) {
-        firebaseAnalytics.logEvent("cloud_upload") {
-            param("file_type", fileType)
-            param("file_size_bytes", fileSizeBytes)
-            param("success", if (success) 1L else 0L)
+        val bundle = Bundle().apply {
+            putString("file_type", fileType)
+            putLong("file_size_bytes", fileSizeBytes)
+            putLong("success", if (success) 1L else 0L)
             if (uploadTime != null) {
-                param("upload_time_ms", uploadTime)
+                putLong("upload_time_ms", uploadTime)
             }
         }
+        firebaseAnalytics.logEvent("cloud_upload", bundle)
     }
 
     /**
      * Log cloud download
      */
     fun logCloudDownload(fileType: String, fileSizeBytes: Long, success: Boolean) {
-        firebaseAnalytics.logEvent("cloud_download") {
-            param("file_type", fileType)
-            param("file_size_bytes", fileSizeBytes)
-            param("success", if (success) 1L else 0L)
+        val bundle = Bundle().apply {
+            putString("file_type", fileType)
+            putLong("file_size_bytes", fileSizeBytes)
+            putLong("success", if (success) 1L else 0L)
         }
+        firebaseAnalytics.logEvent("cloud_download", bundle)
     }
 
     // Research Workflow Events
@@ -273,13 +295,14 @@ class FirebaseAnalyticsService @Inject constructor(
      * Log experiment workflow step
      */
     fun logWorkflowStep(step: String, sessionId: String, duration: Long? = null) {
-        firebaseAnalytics.logEvent("workflow_step") {
-            param("step_name", step)
-            param("session_id", sessionId)
+        val bundle = Bundle().apply {
+            putString("step_name", step)
+            putString("session_id", sessionId)
             if (duration != null) {
-                param("step_duration_ms", duration)
+                putLong("step_duration_ms", duration)
             }
         }
+        firebaseAnalytics.logEvent("workflow_step", bundle)
     }
 
     // User Properties for Research Context
