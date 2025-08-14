@@ -268,9 +268,9 @@ curl http://localhost:5000/api/devices/status
 - Monitor signal strength and connection quality
 - Review connection logs in app settings
 
-## Performance Optimization
+## Performance Optimisation
 
-### Network Optimization
+### Network Optimisation
 - Use 5GHz WiFi when available (less congested)
 - Minimize distance between devices
 - Avoid interference from other devices

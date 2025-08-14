@@ -396,9 +396,9 @@ fun Shimmer.getGSRReading(): Double? {
 ### Basic Recording Session
 
 ```kotlin
-// 1. Initialize ShimmerRecorder
+// 1. Initialise ShimmerRecorder
 val shimmerRecorder = ShimmerRecorder(context, sessionManager, logger)
-val success = shimmerRecorder.initialize()
+val success = shimmerRecorder.initialise()
 
 // 2. Connect to devices
 val deviceAddresses = listOf("00:06:66:12:34:56", "00:06:66:78:9A:BC")
@@ -456,12 +456,12 @@ val allDevices = shimmerRecorder.getConnectedDevices()
 allDevices.forEach { (deviceId, device) ->
     val shimmer = shimmerRecorder.getConnectedShimmerDevice(deviceId)
     shimmer?.let {
-        // Synchronize sampling rates
+        // Synchronise sampling rates
         it.writeCompleteConfiguration(mapOf(
             "samplingRate" to 128.0
         ))
         
-        // Check synchronization quality
+        // Check synchronisation quality
         val metrics = shimmerRecorder.getDataQualityMetrics(deviceId)
         println("Device $deviceId: ${metrics?.connectionStability}")
     }
@@ -545,9 +545,9 @@ launch {
    - Check for electromagnetic interference
    - Validate sampling rate configuration
 
-3. **Data Synchronization Issues**
+3. **Data Synchronisation Issues**
    - Ensure all devices use the same sampling rate
-   - Check system clock synchronization
+   - Check system clock synchronisation
    - Monitor connection stability
 
 4. **Memory Issues with Long Recordings**

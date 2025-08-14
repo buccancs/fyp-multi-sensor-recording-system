@@ -12,7 +12,7 @@ graph TD
     B --> B1[PythonApp/web_launcher.py]
     B1 --> B2[Incomplete Implementation - Line 43 cutoff]
     B2 --> B3[FIXED: Added argument parser options]
-    B3 --> B4[FIXED: Web server initialization]
+    B3 --> B4[FIXED: Web server initialisation]
     B4 --> B5[FIXED: Error handling and shutdown]
     
     C --> C1[PythonApp/shimmer_pc_app.py]
@@ -68,7 +68,7 @@ graph TD
 - **Issue**: Incomplete implementation, truncated at line 43
 - **Fix**: 
   - Added complete argument parser with --port, --host, --debug, --android-port options
-  - Implemented WebDashboardIntegration initialization and startup logic
+  - Implemented WebDashboardIntegration initialisation and startup logic
   - Added proper error handling and graceful shutdown capabilities
 
 ### Fake System Monitoring Replacement

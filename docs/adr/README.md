@@ -71,7 +71,7 @@ Specific implementation details or guidelines.
 | [003](./adr-003-function-decomposition-strategy.md) | Function Decomposition Strategy | Accepted | 2024-02-01 |
 | [004](./adr-004-ui-component-unification.md) | UI Component Unification Strategy | Accepted | 2025-08-12 |
 | [005](./adr-005-camera-preview-switching.md) | Camera Preview Switching Implementation | Accepted | 2025-08-12 |
-| [006](./adr-006-device-initialization-timing.md) | Device Initialization Timing Coordination | Accepted | 2025-08-12 |
+| [006](./adr-006-device-initialisation-timing.md) | Device Initialisation Timing Coordination | Accepted | 2025-08-12 |
 
 ## Creating New ADRs
 

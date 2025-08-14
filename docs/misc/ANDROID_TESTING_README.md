@@ -56,7 +56,7 @@ The comprehensive test suite includes:
 - GSR data collection
 - Thermal camera functionality
 - Webcam recording
-- Data synchronization
+- Data synchronisation
 - File storage operations
 - Network communication
 - Session management
@@ -73,7 +73,7 @@ The comprehensive test suite includes:
 ### Integration Tests
 - PC-Android communication
 - Shimmer-Android integration
-- Multi-device synchronization
+- Multi-device synchronisation
 - Data pipeline validation
 
 ### Performance Tests
@@ -135,7 +135,7 @@ python android_device_testing_demo.py --mode full --comprehensive
 ```python
 from tests_unified.android_test_integration import AndroidTestIntegration
 
-# Initialize integration
+# Initialise integration
 integration = AndroidTestIntegration()
 
 # Detect devices and IDEs
@@ -234,7 +234,7 @@ android_test_results/
 - **Check USB Connection**: Ensure device is properly connected
 - **Enable USB Debugging**: In Developer Options on Android device
 - **Install ADB**: Download Android SDK and add to PATH
-- **Device Authorization**: Accept ADB debugging prompt on device
+- **Device Authorisation**: Accept ADB debugging prompt on device
 
 #### ADB Not Available
 - **Install Android SDK**: Download from official Android site
@@ -266,7 +266,7 @@ python android_device_testing_demo.py --mode status
 python tests_unified/android_test_integration.py --mode detect --verbose
 ```
 
-### Performance Optimization
+### Performance Optimisation
 - **Parallel Testing**: Use `--parallel` flag for faster execution
 - **Category Selection**: Run specific test categories only
 - **Quick Mode**: Use quick validation for rapid feedback
@@ -354,6 +354,6 @@ def _execute_custom_test(self, device: AndroidDevice, test_name: str, artifacts_
     )
 ```
 
-## License
+## Licence
 
 This Android testing suite is part of the Multi-Sensor Recording System project. See the main project LICENSE file for details.

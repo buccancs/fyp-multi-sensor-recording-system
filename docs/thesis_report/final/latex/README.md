@@ -1,6 +1,6 @@
 # LaTeX Thesis — Bibliography (BibTeX) Workflow
 
-This thesis now uses a centralized BibTeX database for references instead of a manual `thebibliography` list.
+This thesis now uses a centralised BibTeX database for references instead of a manual `thebibliography` list.
 
 Key files:
 

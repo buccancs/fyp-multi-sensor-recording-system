@@ -103,7 +103,7 @@ Rev 2.11
 04 July 2014 (Beta 2.6)
 - Support for Shimmer3 bridge amplifier
 - added getExGConfiguration methods
-- New Shimmer initialize. Now: get HW Version -> get FW Version -> Initialization
+- New Shimmer initialise. Now: get HW Version -> get FW Version -> Initialisation
 - Firmware Version divide into Major Firmware Version and Minor Firmware Version
 - Firmware code added in order to identify the features in the different firmwares
 - Change Firmware Version checks, now is Firmware Code checks
@@ -129,7 +129,7 @@ Rev 2.11
 
 27 September 2012 (Beta 0.6)
 - Additional handler msgs for stop streaming has been added.
-- An optional AndroidBluetoothLibrary has been added. Please see license. The reason for this is because some stock firmware were not providing the full bluetooth stack. If bluetooth problems persist please consider using an aftermarket firmware.
+- An optional AndroidBluetoothLibrary has been added. Please see licence. The reason for this is because some stock firmware were not providing the full bluetooth stack. If bluetooth problems persist please consider using an aftermarket firmware.
 - The connect method has been modified to accomodate the new library. Examples have been updated as well.
 - Object Cluster now accepts the bluetooth id of the device
 - Stop Streaming Command which was failing to receive an ACK intermittently has been fixed.

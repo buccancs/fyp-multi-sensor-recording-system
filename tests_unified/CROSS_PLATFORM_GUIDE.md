@@ -137,7 +137,7 @@ chmod +x run_local_tests.sh
    python run_local_tests.py quick --install-deps
    ```
 
-3. **Color Support** (Optional):
+3. **Colour Support** (Optional):
    ```cmd
    pip install colorama
    ```
@@ -195,7 +195,7 @@ All platforms support the following test modes:
 | `full` | Complete test suite | ~10-15 minutes |
 | `requirements` | FR/NFR validation | ~5 minutes |
 | `performance` | Benchmarks & profiling | ~8 minutes |
-| `ci` | CI/CD optimized tests | ~5 minutes |
+| `ci` | CI/CD optimised tests | ~5 minutes |
 | `pc` | Desktop application tests | ~6 minutes |
 | `android` | Mobile application tests | ~7 minutes |
 | `gui` | GUI tests both platforms | ~12 minutes |
@@ -339,7 +339,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 - Use virtual environments to avoid system Python conflicts
 - Install homebrew for easy dependency management
 
-## 📈 Performance Optimization
+## 📈 Performance Optimisation
 
 ### Windows
 - Use Python 3.9+ for better performance

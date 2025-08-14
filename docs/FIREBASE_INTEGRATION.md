@@ -46,7 +46,7 @@ This document describes the Firebase integration added to the Multi-Sensor Recor
 **Purpose**: Store large sensor data files in the cloud
 **Service Class**: `FirebaseStorageService`
 
-**File Organization**:
+**File Organisation**:
 ```
 recording_sessions/
   ├── session-id-1/
@@ -59,7 +59,7 @@ recording_sessions/
 ```
 
 **Features**:
-- Automatic file organization by session
+- Automatic file organisation by session
 - Batch upload/download capabilities
 - File metadata tracking
 - Storage usage monitoring
@@ -93,11 +93,11 @@ object FirebaseModule {
 }
 ```
 
-### Application Initialization
-Firebase is initialized in `MultiSensorApplication.onCreate()`:
+### Application Initialisation
+Firebase is initialised in `MultiSensorApplication.onCreate()`:
 
 ```kotlin
-// Initialize Firebase
+// Initialise Firebase
 FirebaseApp.initializeApp(this)
 FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true)
 FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
@@ -217,7 +217,7 @@ The `FirebaseStatusScreen` provides manual testing capabilities:
 1. Set up actual Firebase project (currently using template configuration)
 2. Configure security rules for research data access
 3. Implement Firebase Authentication for multi-user access
-4. Add real-time data synchronization for collaborative research
+4. Add real-time data synchronisation for collaborative research
 5. Set up Firebase Functions for automated data processing
 6. Configure Analytics dashboards for research insights
 
@@ -227,4 +227,4 @@ For Firebase-related issues:
 - Check Firebase Console for service status
 - Review Firebase documentation: https://firebase.google.com/docs
 - Use `FirebaseStatusScreen` for integration diagnostics
-- Check application logs for Firebase initialization messages
+- Check application logs for Firebase initialisation messages

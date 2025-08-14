@@ -23,7 +23,7 @@ A comprehensive, research-grade testing framework for the Multi-Sensor Recording
   - Endurance testing suites
   - Device diversity testing
   - Security scanning and runtime checks
-  - Performance monitoring and optimization
+  - Performance monitoring and optimisation
 
 ### Eliminated Duplication
 - Removed duplicate performance benchmark files
@@ -105,7 +105,7 @@ This unified testing framework consolidates and replaces multiple scattered test
 - Root-level test files
 - Multiple incompatible test runners
 
-**After**: Single unified hierarchy with clear organization
+**After**: Single unified hierarchy with clear organisation
 - **4-layer testing structure** (unit → integration → system → performance)
 - **Requirements traceability** with automated FR/NFR validation
 - **Technology-specific categories** (Android, hardware, visual, browser)
@@ -128,7 +128,7 @@ tests_unified/
 ├── system/                 # Level 3: End-to-End Testing
 │   └── workflows/
 ├── performance/            # Level 4: Performance & Quality
-│   ├── benchmarks/         # Performance optimization tests
+│   ├── benchmarks/         # Performance optimisation tests
 │   └── endurance/          # Long-running stability tests
 ├── evaluation/             # Research Validation Framework
 │   ├── foundation/         # Android and PC evaluation tests
@@ -142,7 +142,7 @@ tests_unified/
 │   ├── test_cross_platform_gui.py        # Cross-platform coordination
 │   └── test_android_visual.py            # Visual regression testing
 ├── hardware/               # Hardware integration tests
-├── config/                 # Centralized configuration
+├── config/                 # Centralised configuration
 ├── fixtures/               # Shared test utilities
 │   ├── gui_test_utils.py              # PC GUI testing utilities
 │   └── android_test_utils.py          # Android testing utilities
@@ -159,10 +159,10 @@ The unified testing framework includes extensive GUI testing capabilities coveri
 **Complete Desktop Application Testing**
 
 - **Comprehensive Functional Testing** (`test_pc_gui_comprehensive.py`):
-  - Main window initialization and all component verification
+  - Main window initialisation and all component verification
   - Complete button and menu interaction testing
   - Panel operations and real-time data display testing
-  - Dialog interactions and file operation workflows
+  - Dialogue interactions and file operation workflows
   - Error handling and user feedback validation
   - Performance benchmarking and accessibility compliance
 
@@ -181,7 +181,7 @@ The unified testing framework includes extensive GUI testing capabilities coveri
   - Fragment interactions and data flow validation
   - Complete user interaction testing (buttons, gestures, inputs)
   - Form validation and input handling across all screens
-  - Dialog and popup functionality verification
+  - Dialogue and popup functionality verification
   - Gesture interactions and touch handling validation
   - Performance and responsiveness under load testing
   - Accessibility compliance and screen reader support
@@ -197,7 +197,7 @@ The unified testing framework includes extensive GUI testing capabilities coveri
 
 - **Cross-Platform Coordination** (`test_cross_platform_gui.py`):
   - Device connection coordination between PC and Android
-  - Data synchronization UI verification across platforms
+  - Data synchronisation UI verification across platforms
   - Session management coordination and state consistency
   - Workflow consistency validation between platforms
   - UI element consistency and feature parity testing
@@ -208,7 +208,7 @@ The unified testing framework includes extensive GUI testing capabilities coveri
 - ✅ All buttons, menus, and interactive elements
 - ✅ Complete user workflows and navigation flows
 - ✅ Form validation and input handling
-- ✅ Dialog interactions and file operations
+- ✅ Dialogue interactions and file operations
 - ✅ Real-time data updates and status displays
 - ✅ Multi-window and multi-fragment coordination
 
@@ -222,7 +222,7 @@ The unified testing framework includes extensive GUI testing capabilities coveri
 **Integration Testing**:
 - ✅ PC-Android device coordination
 - ✅ Network communication UI components
-- ✅ Session synchronization across platforms
+- ✅ Session synchronisation across platforms
 - ✅ Data flow validation between applications
 
 ### Usage Examples
@@ -289,14 +289,14 @@ The GUI tests provide comprehensive coverage of user interface requirements:
   - **PC GUI Testing**: Complete PyQt5 application functional testing
     - All UI components and interactions (`test_pc_gui_comprehensive.py`)
     - Individual component testing (`test_pc_gui_components.py`)
-    - Dialog and workflow testing
+    - Dialogue and workflow testing
     - Performance and accessibility testing
   - **Android GUI Testing**: Complete mobile UI functional testing
     - All activities and fragments (`test_android_gui_comprehensive.py`)
     - Navigation and user interaction testing (`test_android_gui_components.py`)
     - Error handling and accessibility testing
   - **Cross-Platform GUI**: Integration testing across PC and Android
-    - UI coordination and data synchronization (`test_cross_platform_gui.py`)
+    - UI coordination and data synchronisation (`test_cross_platform_gui.py`)
     - Workflow consistency validation
     - Multi-device interaction testing
 - **Browser** (`browser/`): Web interface compatibility
@@ -363,7 +363,7 @@ python tests_unified/runners/run_unified_tests.py --output-format markdown
 ### Mode Selection
 
 ```bash
-# CI/CD mode (optimized for automated environments)
+# CI/CD mode (optimised for automated environments)
 python tests_unified/runners/run_unified_tests.py --mode ci
 
 # Research mode (comprehensive analysis and reporting)
@@ -395,7 +395,7 @@ python tests_unified/runners/run_unified_tests.py --report-requirements-coverage
 
 The system automatically extracts and validates requirements from `docs/thesis_report/final/latex/3.tex`:
 
-- **Functional Requirements (FR1-FR10)**: Multi-device integration, data synchronization, real-time processing
+- **Functional Requirements (FR1-FR10)**: Multi-device integration, data synchronisation, real-time processing
 - **Non-Functional Requirements (NFR1-NFR8)**: Performance, reliability, usability, maintainability
 
 **Current Coverage**: 15/15 requirements (100%) with strong test mapping across all levels.
@@ -520,7 +520,7 @@ python tests_unified/runners/run_unified_tests.py --performance-benchmarks --all
 The framework tracks:
 - **Execution time**: Test duration and performance regression detection
 - **Memory usage**: Peak memory consumption and leak detection
-- **Resource utilization**: CPU, network, and I/O efficiency
+- **Resource utilisation**: CPU, network, and I/O efficiency
 - **Scalability**: Performance under varying load conditions
 
 ## 🔍 Debugging and Troubleshooting
@@ -573,7 +573,7 @@ The unified testing framework directly supports thesis validation:
 
 All test data handling follows ethical guidelines:
 - No personally identifiable information in test datasets
-- Anonymized test data where applicable
+- Anonymised test data where applicable
 - Secure storage of any sensitive test configurations
 - GDPR-compliant data processing
 
@@ -606,10 +606,10 @@ python tests_unified/migration/migrate_tests.py --source tests/ --target tests_u
 
 ### Planned Enhancements
 
-1. **Machine Learning Validation**: Automated test generation based on system behavior
+1. **Machine Learning Validation**: Automated test generation based on system behaviour
 2. **Visual Regression Testing**: Automated UI/UX validation  
 3. **Real-Time Monitoring**: Live test execution monitoring and alerting
-4. **Advanced Performance Analytics**: Deep system profiling and optimization insights
+4. **Advanced Performance Analytics**: Deep system profiling and optimisation insights
 
 ### Completed Features
 

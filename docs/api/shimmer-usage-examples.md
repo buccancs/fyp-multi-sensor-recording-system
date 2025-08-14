@@ -310,12 +310,12 @@ class MultiDeviceCoordinator(private val shimmerRecorder: ShimmerRecorder) {
             val shimmer = shimmerRecorder.getConnectedShimmerDevice(deviceId)
             
             if (shimmer?.isConnected() == true) {
-                // Synchronize sampling rate across all devices
+                // Synchronise sampling rate across all devices
                 val config = mapOf("samplingRate" to 128.0)
                 val success = shimmer.writeCompleteConfiguration(config)
                 
                 if (!success) {
-                    println("Failed to synchronize device $deviceId")
+                    println("Failed to synchronise device $deviceId")
                     allSynchronized = false
                 }
             } else {
@@ -335,7 +335,7 @@ class MultiDeviceCoordinator(private val shimmerRecorder: ShimmerRecorder) {
             val shimmer = shimmerRecorder.getConnectedShimmerDevice(deviceId)
             shimmer?.let {
                 collectMultiSensorData(it)?.let { reading ->
-                    // Use synchronized timestamp
+                    // Use synchronised timestamp
                     readings[deviceId] = reading.copy(timestamp = timestamp)
                 }
             }
@@ -371,7 +371,7 @@ class DataQualityAssessor {
     }
     
     private fun analyzeDataQuality(readings: List<SensorReading>): DataQuality {
-        // Analyze GSR signal stability
+        // Analyse GSR signal stability
         val gsrValues = readings.mapNotNull { it.gsr }
         
         if (gsrValues.isEmpty()) {
@@ -381,7 +381,7 @@ class DataQualityAssessor {
         val gsrMean = gsrValues.average()
         val gsrVariance = gsrValues.map { (it - gsrMean) * (it - gsrMean) }.average()
         
-        // Analyze timestamp consistency
+        // Analyse timestamp consistency
         val timestamps = readings.map { it.timestamp }
         val intervals = timestamps.zipWithNext { a, b -> b - a }
         val avgInterval = intervals.average()

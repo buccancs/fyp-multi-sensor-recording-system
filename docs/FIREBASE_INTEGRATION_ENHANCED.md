@@ -32,7 +32,7 @@ This document describes the comprehensive Firebase integration added to the Mult
 - `thermal_camera_used` - Camera usage with specifications
 - `calibration_performed` - Device calibration success tracking
 - `data_quality_check` - Data quality assessment metrics
-- `synchronization_performed` - Device synchronization accuracy
+- `synchronization_performed` - Device synchronisation accuracy
 - `data_export` - Research data export tracking
 - `analysis_performed` - Data analysis completion
 - `cloud_upload/download` - File transfer monitoring
@@ -61,7 +61,7 @@ This document describes the comprehensive Firebase integration added to the Mult
 **Collections**:
 - `researcher_profiles` - Researcher profile and access management
 - `recording_sessions` - Session data with collaboration features
-- `research_projects` - Project organization and management
+- `research_projects` - Project organisation and management
 - `calibration_data` - Device calibration records
 - `system_errors` - Error logs for debugging
 - `data_export_requests` - Data export tracking and approval
@@ -74,10 +74,10 @@ This document describes the comprehensive Firebase integration added to the Mult
 - Data quality scoring and tracking
 
 ### 4. Firebase Storage
-**Purpose**: Secure file storage with authentication and organization
+**Purpose**: Secure file storage with authentication and organisation
 **Service Class**: `FirebaseStorageService`
 
-**File Organization**:
+**File Organisation**:
 ```
 recording_sessions/
   ├── session-id-1/
@@ -100,11 +100,11 @@ exports/
 ```
 
 **Features**:
-- Automatic file organization by session and researcher
+- Automatic file organisation by session and researcher
 - Secure access control based on authentication
 - Batch upload/download capabilities
 - File metadata tracking with researcher attribution
-- Storage usage monitoring and cost optimization
+- Storage usage monitoring and cost optimisation
 
 ### 5. Firebase Crashlytics
 **Purpose**: Enhanced stability monitoring for research reliability
@@ -123,7 +123,7 @@ exports/
 The implementation includes production-ready security rules (`firestore.rules`) that provide:
 
 - **Authentication-based access control**: All data access requires valid authentication
-- **Researcher type authorization**: Different access levels for different researcher types
+- **Researcher type authorisation**: Different access levels for different researcher types
 - **Data ownership enforcement**: Users can only access their own data and collaborated projects
 - **Collaboration support**: Secure sharing between researchers on projects
 - **Admin oversight**: Administrative access for system management
@@ -194,7 +194,7 @@ productFlavors {
 Comprehensive event tracking includes:
 - Research session lifecycle events
 - Device and sensor performance metrics
-- Data quality and synchronization tracking
+- Data quality and synchronisation tracking
 - User activity and workflow analysis
 - Error and performance monitoring
 - Cloud storage usage patterns
@@ -205,7 +205,7 @@ Analytics data export configured for:
 - Advanced research activity analysis
 - Custom SQL queries for insights
 - Automated reporting workflows
-- Cost optimization analysis
+- Cost optimisation analysis
 
 ## Implementation Details
 
@@ -224,11 +224,11 @@ object FirebaseModule {
 }
 ```
 
-### Application Initialization
-Firebase is initialized in `MultiSensorApplication.onCreate()` with full service enablement:
+### Application Initialisation
+Firebase is initialised in `MultiSensorApplication.onCreate()` with full service enablement:
 
 ```kotlin
-// Initialize Firebase with all services
+// Initialise Firebase with all services
 FirebaseApp.initializeApp(this)
 FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true)
 FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
@@ -320,13 +320,13 @@ firestoreService.updateRecordingSessionEnd(
 1. **Enhanced Security**: Multi-researcher authentication with role-based access control
 2. **Data Integrity**: Authenticated data storage with ownership tracking
 3. **Collaboration**: Secure sharing and collaboration between researchers
-4. **Analytics Insights**: Comprehensive usage analytics for research optimization
+4. **Analytics Insights**: Comprehensive usage analytics for research optimisation
 5. **Reliability**: Enhanced crash reporting and error tracking
 6. **Scalability**: Cloud infrastructure handles large research datasets
 7. **Compliance**: SOC 2 compliance with institutional data protection requirements
 8. **Audit Trail**: Complete tracking of data access and modifications
-9. **Cost Management**: Optimized storage and query patterns for cost efficiency
-10. **Research Insights**: Advanced analytics for research workflow optimization
+9. **Cost Management**: Optimised storage and query patterns for cost efficiency
+10. **Research Insights**: Advanced analytics for research workflow optimisation
 
 ## Production Readiness Checklist
 
@@ -337,8 +337,8 @@ firestoreService.updateRecordingSessionEnd(
 - [x] **Documentation**: Complete setup and configuration guides
 - [x] **Environment Support**: Development, staging, and production configurations
 - [x] **Error Handling**: Robust error handling and user feedback
-- [x] **Performance Optimization**: Efficient queries and data patterns
-- [x] **Cost Optimization**: Storage lifecycle and query optimization
+- [x] **Performance Optimisation**: Efficient queries and data patterns
+- [x] **Cost Optimisation**: Storage lifecycle and query optimisation
 - [x] **Monitoring Setup**: Health monitoring and alerting configuration
 
 ## Support and Maintenance
@@ -348,7 +348,7 @@ Production monitoring includes:
 - Service health dashboards
 - Error rate alerting
 - Performance monitoring
-- Cost tracking and optimization
+- Cost tracking and optimisation
 - Usage pattern analysis
 
 ### Backup and Recovery

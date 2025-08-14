@@ -486,7 +486,7 @@ class WebcamCapture:
         self.is_previewing = False
     
     def initialize_camera(self) -> bool:
-        """Initialize camera connection"""
+        """Initialise camera connection"""
         try:
             self.cap = cv2.VideoCapture(self.camera_index)
             if not self.cap.isOpened():
@@ -498,7 +498,7 @@ class WebcamCapture:
             self.cap.set(cv2.CAP_PROP_FPS, self.recording_fps)
             return True
         except Exception as e:
-            logger.error(f"Failed to initialize camera: {e}")
+            logger.error(f"Failed to initialise camera: {e}")
             return False
     
     def start_recording(self, session_id: str) -> bool:
