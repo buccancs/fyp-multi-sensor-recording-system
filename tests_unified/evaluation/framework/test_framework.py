@@ -10,7 +10,7 @@ import psutil
 import gc
 from .test_categories import TestCategory, TestConfiguration, QualityThresholds
 from .test_results import TestResults, SuiteResults, TestResult, TestStatus, PerformanceMetrics
-from .quality_validator import QualityValidator, ValidationReport
+from ..metrics.quality_validator import QualityValidator, ValidationReport
 logger = logging.getLogger(__name__)
 class TestSuite:
     def __init__(self, name: str, category: TestCategory, description: str = ""):
