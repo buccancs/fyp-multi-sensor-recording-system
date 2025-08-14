@@ -549,13 +549,34 @@ This project is licensed under the MIT Licence - see the [LICENCE](LICENCE) file
 - **Android Community** - Mobile development frameworks and libraries
 - **Python Scientific Computing Stack** - Data processing and analysis tools
 
+## 📚 Documentation
+
+### Quick Reference
+- **[Architecture Overview](architecture.md)** - System architecture and design decisions
+- **[Backlog & TODOs](backlog.md)** - Project backlog and development priorities  
+- **[Changelog](changelog.md)** - Version history and release notes
+
+### Comprehensive Guides  
+- **[🌡️ Thermal Camera Integration](docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md)** - Complete Topdon thermal camera setup and API reference
+- **[🔥 Firebase Integration](docs/FIREBASE_INTEGRATION.md)** - Cloud services and analytics documentation
+- **[🌐 Network Setup](docs/NETWORK_SETUP_GUIDE.md)** - Network configuration and troubleshooting
+- **[📱 Shimmer Integration](docs/SHIMMER_INTEGRATION_GUIDE.md)** - GSR sensor setup and configuration
+
+### Development Documentation
+- **[🧪 Testing Framework](tests_unified/README.md)** - Unified testing infrastructure documentation
+- **[🔧 API Reference](docs/api/README.md)** - Complete API documentation and examples
+- **[📐 Architecture Decisions](docs/adr/README.md)** - Architecture Decision Records (ADRs)
+- **[📚 Thesis Documentation](docs/thesis_report/README.md)** - Academic thesis chapters and appendices
+
+### Additional Resources
+- **[📝 Miscellaneous Documentation](docs/misc/README.md)** - Development summaries and historical documentation
+- **[🔬 Module Deep Dive](docs/module_deep_dive/)** - Detailed component documentation
+- **[📊 Diagrams](docs/diagrams/)** - System diagrams and flowcharts
+
 ## 🔗 Quick Links
 
-- **[🚀 Run Tests Now](./run_local_test.sh)** - One-click local testing
+- **[🚀 Run Tests Now](./run_local_tests.sh)** - One-click local testing
 - **[📊 GitHub Actions](https://github.com/buccancs/bucika_gsr/actions)** - Live CI/CD status
-- **[📚 Architecture Documentation](architecture.md)** - System architecture overview
-- **[🌡️ Thermal Camera Integration Guide](docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md)** - Complete Topdon thermal camera setup, API reference, and troubleshooting guide
-- **[🔥 Firebase Integration Guide](docs/FIREBASE_INTEGRATION.md)** - Cloud services documentation
 - **[🛠️ Troubleshooting](tests/integration/virtual_environment/TROUBLESHOOTING.md)** - Issue resolution
 - **[🧪 Test Documentation](tests/integration/virtual_environment/)** - Comprehensive test guides
 

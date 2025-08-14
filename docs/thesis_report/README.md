@@ -1,80 +1,131 @@
-# Thesis LaTeX Build Instructions
+# Thesis Documentation
 
-This directory contains the LaTeX sources for the thesis chapters and a master build file.
+This directory contains the complete thesis documentation for the Multi-Sensor Recording System for Contactless GSR Prediction Research project, including both source chapters and build infrastructure for LaTeX compilation.
 
-## Files
-- Master file: `docs/thesis_report/final/latex/main.tex`
-- Converted chapters (selected):
-  - `docs/thesis_report/final/4.tex` (Chapter 4)
-  - `docs/thesis_report/final/6.tex` (Chapter 6)
-  - `docs/thesis_report/final/latex/chapter2.tex` (Chapter 2 in latex subfolder)
-  - Other chapters (e.g., 1.tex, 3.tex) will be included as available.
+## Directory Structure
 
-## Build
-You can build the thesis PDF using a LaTeX distribution (TeX Live/MiKTeX):
+### Source Content
+- **[`final/`](final/README.md)** - Final thesis chapters and appendices in Markdown and LaTeX formats
+- **[`final/latex/`](final/latex/README.md)** - LaTeX compilation sources and build files
+- **[`references.md`](final/references.md)** - Bibliography and references
 
-1. Change directory to `docs/thesis_report/final/latex`.
-2. Run:
-   - `pdflatex main.tex`
-   - `bibtex main` (optional; enables references via `references.bib`)
-   - `pdflatex main.tex`
-   - `pdflatex main.tex`
+### Supporting Documents
+- **[`cs_project_marking_form_meng_1819.md`](cs_project_marking_form_meng_1819.md)** - MEng project evaluation criteria
+- **[`evaluation_comparison_report.md`](evaluation_comparison_report.md)** - Evaluation methodology comparison
+- **[`structure_full.md`](structure_full.md)** - Complete thesis structure overview
+- **[`structure_lean.md`](structure_lean.md)** - Lean thesis structure alternative
 
-Notes:
-- main.tex currently includes Chapters 4 and 6. Chapter 2 and others will be included as they are converted/standardized.
-- The bibliography is referenced at `../../../../references.bib`. Ensure your toolchain can resolve this path or copy the file locally.
-- Required packages are already declared in main.tex: `graphicx`, `amsmath`, `amssymb`, `siunitx` (or `textcomp`), and `hyperref`.
-- Some figure assets referenced in Chapter 4 may not exist yet. Provide assets or comment out includes to avoid build failures.
+## LaTeX Build System
 
-## TODOs
-- Map numeric citations `[n]` in chapter sources to proper `\cite{...}` keys in a centralized BibTeX file.
-- Validate symbol rendering for `\texttimes`/`\textmu` (provided via siunitx or textcomp).
-- Standardize chapter file locations (prefer `docs/thesis_report/final/*.tex`).
+### Master Build File
+- **Master file**: `docs/thesis_report/final/latex/main.tex`
+- **Bibliography**: `../../../../references.bib` (root level shared references)
 
-## Exclusions
-- Do not include `external/` or `docs/generated_docs` in any build artifacts.
+### Available Chapters
+- **Chapter 1**: Introduction (`final/1.md` / `final/latex/1.tex`)
+- **Chapter 2**: Background and Research Context (`final/2.md` / `final/latex/chapter2.tex`)
+- **Chapter 3**: Requirements Analysis (`final/3.md` / `final/latex/3.tex`)
+- **Chapter 4**: System Design and Architecture (`final/4.md` / `final/latex/chapter4.tex`)
+- **Chapter 5**: Evaluation and Testing (`final/5.md` / `final/latex/chapter5.tex`)
+- **Chapter 6**: Conclusion and Future Work (`final/6.md` / `final/latex/6.tex`)
 
+### Appendices
+Complete set of appendices covering system documentation, user manuals, test reports, and supporting materials. See [final/README.md](final/README.md) for detailed contents.
 
-## Appendices
+## Quick Build Instructions
 
-The appendices have been converted to LaTeX and are included from the thesis master at `docs/thesis_report/final/latex/main.tex` after a `\appendix` directive.
+### Prerequisites
+- LaTeX distribution (TeX Live/MiKTeX)
+- BibTeX for bibliography management
+- Required packages: `graphicx`, `amsmath`, `amssymb`, `siunitx`, `hyperref`, `natbib`
+- For Mermaid diagrams: Node.js 16+ and Mermaid CLI (`npm install -g @mermaid-js/mermaid-cli`)
 
-- Location: `docs/thesis_report/final/latex/`
-- Files:
-  - `appendix_A.tex` (System Manual)
-  - `appendix_B.tex` (User Manual)
-  - `appendix_C.tex` (Supporting Documentation)
-  - `appendix_D.tex` (Test Reports)
-  - `appendix_E.tex` (Evaluation Data)
-  - `appendix_F.tex` (Code Listings — TODO placeholder)
-  - `appendix_G.tex` (Diagnostic Figures — analysis only)
-  - `appendix_H.tex` (Consolidated Technical Reference)
-  - `appendix_I.tex` (Deprecated — content migrated to Appendix Z)
-  - `appendix_Z.tex` (Consolidated Figures)
+### Build Process
+1. **Navigate to build directory**:
+   ```bash
+   cd docs/thesis_report/final/latex
+   ```
 
-Notes:
-- Several appendices currently wrap Markdown content in LaTeX `verbatim` blocks for quick inclusion. These will be refined to proper LaTeX lists/tables and `\cite{}` references in a follow-up pass.
-- Mermaid diagram of the LaTeX structure (including appendices) is available at `docs/diagrams/mermaid_thesis_appendices.mmd`.
-- Build remains the same: run `pdflatex` on `main.tex` as described above.
+2. **Compile thesis**:
+   ```bash
+   pdflatex -shell-escape main.tex  # Enable shell-escape for Mermaid
+   bibtex main                      # For bibliography
+   pdflatex -shell-escape main.tex  # Update references
+   pdflatex -shell-escape main.tex  # Final compilation
+   ```
 
+3. **Output**: `main.pdf` contains the complete thesis
 
-## Mermaid Diagrams Rendering in LaTeX
+### Build Notes
+- Bibliography references are resolved from `../../../../references.bib`
+- Shell-escape flag (`-shell-escape`) required for Mermaid diagram rendering
+- Some figure assets may require creation or commenting out during development
 
-We now render Mermaid diagrams directly in LaTeX using the `mermaid` package.
+## Current Status
 
-Build requirements:
-- LaTeX: Enable shell-escape when compiling (required for external tools).
-- Node.js 16+ installed and available on PATH.
-- Mermaid CLI (mmdc): `npm install -g @mermaid-js/mermaid-cli`
+### Completed Conversions
+- [x] Chapter 1: Introduction (LaTeX format)
+- [x] Chapter 2: Background and Research Context (LaTeX format)
+- [x] Chapter 3: Requirements Analysis (LaTeX format)  
+- [x] Chapter 4: System Design and Architecture (LaTeX format)
+- [x] Chapter 5: Evaluation and Testing (LaTeX format)
+- [x] Chapter 6: Conclusion and Future Work (LaTeX format)
+- [x] Appendices A-Z: Complete appendix set (LaTeX format)
 
-Compile steps (example with MiKTeX/TeX Live):
-- From `docs\thesis_report\final\latex`:
-  - `pdflatex -shell-escape main.tex`
-  - `bibtex main` (if bibliography used)
-  - `pdflatex -shell-escape main.tex`
-  - `pdflatex -shell-escape main.tex`
+### Ongoing Tasks
+- [ ] Citation mapping: Replace numeric citations `[n]` with proper `\cite{...}` keys
+- [ ] Symbol validation: Ensure `\texttimes`/`\textmu` render correctly
+- [ ] Figure assets: Provide missing figure files or placeholders
+- [ ] LaTeX refinement: Convert verbatim blocks to proper LaTeX structures
 
-Notes:
-- Mermaid examples are included in Appendix Z under "Rendered Mermaid Diagrams (LaTeX)".
-- If compilation fails for Mermaid, verify Node + mmdc installation and that `-shell-escape` is used.
-- Exclusions remain: do not include `external/` or `docs/generated_docs` in any build artifacts.
+## Development Workflow
+
+### Adding New Content
+1. Create/edit Markdown source in `final/`
+2. Convert to LaTeX format in `final/latex/`
+3. Update master file includes in `main.tex`
+4. Test compilation and resolve any build errors
+
+### Quality Assurance
+- Use content comparison tools in `final/` to verify Markdown-LaTeX synchronization
+- Validate bibliography entries and citation format
+- Check figure references and cross-references
+- Ensure academic writing standards compliance
+
+## Mermaid Diagrams
+
+### LaTeX Integration
+Direct Mermaid rendering in LaTeX using the `mermaid` package:
+
+**Build Requirements:**
+- LaTeX: Enable shell-escape when compiling (`-shell-escape` flag)
+- Node.js 16+ installed and available on PATH
+- Mermaid CLI: `npm install -g @mermaid-js/mermaid-cli`
+
+**Usage Example:**
+```latex
+\begin{mermaid}
+graph TD
+    A[Start] --> B[Process]
+    B --> C[End]
+\end{mermaid}
+```
+
+### Fallback Strategy
+If Mermaid compilation fails:
+1. Generate static images externally using `mmdc` command
+2. Include as standard LaTeX figures with `\includegraphics`
+3. Comment out live Mermaid blocks for debugging
+
+## Troubleshooting
+
+### Common Issues
+- **Missing bibliography**: Ensure `references.bib` path is correct
+- **Figure not found**: Check figure file paths or comment out for testing
+- **Mermaid errors**: Verify Node.js and mmdc installation
+- **Package not found**: Install missing LaTeX packages
+- **Citation errors**: Verify BibTeX keys match bibliography entries
+
+### Build Exclusions
+- Do not include `external/` or `docs/generated_docs` in build artifacts
+- Exclude temporary LaTeX files (`.aux`, `.log`, `.toc`) from version control
