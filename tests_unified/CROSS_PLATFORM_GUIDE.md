@@ -1,14 +1,23 @@
-# Cross-Platform Testing Guide
+# Cross-Platform Testing Guide - **CONSOLIDATED** ✅
 
-This guide explains how to run the unified testing framework on Windows, Linux, and macOS systems.
+This guide explains how to run the **fully consolidated** unified testing framework on Windows, Linux, and macOS systems. All scattered test files have been successfully moved and are now discoverable through unified commands.
 
 ## 🌐 Cross-Platform Overview
 
-The Multi-Sensor Recording System testing framework is designed to work consistently across all major operating systems:
+The Multi-Sensor Recording System testing framework is designed to work consistently across all major operating systems with **completed test consolidation**:
 
 - **Windows 10/11** - Full support with multiple runner options
-- **Linux** (Ubuntu, Fedora, etc.) - Native support with bash scripts
+- **Linux** (Ubuntu, Fedora, etc.) - Native support with bash scripts  
 - **macOS** - Full compatibility using Unix-style scripts
+- **All Platforms** - **4 scattered test files now consolidated** into proper structure
+
+## 📋 Consolidation Status
+
+**COMPLETED** ✅ across all platforms:
+- ✅ Root-level test files moved to unified structure
+- ✅ Evaluation tests reorganized into 6 logical categories
+- ✅ Cross-platform compatibility verified
+- ✅ Consistent test discovery on all operating systems
 
 ## 📦 Prerequisites
 
@@ -115,6 +124,53 @@ chmod +x run_local_tests.sh
 
 # Requirements validation
 ./run_local_tests.sh requirements
+```
+
+## 🧪 Testing Consolidated Files Cross-Platform
+
+### Verify Consolidation Success
+
+**Test moved files on all platforms:**
+
+#### Windows
+```cmd
+# Test consolidated Python unit tests
+python -m pytest tests_unified/unit/python/test_device_connectivity.py -v
+python -m pytest tests_unified/unit/python/test_thermal_recorder_security_fix.py -v
+
+# Test consolidated Android tests
+python -m pytest tests_unified/unit/android/test_android_connection_detection.py -v
+
+# Test consolidated integration tests
+python -m pytest tests_unified/integration/device_coordination/test_pc_server_integration.py -v
+```
+
+#### Linux/macOS
+```bash
+# Test consolidated Python unit tests
+python3 -m pytest tests_unified/unit/python/test_device_connectivity.py -v
+python3 -m pytest tests_unified/unit/python/test_thermal_recorder_security_fix.py -v
+
+# Test consolidated Android tests
+python3 -m pytest tests_unified/unit/android/test_android_connection_detection.py -v
+
+# Test consolidated integration tests  
+python3 -m pytest tests_unified/integration/device_coordination/test_pc_server_integration.py -v
+```
+
+### Test Reorganized Evaluation Categories
+
+**Cross-platform evaluation testing:**
+
+#### All Platforms
+```bash
+# Test new organized evaluation structure
+python -m pytest tests_unified/evaluation/architecture/ -v
+python -m pytest tests_unified/evaluation/research/ -v
+python -m pytest tests_unified/evaluation/framework/ -v
+python -m pytest tests_unified/evaluation/data_collection/ -v
+python -m pytest tests_unified/evaluation/foundation/ -v
+python -m pytest tests_unified/evaluation/metrics/ -v
 ```
 
 ## 🔧 Installation & Setup

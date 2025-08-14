@@ -1,20 +1,33 @@
-# Android Device Testing Suite
+# Android Device Testing Suite - **CONSOLIDATED** ✅
 
-Comprehensive Android device testing with IDE integration and wireless debugging support for the Multi-Sensor Recording System.
+Comprehensive Android device testing with IDE integration and wireless debugging support for the Multi-Sensor Recording System. **All Android tests have been consolidated** into the unified testing framework.
 
 ## Overview
 
-This testing suite provides comprehensive validation of Android devices connected through IntelliJ IDEA or Android Studio, including:
+This testing suite provides comprehensive validation of Android devices connected through IntelliJ IDEA or Android Studio. **All scattered Android test files have been moved** to the consolidated structure:
 
 - **Device Detection**: USB, wireless debugging, and emulator detection
 - **IDE Integration**: Android Studio and IntelliJ IDEA connection detection  
 - **Comprehensive Testing**: UI, functional, requirements, integration, performance, compatibility, and security tests
 - **Real-time Monitoring**: Continuous device and IDE status monitoring
 - **Cross-platform Support**: Windows, macOS, and Linux
+- **✅ Consolidated Structure**: All Android tests now in `tests_unified/unit/android/` and `tests_unified/integration/android/`
 
-## Quick Start
+## Quick Start - **UPDATED FOR CONSOLIDATION** ✅
 
-### 1. Basic Device Detection
+### 1. Consolidated Android Testing
+```bash
+# Test moved Android connection detection (moved from root)
+python -m pytest tests_unified/unit/android/test_android_connection_detection.py -v
+
+# Run all consolidated Android unit tests
+python -m pytest tests_unified/unit/android/ -v
+
+# Use unified framework for Android testing
+python tests_unified/runners/run_unified_tests.py --category android
+```
+
+### 2. Legacy Device Detection (Still Available)
 ```bash
 # Detect connected devices and IDEs
 python android_device_testing_demo.py --mode detect
@@ -23,10 +36,11 @@ python android_device_testing_demo.py --mode detect
 python run_local_tests.py android_quick
 ```
 
-### 2. Comprehensive Testing
+### 3. Comprehensive Testing
 ```bash
-# Full testing suite
+# Full testing suite via unified framework
 python run_local_tests.py android_comprehensive
+```
 
 # IDE integration testing
 python run_local_tests.py android_ide
