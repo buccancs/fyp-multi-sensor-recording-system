@@ -42,7 +42,7 @@
 |                                                                                                                                                                                                                 |
 | - The research team will not know who has participated until after all assessments have been completed and final grades submitted.                                                                              |
 |                                                                                                                                                                                                                 |
-| - All data will be anonymized or pseudonymized before analysis.                                                                                                                                                 |
+| - All data will be anonymised or pseudonymized before analysis.                                                                                                                                                 |
 |                                                                                                                                                                                                                 |
 | > You may withdraw from the study at any time without giving a reason.                                                                                                                                          |
 |                                                                                                                                                                                                                 |

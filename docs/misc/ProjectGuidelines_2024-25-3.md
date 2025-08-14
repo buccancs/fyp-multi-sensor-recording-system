@@ -546,7 +546,7 @@ title: |
 > resource.
 >
 > Do not pirate (i.e., steal) software or use any software that you
-> don't have a valid license to use. Always respect copyright and
+> don't have a valid licence to use. Always respect copyright and
 > licenses. Being found to have used pirated or unlicensed software can
 > have serious implications for your project.
 >
@@ -556,8 +556,8 @@ title: |
 > make your software available to other people, make it publicly
 > available as an Open-Source project, or you are developing software
 > for an external supervisor, you do need to take notice of which
-> license is used and what its consequences are. In particular, a
-> license like the [GNU Public Licence
+> licence is used and what its consequences are. In particular, a
+> licence like the [GNU Public Licence
 > (GPL)](http://www.gnu.org/licenses/gpl.html)[1](#_bookmark7) requires
 > source code to be made available to users
 >
@@ -1302,7 +1302,7 @@ satisfactory solution?
     > include enough information to show how to use the software and
     > what it looks like. A user manual is a good way of doing this,
     > probably as an appendix section. Some projects are heavily
-    > user-centered, and so the user interface is a key part of the
+    > user-centred, and so the user interface is a key part of the
     > project; in these cases a user manual would not just be an
     > appendix, but a core part of the project report. It may be the
     > case, though, that a user manual is not be the most effective way

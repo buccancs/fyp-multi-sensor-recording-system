@@ -31,9 +31,9 @@ class CalibrationManager:
 #### Thermal Camera APIs
 ```kotlin
 class ThermalRecorder {
-    // Initialize thermal camera system with reflection-based API safety
-    fun initialize(previewSurface: SurfaceView? = null): Boolean
-    fun initialize(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
+    // Initialise thermal camera system with reflection-based API safety
+    fun initialise(previewSurface: SurfaceView? = null): Boolean
+    fun initialise(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
     
     // Preview control with real-time switching capability
     fun startPreview(): Boolean
@@ -129,7 +129,7 @@ class PCServer:
 
 #### Enhanced Recording Controllers
 - **RecordingSessionController**: Pure recording operation management with enhanced error handling and thermal camera coordination
-- **DeviceConnectionManager**: Device connectivity orchestration with improved timing control, race condition prevention, and thermal camera initialization
+- **DeviceConnectionManager**: Device connectivity orchestration with improved timing control, race condition prevention, and thermal camera initialisation
 - **ThermalRecorder**: Production-ready Topdon thermal camera integration with reflection-based API safety
 - **FileTransferManager**: Data transfer operations with integrity validation including thermal data formats
 - **CalibrationManager**: Calibration process coordination with multi-device synchronisation and RGB-thermal alignment
@@ -179,7 +179,7 @@ fun RecordingScreen(
 }
 ```
 
-#### Enhanced Device Initialization (Updated)
+#### Enhanced Device Initialisation (Updated)
 ```kotlin
 class DeviceConnectionManager {
     // Enhanced with timing coordination to prevent race conditions
@@ -210,17 +210,17 @@ class NetworkClient {
 
 ```kotlin
 class CameraRecorder {
-    // Enhanced with improved initialization coordination
+    // Enhanced with improved initialisation coordination
     fun startRecording(config: RecordingConfig): Boolean
     fun stopRecording(): Boolean
     fun getRecordingStatus(): RecordingStatus
-    fun isInitialized(): Boolean  // New: Initialization state checking
+    fun isInitialized(): Boolean  // New: Initialisation state checking
 }
 
 class ThermalRecorder {
     // Enhanced with comprehensive hardware integration and reflection-based API safety
-    fun initialize(previewSurface: SurfaceView? = null): Boolean
-    fun initialize(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
+    fun initialise(previewSurface: SurfaceView? = null): Boolean
+    fun initialise(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
     fun startRecording(sessionId: String): Boolean
     fun stopRecording(): Boolean
     fun getThermalCameraStatus(): ThermalCameraStatus
@@ -354,8 +354,8 @@ val thermalRecorder = ThermalRecorder()
 // Connect to PC controller
 networkClient.connect("192.168.1.100", 8080)
 
-// Initialize thermal camera with Topdon hardware support
-val thermalInitialized = thermalRecorder.initialize(surfaceView)
+// Initialise thermal camera with Topdon hardware support
+val thermalInitialized = thermalRecorder.initialise(surfaceView)
 if (thermalInitialized) {
     val status = thermalRecorder.getThermalCameraStatus()
     Log.d("Thermal", "Device: ${status.deviceName}, Available: ${status.isAvailable}")

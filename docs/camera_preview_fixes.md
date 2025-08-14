@@ -31,23 +31,23 @@ This document outlines the fixes implemented to address camera preview failures 
 ### Thermal Camera Preview Failures
 
 1. **USB Connection Problems**
-   - **Problem**: UsbDevice not properly attached or recognized
-   - **Solution**: Added device discovery and re-initialization logic
+   - **Problem**: UsbDevice not properly attached or recognised
+   - **Solution**: Added device discovery and re-initialisation logic
    - **File**: `ThermalRecorder.kt`
 
-2. **UVC Camera Initialization**
+2. **UVC Camera Initialisation**
    - **Problem**: `uvcCamera` object null when `startPreview()` called
-   - **Solution**: Added re-initialization of UVC camera when null
+   - **Solution**: Added re-initialisation of UVC camera when null
    - **File**: `ThermalRecorder.kt`
 
 3. **IRCMD Library Issues**
    - **Problem**: `ircmd` object null during preview start
-   - **Solution**: Added re-initialization of IRCMD when null
+   - **Solution**: Added re-initialisation of IRCMD when null
    - **File**: `ThermalRecorder.kt`
 
 ### Common System-Level Issues
 
-1. **Initialization Race Conditions**
+1. **Initialisation Race Conditions**
    - **Problem**: Preview attempted before proper surface/device setup
    - **Solution**: Added retry logic with exponential backoff
    - **Files**: `DeviceConnectionManager.kt`, `CameraRecorder.kt`, `ThermalRecorder.kt`
@@ -123,13 +123,13 @@ while (!initializationSuccess && retryCount < maxRetries) {
     }
     
     if (uvcCamera == null) {
-        // Re-initialize UVC camera
+        // Re-initialise UVC camera
         val uvcBuilder = ConcreateUVCBuilder()
         uvcCamera = uvcBuilder.setUVCType(UVCType.USB_UVC).build()
     }
     
     if (ircmd == null) {
-        // Re-initialize IRCMD
+        // Re-initialise IRCMD
         val ircmdBuilder = ConcreteIRCMDBuilder()
         ircmd = ircmdBuilder
             .setIrcmdType(IRCMDType.USB_IR_256_384)
@@ -143,13 +143,13 @@ while (!initializationSuccess && retryCount < maxRetries) {
 
 #### DeviceConnectionManager.initializeThermalCamera()
 ```kotlin
-// Added retry logic for thermal initialization
+// Added retry logic for thermal initialisation
 var initSuccess = false
 var retryCount = 0
 val maxRetries = 3
 
 while (!initSuccess && retryCount < maxRetries) {
-    val success = thermalRecorder.initialize(surfaceView)
+    val success = thermalRecorder.initialise(surfaceView)
     if (success) {
         // Try starting preview with backoff
         var previewStarted = false
@@ -161,7 +161,7 @@ while (!initSuccess && retryCount < maxRetries) {
             // Retry with delays: 1s, 2s, 4s
         }
     }
-    // Retry initialization with delays: 1s, 2s, 3s
+    // Retry initialisation with delays: 1s, 2s, 3s
 }
 ```
 
@@ -189,7 +189,7 @@ while (!initSuccess && retryCount < maxRetries) {
 
 The fixes include enhanced logging to help monitor effectiveness:
 - Retry attempt counts and success/failure rates
-- Timing information for initialization delays
+- Timing information for initialisation delays
 - Detailed error messages for different failure modes
 - Device discovery and connection status
 
@@ -198,4 +198,4 @@ The fixes include enhanced logging to help monitor effectiveness:
 1. **Adaptive Timeouts**: Adjust timeouts based on device performance
 2. **Hardware-Specific Optimizations**: Different strategies for different device models
 3. **Background Health Monitoring**: Periodic checks for camera availability
-4. **User Feedback**: Toast messages or UI indicators for initialization status
+4. **User Feedback**: Toast messages or UI indicators for initialisation status

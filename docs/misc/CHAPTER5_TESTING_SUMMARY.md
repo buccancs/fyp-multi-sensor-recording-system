@@ -9,19 +9,19 @@ This document summarizes the comprehensive testing infrastructure implemented to
 ### ✅ Completed Components
 
 #### 1. Android Unit Tests (90% Line Coverage Target)
-- **ShimmerRecorderTest.kt**: 30+ test methods covering initialization, recording lifecycle, error handling, and boundary conditions
+- **ShimmerRecorderTest.kt**: 30+ test methods covering initialisation, recording lifecycle, error handling, and boundary conditions
 - **ConnectionManagerTest.kt**: Network communication, protocol handling, concurrent operations, and error recovery testing
 - **MainViewModelTest.kt**: UI state management, lifecycle events, configuration changes, and memory cleanup testing  
 - **SessionManagerTest.kt**: File operations, session lifecycle, data integrity, and resource management testing
 
 Coverage includes:
-- Initialization with valid/invalid parameters
+- Initialisation with valid/invalid parameters
 - Recording lifecycle (start/stop) validation
 - Error handling and boundary conditions
 - Concurrent operations and thread safety
 - Resource cleanup and memory management
 
-#### 2. Integration Tests (Multi-Device Synchronization)
+#### 2. Integration Tests (Multi-Device Synchronisation)
 - **test_multi_device_synchronization.py**: Comprehensive multi-device coordination testing
   - Mock device simulation (up to 10 devices)
   - Broadcast command testing (start/stop recording)
@@ -67,14 +67,14 @@ Coverage gates implemented:
 ### CSV Data Files
 ```
 test_results/chapter5_artifacts/
-├── drift_results.csv (18.6 KB) - 150 synchronization measurements
+├── drift_results.csv (18.6 KB) - 150 synchronisation measurements
 ├── calib_metrics.csv (2.2 KB) - 16 calibration accuracy measurements  
 ├── net_bench.csv (2.0 KB) - 50 network performance measurements
 └── measurement_summary.json (410 B) - Generation metadata
 ```
 
 ### Sample Data Quality
-- **Synchronization**: 25 sessions × 6 devices = 150 data points with outlier detection
+- **Synchronisation**: 25 sessions × 6 devices = 150 data points with outlier detection
 - **Calibration**: 4 cameras × 4 measurement types = 16 calibration validations
 - **Network**: 5 RTT conditions × 2 TLS modes + scalability = 50+ measurements
 
@@ -96,10 +96,10 @@ test_results/chapter5_artifacts/
 - Performance tests validate 8-hour stability with automated acceptance criteria
 
 ### Evidence Collection
-- **Synchronization Accuracy**: Median drift, IQR, outlier documentation (WiFi roaming)
+- **Synchronisation Accuracy**: Median drift, IQR, outlier documentation (WiFi roaming)
 - **Calibration Metrics**: Intrinsic reprojection error, cross-modal registration accuracy
 - **Network Performance**: 95th percentile latency, TLS overhead, scalability validation
-- **System Stability**: Memory growth slopes, CPU utilization, resource stability
+- **System Stability**: Memory growth slopes, CPU utilisation, resource stability
 
 ### Reproducibility Framework
 - Deterministic scripts with fixed random seeds
@@ -118,7 +118,7 @@ test_results/chapter5_artifacts/
 
 ### Validation Approach
 1. Run fast lane CI to validate unit test coverage gates
-2. Execute nightly integration to generate synchronization evidence  
+2. Execute nightly integration to generate synchronisation evidence  
 3. Perform abbreviated endurance test (1-hour) to validate performance monitoring
 4. Generate complete measurement artifacts for Chapter 5 appendices
 5. Document all procedures for reproducibility and academic review

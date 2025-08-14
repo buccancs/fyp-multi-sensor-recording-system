@@ -26,7 +26,7 @@ All research activities using the Multi-Sensor Recording System must comply with
 ## Data Handling
 
 The research protocol ensures:
-- **Anonymized data collection** with participant ID codes
+- **Anonymised data collection** with participant ID codes
 - **Secure data storage** on encrypted UCL-approved systems
 - **Limited data access** restricted to research team members only
 - **Data retention** following UCL and GDPR requirements

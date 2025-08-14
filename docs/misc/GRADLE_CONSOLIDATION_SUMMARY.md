@@ -15,7 +15,7 @@ This document summarizes the consolidation of the gradle build scripts into a cl
 - Intelligent test task discovery
 - Custom help system (`buildHelp`)
 
-### 2. **Python Module Organization** (`PythonApp/build.gradle`)
+### 2. **Python Module Organisation** (`PythonApp/build.gradle`)
 **Before:** Python tasks scattered in root build, no proper module structure.
 **After:** Dedicated Python build script with:
 - Cross-platform Python executable detection
@@ -30,8 +30,8 @@ This document summarizes the consolidation of the gradle build scripts into a cl
 - Preparation for external project exclusion
 - Clear project structure definition
 
-### 4. **Task Organization**
-Tasks are now properly organized into functional groups:
+### 4. **Task Organisation**
+Tasks are now properly organised into functional groups:
 
 #### Build Tasks
 - `assembleAll` - Build all components (Android APK + Python package)
@@ -92,7 +92,7 @@ MultiSensorRecordingSystem/
 - Cross-platform Python environment detection
 
 ### 5. **Build Performance**
-- Reduced configuration time due to better organization
+- Reduced configuration time due to better organisation
 - Parallel execution potential for independent modules
 - Cleaner dependency graphs
 
@@ -152,7 +152,7 @@ The new structure enables several future improvements:
 2. **Native Backend Module**: Potential addition of native code module
 3. **Documentation Module**: Possible documentation-as-code module
 4. **Artifact Publishing**: Streamlined publishing workflows
-5. **CI/CD Integration**: Better pipeline task organization
+5. **CI/CD Integration**: Better pipeline task organisation
 
 ## Testing Results
 

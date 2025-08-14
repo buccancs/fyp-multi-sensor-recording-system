@@ -23,7 +23,7 @@ This directory contains standalone documentation files that provide additional c
 
 ## Usage
 
-These files provide supplementary information for developers and researchers working on the project. They contain detailed technical notes, development history, and specialized setup instructions that complement the main documentation.
+These files provide supplementary information for developers and researchers working on the project. They contain detailed technical notes, development history, and specialised setup instructions that complement the main documentation.
 
 For primary documentation, see:
 - [Main README](../../README.md) - Project overview and quick start

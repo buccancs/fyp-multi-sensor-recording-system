@@ -2,7 +2,7 @@
 
 Purpose and Justification: This appendix provides a centralised navigation aid for the extensive technical content throughout the thesis. Visual content has been consolidated into Appendix Z - this appendix now focuses on technical reference materials, code organisation, and reproducibility resources.
 
-This appendix provides a consolidated reference index for technical content throughout the thesis, enabling quick navigation to implementation details, hardware specifications, and reproducibility resources without duplication of visual materials now centralized in Appendix Z.
+This appendix provides a consolidated reference index for technical content throughout the thesis, enabling quick navigation to implementation details, hardware specifications, and reproducibility resources without duplication of visual materials now centralised in Appendix Z.
 
 ## H.1 Visual Content Reference - SEE APPENDIX Z
 

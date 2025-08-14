@@ -28,7 +28,7 @@ This document provides detailed instructions for setting up comprehensive analyt
 |------------|-------------|------------|
 | `calibration_performed` | Device calibration | `calibration_type`, `success`, `duration_ms` |
 | `data_quality_check` | Data quality assessment | `session_id`, `quality_score`, `issue_count`, `primary_issue` |
-| `synchronization_performed` | Device synchronization | `device_count`, `success`, `time_drift_ms` |
+| `synchronization_performed` | Device synchronisation | `device_count`, `success`, `time_drift_ms` |
 
 ### Research Workflow Events
 
@@ -118,7 +118,7 @@ This document provides detailed instructions for setting up comprehensive analyt
    - Metric: Average of success parameter
    - Event name: calibration_performed
 
-4. **Synchronization Accuracy** (Time series)
+4. **Synchronisation Accuracy** (Time series)
    - Metric: Average of time_drift_ms parameter
    - Event name: synchronization_performed
    - Dimension: Date
@@ -325,7 +325,7 @@ function sendWeeklyReport() {
 2. **Data Quality Indicators**
    - Quality score distribution
    - Calibration success rates
-   - Synchronization accuracy
+   - Synchronisation accuracy
 
 3. **System Reliability**
    - Error rates by component
@@ -372,4 +372,4 @@ Create calculated fields in Data Studio:
 - [ ] Performance benchmarks established
 - [ ] Review process scheduled (monthly)
 
-This comprehensive analytics setup provides deep insights into research activity, system performance, and data quality, enabling evidence-based optimization of the research platform.
+This comprehensive analytics setup provides deep insights into research activity, system performance, and data quality, enabling evidence-based optimisation of the research platform.

@@ -155,7 +155,7 @@ sequenceDiagram
     participant TS as Time Sync Service
 
     Note over PC,TS: Initial Time synchronisation (±5ms target)
-    PC->>TS: Initialize Master Clock
+    PC->>TS: Initialise Master Clock
     TS->>A1: Time Sync Request
     A1->>TS: Clock Offset Response (~2ms)
     TS->>A2: Time Sync Request  
@@ -472,7 +472,7 @@ xychart-beta
 
 ```mermaid
 flowchart TD
-    Start([Start Calibration]) --> Init[Initialize Calibration Mode]
+    Start([Start Calibration]) --> Init[Initialise Calibration Mode]
     Init --> SetParams[Set Pattern Parameters<br/>• Checkerboard 9x6<br/>• Square Size: 25mm<br/>• Target Images: 20]
     
     SetParams --> CaptureLoop{Capture Paired Images}

@@ -269,7 +269,7 @@ gs://bucika-gsr-research-prod.appspot.com/
 
 ### Step 3: Configure Lifecycle Policies
 
-For cost optimization, set up lifecycle policies:
+For cost optimisation, set up lifecycle policies:
 
 1. Move files to Nearline storage after 30 days
 2. Move to Coldline storage after 90 days
@@ -297,7 +297,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimise.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
         
@@ -347,7 +347,7 @@ npm install -g firebase-tools
 # Login to Firebase
 firebase login
 
-# Initialize Firebase project
+# Initialise Firebase project
 firebase init
 
 # Deploy rules
@@ -406,7 +406,7 @@ jobs:
 3. **Usage Monitoring**
    - Create BigQuery export for advanced analytics
    - Set up daily/weekly usage reports
-   - Monitor storage costs and optimize
+   - Monitor storage costs and optimise
 
 ### Step 2: Backup Strategy
 
@@ -432,16 +432,16 @@ jobs:
    - HIPAA compliance if applicable
    - Institutional review board requirements
 
-### Step 4: Performance Optimization
+### Step 4: Performance Optimisation
 
-1. **Database Optimization**
+1. **Database Optimisation**
    - Monitor query performance
-   - Optimize indexes based on usage patterns
+   - Optimise indexes based on usage patterns
    - Regular cleanup of test data
 
-2. **Storage Optimization**
+2. **Storage Optimisation**
    - Implement compression for large files
-   - Optimize file formats
+   - Optimise file formats
    - Regular cleanup of temporary files
 
 ## Cost Management
@@ -454,9 +454,9 @@ jobs:
 - **Analytics**: Free
 - **Functions**: ~$5-15/month (if using custom claims)
 
-### Cost Optimization Tips
+### Cost Optimisation Tips
 
-1. Use Firestore efficiently (optimize queries, use subcollections)
+1. Use Firestore efficiently (optimise queries, use subcollections)
 2. Implement storage lifecycle policies
 3. Compress large files before upload
 4. Regular cleanup of test/development data
@@ -478,7 +478,7 @@ jobs:
 
 3. **Performance Issues**
    - Monitor with Firebase Performance
-   - Optimize database queries
+   - Optimise database queries
    - Implement proper caching
 
 ### Getting Help

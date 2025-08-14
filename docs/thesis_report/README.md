@@ -87,7 +87,7 @@ Complete set of appendices covering system documentation, user manuals, test rep
 4. Test compilation and resolve any build errors
 
 ### Quality Assurance
-- Use content comparison tools in `final/` to verify Markdown-LaTeX synchronization
+- Use content comparison tools in `final/` to verify Markdown-LaTeX synchronisation
 - Validate bibliography entries and citation format
 - Check figure references and cross-references
 - Ensure academic writing standards compliance

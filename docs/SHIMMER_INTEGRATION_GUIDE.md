@@ -12,9 +12,9 @@ This guide provides comprehensive documentation for integrating Shimmer3 GSR+ de
 
 ### 1. Device Setup
 ```kotlin
-// Initialize Shimmer manager
+// Initialise Shimmer manager
 val shimmerManager = ShimmerManager(context)
-shimmerManager.initialize()
+shimmerManager.initialise()
 
 // Discover paired devices
 val availableDevices = shimmerManager.getAvailableDevices()
@@ -130,7 +130,7 @@ class MultiDeviceCoordinator {
         deviceAddresses.forEach { address ->
             val shimmer = shimmerManager.getConnectedDevice(address)
             shimmer?.let {
-                // Synchronize sampling rates
+                // Synchronise sampling rates
                 it.writeCompleteConfiguration(mapOf("samplingRate" to 128.0))
             }
         }
@@ -309,7 +309,7 @@ class DataQualityTroubleshooter {
 }
 ```
 
-## Performance Optimization
+## Performance Optimisation
 
 ### Best Practices
 

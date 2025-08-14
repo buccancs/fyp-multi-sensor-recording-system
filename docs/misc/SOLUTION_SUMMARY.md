@@ -56,13 +56,13 @@ python pc_server_helper.py --configure-firewall
 - ✅ **Real Camera Feed Endpoints**: Enhanced `/api/camera/rgb/preview` and `/api/camera/ir/preview` to serve actual camera streams
 - ✅ **Android Device Integration**: Added `_get_real_rgb_frame()` and `_get_real_thermal_frame_web()` methods
 - ✅ **Dynamic Status Messages**: Contextual placeholder messages based on device connection status
-- ✅ **Thermal Data Processing**: Web-optimized thermal colormap for proper thermal visualization
+- ✅ **Thermal Data Processing**: Web-optimised thermal colormap for proper thermal visualization
 
 #### Key Camera Improvements:
 - **Real vs Simulated Detection**: System clearly indicates when showing real camera data vs simulation
 - **Proper Thermal Visualization**: Heat map coloring (blue→purple→red→orange→yellow→white)
 - **Dynamic Fallback**: Graceful degradation when devices not connected
-- **Performance Optimized**: Efficient frame processing and HTTP streaming
+- **Performance Optimised**: Efficient frame processing and HTTP streaming
 
 ### 3. Enhanced Network Discovery
 
@@ -163,7 +163,7 @@ Android Device → ✅ PC Server (Port 9000) → Real Camera Data → PyQt/Web U
 
 ### For System Reliability:
 - **🔄 Robust Discovery**: Multiple fallback strategies for device connection
-- **⚡ Fast Performance**: Optimized camera frame processing and network protocols
+- **⚡ Fast Performance**: Optimised camera frame processing and network protocols
 - **🛡️ Error Handling**: Graceful degradation and user-friendly error messages
 - **📈 Scalability**: Supports multiple Android devices and camera sources
 
@@ -235,7 +235,7 @@ The implemented solution provides a solid foundation for real camera integration
 
 1. **Extended Device Support**: Add support for additional thermal camera models
 2. **Advanced Network Features**: mDNS/Bonjour service discovery
-3. **Performance Optimization**: Hardware-accelerated video processing
+3. **Performance Optimisation**: Hardware-accelerated video processing
 4. **Security Enhancements**: TLS encryption for device communication
 5. **Mobile Hotspot Support**: Better handling of mobile network sharing scenarios
 

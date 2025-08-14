@@ -23,7 +23,7 @@ This file tracks pending items and TODOs identified in the thesis documentation 
 - [ ] **Figure Implementation - Usage Data**: Complete figure A11 requiring implementation with usage analysis data
 
 - [ ] **Chapter 4 Citation Mapping**: Replace bracketed numeric references [13], [14], [16], etc. with proper \cite{...} keys in `docs/thesis_report/final/latex/references.bib`
-- [ ] **Centralize Bibliography**: Migrate `docs/thesis_report/final/latex/references.tex` to BibTeX using root-level `references.bib`; update `docs/thesis_report/final/latex/main.tex` to use `\bibliography{references}` with natbib; map all chapter citations to \cite{...}; remove manual thebibliography after verification
+- [ ] **Centralise Bibliography**: Migrate `docs/thesis_report/final/latex/references.tex` to BibTeX using root-level `references.bib`; update `docs/thesis_report/final/latex/main.tex` to use `\bibliography{references}` with natbib; map all chapter citations to \cite{...}; remove manual thebibliography after verification
 - [ ] **Chapter 4 Figures Verification**: Provide assets for `fig_4_04_desktop_gui_layout.png`, `fig_4_05_protocol_sequence.png`, `fig_4_06_data_processing_pipeline.png` or update figure wrappers accordingly
 - [ ] **Chapter 4 LaTeX Integration**: Integrate `docs/thesis_report/final/4.tex` into LaTeX build (e.g., `docs/thesis_report/final/latex/main.tex`), reconcile prior entry pointing to `docs/thesis_report/final/latex/chapter4.tex`, and standardize chapter file locations
 - [ ] **LaTeX Preamble Packages**: Ensure main preamble includes `graphicx`, `textcomp`, `amsmath`, and `hyperref` required by Chapter 4; validate symbol rendering (\texttimes, \mu) and figure compilation
@@ -35,7 +35,7 @@ This file tracks pending items and TODOs identified in the thesis documentation 
 - [ ] **Chapter 5 Citation Mapping**: Audit Chapter 5 for bracketed numeric references and replace with proper \cite{...} keys in `docs/thesis_report/final/latex/references.bib`
 - [ ] **Chapter 5 Figure Integration Verification**: Confirm TikZ/pgfplots figures compile and render correctly (sync accuracy, scalability, extended operation, correlation)
 - [ ] **Chapter 5 Content Parity Review**: Ensure `latex/chapter5.tex` fully reflects `final/5.md`; integrate any missing sections or details
-- [ ] **Chapter 3 Citation Mapping**: Replace bracketed numeric references [1], [11], [12], [21] in `docs/thesis_report/final/3.tex` with proper \cite{...} keys in `references.bib` or standardize on centralized references.md
+- [ ] **Chapter 3 Citation Mapping**: Replace bracketed numeric references [1], [11], [12], [21] in `docs/thesis_report/final/3.tex` with proper \cite{...} keys in `references.bib` or standardize on centralised references.md
 - [ ] **Samsung Device Validation**: Build and run Android app on a Samsung device after documentation changes impacting Android features; record outcomes in test reports
 - [ ] **Chapter 6 Citation Mapping**: Replace bracketed numeric references [21], [22], [17], [8], [19] in `docs/thesis_report/final/6.tex` with proper \cite{...} keys from `references.bib`
 - [ ] **Chapter 6 LaTeX Preamble Packages**: Ensure thesis master preamble includes `textcomp` or `siunitx` for symbol commands (\textmu, \texttimes) used in Chapter 6

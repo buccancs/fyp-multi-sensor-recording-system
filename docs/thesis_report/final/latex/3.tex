@@ -145,7 +145,7 @@ During a session, the data flow is as follows: \textbf{Shimmer GSR Data:} If a S
 \textbf{Data Aggregation:} After all data arrives at the PC, session aggregation occurs. The Session Manager may invoke post-processing functions, including hand segmentation of the recorded video. Once all files are ready, the PC can combine or index them, such as generating a timestamp index. This process centralises and organises data from distributed sources in the PC's file system.
 
 \begin{figure}[ht]
-    \centering
+    \centring
     % TODO: Render Mermaid diagram at docs\thesis_report\final\fig_3_1_architecture.mmd to PDF/PNG and include here via \includegraphics.
     \fbox{TODO: Insert Figure 3.1 rendered from Mermaid}
     \caption{System Architecture overview (see mermaid source: fig\_3\_1\_architecture.mmd)}
@@ -169,7 +169,7 @@ The development and deployment of this multi-sensor recording system presents se
 \textbf{Risk: Synchronisation Drift}\\
 \emph{Impact}: Temporal misalignment between devices may compromise data quality in multi-modal analysis\\
 \emph{Likelihood}: Medium (drift during long sessions)\\
-\emph{Mitigation}: Continuous NTP clock synchronization; monotonic clock sources; post-processing alignment verification; configurable tolerance thresholds
+\emph{Mitigation}: Continuous NTP clock synchronisation; monotonic clock sources; post-processing alignment verification; configurable tolerance thresholds
 
 \textbf{Risk: UI Responsiveness Issues}\\
 \emph{Impact}: Interface freezes during high data throughput disrupts workflow\\

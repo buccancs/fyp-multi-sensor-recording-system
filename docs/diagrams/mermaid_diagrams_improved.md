@@ -1421,13 +1421,13 @@ graph TB
             subgraph "Security and Privacy"
                 ENCRYPT[Encryption Service<br/>Data Protection<br/>Key Management<br/>Secure Storage]
                 PERM_MGR[Permission Manager<br/>Runtime Permissions<br/>Access Control<br/>Security Enforcement]
-                PRIVACY[Privacy Protection<br/>Data Anonymization<br/>Secure Communication<br/>Consent Management]
+                PRIVACY[Privacy Protection<br/>Data Anonymisation<br/>Secure Communication<br/>Consent Management]
             end
             
             subgraph "Configuration and Settings"
                 CONFIG_MGR[Configuration Manager<br/>Settings Hierarchy<br/>Validation Rules<br/>Dynamic Updates]
                 THEME_MGR[Theme Manager<br/>🌙 Dark/Light Mode<br/>Colour Schemes<br/>♿ Accessibility Themes]
-                LOCALE_MGR[🌍 Localization Manager<br/>Multi-language Support<br/>🌐 Regional Settings<br/>Resource Management]
+                LOCALE_MGR[🌍 Localisation Manager<br/>Multi-language Support<br/>🌐 Regional Settings<br/>Resource Management]
             end
         end
     end

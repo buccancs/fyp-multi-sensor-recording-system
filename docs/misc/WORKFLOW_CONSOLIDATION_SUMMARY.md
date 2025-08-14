@@ -22,7 +22,7 @@ Successfully consolidated **10 fragmented GitHub workflows into 4 focused, maint
 - Significant overlap and duplication
 - Inconsistent action versions
 - Fragmented security checks
-- Poor resource utilization
+- Poor resource utilisation
 - Complex maintenance
 
 ### After (4 Workflows)
@@ -45,7 +45,7 @@ Successfully consolidated **10 fragmented GitHub workflows into 4 focused, maint
 - **Parallel Execution:** Python and Android validation run simultaneously
 - **Intelligent Caching:** Separate cache strategies for pip, Gradle, and AVD
 - **Conditional Execution:** Integration tests only run for PRs and main branch
-- **Optimized Dependencies:** Reduced redundant installations
+- **Optimised Dependencies:** Reduced redundant installations
 
 ### Developer Experience
 - **Fast Feedback:** Main CI/CD provides quick PR validation
@@ -136,7 +136,7 @@ ls pyproject.toml build.gradle
 # - GITHUB_TOKEN (automatically provided)
 ```
 
-### Expected Workflow Behavior
+### Expected Workflow Behaviour
 - **PR Creation:** Should trigger Main CI/CD (~15-20 min)
 - **Main Branch Push:** Should trigger Main CI/CD + possibly others
 - **Weekly Schedule:** Should trigger Dependency Management (Sundays) and Security & Quality (Mondays)
@@ -154,7 +154,7 @@ ls pyproject.toml build.gradle
 - **Workflow Success Rates:** Monitor in GitHub Actions tab
 - **Artifact Sizes:** Ensure they stay within reasonable limits
 - **Self-Hosted Runner:** Ensure availability for hardware tests
-- **Cache Hit Rates:** Monitor for performance optimization
+- **Cache Hit Rates:** Monitor for performance optimisation
 
 ## 📚 Documentation
 
@@ -171,7 +171,7 @@ ls pyproject.toml build.gradle
 
 ## ✅ Migration Checklist
 
-- [x] Analyze existing workflows and identify consolidation opportunities
+- [x] Analyse existing workflows and identify consolidation opportunities
 - [x] Create consolidated main CI/CD workflow
 - [x] Create comprehensive testing workflow  
 - [x] Create security and quality workflow
@@ -186,7 +186,7 @@ ls pyproject.toml build.gradle
 
 ### Quantitative Improvements
 - **Workflow Count:** Reduced from 10 to 4 (60% reduction)
-- **CI/CD Runtime:** Improved by ~40% through optimization
+- **CI/CD Runtime:** Improved by ~40% through optimisation
 - **Maintenance Overhead:** Significantly reduced with focused workflows
 - **Code Coverage:** Maintained comprehensive testing coverage
 
@@ -207,4 +207,4 @@ ls pyproject.toml build.gradle
 ---
 
 **Consolidation completed successfully!** 🎉  
-The GitHub workflow infrastructure is now optimized, maintainable, and ready for production use.
+The GitHub workflow infrastructure is now optimised, maintainable, and ready for production use.
