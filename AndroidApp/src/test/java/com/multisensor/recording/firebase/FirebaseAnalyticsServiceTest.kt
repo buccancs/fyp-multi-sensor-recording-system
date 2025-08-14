@@ -1,123 +1,137 @@
 package com.multisensor.recording.firebase
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
-import kotlinx.coroutines.test.*
+import com.google.firebase.analytics.FirebaseAnalytics
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.every
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.AfterEach
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.*
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import javax.inject.Inject
-import org.junit.Assert.*
-
+import org.junit.jupiter.api.DisplayName
 
 /**
- * Comprehensive test suite for FirebaseAnalyticsService
- * 
- * Tests:
- * - Class initialization and construction
- * - All public and internal methods
- * - State management and data flow
- * - Error handling and edge cases
- * - Dependency injection
- * - Lifecycle management
- * - Resource cleanup
- * - Thread safety and concurrency
- * - Performance characteristics
- * - Integration with other components
- * 
- * Coverage: 100% line coverage, 100% branch coverage
+ * Unit tests for FirebaseAnalyticsService
  */
-@RunWith(RobolectricTestRunner::class)
-@Config(application = HiltTestApplication::class)
-@HiltAndroidTest
+@DisplayName("Firebase Analytics Service Tests")
 class FirebaseAnalyticsServiceTest {
-    
-    @get:org.junit.Rule
-    var hiltRule = HiltAndroidRule(this)
-    
-    private lateinit var firebaseanalyticsservice: FirebaseAnalyticsService
-    private val testDispatcher = StandardTestDispatcher()
-    
+
+    private lateinit var mockFirebaseAnalytics: FirebaseAnalytics
+    private lateinit var firebaseAnalyticsService: FirebaseAnalyticsService
+
     @BeforeEach
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        hiltRule.inject()
-        
-        // Initialize test subject
-        firebaseanalyticsservice = FirebaseAnalyticsService()
+    fun setup() {
+        mockFirebaseAnalytics = mockk(relaxed = true)
+        firebaseAnalyticsService = FirebaseAnalyticsService(mockFirebaseAnalytics)
     }
-    
-    @AfterEach
-    fun tearDown() {
-        // Cleanup resources
-    }
-    
+
     @Test
-    fun `firebaseanalyticsservice should initialize successfully`() {
-        // Given & When
-        val instance = FirebaseAnalyticsService()
-        
-        // Then
-        assertNotNull(instance)
-    }
-    
-    @Test
-    fun `firebaseanalyticsservice should handle all public methods`() {
+    @DisplayName("Should log recording session start with correct parameters")
+    fun testLogRecordingSessionStart() {
         // Given
-        // Test setup
-        
+        val sessionId = "test-session-123"
+        val deviceCount = 3
+
         // When
-        // Method calls
-        
+        firebaseAnalyticsService.logRecordingSessionStart(sessionId, deviceCount)
+
         // Then
-        // Verify behavior
-        assertNotNull(firebaseanalyticsservice)
+        verify {
+            mockFirebaseAnalytics.logEvent(eq("recording_session_start"), any())
+        }
     }
-    
+
     @Test
-    fun `firebaseanalyticsservice should handle error conditions`() {
+    @DisplayName("Should log recording session end with correct parameters")
+    fun testLogRecordingSessionEnd() {
         // Given
-        // Error setup
-        
+        val sessionId = "test-session-123"
+        val durationMs = 60000L
+        val dataSize = 1024L
+
         // When
-        // Trigger error conditions
-        
+        firebaseAnalyticsService.logRecordingSessionEnd(sessionId, durationMs, dataSize)
+
         // Then
-        // Verify error handling
-        assertNotNull(firebaseanalyticsservice)
+        verify {
+            mockFirebaseAnalytics.logEvent(eq("recording_session_end"), any())
+        }
     }
-    
+
     @Test
-    fun `firebaseanalyticsservice should manage state correctly`() {
+    @DisplayName("Should log GSR sensor connection")
+    fun testLogGSRSensorConnected() {
         // Given
-        // State setup
-        
+        val sensorId = "shimmer-001"
+
         // When
-        // State changes
-        
+        firebaseAnalyticsService.logGSRSensorConnected(sensorId)
+
         // Then
-        // Verify state management
-        assertNotNull(firebaseanalyticsservice)
+        verify {
+            mockFirebaseAnalytics.logEvent(eq("gsr_sensor_connected"), any())
+        }
     }
-    
+
     @Test
-    fun `firebaseanalyticsservice should cleanup resources properly`() {
+    @DisplayName("Should log thermal camera usage")
+    fun testLogThermalCameraUsed() {
         // Given
-        // Resource allocation
-        
+        val cameraModel = "Topdon TC001"
+        val resolution = "640x480"
+
         // When
-        // Cleanup operation
-        
+        firebaseAnalyticsService.logThermalCameraUsed(cameraModel, resolution)
+
         // Then
-        // Verify cleanup
-        assertNotNull(firebaseanalyticsservice)
+        verify {
+            mockFirebaseAnalytics.logEvent(eq("thermal_camera_used"), any())
+        }
+    }
+
+    @Test
+    @DisplayName("Should log calibration performed")
+    fun testLogCalibrationPerformed() {
+        // Given
+        val calibrationType = "camera_calibration"
+        val success = true
+
+        // When
+        firebaseAnalyticsService.logCalibrationPerformed(calibrationType, success)
+
+        // Then
+        verify {
+            mockFirebaseAnalytics.logEvent(eq("calibration_performed"), any())
+        }
+    }
+
+    @Test
+    @DisplayName("Should log data export")
+    fun testLogDataExport() {
+        // Given
+        val format = "CSV"
+        val fileSizeBytes = 2048L
+
+        // When
+        firebaseAnalyticsService.logDataExport(format, fileSizeBytes)
+
+        // Then
+        verify {
+            mockFirebaseAnalytics.logEvent(eq("data_export"), any())
+        }
+    }
+
+    @Test
+    @DisplayName("Should set user property")
+    fun testSetUserProperty() {
+        // Given
+        val property = "experiment_type"
+        val value = "stress_detection"
+
+        // When
+        firebaseAnalyticsService.setUserProperty(property, value)
+
+        // Then
+        verify {
+            mockFirebaseAnalytics.setUserProperty(eq(property), eq(value))
+        }
     }
 }

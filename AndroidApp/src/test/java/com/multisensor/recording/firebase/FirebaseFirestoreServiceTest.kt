@@ -1,123 +1,173 @@
 package com.multisensor.recording.firebase
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
-import kotlinx.coroutines.test.*
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
+import com.multisensor.recording.firebase.FirebaseAuthService
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.AfterEach
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.*
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import javax.inject.Inject
-import org.junit.Assert.*
-
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Assertions.*
+import java.util.Date
 
 /**
- * Comprehensive test suite for FirebaseFirestoreService
- * 
- * Tests:
- * - Class initialization and construction
- * - All public and internal methods
- * - State management and data flow
- * - Error handling and edge cases
- * - Dependency injection
- * - Lifecycle management
- * - Resource cleanup
- * - Thread safety and concurrency
- * - Performance characteristics
- * - Integration with other components
- * 
- * Coverage: 100% line coverage, 100% branch coverage
+ * Unit tests for FirebaseFirestoreService
  */
-@RunWith(RobolectricTestRunner::class)
-@Config(application = HiltTestApplication::class)
-@HiltAndroidTest
+@DisplayName("Firebase Firestore Service Tests")
 class FirebaseFirestoreServiceTest {
-    
-    @get:org.junit.Rule
-    var hiltRule = HiltAndroidRule(this)
-    
-    private lateinit var firebasefirestoreservice: FirebaseFirestoreService
-    private val testDispatcher = StandardTestDispatcher()
-    
+
+    private lateinit var mockFirestore: FirebaseFirestore
+    private lateinit var mockAuthService: FirebaseAuthService
+    private lateinit var mockCollection: CollectionReference
+    private lateinit var mockDocument: DocumentReference
+    private lateinit var mockDocumentSnapshot: DocumentSnapshot
+    private lateinit var mockQuery: Query
+    private lateinit var mockQuerySnapshot: QuerySnapshot
+    private lateinit var firebaseFirestoreService: FirebaseFirestoreService
+
     @BeforeEach
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        hiltRule.inject()
-        
-        // Initialize test subject
-        firebasefirestoreservice = FirebaseFirestoreService()
+    fun setup() {
+        mockFirestore = mockk(relaxed = true)
+        mockAuthService = mockk(relaxed = true)
+        mockCollection = mockk(relaxed = true)
+        mockDocument = mockk(relaxed = true)
+        mockDocumentSnapshot = mockk(relaxed = true)
+        mockQuery = mockk(relaxed = true)
+        mockQuerySnapshot = mockk(relaxed = true)
+        firebaseFirestoreService = FirebaseFirestoreService(mockFirestore, mockAuthService)
+
+        every { mockFirestore.collection(any()) } returns mockCollection
+        every { mockCollection.document(any()) } returns mockDocument
+        every { mockCollection.document() } returns mockDocument
+        every { mockDocument.id } returns "test-doc-id"
     }
-    
-    @AfterEach
-    fun tearDown() {
-        // Cleanup resources
-    }
-    
+
     @Test
-    fun `firebasefirestoreservice should initialize successfully`() {
-        // Given & When
-        val instance = FirebaseFirestoreService()
-        
-        // Then
-        assertNotNull(instance)
-    }
-    
-    @Test
-    fun `firebasefirestoreservice should handle all public methods`() {
+    @DisplayName("Should save recording session successfully")
+    fun testSaveRecordingSessionSuccess() = runBlocking {
         // Given
-        // Test setup
-        
+        val session = FirebaseFirestoreService.RecordingSession(
+            sessionId = "",
+            startTime = Date(),
+            deviceCount = 2,
+            researcherId = "researcher-001"
+        )
+        val mockSetTask: Task<Void> = Tasks.forResult(null)
+        every { mockDocument.set(any()) } returns mockSetTask
+
         // When
-        // Method calls
-        
+        val result = firebaseFirestoreService.saveRecordingSession(session)
+
         // Then
-        // Verify behavior
-        assertNotNull(firebasefirestoreservice)
+        assertTrue(result.isSuccess)
+        verify { mockDocument.set(any()) }
     }
-    
+
     @Test
-    fun `firebasefirestoreservice should handle error conditions`() {
+    @DisplayName("Should handle save recording session failure")
+    fun testSaveRecordingSessionFailure() = runBlocking {
         // Given
-        // Error setup
-        
+        val session = FirebaseFirestoreService.RecordingSession(
+            sessionId = "",
+            startTime = Date(),
+            deviceCount = 2,
+            researcherId = "researcher-001"
+        )
+        val exception = RuntimeException("Firestore error")
+        val mockSetTask: Task<Void> = Tasks.forException(exception)
+        every { mockDocument.set(any()) } returns mockSetTask
+
         // When
-        // Trigger error conditions
-        
+        val result = firebaseFirestoreService.saveRecordingSession(session)
+
         // Then
-        // Verify error handling
-        assertNotNull(firebasefirestoreservice)
+        assertTrue(result.isFailure)
+        assertEquals(exception, result.exceptionOrNull())
     }
-    
+
     @Test
-    fun `firebasefirestoreservice should manage state correctly`() {
+    @DisplayName("Should update recording session end successfully")
+    fun testUpdateRecordingSessionEndSuccess() = runBlocking {
         // Given
-        // State setup
-        
+        val sessionId = "test-session-123"
+        val endTime = Date()
+        val dataFilePaths = mapOf("rgb_video" to "path/to/video.mp4")
+        val totalDataSizeBytes = 1024L
+        val mockUpdateTask: Task<Void> = Tasks.forResult(null)
+        every { mockDocument.update(any<Map<String, Any>>()) } returns mockUpdateTask
+
         // When
-        // State changes
-        
+        val result = firebaseFirestoreService.updateRecordingSessionEnd(
+            sessionId, endTime, dataFilePaths, totalDataSizeBytes
+        )
+
         // Then
-        // Verify state management
-        assertNotNull(firebasefirestoreservice)
+        assertTrue(result.isSuccess)
+        verify { mockDocument.update(any<Map<String, Any>>()) }
     }
-    
+
     @Test
-    fun `firebasefirestoreservice should cleanup resources properly`() {
+    @DisplayName("Should get recording session successfully")
+    fun testGetRecordingSessionSuccess() = runBlocking {
         // Given
-        // Resource allocation
-        
+        val sessionId = "test-session-123"
+        val mockGetTask: Task<DocumentSnapshot> = Tasks.forResult(mockDocumentSnapshot)
+        every { mockDocument.get() } returns mockGetTask
+        every { mockDocumentSnapshot.toObject(FirebaseFirestoreService.RecordingSession::class.java) } returns 
+            FirebaseFirestoreService.RecordingSession(sessionId = sessionId)
+
         // When
-        // Cleanup operation
-        
+        val result = firebaseFirestoreService.getRecordingSession(sessionId)
+
         // Then
-        // Verify cleanup
-        assertNotNull(firebasefirestoreservice)
+        assertTrue(result.isSuccess)
+        assertNotNull(result.getOrNull())
+        assertEquals(sessionId, result.getOrNull()?.sessionId)
+    }
+
+    @Test
+    @DisplayName("Should save calibration data successfully")
+    fun testSaveCalibrationDataSuccess() = runBlocking {
+        // Given
+        val sessionId = "test-session-123"
+        val calibrationType = "camera_calibration"
+        val calibrationData = mapOf("matrix" to "test-matrix", "distortion" to "test-distortion")
+        val mockSetTask: Task<Void> = Tasks.forResult(null)
+        every { mockDocument.set(any()) } returns mockSetTask
+
+        // When
+        val result = firebaseFirestoreService.saveCalibrationData(sessionId, calibrationType, calibrationData)
+
+        // Then
+        assertTrue(result.isSuccess)
+        verify { mockDocument.set(any()) }
+    }
+
+    @Test
+    @DisplayName("Should log system error successfully")
+    fun testLogSystemErrorSuccess() = runBlocking {
+        // Given
+        val sessionId = "test-session-123"
+        val errorType = "camera_initialization_error"
+        val errorMessage = "Failed to initialize camera"
+        val stackTrace = "com.example.CameraError at line 123"
+        val mockSetTask: Task<Void> = Tasks.forResult(null)
+        every { mockDocument.set(any()) } returns mockSetTask
+
+        // When
+        val result = firebaseFirestoreService.logSystemError(sessionId, errorType, errorMessage, stackTrace)
+
+        // Then
+        assertTrue(result.isSuccess)
+        verify { mockDocument.set(any()) }
     }
 }
