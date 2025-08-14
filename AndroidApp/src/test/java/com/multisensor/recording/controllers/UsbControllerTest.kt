@@ -1,4 +1,4 @@
-package com.multisensor.recording.firebase
+package com.multisensor.recording.controllers
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -18,7 +18,7 @@ import javax.inject.Inject
 import kotlin.test.*
 
 /**
- * Comprehensive test suite for FirebaseFirestoreService
+ * Comprehensive test suite for UsbController
  * 
  * Tests:
  * - Class initialization and construction
@@ -37,12 +37,12 @@ import kotlin.test.*
 @RunWith(RobolectricTestRunner::class)
 @Config(application = HiltTestApplication::class)
 @HiltAndroidTest
-class FirebaseFirestoreServiceTest {
+class UsbControllerTest {
     
     @get:org.junit.Rule
     var hiltRule = HiltAndroidRule(this)
     
-    private lateinit var firebasefirestoreservice: FirebaseFirestoreService
+    private lateinit var usbcontroller: UsbController
     private val testDispatcher = StandardTestDispatcher()
     
     @BeforeEach
@@ -51,7 +51,7 @@ class FirebaseFirestoreServiceTest {
         hiltRule.inject()
         
         // Initialize test subject
-        firebasefirestoreservice = FirebaseFirestoreService()
+        usbcontroller = UsbController()
     }
     
     @AfterEach
@@ -60,16 +60,16 @@ class FirebaseFirestoreServiceTest {
     }
     
     @Test
-    fun `firebasefirestoreservice should initialize successfully`() {
+    fun `usbcontroller should initialize successfully`() {
         // Given & When
-        val instance = FirebaseFirestoreService()
+        val instance = UsbController()
         
         // Then
         assertNotNull(instance)
     }
     
     @Test
-    fun `firebasefirestoreservice should handle all public methods`() {
+    fun `usbcontroller should handle all public methods`() {
         // Given
         // Test setup
         
@@ -78,11 +78,11 @@ class FirebaseFirestoreServiceTest {
         
         // Then
         // Verify behavior
-        assertNotNull(firebasefirestoreservice)
+        assertNotNull(usbcontroller)
     }
     
     @Test
-    fun `firebasefirestoreservice should handle error conditions`() {
+    fun `usbcontroller should handle error conditions`() {
         // Given
         // Error setup
         
@@ -91,11 +91,11 @@ class FirebaseFirestoreServiceTest {
         
         // Then
         // Verify error handling
-        assertNotNull(firebasefirestoreservice)
+        assertNotNull(usbcontroller)
     }
     
     @Test
-    fun `firebasefirestoreservice should manage state correctly`() {
+    fun `usbcontroller should manage state correctly`() {
         // Given
         // State setup
         
@@ -104,11 +104,11 @@ class FirebaseFirestoreServiceTest {
         
         // Then
         // Verify state management
-        assertNotNull(firebasefirestoreservice)
+        assertNotNull(usbcontroller)
     }
     
     @Test
-    fun `firebasefirestoreservice should cleanup resources properly`() {
+    fun `usbcontroller should cleanup resources properly`() {
         // Given
         // Resource allocation
         
@@ -117,6 +117,6 @@ class FirebaseFirestoreServiceTest {
         
         // Then
         // Verify cleanup
-        assertNotNull(firebasefirestoreservice)
+        assertNotNull(usbcontroller)
     }
 }
