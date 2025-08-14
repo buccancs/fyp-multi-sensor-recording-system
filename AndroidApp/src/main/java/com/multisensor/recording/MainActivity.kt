@@ -12,8 +12,11 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import com.multisensor.recording.camera.RgbCamera
 import com.multisensor.recording.camera.ThermalCamera
+import com.multisensor.recording.calibration.SyncClockManager
 import com.multisensor.recording.sensor.GsrSensor
 import com.multisensor.recording.util.PermissionManager
 import java.io.File
@@ -42,12 +45,14 @@ class MainActivity : ComponentActivity() {
     private lateinit var cameraConnectionStatus: TextView
     private lateinit var thermalConnectionStatus: TextView
     private lateinit var gsrConnectionStatus: TextView
+    private lateinit var syncStatus: TextView
 
     // Core components
     private lateinit var permissionManager: PermissionManager
     private lateinit var rgbCamera: RgbCamera
     private lateinit var thermalCamera: ThermalCamera
     private lateinit var gsrSensor: GsrSensor
+    private lateinit var syncClockManager: SyncClockManager
 
     // Recording state
     private val isRecording = AtomicBoolean(false)
@@ -88,6 +93,7 @@ class MainActivity : ComponentActivity() {
         cameraConnectionStatus = findViewById(R.id.camera_connection_status)
         thermalConnectionStatus = findViewById(R.id.thermal_connection_status)
         gsrConnectionStatus = findViewById(R.id.gsr_connection_status)
+        syncStatus = findViewById(R.id.sync_status)
 
         recordButton.setOnClickListener {
             if (isRecording.get()) {
@@ -106,6 +112,10 @@ class MainActivity : ComponentActivity() {
         rgbCamera = RgbCamera(this)
         thermalCamera = ThermalCamera(this)
         gsrSensor = GsrSensor(this)
+        syncClockManager = SyncClockManager()
+        
+        // Update initial sync status
+        updateSyncStatus()
     }
 
     /**
@@ -160,6 +170,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
+            // Perform initial time synchronization
+            lifecycleScope.launch {
+                Log.i(TAG, "Attempting initial time synchronization...")
+                val syncSuccess = performTimeSync()
+                Log.i(TAG, "Initial time sync ${if (syncSuccess) "successful" else "failed"}")
+            }
+
             Log.i(TAG, "Device initialization completed")
         }.start()
     }
@@ -174,13 +191,17 @@ class MainActivity : ComponentActivity() {
         }
 
         Thread {
-            val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            // Get synchronized timestamp for consistent timing across all devices
+            val syncedTimestamp = syncClockManager.getCurrentSyncedTime()
+            val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date(syncedTimestamp))
             val recordingDir = File(getExternalFilesDir(Environment.DIRECTORY_MOVIES), "recordings")
             if (!recordingDir.exists()) {
                 recordingDir.mkdirs()
             }
 
             try {
+                Log.i(TAG, "Starting recording with synchronized timestamp: $syncedTimestamp")
+                
                 // Start RGB recording
                 val rgbFile = File(recordingDir, "rgb_$timestamp.mp4")
                 val rgbStarted = rgbCamera.startRecording(rgbFile)
@@ -193,16 +214,16 @@ class MainActivity : ComponentActivity() {
 
                 if (rgbStarted && thermalStarted && gsrStarted) {
                     isRecording.set(true)
-                    recordingStartTime = System.currentTimeMillis()
+                    recordingStartTime = syncedTimestamp // Use synced time for consistent timing
                     
                     runOnUiThread {
                         recordButton.text = getString(R.string.stop_recording)
                         recordButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
                         timerHandler.post(timerRunnable)
-                        Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Recording started (synced)", Toast.LENGTH_SHORT).show()
                     }
                     
-                    Log.i(TAG, "Multi-sensor recording started")
+                    Log.i(TAG, "Multi-sensor recording started with time sync")
                 } else {
                     runOnUiThread {
                         Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show()
@@ -258,7 +279,8 @@ class MainActivity : ComponentActivity() {
      * Update recording timer display
      */
     private fun updateRecordingTimer() {
-        val elapsed = (System.currentTimeMillis() - recordingStartTime) / 1000
+        val currentTime = syncClockManager.getCurrentSyncedTime()
+        val elapsed = (currentTime - recordingStartTime) / 1000
         val minutes = elapsed / 60
         val seconds = elapsed % 60
         recordingTimer.text = String.format("%02d:%02d", minutes, seconds)
@@ -300,6 +322,50 @@ class MainActivity : ComponentActivity() {
     private fun updateGsrConnectionStatus(connected: Boolean) {
         gsrConnectionStatus.text = if (connected) "Connected" else "Disconnected"
         gsrConnectionStatus.setTextColor(ContextCompat.getColor(this, if (connected) R.color.green else R.color.red))
+    }
+
+    /**
+     * Update time synchronization status display
+     */
+    private fun updateSyncStatus() {
+        val syncStatusInfo = syncClockManager.getSyncStatus()
+        val isValid = syncClockManager.isSyncValid()
+        
+        val statusText = when {
+            syncStatusInfo.isSynchronized && isValid -> "Synced (${syncStatusInfo.clockOffsetMs}ms)"
+            syncStatusInfo.isSynchronized && !isValid -> "Expired"
+            else -> "Not Synced"
+        }
+        
+        val color = when {
+            syncStatusInfo.isSynchronized && isValid -> R.color.green
+            syncStatusInfo.isSynchronized && !isValid -> R.color.orange
+            else -> R.color.red
+        }
+        
+        syncStatus.text = statusText
+        syncStatus.setTextColor(ContextCompat.getColor(this, color))
+    }
+
+    /**
+     * Perform time synchronization with PC
+     * This is a demo implementation - in real usage, PC timestamp would come from network
+     */
+    private suspend fun performTimeSync(): Boolean {
+        return try {
+            // Demo: simulate PC timestamp (in real implementation, this would come from PC server)
+            val simulatedPcTimestamp = System.currentTimeMillis() + 100L // Simulate 100ms offset
+            val success = syncClockManager.synchronizeWithPc(simulatedPcTimestamp, "manual_sync")
+            
+            runOnUiThread {
+                updateSyncStatus()
+            }
+            
+            success
+        } catch (e: Exception) {
+            Log.e(TAG, "Time synchronization failed", e)
+            false
+        }
     }
 
     override fun onDestroy() {
