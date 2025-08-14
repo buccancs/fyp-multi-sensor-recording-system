@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Multi-Sensor Recording</string>
-    <string name="app_description">A complete data collection system for multi-sensor research applications,
-        featuring synchronized recording of camera, thermal, and physiological sensor data.
-    </string>
-
+    <string name="camera_preview">Camera Preview</string>
+    <string name="thermal_preview">Thermal Preview</string>
+    <string name="start_recording">Start Recording</string>
+    <string name="stop_recording">Stop Recording</string>
+    <string name="recording_status">Recording Status</string>
+    <string name="device_status">Device Status</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="initializing">Initializing...</string>
+    <string name="error">Error</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="camera_permission_required">Camera permission is required for recording</string>
+    <string name="storage_permission_required">Storage permission is required for saving recordings</string>
+    <string name="bluetooth_permission_required">Bluetooth permission is required for GSR sensor</string>
 </resources>
