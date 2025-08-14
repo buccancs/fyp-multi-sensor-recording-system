@@ -69,8 +69,6 @@ fun ThermalPreviewScreen(
             ThermalControlsPanel(
                 status = thermalStatus,
                 temperatureRange = uiState.temperatureRange,
-                onCaptureCalibration = { viewModel.captureThermalCalibrationImage() },
-                onStartCalibration = { viewModel.startThermalCalibration() },
                 onTemperatureRangeChange = { /* TODO: Implement temperature range change */ }
             )
 

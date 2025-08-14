@@ -190,8 +190,6 @@ fun RecordingScreen(
                 ThermalControlsPanel(
                     status = thermalStatus,
                     temperatureRange = uiState.temperatureRange,
-                    onCaptureCalibration = { viewModel.captureThermalCalibrationImage() },
-                    onStartCalibration = { viewModel.startThermalCalibration() },
                     onTemperatureRangeChange = { /* TODO: Implement temperature range change */ },
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                 )
@@ -205,7 +203,6 @@ fun RecordingScreen(
             ) {
                 ThermalCameraStatusCard(
                     status = thermalStatus,
-                    onCaptureCalibration = { viewModel.captureThermalCalibrationImage() },
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
