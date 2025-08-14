@@ -34,6 +34,17 @@ fun MainNavigation(
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),
                 actions = {
+                    // Add Shimmer Control button for easy access
+                    IconButton(
+                        onClick = {
+                            navController.navigate(Screen.ShimmerControl.route)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DeviceHub,
+                            contentDescription = "Shimmer Control"
+                        )
+                    }
 
                     IconButton(
                         onClick = {
@@ -145,6 +156,14 @@ fun MainNavigation(
                     }
                 )
             }
+            
+            composable(Screen.ShimmerControl.route) {
+                ShimmerControlScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
     }
 }
@@ -202,6 +221,7 @@ private fun getScreenFromRoute(route: String?): Screen? {
         Screen.Diagnostics.route -> Screen.Diagnostics
         Screen.ShimmerSettings.route -> Screen.ShimmerSettings
         Screen.ShimmerVisualization.route -> Screen.ShimmerVisualization
+        Screen.ShimmerControl.route -> Screen.ShimmerControl
         else -> null
     }
 }

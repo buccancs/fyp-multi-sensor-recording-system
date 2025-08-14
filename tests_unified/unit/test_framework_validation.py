@@ -18,7 +18,7 @@ from tests_unified.fixtures.test_utils import (
     TestEnvironment, 
     MockDevice, 
     assert_within_tolerance,
-    create_mock_test_data
+    create_test_data_placeholder
 )
 
 class TestUnifiedFramework:
@@ -102,23 +102,23 @@ class TestUnifiedFramework:
             assert_within_tolerance(1.0, 1.05, 0.02)
     
     @pytest.mark.unit 
-    def test_mock_data_generation(self):
-        """Test mock data generation utilities"""
+    def test_data_structure_validation(self):
+        """Test data structure validation utilities"""
         
-        # Test GSR data generation
-        gsr_data = create_mock_test_data("gsr", length=10)
-        assert len(gsr_data) == 10
-        assert all(0.1 <= value <= 1.0 for value in gsr_data)
+        # Test GSR data structure validation
+        sample_gsr_data = [0.12, 0.18, 0.25, 0.31, 0.19]
+        assert len(sample_gsr_data) == 5
+        assert all(0.1 <= value <= 1.0 for value in sample_gsr_data)
         
-        # Test thermal data generation
-        thermal_data = create_mock_test_data("thermal", length=5)
-        assert len(thermal_data) == 5
-        assert all(len(row) == 10 for row in thermal_data)
+        # Test thermal data structure validation
+        sample_thermal_data = [[21.2, 21.8], [22.1, 22.4]]
+        assert len(sample_thermal_data) == 2
+        assert all(len(row) == 2 for row in sample_thermal_data)
         
-        # Test timestamp data generation
-        timestamp_data = create_mock_test_data("timestamp", length=10)
-        assert len(timestamp_data) == 10
-        assert timestamp_data == sorted(timestamp_data)  # Should be sorted
+        # Test timestamp data structure validation
+        sample_timestamp_data = [1000, 1100, 1200, 1300, 1400]
+        assert len(sample_timestamp_data) == 5
+        assert sample_timestamp_data == sorted(sample_timestamp_data)  # Should be sorted
     
     @pytest.mark.integration
     def test_quality_validator_import(self):

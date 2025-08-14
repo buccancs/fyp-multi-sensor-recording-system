@@ -38,10 +38,12 @@ import com.multisensor.recording.ui.components.ThermalPreviewSurface
 import com.multisensor.recording.ui.components.ThermalCameraStatusCard
 import com.multisensor.recording.ui.components.ThermalControlsPanel
 import com.multisensor.recording.ui.components.SessionStatusCard
+import com.multisensor.recording.ui.components.ShimmerDashboard
 import com.multisensor.recording.ui.theme.ConnectionGreen
 import com.multisensor.recording.ui.theme.DisconnectedRed
 import com.multisensor.recording.ui.theme.RecordingActive
 import com.multisensor.recording.ui.theme.RecordingInactive
+import kotlin.math.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecordingScreen(
@@ -234,6 +236,63 @@ fun RecordingScreen(
                     },
                     modifier = if (showThermalCamera) Modifier.fillMaxSize() else Modifier.size(0.dp)
                 )
+            }
+
+            // Shimmer Device Dashboard
+            ShimmerDashboard(
+                onNavigateToSettings = {
+                    // Navigate to Shimmer settings
+                    android.content.Intent(context, com.multisensor.recording.ui.ShimmerSettingsActivity::class.java).also {
+                        context.startActivity(it)
+                    }
+                },
+                onNavigateToVisualization = {
+                    // Navigate to Shimmer visualization
+                    android.content.Intent(context, com.multisensor.recording.ui.ShimmerVisualizationActivity::class.java).also {
+                        context.startActivity(it)
+                    }
+                }
+            )
+            
+            // Quick access to comprehensive Shimmer Control
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "Advanced Shimmer Controls",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "Access full device configuration and diagnostics",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    
+                    OutlinedButton(
+                        onClick = { onNavigateToPreview() } // This will navigate to Shimmer Control
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DeviceHub,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Control Panel")
+                    }
+                }
             }
 
             // ColorPaletteSelector(

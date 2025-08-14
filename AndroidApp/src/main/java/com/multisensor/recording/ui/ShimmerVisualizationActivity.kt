@@ -24,6 +24,7 @@ import com.multisensor.recording.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.*
 @AndroidEntryPoint
 class ShimmerVisualizationActivity : AppCompatActivity() {
     private val viewModel: ShimmerConfigViewModel by viewModels()
@@ -281,37 +282,183 @@ class ShimmerVisualizationActivity : AppCompatActivity() {
         }
     }
     private fun updateDataVisualization(state: ShimmerConfigUiState) {
-        dataVisualizationCard.visibility = if (state.isRecording) View.VISIBLE else View.GONE
-        recordingStatusChip.text = if (state.isRecording) "Recording" else "Stopped"
+        dataVisualizationCard.visibility = if (state.isRecording || state.isDeviceConnected) View.VISIBLE else View.GONE
+        recordingStatusChip.text = if (state.isRecording) "Recording" else "Connected"
         recordingStatusChip.setChipBackgroundColorResource(
-            if (state.isRecording) R.color.success_color else R.color.error_color
+            if (state.isRecording) R.color.success_color else R.color.warning_color
         )
+        
         packetsReceivedText.text = state.dataPacketsReceived.toString()
         val duration = state.recordingDuration / 1000
         val minutes = duration / 60
         val seconds = duration % 60
         recordingDurationText.text = String.format("%02d:%02d", minutes, seconds)
+        
         val dataRate = if (duration > 0) state.dataPacketsReceived.toDouble() / duration else 0.0
-        dataRateText.text = String.format("%.1f", dataRate)
+        dataRateText.text = String.format("%.1f Hz", dataRate)
+        
+        // Enhanced real-time data display
         if (state.isRecording && state.dataPacketsReceived > 0) {
             realTimeDataText.text = buildString {
-                append("Active Recording Session\n")
-                append("Duration: ${String.format("%02d:%02d", minutes, seconds)}\n")
-                append("Packets: ${state.dataPacketsReceived}\n")
-                append("Rate: ${String.format("%.1f", dataRate)} Hz\n")
-                append("Signal: ${state.signalStrength} dBm\n")
-                append("Battery: ${state.batteryLevel}%")
+                append("🔴 LIVE RECORDING SESSION\n")
+                append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+                append("⏱️ Duration: ${String.format("%02d:%02d", minutes, seconds)}\n")
+                append("📦 Data Packets: ${state.dataPacketsReceived}\n")
+                append("📊 Sampling Rate: ${String.format("%.1f", dataRate)} Hz\n")
+                append("📶 Signal Strength: ${state.signalStrength} dBm\n")
+                append("🔋 Battery Level: ${state.batteryLevel}%\n")
+                append("🎯 Target Rate: ${state.samplingRate} Hz\n")
+                
+                // Performance metrics
+                val efficiency = if (state.samplingRate > 0) (dataRate / state.samplingRate * 100).coerceAtMost(100.0) else 0.0
+                append("⚡ Data Efficiency: ${String.format("%.1f", efficiency)}%\n")
+                
+                // Data quality indicators
+                val batteryStatus = when {
+                    state.batteryLevel > 50 -> "Excellent"
+                    state.batteryLevel > 20 -> "Good"
+                    state.batteryLevel >= 0 -> "Low"
+                    else -> "Unknown"
+                }
+                append("💡 Battery Status: $batteryStatus\n")
+                
+                val signalQuality = when {
+                    state.signalStrength > -60 -> "Excellent"
+                    state.signalStrength > -70 -> "Good"
+                    state.signalStrength > -80 -> "Fair"
+                    state.signalStrength != 0 -> "Poor"
+                    else -> "Unknown"
+                }
+                append("📡 Signal Quality: $signalQuality\n")
+                
+                // Session statistics
+                if (state.dataPacketsReceived > 0) {
+                    val avgPacketsPerSecond = if (duration > 0) state.dataPacketsReceived.toDouble() / duration else 0.0
+                    append("📈 Avg. Rate: ${String.format("%.2f", avgPacketsPerSecond)} pkt/s\n")
+                }
+                
+                append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             }
         } else if (state.isDeviceConnected) {
             realTimeDataText.text = buildString {
-                append("Device Ready\n")
-                append("Status: Connected\n")
-                append("Battery: ${if (state.batteryLevel >= 0) "${state.batteryLevel}%" else "Unknown"}\n")
-                append("Signal: ${state.signalStrength} dBm\n")
-                append("Firmware: ${state.firmwareVersion}")
+                append("🟢 DEVICE READY FOR RECORDING\n")
+                append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+                append("📱 Device: ${state.selectedDevice?.name ?: "Unknown"}\n")
+                append("🆔 MAC Address: ${state.selectedDevice?.macAddress ?: "Unknown"}\n")
+                append("🔋 Battery: ${if (state.batteryLevel >= 0) "${state.batteryLevel}%" else "Unknown"}\n")
+                append("📶 Signal: ${if (state.signalStrength != 0) "${state.signalStrength} dBm" else "Unknown"}\n")
+                append("💾 Firmware: ${state.firmwareVersion.ifEmpty { "Unknown" }}\n")
+                append("🔧 Hardware: ${state.hardwareVersion.ifEmpty { "Unknown" }}\n")
+                append("⚙️ Sampling Rate: ${state.samplingRate} Hz\n")
+                append("🎛️ Enabled Sensors: ${state.enabledSensors.size}\n")
+                
+                if (state.enabledSensors.isNotEmpty()) {
+                    append("   └ ${state.enabledSensors.joinToString(", ")}\n")
+                }
+                
+                // Connection quality assessment
+                val connectionQuality = when {
+                    state.batteryLevel > 50 && state.signalStrength > -60 -> "Excellent"
+                    state.batteryLevel > 20 && state.signalStrength > -70 -> "Good"
+                    state.batteryLevel > 0 || state.signalStrength > -80 -> "Fair"
+                    else -> "Check Connection"
+                }
+                append("🌟 Connection Quality: $connectionQuality\n")
+                append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+                append("👆 Press START to begin recording")
             }
         } else {
-            realTimeDataText.text = "No active session\n\nConnect a device and start recording to view real-time data."
+            realTimeDataText.text = buildString {
+                append("⚫ NO ACTIVE SESSION\n")
+                append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+                append("📵 Device Status: Disconnected\n")
+                append("🔍 Available Devices: ${state.availableDevices.size}\n")
+                
+                if (state.availableDevices.isNotEmpty()) {
+                    append("\n📋 Discovered Devices:\n")
+                    state.availableDevices.take(3).forEachIndexed { index, device ->
+                        append("   ${index + 1}. ${device.name}\n")
+                        append("      MAC: ${device.macAddress}\n")
+                        if (device.rssi != 0) {
+                            append("      Signal: ${device.rssi}dBm\n")
+                        }
+                    }
+                    if (state.availableDevices.size > 3) {
+                        append("   ... and ${state.availableDevices.size - 3} more\n")
+                    }
+                }
+                
+                append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+                append("🔧 Go to Settings to connect a device\n")
+                append("📊 Then return here to view real-time data")
+            }
         }
+        
+        // Update chart data if recording (mock data for now - would be replaced with real sensor data)
+        if (state.isRecording && state.dataPacketsReceived > 0) {
+            updateChartData(state)
+        }
+    }
+    
+    private fun updateChartData(state: ShimmerConfigUiState) {
+        // Generate realistic mock sensor data based on actual recording state
+        val currentTime = chartEntryCount.toFloat()
+        
+        // Simulate GSR data (typical range 1-20 μS)
+        val gsrValue = 2.5 + 0.5 * kotlin.math.sin(currentTime * 0.1) + 0.2 * kotlin.math.sin(currentTime * 0.3) + (Math.random() * 0.2 - 0.1)
+        gsrData.add(Entry(currentTime, gsrValue.toFloat()))
+        
+        // Simulate PPG data (typical range 500-1500)
+        val ppgValue = 1000 + 100 * kotlin.math.sin(currentTime * 0.05) + 50 * kotlin.math.sin(currentTime * 0.4) + (Math.random() * 20 - 10)
+        ppgData.add(Entry(currentTime, ppgValue.toFloat()))
+        
+        // Simulate accelerometer data (typical range -2g to +2g)
+        val accelValue = 0.98 + 0.1 * kotlin.math.sin(currentTime * 0.2) + (Math.random() * 0.1 - 0.05)
+        accelData.add(Entry(currentTime, accelValue.toFloat()))
+        
+        // Simulate gyroscope data (typical range -100°/s to +100°/s)
+        val gyroValue = 0.0 + 2 * kotlin.math.sin(currentTime * 0.15) + (Math.random() * 1 - 0.5)
+        gyroData.add(Entry(currentTime, gyroValue.toFloat()))
+        
+        // Keep only the last maxChartEntries points
+        if (gsrData.size > maxChartEntries) {
+            gsrData.removeAt(0)
+            ppgData.removeAt(0)
+            accelData.removeAt(0)
+            gyroData.removeAt(0)
+        }
+        
+        chartEntryCount++
+        
+        // Update the visible chart
+        val selectedTab = chartTabLayout.selectedTabPosition
+        when (selectedTab) {
+            0 -> updateChart(gsrChart, gsrData, "GSR (µS)", Color.rgb(63, 81, 181))
+            1 -> updateChart(ppgChart, ppgData, "PPG", Color.rgb(233, 30, 99))
+            2 -> updateChart(accelChart, accelData, "Accelerometer (g)", Color.rgb(76, 175, 80))
+            3 -> updateChart(gyroChart, gyroData, "Gyroscope (°/s)", Color.rgb(255, 152, 0))
+        }
+    }
+    
+    private fun updateChart(chart: LineChart, data: MutableList<Entry>, label: String, color: Int) {
+        val dataSet = LineDataSet(data.toList(), label).apply {
+            this.color = color
+            setCircleColor(color)
+            lineWidth = 2f
+            circleRadius = 1f
+            setDrawCircleHole(false)
+            valueTextSize = 0f
+            setDrawFilled(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            cubicIntensity = 0.2f
+        }
+        
+        chart.data = LineData(dataSet)
+        chart.notifyDataSetChanged()
+        chart.invalidate()
+        
+        // Auto-scroll to show latest data
+        chart.setVisibleXRangeMaximum(100f)
+        chart.moveViewToX(data.size.toFloat())
     }
 }
