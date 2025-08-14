@@ -6,7 +6,7 @@ The Multi-Sensor Recording System features a comprehensive graphical user interf
 
 ## Interface Structure
 
-The main application window consists of a tabbed interface with seven specialized tabs, each focused on specific aspects of the recording system:
+The main application window consists of a tabbed interface with eight specialized tabs, each focused on specific aspects of the recording system:
 
 ### 1. Recording Tab (`ui_tab_00_recording.png`)
 - **Session Configuration**: Set session name, duration, and auto-start options
@@ -39,34 +39,36 @@ The main application window consists of a tabbed interface with seven specialize
 - **Calibration Results**: Display calibration parameters and quality metrics
 
 
-### 6. Camera Preview Tab
+### 6. Media & Stimuli Tab (Enhanced Camera Preview + Video Playback)
 
-The Camera Preview tab provides real-time USB webcam monitoring capabilities for research and recording sessions.
+The Media & Stimuli tab provides comprehensive multimedia capabilities for research sessions, combining USB camera monitoring with video playback for emotion elicitation experiments.
 
-**Key Features:**
+**USB Camera Preview Features:**
 - **USB Camera Detection**: Automatically detects connected USB cameras (indices 0-4)
 - **Live Video Preview**: Real-time video stream display at 640x480 resolution
 - **Camera Selection**: Dropdown to select from available cameras
 - **Preview Controls**: Start/Stop buttons with proper camera resource management
-- **Status Monitoring**: Real-time display of camera status, FPS, and resolution
-- **Error Handling**: Graceful handling of camera disconnections and errors
 
-**Controls:**
-- *Select Camera*: Choose from detected USB cameras
-- *Refresh Cameras*: Re-scan for newly connected cameras
-- *Start Preview*: Begin live video preview from selected camera
-- *Stop Preview*: Stop video preview and release camera resources
+**Video Playback for Emotion Elicitation:**
+- **Video File Support**: Comprehensive format support (MP4, AVI, MOV, MKV, WMV, FLV, WebM, M4V, 3GP, OGV, MPG, MPEG)
+- **File Browser**: Integrated file selection with format filtering
+- **Playback Controls**: Professional play, pause, stop controls with state management
+- **Progress Tracking**: Real-time progress slider with seeking capability
+- **Time Display**: Current position and total duration display (MM:SS format)
+- **Unified Display**: Shared 640x480 display area for both camera and video content
+
+**Research Integration:**
+- **Stimulus Presentation**: Load and play emotion elicitation videos during experiments
+- **Participant Monitoring**: Simultaneously monitor participant positioning via USB camera
+- **Session Coordination**: Integrate video playback with GSR recording sessions
+- **Status Logging**: Comprehensive logging of all media activities for research tracking
+- **Professional Interface**: Research-ready controls suitable for academic experiments
 
 **Technical Implementation:**
-- Uses OpenCV for camera capture and frame processing
-- PyQt threading for smooth video display without blocking UI
-- Automatic frame rate control and resolution scaling
-- Integration with existing session management system
-
-This feature is particularly useful for:
-- Monitoring participant positioning during GSR recording sessions
-- Verifying camera angles before starting multi-sensor recordings
-- Real-time feedback for researchers conducting contactless measurements
+- **Threading**: PyQt-based threading for smooth video playback without UI blocking
+- **Resource Management**: Automatic cleanup and proper camera/video resource handling
+- **Error Handling**: Comprehensive error detection and user notification
+- **Format Detection**: Automatic video format detection and validation
 
 ### 7. Security Tab (`ui_tab_05_security.png`)
 - **TLS Configuration**: Manage encryption certificates and security settings

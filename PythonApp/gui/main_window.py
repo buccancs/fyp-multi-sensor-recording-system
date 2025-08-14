@@ -15,7 +15,8 @@ try:
         QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
         QPushButton, QLabel, QTextEdit, QGroupBox,
         QLineEdit, QSpinBox, QCheckBox, QMessageBox,
-        QStatusBar, QTabWidget, QComboBox, QFrame
+        QStatusBar, QTabWidget, QComboBox, QFrame,
+        QFileDialog, QSlider, QProgressBar
     )
     from PyQt6.QtCore import Qt, QTimer, pyqtSignal
     from PyQt6.QtGui import QFont, QPixmap, QImage
@@ -25,7 +26,8 @@ except ImportError:
         QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
         QPushButton, QLabel, QTextEdit, QGroupBox,
         QLineEdit, QSpinBox, QCheckBox, QMessageBox,
-        QStatusBar, QTabWidget, QComboBox, QFrame
+        QStatusBar, QTabWidget, QComboBox, QFrame,
+        QFileDialog, QSlider, QProgressBar
     )
     from PyQt5.QtCore import Qt, QTimer, pyqtSignal
     from PyQt5.QtGui import QFont, QPixmap, QImage
@@ -38,7 +40,7 @@ from PythonApp.sync import TimeServer, SessionSynchronizer, SyncSignalBroadcaste
 from PythonApp.calibration import CalibrationManager, CalibrationPattern
 from PythonApp.transfer import TransferManager
 from PythonApp.security import SecurityManager
-from PythonApp.camera import WebcamManager, CameraCapture, OPENCV_AVAILABLE
+from PythonApp.camera import WebcamManager, CameraCapture, VideoPlayer, OPENCV_AVAILABLE
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +61,8 @@ class MainWindow(QMainWindow):
         self.security_manager: Optional[SecurityManager] = None
         self.webcam_manager: Optional[WebcamManager] = None
         self.active_camera_capture: Optional[CameraCapture] = None
+        self.active_video_player: Optional[VideoPlayer] = None
+        self.current_video_path: str = ""
         
         self.setWindowTitle("Multi-Sensor Recording System - Enhanced")
         self.setMinimumSize(1000, 700)
@@ -138,7 +142,7 @@ class MainWindow(QMainWindow):
         self._create_sensors_tab(tab_widget)
         self._create_sync_tab(tab_widget)
         self._create_calibration_tab(tab_widget)
-        self._create_camera_preview_tab(tab_widget)
+        self._create_media_tab(tab_widget)
         self._create_security_tab(tab_widget)
         self._create_settings_tab(tab_widget)
         
@@ -413,85 +417,143 @@ class MainWindow(QMainWindow):
         
         tab_widget.addTab(calibration_widget, "Calibration")
     
-    def _create_camera_preview_tab(self, tab_widget: QTabWidget):
-        """Create the camera preview tab."""
-        camera_widget = QWidget()
-        layout = QVBoxLayout(camera_widget)
+    def _create_media_tab(self, tab_widget: QTabWidget):
+        """Create the media (camera preview + video playback) tab."""
+        media_widget = QWidget()
+        layout = QVBoxLayout(media_widget)
         
-        # Camera controls group
-        controls_group = QGroupBox("Camera Controls")
-        controls_layout = QVBoxLayout(controls_group)
+        # Create two main sections: Camera Preview and Video Playback
+        
+        # Camera Preview Section
+        camera_group = QGroupBox("USB Camera Preview")
+        camera_layout = QVBoxLayout(camera_group)
         
         # Camera info
-        info_text = QLabel("USB webcam preview allows real-time monitoring of connected cameras.\n"
-                          "This feature requires OpenCV and a connected USB camera.")
-        info_text.setWordWrap(True)
-        controls_layout.addWidget(info_text)
+        camera_info_text = QLabel("Real-time USB webcam preview for participant monitoring.\n"
+                                 "Requires OpenCV and a connected USB camera.")
+        camera_info_text.setWordWrap(True)
+        camera_layout.addWidget(camera_info_text)
         
-        # Camera selection
-        camera_selection_layout = QHBoxLayout()
-        camera_selection_layout.addWidget(QLabel("Select Camera:"))
+        # Camera selection and controls
+        camera_controls_layout = QHBoxLayout()
+        camera_controls_layout.addWidget(QLabel("Select Camera:"))
         self.camera_combo = QComboBox()
-        camera_selection_layout.addWidget(self.camera_combo)
+        camera_controls_layout.addWidget(self.camera_combo)
         
         self.refresh_cameras_btn = QPushButton("Refresh Cameras")
         self.refresh_cameras_btn.clicked.connect(self._refresh_cameras)
-        camera_selection_layout.addWidget(self.refresh_cameras_btn)
+        camera_controls_layout.addWidget(self.refresh_cameras_btn)
         
-        controls_layout.addLayout(camera_selection_layout)
-        
-        # Preview controls
-        preview_controls = QHBoxLayout()
-        
-        self.start_preview_btn = QPushButton("Start Preview")
+        self.start_preview_btn = QPushButton("Start Camera Preview")
         self.start_preview_btn.clicked.connect(self._start_camera_preview)
-        preview_controls.addWidget(self.start_preview_btn)
+        camera_controls_layout.addWidget(self.start_preview_btn)
         
-        self.stop_preview_btn = QPushButton("Stop Preview")
+        self.stop_preview_btn = QPushButton("Stop Camera Preview")
         self.stop_preview_btn.clicked.connect(self._stop_camera_preview)
         self.stop_preview_btn.setEnabled(False)
-        preview_controls.addWidget(self.stop_preview_btn)
+        camera_controls_layout.addWidget(self.stop_preview_btn)
         
-        controls_layout.addLayout(preview_controls)
-        layout.addWidget(controls_group)
+        camera_layout.addLayout(camera_controls_layout)
+        layout.addWidget(camera_group)
         
-        # Camera preview display
-        preview_group = QGroupBox("Camera Preview")
-        preview_layout = QVBoxLayout(preview_group)
+        # Video Playback Section
+        video_group = QGroupBox("Video Playback for Emotion Elicitation")
+        video_layout = QVBoxLayout(video_group)
         
-        # Create preview label with fixed size
-        self.camera_preview_label = QLabel()
-        self.camera_preview_label.setMinimumSize(640, 480)
-        self.camera_preview_label.setStyleSheet("QLabel { background-color: black; border: 1px solid gray; }")
-        self.camera_preview_label.setAlignment(Qt.AlignCenter)
-        self.camera_preview_label.setText("No camera preview\nClick 'Start Preview' to begin")
-        self.camera_preview_label.setWordWrap(True)
+        # Video info
+        video_info_text = QLabel("Play video files to elicit emotional responses during experiments.\n"
+                                "Supports common formats: MP4, AVI, MOV, etc.")
+        video_info_text.setWordWrap(True)
+        video_layout.addWidget(video_info_text)
         
-        # Add preview label to a frame for better appearance
-        preview_frame = QFrame()
-        preview_frame.setFrameStyle(QFrame.Box)
-        preview_frame_layout = QVBoxLayout(preview_frame)
-        preview_frame_layout.addWidget(self.camera_preview_label)
+        # Video file selection
+        video_file_layout = QHBoxLayout()
+        video_file_layout.addWidget(QLabel("Video File:"))
+        self.video_path_label = QLabel("No video selected")
+        self.video_path_label.setStyleSheet("QLabel { color: gray; }")
+        video_file_layout.addWidget(self.video_path_label)
         
-        preview_layout.addWidget(preview_frame)
-        layout.addWidget(preview_group)
+        self.browse_video_btn = QPushButton("Browse...")
+        self.browse_video_btn.clicked.connect(self._browse_video_file)
+        video_file_layout.addWidget(self.browse_video_btn)
         
-        # Camera status
-        status_group = QGroupBox("Camera Status")
+        video_layout.addLayout(video_file_layout)
+        
+        # Video playback controls
+        video_controls_layout = QHBoxLayout()
+        
+        self.play_video_btn = QPushButton("Play")
+        self.play_video_btn.clicked.connect(self._handle_play_button)
+        self.play_video_btn.setEnabled(False)
+        video_controls_layout.addWidget(self.play_video_btn)
+        
+        self.pause_video_btn = QPushButton("Pause")
+        self.pause_video_btn.clicked.connect(self._pause_video)
+        self.pause_video_btn.setEnabled(False)
+        video_controls_layout.addWidget(self.pause_video_btn)
+        
+        self.stop_video_btn = QPushButton("Stop")
+        self.stop_video_btn.clicked.connect(self._stop_video)
+        self.stop_video_btn.setEnabled(False)
+        video_controls_layout.addWidget(self.stop_video_btn)
+        
+        video_layout.addLayout(video_controls_layout)
+        
+        # Video progress slider
+        progress_layout = QHBoxLayout()
+        progress_layout.addWidget(QLabel("Progress:"))
+        self.video_progress_slider = QSlider(Qt.Horizontal)
+        self.video_progress_slider.setEnabled(False)
+        self.video_progress_slider.sliderPressed.connect(self._video_slider_pressed)
+        self.video_progress_slider.sliderReleased.connect(self._video_slider_released)
+        progress_layout.addWidget(self.video_progress_slider)
+        
+        self.video_time_label = QLabel("00:00 / 00:00")
+        progress_layout.addWidget(self.video_time_label)
+        
+        video_layout.addLayout(progress_layout)
+        layout.addWidget(video_group)
+        
+        # Shared display area for both camera and video
+        display_group = QGroupBox("Media Display")
+        display_layout = QVBoxLayout(display_group)
+        
+        # Create display label with fixed size
+        self.media_display_label = QLabel()
+        self.media_display_label.setMinimumSize(640, 480)
+        self.media_display_label.setStyleSheet("QLabel { background-color: black; border: 1px solid gray; }")
+        self.media_display_label.setAlignment(Qt.AlignCenter)
+        self.media_display_label.setText("No media active\nStart camera preview or load a video to begin")
+        self.media_display_label.setWordWrap(True)
+        
+        # Add display label to a frame for better appearance
+        display_frame = QFrame()
+        display_frame.setFrameStyle(QFrame.Box)
+        display_frame_layout = QVBoxLayout(display_frame)
+        display_frame_layout.addWidget(self.media_display_label)
+        
+        display_layout.addWidget(display_frame)
+        layout.addWidget(display_group)
+        
+        # Media status
+        status_group = QGroupBox("Media Status")
         status_layout = QVBoxLayout(status_group)
         
-        self.camera_status_display = QTextEdit()
-        self.camera_status_display.setReadOnly(True)
-        self.camera_status_display.setMaximumHeight(150)
-        self.camera_status_display.setText("Camera preview not started")
-        status_layout.addWidget(self.camera_status_display)
+        self.media_status_display = QTextEdit()
+        self.media_status_display.setReadOnly(True)
+        self.media_status_display.setMaximumHeight(150)
+        self.media_status_display.setText("Media system ready")
+        status_layout.addWidget(self.media_status_display)
         
         layout.addWidget(status_group)
         
-        tab_widget.addTab(camera_widget, "Camera Preview")
+        tab_widget.addTab(media_widget, "Media & Stimuli")
         
         # Initialize camera list
         self._refresh_cameras()
+        
+        # Initialize video player state
+        self._video_slider_dragging = False
     
     def _create_security_tab(self, tab_widget: QTabWidget):
         """Create the security tab."""
@@ -1035,8 +1097,8 @@ class MainWindow(QMainWindow):
                 self.refresh_cameras_btn.setEnabled(True)
                 
                 # Clear preview
-                self.camera_preview_label.clear()
-                self.camera_preview_label.setText("Camera preview stopped\nClick 'Start Preview' to begin")
+                self.media_display_label.clear()
+                self.media_display_label.setText("Camera preview stopped\nClick 'Start Camera Preview' to begin")
                 
                 self._update_camera_status("Camera preview stopped")
                 logger.info("Camera preview stopped")
@@ -1066,13 +1128,13 @@ class MainWindow(QMainWindow):
             q_image = QImage(rgb_frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
             
             # Scale image to fit preview label while maintaining aspect ratio
-            preview_size = self.camera_preview_label.size()
+            preview_size = self.media_display_label.size()
             scaled_pixmap = QPixmap.fromImage(q_image).scaled(
                 preview_size, Qt.KeepAspectRatio, Qt.SmoothTransformation
             )
             
             # Set the pixmap to the label
-            self.camera_preview_label.setPixmap(scaled_pixmap)
+            self.media_display_label.setPixmap(scaled_pixmap)
             
         except Exception as e:
             logger.error(f"Error updating camera frame: {e}")
@@ -1092,14 +1154,266 @@ class MainWindow(QMainWindow):
         QMessageBox.warning(self, "Camera Disconnected", "The camera has been disconnected.")
     
     def _update_camera_status(self, message):
-        """Update the camera status display."""
+        """Update the media status display."""
         timestamp = time.strftime("%H:%M:%S")
-        self.camera_status_display.append(f"[{timestamp}] {message}")
+        self.media_status_display.append(f"[{timestamp}] Camera: {message}")
         
         # Auto-scroll to bottom
-        cursor = self.camera_status_display.textCursor()
+        cursor = self.media_status_display.textCursor()
         cursor.movePosition(cursor.MoveOperation.End if PYQT_VERSION == 6 else cursor.End)
-        self.camera_status_display.setTextCursor(cursor)
+        self.media_status_display.setTextCursor(cursor)
+    
+    def _browse_video_file(self):
+        """Browse for a video file to play."""
+        try:
+            # Get supported formats from webcam manager
+            formats = self.webcam_manager.get_supported_video_formats() if self.webcam_manager else ["mp4", "avi", "mov"]
+            format_filter = "Video Files (" + " ".join(f"*.{fmt}" for fmt in formats) + ");;All Files (*)"
+            
+            file_path, _ = QFileDialog.getOpenFileName(
+                self,
+                "Select Video File for Emotion Elicitation",
+                "",
+                format_filter
+            )
+            
+            if file_path:
+                self.current_video_path = file_path
+                filename = os.path.basename(file_path)
+                self.video_path_label.setText(filename)
+                self.video_path_label.setStyleSheet("QLabel { color: black; }")
+                
+                # Enable play button
+                self.play_video_btn.setEnabled(True)
+                self._update_video_status(f"Video loaded: {filename}")
+                
+                # Reset video controls
+                self.video_progress_slider.setValue(0)
+                self.video_time_label.setText("00:00 / 00:00")
+                
+        except Exception as e:
+            logger.error(f"Error browsing video file: {e}")
+            self._update_video_status(f"Error loading video: {e}")
+            QMessageBox.critical(self, "Video Error", f"Failed to load video: {e}")
+    
+    def _play_video(self):
+        """Start video playback."""
+        if not OPENCV_AVAILABLE:
+            QMessageBox.warning(self, "OpenCV Required", "OpenCV is required for video playback functionality.")
+            return
+            
+        if not self.current_video_path:
+            QMessageBox.warning(self, "No Video", "Please select a video file first.")
+            return
+            
+        try:
+            # Stop any active camera preview
+            if self.active_camera_capture:
+                self._stop_camera_preview()
+            
+            # Stop any existing video playback
+            if self.active_video_player:
+                self._stop_video()
+            
+            # Start new video playback
+            self.active_video_player = self.webcam_manager.start_video_playback(self.current_video_path)
+            
+            if self.active_video_player:
+                # Connect signals for video updates
+                self.active_video_player.frame_ready.connect(self._update_video_frame)
+                self.active_video_player.position_changed.connect(self._update_video_position)
+                self.active_video_player.duration_changed.connect(self._update_video_duration)
+                self.active_video_player.playback_finished.connect(self._handle_video_finished)
+                self.active_video_player.error_occurred.connect(self._handle_video_error)
+                
+                # Start playback
+                if self.active_video_player.start_playback():
+                    # Update UI
+                    self.play_video_btn.setEnabled(False)
+                    self.pause_video_btn.setEnabled(True)
+                    self.stop_video_btn.setEnabled(True)
+                    self.video_progress_slider.setEnabled(True)
+                    
+                    # Disable camera controls during video playback
+                    self.start_preview_btn.setEnabled(False)
+                    self.camera_combo.setEnabled(False)
+                    self.refresh_cameras_btn.setEnabled(False)
+                    
+                    self._update_video_status("Video playback started")
+                    logger.info(f"Video playback started: {self.current_video_path}")
+                else:
+                    self._update_video_status("Failed to start video playback")
+                    self.active_video_player = None
+            else:
+                self._update_video_status("Failed to load video for playback")
+                
+        except Exception as e:
+            logger.error(f"Error starting video playback: {e}")
+            self._update_video_status(f"Error starting playback: {e}")
+            QMessageBox.critical(self, "Video Error", f"Failed to start video playback: {e}")
+    
+    def _pause_video(self):
+        """Pause video playback."""
+        if self.active_video_player:
+            self.active_video_player.pause_playback()
+            self.play_video_btn.setEnabled(True)
+            self.pause_video_btn.setEnabled(False)
+            self._update_video_status("Video playback paused")
+    
+    def _resume_video(self):
+        """Resume video playback (same as play when paused)."""
+        if self.active_video_player:
+            self.active_video_player.resume_playback()
+            self.play_video_btn.setEnabled(False)
+            self.pause_video_btn.setEnabled(True)
+            self._update_video_status("Video playback resumed")
+    
+    def _stop_video(self):
+        """Stop video playback."""
+        if self.active_video_player:
+            try:
+                self.active_video_player.stop_playback()
+                self.active_video_player = None
+                
+                # Update UI
+                self.play_video_btn.setEnabled(True if self.current_video_path else False)
+                self.pause_video_btn.setEnabled(False)
+                self.stop_video_btn.setEnabled(False)
+                self.video_progress_slider.setEnabled(False)
+                self.video_progress_slider.setValue(0)
+                
+                # Re-enable camera controls
+                self.start_preview_btn.setEnabled(True)
+                self.camera_combo.setEnabled(True)
+                self.refresh_cameras_btn.setEnabled(True)
+                
+                # Clear video display
+                self.media_display_label.clear()
+                self.media_display_label.setText("Video playback stopped\nLoad a video or start camera preview")
+                
+                self._update_video_status("Video playback stopped")
+                logger.info("Video playback stopped")
+                
+            except Exception as e:
+                logger.error(f"Error stopping video playback: {e}")
+                self._update_video_status(f"Error stopping playback: {e}")
+        
+        if self.webcam_manager:
+            self.webcam_manager.stop_video_playback()
+    
+    def _update_video_frame(self, frame):
+        """Update the video display with a new frame."""
+        try:
+            if frame is None:
+                return
+                
+            # Convert frame to RGB (OpenCV uses BGR)
+            import cv2
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
+            # Get frame dimensions
+            height, width, channel = rgb_frame.shape
+            bytes_per_line = 3 * width
+            
+            # Create QImage
+            q_image = QImage(rgb_frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+            
+            # Scale image to fit display label while maintaining aspect ratio
+            display_size = self.media_display_label.size()
+            scaled_pixmap = QPixmap.fromImage(q_image).scaled(
+                display_size, Qt.KeepAspectRatio, Qt.SmoothTransformation
+            )
+            
+            # Set the pixmap to the label
+            self.media_display_label.setPixmap(scaled_pixmap)
+            
+        except Exception as e:
+            logger.error(f"Error updating video frame: {e}")
+            self._update_video_status(f"Frame update error: {e}")
+    
+    def _update_video_position(self, position_ms):
+        """Update video playback position."""
+        if not self._video_slider_dragging and self.active_video_player:
+            duration_ms = self.active_video_player.get_duration_ms()
+            if duration_ms > 0:
+                progress = int((position_ms / duration_ms) * 100)
+                self.video_progress_slider.setValue(progress)
+            
+            # Update time display
+            self._update_time_display(position_ms, duration_ms)
+    
+    def _update_video_duration(self, duration_ms):
+        """Update video duration display."""
+        if duration_ms > 0:
+            self.video_progress_slider.setMaximum(100)  # Use percentage
+            self._update_time_display(0, duration_ms)
+    
+    def _update_time_display(self, position_ms, duration_ms):
+        """Update the time display label."""
+        def ms_to_time_str(ms):
+            total_seconds = ms // 1000
+            minutes = total_seconds // 60
+            seconds = total_seconds % 60
+            return f"{minutes:02d}:{seconds:02d}"
+        
+        position_str = ms_to_time_str(position_ms)
+        duration_str = ms_to_time_str(duration_ms)
+        self.video_time_label.setText(f"{position_str} / {duration_str}")
+    
+    def _video_slider_pressed(self):
+        """Handle video slider press (start dragging)."""
+        self._video_slider_dragging = True
+    
+    def _video_slider_released(self):
+        """Handle video slider release (seek to position)."""
+        self._video_slider_dragging = False
+        
+        if self.active_video_player:
+            slider_value = self.video_progress_slider.value()
+            duration_ms = self.active_video_player.get_duration_ms()
+            
+            if duration_ms > 0:
+                target_position_ms = int((slider_value / 100.0) * duration_ms)
+                self.active_video_player.seek_to_position(target_position_ms)
+                self._update_video_status(f"Seeking to {target_position_ms // 1000}s")
+    
+    def _handle_video_finished(self):
+        """Handle video playback finished."""
+        self._update_video_status("Video playback finished")
+        
+        # Reset controls but keep video loaded
+        self.play_video_btn.setEnabled(True)
+        self.pause_video_btn.setEnabled(False)
+        self.video_progress_slider.setValue(0)
+        
+        # Re-enable camera controls
+        self.start_preview_btn.setEnabled(True)
+        self.camera_combo.setEnabled(True)
+        self.refresh_cameras_btn.setEnabled(True)
+    
+    def _handle_video_error(self, error_message):
+        """Handle video playback error."""
+        logger.error(f"Video error: {error_message}")
+        self._update_video_status(f"Video error: {error_message}")
+        self._stop_video()
+        QMessageBox.critical(self, "Video Error", f"Video playback error: {error_message}")
+    
+    def _update_video_status(self, message):
+        """Update the video status display."""
+        timestamp = time.strftime("%H:%M:%S")
+        self.media_status_display.append(f"[{timestamp}] Video: {message}")
+        
+        # Auto-scroll to bottom
+        cursor = self.media_status_display.textCursor()
+        cursor.movePosition(cursor.MoveOperation.End if PYQT_VERSION == 6 else cursor.End)
+        self.media_status_display.setTextCursor(cursor)
+    
+    def _handle_play_button(self):
+        """Handle play button click - either start new playback or resume paused playback."""
+        if self.active_video_player and self.active_video_player.paused:
+            self._resume_video()
+        else:
+            self._play_video()
     
     def closeEvent(self, event):
         """Handle application close."""
@@ -1128,8 +1442,9 @@ class MainWindow(QMainWindow):
             if self.sensor_manager:
                 self.sensor_manager.cleanup()
             
-            # Stop camera preview
+            # Stop camera preview and video playback
             self._stop_camera_preview()
+            self._stop_video()
             
             if self.time_server and self.time_server.running:
                 self.time_server.stop_server()
