@@ -17,4 +17,5 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Diagnostics : Screen("diagnostics", "Diagnostics", Icons.Filled.BugReport)
     object ShimmerSettings : Screen("shimmer_settings", "Shimmer", Icons.Filled.Bluetooth)
     object ShimmerVisualization : Screen("shimmer_viz", "Visualisation", Icons.Filled.Analytics)
+    object ShimmerControl : Screen("shimmer_control", "Shimmer Control", Icons.Filled.DeviceHub)
 }

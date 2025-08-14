@@ -66,9 +66,9 @@ graph TB
         subgraph "External Sensor Integration"
             direction TB
             subgraph "Shimmer3 GSR+ Sensors"
-                Sh1[Shimmer Device 1<br/>Physiological Data]
-                Sh2[Shimmer Device 2<br/>Secondary Sensors]
-                ShBT[Bluetooth Communication<br/>Wireless Protocol]
+                Sh1[Shimmer Device 1<br/>Multi-Sensor Array:<br/>GSR, PPG, Accel, Gyro, Mag]
+                Sh2[Shimmer Device 2<br/>Extended Physiological:<br/>ECG, EMG, Temperature]
+                ShBT[ShimmerAndroidAPI<br/>Official Bluetooth Protocol]
             end
             
             subgraph "Thermal Cameras"
@@ -174,6 +174,7 @@ The PC Master Controller serves as the central command and coordination hub, imp
 - **Features**: Bluetooth management, real-time GSR data acquisition, device configuration
 - **Integration**: Provides physiological ground truth data for contactless prediction research
 - **Research Application**: Research-grade GSR measurement with 256Hz sampling and 16-bit resolution
+- **Android Integration**: Coordinates with Android ShimmerRecorder for distributed sensor management
 
 **Synchronisation Engine** (`PythonApp/master_clock_synchronizer.py`)
 - **Responsibility**: Temporal coordination across all system components
@@ -256,10 +257,12 @@ The Android application underwent comprehensive refactoring, transforming from a
 - **Research Application**: Contactless skin temperature monitoring for physiological research with improved user control
 
 **ShimmerRecorder** (`AndroidApp/src/main/java/com/multisensor/recording/recording/`)
-- **Responsibility**: Shimmer GSR sensor integration via Bluetooth with enhanced coordination
-- **Features**: Real-time GSR data streaming, device configuration, quality monitoring, improved initialization timing
-- **Integration**: Provides physiological ground truth synchronised with visual data, utilises unified status indicators
-- **Reliability**: Automatic reconnection and data integrity validation, enhanced error handling for device coordination
+- **Responsibility**: Complete ShimmerAndroidAPI integration with professional-grade physiological sensor support
+- **Features**: Official ShimmerBluetoothManagerAndroid integration, multi-sensor arrays (GSR, PPG, accelerometer, gyroscope, magnetometer, ECG, EMG), real-time data streaming with ObjectCluster parsing
+- **Connection Management**: Both BT_CLASSIC and BLE support, automatic device discovery from paired devices, connection state management with retry mechanisms
+- **Data Processing**: Configurable sampling rates (25.6Hz to 512Hz), SD logging functionality with time synchronization, CSV export with proper timestamps
+- **UI Integration**: Comprehensive Shimmer dashboard embedded in recording workflow, dedicated control panel with device management interface
+- **Quality Assurance**: Real-time signal quality monitoring, battery level tracking, connection stability assessment, data integrity validation
 
 ### 3. Communication Protocol System
 

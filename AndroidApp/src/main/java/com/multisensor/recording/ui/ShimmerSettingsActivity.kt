@@ -172,25 +172,62 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             else -> ""
         }
         updateDeviceStatus(state)
-        val deviceNames = state.availableDevices.map { "${it.name} (${it.macAddress})" }
+        
+        // Enhanced device list with better information
+        val deviceNames = state.availableDevices.map { device ->
+            buildString {
+                append(device.name)
+                append(" (${device.macAddress})")
+                if (device.rssi != 0) {
+                    append("\nSignal: ${device.rssi}dBm")
+                }
+            }
+        }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, deviceNames)
         deviceListView.adapter = adapter
         deviceListView.choiceMode = ListView.CHOICE_MODE_SINGLE
         if (state.selectedDeviceIndex >= 0 && state.selectedDeviceIndex < state.availableDevices.size) {
             deviceListView.setItemChecked(state.selectedDeviceIndex, true)
         }
+        
+        // Update sensor configuration controls based on connection state
         sensorCheckboxes.values.forEach { checkbox ->
             checkbox.isEnabled = state.isDeviceConnected && !state.isConfiguring
         }
         gsrRangeSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
         accelRangeSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
         crcSpinner.isEnabled = state.isDeviceConnected && !state.isConfiguring
+        
+        // Enable CRC only for firmware version 8+
         if (state.isDeviceConnected && state.firmwareVersion.isNotEmpty()) {
             val firmwareVersionCode = state.firmwareVersion.split(".").firstOrNull()?.toIntOrNull() ?: 0
-            crcSpinner.isEnabled = firmwareVersionCode >= 8
+            crcSpinner.isEnabled = firmwareVersionCode >= 8 && !state.isConfiguring
         }
+        
+        // Show/hide configuration panel based on device connection
         findViewById<View>(R.id.configuration_section)?.visibility =
             if (state.showConfigurationPanel) View.VISIBLE else View.GONE
+        
+        // Update sensor checkboxes based on current configuration
+        if (state.isDeviceConnected) {
+            state.enabledSensors.forEach { sensorName ->
+                val sensorChannel = when (sensorName) {
+                    "GSR" -> SensorChannel.GSR
+                    "PPG" -> SensorChannel.PPG
+                    "ACCEL" -> SensorChannel.ACCEL
+                    "GYRO" -> SensorChannel.GYRO
+                    "MAG" -> SensorChannel.MAG
+                    "ECG" -> SensorChannel.ECG
+                    "EMG" -> SensorChannel.EMG
+                    else -> null
+                }
+                sensorChannel?.let { channel ->
+                    sensorCheckboxes[channel]?.isChecked = true
+                }
+            }
+        }
+        
+        // Show error messages
         state.errorMessage?.let { message ->
             if (state.showErrorDialog) {
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()
@@ -216,6 +253,8 @@ class ShimmerSettingsActivity : AppCompatActivity() {
                 deviceStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.error_color))
             }
         }
+        
+        // Enhanced battery display with more detailed status
         if (state.batteryLevel >= 0) {
             batteryLevelText.text = "${state.batteryLevel}%"
             batteryProgressBar.progress = state.batteryLevel
@@ -231,6 +270,8 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             batteryLevelText.text = "--"
             batteryProgressBar.progress = 0
         }
+        
+        // Enhanced signal strength display
         val signalStrength = state.signalStrength
         if (signalStrength != 0) {
             signalStrengthText.text = "${signalStrength}dBm"
@@ -255,17 +296,41 @@ class ShimmerSettingsActivity : AppCompatActivity() {
             signalStrengthText.text = "--"
             signalProgressBar.progress = 0
         }
+        
+        // Enhanced device information display
         if (state.isDeviceConnected) {
             deviceInfoText.text = buildString {
                 append("Device Information:\n")
-                append("• Firmware: ${state.firmwareVersion}\n")
-                append("• Hardware: ${state.hardwareVersion}\n")
-                append("• MAC: ${state.selectedDevice?.macAddress ?: "Unknown"}\n")
-                append("• Battery: ${state.batteryLevel}%\n")
-                append("• Signal: ${state.signalStrength}dBm")
+                append("• Name: ${state.selectedDevice?.name ?: "Unknown"}\n")
+                append("• MAC Address: ${state.selectedDevice?.macAddress ?: "Unknown"}\n")
+                append("• Firmware: ${state.firmwareVersion.ifEmpty { "Unknown" }}\n")
+                append("• Hardware: ${state.hardwareVersion.ifEmpty { "Unknown" }}\n")
+                append("• Battery: ${if (state.batteryLevel >= 0) "${state.batteryLevel}%" else "Unknown"}\n")
+                append("• Signal: ${if (state.signalStrength != 0) "${state.signalStrength}dBm" else "Unknown"}\n")
+                append("• Sampling Rate: ${state.samplingRate}Hz\n")
+                append("• Enabled Sensors: ${state.enabledSensors.joinToString(", ").ifEmpty { "None" }}\n")
+                if (state.isRecording) {
+                    append("• Recording: Active (${state.dataPacketsReceived} packets)")
+                } else {
+                    append("• Recording: Inactive")
+                }
             }
         } else {
-            deviceInfoText.text = "No device connected\n\nPlease scan and connect a Shimmer device to configure settings."
+            deviceInfoText.text = buildString {
+                append("No device connected\n\n")
+                append("Please scan and connect a Shimmer device to configure settings and start recording.\n\n")
+                append("Available devices: ${state.availableDevices.size}\n")
+                if (state.availableDevices.isNotEmpty()) {
+                    append("\nFound devices:\n")
+                    state.availableDevices.forEachIndexed { index, device ->
+                        append("${index + 1}. ${device.name} (${device.macAddress})")
+                        if (device.rssi != 0) {
+                            append(" - ${device.rssi}dBm")
+                        }
+                        append("\n")
+                    }
+                }
+            }
         }
     }
     private fun setupSpinners() {

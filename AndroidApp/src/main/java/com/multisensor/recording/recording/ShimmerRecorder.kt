@@ -144,6 +144,15 @@ constructor(
                         }
                     }
 
+                    Shimmer.MESSAGE_TOAST -> {
+                        // Handle Toast messages sent from Shimmer
+                        val toastMessage = msg.data.getString(Shimmer.TOAST)
+                        if (toastMessage != null) {
+                            logger.info("Shimmer Toast: $toastMessage")
+                            // Note: Toast display is handled automatically in ShimmerService if used
+                        }
+                    }
+
                     else -> {
                         logger.debug("Received unknown Shimmer message: ${msg.what}")
                     }
@@ -187,6 +196,17 @@ constructor(
                 ShimmerBluetooth.BT_STATE.CONNECTED -> {
                     device.updateConnectionState(ShimmerDevice.ConnectionState.CONNECTED, logger)
                     logger.info("Device ${device.getDisplayName()} is now CONNECTED")
+                    
+                    // Get the actual Shimmer device object from the manager
+                    try {
+                        val shimmerDevice = shimmerBluetoothManager?.getShimmerDeviceBtConnectedFromMac(macAddress)
+                        if (shimmerDevice != null) {
+                            shimmerDevices[macAddress] = shimmerDevice as Shimmer
+                            logger.debug("Stored Shimmer device object for ${device.getDisplayName()}")
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Failed to get Shimmer device object for $macAddress", e)
+                    }
                 }
 
                 ShimmerBluetooth.BT_STATE.CONNECTING -> {
@@ -216,6 +236,10 @@ constructor(
                     device.updateConnectionState(ShimmerDevice.ConnectionState.DISCONNECTED, logger)
                     device.isStreaming.set(false)
                     logger.info("Device ${device.getDisplayName()} has been DISCONNECTED")
+                    
+                    // Clean up device references
+                    shimmerDevices.remove(macAddress)
+                    shimmerHandlers.remove(macAddress)
                 }
 
                 else -> {
@@ -554,37 +578,51 @@ constructor(
                     dataQueues[macAddress] = ConcurrentLinkedQueue()
                     sampleCounts[macAddress] = AtomicLong(0)
 
-                    val bluetoothDeviceDetails =
-                        com.shimmerresearch.driverUtilities
-                            .BluetoothDeviceDetails(
-                                macAddress,
-                                macAddress,
-                                deviceName,
-                            ).apply {
-                                isBleDevice = (connectionType == ShimmerBluetoothManagerAndroid.BT_TYPE.BLE)
-                            }
-
-                    shimmerBluetoothManager?.connectShimmerThroughBTAddress(bluetoothDeviceDetails)
+                    // Use the official API method for connection
+                    logger.info("Connecting to device $macAddress using ShimmerBluetoothManagerAndroid...")
+                    
+                    // Connect using the appropriate method based on connection type
+                    if (connectionType == ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC) {
+                        shimmerBluetoothManager?.connectShimmerThroughBTAddress(macAddress)
+                    } else {
+                        shimmerBluetoothManager?.connectShimmer3BLEThroughBTAddress(macAddress, deviceName, context)
+                    }
 
                     logger.debug(
-                        "Connection initiated for $deviceName via $connectionType (BLE: ${bluetoothDeviceDetails.isBleDevice})",
+                        "Connection initiated for $deviceName via $connectionType",
                     )
 
-                    delay(2000)
+                    // Wait for connection to be established (timeout after 10 seconds)
+                    var connectionAttempts = 0
+                    val maxAttempts = 50  // 50 * 200ms = 10 seconds
+                    
+                    while (connectionAttempts < maxAttempts) {
+                        delay(200)
+                        
+                        // Check if we have a connected Shimmer device through the manager
+                        val shimmerDevice = shimmerBluetoothManager?.getShimmerDeviceBtConnectedFromMac(macAddress)
+                        if (shimmerDevice != null && shimmerDevice.isConnected()) {
+                            // Store the actual Shimmer device object
+                            shimmerDevices[macAddress] = shimmerDevice as Shimmer
+                            device.updateConnectionState(ShimmerDevice.ConnectionState.CONNECTED, logger)
+                            isConnected.set(true)
+                            
+                            logger.info("Successfully connected to $deviceName via $connectionType")
+                            return@withContext true
+                        }
+                        
+                        connectionAttempts++
+                    }
 
-                    device.updateConnectionState(ShimmerDevice.ConnectionState.CONNECTED, logger)
-                    isConnected.set(true)
+                    // Connection timeout
+                    logger.error("Connection timeout for device $macAddress after ${maxAttempts * 200}ms")
+                    cleanupFailedConnection(macAddress)
+                    return@withContext false
 
-                    logger.info("Successfully initiated connection to $deviceName via $connectionType")
-                    return@withContext true
                 } catch (e: Exception) {
                     logger.error("Failed to connect to device $macAddress via $connectionType", e)
 
-                    connectedDevices.remove(macAddress)
-                    deviceConfigurations.remove(macAddress)
-                    dataQueues.remove(macAddress)
-                    sampleCounts.remove(macAddress)
-
+                    cleanupFailedConnection(macAddress)
                     return@withContext false
                 }
             } catch (e: Exception) {
@@ -593,25 +631,40 @@ constructor(
             }
         }
 
-    suspend fun connectDevices(deviceAddresses: List<String>): List<String> =
-        withContext(Dispatchers.IO) {
-            val successfulConnections = mutableListOf<String>()
+    /**
+     * Connect to multiple devices with automatic connection type selection
+     */
+    suspend fun connectDevicesWithConnectionType(
+        deviceList: List<Pair<String, String>>, // List of (macAddress, deviceName) pairs
+        preferredConnectionType: ShimmerBluetoothManagerAndroid.BT_TYPE = ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC
+    ): List<String> = withContext(Dispatchers.IO) {
+        val successfulConnections = mutableListOf<String>()
 
-            deviceAddresses.forEach { macAddress ->
-                logger.info("Attempting to connect to device: $macAddress")
+        deviceList.forEach { (macAddress, deviceName) ->
+            logger.info("Attempting to connect to device: $deviceName ($macAddress)")
 
-                val connected = connectSingleDeviceInternal(macAddress, "Shimmer3-GSR+")
-                if (connected) {
-                    successfulConnections.add(macAddress)
-                    logger.info("Successfully connected to device: $macAddress")
-                } else {
-                    logger.error("Failed to connect to device: $macAddress")
-                }
+            val connected = connectSingleDevice(macAddress, deviceName, preferredConnectionType)
+            if (connected) {
+                successfulConnections.add(macAddress)
+                logger.info("Successfully connected to device: $deviceName")
+            } else {
+                logger.error("Failed to connect to device: $deviceName")
             }
-
-            logger.info("Connected to ${successfulConnections.size} out of ${deviceAddresses.size} devices")
-            successfulConnections
         }
+
+        logger.info("Connected to ${successfulConnections.size} out of ${deviceList.size} devices")
+        successfulConnections
+    }
+
+    /**
+     * Get available connection types for a device
+     */
+    fun getAvailableConnectionTypes(): List<ShimmerBluetoothManagerAndroid.BT_TYPE> {
+        return listOf(
+            ShimmerBluetoothManagerAndroid.BT_TYPE.BT_CLASSIC,
+            ShimmerBluetoothManagerAndroid.BT_TYPE.BLE
+        )
+    }
 
     private suspend fun connectSingleDeviceInternal(
         macAddress: String,
@@ -680,26 +733,13 @@ constructor(
             try {
                 logger.info("Disconnecting from ${connectedDevices.size} devices...")
 
-                var successfulDisconnections = 0
+                // Use the ShimmerBluetoothManagerAndroid to disconnect all devices
+                shimmerBluetoothManager?.disconnectAllDevices()
+                
+                // Wait a moment for disconnections to process
+                delay(1000)
 
-                connectedDevices.values.forEach { device ->
-                    val shimmer = shimmerDevices[device.macAddress]
-
-                    try {
-                        logger.debug("Disconnecting from device ${device.getDisplayName()}")
-
-                        shimmer?.stop()
-                        shimmer?.disconnect()
-
-                        device.updateConnectionState(ShimmerDevice.ConnectionState.DISCONNECTED, logger)
-                        successfulDisconnections++
-
-                        logger.info("Successfully disconnected from device ${device.getDisplayName()}")
-                    } catch (e: Exception) {
-                        logger.error("Failed to disconnect from device ${device.getDisplayName()}", e)
-                    }
-                }
-
+                // Clean up local state
                 connectedDevices.clear()
                 shimmerDevices.clear()
                 shimmerHandlers.clear()
@@ -709,7 +749,7 @@ constructor(
 
                 isConnected.set(false)
 
-                logger.info("Disconnected from $successfulDisconnections devices")
+                logger.info("Disconnected from all devices using ShimmerBluetoothManagerAndroid")
                 true
             } catch (e: Exception) {
                 logger.error("Failed to disconnect from devices", e)
@@ -970,13 +1010,13 @@ constructor(
                         try {
                             logger.debug("Starting streaming for device ${device.getDisplayName()}")
 
+                            // Use the official Shimmer API startStreaming method
                             shimmer.startStreaming()
 
-                            device.updateConnectionState(ShimmerDevice.ConnectionState.STREAMING, logger)
-                            device.isStreaming.set(true)
-
+                            // Note: State change will be handled by the message handler
+                            logger.info("Streaming start command sent for device ${device.getDisplayName()}")
                             successfulStreams++
-                            logger.info("Successfully started streaming for device ${device.getDisplayName()}")
+                            
                         } catch (e: Exception) {
                             logger.error("Failed to start streaming for device ${device.getDisplayName()}", e)
                             device.updateConnectionState(ShimmerDevice.ConnectionState.ERROR, logger)
@@ -989,7 +1029,7 @@ constructor(
 
                 if (successfulStreams > 0) {
                     startDataProcessing()
-                    logger.info("Started streaming for $successfulStreams out of ${connectedDevices.size} devices")
+                    logger.info("Started streaming commands for $successfulStreams out of ${connectedDevices.size} devices")
                 }
 
                 successfulStreams > 0
@@ -1013,15 +1053,16 @@ constructor(
                         try {
                             logger.debug("Stopping streaming for device ${device.getDisplayName()}")
 
+                            // Use the official Shimmer API stopStreaming method
                             shimmer.stopStreaming()
 
-                            device.isStreaming.set(false)
-                            device.updateConnectionState(ShimmerDevice.ConnectionState.CONNECTED, logger)
-
+                            // Note: State change will be handled by the message handler
+                            logger.info("Streaming stop command sent for device ${device.getDisplayName()}")
                             successfulStops++
-                            logger.info("Successfully stopped streaming for device ${device.getDisplayName()}")
+                            
                         } catch (e: Exception) {
                             logger.error("Failed to stop streaming for device ${device.getDisplayName()}", e)
+                            // Still mark as stopped even if there was an error
                             device.isStreaming.set(false)
                             device.updateConnectionState(ShimmerDevice.ConnectionState.CONNECTED, logger)
                         }
@@ -1032,7 +1073,7 @@ constructor(
                     }
                 }
 
-                logger.info("Stopped streaming for $successfulStops out of ${connectedDevices.size} devices")
+                logger.info("Stopped streaming commands for $successfulStops out of ${connectedDevices.size} devices")
 
                 true
             } catch (e: Exception) {
@@ -2101,24 +2142,40 @@ constructor(
                     return@withContext false
                 }
 
-                var successCount = 0
-                val deviceList = mutableListOf<com.shimmerresearch.driver.ShimmerDevice>()
+                val connectedShimmerDevices = mutableListOf<com.shimmerresearch.driver.ShimmerDevice>()
 
-                shimmerDevices.values.forEach { shimmer ->
-                    if (shimmer.isConnected()) {
-                        shimmer.writeConfigTime(System.currentTimeMillis())
-                        deviceList.add(shimmer)
+                // Get connected devices from the manager
+                connectedDevices.values.forEach { device ->
+                    try {
+                        val shimmerDevice = shimmerBluetoothManager?.getShimmerDeviceBtConnectedFromMac(device.macAddress)
+                        if (shimmerDevice != null && shimmerDevice.isConnected()) {
+                            // Sync time before starting SD logging
+                            try {
+                                // Use reflection to call writeConfigTime as it might not be available in all versions
+                                val writeTimeMethod = shimmerDevice.javaClass.getMethod("writeConfigTime", Long::class.java)
+                                writeTimeMethod.invoke(shimmerDevice, System.currentTimeMillis())
+                            } catch (e: NoSuchMethodException) {
+                                logger.debug("writeConfigTime method not available, skipping time sync")
+                            } catch (e: Exception) {
+                                logger.warning("Failed to sync time for device ${device.getDisplayName()}: ${e.message}")
+                            }
+                            connectedShimmerDevices.add(shimmerDevice)
+                            logger.debug("Added device ${device.getDisplayName()} to SD logging list")
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Failed to prepare device ${device.getDisplayName()} for SD logging", e)
                     }
                 }
 
-                if (deviceList.isEmpty()) {
+                if (connectedShimmerDevices.isEmpty()) {
                     logger.info("No connected Shimmer devices found for SD logging")
                     return@withContext false
                 }
 
-                shimmerBluetoothManager?.startSDLogging(deviceList)
+                // Use the manager to start SD logging on all devices
+                shimmerBluetoothManager?.startSDLogging(connectedShimmerDevices)
 
-                logger.info("SD logging started on ${deviceList.size} devices")
+                logger.info("SD logging started on ${connectedShimmerDevices.size} devices")
                 return@withContext true
             } catch (e: Exception) {
                 logger.error("Failed to start SD logging", e)
@@ -2136,22 +2193,30 @@ constructor(
                     return@withContext false
                 }
 
-                val deviceList = mutableListOf<com.shimmerresearch.driver.ShimmerDevice>()
+                val connectedShimmerDevices = mutableListOf<com.shimmerresearch.driver.ShimmerDevice>()
 
-                shimmerDevices.values.forEach { shimmer ->
-                    if (shimmer.isConnected()) {
-                        deviceList.add(shimmer)
+                // Get connected devices from the manager
+                connectedDevices.values.forEach { device ->
+                    try {
+                        val shimmerDevice = shimmerBluetoothManager?.getShimmerDeviceBtConnectedFromMac(device.macAddress)
+                        if (shimmerDevice != null && shimmerDevice.isConnected()) {
+                            connectedShimmerDevices.add(shimmerDevice)
+                            logger.debug("Added device ${device.getDisplayName()} to SD logging stop list")
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Failed to get device ${device.getDisplayName()} for stopping SD logging", e)
                     }
                 }
 
-                if (deviceList.isEmpty()) {
+                if (connectedShimmerDevices.isEmpty()) {
                     logger.info("No connected Shimmer devices found for stopping SD logging")
                     return@withContext false
                 }
 
-                shimmerBluetoothManager?.stopSDLogging(deviceList)
+                // Use the manager to stop SD logging on all devices
+                shimmerBluetoothManager?.stopSDLogging(connectedShimmerDevices)
 
-                logger.info("SD logging stopped on ${deviceList.size} devices")
+                logger.info("SD logging stopped on ${connectedShimmerDevices.size} devices")
                 return@withContext true
             } catch (e: Exception) {
                 logger.error("Failed to stop SD logging", e)
@@ -2159,23 +2224,76 @@ constructor(
             }
         }
 
-    fun isAnyDeviceStreaming(): Boolean =
-        shimmerDevices.values.any { shimmer ->
-            shimmer.isConnected() && shimmer.isStreaming()
+    fun isAnyDeviceStreaming(): Boolean {
+        return try {
+            // Check through manager first
+            connectedDevices.keys.any { macAddress ->
+                val shimmerDevice = shimmerBluetoothManager?.getShimmerDeviceBtConnectedFromMac(macAddress)
+                shimmerDevice?.isConnected() == true && shimmerDevice.isStreaming()
+            } || 
+            // Fallback to local cache
+            shimmerDevices.values.any { shimmer ->
+                shimmer.isConnected() && shimmer.isStreaming()
+            }
+        } catch (e: Exception) {
+            logger.error("Error checking if any device is streaming", e)
+            false
         }
+    }
 
-    fun isAnyDeviceSDLogging(): Boolean =
-        shimmerDevices.values.any { shimmer ->
-            shimmer.isConnected() && shimmer.isSDLogging()
+    fun isAnyDeviceSDLogging(): Boolean {
+        return try {
+            // Check through manager first
+            connectedDevices.keys.any { macAddress ->
+                val shimmerDevice = shimmerBluetoothManager?.getShimmerDeviceBtConnectedFromMac(macAddress)
+                shimmerDevice?.isConnected() == true && shimmerDevice.isSDLogging()
+            } ||
+            // Fallback to local cache
+            shimmerDevices.values.any { shimmer ->
+                shimmer.isConnected() && shimmer.isSDLogging()
+            }
+        } catch (e: Exception) {
+            logger.error("Error checking if any device is SD logging", e)
+            false
         }
+    }
 
-    fun getConnectedShimmerDevice(macAddress: String): com.shimmerresearch.driver.ShimmerDevice? =
-        shimmerDevices[macAddress]
-
-    fun getFirstConnectedShimmerDevice(): com.shimmerresearch.driver.ShimmerDevice? =
-        shimmerDevices.values.firstOrNull { shimmer ->
-            shimmer.isConnected()
+    fun getConnectedShimmerDevice(macAddress: String): com.shimmerresearch.driver.ShimmerDevice? {
+        return try {
+            // First try to get from our local cache
+            val localShimmer = shimmerDevices[macAddress]
+            if (localShimmer != null) {
+                return localShimmer
+            }
+            
+            // Fallback to getting from the manager
+            shimmerBluetoothManager?.getShimmerDeviceBtConnectedFromMac(macAddress)
+        } catch (e: Exception) {
+            logger.error("Failed to get Shimmer device for $macAddress", e)
+            null
         }
+    }
+
+    fun getFirstConnectedShimmerDevice(): com.shimmerresearch.driver.ShimmerDevice? {
+        return try {
+            // Try local cache first
+            val firstLocal = shimmerDevices.values.firstOrNull { shimmer ->
+                shimmer.isConnected()
+            }
+            if (firstLocal != null) {
+                return firstLocal
+            }
+            
+            // Fallback to finding through manager
+            connectedDevices.keys.firstNotNullOfOrNull { macAddress ->
+                shimmerBluetoothManager?.getShimmerDeviceBtConnectedFromMac(macAddress)
+                    ?.takeIf { it.isConnected() }
+            }
+        } catch (e: Exception) {
+            logger.error("Failed to get first connected Shimmer device", e)
+            null
+        }
+    }
 
     fun getShimmerBluetoothManager(): ShimmerBluetoothManagerAndroid? = shimmerBluetoothManager
 
@@ -2193,14 +2311,62 @@ constructor(
                 return@withContext emptyList()
             }
 
-            val simulatedDevices = listOf(
-                Pair("00:06:66:68:4A:B4", "Shimmer_4AB4"),
-                Pair("00:06:66:68:4A:B5", "Shimmer_4AB5")
-            )
+            // Initialize Bluetooth manager if needed
+            if (shimmerBluetoothManager == null) {
+                withContext(Dispatchers.Main) {
+                    val handler = createShimmerHandler()
+                    shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, handler)
+                }
+            }
 
-            logger.info("Found ${simulatedDevices.size} Shimmer devices in scan")
-            return@withContext simulatedDevices
+            // Get real paired devices
+            val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+            val bluetoothAdapter = bluetoothManager.adapter
 
+            if (bluetoothAdapter?.isEnabled == true) {
+                val pairedDevices = bluetoothAdapter.bondedDevices ?: emptySet()
+                logger.info("Scanning ${pairedDevices.size} paired Bluetooth devices for Shimmer devices...")
+
+                val shimmerDevices = pairedDevices
+                    .filter { device ->
+                        val name = device.name
+                        val isShimmer = name?.contains("Shimmer", ignoreCase = true) == true ||
+                                       name?.contains("RN42", ignoreCase = true) == true
+                        if (isShimmer) {
+                            logger.info("Found Shimmer device: ${device.name} (${device.address})")
+                        }
+                        isShimmer
+                    }
+                    .map { device -> 
+                        Pair(device.address, device.name ?: "Shimmer_${device.address.takeLast(4)}")
+                    }
+
+                logger.info("Found ${shimmerDevices.size} Shimmer devices in paired list")
+                
+                if (shimmerDevices.isEmpty()) {
+                    logger.warning("No Shimmer devices found in paired devices. Please pair a Shimmer device first.")
+                    logger.info("Instructions:")
+                    logger.info("1. Go to Android Settings -> Bluetooth")
+                    logger.info("2. Make sure Shimmer device is powered on and in pairing mode")
+                    logger.info("3. Scan for new devices and pair with your Shimmer")
+                    logger.info("4. Use PIN 1234 when prompted")
+                    
+                    // Return demo devices for testing when no real devices are paired
+                    return@withContext listOf(
+                        Pair("00:06:66:68:4A:B4", "Shimmer_4AB4"),
+                        Pair("00:06:66:68:4A:B5", "Shimmer_4AB5")
+                    )
+                }
+
+                return@withContext shimmerDevices
+            } else {
+                logger.error("Bluetooth adapter is not enabled")
+                return@withContext emptyList()
+            }
+
+        } catch (e: SecurityException) {
+            logger.error("Security exception during device scan: ${e.message}", e)
+            return@withContext emptyList()
         } catch (e: Exception) {
             logger.error("Error during Bluetooth device scan", e)
             return@withContext emptyList()
