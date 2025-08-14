@@ -1,74 +1,46 @@
 package com.multisensor.recording
 
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.SurfaceView
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.camera.view.PreviewView
-import androidx.core.content.ContextCompat
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import kotlinx.coroutines.launch
-import com.multisensor.recording.camera.RgbCamera
-import com.multisensor.recording.camera.ThermalCamera
-import com.multisensor.recording.calibration.SyncClockManager
-import com.multisensor.recording.calibration.CalibrationManager
-import com.multisensor.recording.sensor.GsrSensor
+import com.multisensor.recording.fragment.MainFragment
+import com.multisensor.recording.fragment.RecordingFragment
+import com.multisensor.recording.fragment.SettingsFragment
 import com.multisensor.recording.util.PermissionManager
 import com.multisensor.recording.util.Logger
-import com.multisensor.recording.session.SessionManager
 import com.multisensor.recording.network.PcCommunicationClient
 import com.multisensor.recording.network.FaultToleranceManager
 import com.multisensor.recording.network.DataTransferManager
-import com.multisensor.recording.network.DeviceType
-import com.multisensor.recording.network.DeviceStatus
+import com.multisensor.recording.calibration.CalibrationManager
 import com.multisensor.recording.security.SecurityManager
 import com.multisensor.recording.validation.DataValidationService
 import com.multisensor.recording.performance.PerformanceMonitor
 import com.multisensor.recording.scalability.ScalabilityManager
 import com.multisensor.recording.config.ConfigurationManager
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * Streamlined MainActivity - simplified from the complex original
- * Focuses on core IRCamera functionality with minimal dependencies
+ * MainActivity with IRCamera-style navigation
+ * Features ViewPager2 with bottom navigation tabs
  */
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity(), View.OnClickListener {
     
     companion object {
         private const val TAG = "MainActivity"
     }
 
     // UI components
-    private lateinit var cameraPreview: PreviewView
-    private lateinit var thermalPreview: SurfaceView
-    private lateinit var recordButton: Button
-    private lateinit var recordingTimer: TextView
-    private lateinit var cameraStatus: TextView
-    private lateinit var thermalStatus: TextView
-    private lateinit var gsrStatus: TextView
-    private lateinit var cameraConnectionStatus: TextView
-    private lateinit var thermalConnectionStatus: TextView
-    private lateinit var gsrConnectionStatus: TextView
-    private lateinit var syncStatus: TextView
-
+    private lateinit var viewPager: ViewPager2
+    
     // Core components
     private lateinit var permissionManager: PermissionManager
-    private lateinit var rgbCamera: RgbCamera
-    private lateinit var thermalCamera: ThermalCamera
-    private lateinit var gsrSensor: GsrSensor
-    private lateinit var syncClockManager: SyncClockManager
     
-    // New functional requirement components
-    private lateinit var sessionManager: SessionManager
+    // Functional requirement components
     private lateinit var pcCommunicationClient: PcCommunicationClient
     private lateinit var faultToleranceManager: FaultToleranceManager
     private lateinit var dataTransferManager: DataTransferManager
@@ -81,24 +53,11 @@ class MainActivity : ComponentActivity() {
     private lateinit var scalabilityManager: ScalabilityManager
     private lateinit var configurationManager: ConfigurationManager
 
-    // Recording state
-    private val isRecording = AtomicBoolean(false)
-    private var recordingStartTime = 0L
-    private val timerHandler = Handler(Looper.getMainLooper())
-    private val timerRunnable = object : Runnable {
-        override fun run() {
-            if (isRecording.get()) {
-                updateRecordingTimer()
-                timerHandler.postDelayed(this, 1000)
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         
-        Log.i(TAG, "Starting streamlined Multi-Sensor Recording App")
+        Log.i(TAG, "Starting IRCamera-style Multi-Sensor Recording App")
         
         initializeViews()
         initializeComponents()
@@ -109,26 +68,24 @@ class MainActivity : ComponentActivity() {
      * Initialize UI views
      */
     private fun initializeViews() {
-        cameraPreview = findViewById(R.id.camera_preview)
-        thermalPreview = findViewById(R.id.thermal_preview)
-        recordButton = findViewById(R.id.record_button)
-        recordingTimer = findViewById(R.id.recording_timer)
+        viewPager = findViewById(R.id.view_page)
         
-        cameraStatus = findViewById(R.id.camera_status)
-        thermalStatus = findViewById(R.id.thermal_status)
-        
-        cameraConnectionStatus = findViewById(R.id.camera_connection_status)
-        thermalConnectionStatus = findViewById(R.id.thermal_connection_status)
-        gsrConnectionStatus = findViewById(R.id.gsr_connection_status)
-        syncStatus = findViewById(R.id.sync_status)
-
-        recordButton.setOnClickListener {
-            if (isRecording.get()) {
-                stopRecording()
-            } else {
-                startRecording()
+        viewPager.offscreenPageLimit = 3
+        viewPager.isUserInputEnabled = false
+        viewPager.adapter = ViewPagerAdapter(this)
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                refreshTabSelect(position)
             }
-        }
+        })
+        
+        // Set default to main page (position 1)
+        viewPager.setCurrentItem(1, false)
+
+        // Setup bottom navigation click handlers
+        findViewById<View>(R.id.cl_icon_recording)?.setOnClickListener(this)
+        findViewById<View>(R.id.view_main)?.setOnClickListener(this)
+        findViewById<View>(R.id.cl_icon_settings)?.setOnClickListener(this)
     }
 
     /**
@@ -172,13 +129,8 @@ class MainActivity : ComponentActivity() {
         
         // Initialize existing components
         permissionManager = PermissionManager(this)
-        rgbCamera = RgbCamera(this)
-        thermalCamera = ThermalCamera(this)
-        gsrSensor = GsrSensor(this)
-        syncClockManager = SyncClockManager()
         
         // Initialize functional requirement components
-        sessionManager = SessionManager(this)
         pcCommunicationClient = PcCommunicationClient()
         faultToleranceManager = FaultToleranceManager(this)
         dataTransferManager = DataTransferManager(this)
@@ -187,8 +139,7 @@ class MainActivity : ComponentActivity() {
         // Setup callbacks and integration
         setupComponentCallbacks()
         
-        // Update initial sync status
-        updateSyncStatus()
+        Log.i(TAG, "All components initialized successfully")
     }
 
     /**
@@ -198,472 +149,113 @@ class MainActivity : ComponentActivity() {
         permissionManager.requestAllPermissions(this) { granted ->
             if (granted) {
                 Log.i(TAG, "All permissions granted")
-                initializeDevices()
+                // Permissions granted, components are ready
             } else {
                 Log.w(TAG, "Permissions denied")
-                Toast.makeText(this, "App requires all permissions to function", Toast.LENGTH_LONG).show()
+                // Handle permission denial - maybe show explanation
             }
         }
     }
 
     /**
-     * Initialize all devices
+     * Refresh the 3 tabs' selection state
+     * @param index Currently selected tab, [0, 2]
      */
-    private fun initializeDevices() {
-        Thread {
-            // Register devices with fault tolerance manager
-            faultToleranceManager.registerDevice("rgb_camera", DeviceType.RGB_CAMERA) {
-                rgbCamera.initialize(cameraPreview, this@MainActivity)
-            }
-            
-            faultToleranceManager.registerDevice("thermal_camera", DeviceType.THERMAL_CAMERA) {
-                thermalCamera.initialize(thermalPreview)
-            }
-            
-            faultToleranceManager.registerDevice("gsr_sensor", DeviceType.GSR_SENSOR) {
-                gsrSensor.initialize()
-            }
+    private fun refreshTabSelect(index: Int) {
+        val recordingIcon = findViewById<android.widget.ImageView>(R.id.iv_icon_recording)
+        val recordingText = findViewById<android.widget.TextView>(R.id.tv_icon_recording)
+        val settingsIcon = findViewById<android.widget.ImageView>(R.id.iv_icon_settings)
+        val settingsText = findViewById<android.widget.TextView>(R.id.tv_icon_settings)
+        val mainBg = findViewById<android.widget.ImageView>(R.id.iv_bottom_main_bg)
 
-            // Initialize RGB camera
-            val rgbInitialized = rgbCamera.initialize(cameraPreview, this)
-            runOnUiThread {
-                updateCameraStatus(rgbInitialized)
-                faultToleranceManager.updateDeviceHealth(
-                    "rgb_camera", 
-                    if (rgbInitialized) DeviceStatus.CONNECTED else DeviceStatus.ERROR
-                )
+        // Reset all selections
+        recordingIcon?.isSelected = false
+        recordingText?.isSelected = false
+        settingsIcon?.isSelected = false
+        settingsText?.isSelected = false
+        mainBg?.setImageResource(R.drawable.main_bg_not_select)
+
+        when (index) {
+            0 -> { // Recording tab
+                recordingIcon?.isSelected = true
+                recordingText?.isSelected = true
             }
-
-            // Initialize thermal camera
-            val thermalInitialized = thermalCamera.initialize(thermalPreview)
-            runOnUiThread {
-                updateThermalStatus(thermalInitialized)
-                faultToleranceManager.updateDeviceHealth(
-                    "thermal_camera", 
-                    if (thermalInitialized) DeviceStatus.CONNECTED else DeviceStatus.ERROR
-                )
+            1 -> { // Main/Home tab
+                mainBg?.setImageResource(R.drawable.main_bg_select)
             }
-
-            // Initialize GSR sensor
-            val gsrInitialized = gsrSensor.initialize()
-            runOnUiThread {
-                updateGsrStatus(gsrInitialized)
-                faultToleranceManager.updateDeviceHealth(
-                    "gsr_sensor", 
-                    if (gsrInitialized) DeviceStatus.CONNECTED else DeviceStatus.ERROR
-                )
+            2 -> { // Settings tab
+                settingsIcon?.isSelected = true
+                settingsText?.isSelected = true
             }
-
-            // Auto-connect to GSR sensor if available
-            if (gsrInitialized) {
-                gsrSensor.scanForDevices { devices ->
-                    if (devices.isNotEmpty()) {
-                        // Auto-connect to first available device
-                        val deviceAddress = devices.first().substringAfter("(").substringBefore(")")
-                        val connected = gsrSensor.connect(deviceAddress)
-                        runOnUiThread {
-                            updateGsrConnectionStatus(connected)
-                        }
-                    }
-                }
-            }
-
-            // Perform initial time synchronization
-            lifecycleScope.launch {
-                Log.i(TAG, "Attempting initial time synchronization...")
-                val syncSuccess = performTimeSync()
-                Log.i(TAG, "Initial time sync ${if (syncSuccess) "successful" else "failed"}")
-            }
-
-            // Attempt to connect to PC server (if configured)
-            attemptPcConnection()
-
-            Log.i(TAG, "Device initialization completed")
-        }.start()
-    }
-
-    /**
-     * Start recording session
-     */
-    private fun startRecording() {
-        if (!allDevicesReady()) {
-            Toast.makeText(this, "Not all devices are ready", Toast.LENGTH_SHORT).show()
-            return
         }
+    }
 
-        Thread {
-            try {
-                // Create new session
-                val session = sessionManager.createSession()
-                if (session == null) {
-                    runOnUiThread {
-                        Toast.makeText(this, "Failed to create session", Toast.LENGTH_SHORT).show()
-                    }
-                    return@Thread
-                }
-
-                // Start session
-                if (!sessionManager.startSession()) {
-                    runOnUiThread {
-                        Toast.makeText(this, "Failed to start session", Toast.LENGTH_SHORT).show()
-                    }
-                    return@Thread
-                }
-
-                // Get synchronized timestamp for consistent timing across all devices
-                val syncedTimestamp = syncClockManager.getCurrentSyncedTime()
-                val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date(syncedTimestamp))
-                val sessionDir = sessionManager.getSessionDirectory()
-
-                Log.i(TAG, "Starting recording session: ${session.sessionId} with synchronized timestamp: $syncedTimestamp")
-                
-                // Start RGB recording
-                val rgbFile = File(sessionDir, "rgb_$timestamp.mp4")
-                val rgbStarted = rgbCamera.startRecording(rgbFile)
-                if (rgbStarted) {
-                    sessionManager.addRecordedFile("rgb_video", rgbFile.absolutePath, rgbFile.length())
-                }
-
-                // Start thermal recording
-                val thermalStarted = thermalCamera.startRecording()
-                if (thermalStarted) {
-                    sessionManager.addRecordedFile("thermal_video", "thermal_$timestamp.raw", 0L)
-                }
-
-                // Start GSR streaming
-                val gsrStarted = gsrSensor.startStreaming()
-                if (gsrStarted) {
-                    val gsrFile = File(sessionDir, "gsr_$timestamp.csv")
-                    sessionManager.addRecordedFile("gsr_data", gsrFile.absolutePath, 0L)
-                }
-
-                if (rgbStarted && thermalStarted && gsrStarted) {
-                    isRecording.set(true)
-                    recordingStartTime = syncedTimestamp // Use synced time for consistent timing
-                    
-                    runOnUiThread {
-                        recordButton.text = getString(R.string.stop_recording)
-                        recordButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-                        timerHandler.post(timerRunnable)
-                        Toast.makeText(this, "Recording started (Session: ${session.sessionId})", Toast.LENGTH_SHORT).show()
-                    }
-                    
-                    Log.i(TAG, "Multi-sensor recording started with time sync for session: ${session.sessionId}")
-                } else {
-                    // Recording failed, terminate session
-                    sessionManager.terminateSession("Failed to start all recording streams")
-                    runOnUiThread {
-                        Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error starting recording", e)
-                sessionManager.terminateSession("Recording error: ${e.message}")
-                runOnUiThread {
-                    Toast.makeText(this, "Recording error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.cl_icon_recording -> { // Recording tab
+                viewPager.setCurrentItem(0, false)
             }
-        }.start()
-    }
-
-    /**
-     * Stop recording session
-     */
-    private fun stopRecording() {
-        Thread {
-            try {
-                val session = sessionManager.getCurrentSession()
-                
-                // Stop all recordings
-                rgbCamera.stopRecording()
-                thermalCamera.stopRecording()
-                gsrSensor.stopStreaming()
-
-                isRecording.set(false)
-                
-                // Stop session
-                sessionManager.stopSession()
-
-                runOnUiThread {
-                    recordButton.text = getString(R.string.start_recording)
-                    recordButton.setBackgroundColor(ContextCompat.getColor(this, R.color.primary))
-                    recordingTimer.text = "00:00"
-                    timerHandler.removeCallbacks(timerRunnable)
-                    
-                    val sessionId = session?.sessionId ?: "unknown"
-                    Toast.makeText(this, "Recording stopped (Session: $sessionId)", Toast.LENGTH_SHORT).show()
-                }
-
-                Log.i(TAG, "Multi-sensor recording stopped")
-                
-                // Start automatic file transfer to PC if connected
-                session?.let { sessionInfo ->
-                    if (pcCommunicationClient.isConnected()) {
-                        Log.i(TAG, "Starting automatic file transfer for session: ${sessionInfo.sessionId}")
-                        dataTransferManager.uploadSessionData(sessionInfo, getPcAddress())
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.e(TAG, "Error stopping recording", e)
-                runOnUiThread {
-                    Toast.makeText(this, "Error stopping recording: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+            R.id.view_main -> { // Main/Home tab
+                viewPager.setCurrentItem(1, false)
             }
-        }.start()
-    }
-
-    /**
-     * Check if all devices are ready for recording
-     */
-    private fun allDevicesReady(): Boolean {
-        return rgbCamera.isConnected() && 
-               thermalCamera.isConnected() && 
-               gsrSensor.isConnected()
-    }
-
-    /**
-     * Update recording timer display
-     */
-    private fun updateRecordingTimer() {
-        val currentTime = syncClockManager.getCurrentSyncedTime()
-        val elapsed = (currentTime - recordingStartTime) / 1000
-        val minutes = elapsed / 60
-        val seconds = elapsed % 60
-        recordingTimer.text = String.format("%02d:%02d", minutes, seconds)
-    }
-
-    /**
-     * Update camera status display
-     */
-    private fun updateCameraStatus(initialized: Boolean) {
-        cameraStatus.text = if (initialized) "Ready" else "Error"
-        cameraStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.green else R.color.red))
-        
-        cameraConnectionStatus.text = if (rgbCamera.isConnected()) "Connected" else "Disconnected"
-        cameraConnectionStatus.setTextColor(ContextCompat.getColor(this, if (rgbCamera.isConnected()) R.color.green else R.color.red))
-    }
-
-    /**
-     * Update thermal camera status display
-     */
-    private fun updateThermalStatus(initialized: Boolean) {
-        thermalStatus.text = if (initialized) "Ready" else "Error"
-        thermalStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.green else R.color.red))
-        
-        thermalConnectionStatus.text = if (thermalCamera.isConnected()) "Connected" else "Disconnected"
-        thermalConnectionStatus.setTextColor(ContextCompat.getColor(this, if (thermalCamera.isConnected()) R.color.green else R.color.red))
-    }
-
-    /**
-     * Update GSR sensor status display
-     */
-    private fun updateGsrStatus(initialized: Boolean) {
-        gsrConnectionStatus.text = if (initialized) "Initialized" else "Error"
-        gsrConnectionStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.orange else R.color.red))
-    }
-
-    /**
-     * Update GSR connection status display
-     */
-    private fun updateGsrConnectionStatus(connected: Boolean) {
-        gsrConnectionStatus.text = if (connected) "Connected" else "Disconnected"
-        gsrConnectionStatus.setTextColor(ContextCompat.getColor(this, if (connected) R.color.green else R.color.red))
-    }
-
-    /**
-     * Update time synchronization status display
-     */
-    private fun updateSyncStatus() {
-        val syncStatusInfo = syncClockManager.getSyncStatus()
-        val isValid = syncClockManager.isSyncValid()
-        
-        val statusText = when {
-            syncStatusInfo.isSynchronized && isValid -> "Synced (${syncStatusInfo.clockOffsetMs}ms)"
-            syncStatusInfo.isSynchronized && !isValid -> "Expired"
-            else -> "Not Synced"
-        }
-        
-        val color = when {
-            syncStatusInfo.isSynchronized && isValid -> R.color.green
-            syncStatusInfo.isSynchronized && !isValid -> R.color.orange
-            else -> R.color.red
-        }
-        
-        syncStatus.text = statusText
-        syncStatus.setTextColor(ContextCompat.getColor(this, color))
-    }
-
-    /**
-     * Perform time synchronization with PC
-     * This is a demo implementation - in real usage, PC timestamp would come from network
-     */
-    private suspend fun performTimeSync(): Boolean {
-        return try {
-            // Demo: simulate PC timestamp (in real implementation, this would come from PC server)
-            val simulatedPcTimestamp = System.currentTimeMillis() + 100L // Simulate 100ms offset
-            val success = syncClockManager.synchronizeWithPc(simulatedPcTimestamp, "manual_sync")
-            
-            runOnUiThread {
-                updateSyncStatus()
+            R.id.cl_icon_settings -> { // Settings tab
+                viewPager.setCurrentItem(2, false)
             }
-            
-            success
-        } catch (e: Exception) {
-            Log.e(TAG, "Time synchronization failed", e)
-            false
         }
     }
 
     /**
-     * Setup callbacks for new functional requirement components
+     * Navigate to recording tab from other fragments
+     */
+    fun navigateToRecording() {
+        viewPager.setCurrentItem(0, false)
+    }
+
+    /**
+     * ViewPager adapter for fragment navigation
+     */
+    private class ViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+        override fun getItemCount() = 3
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                0 -> RecordingFragment()  // Recording controls and previews
+                1 -> MainFragment()       // Device connection status
+                else -> SettingsFragment() // Settings and system info
+            }
+        }
+    }
+
+    /**
+     * Setup callbacks for functional requirement components
      */
     private fun setupComponentCallbacks() {
         // PC Communication callbacks
-        pcCommunicationClient.setCommandCallback { command ->
-            handlePcCommand(command)
-        }
-        
         pcCommunicationClient.setConnectionCallback { connected, message ->
             runOnUiThread {
-                if (connected) {
-                    Toast.makeText(this, "Connected to PC server", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "PC connection lost: $message", Toast.LENGTH_SHORT).show()
-                }
+                // Handle PC connection status changes
+                Log.i(TAG, "PC connection: $connected - $message")
             }
         }
         
         // Fault tolerance callbacks
-        faultToleranceManager.setDeviceRecoveryCallback { deviceId, success, message ->
-            runOnUiThread {
-                if (success) {
-                    Toast.makeText(this, "Device $deviceId recovered", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Device $deviceId recovery failed: $message", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-        
         faultToleranceManager.setSystemHealthCallback { isHealthy, deviceHealthMap ->
             // Update UI with system health status
             runOnUiThread {
-                // You could update a system health indicator here
+                Log.d(TAG, "System health: $isHealthy")
             }
         }
         
         // Data transfer callbacks
-        dataTransferManager.setTransferProgressCallback { fileName, bytesTransferred, totalBytes, progress ->
-            runOnUiThread {
-                // Update transfer progress in UI
-                Log.d(TAG, "Transfer progress: $fileName - ${progress.toInt()}%")
-            }
-        }
-        
         dataTransferManager.setTransferCompleteCallback { success, errorMessage, results ->
             runOnUiThread {
                 if (success) {
-                    Toast.makeText(this, "Session data uploaded successfully", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "Data transfer completed successfully")
                 } else {
-                    Toast.makeText(this, "Upload failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                    Log.w(TAG, "Data transfer failed: $errorMessage")
                 }
             }
         }
-    }
-
-    /**
-     * Handle commands received from PC server
-     */
-    private fun handlePcCommand(command: com.multisensor.recording.network.PcCommand) {
-        when (command.action) {
-            "start_recording" -> {
-                runOnUiThread {
-                    if (!isRecording.get()) {
-                        startRecording()
-                    }
-                }
-                pcCommunicationClient.sendResponse(command.action, true, "Recording started")
-            }
-            
-            "stop_recording" -> {
-                runOnUiThread {
-                    if (isRecording.get()) {
-                        stopRecording()
-                    }
-                }
-                pcCommunicationClient.sendResponse(command.action, true, "Recording stopped")
-            }
-            
-            "sync_signal" -> {
-                // Handle synchronization signal (e.g., flash screen)
-                val signalType = command.parameters["signalType"] as? String ?: "flash"
-                performSyncSignal(signalType)
-                pcCommunicationClient.sendResponse(command.action, true, "Sync signal executed")
-            }
-            
-            "get_status" -> {
-                val status = org.json.JSONObject().apply {
-                    put("isRecording", isRecording.get())
-                    put("sessionActive", sessionManager.isActive())
-                    put("deviceHealth", faultToleranceManager.isSystemHealthy())
-                    put("syncStatus", syncClockManager.isSyncValid())
-                }
-                pcCommunicationClient.sendResponse(command.action, true, "Status retrieved", status)
-            }
-            
-            else -> {
-                Log.w(TAG, "Unknown PC command: ${command.action}")
-                pcCommunicationClient.sendResponse(command.action, false, "Unknown command")
-            }
-        }
-    }
-
-    /**
-     * Perform synchronization signal (screen flash, etc.)
-     */
-    private fun performSyncSignal(signalType: String) {
-        when (signalType) {
-            "flash" -> {
-                // Flash screen white briefly for visual sync marker
-                runOnUiThread {
-                    val originalColor = window.decorView.background
-                    window.decorView.setBackgroundColor(android.graphics.Color.WHITE)
-                    
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        window.decorView.background = originalColor
-                    }, 100) // Flash for 100ms
-                }
-            }
-            // Add other signal types as needed
-        }
-        
-        Log.i(TAG, "Executed sync signal: $signalType")
-    }
-
-    /**
-     * Attempt to connect to PC server
-     */
-    private fun attemptPcConnection() {
-        // Try to connect to PC on local network
-        // In a real implementation, this could use network discovery or configuration
-        val pcAddress = getPcAddress()
-        if (pcAddress.isNotEmpty()) {
-            lifecycleScope.launch {
-                val connected = pcCommunicationClient.connectToPc(pcAddress)
-                Log.i(TAG, "PC connection attempt: ${if (connected) "success" else "failed"}")
-            }
-        }
-    }
-
-    /**
-     * Get PC server address (placeholder implementation)
-     */
-    private fun getPcAddress(): String {
-        // In a real implementation, this could come from:
-        // - Network discovery
-        // - User configuration
-        // - Default gateway detection
-        return "192.168.1.100" // Placeholder
     }
 
     /**
@@ -687,8 +279,8 @@ class MainActivity : ComponentActivity() {
                         // User acknowledges warnings
                     }
                     .setNegativeButton("Review Settings") { _, _ ->
-                        // Could open settings activity
-                        Logger.i(TAG, "User chose to review security settings")
+                        // Navigate to settings tab
+                        viewPager.setCurrentItem(2, false)
                     }
                     .setCancelable(false)
                     .show()
@@ -701,30 +293,20 @@ class MainActivity : ComponentActivity() {
      * NFR1: Performance alerting for bottlenecks
      */
     private fun showPerformanceAlert(alert: PerformanceMonitor.PerformanceAlert) {
-        val alertColor = when (alert.severity) {
-            PerformanceMonitor.AlertSeverity.ERROR -> R.color.red
-            PerformanceMonitor.AlertSeverity.WARNING -> R.color.orange
-            PerformanceMonitor.AlertSeverity.INFO -> R.color.blue
-        }
-        
         // Show performance alert as toast for now
-        // In a full implementation, this could be a persistent notification
-        Toast.makeText(this, "Performance Alert: ${alert.message}", Toast.LENGTH_LONG).show()
+        android.widget.Toast.makeText(this, "Performance Alert: ${alert.message}", android.widget.Toast.LENGTH_LONG).show()
         
         Logger.w(TAG, "Performance alert: ${alert.type} - ${alert.message}")
         
         // Take automated actions based on alert type
         when (alert.type) {
             PerformanceMonitor.AlertType.HIGH_MEMORY_USAGE -> {
-                // Could trigger garbage collection or reduce quality
                 System.gc()
             }
             PerformanceMonitor.AlertType.HIGH_FRAME_DROP_RATE -> {
-                // Could reduce video quality or frame rate
                 Logger.i(TAG, "Consider reducing video quality due to frame drops")
             }
             PerformanceMonitor.AlertType.HIGH_SAMPLE_DROP_RATE -> {
-                // Could reduce sensor sampling rate
                 Logger.i(TAG, "Consider reducing sensor sampling rate due to sample drops")
             }
             else -> {
@@ -736,26 +318,14 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         
-        // Stop recording if active
-        if (isRecording.get()) {
-            stopRecording()
-        }
-        
-        // Release all resources
-        rgbCamera.release()
-        thermalCamera.release()
-        gsrSensor.release()
-        
-        // Cleanup new components
-        pcCommunicationClient.cleanup()
-        faultToleranceManager.cleanup()
-        dataTransferManager.cleanup()
+        // Cleanup components
+        if (::pcCommunicationClient.isInitialized) pcCommunicationClient.cleanup()
+        if (::faultToleranceManager.isInitialized) faultToleranceManager.cleanup()
+        if (::dataTransferManager.isInitialized) dataTransferManager.cleanup()
         
         // Cleanup NFR components
-        performanceMonitor.stopMonitoring()
-        scalabilityManager.cleanup()
-        
-        timerHandler.removeCallbacks(timerRunnable)
+        if (::performanceMonitor.isInitialized) performanceMonitor.stopMonitoring()
+        if (::scalabilityManager.isInitialized) scalabilityManager.cleanup()
         
         Log.i(TAG, "MainActivity destroyed, all resources released")
     }
