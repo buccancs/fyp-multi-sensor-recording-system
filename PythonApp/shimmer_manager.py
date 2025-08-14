@@ -11,9 +11,20 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Union
-from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSample
-from ..network.pc_server import PCServer
-from ..utils.logging_config import get_logger
+
+# Fix relative imports for standalone execution
+try:
+    from ..network.android_device_manager import AndroidDeviceManager, ShimmerDataSample
+    from ..network.pc_server import PCServer
+    from ..utils.logging_config import get_logger
+except ImportError:
+    # Fallback for standalone execution
+    import sys
+    import os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+    from network.android_device_manager import AndroidDeviceManager, ShimmerDataSample
+    from network.pc_server import PCServer
+    from utils.logging_config import get_logger
 try:
     from .shimmer.shimmer_imports import (
         DEFAULT_BAUDRATE,
@@ -23,15 +34,28 @@ try:
         PYSHIMMER_AVAILABLE,
     )
 except ImportError:
+    # Fallback for standalone execution
     import sys
+    import os
     sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
-    from PythonApp.shimmer.shimmer_imports import (
-        DEFAULT_BAUDRATE,
-        DataPacket,
-        Serial,
-        ShimmerBluetooth,
-        PYSHIMMER_AVAILABLE,
-    )
+    try:
+        from shimmer.shimmer_imports import (
+            DEFAULT_BAUDRATE,
+            DataPacket,
+            Serial,
+            ShimmerBluetooth,
+            PYSHIMMER_AVAILABLE,
+        )
+    except ImportError:
+        # Final fallback with absolute path
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'PythonApp'))
+        from PythonApp.shimmer.shimmer_imports import (
+            DEFAULT_BAUDRATE,
+            DataPacket,
+            Serial,
+            ShimmerBluetooth,
+            PYSHIMMER_AVAILABLE,
+        )
 class ConnectionType(Enum):
     DIRECT_BLUETOOTH = "direct_bluetooth"
     ANDROID_MEDIATED = "android_mediated"

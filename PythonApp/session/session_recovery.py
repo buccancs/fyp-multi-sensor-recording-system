@@ -382,3 +382,7 @@ def reset_recovery_manager() -> None:
     if _recovery_manager_instance and _recovery_manager_instance.monitoring_active:
         _recovery_manager_instance.stop_monitoring()
     _recovery_manager_instance = None
+
+
+# Alias for backward compatibility and expected interface
+SessionRecovery = SessionRecoveryManager

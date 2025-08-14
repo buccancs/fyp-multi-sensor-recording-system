@@ -1,5 +1,5 @@
 from .connection_handler import ShimmerConnectionHandler
-from .data_processor import ShimmerDataProcessor
+from .data_processor import ShimmerProcessor as ShimmerDataProcessor
 from .device_models import (
     ConnectionStatus,
     ConnectionType,

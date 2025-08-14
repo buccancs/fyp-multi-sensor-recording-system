@@ -1,14 +1,115 @@
 {
   "summary": {
-    "total_requirements": 15,
-    "tested_requirements": 15,
+    "total_requirements": 18,
+    "tested_requirements": 18,
     "untested_requirements": 0,
     "coverage_percentage": 100.0
   },
   "functional_requirements": {
+    "FR1": {
+      "id": "FR1",
+      "title": "M",
+      "tested": true,
+      "test_files": [
+        "tests_unified/android_device_complete_tests.py",
+        "tests_unified/performance/test_endurance_suite.py",
+        "tests_unified/performance/test_performance_verification.py",
+        "tests_unified/system/test_new_features.py",
+        "tests_unified/system/test_simplified_validation.py",
+        "tests_unified/e2e/test_android_complete.py",
+        "tests_unified/e2e/test_appium_android.py",
+        "tests_unified/fixtures/android_test_utils.py",
+        "tests_unified/fixtures/test_utils.py",
+        "tests_unified/visual/test_android_gui_components.py",
+        "tests_unified/visual/test_pc_gui_complete.py",
+        "tests_unified/visual/test_android_gui_complete.py",
+        "tests_unified/visual/test_pc_gui_components.py",
+        "tests_unified/visual/test_cross_platform_gui.py",
+        "tests_unified/visual/test_android_visual.py",
+        "tests_unified/web/test_web_dashboard.py",
+        "tests_unified/integration/test_multi_device_synchronization.py",
+        "tests_unified/integration/test_native_backend_integration.py",
+        "tests_unified/integration/test_android_device_manager.py",
+        "tests_unified/hardware/test_shimmer_integration.py",
+        "tests_unified/hardware/test_thermal_camera.py",
+        "tests_unified/load/test_socketio_load.py",
+        "tests_unified/load/test_android_load_stress.py",
+        "tests_unified/performance/benchmarks/performance_benchmark.py",
+        "tests_unified/performance/endurance/endurance_test_suite.py",
+        "tests_unified/performance/endurance/endurance_testing.py",
+        "tests_unified/performance/production/deployment_automation.py",
+        "tests_unified/performance/production/endurance_test_suite.py",
+        "tests_unified/performance/production/phase4_validator.py",
+        "tests_unified/performance/production/hardware_acceleration.py",
+        "tests_unified/performance/production/device_diversity_testing.py",
+        "tests_unified/unit/android/test_android_basic.py",
+        "tests_unified/unit/python/test_device_connectivity.py",
+        "tests_unified/unit/python/test_thermal_recorder_security_fix.py",
+        "tests_unified/unit/sensors/test_shimmer_implementation.py",
+        "tests_unified/unit/sensors/test_shimmer_extension_methods.py",
+        "tests_unified/integration/device_coordination/integration_tests.py",
+        "tests_unified/integration/device_coordination/test_pc_server_integration.py",
+        "tests_unified/evaluation/data_collection/measurement_collection.py",
+        "tests_unified/evaluation/foundation/pc_tests.py",
+        "tests_unified/evaluation/foundation/android_tests.py",
+        "tests_unified/evaluation/research/test_thesis_claims_validation.py",
+        "tests_unified/evaluation/research/requirements_coverage_analysis.py",
+        "tests_unified/evaluation/framework/test_categories.py",
+        "tests_unified/evaluation/architecture/test_architecture_enforcement.py"
+      ],
+      "coverage_notes": "Content coverage: android_device_complete_tests.py; Content coverage: test_endurance_suite.py; Content coverage: test_performance_verification.py; Content coverage: test_new_features.py; Content coverage: test_simplified_validation.py; Content coverage: test_android_complete.py; Content coverage: test_appium_android.py; Content coverage: android_test_utils.py; Content coverage: test_utils.py; Content coverage: test_android_gui_components.py; Content coverage: test_pc_gui_complete.py; Content coverage: test_android_gui_complete.py; Content coverage: test_pc_gui_components.py; Content coverage: test_cross_platform_gui.py; Content coverage: test_android_visual.py; Content coverage: test_web_dashboard.py; Content coverage: test_multi_device_synchronization.py; Content coverage: test_native_backend_integration.py; Content coverage: test_android_device_manager.py; Strong coverage: test_shimmer_integration.py; Strong coverage: test_thermal_camera.py; Content coverage: test_socketio_load.py; Content coverage: test_android_load_stress.py; Content coverage: performance_benchmark.py; Content coverage: endurance_test_suite.py; Content coverage: endurance_testing.py; Content coverage: deployment_automation.py; Content coverage: endurance_test_suite.py; Content coverage: phase4_validator.py; Path coverage: hardware_acceleration.py; Content coverage: device_diversity_testing.py; Content coverage: test_android_basic.py; Content coverage: test_device_connectivity.py; Content coverage: test_thermal_recorder_security_fix.py; Strong coverage: test_shimmer_implementation.py; Strong coverage: test_shimmer_extension_methods.py; Strong coverage: integration_tests.py; Strong coverage: test_pc_server_integration.py; Content coverage: measurement_collection.py; Content coverage: pc_tests.py; Content coverage: android_tests.py; Content coverage: test_thesis_claims_validation.py; Content coverage: requirements_coverage_analysis.py; Content coverage: test_categories.py; Content coverage: test_architecture_enforcement.py"
+    },
+    "FR2": {
+      "id": "FR2",
+      "title": "S",
+      "tested": true,
+      "test_files": [
+        "tests_unified/android_test_integration.py",
+        "tests_unified/android_device_complete_tests.py",
+        "tests_unified/system/test_new_features.py",
+        "tests_unified/system/python_system_test.py",
+        "tests_unified/system/test_documentation_device_references.py",
+        "tests_unified/system/test_simplified_validation.py",
+        "tests_unified/e2e/test_appium_android.py",
+        "tests_unified/visual/test_android_gui_components.py",
+        "tests_unified/visual/test_main_window.py",
+        "tests_unified/visual/test_android_gui_complete.py",
+        "tests_unified/visual/test_pc_gui_components.py",
+        "tests_unified/visual/test_cross_platform_gui.py",
+        "tests_unified/web/test_web_dashboard.py",
+        "tests_unified/integration/test_multi_device_synchronization.py",
+        "tests_unified/integration/test_native_backend_integration.py",
+        "tests_unified/integration/test_android_device_manager.py",
+        "tests_unified/integration/test_virtual_environment_integration.py",
+        "tests_unified/integration/test_android_connection_detection.py",
+        "tests_unified/hardware/test_shimmer_integration.py",
+        "tests_unified/load/test_socketio_load.py",
+        "tests_unified/load/test_android_load_stress.py",
+        "tests_unified/performance/production/deployment_automation.py",
+        "tests_unified/performance/production/phase4_validator.py",
+        "tests_unified/performance/production/security_scanner.py",
+        "tests_unified/performance/production/performance_monitor_integration.py",
+        "tests_unified/system/workflows/system_test.py",
+        "tests_unified/unit/sensors/test_shimmer_implementation.py",
+        "tests_unified/integration/device_coordination/integration_tests.py",
+        "tests_unified/integration/device_coordination/test_pc_server_integration.py",
+        "tests_unified/evaluation/data_collection/measurement_collection.py",
+        "tests_unified/evaluation/foundation/pc_tests.py",
+        "tests_unified/evaluation/foundation/android_tests.py",
+        "tests_unified/evaluation/research/test_thesis_claims_validation.py",
+        "tests_unified/evaluation/research/requirements_coverage_analysis.py",
+        "tests_unified/evaluation/framework/test_framework.py",
+        "tests_unified/evaluation/framework/test_categories.py",
+        "tests_unified/evaluation/framework/test_results.py",
+        "tests_unified/evaluation/metrics/performance_monitor.py",
+        "tests_unified/evaluation/metrics/quality_validator.py",
+        "tests_unified/evaluation/architecture/test_architecture_enforcement.py"
+      ],
+      "coverage_notes": "Path coverage: android_test_integration.py; Content coverage: android_device_complete_tests.py; Path coverage: test_new_features.py; Strong coverage: python_system_test.py; Path coverage: test_documentation_device_references.py; Path coverage: test_simplified_validation.py; Content coverage: test_appium_android.py; Content coverage: test_android_gui_components.py; Content coverage: test_main_window.py; Content coverage: test_android_gui_complete.py; Content coverage: test_pc_gui_components.py; Content coverage: test_cross_platform_gui.py; Content coverage: test_web_dashboard.py; Path coverage: test_multi_device_synchronization.py; Path coverage: test_native_backend_integration.py; Path coverage: test_android_device_manager.py; Path coverage: test_virtual_environment_integration.py; Path coverage: test_android_connection_detection.py; Path coverage: test_shimmer_integration.py; Content coverage: test_socketio_load.py; Content coverage: test_android_load_stress.py; Content coverage: deployment_automation.py; Content coverage: phase4_validator.py; Content coverage: security_scanner.py; Path coverage: performance_monitor_integration.py; Strong coverage: system_test.py; Content coverage: test_shimmer_implementation.py; Path coverage: integration_tests.py; Path coverage: test_pc_server_integration.py; Strong coverage: measurement_collection.py; Path coverage: pc_tests.py; Path coverage: android_tests.py; Path coverage: test_thesis_claims_validation.py; Strong coverage: requirements_coverage_analysis.py; Path coverage: test_framework.py; Path coverage: test_categories.py; Path coverage: test_results.py; Path coverage: performance_monitor.py; Path coverage: quality_validator.py; Path coverage: test_architecture_enforcement.py"
+    },
     "FR3": {
       "id": "FR3",
-      "title": "Time Synchronisation Service",
+      "title": "T",
       "tested": true,
       "test_files": [
         "tests_unified/android_test_integration.py",
@@ -76,7 +177,7 @@
     },
     "FR4": {
       "id": "FR4",
-      "title": "Session Management",
+      "title": "S",
       "tested": true,
       "test_files": [
         "tests_unified/android_test_integration.py",
@@ -118,7 +219,7 @@
     },
     "FR5": {
       "id": "FR5",
-      "title": "Data Recording and Storage",
+      "title": "D",
       "tested": true,
       "test_files": [
         "tests_unified/android_test_integration.py",
@@ -160,7 +261,7 @@
     },
     "FR6": {
       "id": "FR6",
-      "title": "User Interface for Monitoring \\& Control",
+      "title": "U",
       "tested": true,
       "test_files": [
         "tests_unified/android_device_complete_tests.py",
@@ -224,7 +325,7 @@
     },
     "FR7": {
       "id": "FR7",
-      "title": "Device Synchronisation and Signals",
+      "title": "D",
       "tested": true,
       "test_files": [
         "tests_unified/test_android_device_complete.py",
@@ -287,7 +388,7 @@
     },
     "FR8": {
       "id": "FR8",
-      "title": "Fault Tolerance and Recovery",
+      "title": "F",
       "tested": true,
       "test_files": [
         "tests_unified/android_test_integration.py",
@@ -330,7 +431,7 @@
     },
     "FR9": {
       "id": "FR9",
-      "title": "Calibration Utilities",
+      "title": "C",
       "tested": true,
       "test_files": [
         "tests_unified/android_device_complete_tests.py",
@@ -374,7 +475,7 @@
     },
     "FR10": {
       "id": "FR10",
-      "title": "Data Transfer and Aggregation",
+      "title": "D",
       "tested": true,
       "test_files": [
         "tests_unified/android_test_integration.py",
@@ -401,9 +502,70 @@
     }
   },
   "non_functional_requirements": {
+    "NFR1": {
+      "id": "NFR1",
+      "title": "P",
+      "tested": true,
+      "test_files": [
+        "tests_unified/test_android_device_complete.py",
+        "tests_unified/android_device_complete_tests.py",
+        "tests_unified/performance/test_endurance_suite.py",
+        "tests_unified/performance/test_performance_verification.py",
+        "tests_unified/system/test_simplified_validation.py",
+        "tests_unified/e2e/test_android_complete.py",
+        "tests_unified/fixtures/android_test_utils.py",
+        "tests_unified/fixtures/gui_test_utils.py",
+        "tests_unified/browser/test_browser_compatibility.py",
+        "tests_unified/visual/test_android_gui_components.py",
+        "tests_unified/visual/test_pc_gui_complete.py",
+        "tests_unified/visual/test_android_gui_complete.py",
+        "tests_unified/visual/test_pc_gui_components.py",
+        "tests_unified/visual/test_cross_platform_gui.py",
+        "tests_unified/visual/test_android_visual.py",
+        "tests_unified/web/test_web_dashboard.py",
+        "tests_unified/migration/migrate_tests.py",
+        "tests_unified/runners/run_unified_tests.py",
+        "tests_unified/unit/test_framework_validation.py",
+        "tests_unified/integration/test_multi_device_synchronization.py",
+        "tests_unified/integration/test_native_backend_integration.py",
+        "tests_unified/hardware/test_thermal_camera.py",
+        "tests_unified/load/test_socketio_load.py",
+        "tests_unified/load/test_android_load_stress.py",
+        "tests_unified/performance/benchmarks/performance_optimization_tests.py",
+        "tests_unified/performance/benchmarks/performance_benchmark.py",
+        "tests_unified/performance/endurance/endurance_test_suite.py",
+        "tests_unified/performance/endurance/endurance_testing.py",
+        "tests_unified/performance/production/deployment_automation.py",
+        "tests_unified/performance/production/runtime_security_checker.py",
+        "tests_unified/performance/production/endurance_test_suite.py",
+        "tests_unified/performance/production/phase4_validator.py",
+        "tests_unified/performance/production/dependency_scanner.py",
+        "tests_unified/performance/production/hardware_acceleration.py",
+        "tests_unified/performance/production/security_scanner.py",
+        "tests_unified/performance/production/graceful_degradation.py",
+        "tests_unified/performance/production/device_diversity_testing.py",
+        "tests_unified/performance/production/device_capability_detector.py",
+        "tests_unified/performance/production/performance_monitor_integration.py",
+        "tests_unified/unit/python/test_device_connectivity.py",
+        "tests_unified/unit/python/test_memory_leak_detector.py",
+        "tests_unified/integration/device_coordination/integration_tests.py",
+        "tests_unified/integration/device_coordination/test_pc_server_integration.py",
+        "tests_unified/evaluation/data_collection/measurement_collection.py",
+        "tests_unified/evaluation/foundation/pc_tests.py",
+        "tests_unified/evaluation/foundation/android_tests.py",
+        "tests_unified/evaluation/research/test_thesis_claims_validation.py",
+        "tests_unified/evaluation/research/requirements_coverage_analysis.py",
+        "tests_unified/evaluation/framework/test_framework.py",
+        "tests_unified/evaluation/framework/test_categories.py",
+        "tests_unified/evaluation/framework/test_results.py",
+        "tests_unified/evaluation/metrics/performance_monitor.py",
+        "tests_unified/evaluation/metrics/quality_validator.py"
+      ],
+      "coverage_notes": "Content coverage: test_android_device_complete.py; Content coverage: android_device_complete_tests.py; Strong coverage: test_endurance_suite.py; Strong coverage: test_performance_verification.py; Content coverage: test_simplified_validation.py; Content coverage: test_android_complete.py; Content coverage: android_test_utils.py; Content coverage: gui_test_utils.py; Content coverage: test_browser_compatibility.py; Content coverage: test_android_gui_components.py; Content coverage: test_pc_gui_complete.py; Content coverage: test_android_gui_complete.py; Content coverage: test_pc_gui_components.py; Content coverage: test_cross_platform_gui.py; Content coverage: test_android_visual.py; Content coverage: test_web_dashboard.py; Content coverage: migrate_tests.py; Content coverage: run_unified_tests.py; Content coverage: test_framework_validation.py; Content coverage: test_multi_device_synchronization.py; Content coverage: test_native_backend_integration.py; Content coverage: test_thermal_camera.py; Content coverage: test_socketio_load.py; Content coverage: test_android_load_stress.py; Strong coverage: performance_optimization_tests.py; Strong coverage: performance_benchmark.py; Strong coverage: endurance_test_suite.py; Strong coverage: endurance_testing.py; Strong coverage: deployment_automation.py; Path coverage: runtime_security_checker.py; Strong coverage: endurance_test_suite.py; Strong coverage: phase4_validator.py; Path coverage: dependency_scanner.py; Strong coverage: hardware_acceleration.py; Path coverage: security_scanner.py; Strong coverage: graceful_degradation.py; Strong coverage: device_diversity_testing.py; Strong coverage: device_capability_detector.py; Strong coverage: performance_monitor_integration.py; Content coverage: test_device_connectivity.py; Content coverage: test_memory_leak_detector.py; Content coverage: integration_tests.py; Content coverage: test_pc_server_integration.py; Content coverage: measurement_collection.py; Content coverage: pc_tests.py; Content coverage: android_tests.py; Content coverage: test_thesis_claims_validation.py; Content coverage: requirements_coverage_analysis.py; Content coverage: test_framework.py; Content coverage: test_categories.py; Content coverage: test_results.py; Strong coverage: performance_monitor.py; Strong coverage: quality_validator.py"
+    },
     "NFR2": {
       "id": "NFR2",
-      "title": "Temporal Accuracy",
+      "title": "T",
       "tested": true,
       "test_files": [
         "tests_unified/android_test_integration.py",
@@ -441,7 +603,7 @@
     },
     "NFR3": {
       "id": "NFR3",
-      "title": "Reliability and Fault Tolerance",
+      "title": "R",
       "tested": true,
       "test_files": [
         "tests_unified/test_android_device_complete.py",
@@ -480,7 +642,7 @@
     },
     "NFR4": {
       "id": "NFR4",
-      "title": "Data Integrity and Validation",
+      "title": "D",
       "tested": true,
       "test_files": [
         "tests_unified/test_android_device_complete.py",
@@ -535,7 +697,7 @@
     },
     "NFR5": {
       "id": "NFR5",
-      "title": "Security",
+      "title": "S",
       "tested": true,
       "test_files": [
         "tests_unified/android_test_integration.py",
@@ -573,7 +735,7 @@
     },
     "NFR6": {
       "id": "NFR6",
-      "title": "Usability",
+      "title": "U",
       "tested": true,
       "test_files": [
         "tests_unified/system/test_new_features.py",
@@ -601,7 +763,7 @@
     },
     "NFR7": {
       "id": "NFR7",
-      "title": "Scalability",
+      "title": "S",
       "tested": true,
       "test_files": [
         "tests_unified/android_device_complete_tests.py",
@@ -652,7 +814,7 @@
     },
     "NFR8": {
       "id": "NFR8",
-      "title": "Maintainability and Modularity",
+      "title": "M",
       "tested": true,
       "test_files": [
         "tests_unified/android_test_integration.py",

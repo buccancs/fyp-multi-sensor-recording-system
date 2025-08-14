@@ -47,7 +47,8 @@ class RequirementsCoverageAnalyzer:
             content = f.read()
         
         # Extract FR requirements
-        fr_pattern = r'\\item\s+(FR\d+):\s+([^-]+)\s+--\s+([^\\]+)'
+        # Pattern matches both formats: "FR#: Title -- Description" and "FR#: Title Description"
+        fr_pattern = r'\\item\s+(FR\d+):\s+([^-\n]+?)(?:\s+--\s+)?(.*?)(?=\\item|\\end\{itemize\}|$)'
         fr_matches = re.findall(fr_pattern, content, re.MULTILINE | re.DOTALL)
         
         for match in fr_matches:
@@ -64,7 +65,8 @@ class RequirementsCoverageAnalyzer:
             )
         
         # Extract NFR requirements
-        nfr_pattern = r'\\item\s+(NFR\d+):\s+([^-]+)\s+--\s+([^\\]+)'
+        # Pattern matches both formats: "NFR#: Title -- Description" and "NFR#: Title Description"
+        nfr_pattern = r'\\item\s+(NFR\d+):\s+([^-\n]+?)(?:\s+--\s+)?(.*?)(?=\\item|\\end\{itemize\}|$)'
         nfr_matches = re.findall(nfr_pattern, content, re.MULTILINE | re.DOTALL)
         
         for match in nfr_matches:
