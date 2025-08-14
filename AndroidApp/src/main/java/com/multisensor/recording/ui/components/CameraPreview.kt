@@ -88,6 +88,8 @@ fun ThermalPreviewSurface(
 ) {
     val context = LocalContext.current
     val uiState by hiltViewModel<MainViewModel>().uiState.collectAsStateWithLifecycle()
+    val viewModel: MainViewModel = hiltViewModel()
+    val thermalStatus by viewModel.thermalStatus.collectAsStateWithLifecycle()
     var surfaceView by remember { mutableStateOf<SurfaceView?>(null) }
 
     // Notify parent when SurfaceView is ready
@@ -117,25 +119,84 @@ fun ThermalPreviewSurface(
                 .clip(RoundedCornerShape(12.dp))
         )
 
-        // Placeholder overlay when no thermal data
-        DeviceStatusOverlay(
-            deviceName = "Thermal",
-            icon = Icons.Default.Thermostat,
-            isConnected = uiState.isThermalConnected,
-            isInitializing = uiState.isConnecting,
-            detailText = when {
-                uiState.isThermalConnected -> "Thermal camera active"
-                uiState.isConnecting -> "Connecting to camera..."
-                else -> "Connect thermal camera"
-            },
-            modifier = Modifier.align(Alignment.Center)
-        )
+        // Enhanced thermal status overlay
+        if (!thermalStatus.isAvailable || !thermalStatus.isPreviewActive) {
+            DeviceStatusOverlay(
+                deviceName = "Thermal",
+                icon = Icons.Default.Thermostat,
+                isConnected = thermalStatus.isAvailable,
+                isInitializing = uiState.isConnecting,
+                detailText = when {
+                    thermalStatus.isAvailable && !thermalStatus.isPreviewActive -> "Camera connected - starting preview..."
+                    thermalStatus.isAvailable -> "Thermal camera active"
+                    uiState.isConnecting -> "Connecting to camera..."
+                    else -> "Connect thermal camera"
+                },
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
 
-        // Recording indicator overlay
-        if (isRecording) {
+        // Thermal frame info overlay (top-left)
+        if (thermalStatus.isAvailable && thermalStatus.isPreviewActive) {
+            Card(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        text = "${thermalStatus.width}×${thermalStatus.height}",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        text = "${thermalStatus.frameRate} fps",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    if (thermalStatus.frameCount > 0) {
+                        Text(
+                            text = "Frame: ${thermalStatus.frameCount}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        }
+
+        // Recording indicator overlay (top-right)
+        if (isRecording && thermalStatus.isRecording) {
             RecordingIndicator(
                 modifier = Modifier.align(Alignment.TopEnd)
             )
+        }
+        
+        // Device name overlay (bottom-left)
+        if (thermalStatus.isAvailable) {
+            Card(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Text(
+                    text = thermalStatus.deviceName,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Medium
+                )
+            }
         }
     }
 }

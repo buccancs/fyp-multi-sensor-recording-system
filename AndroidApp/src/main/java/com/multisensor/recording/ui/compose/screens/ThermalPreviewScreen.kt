@@ -17,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.components.ColorPaletteSelector
 import com.multisensor.recording.ui.components.ThermalPreview
+import com.multisensor.recording.ui.components.ThermalControlsPanel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThermalPreviewScreen(
@@ -24,6 +25,7 @@ fun ThermalPreviewScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val thermalStatus by viewModel.thermalStatus.collectAsStateWithLifecycle()
     val context = LocalContext.current
     Scaffold(
         topBar = {
@@ -65,10 +67,24 @@ fun ThermalPreviewScreen(
                     .fillMaxWidth()
                     .weight(1f)
             )
+            
+            // Enhanced thermal controls panel
+            ThermalControlsPanel(
+                status = thermalStatus,
+                temperatureRange = uiState.temperatureRange,
+                colorPalette = uiState.colorPalette,
+                onCaptureCalibration = { viewModel.captureThermalCalibrationImage() },
+                onStartCalibration = { viewModel.startThermalCalibration() },
+                onTemperatureRangeChange = { /* TODO: Implement temperature range change */ },
+                onColorPaletteChange = { /* TODO: Implement color palette change */ }
+            )
+            
+            // Legacy color palette selector (for compatibility)
             ColorPaletteSelector(
                 currentPalette = uiState.colorPalette,
                 onPaletteSelect = {  }
             )
+            
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)

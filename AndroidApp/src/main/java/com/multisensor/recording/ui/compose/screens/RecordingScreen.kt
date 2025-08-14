@@ -1,6 +1,8 @@
 package com.multisensor.recording.ui.compose.screens
 import android.view.SurfaceView
 import android.view.TextureView
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -33,6 +35,8 @@ import com.multisensor.recording.ui.components.CameraPreview
 import com.multisensor.recording.ui.components.ColorPaletteSelector
 import com.multisensor.recording.ui.components.ThermalPreview
 import com.multisensor.recording.ui.components.ThermalPreviewSurface
+import com.multisensor.recording.ui.components.ThermalCameraStatusCard
+import com.multisensor.recording.ui.components.ThermalControlsPanel
 import com.multisensor.recording.ui.components.SessionStatusCard
 import com.multisensor.recording.ui.theme.ConnectionGreen
 import com.multisensor.recording.ui.theme.DisconnectedRed
@@ -45,6 +49,7 @@ fun RecordingScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val thermalStatus by viewModel.thermalStatus.collectAsStateWithLifecycle()
     val context = LocalContext.current
     
     // Track preview components readiness
@@ -54,6 +59,12 @@ fun RecordingScreen(
     
     // Camera switching state - true for thermal/IR, false for RGB
     var showThermalCamera by remember { mutableStateOf(false) }
+    
+    // Show thermal camera status panel state
+    var showThermalStatus by remember { mutableStateOf(false) }
+    
+    // Show thermal controls panel state  
+    var showThermalControls by remember { mutableStateOf(false) }
 
     // Initialize system when both preview components are ready
     LaunchedEffect(cameraTextureView, thermalSurfaceView) {
@@ -117,11 +128,38 @@ fun RecordingScreen(
                     color = if (uiState.isRecording) RecordingActive else MaterialTheme.colorScheme.onSurface
                 )
                 
-                // Compact camera switch
+                // Camera controls
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
+                    // Thermal controls button
+                    IconButton(
+                        onClick = { showThermalControls = !showThermalControls },
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Thermal Controls",
+                            modifier = Modifier.size(16.dp),
+                            tint = if (showThermalControls) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    
+                    // Thermal status button
+                    IconButton(
+                        onClick = { showThermalStatus = !showThermalStatus },
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Thermostat,
+                            contentDescription = "Thermal Status",
+                            modifier = Modifier.size(16.dp),
+                            tint = if (thermalStatus.isAvailable) ConnectionGreen else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    
+                    // Camera switch
                     Text(
                         text = "RGB",
                         style = MaterialTheme.typography.labelSmall,
@@ -140,6 +178,37 @@ fun RecordingScreen(
                                else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+            }
+
+            // Thermal Camera Controls Panel (collapsible)
+            AnimatedVisibility(
+                visible = showThermalControls,
+                enter = slideInVertically() + expandVertically() + fadeIn(),
+                exit = slideOutVertically() + shrinkVertically() + fadeOut()
+            ) {
+                ThermalControlsPanel(
+                    status = thermalStatus,
+                    temperatureRange = uiState.temperatureRange,
+                    colorPalette = uiState.colorPalette,
+                    onCaptureCalibration = { viewModel.captureThermalCalibrationImage() },
+                    onStartCalibration = { viewModel.startThermalCalibration() },
+                    onTemperatureRangeChange = { /* TODO: Implement temperature range change */ },
+                    onColorPaletteChange = { /* TODO: Implement color palette change */ },
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
+
+            // Thermal Camera Status Card (collapsible)
+            AnimatedVisibility(
+                visible = showThermalStatus,
+                enter = slideInVertically() + expandVertically() + fadeIn(),
+                exit = slideOutVertically() + shrinkVertically() + fadeOut()
+            ) {
+                ThermalCameraStatusCard(
+                    status = thermalStatus,
+                    onCaptureCalibration = { viewModel.captureThermalCalibrationImage() },
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
             }
 
             // Camera Preview - Always create both views for initialization, but only display one
