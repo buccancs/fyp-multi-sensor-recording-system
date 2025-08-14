@@ -38,13 +38,43 @@ The main application window consists of a tabbed interface with seven specialize
 - **Pattern Detection**: Chessboard and other calibration pattern support
 - **Calibration Results**: Display calibration parameters and quality metrics
 
-### 6. Security Tab (`ui_tab_05_security.png`)
+
+### 6. Camera Preview Tab
+
+The Camera Preview tab provides real-time USB webcam monitoring capabilities for research and recording sessions.
+
+**Key Features:**
+- **USB Camera Detection**: Automatically detects connected USB cameras (indices 0-4)
+- **Live Video Preview**: Real-time video stream display at 640x480 resolution
+- **Camera Selection**: Dropdown to select from available cameras
+- **Preview Controls**: Start/Stop buttons with proper camera resource management
+- **Status Monitoring**: Real-time display of camera status, FPS, and resolution
+- **Error Handling**: Graceful handling of camera disconnections and errors
+
+**Controls:**
+- *Select Camera*: Choose from detected USB cameras
+- *Refresh Cameras*: Re-scan for newly connected cameras
+- *Start Preview*: Begin live video preview from selected camera
+- *Stop Preview*: Stop video preview and release camera resources
+
+**Technical Implementation:**
+- Uses OpenCV for camera capture and frame processing
+- PyQt threading for smooth video display without blocking UI
+- Automatic frame rate control and resolution scaling
+- Integration with existing session management system
+
+This feature is particularly useful for:
+- Monitoring participant positioning during GSR recording sessions
+- Verifying camera angles before starting multi-sensor recordings
+- Real-time feedback for researchers conducting contactless measurements
+
+### 7. Security Tab (`ui_tab_05_security.png`)
 - **TLS Configuration**: Manage encryption certificates and security settings
 - **Authentication**: Token-based device authentication management
 - **Security Status**: Monitor security state and certificate validity
 - **Access Control**: Device permission and access management
 
-### 7. Settings Tab (`ui_tab_06_settings.png`)
+### 8. Settings Tab (`ui_tab_06_settings.png`)
 - **System Configuration**: General application settings and preferences
 - **Network Settings**: Server ports, protocols, and connection parameters
 - **Logging Configuration**: Debug levels and log file management

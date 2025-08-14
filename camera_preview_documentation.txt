@@ -1,0 +1,42 @@
+
+Camera Preview Tab - New Feature Added
+=====================================
+
+The Camera Preview tab provides real-time USB webcam monitoring functionality:
+
+┌─ Camera Controls ─────────────────────────────────────────────────┐
+│ USB webcam preview allows real-time monitoring of connected       │
+│ cameras. This feature requires OpenCV and a connected USB camera. │
+│                                                                   │
+│ Select Camera: [Camera 0 (640x480)     ▼] [Refresh Cameras]     │
+│                                                                   │
+│ [Start Preview]  [Stop Preview]                                  │
+└───────────────────────────────────────────────────────────────────┘
+
+┌─ Camera Preview ──────────────────────────────────────────────────┐
+│                                                                   │
+│    ┌─────────────────────────────────────────────────────────┐   │
+│    │                                                         │   │
+│    │              Live Camera Feed                           │   │
+│    │            640 x 480 resolution                        │   │
+│    │                                                         │   │
+│    │     [Real-time webcam video stream displays here]      │   │
+│    │                                                         │   │
+│    │                                                         │   │
+│    └─────────────────────────────────────────────────────────┘   │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+
+┌─ Camera Status ───────────────────────────────────────────────────┐
+│ [10:45:23] Camera 0 preview started                              │
+│ [10:45:24] Receiving frames at 30 FPS                           │
+│ [10:45:25] Resolution: 640x480                                  │
+└───────────────────────────────────────────────────────────────────┘
+
+Features:
+- Automatic USB camera detection
+- Real-time video preview at 30 FPS
+- Support for multiple camera indices (0-4)
+- Resolution display and status monitoring
+- Start/Stop controls with proper cleanup
+- Integration with existing multi-sensor recording system

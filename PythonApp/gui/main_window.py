@@ -7,6 +7,7 @@ Provides essential controls for device management and recording.
 """
 
 import logging
+import time
 from typing import Optional
 
 try:
@@ -14,20 +15,20 @@ try:
         QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
         QPushButton, QLabel, QTextEdit, QGroupBox,
         QLineEdit, QSpinBox, QCheckBox, QMessageBox,
-        QStatusBar, QTabWidget
+        QStatusBar, QTabWidget, QComboBox, QFrame
     )
     from PyQt6.QtCore import Qt, QTimer, pyqtSignal
-    from PyQt6.QtGui import QFont
+    from PyQt6.QtGui import QFont, QPixmap, QImage
     PYQT_VERSION = 6
 except ImportError:
     from PyQt5.QtWidgets import (
         QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
         QPushButton, QLabel, QTextEdit, QGroupBox,
         QLineEdit, QSpinBox, QCheckBox, QMessageBox,
-        QStatusBar, QTabWidget
+        QStatusBar, QTabWidget, QComboBox, QFrame
     )
     from PyQt5.QtCore import Qt, QTimer, pyqtSignal
-    from PyQt5.QtGui import QFont
+    from PyQt5.QtGui import QFont, QPixmap, QImage
     PYQT_VERSION = 5
 
 from PythonApp.network import JsonSocketServer
@@ -37,6 +38,7 @@ from PythonApp.sync import TimeServer, SessionSynchronizer, SyncSignalBroadcaste
 from PythonApp.calibration import CalibrationManager, CalibrationPattern
 from PythonApp.transfer import TransferManager
 from PythonApp.security import SecurityManager
+from PythonApp.camera import WebcamManager, CameraCapture, OPENCV_AVAILABLE
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +57,8 @@ class MainWindow(QMainWindow):
         self.calibration_manager: Optional[CalibrationManager] = None
         self.transfer_manager: Optional[TransferManager] = None
         self.security_manager: Optional[SecurityManager] = None
+        self.webcam_manager: Optional[WebcamManager] = None
+        self.active_camera_capture: Optional[CameraCapture] = None
         
         self.setWindowTitle("Multi-Sensor Recording System - Enhanced")
         self.setMinimumSize(1000, 700)
@@ -105,6 +109,9 @@ class MainWindow(QMainWindow):
             self.session_manager.set_session_synchronizer(self.session_synchronizer)
             self.session_manager.set_transfer_manager(self.transfer_manager)
             
+            # Initialize webcam manager
+            self.webcam_manager = WebcamManager()
+            
             # Add a default simulated sensor
             self.sensor_manager.add_sensor("simulated_gsr_01")
             
@@ -131,6 +138,7 @@ class MainWindow(QMainWindow):
         self._create_sensors_tab(tab_widget)
         self._create_sync_tab(tab_widget)
         self._create_calibration_tab(tab_widget)
+        self._create_camera_preview_tab(tab_widget)
         self._create_security_tab(tab_widget)
         self._create_settings_tab(tab_widget)
         
@@ -404,6 +412,86 @@ class MainWindow(QMainWindow):
         layout.addWidget(status_group)
         
         tab_widget.addTab(calibration_widget, "Calibration")
+    
+    def _create_camera_preview_tab(self, tab_widget: QTabWidget):
+        """Create the camera preview tab."""
+        camera_widget = QWidget()
+        layout = QVBoxLayout(camera_widget)
+        
+        # Camera controls group
+        controls_group = QGroupBox("Camera Controls")
+        controls_layout = QVBoxLayout(controls_group)
+        
+        # Camera info
+        info_text = QLabel("USB webcam preview allows real-time monitoring of connected cameras.\n"
+                          "This feature requires OpenCV and a connected USB camera.")
+        info_text.setWordWrap(True)
+        controls_layout.addWidget(info_text)
+        
+        # Camera selection
+        camera_selection_layout = QHBoxLayout()
+        camera_selection_layout.addWidget(QLabel("Select Camera:"))
+        self.camera_combo = QComboBox()
+        camera_selection_layout.addWidget(self.camera_combo)
+        
+        self.refresh_cameras_btn = QPushButton("Refresh Cameras")
+        self.refresh_cameras_btn.clicked.connect(self._refresh_cameras)
+        camera_selection_layout.addWidget(self.refresh_cameras_btn)
+        
+        controls_layout.addLayout(camera_selection_layout)
+        
+        # Preview controls
+        preview_controls = QHBoxLayout()
+        
+        self.start_preview_btn = QPushButton("Start Preview")
+        self.start_preview_btn.clicked.connect(self._start_camera_preview)
+        preview_controls.addWidget(self.start_preview_btn)
+        
+        self.stop_preview_btn = QPushButton("Stop Preview")
+        self.stop_preview_btn.clicked.connect(self._stop_camera_preview)
+        self.stop_preview_btn.setEnabled(False)
+        preview_controls.addWidget(self.stop_preview_btn)
+        
+        controls_layout.addLayout(preview_controls)
+        layout.addWidget(controls_group)
+        
+        # Camera preview display
+        preview_group = QGroupBox("Camera Preview")
+        preview_layout = QVBoxLayout(preview_group)
+        
+        # Create preview label with fixed size
+        self.camera_preview_label = QLabel()
+        self.camera_preview_label.setMinimumSize(640, 480)
+        self.camera_preview_label.setStyleSheet("QLabel { background-color: black; border: 1px solid gray; }")
+        self.camera_preview_label.setAlignment(Qt.AlignCenter)
+        self.camera_preview_label.setText("No camera preview\nClick 'Start Preview' to begin")
+        self.camera_preview_label.setWordWrap(True)
+        
+        # Add preview label to a frame for better appearance
+        preview_frame = QFrame()
+        preview_frame.setFrameStyle(QFrame.Box)
+        preview_frame_layout = QVBoxLayout(preview_frame)
+        preview_frame_layout.addWidget(self.camera_preview_label)
+        
+        preview_layout.addWidget(preview_frame)
+        layout.addWidget(preview_group)
+        
+        # Camera status
+        status_group = QGroupBox("Camera Status")
+        status_layout = QVBoxLayout(status_group)
+        
+        self.camera_status_display = QTextEdit()
+        self.camera_status_display.setReadOnly(True)
+        self.camera_status_display.setMaximumHeight(150)
+        self.camera_status_display.setText("Camera preview not started")
+        status_layout.addWidget(self.camera_status_display)
+        
+        layout.addWidget(status_group)
+        
+        tab_widget.addTab(camera_widget, "Camera Preview")
+        
+        # Initialize camera list
+        self._refresh_cameras()
     
     def _create_security_tab(self, tab_widget: QTabWidget):
         """Create the security tab."""
@@ -862,6 +950,157 @@ class MainWindow(QMainWindow):
         cursor.movePosition(cursor.MoveOperation.End if PYQT_VERSION == 6 else cursor.End)
         self.log_display.setTextCursor(cursor)
     
+    def _refresh_cameras(self):
+        """Refresh the list of available cameras."""
+        if not self.webcam_manager:
+            return
+            
+        try:
+            cameras = self.webcam_manager.detect_cameras()
+            
+            # Clear and repopulate combo box
+            self.camera_combo.clear()
+            
+            if not cameras:
+                self.camera_combo.addItem("No cameras detected")
+                self.start_preview_btn.setEnabled(False)
+                self._update_camera_status("No USB cameras detected")
+            else:
+                for camera in cameras:
+                    self.camera_combo.addItem(f"Camera {camera.index} ({camera.width}x{camera.height})")
+                self.start_preview_btn.setEnabled(True)
+                self._update_camera_status(f"Found {len(cameras)} camera(s)")
+                
+        except Exception as e:
+            logger.error(f"Error refreshing cameras: {e}")
+            self._update_camera_status(f"Error detecting cameras: {e}")
+    
+    def _start_camera_preview(self):
+        """Start the camera preview."""
+        if not OPENCV_AVAILABLE:
+            QMessageBox.warning(self, "OpenCV Required", "OpenCV is required for camera preview functionality.")
+            return
+            
+        if not self.webcam_manager:
+            return
+            
+        try:
+            # Get selected camera index
+            selected_text = self.camera_combo.currentText()
+            if "No cameras" in selected_text:
+                QMessageBox.warning(self, "No Camera", "No camera selected or available.")
+                return
+                
+            camera_index = int(selected_text.split()[1])  # Extract index from "Camera X (...)"
+            
+            # Stop any existing preview
+            self._stop_camera_preview()
+            
+            # Start new preview
+            self.active_camera_capture = self.webcam_manager.start_camera_preview(camera_index)
+            
+            if self.active_camera_capture:
+                # Connect signals for frame updates
+                self.active_camera_capture.frame_ready.connect(self._update_camera_frame)
+                self.active_camera_capture.error_occurred.connect(self._handle_camera_error)
+                self.active_camera_capture.camera_disconnected.connect(self._handle_camera_disconnect)
+                
+                # Update UI
+                self.start_preview_btn.setEnabled(False)
+                self.stop_preview_btn.setEnabled(True)
+                self.camera_combo.setEnabled(False)
+                self.refresh_cameras_btn.setEnabled(False)
+                
+                self._update_camera_status(f"Camera {camera_index} preview started")
+                logger.info(f"Camera {camera_index} preview started")
+            else:
+                self._update_camera_status("Failed to start camera preview")
+                
+        except Exception as e:
+            logger.error(f"Error starting camera preview: {e}")
+            self._update_camera_status(f"Error starting preview: {e}")
+            QMessageBox.critical(self, "Camera Error", f"Failed to start camera preview: {e}")
+    
+    def _stop_camera_preview(self):
+        """Stop the camera preview."""
+        if self.active_camera_capture:
+            try:
+                self.active_camera_capture.stop_capture()
+                self.active_camera_capture = None
+                
+                # Update UI
+                self.start_preview_btn.setEnabled(True)
+                self.stop_preview_btn.setEnabled(False)
+                self.camera_combo.setEnabled(True)
+                self.refresh_cameras_btn.setEnabled(True)
+                
+                # Clear preview
+                self.camera_preview_label.clear()
+                self.camera_preview_label.setText("Camera preview stopped\nClick 'Start Preview' to begin")
+                
+                self._update_camera_status("Camera preview stopped")
+                logger.info("Camera preview stopped")
+                
+            except Exception as e:
+                logger.error(f"Error stopping camera preview: {e}")
+                self._update_camera_status(f"Error stopping preview: {e}")
+        
+        if self.webcam_manager:
+            self.webcam_manager.stop_camera_preview()
+    
+    def _update_camera_frame(self, frame):
+        """Update the camera preview with a new frame."""
+        try:
+            if frame is None:
+                return
+                
+            # Convert frame to RGB (OpenCV uses BGR)
+            import cv2
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
+            # Get frame dimensions
+            height, width, channel = rgb_frame.shape
+            bytes_per_line = 3 * width
+            
+            # Create QImage
+            q_image = QImage(rgb_frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+            
+            # Scale image to fit preview label while maintaining aspect ratio
+            preview_size = self.camera_preview_label.size()
+            scaled_pixmap = QPixmap.fromImage(q_image).scaled(
+                preview_size, Qt.KeepAspectRatio, Qt.SmoothTransformation
+            )
+            
+            # Set the pixmap to the label
+            self.camera_preview_label.setPixmap(scaled_pixmap)
+            
+        except Exception as e:
+            logger.error(f"Error updating camera frame: {e}")
+            self._update_camera_status(f"Frame update error: {e}")
+    
+    def _handle_camera_error(self, error_message):
+        """Handle camera error."""
+        logger.error(f"Camera error: {error_message}")
+        self._update_camera_status(f"Camera error: {error_message}")
+        self._stop_camera_preview()
+    
+    def _handle_camera_disconnect(self):
+        """Handle camera disconnection."""
+        logger.warning("Camera disconnected")
+        self._update_camera_status("Camera disconnected")
+        self._stop_camera_preview()
+        QMessageBox.warning(self, "Camera Disconnected", "The camera has been disconnected.")
+    
+    def _update_camera_status(self, message):
+        """Update the camera status display."""
+        timestamp = time.strftime("%H:%M:%S")
+        self.camera_status_display.append(f"[{timestamp}] {message}")
+        
+        # Auto-scroll to bottom
+        cursor = self.camera_status_display.textCursor()
+        cursor.movePosition(cursor.MoveOperation.End if PYQT_VERSION == 6 else cursor.End)
+        self.camera_status_display.setTextCursor(cursor)
+    
     def closeEvent(self, event):
         """Handle application close."""
         try:
@@ -888,6 +1127,9 @@ class MainWindow(QMainWindow):
             # Stop all components
             if self.sensor_manager:
                 self.sensor_manager.cleanup()
+            
+            # Stop camera preview
+            self._stop_camera_preview()
             
             if self.time_server and self.time_server.running:
                 self.time_server.stop_server()
