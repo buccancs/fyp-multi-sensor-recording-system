@@ -15,7 +15,8 @@ import org.mockito.kotlin.*
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.inject.Inject
-import kotlin.test.*
+import org.junit.Assert.*
+
 
 /**
  * Comprehensive test suite for DoubleRange

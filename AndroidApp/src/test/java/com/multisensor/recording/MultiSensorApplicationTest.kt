@@ -16,9 +16,10 @@ import org.mockito.kotlin.*
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import javax.inject.Inject
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import org.junit.Assert.*
+
+
+
 
 /**
  * Comprehensive test suite for MultiSensorApplication
