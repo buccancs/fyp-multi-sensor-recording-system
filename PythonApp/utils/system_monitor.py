@@ -7,7 +7,7 @@ while using the unified system monitoring from shared_protocols.
 
 import time
 
-from ..shared_protocols.system_monitoring import (
+from shared_protocols.system_monitoring import (
     get_system_monitor, 
     start_system_monitoring, 
     stop_system_monitoring,
@@ -82,22 +82,22 @@ class SystemMonitor:
         return metrics.cpu_percent if metrics else 0.0
 
 
-# Backwards compatibility
-def create_system_monitor():
-    """Create a system monitor instance."""
-    return SystemMonitor()
+    # Backwards compatibility
+    def create_system_monitor():
+        """Create a system monitor instance."""
+        return SystemMonitor()
 
 
-# Global instance for backwards compatibility  
-_global_simple_monitor = None
+    # Global instance for backwards compatibility  
+    _global_simple_monitor = None
 
 
-def get_simple_monitor():
-    """Get the simplified monitor instance."""
-    global _global_simple_monitor
-    if _global_simple_monitor is None:
-        _global_simple_monitor = SystemMonitor()
-    return _global_simple_monitor
+    def get_simple_monitor():
+        """Get the simplified monitor instance."""
+        global _global_simple_monitor
+        if _global_simple_monitor is None:
+            _global_simple_monitor = SystemMonitor()
+        return _global_simple_monitor
 
     def get_cpu_usage(self) -> Dict[str, Any]:
         try:
@@ -373,7 +373,9 @@ def get_simple_monitor():
         }
         self._last_update = current_time
         return status
+
 _system_monitor = None
+
 def get_system_monitor() -> SystemMonitor:
     global _system_monitor
     if _system_monitor is None:
