@@ -1,0 +1,77 @@
+This is BibTeX, Version 0.99d (TeX Live 2023/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: abbrvnat.bst
+Database file #1: references.bib
+Warning--entry type for "ref2" isn't style-file defined
+--line 14 of file references.bib
+Warning--entry type for "ref6" isn't style-file defined
+--line 54 of file references.bib
+Warning--entry type for "ref8" isn't style-file defined
+--line 73 of file references.bib
+Warning--entry type for "ref9" isn't style-file defined
+--line 81 of file references.bib
+Warning--entry type for "ref13" isn't style-file defined
+--line 116 of file references.bib
+Warning--entry type for "ref14" isn't style-file defined
+--line 124 of file references.bib
+Warning--entry type for "ref15" isn't style-file defined
+--line 133 of file references.bib
+Warning--entry type for "ref16" isn't style-file defined
+--line 142 of file references.bib
+Warning--entry type for "ref17" isn't style-file defined
+--line 151 of file references.bib
+Warning--entry type for "ref18" isn't style-file defined
+--line 159 of file references.bib
+Warning--entry type for "ref19" isn't style-file defined
+--line 167 of file references.bib
+Warning--entry type for "ref20" isn't style-file defined
+--line 175 of file references.bib
+Warning--entry type for "ref22" isn't style-file defined
+--line 193 of file references.bib
+Warning--entry type for "ref23" isn't style-file defined
+--line 201 of file references.bib
+Warning--entry type for "ref24" isn't style-file defined
+--line 209 of file references.bib
+You've used 24 entries,
+            2773 wiz_defined-function locations,
+            718 strings with 7397 characters,
+and the built_in function-call counts, 8000 in all, are:
+= -- 708
+> -- 329
+< -- 21
++ -- 123
+- -- 99
+* -- 495
+:= -- 1261
+add.period$ -- 84
+call.type$ -- 24
+change.case$ -- 102
+chr.to.int$ -- 24
+cite$ -- 48
+duplicate$ -- 402
+empty$ -- 775
+format.name$ -- 123
+if$ -- 1684
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 11
+newline$ -- 140
+num.names$ -- 96
+pop$ -- 262
+preamble$ -- 1
+purify$ -- 81
+quote$ -- 0
+skip$ -- 331
+stack$ -- 0
+substring$ -- 98
+swap$ -- 24
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 249
+warning$ -- 0
+while$ -- 76
+width$ -- 0
+write$ -- 326
+(There were 15 warnings)

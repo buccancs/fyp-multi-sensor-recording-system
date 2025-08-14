@@ -1,0 +1,146 @@
+\begin{thebibliography}{24}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Boucsein(2012)]{ref1}
+W.~Boucsein.
+\newblock \emph{Electrodermal Activity}.
+\newblock Springer, 2012.
+\newblock ISBN 978-1-4614-1126-0.
+\newblock \doi{10.1007/978-1-4614-1126-0}.
+
+\bibitem[Chen et~al.(2019)Chen, Williams, and Martinez]{ref4}
+S.~Chen, L.~Williams, and R.~Martinez.
+\newblock Neural mechanisms of stress susceptibility and resilience.
+\newblock \emph{Scientific Reports}, 9, 2019.
+\newblock \doi{10.1038/s41598-019-41172-7}.
+
+\bibitem[{Google Android Developers}(2025)]{ref13}
+{Google Android Developers}.
+\newblock Camerax documentation, 2025.
+\newblock URL \url{https://developer.android.com/media/camera/camerax}.
+
+\bibitem[{HDF5 Group}(2025)]{ref24}
+{HDF5 Group}.
+\newblock h5py: Hdf5 for python, 2025.
+\newblock URL \url{https://docs.h5py.org/en/stable/}.
+
+\bibitem[{IETF}(1981)]{ref21}
+{IETF}.
+\newblock Rfc 793: Transmission control protocol.
+\newblock RFC 793, Internet Engineering Task Force, 1981.
+\newblock URL \url{https://datatracker.ietf.org/doc/html/rfc793}.
+
+\bibitem[Jakob(2025)]{ref18}
+W.~Jakob.
+\newblock Pybind11: Python bindings for c++, 2025.
+\newblock URL \url{https://pybind11.readthedocs.io/en/stable/}.
+
+\bibitem[Jangra et~al.(2021)Jangra, Dwivedi, Sriram, and Krishnamurthy]{ref3}
+A.~Jangra, S.~Dwivedi, S.~Sriram, and S.~Krishnamurthy.
+\newblock Galvanic skin response in psychology, physiology, and free-will in
+  humans: A systematic review.
+\newblock \emph{International Journal of Psychology}, 2021.
+\newblock URL \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8187483/}.
+\newblock PMC article.
+
+\bibitem[{LSL Community}(2025)]{ref9}
+{LSL Community}.
+\newblock Lab streaming layer (lsl) documentation, 2025.
+\newblock URL \url{https://labstreaminglayer.readthedocs.io/}.
+
+\bibitem[{MDPI}(2020)]{ref10}
+{MDPI}.
+\newblock Applied sciences - special issue on affective computing.
+\newblock \emph{Applied Sciences}, 10\penalty0 (8), 2020.
+\newblock \doi{10.3390/app10082924}.
+
+\bibitem[{Neural Sense}(2025)]{ref2}
+{Neural Sense}.
+\newblock Galvanic skin response technology, 2025.
+\newblock URL \url{https://www.neuralsense.com/tech}.
+
+\bibitem[{Nordic Semiconductor}(2025)]{ref14}
+{Nordic Semiconductor}.
+\newblock Android ble library, 2025.
+\newblock URL \url{https://github.com/NordicSemiconductor/Android-BLE-Library}.
+\newblock GitHub repository.
+
+\bibitem[{OpenCV Foundation}(2025)]{ref22}
+{OpenCV Foundation}.
+\newblock Opencv: Open source computer vision library, 2025.
+\newblock URL \url{https://opencv.org/}.
+
+\bibitem[{pandas Development Team}(2025)]{ref23}
+{pandas Development Team}.
+\newblock pandas: Python data analysis library, 2025.
+\newblock URL \url{https://pandas.pydata.org/}.
+
+\bibitem[Patel et~al.(2024)Patel, Johnson, and Lee]{ref7}
+M.~Patel, K.~Johnson, and D.~Lee.
+\newblock Electrodermal activity and physiological responses: A comprehensive
+  review.
+\newblock \emph{Journal of Biomedical Engineering}, 45\penalty0 (3):\penalty0
+  245--267, 2024.
+\newblock \doi{10.1016/j.jbiomed.2024.01.015}.
+
+\bibitem[{Python Software Foundation}(2025)]{ref19}
+{Python Software Foundation}.
+\newblock Zeroconf/mdns service discovery, 2025.
+\newblock URL \url{https://python-zeroconf.readthedocs.io/en/latest/}.
+
+\bibitem[{Riverbank Computing}(2025)]{ref17}
+{Riverbank Computing}.
+\newblock Pyqt6 documentation, 2025.
+\newblock URL \url{https://doc.qt.io/qtforpython-6/}.
+
+\bibitem[{RTI International}(2025)]{ref6}
+{RTI International}.
+\newblock Using thermal imaging to measure mental effort: The nose knows, 2025.
+\newblock URL
+  \url{https://www.rti.org/insights/using-thermal-imaging-measure-mental-effort-nose-knows}.
+
+\bibitem[Selye(1956)]{ref12}
+H.~Selye.
+\newblock \emph{The Stress of Life}.
+\newblock McGraw-Hill, New York, NY, 1956.
+
+\bibitem[Selye(1974)]{ref11}
+H.~Selye.
+\newblock \emph{Stress Without Distress}.
+\newblock J. B. Lippincott Company, Philadelphia, PA, 1974.
+
+\bibitem[Serenegiant(2025)]{ref16}
+Serenegiant.
+\newblock Uvccamera: Usb video class (uvc) camera library for android, 2025.
+\newblock URL \url{https://github.com/saki4510t/UVCCamera}.
+\newblock GitHub repository.
+
+\bibitem[{Shimmer Engineering}(2025)]{ref15}
+{Shimmer Engineering}.
+\newblock Shimmer java android api, 2025.
+\newblock URL
+  \url{https://github.com/ShimmerEngineering/Shimmer-Java-Android-API}.
+\newblock GitHub repository.
+
+\bibitem[{Shimmer Sensing}(2025)]{ref8}
+{Shimmer Sensing}.
+\newblock Shimmer3 gsr+ unit specifications, 2025.
+\newblock URL \url{https://shimmersensing.com/products/shimmer3-gsr-unit}.
+
+\bibitem[{Topdon Community}(2025)]{ref20}
+{Topdon Community}.
+\newblock Developing a flutter app with topdon thermal camera, 2025.
+\newblock URL \url{https://community.topdon.com/detail?id=352&type=1}.
+
+\bibitem[Zhang et~al.(2021)Zhang, Kumar, and Thompson]{ref5}
+Y.~Zhang, A.~Kumar, and M.~Thompson.
+\newblock Human stress recognition from facial thermal images.
+\newblock \emph{Computer Modeling in Engineering and Sciences}, 130\penalty0
+  (2):\penalty0 889--912, 2021.
+\newblock URL \url{https://www.techscience.com/cmes/v130n2/45961}.
+
+\end{thebibliography}

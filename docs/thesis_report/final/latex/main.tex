@@ -1,27 +1,45 @@
 \documentclass[11pt]{report}
 
-% Packages
-\usepackage[T1]{fontenc}
+% Packages (reconstructed from error log, with biblatex removed to fix conflict)
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[british]{babel}
 \usepackage{amsmath}
-%\usepackage{amssymb}
-\usepackage{hyperref}
-\usepackage{siunitx} % provides \micro symbol via siunitx and robust units
-\usepackage[numbers]{natbib} % TODO: Map numeric citations to BibTeX keys
-\usepackage{verbatim} % for verbatim blocks in appendices
-%\usepackage{mermaid}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
 \usepackage{booktabs}
-% Mermaid diagrams rendering
-% Note: Requires Node.js and mermaid-cli or mermaid package support; compile with -shell-escape
-% If mermaid.sty is unavailable, skip package to avoid build failure.
-%\IfFileExists{mermaid.sty}{\usepackage{mermaid}}{}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{tocloft}
 \usepackage{textcomp}
+\usepackage[numbers]{natbib} % TODO: Map numeric citations to BibTeX keys
+\usepackage{pifont}
+% Note: biblatex removed to prevent conflict with natbib
+\usepackage{siunitx} % provides \micro symbol via siunitx and robust units
+\usepackage{verbatim} % for verbatim blocks in appendices
 
 % Hyperref setup
 \hypersetup{
-    colourlinks=true,
+    colorlinks=true,
     linkcolor=blue,
     citecolor=blue,
     urlcolor=blue
@@ -30,12 +48,12 @@
 \begin{document}
 
 % Title Page (placeholder)
-    \begin{titlepage}
-        \centring
-        {\LARGE Multi-Sensor Recording System Thesis\\[1ex]}
-        {\large Build Integration}\\[2ex]
-        {\large Generated on: \today}
-    \end{titlepage}
+\begin{titlepage}
+    \centering
+    {\LARGE Multi-Sensor Recording System Thesis\\[1ex]}
+    {\large Build Integration}\\[2ex]
+    {\large Generated on: \today}
+\end{titlepage}
 
     \tableofcontents
     \clearpage
