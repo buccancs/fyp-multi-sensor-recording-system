@@ -11,6 +11,36 @@ class Logger {
         
         // For unit testing - when true, logging is disabled
         var isTestMode = false
+
+        fun v(tag: String, message: String, throwable: Throwable? = null) {
+            if (!isTestMode) {
+                Log.v(tag, message, throwable)
+            }
+        }
+
+        fun d(tag: String, message: String, throwable: Throwable? = null) {
+            if (!isTestMode) {
+                Log.d(tag, message, throwable)
+            }
+        }
+
+        fun i(tag: String, message: String, throwable: Throwable? = null) {
+            if (!isTestMode) {
+                Log.i(tag, message, throwable)
+            }
+        }
+
+        fun w(tag: String, message: String, throwable: Throwable? = null) {
+            if (!isTestMode) {
+                Log.w(tag, message, throwable)
+            }
+        }
+
+        fun e(tag: String, message: String, throwable: Throwable? = null) {
+            if (!isTestMode) {
+                Log.e(tag, message, throwable)
+            }
+        }
     }
 
     fun verbose(message: String, throwable: Throwable? = null) {
