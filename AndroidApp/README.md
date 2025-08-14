@@ -1162,6 +1162,29 @@ Solution:
 4. Monitor device temperature
 ```
 
+#### Thermal Camera Issues (Android 13+)
+
+**Issue**: Thermal camera not detected automatically on Android 13+
+```
+Error: SecurityException - One of RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED should be specified
+Solution:
+1. This is a known limitation due to Android 13+ security restrictions
+2. The thermal camera can still function but automatic device detection is limited
+3. Manual device reconnection may be required after disconnection
+4. Check diagnostics screen for detailed USB monitoring status
+5. Restart the app if thermal camera becomes unresponsive
+```
+
+**Issue**: USB monitoring disabled warning in logs
+```
+Warning: USB monitoring disabled due to receiver registration requirements on Android 13+
+Solution:
+1. This is expected behavior on Android 13+ devices
+2. Thermal camera functionality is not completely disabled
+3. Use the diagnostics screen to verify thermal camera status
+4. Consider manual device scanning if automatic detection fails
+```
+
 #### Sensor Integration
 
 **Issue**: Shimmer sensor not detected
