@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.multisensor.recording.ui.MainViewModel
-import com.multisensor.recording.ui.components.ColorPaletteSelector
 import com.multisensor.recording.ui.components.ThermalPreview
 import com.multisensor.recording.ui.components.ThermalControlsPanel
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,8 +59,6 @@ fun ThermalPreviewScreen(
                 thermalBitmap = uiState.currentThermalFrame,
                 isRecording = uiState.isRecording,
                 temperatureRange = uiState.temperatureRange,
-                colorPalette = uiState.colorPalette,
-                onPaletteChange = {  },
                 onTemperatureRangeChange = {  },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -72,18 +69,9 @@ fun ThermalPreviewScreen(
             ThermalControlsPanel(
                 status = thermalStatus,
                 temperatureRange = uiState.temperatureRange,
-                colorPalette = uiState.colorPalette,
-                onCaptureCalibration = { viewModel.captureThermalCalibrationImage() },
-                onStartCalibration = { viewModel.startThermalCalibration() },
-                onTemperatureRangeChange = { /* TODO: Implement temperature range change */ },
-                onColorPaletteChange = { /* TODO: Implement color palette change */ }
+                onTemperatureRangeChange = { /* TODO: Implement temperature range change */ }
             )
-            
-            // Legacy color palette selector (for compatibility)
-            ColorPaletteSelector(
-                currentPalette = uiState.colorPalette,
-                onPaletteSelect = {  }
-            )
+
             
             Card(
                 modifier = Modifier.fillMaxWidth(),

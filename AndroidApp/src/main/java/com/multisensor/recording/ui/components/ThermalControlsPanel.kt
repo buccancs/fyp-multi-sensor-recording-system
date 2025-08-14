@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.multisensor.recording.recording.ThermalRecorder
-import com.multisensor.recording.util.ThermalColorPalette
 import com.multisensor.recording.util.TemperatureRange
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,11 +20,7 @@ import com.multisensor.recording.util.TemperatureRange
 fun ThermalControlsPanel(
     status: ThermalRecorder.ThermalCameraStatus,
     temperatureRange: TemperatureRange = TemperatureRange.BODY_TEMPERATURE,
-    colorPalette: ThermalColorPalette = ThermalColorPalette.IRON,
-    onCaptureCalibration: () -> Unit = {},
-    onStartCalibration: () -> Unit = {},
     onTemperatureRangeChange: (TemperatureRange) -> Unit = {},
-    onColorPaletteChange: (ThermalColorPalette) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -139,79 +134,8 @@ fun ThermalControlsPanel(
                         }
                     }
                     
-                    // Color Palette Controls  
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Text(
-                                text = "Color Palette",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Medium
-                            )
-                            
-                            ColorPaletteSelector(
-                                currentPalette = colorPalette,
-                                onPaletteSelect = onColorPaletteChange
-                            )
-                        }
-                    }
-                    
-                    // Calibration Controls
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Text(
-                                text = "Calibration",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Medium
-                            )
-                            
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Button(
-                                    onClick = onCaptureCalibration,
-                                    enabled = status.isAvailable && status.isPreviewActive && !status.isRecording,
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.CameraAlt,
-                                        contentDescription = "Capture",
-                                        modifier = Modifier.size(18.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(4.dp))
-                                    Text("Capture Image")
-                                }
-                                
-                                OutlinedButton(
-                                    onClick = onStartCalibration,
-                                    enabled = status.isAvailable && !status.isRecording,
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Tune,
-                                        contentDescription = "Calibrate",
-                                        modifier = Modifier.size(18.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(4.dp))
-                                    Text("Start Calibration")
-                                }
-                            }
-                        }
-                    }
+
+
                     
                     // Current Status Summary
                     Card(
@@ -244,22 +168,7 @@ fun ThermalControlsPanel(
                                     fontWeight = FontWeight.Medium
                                 )
                             }
-                            
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = "Palette:",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    text = colorPalette.displayName,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
+
                             
                             if (status.frameCount > 0) {
                                 Row(
