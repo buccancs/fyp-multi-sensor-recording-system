@@ -1,7 +1,6 @@
 package com.multisensor.recording.firebase
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -81,7 +80,7 @@ class FirebaseFirestoreService @Inject constructor(
     suspend fun getResearcherProfile(uid: String): Result<ResearcherProfile?> {
         return try {
             val doc = firestore.collection("researcher_profiles").document(uid).get().await()
-            val profile = doc.toObject<ResearcherProfile>()
+            val profile = doc.toObject(ResearcherProfile::class.java)
             Result.success(profile)
         } catch (e: Exception) {
             Result.failure(e)
@@ -158,7 +157,7 @@ class FirebaseFirestoreService @Inject constructor(
     suspend fun getRecordingSession(sessionId: String): Result<RecordingSession?> {
         return try {
             val doc = firestore.collection("recording_sessions").document(sessionId).get().await()
-            val session = doc.toObject<RecordingSession>()
+            val session = doc.toObject(RecordingSession::class.java)
             Result.success(session)
         } catch (e: Exception) {
             Result.failure(e)
@@ -178,7 +177,7 @@ class FirebaseFirestoreService @Inject constructor(
                 .orderBy("startTime", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get().await()
             
-            val sessions = snapshot.documents.mapNotNull { it.toObject<RecordingSession>() }
+            val sessions = snapshot.documents.mapNotNull { it.toObject(RecordingSession::class.java) }
             Result.success(sessions)
         } catch (e: Exception) {
             Result.failure(e)
@@ -204,7 +203,7 @@ class FirebaseFirestoreService @Inject constructor(
             
             val allSessions = (ownedSessions.documents + collaboratedSessions.documents)
                 .distinctBy { it.id }
-                .mapNotNull { it.toObject<RecordingSession>() }
+                .mapNotNull { it.toObject(RecordingSession::class.java) }
                 .sortedByDescending { it.startTime }
             
             Result.success(allSessions)
@@ -275,7 +274,7 @@ class FirebaseFirestoreService @Inject constructor(
                 .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get().await()
             
-            val projects = snapshot.documents.mapNotNull { it.toObject<ResearchProject>() }
+            val projects = snapshot.documents.mapNotNull { it.toObject(ResearchProject::class.java) }
             Result.success(projects)
         } catch (e: Exception) {
             Result.failure(e)
