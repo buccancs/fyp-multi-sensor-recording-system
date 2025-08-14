@@ -14,7 +14,7 @@ try:
         QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
         QPushButton, QLabel, QTextEdit, QGroupBox,
         QLineEdit, QSpinBox, QCheckBox, QMessageBox,
-        QTimer, QStatusBar, QTabWidget
+        QStatusBar, QTabWidget
     )
     from PyQt6.QtCore import Qt, QTimer, pyqtSignal
     from PyQt6.QtGui import QFont
@@ -24,7 +24,7 @@ except ImportError:
         QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
         QPushButton, QLabel, QTextEdit, QGroupBox,
         QLineEdit, QSpinBox, QCheckBox, QMessageBox,
-        QTimer, QStatusBar, QTabWidget
+        QStatusBar, QTabWidget
     )
     from PyQt5.QtCore import Qt, QTimer, pyqtSignal
     from PyQt5.QtGui import QFont
