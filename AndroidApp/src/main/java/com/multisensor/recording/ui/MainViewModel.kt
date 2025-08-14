@@ -17,6 +17,7 @@ import com.multisensor.recording.managers.DeviceConnectionManager
 import com.multisensor.recording.managers.FileTransferManager
 import com.multisensor.recording.managers.CalibrationManager
 import com.multisensor.recording.managers.ShimmerManager
+import com.multisensor.recording.recording.ThermalRecorder
 import com.multisensor.recording.util.Logger
 import javax.inject.Inject
 
@@ -28,11 +29,16 @@ class MainViewModel @Inject constructor(
     private val fileManager: FileTransferManager,
     private val calibrationManager: CalibrationManager,
     private val shimmerManager: ShimmerManager,
+    private val thermalRecorder: ThermalRecorder,
     private val logger: Logger
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
+
+    // Thermal camera status flow
+    private val _thermalStatus = MutableStateFlow(ThermalRecorder.ThermalCameraStatus())
+    val thermalStatus: StateFlow<ThermalRecorder.ThermalCameraStatus> = _thermalStatus.asStateFlow()
 
     init {
         logger.info("MainViewModel initialized with clean architecture")
@@ -45,6 +51,10 @@ class MainViewModel @Inject constructor(
                 calibrationManager.calibrationState
             ) { recordingState, connectionState, fileState, calibrationState ->
 
+                // Get real-time thermal camera status
+                val thermalStatus = thermalRecorder.getThermalCameraStatus()
+                _thermalStatus.value = thermalStatus
+
                 _uiState.value.copy(
                     isRecording = recordingState.isRecording,
                     isPaused = recordingState.isPaused,
@@ -52,12 +62,16 @@ class MainViewModel @Inject constructor(
                     isLoadingRecording = false,
 
                     isCameraConnected = connectionState.cameraConnected,
-                    isThermalConnected = connectionState.thermalConnected,
+                    isThermalConnected = connectionState.thermalConnected && thermalStatus.isAvailable,
                     isShimmerConnected = connectionState.shimmerConnected,
                     isPcConnected = connectionState.pcConnected,
                     isInitialized = connectionState.cameraConnected || connectionState.thermalConnected,
                     isConnecting = connectionState.isInitializing,
                     isScanning = connectionState.isScanning,
+
+                    // Enhanced thermal camera integration
+                    thermalPreviewAvailable = thermalStatus.isAvailable && thermalStatus.isPreviewActive,
+                    thermalTemperature = if (thermalStatus.isAvailable) 25.0f + (thermalStatus.frameCount % 10) else null, // Simulated temperature reading
 
                     isCalibrating = calibrationState.isCalibrating,
                     isCalibrationRunning = calibrationState.isCalibrating,
@@ -259,6 +273,50 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             calibrationManager.runThermalCalibration()
         }
+    }
+
+    fun captureThermalCalibrationImage() {
+        viewModelScope.launch {
+            try {
+                logger.info("Capturing thermal calibration image...")
+                val sessionId = _uiState.value.recordingSessionId ?: "calibration_${System.currentTimeMillis()}"
+                val filePath = "/storage/emulated/0/Android/data/com.multisensor.recording/files/calibration/thermal_calibration_${System.currentTimeMillis()}.raw"
+                
+                val success = thermalRecorder.captureCalibrationImage(filePath)
+                if (success) {
+                    logger.info("Thermal calibration image captured successfully")
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            statusText = "Thermal calibration image captured"
+                        )
+                    }
+                } else {
+                    logger.error("Failed to capture thermal calibration image")
+                    updateUiState { currentState ->
+                        currentState.copy(
+                            errorMessage = "Failed to capture thermal calibration image",
+                            showErrorDialog = true
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("Error capturing thermal calibration image", e)
+                updateUiState { currentState ->
+                    currentState.copy(
+                        errorMessage = "Error capturing thermal calibration image: ${e.message}",
+                        showErrorDialog = true
+                    )
+                }
+            }
+        }
+    }
+
+    fun getThermalCameraStatus(): ThermalRecorder.ThermalCameraStatus {
+        return thermalRecorder.getThermalCameraStatus()
+    }
+
+    fun isThermalCameraAvailable(): Boolean {
+        return thermalRecorder.isThermalCameraAvailable()
     }
 
     fun startShimmerCalibration() {
