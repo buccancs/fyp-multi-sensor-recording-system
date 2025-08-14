@@ -29,7 +29,7 @@ private val frameCallback = IFrameCallback { frame ->
     lslOutlet?.push_sample(tempArray, timestamp)
 }
 
-// Camera initialization and configuration
+// Camera initialisation and configuration
 fun initializeThermalCamera() {
     uvcCamera = UVCCamera()
     uvcCamera.open(ctrlBlock)

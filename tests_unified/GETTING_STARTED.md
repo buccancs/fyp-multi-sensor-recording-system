@@ -133,7 +133,7 @@ The framework is designed for GitHub Actions:
   run: python tests_unified/runners/run_unified_tests.py --mode ci
 ```
 
-## 🔧 Customization
+## 🔧 Customisation
 
 ### Test Selection
 

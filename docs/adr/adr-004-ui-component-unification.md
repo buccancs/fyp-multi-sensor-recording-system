@@ -10,7 +10,7 @@ The Android application suffered from extensive code duplication across UI compo
 
 ### Problems Identified
 
-1. **Multiple RecordingIndicator Implementations**: Three separate implementations of recording indicators existed across `CameraPreview.kt`, `ThermalPreview.kt`, and other components, each with slightly different styling and behavior.
+1. **Multiple RecordingIndicator Implementations**: Three separate implementations of recording indicators existed across `CameraPreview.kt`, `ThermalPreview.kt`, and other components, each with slightly different styling and behaviour.
 
 2. **Duplicate Status Overlays**: Device connection status overlays were implemented multiple times with inconsistent appearance and state management.
 
@@ -42,7 +42,7 @@ Implement a unified component architecture through the creation of `CommonIndica
    - Clean up obsolete UI patterns and styling approaches
 
 4. **Ensure Functional Equivalence**:
-   - Maintain exact same visual appearance and behavior
+   - Maintain exact same visual appearance and behaviour
    - Preserve all animation and interaction patterns
    - Ensure backward compatibility with existing component usage
 
@@ -52,7 +52,7 @@ Implement a unified component architecture through the creation of `CommonIndica
 
 - **Significant Code Reduction**: Eliminated 500+ lines of duplicate code while maintaining identical functionality
 - **Improved Maintainability**: Single source of truth for common UI patterns reduces maintenance overhead
-- **Consistent User Experience**: Unified components ensure consistent styling and behavior across the application
+- **Consistent User Experience**: Unified components ensure consistent styling and behaviour across the application
 - **Reduced Bug Potential**: Single implementation eliminates inconsistencies and reduces testing surface area
 - **Enhanced Development Velocity**: Future UI changes can be made in one location and propagate throughout the application
 
@@ -66,7 +66,7 @@ Implement a unified component architecture through the creation of `CommonIndica
 
 - **Comprehensive Testing**: Created `CommonIndicatorsTest.kt` to validate all unified components
 - **Integration Testing**: Implemented `UnifiedComponentsIntegrationTest.kt` to ensure components work together properly
-- **Visual Validation**: Manual testing confirmed identical appearance and behavior to original implementations
+- **Visual Validation**: Manual testing confirmed identical appearance and behaviour to original implementations
 - **Gradual Migration**: Unified components were introduced alongside existing implementations before full replacement
 
 ## Implementation Details
@@ -99,9 +99,9 @@ Implement a unified component architecture through the creation of `CommonIndica
 
 This ADR builds upon existing architectural decisions:
 
-- **ADR-001**: Reactive State Management - Unified components utilize StateFlow patterns for consistent state updates
+- **ADR-001**: Reactive State Management - Unified components utilise StateFlow patterns for consistent state updates
 - **ADR-002**: Strict Type Safety - All unified components maintain complete type safety
-- **ADR-003**: Function Decomposition Strategy - Follows single responsibility principle through specialized component functions
+- **ADR-003**: Function Decomposition Strategy - Follows single responsibility principle through specialised component functions
 
 ## References
 

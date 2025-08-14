@@ -415,7 +415,7 @@
 >
 > ☒After the session, escort participants to the exit or arrange for
 > someone else to do so to reduce the risk of them being left in the
-> building without authorization
+> building without authorisation
 >
 > ☒Confirm to colleague after session is finished
 >

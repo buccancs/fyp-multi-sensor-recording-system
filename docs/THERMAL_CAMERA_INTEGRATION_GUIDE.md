@@ -22,9 +22,9 @@ The system supports the following Topdon product IDs:
 ### Core Methods
 
 ```kotlin
-// Initialize thermal camera system
-fun initialize(previewSurface: SurfaceView? = null): Boolean
-fun initialize(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
+// Initialise thermal camera system
+fun initialise(previewSurface: SurfaceView? = null): Boolean
+fun initialise(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
 
 // Preview control
 fun startPreview(): Boolean
@@ -51,7 +51,7 @@ The `ThermalCameraStatus` data class provides comprehensive system status:
 
 ```kotlin
 data class ThermalCameraStatus(
-    val isAvailable: Boolean = false,      // Hardware detected and initialized
+    val isAvailable: Boolean = false,      // Hardware detected and initialised
     val isRecording: Boolean = false,      // Currently recording thermal data
     val isPreviewActive: Boolean = false,  // Preview display active
     val deviceName: String = "No Device",  // Connected device identifier
@@ -70,10 +70,10 @@ data class ThermalCameraStatus(
 @Inject
 lateinit var thermalRecorder: ThermalRecorder
 
-// Initialize
-val success = thermalRecorder.initialize(surfaceView)
+// Initialise
+val success = thermalRecorder.initialise(surfaceView)
 if (success) {
-    Log.d("Thermal", "Camera initialized successfully")
+    Log.d("Thermal", "Camera initialised successfully")
     
     // Check status
     val status = thermalRecorder.getThermalCameraStatus()
@@ -128,7 +128,7 @@ if (thermalRecorder.captureCalibrationImage(calibrationPath)) {
 1. Connect Topdon thermal camera to Android device via USB-C OTG cable
 2. Launch the Multi-Sensor Recording app
 3. Grant USB permissions when system prompt appears
-4. Initialize thermal camera through app interface
+4. Initialise thermal camera through app interface
 
 ### Troubleshooting Connection Issues
 
@@ -143,7 +143,7 @@ if (!isAvailable) {
     // 4. Try reconnecting device
 }
 
-// Monitor initialization
+// Monitor initialisation
 val status = thermalRecorder.getThermalCameraStatus()
 when {
     !status.isAvailable -> "Check USB connection and permissions"
@@ -174,14 +174,14 @@ try {
 The system implements progressive retry delays for robustness:
 
 ```kotlin
-// IRCMD initialization with retry
+// IRCMD initialisation with retry
 var retryCount = 0
 val maxRetries = 3
-while (!initialized && retryCount < maxRetries) {
+while (!initialised && retryCount < maxRetries) {
     try {
-        // Attempt initialization
+        // Attempt initialisation
         ircmd = ConcreteIRCMDBuilder().build()
-        initialized = true
+        initialised = true
     } catch (e: Exception) {
         retryCount++
         if (retryCount < maxRetries) {
@@ -199,7 +199,7 @@ while (!initialized && retryCount < maxRetries) {
 | `Device not detected` | Hardware connection issue | Check USB-C cable and OTG support |
 | `Preview start failed` | Camera resource conflict | Stop other camera apps, restart preview |
 | `Recording failed` | Insufficient storage | Check available storage space |
-| `Initialization timeout` | Hardware compatibility | Verify device model compatibility |
+| `Initialisation timeout` | Hardware compatibility | Verify device model compatibility |
 
 ## Performance Considerations
 
@@ -208,7 +208,7 @@ while (!initialized && retryCount < maxRetries) {
 - **CPU Impact**: Minimal when using hardware-accelerated capture
 - **Battery Consumption**: Thermal camera adds ~500mA current draw
 
-### Optimization Tips
+### Optimisation Tips
 1. **Frame Rate Adjustment**: Reduce from 25fps to 9fps for battery savings
 2. **Preview Management**: Stop preview when not needed
 3. **Session Cleanup**: Always call `cleanup()` to release resources
@@ -233,7 +233,7 @@ For hardware validation with connected devices:
 ```
 
 ### Test Coverage
-- ✅ Initialization scenarios (with/without hardware)
+- ✅ Initialisation scenarios (with/without hardware)
 - ✅ Preview start/stop operations  
 - ✅ Recording session management
 - ✅ Status monitoring and reporting
@@ -273,7 +273,7 @@ if (success) {
 
 - [ ] **Hardware Connection**: Topdon camera connected via USB-C OTG
 - [ ] **Permissions**: USB device permissions granted
-- [ ] **Initialization**: `thermalRecorder.initialize()` returns `true`
+- [ ] **Initialisation**: `thermalRecorder.initialise()` returns `true`
 - [ ] **Device Detection**: `isThermalCameraAvailable()` returns `true`
 - [ ] **Preview Function**: `startPreview()` and `stopPreview()` work correctly
 - [ ] **Recording Capability**: `startRecording()` and `stopRecording()` function properly

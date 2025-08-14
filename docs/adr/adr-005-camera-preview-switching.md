@@ -12,19 +12,19 @@ Users required the ability to switch between RGB camera and thermal camera previ
 
 1. **Focused Data Collection**: Researchers needed to focus on either RGB or thermal data streams without visual distraction from the other preview
 2. **User Control**: Manual switching capability to change preview modes based on experimental protocols
-3. **Device Coordination**: Both cameras must remain initialized for proper device coordination even when only one preview is visible
+3. **Device Coordination**: Both cameras must remain initialised for proper device coordination even when only one preview is visible
 4. **Clear Indication**: Users must have clear visual feedback about which camera preview is currently active
 
 ### Technical Constraints
 
-1. **Initialization Dependency**: Both RGB and thermal cameras must be initialized for proper system coordination with the PC controller
-2. **State Management**: Preview switching state must be maintained independently of device initialization state
+1. **Initialisation Dependency**: Both RGB and thermal cameras must be initialised for proper system coordination with the PC controller
+2. **State Management**: Preview switching state must be maintained independently of device initialisation state
 3. **UI Consistency**: Switching interface must follow established Material Design patterns and integrate with unified UI components
 4. **Performance**: Preview switching must be immediate without affecting recording quality or system performance
 
 ## Decision
 
-Implement a toggle switch interface that allows users to choose between RGB and thermal camera previews while maintaining initialization of both camera systems for proper device coordination.
+Implement a toggle switch interface that allows users to choose between RGB and thermal camera previews while maintaining initialisation of both camera systems for proper device coordination.
 
 ### Implementation Strategy
 
@@ -35,12 +35,12 @@ Implement a toggle switch interface that allows users to choose between RGB and 
 
 2. **Selective Preview Visibility**:
    - Only the selected camera preview is visible in the UI
-   - Non-selected preview components remain initialized but hidden
+   - Non-selected preview components remain initialised but hidden
    - State management through Compose remember state
 
 3. **Maintained Device Coordination**:
-   - Both RGB and thermal cameras remain initialized regardless of preview selection
-   - PC controller communication includes both camera streams for synchronization
+   - Both RGB and thermal cameras remain initialised regardless of preview selection
+   - PC controller communication includes both camera streams for synchronisation
    - Device coordination protocols unaffected by preview switching
 
 4. **Enhanced User Experience**:
@@ -84,8 +84,8 @@ if (showThermalCamera) {
 ### State Management
 
 - **Preview Selection State**: Managed at RecordingScreen level through Compose state
-- **Device Initialization State**: Independent of preview selection, both cameras always initialized
-- **UI State Synchronization**: Preview switching state synchronized with unified status indicators
+- **Device Initialisation State**: Independent of preview selection, both cameras always initialised
+- **UI State Synchronisation**: Preview switching state synchronised with unified status indicators
 
 ## Consequences
 
@@ -95,7 +95,7 @@ if (showThermalCamera) {
 - **Enhanced Research Workflow**: Clear preview modes support different experimental phases
 - **Maintained System Functionality**: Full device coordination preserved while adding user control
 - **Consistent UI Patterns**: Integration with unified components provides consistent styling
-- **Performance Optimization**: Reduced UI complexity by showing only necessary preview
+- **Performance Optimisation**: Reduced UI complexity by showing only necessary preview
 
 ### Negative
 
@@ -106,7 +106,7 @@ if (showThermalCamera) {
 ### Risk Mitigation
 
 - **Comprehensive Testing**: `RecordingScreenTest.kt` validates all switching scenarios
-- **Device Coordination Testing**: Ensures both cameras remain properly initialized
+- **Device Coordination Testing**: Ensures both cameras remain properly initialised
 - **Integration Testing**: Validates switching works seamlessly with unified components
 - **Manual Validation**: Tested across different Android devices and screen sizes
 
@@ -132,12 +132,12 @@ if (showThermalCamera) {
 2. **User Action**: Tap toggle switch to change preview mode
 3. **State Update**: `showThermalCamera` state updated immediately  
 4. **UI Update**: Preview components recomposed to show selected camera
-5. **Device State**: Both cameras remain initialized and coordinated
+5. **Device State**: Both cameras remain initialised and coordinated
 
 ### Integration with Existing Systems
 
 - **Unified Components**: Leverages `DeviceStatusOverlay` for consistent status display
-- **Device Management**: Works seamlessly with `DeviceConnectionManager` initialization
+- **Device Management**: Works seamlessly with `DeviceConnectionManager` initialisation
 - **Recording System**: Compatible with all recording functionalities regardless of preview mode
 - **PC Communication**: Full communication protocol maintained for both camera systems
 

@@ -4,7 +4,7 @@
 
 This guide helps resolve network connection issues between Android devices and the PC server, specifically addressing errors like:
 - `Connection failed: failed to connect to /192.168.0.100 (port 9000)`
-- `UVC camera not initialized - cannot start thermal preview`
+- `UVC camera not initialised - cannot start thermal preview`
 - `Failed to connect to PC at 192.168.0.100:9000`
 
 ## Root Cause

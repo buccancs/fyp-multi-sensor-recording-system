@@ -39,7 +39,7 @@ For Authors and Readers:
 - Print compatibility: Both Mermaid (dynamic) and PNG (static) versions available
 
 For Document Maintenance:
-- Single source of truth: All visual content now centralized in Appendix Z
+- Single source of truth: All visual content now centralised in Appendix Z
 - Reduced duplication: Eliminates redundant figure storage across appendices
 - Improved consistency: Unified formatting and referencing standards
 - Enhanced navigation: Cross-reference tables enable quick figure location

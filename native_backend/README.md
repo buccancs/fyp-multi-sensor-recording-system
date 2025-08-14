@@ -53,7 +53,7 @@ Performance verification tests demonstrate significant improvements:
 - **High-resolution capture**: Supports up to 1920x1080 at 30fps
 - **Real-time preprocessing**: Image enhancement, noise reduction
 - **Motion detection**: Frame-to-frame difference analysis
-- **Synchronization**: Master clock alignment for multi-sensor coordination
+- **Synchronisation**: Master clock alignment for multi-sensor coordination
 
 ## Building
 
@@ -146,13 +146,13 @@ cd tests
 python test_performance_verification.py
 ```
 
-## Optimization Flags
+## Optimisation Flags
 
-The build system applies aggressive optimization:
+The build system applies aggressive optimisation:
 - **Compiler flags**: `-O3 -march=native -ffast-math`
 - **OpenMP support**: Parallel processing where applicable
 - **SIMD instructions**: Automatic vectorization
-- **Link-time optimization**: When supported by compiler
+- **Link-time optimisation**: When supported by compiler
 
 ## Platform Support
 
@@ -191,7 +191,7 @@ When modifying the native backend:
 
 1. **Update both C++ and Python implementations** to maintain compatibility
 2. **Add performance tests** for new functionality
-3. **Update integration tests** to verify fallback behavior
+3. **Update integration tests** to verify fallback behaviour
 4. **Document performance characteristics** in the validation tests
 
 ## Performance Verification
@@ -199,7 +199,7 @@ When modifying the native backend:
 The implementation includes comprehensive performance tests that validate:
 - **Sampling rate compliance**: 128Hz Shimmer processing with <8ms latency
 - **Frame rate compliance**: 30fps webcam processing with <33ms latency
-- **Synchronization precision**: Millisecond-level timestamp accuracy
+- **Synchronisation precision**: Millisecond-level timestamp accuracy
 - **Speedup verification**: Native vs Python performance comparison
 
 Run the full validation suite:

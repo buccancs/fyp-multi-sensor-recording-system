@@ -55,7 +55,7 @@ adb devices
 ### 2. Android Development Setup
 
 **Step 1: Android SDK Configuration**
-1. **File** → **Settings** → **Appearance & Behavior** → **System Settings** → **Android SDK**
+1. **File** → **Settings** → **Appearance & Behaviour** → **System Settings** → **Android SDK**
 2. **SDK Platforms**: Ensure **Android 15 (API level 35)** is installed
 3. **SDK Tools**: Verify these are installed:
    - Android SDK Build-Tools 35.0.0+
@@ -170,7 +170,7 @@ python run_local_tests.py android_ide
 python tests_unified/evaluation/measurement_collection.py
 
 # Specific measurement categories
-python tests_unified/evaluation/measurement_collection.py --category synchronization
+python tests_unified/evaluation/measurement_collection.py --category synchronisation
 python tests_unified/evaluation/measurement_collection.py --category calibration
 python tests_unified/evaluation/measurement_collection.py --category network
 ```
@@ -180,7 +180,7 @@ python tests_unified/evaluation/measurement_collection.py --category network
 **Location**: `test_results/chapter5_artifacts/`
 
 **Files Generated:**
-- `drift_results.csv` - Synchronization accuracy measurements
+- `drift_results.csv` - Synchronisation accuracy measurements
 - `calib_metrics.csv` - Camera calibration accuracy data
 - `net_bench.csv` - Network performance benchmarks
 - `measurement_summary.json` - Metadata and generation info
@@ -229,7 +229,7 @@ tail -f test_results/latest/test_log.txt
 **IntelliJ Built-in Profiler:**
 1. **Run** → **Profile** (for Python scripts)
 2. **Monitor CPU and Memory usage**
-3. **Analyze performance bottlenecks**
+3. **Analyse performance bottlenecks**
 
 **System Resource Monitoring:**
 ```bash
@@ -305,14 +305,14 @@ while True:
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load synchronization data
+# Load synchronisation data
 sync_data = pd.read_csv('test_results/chapter5_artifacts/drift_results.csv')
 print(f"Median drift: {sync_data['drift_ms'].median():.2f}ms")
 print(f"95th percentile: {sync_data['drift_ms'].quantile(0.95):.2f}ms")
 
 # Plot distribution
 sync_data['drift_ms'].hist(bins=20)
-plt.title('Samsung S22 Android 15 Synchronization Accuracy')
+plt.title('Samsung S22 Android 15 Synchronisation Accuracy')
 plt.xlabel('Drift (ms)')
 plt.ylabel('Frequency')
 plt.show()
@@ -352,7 +352,7 @@ python tests_unified/evaluation/metrics/generate_thesis_summary.py
 # File → Settings → Project → Python Interpreter → Add Interpreter
 ```
 
-**Problem: ADB not recognized**
+**Problem: ADB not recognised**
 ```bash
 # Solution: Add Android SDK platform-tools to PATH
 # Windows: Add to PATH: C:\Users\<USER>\AppData\Local\Android\Sdk\platform-tools
@@ -464,6 +464,6 @@ python tests_unified/evaluation/compliance/final_validation.py \
 
 ---
 
-**Status**: ✅ **IntelliJ Ready** | 🚀 **Samsung S22 Android 15 Optimized** | 🔒 **Academic Integrity Enforced** | 📊 **Thesis Evaluation Ready**
+**Status**: ✅ **IntelliJ Ready** | 🚀 **Samsung S22 Android 15 Optimised** | 🔒 **Academic Integrity Enforced** | 📊 **Thesis Evaluation Ready**
 
 For additional support or questions, refer to the troubleshooting section or check the project's GitHub Issues page.

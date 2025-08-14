@@ -146,7 +146,7 @@ graph TD
 
 ### Performance Improvements
 - **Reduced CI time:** Main pipeline runs 40% faster than previous fragmented approach
-- **Better resource utilization:** Parallel execution and intelligent caching
+- **Better resource utilisation:** Parallel execution and intelligent caching
 - **Focused execution:** Run only necessary tests based on trigger
 
 ### Maintainability
@@ -161,7 +161,7 @@ graph TD
 
 ### Operational Benefits
 - **Cost reduction:** Efficient resource usage and reduced redundant runs
-- **Better monitoring:** Centralized reporting and trend analysis
+- **Better monitoring:** Centralised reporting and trend analysis
 - **Automated maintenance:** Dependency updates and security alerting
 
 ## Configuration

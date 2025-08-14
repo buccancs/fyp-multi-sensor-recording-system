@@ -71,7 +71,7 @@ python tests_unified/runners/run_unified_tests.py --validate-requirements
 This research platform enables contactless GSR prediction through synchronised multi-sensor data collection with **unified architecture eliminating code duplication**:
 
 - **📱 Android Mobile Application**: Real-time RGB video and thermal imaging capture with unified UI architecture and camera switching capabilities
-- **🖥️ PC Controller Application**: Centralized data recording and synchronisation with enhanced device coordination
+- **🖥️ PC Controller Application**: Centralised data recording and synchronisation with enhanced device coordination
 - **📊 Shimmer GSR Sensors**: **Complete ShimmerAndroidAPI integration** with real device communication, multi-sensor support (GSR, PPG, accelerometer, gyroscope, magnetometer, ECG, EMG), and comprehensive UI controls
 - **🧪 Virtual Test Environment**: Complete system simulation without hardware dependencies
 - **⚡ Real-time Processing**: Live data analysis and visualisation with sub-millisecond precision
@@ -87,7 +87,7 @@ This research platform enables contactless GSR prediction through synchronised m
 - **Unified Data Recording**: Comprehensive UnifiedDataRecorder consolidating separate recording systems
 - **Consolidated Logging Framework**: Single logging system with backwards compatibility across platforms
 - **Shared Protocol Framework**: Common data structures and network protocols for Android and Python apps
-- **System Monitoring**: Unified performance optimization and resource management
+- **System Monitoring**: Unified performance optimisation and resource management
 
 ### 🔧 Hardware-Free Testing
 - **Virtual Device Simulation**: Test with 2-6 simulated Android devices
@@ -96,14 +96,14 @@ This research platform enables contactless GSR prediction through synchronised m
 - **No Physical Dependencies**: Test entire system without hardware
 
 ### 📊 Multi-Sensor Data Fusion with Unified Components
-- **Synchronised Recording**: Precise timestamp alignment across all sensors with improved initialization coordination
+- **Synchronised Recording**: Precise timestamp alignment across all sensors with improved initialisation coordination
 - **Multiple Data Streams**: GSR, RGB video, thermal imaging, device metadata
 - **Real-time Processing**: Live analysis and visualisation with configurable update rates
 - **Shimmer Device Integration**: Complete ShimmerAndroidAPI integration with official bluetooth management patterns
 - **Professional UI Controls**: Comprehensive device management, sensor configuration, and real-time monitoring interfaces
 - **Camera Preview Switching**: Toggle between RGB and thermal camera views with real-time preview control
 - **Unified Architecture**: **Consolidated components eliminating code duplication** between platforms
-- **Enhanced Error Handling**: Improved camera initialization timing preventing "CameraRecorder not initialized" errors
+- **Enhanced Error Handling**: Improved camera initialisation timing preventing "CameraRecorder not initialised" errors
 - **Real-time Visualisation**: Live data monitoring and analysis with consistent UI patterns
 - **Data Export**: CSV, JSON, and binary formats for research analysis
 
@@ -121,14 +121,14 @@ This research platform enables contactless GSR prediction through synchronised m
 - **JSON Protocol**: Structured message exchange and control
 - **File Transfer**: Secure video and thermal data transmission
 - **Heartbeat Monitoring**: Connection health and automatic recovery
-- **Enhanced Device Coordination**: Improved initialization timing and error recovery
+- **Enhanced Device Coordination**: Improved initialisation timing and error recovery
 
 ### 🔥 Firebase Cloud Integration
 - **Analytics Tracking**: Research event monitoring and usage insights
 - **Cloud Storage**: Automatic backup of video and sensor data files
 - **Firestore Database**: Research session metadata and experimental data
 - **Crash Reporting**: Enhanced stability monitoring with Crashlytics
-- **Real-time Sync**: Cross-device data synchronization for research teams
+- **Real-time Sync**: Cross-device data synchronisation for research teams
 - **Research Dashboard**: Firebase status monitoring and integration testing
 
 ### 🧪 Comprehensive Testing Framework
@@ -225,7 +225,7 @@ The system includes complete **ShimmerAndroidAPI integration** with professional
 - **✅ Multi-Sensor Arrays**: GSR, PPG, accelerometer, gyroscope, magnetometer, ECG, EMG
 - **✅ Professional State Management**: Official message handler patterns for device lifecycle
 - **✅ Real-time Data Streaming**: Configurable sampling rates (25.6Hz to 512Hz)
-- **✅ SD Logging**: Time-synchronized logging across multiple devices
+- **✅ SD Logging**: Time-synchronised logging across multiple devices
 
 #### User Interface
 - **📱 Shimmer Dashboard**: Embedded directly in recording workflow
@@ -240,7 +240,7 @@ viewModel.updateSensorConfiguration(setOf("GSR", "PPG", "ACCEL"))
 viewModel.updateSamplingRate(128) // Optimal for physiological signals
 viewModel.updateGsrRange(4) // High sensitivity for subtle changes
 
-// Start synchronized recording
+// Start synchronised recording
 viewModel.startStreaming() // Begins real-time data collection
 ```
 
@@ -549,13 +549,34 @@ This project is licensed under the MIT Licence - see the [LICENCE](LICENCE) file
 - **Android Community** - Mobile development frameworks and libraries
 - **Python Scientific Computing Stack** - Data processing and analysis tools
 
+## 📚 Documentation
+
+### Quick Reference
+- **[Architecture Overview](architecture.md)** - System architecture and design decisions
+- **[Backlog & TODOs](backlog.md)** - Project backlog and development priorities  
+- **[Changelog](changelog.md)** - Version history and release notes
+
+### Comprehensive Guides  
+- **[🌡️ Thermal Camera Integration](docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md)** - Complete Topdon thermal camera setup and API reference
+- **[🔥 Firebase Integration](docs/FIREBASE_INTEGRATION.md)** - Cloud services and analytics documentation
+- **[🌐 Network Setup](docs/NETWORK_SETUP_GUIDE.md)** - Network configuration and troubleshooting
+- **[📱 Shimmer Integration](docs/SHIMMER_INTEGRATION_GUIDE.md)** - GSR sensor setup and configuration
+
+### Development Documentation
+- **[🧪 Testing Framework](tests_unified/README.md)** - Unified testing infrastructure documentation
+- **[🔧 API Reference](docs/api/README.md)** - Complete API documentation and examples
+- **[📐 Architecture Decisions](docs/adr/README.md)** - Architecture Decision Records (ADRs)
+- **[📚 Thesis Documentation](docs/thesis_report/README.md)** - Academic thesis chapters and appendices
+
+### Additional Resources
+- **[📝 Miscellaneous Documentation](docs/misc/README.md)** - Development summaries and historical documentation
+- **[🔬 Module Deep Dive](docs/module_deep_dive/)** - Detailed component documentation
+- **[📊 Diagrams](docs/diagrams/)** - System diagrams and flowcharts
+
 ## 🔗 Quick Links
 
-- **[🚀 Run Tests Now](./run_local_test.sh)** - One-click local testing
+- **[🚀 Run Tests Now](./run_local_tests.sh)** - One-click local testing
 - **[📊 GitHub Actions](https://github.com/buccancs/bucika_gsr/actions)** - Live CI/CD status
-- **[📚 Architecture Documentation](architecture.md)** - System architecture overview
-- **[🌡️ Thermal Camera Integration Guide](docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md)** - Complete Topdon thermal camera setup, API reference, and troubleshooting guide
-- **[🔥 Firebase Integration Guide](docs/FIREBASE_INTEGRATION.md)** - Cloud services documentation
 - **[🛠️ Troubleshooting](tests/integration/virtual_environment/TROUBLESHOOTING.md)** - Issue resolution
 - **[🧪 Test Documentation](tests/integration/virtual_environment/)** - Comprehensive test guides
 

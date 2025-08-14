@@ -48,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Converted `docs/thesis_report/final/3.md` to LaTeX at `docs/thesis_report/final/3.tex`
   - Added Mermaid diagram source `docs/thesis_report/final/fig_3_1_architecture.mmd` for Figure 3.1
   - Added pytest to verify presence and key markers in `3.tex` and Mermaid source
-  - TODO: Map numeric citations [n] to BibTeX keys or align with centralized references; integrate Mermaid rendering (CLI/Kroki) into LaTeX build pipeline
+  - TODO: Map numeric citations [n] to BibTeX keys or align with centralised references; integrate Mermaid rendering (CLI/Kroki) into LaTeX build pipeline
 
 - **LaTeX Chapter 1 Conversion (2025-08-11)**
   - Converted `docs/thesis_report/final/1.md` to LaTeX at `docs/thesis_report/final/1.tex`
@@ -126,7 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Added `captureCalibrationImage()` and `triggerFlashSync()` stub methods to CameraRecorder.kt
     - Added `captureCalibrationImage()` and `isThermalCameraAvailable()` stub methods to ThermalRecorder.kt
     - Added `isRawStage3Available()` method to CameraRecorder.kt
-    - Added wrapper methods (`initialize()`, `startSession()`, `getSummary()`) to RecordingSessionController.kt and DeviceConnectionManager.kt
+    - Added wrapper methods (`initialise()`, `startSession()`, `getSummary()`) to RecordingSessionController.kt and DeviceConnectionManager.kt
     - Added `attemptStreamingRecovery()` and `currentStreamingQuality` property to NetworkController.kt
     - Fixed FirebaseModule.kt dependency injection by adding missing `authService` parameter
   - **Fixed method overload conflicts:**

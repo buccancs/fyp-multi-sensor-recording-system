@@ -463,11 +463,11 @@ in your writing and documentation practices:
   documentation (like READMEs) if they are part of the submission --
   they should not contain unattributed content from tutorials or
   websites either.
-- **Understand and Apply UCL's Integrity Policies:** Familiarize
+- **Understand and Apply UCL's Integrity Policies:** Familiarise
   yourself with UCL's **academic integrity guidelines** and **plagiarism
   policies**. These will outline what is expected in terms of
   originality and fair use of sources. **Being honest in your academic
-  work and formally recognizing the ideas on which your work is based is
+  work and formally recognising the ideas on which your work is based is
   essential[\[27\]](https://www.ucl.ac.uk/students/academic-support/final-year-undergraduate/final-year-project#:~:text=Also%20remember%20to%20refresh%20and,could%20be%20penalised%20for%C2%A0Academic%20Misconduct).**
   If you fail to acknowledge someone else's work or ideas, you risk
   accusations of Academic
@@ -556,10 +556,10 @@ management in the documentation:
   consent. If applicable, mention that they were free to withdraw at any
   time and that the study posed minimal risk. Providing this level of
   detail shows compliance with ethical research practices.
-- **Data Anonymization:** **Personal data protection** is crucial. If
+- **Data Anonymisation:** **Personal data protection** is crucial. If
   any personal identifiers were collected (even something like video of
   a person's face or their raw GSR data which could be considered
-  personal health data), explain how you **anonymized or pseudonymized**
+  personal health data), explain how you **anonymised or pseudonymized**
   the data. For instance, assign participant IDs instead of using names,
   blur faces in any saved video, and do not disclose any individually
   identifiable information in your thesis. In documentation, you can
@@ -673,7 +673,7 @@ demonstrate that you planned and managed the project effectively:
   you can include a table of key risks (technical, time, resource risks)
   and how you addressed them, either in an appendix or within a planning
   section. At minimum, in your text mention if any major risks
-  materialized and what you did (e.g., "A risk was identified that the
+  materialised and what you did (e.g., "A risk was identified that the
   thermal camera might not have sufficient resolution; to mitigate this,
   a backup camera was prepared, though ultimately not needed."). This
   demonstrates foresight and comprehensive planning.
@@ -710,12 +710,12 @@ projects are not just graded on what you built or discovered, but also
 on *how* you went about it. A well-documented plan and its execution
 give insight into your workflow and can impress upon the examiners that
 you worked methodically and professionally. It also helps future readers
-understand the trajectory of the project, which can contextualize
+understand the trajectory of the project, which can contextualise
 decisions and outcomes.
 
 ## Clarity, Layout, and Presentation Standards
 
-Clear language and a reader-friendly layout are essential to maximize
+Clear language and a reader-friendly layout are essential to maximise
 the impact of your documentation. UCL's guidelines often emphasise not
 just what you write, but how you present it. Ensure the following
 presentation standards are met in all documents:
@@ -871,7 +871,7 @@ technically accurate**. Ensure the following to support this:
   it's not public, include it in an appendix or as a submitted artifact.
   Similarly, key datasets or examples of recorded data should be
   provided if possible (within the bounds of ethical agreements -- e.g.,
-  anonymized sample data). If data is too large, describe its nature and
+  anonymised sample data). If data is too large, describe its nature and
   perhaps provide a way to obtain it. The principle is that nothing is
   hidden: *with your documentation, the code and data, one should be
   able to reconstruct the project results*.

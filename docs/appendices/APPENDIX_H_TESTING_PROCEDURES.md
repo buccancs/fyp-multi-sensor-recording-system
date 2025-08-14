@@ -26,7 +26,7 @@ test_results/
 ├── junit-unit.xml          # Unit test results
 ├── coverage-unit.xml       # Coverage reports
 ├── chapter5_artifacts/     # Measurement data
-│   ├── drift_results.csv   # Synchronization accuracy
+│   ├── drift_results.csv   # Synchronisation accuracy
 │   ├── calib_metrics.csv   # Calibration metrics
 │   ├── net_bench.csv       # Network performance
 │   └── measurement_summary.json
@@ -57,7 +57,7 @@ mypy PythonApp/ --ignore-missing-imports
 
 ### Integration Tests
 ```bash
-# Multi-device synchronization simulation
+# Multi-device synchronisation simulation
 python -m pytest tests_unified/integration/test_multi_device_synchronization.py -v
 
 # Cross-platform validation
@@ -120,7 +120,7 @@ from pathlib import Path
 
 output_dir = Path('test_results/chapter5_artifacts')
 
-# Synchronization accuracy
+# Synchronisation accuracy
 sync_collector = SynchronizationAccuracyCollector(output_dir)
 sync_collector.collect_multiple_sessions(num_sessions=20, device_count=6)
 sync_csv = sync_collector.save_to_csv()
@@ -204,7 +204,7 @@ adb shell getprop | grep -E "ro.build.version|ro.product.model|ro.product.brand"
 
 ## H.4 Raw CSV and JSON Outputs
 
-### Synchronization Accuracy Data (drift_results.csv)
+### Synchronisation Accuracy Data (drift_results.csv)
 ```csv
 session_id,timestamp,device_count,device_id,drift_ms,network_delay_ms,processing_delay_ms,clock_drift_ms,outlier,wifi_roaming,median_drift_ms,iqr_drift_ms,outlier_count,outlier_percentage
 sync_session_000_1755091314,2025-08-13T13:21:54.272801,6,device_00,6.674,6.688,0.552,-0.566,False,False,8.109,2.304,0,0.0
@@ -216,7 +216,7 @@ sync_session_000_1755091314,2025-08-13T13:21:54.272801,6,device_02,7.91,7.596,0.
 - Median drift: 5.7-8.1ms across sessions
 - IQR: 1.3-2.3ms typical spread
 - Outliers: 10-20% due to WiFi roaming (50-200ms spikes)
-- Normal operation: <10ms synchronization accuracy
+- Normal operation: <10ms synchronisation accuracy
 
 ### Calibration Accuracy Data (calib_metrics.csv)
 ```csv
@@ -273,7 +273,7 @@ timestamp,measurement_type,base_rtt_ms,tls_enabled,node_count,num_requests,mean_
 **Acceptance Criteria**:
 - ✅ Memory growth <100MB over 8 hours (actual: 45.3MB)
 - ✅ No crashes detected (actual: 0)
-- ✅ CPU utilization <50% average (actual: 12.4%)
+- ✅ CPU utilisation <50% average (actual: 12.4%)
 - ✅ Thread/FD stability maintained
 - ✅ Memory growth slope <100MB per 2-hour window
 

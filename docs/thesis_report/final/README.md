@@ -26,7 +26,7 @@ This directory contains the final thesis chapters and appendices in both Markdow
 
 ## Content Comparison Tool
 
-This directory includes a comprehensive content comparison tool to ensure synchronization between Markdown and LaTeX versions:
+This directory includes a comprehensive content comparison tool to ensure synchronisation between Markdown and LaTeX versions:
 
 ### Quick Usage
 ```bash
@@ -73,7 +73,7 @@ Based on the latest comparison run, there are content differences across all fil
 - **Chapter 2**: Significant content differences (27% similarity)
 - **Appendix F**: LaTeX version is a placeholder (0.2% similarity)
 
-### Well-Synchronized Files
+### Well-Synchronised Files
 - **Appendix A**: System Manual (98.9% similarity)
 - **Appendix H**: Reference Index (98.0% similarity)
 
@@ -81,7 +81,7 @@ Based on the latest comparison run, there are content differences across all fil
 
 When updating content:
 1. Make changes in the appropriate Markdown file
-2. Run the comparison tool to check synchronization
+2. Run the comparison tool to check synchronisation
 3. Update the corresponding LaTeX file if needed
 4. Verify with another comparison run
 

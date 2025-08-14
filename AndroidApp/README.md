@@ -12,16 +12,16 @@ A sophisticated Android application for synchronised multi-sensor data collectio
 **Recent Major Improvements (commits bb1433e, 95481c3, 1806194):**
 - ✅ **UI Architecture Overhaul**: Eliminated 500+ lines of duplicate code through unified component system
 - ✅ **Camera Preview Switching**: Added toggle switch for RGB/thermal camera preview selection
-- ✅ **Device Initialization Fix**: Resolved "CameraRecorder not initialized" race conditions with timing coordination
+- ✅ **Device Initialisation Fix**: Resolved "CameraRecorder not initialised" race conditions with timing coordination
 - ✅ **Comprehensive Test Coverage**: Added complete test suite for unified components and camera switching
 - ✅ **Code Deduplication**: Created CommonIndicators.kt with shared RecordingIndicator, DeviceStatusOverlay, PreviewCard
 - ✅ **Legacy Code Removal**: Deleted deprecated RecordingFragment.kt and fragment_recording.xml (400+ lines)
-- ✅ **Enhanced Error Handling**: Improved device coordination and initialization reliability
+- ✅ **Enhanced Error Handling**: Improved device coordination and initialisation reliability
 
 **Current Status:**
 - **Compilation**: 100% successful across all modules
 - **UI Architecture**: Unified component system with 78% code reduction
-- **Device Coordination**: Race condition-free initialization with enhanced timing control
+- **Device Coordination**: Race condition-free initialisation with enhanced timing control
 - **Test Framework**: Comprehensive coverage including UI components and camera switching
 - **User Experience**: Streamlined interface with camera preview switching capability
 
@@ -54,9 +54,9 @@ The Multi-Sensor Android Application implements a research-grade mobile data col
 - **🎛️ Professional UI Controls**: Comprehensive device management and sensor configuration interfaces
 - **RAW Image Capture**: Simultaneous RAW image capture for advanced image processing and calibration workflows  
 - **Thermal Camera Integration**: Real-time thermal imaging using Topdon TC001/TC001+ cameras via USB-C OTG connectivity with reflection-based API safety
-- **Camera Preview Switching**: User-controlled toggle between RGB and thermal camera previews with real-time switching and synchronized recording
+- **Camera Preview Switching**: User-controlled toggle between RGB and thermal camera previews with real-time switching and synchronised recording
 - **Shimmer3 GSR+ Integration**: Bluetooth communication with physiological sensors for galvanic skin response measurement
-- **Enhanced Device Coordination**: Improved initialization timing preventing race conditions and device errors with thermal camera initialization support
+- **Enhanced Device Coordination**: Improved initialisation timing preventing race conditions and device errors with thermal camera initialisation support
 - **Unified UI Architecture**: Streamlined components eliminating code duplication and providing consistent user experience across RGB and thermal modes
 - **Real-time Preview Streaming**: Live video preview transmission to PC controller for monitoring and coordination including thermal data streams
 - **Socket-based Remote Control**: Network-based command interface for synchronised multi-device recording sessions with thermal coordination
@@ -259,8 +259,8 @@ Integration with Topdon TC001/TC001+ thermal cameras through USB-C OTG connectiv
 @Inject
 lateinit var thermalRecorder: ThermalRecorder
 
-// Initialize with comprehensive error handling
-val success = thermalRecorder.initialize(surfaceView)
+// Initialise with comprehensive error handling
+val success = thermalRecorder.initialise(surfaceView)
 if (success) {
     val status = thermalRecorder.getThermalCameraStatus()
     Log.d("Thermal", "Device: ${status.deviceName}, Frames: ${status.frameCount}")
@@ -282,7 +282,7 @@ if (success) {
 - **🔗 Multi-Connection Support**: Both BT_CLASSIC and Bluetooth Low Energy (BLE) connections  
 - **📊 Multi-Sensor Arrays**: GSR, PPG, accelerometer, gyroscope, magnetometer, ECG, EMG, temperature sensors
 - **⚡ Real-time Data Streaming**: Configurable sampling rates from 25.6Hz to 512Hz with ObjectCluster data parsing
-- **💾 SD Logging Functionality**: Time-synchronized logging across multiple devices with automatic file management
+- **💾 SD Logging Functionality**: Time-synchronised logging across multiple devices with automatic file management
 - **🔄 Professional State Management**: Official message handler patterns for device lifecycle and connection management
 
 **User Interface Integration:**
@@ -295,7 +295,7 @@ if (success) {
 - **🔬 Data Quality Assessment**: Real-time signal quality monitoring and connection stability tracking
 - **📈 Performance Monitoring**: Battery level tracking, signal strength indicators, and data rate analysis
 - **🔧 Advanced Configuration**: GSR range settings, accelerometer sensitivity, EXG channel configuration
-- **💻 Professional Recording**: CSV export with proper timestamps and multi-device synchronization
+- **💻 Professional Recording**: CSV export with proper timestamps and multi-device synchronisation
 
 ### Advanced Features
 
@@ -736,13 +736,13 @@ Production-ready Topdon thermal camera integration with reflection-based API saf
 ```kotlin
 interface ThermalRecorder {
     /**
-     * Initialize thermal camera system with optional preview surface
+     * Initialise thermal camera system with optional preview surface
      * @param previewSurface Optional SurfaceView for preview display
      * @param previewStreamer Optional preview streaming component
-     * @return True if initialization successful
+     * @return True if initialisation successful
      */
-    fun initialize(previewSurface: SurfaceView? = null): Boolean
-    fun initialize(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
+    fun initialise(previewSurface: SurfaceView? = null): Boolean
+    fun initialise(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
     
     /**
      * Start thermal camera recording for specified session
@@ -1102,7 +1102,7 @@ class SecureDataManager {
 
 - **Data Minimisation**: Collect only necessary data for research purposes
 - **Local Processing**: Sensitive processing performed on-device
-- **Anonymization**: Optional data anonymization before export
+- **Anonymisation**: Optional data anonymisation before export
 - **Consent Management**: Integrated consent tracking and validation
 
 ### Compliance

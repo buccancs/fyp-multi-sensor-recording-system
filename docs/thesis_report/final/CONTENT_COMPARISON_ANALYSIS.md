@@ -1,6 +1,6 @@
 # Content Comparison Analysis: Markdown vs LaTeX Thesis Files
 
-Based on detailed examination of corresponding `.md` and `.tex` files in the `docs/thesis_report/final/` directory, this analysis identifies synchronization status and content differences between the two formats.
+Based on detailed examination of corresponding `.md` and `.tex` files in the `docs/thesis_report/final/` directory, this analysis identifies synchronisation status and content differences between the two formats.
 
 ## Executive Summary
 
@@ -10,7 +10,7 @@ Based on detailed examination of corresponding `.md` and `.tex` files in the `do
 - **4 Chapter files**: 67-87% content missing (Chapters 3-6)
 - **1 Appendix**: Nearly 99% placeholder (Appendix F) 
 - **5 Appendices**: Need verbatim-to-LaTeX conversion (B, C, E, I, Z)
-- **1 File pair**: Well synchronized (Appendix A - 98% sync)
+- **1 File pair**: Well synchronised (Appendix A - 98% sync)
 - **Overall**: 11 of 16 file pairs need significant work
 
 **Immediate Action Required**: Complete missing content in Chapters 3-5 (core technical chapters) before addressing formatting issues.
@@ -80,7 +80,7 @@ Based on detailed examination of corresponding `.md` and `.tex` files in the `do
 - **Minor Issues**: 
   - LaTeX uses verbatim blocks for large sections
   - Citation format differences (`[8]` vs `\citep{ref8}`)
-  - Overall excellent synchronization
+  - Overall excellent synchronisation
 
 #### Appendix B: User Manual (appendix_b_user_manual.md ↔ latex/appendix_B.tex)
 **Status**: ⚠️ **PARTIAL CONVERSION**
@@ -105,7 +105,7 @@ Based on detailed examination of corresponding `.md` and `.tex` files in the `do
 - **Content Sync**: ~90% similar content
 - **Key Issues**:
   - Markdown: 308 lines vs LaTeX: 341 lines (LaTeX slightly longer)
-  - Generally well-synchronized with proper LaTeX formatting
+  - Generally well-synchronised with proper LaTeX formatting
   - Minor citation format differences
   - **Low priority for updates**
 
@@ -150,7 +150,7 @@ Based on detailed examination of corresponding `.md` and `.tex` files in the `do
 - **Content Sync**: ~75% similar content
 - **Key Issues**:
   - Markdown: 63 lines vs LaTeX: 58 lines (similar length but different structure)
-  - LaTeX has better figure organization and referencing
+  - LaTeX has better figure organisation and referencing
   - Some figures may be missing from LaTeX version
   - **Medium priority for content verification**
 
@@ -159,8 +159,8 @@ Based on detailed examination of corresponding `.md` and `.tex` files in the `do
 - **Content Sync**: ~90% similar content
 - **Key Issues**:
   - Markdown: 669 lines vs LaTeX: 700 lines (LaTeX slightly longer)
-  - LaTeX has more detailed figure organization
-  - Generally well-synchronized with proper LaTeX formatting
+  - LaTeX has more detailed figure organisation
+  - Generally well-synchronised with proper LaTeX formatting
   - **Low priority for updates**
 
 ## Pattern Analysis
@@ -205,7 +205,7 @@ Based on detailed examination of corresponding `.md` and `.tex` files in the `do
 - Appendix H: Citation format conversion
 - Appendix Z: Minor organizational differences
 
-**Well Synchronized**:
+**Well Synchronised**:
 - Appendix A: Excellent sync (98%), minor format differences only
 
 ## Recommendations
@@ -244,15 +244,15 @@ Based on detailed examination of corresponding `.md` and `.tex` files in the `do
 
 ## Conclusion
 
-The documentation exists in two formats with **severe synchronization issues across most files**. The analysis reveals:
+The documentation exists in two formats with **severe synchronisation issues across most files**. The analysis reveals:
 
 **Overall Statistics**:
 - **11 of 16 file pairs** have significant content gaps or formatting issues
 - **4 chapter files** have critical content missing (67-87% incomplete)
 - **1 appendix** is almost entirely placeholder (Appendix F)
 - **5 appendices** need format conversion from verbatim to proper LaTeX
-- **Only 1 file pair** (Appendix A) is well-synchronized
+- **Only 1 file pair** (Appendix A) is well-synchronised
 
-**Critical Finding**: The Markdown versions contain significantly more current and complete content across most files, while LaTeX versions range from well-synchronized (Appendix A) to severely incomplete (Chapters 3-5, Appendix F). The thesis documentation is currently **unsuitable for submission** due to major content gaps in the LaTeX version.
+**Critical Finding**: The Markdown versions contain significantly more current and complete content across most files, while LaTeX versions range from well-synchronised (Appendix A) to severely incomplete (Chapters 3-5, Appendix F). The thesis documentation is currently **unsuitable for submission** due to major content gaps in the LaTeX version.
 
 **Urgency**: Immediate action is required to complete the missing 70-80% of content in core chapters before thesis submission. Priority should focus on Chapters 3-5 which contain the critical technical content.

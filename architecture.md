@@ -207,14 +207,14 @@ The Android application underwent comprehensive refactoring, transforming from a
 **Camera Preview Switching** (`AndroidApp/src/main/java/com/multisensor/recording/ui/compose/screens/RecordingScreen.kt`)
 - **Responsibility**: Provides user-controlled switching between RGB and thermal camera previews
 - **Features**: Toggle switch with clear "RGB" and "Thermal" labels, real-time preview switching
-- **Integration**: Maintains initialization of both cameras while displaying only the selected preview
+- **Integration**: Maintains initialisation of both cameras while displaying only the selected preview
 - **User Experience**: Clean interface allowing researchers to focus on specific data streams as needed
 
-**Enhanced Device Initialization** (`AndroidApp/src/main/java/com/multisensor/recording/managers/DeviceConnectionManager.kt`)
-- **Responsibility**: Coordinates camera and device initialization with improved timing control
-- **Features**: 500ms delay between initialization and session start, enhanced error logging, race condition prevention
-- **Integration**: Resolves "CameraRecorder not initialized" errors through proper coordination between TextureView and SurfaceView creation
-- **Reliability**: Ensures stable device initialization across diverse Android hardware configurations
+**Enhanced Device Initialisation** (`AndroidApp/src/main/java/com/multisensor/recording/managers/DeviceConnectionManager.kt`)
+- **Responsibility**: Coordinates camera and device initialisation with improved timing control
+- **Features**: 500ms delay between initialisation and session start, enhanced error logging, race condition prevention
+- **Integration**: Resolves "CameraRecorder not initialised" errors through proper coordination between TextureView and SurfaceView creation
+- **Reliability**: Ensures stable device initialisation across diverse Android hardware configurations
 
 #### Business Logic Controllers
 
@@ -226,9 +226,9 @@ The Android application underwent comprehensive refactoring, transforming from a
 
 **DeviceConnectionManager** (389 lines)
 - **Responsibility**: Device connectivity orchestration and network coordination with improved timing control
-- **Features**: Connection state management, automatic reconnection, network discovery, 500ms initialization delay for race condition prevention
-- **Integration**: Manages WebSocket communication with PC controller and coordinates camera initialization timing
-- **Reliability**: Implements 80% automatic recovery from connection failures, resolves "CameraRecorder not initialized" errors through enhanced coordination
+- **Features**: Connection state management, automatic reconnection, network discovery, 500ms initialisation delay for race condition prevention
+- **Integration**: Manages WebSocket communication with PC controller and coordinates camera initialisation timing
+- **Reliability**: Implements 80% automatic recovery from connection failures, resolves "CameraRecorder not initialised" errors through enhanced coordination
 
 **FileTransferManager** (448 lines)
 - **Responsibility**: Data transfer operations and local persistence management
@@ -245,10 +245,10 @@ The Android application underwent comprehensive refactoring, transforming from a
 #### Recording Components
 
 **CameraRecorder** (`AndroidApp/src/main/java/com/multisensor/recording/recording/`)
-- **Responsibility**: High-resolution video capture using Camera2 API with enhanced initialization coordination
+- **Responsibility**: High-resolution video capture using Camera2 API with enhanced initialisation coordination
 - **Features**: 1920x1080@30fps recording, real-time preview, format optimisation, improved timing control
 - **Integration**: Synchronised frame capture with temporal metadata, coordinated with unified UI components
-- **Performance**: Optimised for continuous recording with minimal battery impact, eliminates initialization race conditions
+- **Performance**: Optimised for continuous recording with minimal battery impact, eliminates initialisation race conditions
 
 **ThermalRecorder** (`AndroidApp/src/main/java/com/multisensor/recording/recording/`)
 - **Responsibility**: Thermal camera integration and temperature data collection with user-controlled preview switching
@@ -260,7 +260,7 @@ The Android application underwent comprehensive refactoring, transforming from a
 - **Responsibility**: Complete ShimmerAndroidAPI integration with professional-grade physiological sensor support
 - **Features**: Official ShimmerBluetoothManagerAndroid integration, multi-sensor arrays (GSR, PPG, accelerometer, gyroscope, magnetometer, ECG, EMG), real-time data streaming with ObjectCluster parsing
 - **Connection Management**: Both BT_CLASSIC and BLE support, automatic device discovery from paired devices, connection state management with retry mechanisms
-- **Data Processing**: Configurable sampling rates (25.6Hz to 512Hz), SD logging functionality with time synchronization, CSV export with proper timestamps
+- **Data Processing**: Configurable sampling rates (25.6Hz to 512Hz), SD logging functionality with time synchronisation, CSV export with proper timestamps
 - **UI Integration**: Comprehensive Shimmer dashboard embedded in recording workflow, dedicated control panel with device management interface
 - **Quality Assurance**: Real-time signal quality monitoring, battery level tracking, connection stability assessment, data integrity validation
 
@@ -426,7 +426,7 @@ graph TB
         
         subgraph "Privacy Compliance Layer"
             GDPR[GDPR Compliance<br/>Data Subject Rights]
-            ANON[Data Anonymization<br/>PII Protection]
+            ANON[Data Anonymisation<br/>PII Protection]
             RETENTION[Data Retention<br/>Automated Lifecycle]
         end
         
@@ -459,7 +459,7 @@ graph TB
 
 **Privacy Compliance Features**:
 - **GDPR Compliance**: Full compliance with EU privacy regulations including consent management
-- **Data Anonymization**: Automatic PII removal and participant ID anonymization
+- **Data Anonymisation**: Automatic PII removal and participant ID anonymisation
 - **Retention Policies**: Configurable data retention with automated deletion recommendations
 
 ### 6. Performance and Scalability Architecture
@@ -518,7 +518,7 @@ The testing strategy implements a four-tier approach designed to satisfy academi
 | Test Level | Coverage Target | Test Types | Artifacts Generated | Chapter 5 Evidence |
 |------------|----------------|------------|-------------------|-------------------|
 | **Unit Tests** | Android: 90% line coverage<br/>Python: 95% branch coverage | JUnit+Robolectric (Android)<br/>pytest (Python)<br/>Lint/Static Analysis | JUnit XML, JaCoCo HTML<br/>Coverage reports<br/>Lint reports | Component reliability validation |
-| **Integration Tests** | Multi-device coordination<br/>Network protocols<br/>Cross-platform compatibility | Multi-device sync simulation<br/>Network loopback testing<br/>Android to PC instrumentation | Synchronization CSV data<br/>Protocol validation logs<br/>Performance benchmarks | System coordination evidence |
+| **Integration Tests** | Multi-device coordination<br/>Network protocols<br/>Cross-platform compatibility | Multi-device sync simulation<br/>Network loopback testing<br/>Android to PC instrumentation | Synchronisation CSV data<br/>Protocol validation logs<br/>Performance benchmarks | System coordination evidence |
 | **System Performance** | 8-hour endurance target<br/>Memory leak detection<br/>Resource stability | Endurance testing<br/>Memory leak validation<br/>CPU/thread monitoring | Performance metrics CSV<br/>Memory usage timeseries<br/>Resource stability reports | Performance claims validation |
 | **Measurement Collection** | Quantitative evidence<br/>Reproducible data<br/>Academic standards | Accuracy measurements<br/>Calibration validation<br/>Network performance analysis | drift_results.csv<br/>calib_metrics.csv<br/>net_bench.csv | Quantitative claims support |
 
@@ -532,7 +532,7 @@ The testing strategy implements a four-tier approach designed to satisfy academi
 
 The testing framework generates quantitative evidence required for Chapter 5 evaluation through automated measurement collection:
 
-- **Synchronization Accuracy**: Median drift and IQR measurements across multiple sessions with outlier documentation (WiFi roaming events)
+- **Synchronisation Accuracy**: Median drift and IQR measurements across multiple sessions with outlier documentation (WiFi roaming events)
 - **Calibration Accuracy**: Intrinsic reprojection error for RGB/thermal cameras, cross-modal registration error, temporal alignment accuracy
 - **Network Performance**: 95th percentile latency under different RTTs, TLS overhead quantification, scalability to 6+ nodes
 - **UI Responsiveness**: Thread latency during device discovery, Espresso automation flows, setup time metrics
@@ -559,7 +559,7 @@ graph TB
             VIEWMODEL[ViewModel Recording State<br/>isRecording Flags & Status Updates]
             UI[UI/Instrumentation Testing<br/>Espresso Navigation & Permissions]
             UNIFIED[Unified Components Testing<br/>CommonIndicators & Camera Switching]
-            TIMING[Device Timing Testing<br/>Initialization Race Condition Fixes]
+            TIMING[Device Timing Testing<br/>Initialisation Race Condition Fixes]
             EDGE[Edge Case & Stress Testing<br/>Bluetooth Drops & Network Issues]
         end
         
@@ -609,7 +609,7 @@ graph TB
 **Comprehensive Test Suite** (Latest Implementation with Complete Coverage):
 - **CommonIndicatorsTest.kt**: Tests for unified `RecordingIndicator`, `DeviceStatusOverlay`, and `PreviewCard` components
 - **RecordingScreenTest.kt**: Tests for camera switching functionality and recording controls
-- **DeviceConnectionManagerTimingTest.kt**: Tests for camera initialization timing fix that resolves race conditions
+- **DeviceConnectionManagerTimingTest.kt**: Tests for camera initialisation timing fix that resolves race conditions
 - **UnifiedComponentsIntegrationTest.kt**: Integration tests ensuring all unified components work together properly
 
 **Quality Assurance Metrics**
@@ -625,7 +625,7 @@ graph TB
 **Enhanced Testing Infrastructure Coverage**:
 - **UI Component Testing**: Complete validation of unified `CommonIndicators.kt` components eliminating duplication
 - **Camera Switching Testing**: Comprehensive tests for RGB/thermal preview switching functionality  
-- **Device Coordination Testing**: Validation of improved initialization timing preventing "CameraRecorder not initialized" errors
+- **Device Coordination Testing**: Validation of improved initialisation timing preventing "CameraRecorder not initialised" errors
 - **Integration Testing**: Cross-component validation ensuring unified components work seamlessly together
 - **Regression Testing**: Ensures code deduplication maintains exact same functionality while improving maintainability
 
@@ -716,10 +716,10 @@ graph TB
 - **Rationale**: Enable focused data collection while maintaining both camera systems for proper device coordination
 - **Consequences**: Improved user experience for researchers, enhanced workflow control, maintained system functionality
 
-### ADR-006: Device Initialization Timing Coordination
-- **Decision**: Add 500ms delay between camera initialization and session start with coordinated view readiness validation
-- **Rationale**: Prevent "CameraRecorder not initialized" race conditions and ensure reliable camera system setup
-- **Consequences**: Eliminated initialization errors, improved system reliability, enhanced debugging capabilities, consistent behavior across devices
+### ADR-006: Device Initialisation Timing Coordination
+- **Decision**: Add 500ms delay between camera initialisation and session start with coordinated view readiness validation
+- **Rationale**: Prevent "CameraRecorder not initialised" race conditions and ensure reliable camera system setup
+- **Consequences**: Eliminated initialisation errors, improved system reliability, enhanced debugging capabilities, consistent behaviour across devices
 
 ## System Integration Patterns
 
@@ -845,7 +845,7 @@ graph LR
 
 
 ## Documentation — Bibliography Flow (BibTeX)
-This repository's thesis now uses a centralized BibTeX workflow instead of manual thebibliography. The flow below shows how citations are resolved during the LaTeX build.
+This repository's thesis now uses a centralised BibTeX workflow instead of manual thebibliography. The flow below shows how citations are resolved during the LaTeX build.
 
 ```mermaid
 flowchart LR

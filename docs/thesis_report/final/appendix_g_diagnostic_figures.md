@@ -2,7 +2,7 @@
 
 Purpose and Justification: This appendix provides detailed performance analysis and diagnostic insights that support the evaluation conclusions presented in Chapter 6. Visual content has been consolidated into Appendix Z for improved navigation - this appendix now focuses on analysis and interpretation.
 
-This appendix provides detailed diagnostic analysis and performance interpretation supporting the system evaluation presented in Chapter 6. All diagnostic figures are now centralized in Appendix Z, Sections Z.4.1-Z.4.5, with this appendix focusing on the analytical insights and interpretation.
+This appendix provides detailed diagnostic analysis and performance interpretation supporting the system evaluation presented in Chapter 6. All diagnostic figures are now centralised in Appendix Z, Sections Z.4.1-Z.4.5, with this appendix focusing on the analytical insights and interpretation.
 
 ## G.1 Device Discovery and Connection Reliability Analysis
 

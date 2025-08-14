@@ -24,4 +24,4 @@ These tests were calling methods that don't exist in the actual implementation:
 - Android tests: ✅ All compilable tests passing
 - Overall test runner: ✅ Working
 
-The broken test files need to be rewritten to match the actual class APIs, but that would require significant time and understanding of the intended test behavior. For now, the main test infrastructure is working correctly.
+The broken test files need to be rewritten to match the actual class APIs, but that would require significant time and understanding of the intended test behaviour. For now, the main test infrastructure is working correctly.
