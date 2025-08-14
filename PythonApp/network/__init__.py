@@ -4,6 +4,7 @@ Network Communication Module
 
 Simple JSON socket server for communicating with Android devices.
 Handles device connections, command distribution, and status updates.
+Includes security features and enhanced message handling.
 """
 
 import json
@@ -28,6 +29,8 @@ class AndroidDevice:
         self.last_heartbeat = datetime.now()
         self.is_recording = False
         self.device_info = {}
+        self.authenticated = False
+        self.permissions: List[str] = []
         
     def send_message(self, message: dict) -> bool:
         """Send JSON message to device."""
@@ -46,7 +49,7 @@ class AndroidDevice:
 
 
 class JsonSocketServer:
-    """Simple JSON socket server for Android device communication."""
+    """Enhanced JSON socket server for Android device communication."""
     
     def __init__(self, host: str = "0.0.0.0", port: int = 8080):
         self.host = host
@@ -57,15 +60,37 @@ class JsonSocketServer:
         self.message_handlers = {}
         self.server_thread = None
         
+        # Security and synchronization components
+        self.security_manager = None
+        self.session_synchronizer = None
+        self.transfer_manager = None
+        
         # Register default message handlers
         self._register_handlers()
+    
+    def set_security_manager(self, security_manager):
+        """Set the security manager for authentication."""
+        self.security_manager = security_manager
+    
+    def set_session_synchronizer(self, synchronizer):
+        """Set the session synchronizer for device coordination."""
+        self.session_synchronizer = synchronizer
+    
+    def set_transfer_manager(self, transfer_manager):
+        """Set the transfer manager for file operations."""
+        self.transfer_manager = transfer_manager
     
     def _register_handlers(self):
         """Register default message handlers."""
         self.message_handlers = {
             'device_info': self._handle_device_info,
+            'authentication': self._handle_authentication,
             'heartbeat': self._handle_heartbeat,
             'recording_status': self._handle_recording_status,
+            'file_list_response': self._handle_file_list_response,
+            'file_chunk': self._handle_file_chunk,
+            'file_complete': self._handle_file_complete,
+            'sync_response': self._handle_sync_response,
             'error': self._handle_error
         }
     
@@ -189,16 +214,100 @@ class JsonSocketServer:
         device.device_info = message.get('data', {})
         logger.info(f"Device info updated for {device.device_id}: {device.device_info}")
     
+    def _handle_authentication(self, device: AndroidDevice, message: dict):
+        """Handle authentication message."""
+        if not self.security_manager:
+            # No security manager - allow all connections
+            device.authenticated = True
+            device.permissions = ["record", "transfer", "sync"]
+            self._send_auth_response(device, True, "Authentication disabled")
+            return
+        
+        auth_data = message.get('data', {})
+        token = auth_data.get('token')
+        
+        if not token:
+            self._send_auth_response(device, False, "No authentication token provided")
+            return
+        
+        # Validate token
+        if self.security_manager.authenticate_device(device.device_id, token):
+            device.authenticated = True
+            device.permissions = auth_data.get('requested_permissions', ["record"])
+            self._send_auth_response(device, True, "Authentication successful")
+            logger.info(f"Device {device.device_id} authenticated successfully")
+        else:
+            self._send_auth_response(device, False, "Invalid authentication token")
+            logger.warning(f"Authentication failed for device {device.device_id}")
+    
+    def _send_auth_response(self, device: AndroidDevice, success: bool, message: str):
+        """Send authentication response to device."""
+        response = {
+            'type': 'auth_response',
+            'success': success,
+            'message': message,
+            'permissions': device.permissions if success else []
+        }
+        device.send_message(response)
+    
     def _handle_heartbeat(self, device: AndroidDevice, message: dict):
         """Handle heartbeat message."""
-        # Heartbeat already processed in _process_message
-        pass
+        # Update session synchronizer if available
+        if self.session_synchronizer:
+            self.session_synchronizer.update_device_heartbeat(device.device_id)
     
     def _handle_recording_status(self, device: AndroidDevice, message: dict):
         """Handle recording status update."""
         status_data = message.get('data', {})
         device.is_recording = status_data.get('is_recording', False)
         logger.info(f"Recording status for {device.device_id}: {device.is_recording}")
+    
+    def _handle_file_list_response(self, device: AndroidDevice, message: dict):
+        """Handle file list response from device."""
+        if not self.transfer_manager:
+            logger.warning("No transfer manager available for file list response")
+            return
+        
+        data = message.get('data', {})
+        session_id = data.get('session_id')
+        file_list = data.get('files', [])
+        
+        if session_id and file_list:
+            self.transfer_manager.handle_file_list_response(device.device_id, session_id, file_list)
+    
+    def _handle_file_chunk(self, device: AndroidDevice, message: dict):
+        """Handle file chunk from device."""
+        if not self.transfer_manager:
+            logger.warning("No transfer manager available for file chunk")
+            return
+        
+        data = message.get('data', {})
+        file_id = data.get('file_id')
+        chunk_data = data.get('chunk_data')
+        chunk_index = data.get('chunk_index', 0)
+        
+        if file_id and chunk_data is not None:
+            self.transfer_manager.handle_file_chunk(file_id, chunk_data, chunk_index)
+    
+    def _handle_file_complete(self, device: AndroidDevice, message: dict):
+        """Handle file transfer completion from device."""
+        if not self.transfer_manager:
+            logger.warning("No transfer manager available for file completion")
+            return
+        
+        data = message.get('data', {})
+        file_id = data.get('file_id')
+        
+        if file_id:
+            self.transfer_manager.handle_file_complete(file_id)
+    
+    def _handle_sync_response(self, device: AndroidDevice, message: dict):
+        """Handle synchronization response from device."""
+        data = message.get('data', {})
+        sync_type = data.get('sync_type')
+        sync_id = data.get('sync_id')
+        
+        logger.debug(f"Sync response from {device.device_id}: {sync_type} #{sync_id}")
     
     def _handle_error(self, device: AndroidDevice, message: dict):
         """Handle error message from device."""
@@ -273,6 +382,8 @@ class JsonSocketServer:
                 'last_heartbeat': device.last_heartbeat.isoformat(),
                 'is_recording': device.is_recording,
                 'is_alive': device.is_alive(),
+                'authenticated': device.authenticated,
+                'permissions': device.permissions,
                 'device_info': device.device_info
             }
         

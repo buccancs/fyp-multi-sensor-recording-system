@@ -4,6 +4,7 @@ Session Management Module
 
 Manages recording sessions with coordinated start/stop across devices.
 Handles session metadata, file organization, and status tracking.
+Integrates with sensors, synchronization, calibration, and file transfer.
 """
 
 import json
@@ -70,12 +71,29 @@ class SessionManager:
         self.session_history: List[SessionInfo] = []
         self.network_server = None
         
+        # Initialize managers
+        self.sensor_manager = None
+        self.session_synchronizer = None
+        self.transfer_manager = None
+        
         # Load session history
         self._load_session_history()
     
     def set_network_server(self, server):
         """Set the network server for device communication."""
         self.network_server = server
+    
+    def set_sensor_manager(self, sensor_manager):
+        """Set the sensor manager for GSR data recording."""
+        self.sensor_manager = sensor_manager
+    
+    def set_session_synchronizer(self, synchronizer):
+        """Set the session synchronizer for device coordination."""
+        self.session_synchronizer = synchronizer
+    
+    def set_transfer_manager(self, transfer_manager):
+        """Set the transfer manager for file transfers."""
+        self.transfer_manager = transfer_manager
     
     def create_session(self, config: SessionConfig) -> SessionInfo:
         """Create a new recording session."""
@@ -120,6 +138,18 @@ class SessionManager:
             connected_devices = self.network_server.get_connected_devices()
             if not connected_devices:
                 raise RuntimeError("No devices connected")
+            
+            # Start session synchronization if available
+            if self.session_synchronizer:
+                sync_success = self.session_synchronizer.start_session_sync(self.active_session.session_id)
+                if not sync_success:
+                    logger.warning("Failed to start session synchronization")
+            
+            # Start sensor recording if available
+            if self.sensor_manager:
+                sensor_success = self.sensor_manager.start_recording(self.active_session.session_id)
+                if not sensor_success:
+                    logger.warning("Failed to start sensor recording")
             
             # Send start recording command to all devices
             session_data = {
@@ -170,6 +200,12 @@ class SessionManager:
             # Send stop recording command to all devices
             successful_devices = self.network_server.broadcast_command('stop_recording')
             
+            # Stop sensor recording if available
+            if self.sensor_manager:
+                sensor_success = self.sensor_manager.stop_recording()
+                if not sensor_success:
+                    logger.warning("Failed to stop sensor recording")
+            
             # Update session info
             self.active_session.end_time = datetime.now()
             self.active_session.status = "stopped"
@@ -178,6 +214,22 @@ class SessionManager:
             
             # Save final session metadata
             self._save_session_metadata()
+            
+            # Initiate file transfer if available
+            if self.transfer_manager:
+                transfer_success = self.transfer_manager.initiate_session_transfer(
+                    self.active_session.session_id
+                )
+                if transfer_success:
+                    logger.info("Initiated file transfer from devices")
+                else:
+                    logger.warning("Failed to initiate file transfer")
+            
+            # Stop session synchronization if available
+            if self.session_synchronizer:
+                sync_success = self.session_synchronizer.stop_session_sync()
+                if not sync_success:
+                    logger.warning("Failed to stop session synchronization")
             
             # Add to history
             self.session_history.append(self.active_session)
@@ -209,6 +261,16 @@ class SessionManager:
             end_time = self.active_session.end_time or datetime.now()
             duration_seconds = (end_time - self.active_session.start_time).total_seconds()
         
+        # Get sensor status if available
+        sensor_status = {}
+        if self.sensor_manager:
+            sensor_status = self.sensor_manager.get_sensor_status()
+        
+        # Get synchronization status if available
+        sync_status = {}
+        if self.session_synchronizer:
+            sync_status = self.session_synchronizer.get_device_sync_status()
+        
         return {
             'has_active_session': True,
             'session_info': self.active_session.to_dict(),
@@ -216,7 +278,9 @@ class SessionManager:
             'connected_devices': (
                 list(self.network_server.get_connected_devices().keys()) 
                 if self.network_server else []
-            )
+            ),
+            'sensor_status': sensor_status,
+            'sync_status': sync_status
         }
     
     def get_session_history(self, limit: int = 50) -> List[Dict[str, Any]]:
