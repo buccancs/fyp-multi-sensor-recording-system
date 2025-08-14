@@ -23,11 +23,11 @@ import org.junit.Test
  *    - ✅ Recording Components: Camera, Thermal, Shimmer recorders
  *    - ✅ Network Layer: WebSocket, REST APIs, connection management
  *    - ✅ Security: Encryption, permissions, authentication
- *    - ✅ Performance: Power management, optimization
+ *    - ✅ Performance: Power management, optimisation
  *    - ✅ Monitoring: Analytics, performance tracking
  *    - ✅ Calibration: Camera, thermal, sensor calibration
  *    - ✅ Streaming: Data streams, real-time processing
- *    - ✅ Protocol: Message protocols, data synchronization
+ *    - ✅ Protocol: Message protocols, data synchronisation
  *    - ✅ DI: Dependency injection modules
  *    - ✅ Hand Segmentation: ML models, image processing
  * 
@@ -45,25 +45,25 @@ import org.junit.Test
  * 
  * 3. INTEGRATION TESTS (Multi-component testing)
  *    - ✅ Recording Workflows: End-to-end recording with all sensors
- *    - ✅ Device Coordination: Camera + Thermal + Shimmer synchronization
+ *    - ✅ Device Coordination: Camera + Thermal + Shimmer synchronisation
  *    - ✅ File Management: Session creation, data storage, file integrity
  *    - ✅ Network Integration: PC server communication, data streaming
  *    - ✅ Firebase Integration: Authentication + storage + analytics
  *    - ✅ Calibration Workflows: System-wide calibration validation
  * 
- * 4. PERFORMANCE TESTS (Quality and optimization)
- *    - ✅ Memory Usage: Leak detection, garbage collection optimization
- *    - ✅ Battery Life: Power consumption monitoring and optimization
+ * 4. PERFORMANCE TESTS (Quality and optimisation)
+ *    - ✅ Memory Usage: Leak detection, garbage collection optimisation
+ *    - ✅ Battery Life: Power consumption monitoring and optimisation
  *    - ✅ Network Performance: Bandwidth usage, connection stability
  *    - ✅ UI Performance: Frame rates, animation smoothness
  *    - ✅ Storage Performance: File I/O speed, data compression
- *    - ✅ Sensor Performance: Data acquisition rates, synchronization accuracy
+ *    - ✅ Sensor Performance: Data acquisition rates, synchronisation accuracy
  * 
  * 5. SECURITY TESTS (Data protection and privacy)
  *    - ✅ Data Encryption: File encryption, network security
  *    - ✅ Authentication: Firebase auth, user session management
  *    - ✅ Permissions: Camera, storage, network permission handling
- *    - ✅ Privacy: Data anonymization, consent management
+ *    - ✅ Privacy: Data anonymisation, consent management
  * 
  * COVERAGE METRICS ACHIEVED:
  * - Line Coverage: 100% (target achieved)

@@ -37,7 +37,7 @@ class RecordingComponentsComprehensiveTest {
     }
 
     @Test
-    fun `test camera recorder initialization`() {
+    fun `test camera recorder initialisation`() {
         val config = CameraConfiguration(
             cameraId = "0",
             resolution = Resolution(1920, 1080),
@@ -45,7 +45,7 @@ class RecordingComponentsComprehensiveTest {
             bitRate = 8000000
         )
 
-        val result = cameraRecorder.initialize(config)
+        val result = cameraRecorder.initialise(config)
 
         assertTrue(result.isSuccess)
         assertEquals("0", cameraRecorder.getCurrentCameraId())
@@ -130,14 +130,14 @@ class RecordingComponentsComprehensiveTest {
             bitRate = 8000000
         )
 
-        val result = cameraRecorder.initialize(config)
+        val result = cameraRecorder.initialise(config)
 
         assertTrue(result.isFailure)
         assertNotNull(result.exceptionOrNull())
     }
 
     @Test
-    fun `test thermal recorder initialization`() {
+    fun `test thermal recorder initialisation`() {
         val config = ThermalConfiguration(
             samplingRate = 10,
             temperatureRange = TemperatureRange(-10f, 60f),
@@ -147,10 +147,10 @@ class RecordingComponentsComprehensiveTest {
         whenever(mockThermalSensor.isAvailable()).thenReturn(true)
         thermalRecorder.setThermalSensor(mockThermalSensor)
 
-        val result = thermalRecorder.initialize(config)
+        val result = thermalRecorder.initialise(config)
 
         assertTrue(result.isSuccess)
-        assertTrue(thermalRecorder.isInitialized())
+        assertTrue(thermalRecorder.isInitialised())
     }
 
     @Test
@@ -227,7 +227,7 @@ class RecordingComponentsComprehensiveTest {
     }
 
     @Test
-    fun `test shimmer recorder initialization`() {
+    fun `test shimmer recorder initialisation`() {
         val config = ShimmerConfiguration(
             deviceMacAddress = "00:06:66:AA:BB:CC",
             samplingRate = 512,
@@ -238,7 +238,7 @@ class RecordingComponentsComprehensiveTest {
         whenever(mockShimmerDevice.connect(any())).thenReturn(true)
         shimmerRecorder.setShimmerDevice(mockShimmerDevice)
 
-        val result = shimmerRecorder.initialize(config)
+        val result = shimmerRecorder.initialise(config)
 
         assertTrue(result.isSuccess)
         verify(mockShimmerDevice).connect(config.deviceMacAddress)
@@ -287,16 +287,16 @@ class RecordingComponentsComprehensiveTest {
     fun `test shimmer device synchronisation`() {
         val masterTimestamp = System.currentTimeMillis()
 
-        whenever(mockShimmerDevice.synchronizeClock(masterTimestamp))
+        whenever(mockShimmerDevice.synchroniseClock(masterTimestamp))
             .thenReturn(SyncResult(success = true, offsetMs = 2))
 
         shimmerRecorder.setShimmerDevice(mockShimmerDevice)
 
-        val syncResult = shimmerRecorder.synchronizeWithMaster(masterTimestamp)
+        val syncResult = shimmerRecorder.synchroniseWithMaster(masterTimestamp)
 
         assertTrue(syncResult.success)
         assertEquals(2L, syncResult.offsetMs)
-        verify(mockShimmerDevice).synchronizeClock(masterTimestamp)
+        verify(mockShimmerDevice).synchroniseClock(masterTimestamp)
     }
 
     @Test
@@ -363,14 +363,14 @@ class RecordingComponentsComprehensiveTest {
             shimmerRecorder = shimmerRecorder
         )
 
-        val startResult = coordinator.startSynchronizedRecording(recordingSession)
+        val startResult = coordinator.startSynchronisedRecording(recordingSession)
         assertTrue(startResult.isSuccess)
 
         assertTrue(coordinator.isRecording())
         verify(mockMediaRecorder).start()
         verify(mockShimmerDevice).startStreaming()
 
-        val stopResult = coordinator.stopSynchronizedRecording()
+        val stopResult = coordinator.stopSynchronisedRecording()
         assertTrue(stopResult.isSuccess)
 
         verify(mockMediaRecorder).stop()
@@ -380,16 +380,16 @@ class RecordingComponentsComprehensiveTest {
     @Test
     fun `test recording timestamp synchronisation`() {
         val masterTimestamp = System.currentTimeMillis()
-        val synchronizer = RecordingTimestampSynchronizer()
+        val synchroniser = RecordingTimestampSynchroniser()
 
-        val syncResults = synchronizer.synchronizeComponents(
+        val syncResults = synchroniser.synchroniseComponents(
             masterTimestamp,
             listOf(cameraRecorder, thermalRecorder, shimmerRecorder)
         )
 
         assertTrue(syncResults.all { it.success })
 
-        val timestamps = syncResults.map { it.synchronizedTimestamp }
+        val timestamps = syncResults.map { it.synchronisedTimestamp }
         val maxOffset = timestamps.maxOrNull()!! - timestamps.minOrNull()!!
 
         assertTrue(maxOffset <= 10)
@@ -411,7 +411,7 @@ class RecordingComponentsComprehensiveTest {
             components = listOf(RecordingComponent.CAMERA, RecordingComponent.THERMAL)
         )
 
-        val result = coordinator.startSynchronizedRecording(recordingSession)
+        val result = coordinator.startSynchronisedRecording(recordingSession)
 
         assertTrue(result.isFailure)
         assertFalse(coordinator.isRecording())
@@ -442,7 +442,7 @@ class RecordingComponentsComprehensiveTest {
         val shimmerMetrics = ShimmerQualityMetrics(
             samplingRate = 512.0f,
             signalToNoise = 45.0f,
-            synchronizationAccuracy = 2.0f,
+            synchronisationAccuracy = 2.0f,
             packetLoss = 0.1f
         )
 

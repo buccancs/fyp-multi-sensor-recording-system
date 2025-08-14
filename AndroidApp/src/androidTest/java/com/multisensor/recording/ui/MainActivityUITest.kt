@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
  * Covers all user interactions, navigation, and UI state management.
  * 
  * Test Categories:
- * - Activity launch and initialization
+ * - Activity launch and initialisation
  * - Navigation drawer functionality
  * - Fragment navigation
  * - Recording controls
@@ -50,7 +50,7 @@ class MainActivityUITest {
     fun setUp() {
         hiltRule.inject()
         
-        // Initialize activity scenario
+        // Initialise activity scenario
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
         
         // Wait for activity to be ready
@@ -270,7 +270,7 @@ class MainActivityUITest {
     fun test_camera_preview_display() {
         // Given: Camera permissions are granted
         
-        // When: Camera preview is initialized
+        // When: Camera preview is initialised
         // Then: Camera preview should be visible
         onView(withId(R.id.camera_preview))
             .check(matches(isDisplayed()))
@@ -369,7 +369,7 @@ class MainActivityUITest {
             .perform(longClick())
         
         // Then: Additional options should be displayed
-        // Note: Implementation depends on actual long-press behavior
+        // Note: Implementation depends on actual long-press behaviour
         onView(withText(anyOf(
             containsString("Options"),
             containsString("Settings"),
@@ -387,7 +387,7 @@ class MainActivityUITest {
             .perform(swipeLeft())
         
         // Then: Appropriate response should occur
-        // Note: Implementation depends on actual swipe behavior
+        // Note: Implementation depends on actual swipe behaviour
         // This might trigger fragment switching or other navigation
     }
 
