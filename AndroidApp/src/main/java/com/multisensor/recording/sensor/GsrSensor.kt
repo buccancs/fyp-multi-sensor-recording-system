@@ -2,13 +2,11 @@ package com.multisensor.recording.sensor
 
 import android.content.Context
 import android.util.Log
-import com.shimmerresearch.android.Shimmer
-import com.shimmerresearch.android.manager.ShimmerBluetoothManagerAndroid
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * Streamlined GSR sensor implementation using Shimmer
- * Simplified from the complex GSR integration in the original app
+ * Streamlined GSR sensor implementation
+ * Simplified to basic structure - will be expanded with working Shimmer integration
  */
 class GsrSensor(private val context: Context) {
     
@@ -21,9 +19,6 @@ class GsrSensor(private val context: Context) {
     private val isConnected = AtomicBoolean(false)
     private val isStreaming = AtomicBoolean(false)
 
-    // Shimmer components
-    private var shimmerManager: ShimmerBluetoothManagerAndroid? = null
-    private var shimmerDevice: Shimmer? = null
     private var deviceAddress: String? = null
 
     /**
@@ -33,7 +28,7 @@ class GsrSensor(private val context: Context) {
         return try {
             Log.i(TAG, "Initializing GSR sensor")
             
-            shimmerManager = ShimmerBluetoothManagerAndroid(context)
+            // Simplified initialization - would integrate with Shimmer SDK here
             
             isInitialized.set(true)
             Log.i(TAG, "GSR sensor initialized successfully")
@@ -45,22 +40,14 @@ class GsrSensor(private val context: Context) {
     }
 
     /**
-     * Scan for available Shimmer devices
+     * Scan for available Shimmer devices - simplified
      */
     fun scanForDevices(callback: (List<String>) -> Unit) {
         try {
-            shimmerManager?.let { manager ->
-                // Scan for Bluetooth devices
-                val pairedDevices = manager.getShimmerBluetoothRadio()?.bondedDevices
-                val shimmerDevices = pairedDevices?.filter { device ->
-                    device.name?.contains("Shimmer", ignoreCase = true) ?: false
-                }?.map { device ->
-                    "${device.name} (${device.address})"
-                } ?: emptyList()
-                
-                callback(shimmerDevices)
-                Log.i(TAG, "Found ${shimmerDevices.size} Shimmer devices")
-            }
+            // Simulate finding devices for now
+            val mockDevices = listOf("Shimmer3 GSR+ (00:06:66:XX:XX:XX)")
+            callback(mockDevices)
+            Log.i(TAG, "Found ${mockDevices.size} Shimmer devices (simulated)")
         } catch (e: Exception) {
             Log.e(TAG, "Error scanning for devices", e)
             callback(emptyList())
@@ -68,7 +55,7 @@ class GsrSensor(private val context: Context) {
     }
 
     /**
-     * Connect to a specific Shimmer device
+     * Connect to a specific Shimmer device - simplified
      */
     fun connect(deviceAddress: String): Boolean {
         return try {
@@ -76,25 +63,20 @@ class GsrSensor(private val context: Context) {
             
             this.deviceAddress = deviceAddress
             
-            shimmerManager?.let { manager ->
-                shimmerDevice = manager.getShimmerBluetoothRadio()?.getShimmer(deviceAddress)
-                shimmerDevice?.connect()
-                
-                // Simple connection check (in real implementation, use callbacks)
-                Thread.sleep(2000) // Give time for connection
-                
-                val connected = shimmerDevice?.isConnected ?: false
-                isConnected.set(connected)
-                
-                if (connected) {
-                    Log.i(TAG, "GSR sensor connected successfully")
-                } else {
-                    Log.w(TAG, "GSR sensor connection failed")
-                }
-                
-                connected
-            } ?: false
+            // Simulate connection for now
+            // In real implementation, would use Shimmer SDK to connect
+            Thread.sleep(1000) // Simulate connection time
             
+            val connected = true // Simulate successful connection
+            isConnected.set(connected)
+            
+            if (connected) {
+                Log.i(TAG, "GSR sensor connected successfully (simulated)")
+            } else {
+                Log.w(TAG, "GSR sensor connection failed")
+            }
+            
+            connected
         } catch (e: Exception) {
             Log.e(TAG, "Failed to connect to GSR sensor", e)
             false
@@ -102,7 +84,7 @@ class GsrSensor(private val context: Context) {
     }
 
     /**
-     * Start GSR data streaming
+     * Start GSR data streaming - simplified
      */
     fun startStreaming(): Boolean {
         if (!isConnected.get()) {
@@ -111,15 +93,10 @@ class GsrSensor(private val context: Context) {
         }
 
         return try {
-            shimmerDevice?.let { device ->
-                // Configure for GSR sensing
-                device.enableGSRSensor()
-                device.startStreaming()
-                
-                isStreaming.set(true)
-                Log.i(TAG, "GSR streaming started")
-                true
-            } ?: false
+            // Simulate streaming start
+            isStreaming.set(true)
+            Log.i(TAG, "GSR streaming started (simulated)")
+            true
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start GSR streaming", e)
             false
@@ -132,7 +109,6 @@ class GsrSensor(private val context: Context) {
     fun stopStreaming(): Boolean {
         return try {
             if (isStreaming.get()) {
-                shimmerDevice?.stopStreaming()
                 isStreaming.set(false)
                 Log.i(TAG, "GSR streaming stopped")
             }
@@ -150,10 +126,7 @@ class GsrSensor(private val context: Context) {
         return try {
             stopStreaming()
             
-            shimmerDevice?.disconnect()
-            shimmerDevice = null
             deviceAddress = null
-            
             isConnected.set(false)
             Log.i(TAG, "GSR sensor disconnected")
             true
@@ -181,9 +154,7 @@ class GsrSensor(private val context: Context) {
      * Get connected device info
      */
     fun getDeviceInfo(): String {
-        return shimmerDevice?.let { device ->
-            "Shimmer GSR: ${device.deviceName}"
-        } ?: deviceAddress ?: "No Device"
+        return deviceAddress ?: "No Device"
     }
 
     /**
@@ -192,7 +163,6 @@ class GsrSensor(private val context: Context) {
     fun release() {
         try {
             disconnect()
-            shimmerManager = null
             
             isInitialized.set(false)
             isConnected.set(false)

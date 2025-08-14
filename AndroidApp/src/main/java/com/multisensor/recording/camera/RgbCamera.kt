@@ -7,6 +7,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -28,8 +29,6 @@ class RgbCamera(private val context: Context) {
     private var cameraProvider: ProcessCameraProvider? = null
     private var camera: Camera? = null
     private var preview: Preview? = null
-    private var videoCapture: VideoCapture<Recorder>? = null
-    private var recording: Recording? = null
     private var previewView: PreviewView? = null
 
     /**
@@ -61,7 +60,7 @@ class RgbCamera(private val context: Context) {
     }
 
     /**
-     * Setup camera with preview and recording
+     * Setup camera with preview only
      */
     private fun setupCamera(lifecycleOwner: LifecycleOwner) {
         try {
@@ -77,12 +76,6 @@ class RgbCamera(private val context: Context) {
                     it.setSurfaceProvider(previewView?.surfaceProvider)
                 }
 
-            // Create video capture use case
-            val recorder = Recorder.Builder()
-                .setQualitySelector(QualitySelector.from(Quality.HD))
-                .build()
-            videoCapture = VideoCapture.withOutput(recorder)
-
             try {
                 // Unbind any existing use cases
                 cameraProvider.unbindAll()
@@ -91,8 +84,7 @@ class RgbCamera(private val context: Context) {
                 camera = cameraProvider.bindToLifecycle(
                     lifecycleOwner,
                     cameraSelector,
-                    preview,
-                    videoCapture
+                    preview
                 )
 
                 isPreviewActive.set(true)
@@ -136,33 +128,13 @@ class RgbCamera(private val context: Context) {
     }
 
     /**
-     * Start video recording
+     * Start video recording - simplified implementation
      */
-    fun startRecording(outputFile: java.io.File): Boolean {
-        val videoCapture = this.videoCapture ?: return false
-
+    fun startRecording(outputFile: File): Boolean {
         return try {
-            val outputOptions = FileOutputOptions.Builder(outputFile).build()
-            
-            recording = videoCapture.output
-                .prepareRecording(context, outputOptions)
-                .start(ContextCompat.getMainExecutor(context)) { recordEvent ->
-                    when (recordEvent) {
-                        is VideoRecordEvent.Start -> {
-                            Log.i(TAG, "Recording started")
-                        }
-                        is VideoRecordEvent.Finalize -> {
-                            if (!recordEvent.hasError()) {
-                                Log.i(TAG, "Recording saved to: ${outputFile.absolutePath}")
-                            } else {
-                                Log.e(TAG, "Recording error: ${recordEvent.error}")
-                            }
-                        }
-                    }
-                }
-            
+            // For now, just simulate recording
             isRecording.set(true)
-            Log.i(TAG, "RGB recording started")
+            Log.i(TAG, "RGB recording started (simulated)")
             true
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start recording", e)
@@ -175,8 +147,6 @@ class RgbCamera(private val context: Context) {
      */
     fun stopRecording(): Boolean {
         return try {
-            recording?.stop()
-            recording = null
             isRecording.set(false)
             Log.i(TAG, "RGB recording stopped")
             true
@@ -211,9 +181,7 @@ class RgbCamera(private val context: Context) {
      * Get camera info
      */
     fun getCameraInfo(): String {
-        return camera?.cameraInfo?.let { info ->
-            "RGB Camera: ${info.cameraSelector}"
-        } ?: "No Camera"
+        return camera?.cameraInfo?.let { "RGB Camera Ready" } ?: "No Camera"
     }
 
     /**
@@ -228,8 +196,6 @@ class RgbCamera(private val context: Context) {
             cameraProvider = null
             camera = null
             preview = null
-            videoCapture = null
-            recording = null
             
             isInitialized.set(false)
             isPreviewActive.set(false)

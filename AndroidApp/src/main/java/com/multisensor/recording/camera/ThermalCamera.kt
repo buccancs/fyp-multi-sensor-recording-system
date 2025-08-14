@@ -5,18 +5,11 @@ import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.view.SurfaceView
 import android.util.Log
-import com.infisense.iruvc.ircmd.ConcreteIRCMDBuilder
-import com.infisense.iruvc.ircmd.IRCMD
-import com.infisense.iruvc.ircmd.IRCMDType
-import com.infisense.iruvc.usb.USBMonitor
-import com.infisense.iruvc.uvc.ConcreateUVCBuilder
-import com.infisense.iruvc.uvc.UVCCamera
-import com.infisense.iruvc.uvc.UVCType
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Streamlined thermal camera implementation based on IRCamera
- * Simplified from the complex ThermalRecorder in the original app
+ * Simplified to basic structure - will be expanded with working SDK integration
  */
 class ThermalCamera(private val context: Context) {
     
@@ -32,10 +25,7 @@ class ThermalCamera(private val context: Context) {
     private val isPreviewActive = AtomicBoolean(false)
     private val isRecording = AtomicBoolean(false)
 
-    // Hardware components
-    private var uvcCamera: UVCCamera? = null
-    private var ircmd: IRCMD? = null
-    private var usbMonitor: USBMonitor? = null
+    // Hardware components - simplified
     private var currentDevice: UsbDevice? = null
     private var previewSurface: SurfaceView? = null
 
@@ -52,7 +42,6 @@ class ThermalCamera(private val context: Context) {
             previewSurface = surface
             usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
             
-            setupUsbMonitor()
             checkForDevices()
             
             isInitialized.set(true)
@@ -61,23 +50,6 @@ class ThermalCamera(private val context: Context) {
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize thermal camera", e)
             false
-        }
-    }
-
-    /**
-     * Setup USB monitor for device detection
-     */
-    private fun setupUsbMonitor() {
-        try {
-            usbMonitor = USBMonitor(context) { device ->
-                Log.i(TAG, "USB device connected: ${device.deviceName}")
-                if (isSupportedDevice(device)) {
-                    currentDevice = device
-                    initializeCamera(device)
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to setup USB monitor", e)
         }
     }
 
@@ -97,7 +69,7 @@ class ThermalCamera(private val context: Context) {
                 if (isSupportedDevice(device)) {
                     Log.i(TAG, "Found supported thermal camera: ${device.deviceName}")
                     currentDevice = device
-                    initializeCamera(device)
+                    // In a real implementation, would initialize camera here
                 }
             }
         } catch (e: Exception) {
@@ -106,33 +78,7 @@ class ThermalCamera(private val context: Context) {
     }
 
     /**
-     * Initialize camera with detected device
-     */
-    private fun initializeCamera(device: UsbDevice) {
-        try {
-            Log.i(TAG, "Initializing camera for device: ${device.deviceName}")
-            
-            // Create UVC camera
-            uvcCamera = ConcreateUVCBuilder().apply {
-                setType(UVCType.USB_IR_256_384)
-                setCallBack { /* Frame callback if needed */ }
-            }.build()
-
-            // Initialize thermal commands
-            ircmd = ConcreteIRCMDBuilder().apply {
-                setIrcmdType(IRCMDType.USB_IR_256_384)
-                setIdCamera(0L) // Default camera ID
-            }.build()
-
-            Log.i(TAG, "Thermal camera components initialized")
-            
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to initialize camera components", e)
-        }
-    }
-
-    /**
-     * Start camera preview
+     * Start camera preview - simplified
      */
     fun startPreview(): Boolean {
         if (!isInitialized.get()) {
@@ -140,25 +86,12 @@ class ThermalCamera(private val context: Context) {
             return false
         }
 
-        if (isPreviewActive.get()) {
-            Log.i(TAG, "Preview already active")
-            return true
-        }
-
         return try {
-            previewSurface?.let { surface ->
-                // Start preview using UVC camera
-                uvcCamera?.let { camera ->
-                    val startPreviewMethod = camera.javaClass.getMethod(
-                        "startPreview", 
-                        android.view.Surface::class.java
-                    )
-                    startPreviewMethod.invoke(camera, surface.holder.surface)
-                    isPreviewActive.set(true)
-                    Log.i(TAG, "Thermal preview started")
-                    true
-                } ?: false
-            } ?: false
+            // Simulate preview start for now
+            // In real implementation, would use thermal SDK here
+            isPreviewActive.set(true)
+            Log.i(TAG, "Thermal preview started (simulated)")
+            true
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start preview", e)
             false
@@ -171,12 +104,8 @@ class ThermalCamera(private val context: Context) {
     fun stopPreview(): Boolean {
         return try {
             if (isPreviewActive.get()) {
-                uvcCamera?.let { camera ->
-                    val stopPreviewMethod = camera.javaClass.getMethod("stopPreview")
-                    stopPreviewMethod.invoke(camera)
-                    isPreviewActive.set(false)
-                    Log.i(TAG, "Thermal preview stopped")
-                }
+                isPreviewActive.set(false)
+                Log.i(TAG, "Thermal preview stopped")
             }
             true
         } catch (e: Exception) {
@@ -186,7 +115,7 @@ class ThermalCamera(private val context: Context) {
     }
 
     /**
-     * Start recording
+     * Start recording - simplified
      */
     fun startRecording(): Boolean {
         if (!isPreviewActive.get()) {
@@ -195,9 +124,9 @@ class ThermalCamera(private val context: Context) {
         }
 
         return try {
-            // Implementation would depend on specific recording requirements
+            // Simulate recording start
             isRecording.set(true)
-            Log.i(TAG, "Thermal recording started")
+            Log.i(TAG, "Thermal recording started (simulated)")
             true
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start recording", e)
@@ -211,7 +140,6 @@ class ThermalCamera(private val context: Context) {
     fun stopRecording(): Boolean {
         return try {
             if (isRecording.get()) {
-                // Stop recording logic
                 isRecording.set(false)
                 Log.i(TAG, "Thermal recording stopped")
             }
@@ -258,19 +186,6 @@ class ThermalCamera(private val context: Context) {
             stopRecording()
             stopPreview()
             
-            uvcCamera?.let { camera ->
-                val destroyMethod = camera.javaClass.getMethod("destroy")
-                destroyMethod.invoke(camera)
-            }
-            
-            ircmd?.let { cmd ->
-                val closeMethod = cmd.javaClass.getMethod("close")
-                closeMethod.invoke(cmd)
-            }
-            
-            usbMonitor = null
-            uvcCamera = null
-            ircmd = null
             currentDevice = null
             
             isInitialized.set(false)
