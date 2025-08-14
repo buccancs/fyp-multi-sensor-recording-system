@@ -33,7 +33,7 @@ class RequirementsCoverageAnalyzer:
     def __init__(self):
         self.requirements: Dict[str, Requirement] = {}
         self.test_files: List[Path] = []
-        self.repo_root = Path(__file__).parent.parent.parent
+        self.repo_root = Path(__file__).parent.parent.parent.parent
         
     def extract_requirements_from_tex(self) -> None:
         """Extract FR and NFR requirements from 3.tex"""
