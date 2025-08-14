@@ -150,6 +150,11 @@ class DeviceConnectionManager @Inject constructor(
             } else {
                 Result.failure(RuntimeException("Thermal camera not available"))
             }
+        } catch (e: SecurityException) {
+            logger.error("Security exception initializing thermal camera", e)
+            logger.warning("Thermal camera limited functionality due to USB receiver restrictions on Android 13+")
+            _connectionState.value = _connectionState.value.copy(thermalConnected = false)
+            Result.failure(e)
         } catch (e: Exception) {
             logger.error("Thermal camera initialization error", e)
             Result.failure(e)
@@ -164,8 +169,8 @@ class DeviceConnectionManager @Inject constructor(
                 logger.info("Shimmer sensors initialized successfully")
                 Result.success(Unit)
             } else {
-                logger.warning("No Shimmer sensors available")
-                Result.failure(RuntimeException("Shimmer sensors not available"))
+                logger.warning("No Shimmer sensors available - may be due to missing Bluetooth permissions")
+                Result.failure(RuntimeException("Shimmer sensors not available - check Bluetooth permissions"))
             }
         } catch (e: Exception) {
             logger.error("Shimmer initialization error", e)
