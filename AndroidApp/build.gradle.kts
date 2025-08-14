@@ -105,16 +105,17 @@ dependencies {
     // Permissions - use standard Android permissions
     implementation("androidx.activity:activity-ktx:1.8.2") // For registerForActivityResult
 
-    // For now, comment out thermal and GSR libraries to get basic app building
-    // These will be re-added once we have the basic structure working
-    // implementation(files("src/main/libs/topdon_1.3.7.aar"))
-    // implementation(files("src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar"))
-    // implementation(files("src/main/libs/opengl_1.3.2_standard.aar"))
-    // implementation(files("src/main/libs/suplib-release.aar"))
-    // implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
-    // implementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))
-    // implementation(files("src/main/libs/shimmerdriver-0.11.4_beta.jar"))
-    // implementation(files("src/main/libs/shimmerdriverpc-0.11.4_beta.jar"))
+    // IRCamera thermal camera SDKs (Topdon/InfiSense)
+    implementation(files("src/main/libs/topdon_1.3.7.aar"))
+    implementation(files("src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar"))
+    implementation(files("src/main/libs/opengl_1.3.2_standard.aar"))
+    implementation(files("src/main/libs/suplib-release.aar"))
+    
+    // Shimmer GSR sensor SDKs
+    implementation(files("src/main/libs/shimmerandroidinstrumentdriver-3.2.3_beta.aar"))
+    implementation(files("src/main/libs/shimmerbluetoothmanager-0.11.4_beta.jar"))
+    implementation(files("src/main/libs/shimmerdriver-0.11.4_beta.jar"))
+    implementation(files("src/main/libs/shimmerdriverpc-0.11.4_beta.jar"))
 
     // Testing
     testImplementation("junit:junit:4.13.2")

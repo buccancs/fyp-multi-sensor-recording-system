@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.video.*
+import androidx.camera.video.VideoCapture
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -11,8 +13,8 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * Streamlined RGB camera implementation using Camera2 API
- * Simplified from the complex ModularCameraRecorder
+ * RGB camera implementation with real video recording
+ * Built around CameraX API with full video recording functionality
  */
 class RgbCamera(private val context: Context) {
     
@@ -28,8 +30,11 @@ class RgbCamera(private val context: Context) {
     // Camera components
     private var cameraProvider: ProcessCameraProvider? = null
     private var camera: Camera? = null
+    private var videoCapture: VideoCapture<Recorder>? = null
+    private var currentRecording: Recording? = null
     private var preview: Preview? = null
     private var previewView: PreviewView? = null
+    private var lifecycleOwner: LifecycleOwner? = null
 
     /**
      * Initialize RGB camera
@@ -39,6 +44,7 @@ class RgbCamera(private val context: Context) {
             Log.i(TAG, "Initializing RGB camera")
             
             this.previewView = previewView
+            this.lifecycleOwner = lifecycleOwner
             
             val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
             cameraProviderFuture.addListener({
@@ -128,30 +134,111 @@ class RgbCamera(private val context: Context) {
     }
 
     /**
-     * Start video recording - simplified implementation
+     * Start video recording - real implementation  
      */
     fun startRecording(outputFile: File): Boolean {
         return try {
-            // For now, just simulate recording
-            isRecording.set(true)
-            Log.i(TAG, "RGB recording started (simulated)")
-            true
+            if (!isInitialized.get()) {
+                Log.e(TAG, "RGB camera not initialized")
+                return false
+            }
+            
+            if (isRecording.get()) {
+                Log.w(TAG, "RGB recording already in progress")
+                return false
+            }
+            
+            Log.i(TAG, "Starting RGB video recording to: ${outputFile.absolutePath}")
+            
+            // Create FileOutputOptions for the recording
+            val outputOptions = FileOutputOptions.Builder(outputFile).build()
+            
+            // Configure VideoCapture use case
+            val recorder = Recorder.Builder()
+                .setQualitySelector(QualitySelector.from(Quality.HD))
+                .build()
+            
+            videoCapture = VideoCapture.withOutput(recorder)
+            
+            // Rebind with video capture
+            cameraProvider?.let { provider ->
+                try {
+                    // Unbind all use cases
+                    provider.unbindAll()
+                    
+                    // Create preview again
+                    val preview = Preview.Builder()
+                        .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                        .build()
+                    
+                    previewView?.let { view ->
+                        preview.setSurfaceProvider(view.surfaceProvider)
+                    }
+                    
+                    // Bind preview and video capture
+                    camera = lifecycleOwner?.let { owner ->
+                        provider.bindToLifecycle(
+                            owner,
+                            CameraSelector.DEFAULT_BACK_CAMERA,
+                            preview,
+                            videoCapture
+                        )
+                    }
+                    
+                    // Start the actual recording
+                    currentRecording = recorder
+                        .prepareRecording(context, outputOptions)
+                        .start(ContextCompat.getMainExecutor(context)) { recordEvent ->
+                            when (recordEvent) {
+                                is VideoRecordEvent.Start -> {
+                                    isRecording.set(true)
+                                    Log.i(TAG, "RGB video recording started successfully")
+                                }
+                                is VideoRecordEvent.Finalize -> {
+                                    isRecording.set(false)
+                                    if (recordEvent.hasError()) {
+                                        Log.e(TAG, "RGB video recording error: ${recordEvent.error}")
+                                    } else {
+                                        Log.i(TAG, "RGB video recording completed: ${outputFile.absolutePath}")
+                                    }
+                                }
+                                is VideoRecordEvent.Status -> {
+                                    Log.d(TAG, "RGB recording status: ${recordEvent.recordingStats.recordedDurationNanos}")
+                                }
+                            }
+                        }
+                    
+                    Log.i(TAG, "RGB recording started")
+                    true
+                    
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to bind camera with video capture", e)
+                    false
+                }
+            } ?: run {
+                Log.e(TAG, "Camera provider not available")
+                false
+            }
+            
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to start recording", e)
+            Log.e(TAG, "Failed to start RGB recording", e)
             false
         }
     }
 
     /**
-     * Stop video recording
+     * Stop video recording - real implementation
      */
     fun stopRecording(): Boolean {
         return try {
+            currentRecording?.stop()
+            currentRecording = null
+            
             isRecording.set(false)
             Log.i(TAG, "RGB recording stopped")
             true
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to stop recording", e)
+            Log.e(TAG, "Failed to stop RGB recording", e)
             false
         }
     }
