@@ -49,15 +49,15 @@ The Multi-Sensor Android Application implements a research-grade mobile data col
 
 - **4K RGB Video Recording**: High-quality video capture using Camera2 API with configurable resolution and frame rates
 - **RAW Image Capture**: Simultaneous RAW image capture for advanced image processing and calibration workflows  
-- **Thermal Camera Integration**: Real-time thermal imaging using Topdon TC001 cameras via USB-C OTG connectivity
-- **Camera Preview Switching**: User-controlled toggle between RGB and thermal camera previews with real-time switching
+- **Thermal Camera Integration**: Real-time thermal imaging using Topdon TC001/TC001+ cameras via USB-C OTG connectivity with reflection-based API safety
+- **Camera Preview Switching**: User-controlled toggle between RGB and thermal camera previews with real-time switching and synchronized recording
 - **Shimmer3 GSR+ Integration**: Bluetooth communication with physiological sensors for galvanic skin response measurement
-- **Enhanced Device Coordination**: Improved initialization timing preventing race conditions and device errors
-- **Unified UI Architecture**: Streamlined components eliminating code duplication and providing consistent user experience
-- **Real-time Preview Streaming**: Live video preview transmission to PC controller for monitoring and coordination
-- **Socket-based Remote Control**: Network-based command interface for synchronised multi-device recording sessions
-- **Hand Segmentation**: MediaPipe-based hand landmark detection for region-of-interest analysis
-- **Session Management**: Complete data organisation with automatic file management and metadata generation
+- **Enhanced Device Coordination**: Improved initialization timing preventing race conditions and device errors with thermal camera initialization support
+- **Unified UI Architecture**: Streamlined components eliminating code duplication and providing consistent user experience across RGB and thermal modes
+- **Real-time Preview Streaming**: Live video preview transmission to PC controller for monitoring and coordination including thermal data streams
+- **Socket-based Remote Control**: Network-based command interface for synchronised multi-device recording sessions with thermal coordination
+- **Hand Segmentation**: MediaPipe-based hand landmark detection for region-of-interest analysis with thermal overlay support
+- **Session Management**: Complete data organisation with automatic file management and metadata generation including thermal camera information
 
 ### Research Applications
 
@@ -238,13 +238,37 @@ class CameraRecorder {
 - **Focus Control**: Automatic and manual focus modes for optimal image quality
 
 #### Thermal Camera Integration
-Integration with Topdon TC001 thermal cameras through USB-C OTG connectivity:
+Integration with Topdon TC001/TC001+ thermal cameras through USB-C OTG connectivity with production-ready reliability:
 
 **Features:**
-- **Real-time Thermal Imaging**: Live thermal data capture and processing
-- **Temperature Mapping**: Calibrated temperature measurement across the sensor field
-- **Synchronisation**: Temporal alignment with RGB video streams
-- **Multiple Formats**: Support for both processed thermal images and raw sensor data
+- **Real-time Thermal Imaging**: Live thermal data capture and processing with 256x192@25fps capability
+- **Temperature Mapping**: Calibrated temperature measurement across the sensor field with emissivity compensation
+- **Hardware Detection**: Automatic USB device detection for supported Topdon product IDs with progressive retry logic
+- **Reflection-based API Safety**: Graceful operation even when specific library methods are unavailable
+- **Synchronisation**: Temporal alignment with RGB video streams using master clock coordination
+- **Multiple Formats**: Support for both processed thermal images and raw sensor data with comprehensive validation
+- **Error Recovery**: Robust handling of USB permissions, hardware disconnection, and connection failures
+- **Calibration Support**: Advanced calibration image capture with multiple fallback methods
+
+**Technical Implementation:**
+```kotlin
+@Inject
+lateinit var thermalRecorder: ThermalRecorder
+
+// Initialize with comprehensive error handling
+val success = thermalRecorder.initialize(surfaceView)
+if (success) {
+    val status = thermalRecorder.getThermalCameraStatus()
+    Log.d("Thermal", "Device: ${status.deviceName}, Frames: ${status.frameCount}")
+    
+    // Start coordinated recording
+    if (thermalRecorder.startRecording(sessionId)) {
+        // Monitor recording status
+        val recordingStatus = thermalRecorder.getThermalCameraStatus()
+        // Handle recording coordination...
+    }
+}
+```
 
 #### Shimmer3 GSR+ Integration
 Bluetooth connectivity with Shimmer3 physiological sensors for ground truth measurements:
@@ -383,9 +407,14 @@ dependencies {
 - Bluetooth 4.0+ (for Shimmer sensors)
 
 **Recommended Devices:**
-- Samsung Galaxy S22 or newer
+- Samsung Galaxy S22 or newer (recommended for thermal camera support)
 - Google Pixel 6 or newer
 - OnePlus 9 or newer
+
+**For Thermal Camera Integration:**
+- USB-C OTG support required
+- Topdon TC001 or TC001+ thermal camera
+- See [Thermal Camera Integration Guide](../docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md) for complete setup instructions
 
 ### Installation Steps
 
@@ -680,6 +709,71 @@ interface CameraManager {
      */
     suspend fun updateParameters(params: CameraParameters): Result<Unit>
 }
+```
+
+#### Thermal Camera API
+
+Production-ready Topdon thermal camera integration with reflection-based API safety:
+
+```kotlin
+interface ThermalRecorder {
+    /**
+     * Initialize thermal camera system with optional preview surface
+     * @param previewSurface Optional SurfaceView for preview display
+     * @param previewStreamer Optional preview streaming component
+     * @return True if initialization successful
+     */
+    fun initialize(previewSurface: SurfaceView? = null): Boolean
+    fun initialize(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
+    
+    /**
+     * Start thermal camera recording for specified session
+     * @param sessionId Unique session identifier
+     * @return True if recording started successfully
+     */
+    fun startRecording(sessionId: String): Boolean
+    
+    /**
+     * Stop thermal camera recording
+     * @return True if recording stopped successfully
+     */
+    fun stopRecording(): Boolean
+    
+    /**
+     * Get comprehensive thermal camera status
+     * @return ThermalCameraStatus with detailed properties
+     */
+    fun getThermalCameraStatus(): ThermalCameraStatus
+    
+    /**
+     * Check if thermal camera hardware is available
+     * @return True if thermal camera detected and accessible
+     */
+    fun isThermalCameraAvailable(): Boolean
+    
+    /**
+     * Capture calibration image for thermal-RGB alignment
+     * @param filePath Target file path for calibration image
+     * @return True if capture successful
+     */
+    fun captureCalibrationImage(filePath: String): Boolean
+    
+    /**
+     * Release thermal camera resources
+     */
+    fun cleanup()
+}
+
+data class ThermalCameraStatus(
+    val isAvailable: Boolean = false,
+    val isRecording: Boolean = false,
+    val isPreviewActive: Boolean = false,
+    val deviceName: String = "No Device",
+    val width: Int = 256,
+    val height: Int = 192,
+    val frameRate: Int = 25,
+    val frameCount: Long = 0L
+)
 ```
 
 #### Network API
@@ -1257,4 +1351,4 @@ This project is licenced under the MIT Licence - see the [LICENCE](../LICENCE) f
 
 This Android application is part of the Multi-Sensor Recording System developed for advanced research applications requiring precise temporal synchronisation across diverse sensor modalities. The implementation leverages modern Android development practices and scientific computing principles to provide a robust platform for multi-modal data collection in experimental research environments.
 
-For complete system documentation, see the [main project README](../README.md) and the [Python Desktop Controller README](../PythonApp/README.md).
+For complete system documentation, see the [main project README](../README.md), the [Python Desktop Controller README](../PythonApp/README.md), and the [Thermal Camera Integration Guide](../docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md).

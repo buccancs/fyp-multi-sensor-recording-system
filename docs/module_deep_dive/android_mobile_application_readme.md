@@ -44,6 +44,7 @@ Android Application (Refactored Architecture)
 │   └── FileSystemManager                # Local storage coordination
 └── Hardware Integration
     ├── CameraAPI                         # Android Camera2 API integration
+    ├── ThermalCameraAPI                  # Topdon thermal camera integration with reflection-based API safety
     ├── SensorAPI                         # Inertial and environmental sensors
     └── NetworkingAPI                     # JSON socket protocol implementation
 ```

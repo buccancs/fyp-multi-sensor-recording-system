@@ -9,12 +9,13 @@ This directory contains complete API documentation for the Multi-Sensor Recordin
 ### Python Desktop Controller APIs
 
 #### Core Modules
-- **CalibrationManager**: Camera calibration and validation APIs
-- **SessionManager**: Recording session coordination APIs  
+- **CalibrationManager**: Camera calibration and validation APIs with RGB-thermal alignment
+- **SessionManager**: Recording session coordination APIs for multi-modal recording
+- **ThermalRecorderManager**: Topdon thermal camera integration with reflection-based API safety
 - **ShimmerManager**: Shimmer GSR sensor management APIs
 - **Shimmer Extension Methods**: Complete sensor data access following original Shimmer Android API patterns
 - **PCServer**: Network communication server APIs
-- **AndroidDeviceManager**: Android device integration APIs
+- **AndroidDeviceManager**: Android device integration APIs with thermal camera support
 
 #### Calibration APIs
 ```python
@@ -23,6 +24,46 @@ class CalibrationManager:
                                    thermal_images: List[np.ndarray]) -> CalibrationResult
     def save_calibration_results(self, result: CalibrationResult, output_path: str) -> bool
     def load_calibration_results(self, file_path: str) -> Optional[CalibrationResult]
+    def align_rgb_thermal_cameras(self, rgb_matrix: np.ndarray, 
+                                thermal_matrix: np.ndarray) -> TransformationMatrix
+```
+
+#### Thermal Camera APIs
+```kotlin
+class ThermalRecorder {
+    // Initialize thermal camera system with reflection-based API safety
+    fun initialize(previewSurface: SurfaceView? = null): Boolean
+    fun initialize(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
+    
+    // Preview control with real-time switching capability
+    fun startPreview(): Boolean
+    fun stopPreview(): Boolean
+    
+    // Recording control with progressive retry logic
+    fun startRecording(sessionId: String): Boolean
+    fun stopRecording(): Boolean
+    
+    // Status monitoring with comprehensive properties
+    fun getThermalCameraStatus(): ThermalCameraStatus
+    fun isThermalCameraAvailable(): Boolean
+    
+    // Calibration and capture with multiple fallback methods
+    fun captureCalibrationImage(filePath: String): Boolean
+    
+    // Resource management with proper cleanup
+    fun cleanup()
+}
+
+data class ThermalCameraStatus(
+    val isAvailable: Boolean = false,
+    val isRecording: Boolean = false,
+    val isPreviewActive: Boolean = false,
+    val deviceName: String = "No Device",
+    val width: Int = 256,
+    val height: Int = 192,
+    val frameRate: Int = 25,
+    val frameCount: Long = 0L
+)
 ```
 
 #### Shimmer Sensor APIs
@@ -87,10 +128,11 @@ class PCServer:
 ### Android Application APIs
 
 #### Enhanced Recording Controllers
-- **RecordingSessionController**: Pure recording operation management with enhanced error handling
-- **DeviceConnectionManager**: Device connectivity orchestration with improved timing control and race condition prevention
-- **FileTransferManager**: Data transfer operations with integrity validation
-- **CalibrationManager**: Calibration process coordination with multi-device synchronisation
+- **RecordingSessionController**: Pure recording operation management with enhanced error handling and thermal camera coordination
+- **DeviceConnectionManager**: Device connectivity orchestration with improved timing control, race condition prevention, and thermal camera initialization
+- **ThermalRecorder**: Production-ready Topdon thermal camera integration with reflection-based API safety
+- **FileTransferManager**: Data transfer operations with integrity validation including thermal data formats
+- **CalibrationManager**: Calibration process coordination with multi-device synchronisation and RGB-thermal alignment
 
 #### UI Component Architecture (New)
 ```kotlin
@@ -176,11 +218,15 @@ class CameraRecorder {
 }
 
 class ThermalRecorder {
-    // Enhanced with preview switching support
-    fun initialise(config: ThermalConfig): Boolean
-    fun startCapture(): Boolean
-    fun stopCapture(): Boolean
-    fun setPreviewVisibility(visible: Boolean)  // New: Preview control
+    // Enhanced with comprehensive hardware integration and reflection-based API safety
+    fun initialize(previewSurface: SurfaceView? = null): Boolean
+    fun initialize(previewSurface: SurfaceView? = null, previewStreamer: Any? = null): Boolean
+    fun startRecording(sessionId: String): Boolean
+    fun stopRecording(): Boolean
+    fun getThermalCameraStatus(): ThermalCameraStatus
+    fun isThermalCameraAvailable(): Boolean
+    fun captureCalibrationImage(filePath: String): Boolean
+    fun cleanup()
 }
 
 // New: Enhanced error handling for device coordination
@@ -300,7 +346,7 @@ session_manager.start_recording(session_id)
 
 ### Android Application
 ```kotlin
-// Initialise recording components
+// Initialise recording components with thermal camera support
 val networkClient = NetworkClient()
 val cameraRecorder = CameraRecorder()
 val thermalRecorder = ThermalRecorder()
@@ -308,16 +354,30 @@ val thermalRecorder = ThermalRecorder()
 // Connect to PC controller
 networkClient.connect("192.168.1.100", 8080)
 
-// Start recording when commanded
+// Initialize thermal camera with Topdon hardware support
+val thermalInitialized = thermalRecorder.initialize(surfaceView)
+if (thermalInitialized) {
+    val status = thermalRecorder.getThermalCameraStatus()
+    Log.d("Thermal", "Device: ${status.deviceName}, Available: ${status.isAvailable}")
+}
+
+// Start recording when commanded with thermal integration
 networkClient.registerMessageHandler { message ->
     when (message.payload.command) {
         "start_recording" -> {
             cameraRecorder.startRecording(message.payload.parameters)
-            thermalRecorder.startCapture()
+            if (thermalInitialized) {
+                thermalRecorder.startRecording(message.payload.sessionId)
+            }
         }
         "stop_recording" -> {
             cameraRecorder.stopRecording()
-            thermalRecorder.stopCapture()
+            if (thermalInitialized) {
+                thermalRecorder.stopRecording()
+            }
+        }
+        "capture_calibration" -> {
+            thermalRecorder.captureCalibrationImage("/path/to/calibration.png")
         }
     }
 }

@@ -105,12 +105,13 @@ This research platform enables contactless GSR prediction through synchronised m
 - **Data Export**: CSV, JSON, and binary formats for research analysis
 
 ### 🌡️ Topdon Thermal Camera Integration
-- **Production-Ready Implementation**: Complete Topdon TC001/TC001+ thermal camera support with reflection-based API safety
-- **Hardware Compatibility**: Support for USB-C OTG connected thermal cameras with automatic device detection
-- **Comprehensive Status Monitoring**: Real-time thermal camera status, frame counting, and quality assessment
-- **Thermal Calibration**: Advanced calibration image capture with multiple capture method fallbacks
-- **Error Recovery**: Graceful handling of hardware disconnection and progressive retry logic
-- **Preview Integration**: Seamless thermal preview display with 256x192@25fps capability
+- **Production-Ready Implementation**: Complete Topdon TC001/TC001+ thermal camera support with reflection-based API safety and graceful degradation
+- **Hardware Compatibility**: Support for USB-C OTG connected thermal cameras with automatic device detection and progressive retry logic
+- **Comprehensive Status Monitoring**: Real-time thermal camera status, frame counting, and quality assessment with detailed logging
+- **Thermal Calibration**: Advanced calibration image capture with multiple capture method fallbacks and error recovery
+- **Error Recovery**: Graceful handling of hardware disconnection, USB permissions, and progressive retry with exponential backoff
+- **Preview Integration**: Seamless thermal preview display with 256x192@25fps capability and real-time switching between RGB and thermal views
+- **Research-Grade Precision**: Temperature mapping, synchronisation with RGB streams, and comprehensive data validation for scientific applications
 
 ### 🌐 Network Communication
 - **Bluetooth Low Energy (BLE)**: Efficient mobile-PC communication
@@ -519,7 +520,7 @@ This project is licensed under the MIT Licence - see the [LICENCE](LICENCE) file
 - **[🚀 Run Tests Now](./run_local_test.sh)** - One-click local testing
 - **[📊 GitHub Actions](https://github.com/buccancs/bucika_gsr/actions)** - Live CI/CD status
 - **[📚 Architecture Documentation](architecture.md)** - System architecture overview
-- **[🌡️ Thermal Camera Integration](docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md)** - Topdon thermal camera setup and API guide
+- **[🌡️ Thermal Camera Integration Guide](docs/THERMAL_CAMERA_INTEGRATION_GUIDE.md)** - Complete Topdon thermal camera setup, API reference, and troubleshooting guide
 - **[🔥 Firebase Integration Guide](docs/FIREBASE_INTEGRATION.md)** - Cloud services documentation
 - **[🛠️ Troubleshooting](tests/integration/virtual_environment/TROUBLESHOOTING.md)** - Issue resolution
 - **[🧪 Test Documentation](tests/integration/virtual_environment/)** - Comprehensive test guides

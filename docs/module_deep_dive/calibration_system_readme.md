@@ -45,9 +45,9 @@ The calibration system builds upon established computer vision principles:
 
 #### Stereo Calibration
 
-- **RGB-Thermal Alignment**: Spatial relationship estimation between visible and thermal cameras
-- **Epipolar Geometry**: Fundamental and essential matrix computation
-- **Rectification**: Image rectification for simplified stereo matching
+- **RGB-Thermal Alignment**: Spatial relationship estimation between visible and thermal cameras using Topdon TC001/TC001+ hardware
+- **Epipolar Geometry**: Fundamental and essential matrix computation for precise spatial correspondence
+- **Rectification**: Image rectification for simplified stereo matching and thermal overlay capabilities
 - **Disparity Mapping**: Depth estimation from calibrated stereo pairs
 
 #### Temporal Calibration
