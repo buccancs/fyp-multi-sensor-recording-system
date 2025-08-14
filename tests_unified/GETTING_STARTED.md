@@ -1,6 +1,15 @@
-# Getting Started with Unified Testing Framework
+# Getting Started with Unified Testing Framework - **CONSOLIDATED** ✅
 
-This guide provides a quick introduction to using the unified testing framework for the Multi-Sensor Recording System.
+This guide provides a quick introduction to using the **fully consolidated** unified testing framework for the Multi-Sensor Recording System. All scattered test files have been successfully moved and evaluation tests reorganized.
+
+## 📋 Consolidation Status
+
+**COMPLETED** ✅: All test consolidation objectives achieved:
+- ✅ **4 root-level test files** successfully moved to appropriate unified locations
+- ✅ **Evaluation tests reorganized** into 6 logical categories with clear purpose
+- ✅ **100% pytest discovery** verified for all consolidated tests
+- ✅ **Import paths fixed** and validation completed
+- ✅ **Documentation updated** to reflect new structure
 
 ## 🚀 Installation and Setup
 
@@ -88,6 +97,25 @@ python tests_unified/runners/run_unified_tests.py --report-requirements-coverage
 ```
 
 ## 🎯 Common Use Cases
+
+### Newly Consolidated Test Examples
+
+1. **Test consolidation validation**:
+   ```bash
+   # Verify all moved files work correctly
+   python -m pytest tests_unified/unit/python/test_device_connectivity.py -v
+   python -m pytest tests_unified/unit/python/test_thermal_recorder_security_fix.py -v
+   python -m pytest tests_unified/unit/android/test_android_connection_detection.py -v
+   python -m pytest tests_unified/integration/device_coordination/test_pc_server_integration.py -v
+   ```
+
+2. **Test reorganized evaluation categories**:
+   ```bash
+   # Test new evaluation structure (6 categories)
+   python -m pytest tests_unified/evaluation/architecture/ -v
+   python -m pytest tests_unified/evaluation/research/ -v
+   python -m pytest tests_unified/evaluation/framework/ -v
+   ```
 
 ### Developer Workflow
 

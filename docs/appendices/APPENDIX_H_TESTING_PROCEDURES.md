@@ -1,4 +1,4 @@
-# Appendix H: Chapter 5 Testing Procedures and Artifacts
+# Appendix H: Chapter 5 Testing Procedures and Artifacts - **UPDATED FOR CONSOLIDATION** ✅
 
 ## H.1 Testing Environment Setup
 
@@ -7,6 +7,13 @@
 - Java 17 with Android SDK and Gradle 8.13
 - Minimum 4GB RAM for endurance testing
 - 10GB+ disk space for artifact generation
+
+### Consolidated Test Structure ✅
+All tests have been consolidated into the unified framework:
+- **4 root-level test files moved** to appropriate locations
+- **Evaluation tests reorganized** into 6 logical categories
+- **Import paths fixed** and validated
+- **Cross-platform compatibility** verified
 
 ### Environment Configuration
 ```bash
@@ -18,6 +25,9 @@ pip install ruff black mypy
 
 # Verify Android environment
 ./gradlew --version
+
+# Verify consolidated test framework
+python tests_unified/runners/run_unified_tests.py --help
 ```
 
 ### Test Data Directories
@@ -33,20 +43,43 @@ test_results/
 └── endurance_report.json   # 8-hour test results
 ```
 
-## H.2 Test Execution Commands
+## H.2 Test Execution Commands - **UPDATED FOR CONSOLIDATED STRUCTURE** ✅
 
-### Fast Lane Tests (Unit + Lint)
+### Consolidated Framework Testing (Recommended)
+```bash
+# Run all consolidated tests using unified framework
+python tests_unified/runners/run_unified_tests.py --quick
+
+# Test specific consolidated categories
+python tests_unified/runners/run_unified_tests.py --level unit        # All moved unit tests
+python tests_unified/runners/run_unified_tests.py --category android  # Android tests
+python tests_unified/runners/run_unified_tests.py --category evaluation # Reorganized evaluation
+
+# Validate all moved files are working
+python -m pytest tests_unified/unit/python/test_device_connectivity.py -v
+python -m pytest tests_unified/unit/python/test_thermal_recorder_security_fix.py -v
+python -m pytest tests_unified/unit/android/test_android_connection_detection.py -v
+python -m pytest tests_unified/integration/device_coordination/test_pc_server_integration.py -v
+```
+
+### Legacy Fast Lane Tests (Unit + Lint)
 ```bash
 # Android unit tests with coverage
 cd AndroidApp
 ./gradlew testDevDebugUnitTest jacocoTestReport
 
-# Python unit tests with coverage
+# Python unit tests with coverage (updated paths)
 python -m pytest tests_unified/unit/python/ \
   --cov=PythonApp \
   --cov-branch \
   --cov-report=html \
   --junitxml=test_results/junit-python-unit.xml
+
+# Test reorganized evaluation categories
+python -m pytest tests_unified/evaluation/architecture/ -v
+python -m pytest tests_unified/evaluation/research/ -v
+python -m pytest tests_unified/evaluation/framework/ -v
+```
 
 # Linting and static analysis
 ./gradlew detekt ktlint
