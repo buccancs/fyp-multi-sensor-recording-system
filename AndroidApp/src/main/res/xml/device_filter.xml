@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <usb-device
-            vendor-id="0x0BDA"
-            product-id="0x3901"/>
-
-    <usb-device
-            vendor-id="0x0BDA"
-            product-id="0x5840"/>
-
-    <usb-device
-            vendor-id="0x0BDA"
-            product-id="0x5830"/>
-
-    <usb-device
-            vendor-id="0x0BDA"
-            product-id="0x5838"/>
-
+    <!-- Topdon thermal camera USB device filters -->
+    <usb-device vendor-id="1204" product-id="14593" />
+    <usb-device vendor-id="1204" product-id="22592" />
+    <usb-device vendor-id="1204" product-id="22576" />
+    <usb-device vendor-id="1204" product-id="22584" />
+    <usb-device vendor-id="1204" product-id="22593" />
+    <usb-device vendor-id="1204" product-id="22594" />
+    <usb-device vendor-id="1204" product-id="14594" />
+    <usb-device vendor-id="1204" product-id="14595" />
 </resources>

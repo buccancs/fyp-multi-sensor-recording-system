@@ -1,223 +1,322 @@
 package com.multisensor.recording
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
-import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.multisensor.recording.databinding.ActivityMainFragmentsBinding
-import com.multisensor.recording.firebase.FirebaseAnalyticsService
-import com.multisensor.recording.ui.MainUiState
-import com.multisensor.recording.ui.MainViewModel
-import com.multisensor.recording.ui.OnboardingActivity
-import com.multisensor.recording.ui.SettingsActivity
-import com.multisensor.recording.ui.ShimmerSettingsActivity
-import com.multisensor.recording.ui.ShimmerVisualizationActivity
-import com.multisensor.recording.ui.compose.navigation.MainNavigation
-import com.multisensor.recording.ui.theme.MultiSensorTheme
-import com.multisensor.recording.util.Logger
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.collect
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainFragmentsBinding
-    private lateinit var viewModel: MainViewModel
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var sharedPreferences: SharedPreferences
+import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.SurfaceView
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.camera.view.PreviewView
+import androidx.core.content.ContextCompat
+import com.multisensor.recording.camera.RgbCamera
+import com.multisensor.recording.camera.ThermalCamera
+import com.multisensor.recording.sensor.GsrSensor
+import com.multisensor.recording.util.PermissionManager
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
+
+/**
+ * Streamlined MainActivity - simplified from the complex original
+ * Focuses on core IRCamera functionality with minimal dependencies
+ */
+class MainActivity : ComponentActivity() {
     
-    @Inject
-    lateinit var logger: Logger
-    
-    @Inject
-    lateinit var firebaseAnalyticsService: FirebaseAnalyticsService
+    companion object {
+        private const val TAG = "MainActivity"
+    }
+
+    // UI components
+    private lateinit var cameraPreview: PreviewView
+    private lateinit var thermalPreview: SurfaceView
+    private lateinit var recordButton: Button
+    private lateinit var recordingTimer: TextView
+    private lateinit var cameraStatus: TextView
+    private lateinit var thermalStatus: TextView
+    private lateinit var gsrStatus: TextView
+    private lateinit var cameraConnectionStatus: TextView
+    private lateinit var thermalConnectionStatus: TextView
+    private lateinit var gsrConnectionStatus: TextView
+
+    // Core components
+    private lateinit var permissionManager: PermissionManager
+    private lateinit var rgbCamera: RgbCamera
+    private lateinit var thermalCamera: ThermalCamera
+    private lateinit var gsrSensor: GsrSensor
+
+    // Recording state
+    private val isRecording = AtomicBoolean(false)
+    private var recordingStartTime = 0L
+    private val timerHandler = Handler(Looper.getMainLooper())
+    private val timerRunnable = object : Runnable {
+        override fun run() {
+            if (isRecording.get()) {
+                updateRecordingTimer()
+                timerHandler.postDelayed(this, 1000)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        setContentView(R.layout.activity_main)
+        
+        Log.i(TAG, "Starting streamlined Multi-Sensor Recording App")
+        
+        initializeViews()
+        initializeComponents()
+        requestPermissions()
+    }
 
-        // Initialize Firebase Analytics for app launch
-        firebaseAnalyticsService.setUserProperty("user_type", "researcher")
+    /**
+     * Initialize UI views
+     */
+    private fun initializeViews() {
+        cameraPreview = findViewById(R.id.camera_preview)
+        thermalPreview = findViewById(R.id.thermal_preview)
+        recordButton = findViewById(R.id.record_button)
+        recordingTimer = findViewById(R.id.recording_timer)
+        
+        cameraStatus = findViewById(R.id.camera_status)
+        thermalStatus = findViewById(R.id.thermal_status)
+        
+        cameraConnectionStatus = findViewById(R.id.camera_connection_status)
+        thermalConnectionStatus = findViewById(R.id.thermal_connection_status)
+        gsrConnectionStatus = findViewById(R.id.gsr_connection_status)
 
-        if (OnboardingActivity.shouldShowOnboarding(sharedPreferences)) {
-            startActivity(Intent(this, OnboardingActivity::class.java))
-            finish()
+        recordButton.setOnClickListener {
+            if (isRecording.get()) {
+                stopRecording()
+            } else {
+                startRecording()
+            }
+        }
+    }
+
+    /**
+     * Initialize core components
+     */
+    private fun initializeComponents() {
+        permissionManager = PermissionManager(this)
+        rgbCamera = RgbCamera(this)
+        thermalCamera = ThermalCamera(this)
+        gsrSensor = GsrSensor(this)
+    }
+
+    /**
+     * Request all required permissions
+     */
+    private fun requestPermissions() {
+        permissionManager.requestAllPermissions(this) { granted ->
+            if (granted) {
+                Log.i(TAG, "All permissions granted")
+                initializeDevices()
+            } else {
+                Log.w(TAG, "Permissions denied")
+                Toast.makeText(this, "App requires all permissions to function", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    /**
+     * Initialize all devices
+     */
+    private fun initializeDevices() {
+        Thread {
+            // Initialize RGB camera
+            val rgbInitialized = rgbCamera.initialize(cameraPreview, this)
+            runOnUiThread {
+                updateCameraStatus(rgbInitialized)
+            }
+
+            // Initialize thermal camera
+            val thermalInitialized = thermalCamera.initialize(thermalPreview)
+            runOnUiThread {
+                updateThermalStatus(thermalInitialized)
+            }
+
+            // Initialize GSR sensor
+            val gsrInitialized = gsrSensor.initialize()
+            runOnUiThread {
+                updateGsrStatus(gsrInitialized)
+            }
+
+            // Auto-connect to GSR sensor if available
+            if (gsrInitialized) {
+                gsrSensor.scanForDevices { devices ->
+                    if (devices.isNotEmpty()) {
+                        // Auto-connect to first available device
+                        val deviceAddress = devices.first().substringAfter("(").substringBefore(")")
+                        val connected = gsrSensor.connect(deviceAddress)
+                        runOnUiThread {
+                            updateGsrConnectionStatus(connected)
+                        }
+                    }
+                }
+            }
+
+            Log.i(TAG, "Device initialization completed")
+        }.start()
+    }
+
+    /**
+     * Start recording session
+     */
+    private fun startRecording() {
+        if (!allDevicesReady()) {
+            Toast.makeText(this, "Not all devices are ready", Toast.LENGTH_SHORT).show()
             return
         }
 
-        enableEdgeToEdge()
+        Thread {
+            val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            val recordingDir = File(getExternalFilesDir(Environment.DIRECTORY_MOVIES), "recordings")
+            if (!recordingDir.exists()) {
+                recordingDir.mkdirs()
+            }
 
-        initializeComposeUI()
-    }
-    private fun initializeComposeUI() {
-        try {
-            viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-            setContent {
-                MultiSensorTheme {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        MainNavigation()
-                    }
-                }
-            }
-            logger.info("MainActivity initialized with Compose UI")
-        } catch (e: SecurityException) {
-            logger.error("Permission error during MainActivity Compose initialization: ${e.message}", e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-            showErrorDialog("Permission Error", "Application requires additional permissions: ${e.message}")
-        } catch (e: IllegalStateException) {
-            logger.error("Invalid state during MainActivity Compose initialization: ${e.message}", e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-            showErrorDialog("State Error", "Failed to initialize application state: ${e.message}")
-        } catch (e: RuntimeException) {
-            logger.error("Runtime error during MainActivity Compose initialization: ${e.message}", e)
-            FirebaseCrashlytics.getInstance().recordException(e)
-            showErrorDialog("Initialization Error", "Failed to initialize the application: ${e.message}")
-        }
-    }
-    private fun initializeFragmentUI() {
-        binding = ActivityMainFragmentsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        try {
-            viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-            setupNavigation()
-            setupUI()
-            observeViewModel()
-            logger.info("MainActivity initialized with fragment architecture")
-        } catch (e: SecurityException) {
-            logger.error("Permission error during MainActivity initialization: ${e.message}", e)
-            showErrorDialog("Permission Error", "Application requires additional permissions: ${e.message}")
-        } catch (e: IllegalStateException) {
-            logger.error("Invalid state during MainActivity initialization: ${e.message}", e)
-            showErrorDialog("State Error", "Failed to initialize application state: ${e.message}")
-        } catch (e: RuntimeException) {
-            logger.error("Runtime error during MainActivity initialization: ${e.message}", e)
-            showErrorDialog("Initialization Error", "Failed to initialize the application: ${e.message}")
-        }
-    }
-    private fun setupNavigation() {
-        setSupportActionBar(binding.toolbar)
-        try {
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            val navController = navHostFragment.navController
-            appBarConfiguration = AppBarConfiguration(
-                setOf(
-                    R.id.nav_recording, R.id.nav_devices,
-                    R.id.nav_calibration, R.id.nav_files
-                ),
-                binding.drawerLayout
-            )
-            setupActionBarWithNavController(navController, appBarConfiguration)
-            binding.navView.setupWithNavController(navController)
-            binding.bottomNavigation.setupWithNavController(navController)
-            binding.navView.setNavigationItemSelectedListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.nav_settings -> {
-                        startActivity(Intent(this, SettingsActivity::class.java))
-                        binding.drawerLayout.closeDrawers()
-                        true
-                    }
-                    R.id.nav_network_config,
-                    R.id.nav_shimmer_settings,
-                    R.id.nav_shimmer_visualization,
-                    R.id.nav_diagnostics,
-                    R.id.nav_about -> {
-                        binding.drawerLayout.closeDrawers()
-                        when (menuItem.itemId) {
-                            R.id.nav_shimmer_settings -> {
-                                startActivity(Intent(this, ShimmerSettingsActivity::class.java))
-                                true
-                            }
-                            R.id.nav_shimmer_visualization -> {
-                                startActivity(Intent(this, ShimmerVisualizationActivity::class.java))
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-                    else -> {
-                        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                        val navController = navHostFragment.navController
-                        navController.navigate(menuItem.itemId)
-                        binding.drawerLayout.closeDrawers()
-                        true
-                    }
-                }
-            }
-            logger.info("Navigation setup completed successfully")
-        } catch (e: SecurityException) {
-            logger.error("Permission error during navigation setup: ${e.message}", e)
-            showErrorDialog("Permission Error", "Failed to setup navigation permissions: ${e.message}")
-        } catch (e: IllegalStateException) {
-            logger.error("Invalid state during navigation setup: ${e.message}", e)
-            showErrorDialog("Navigation State Error", "Failed to setup navigation state: ${e.message}")
-        } catch (e: RuntimeException) {
-            logger.error("Runtime error during navigation setup: ${e.message}", e)
-            showErrorDialog("Navigation Error", "Failed to setup navigation: ${e.message}")
-        }
-    }
-    private fun setupUI() {
-        val menu = binding.navView.menu
-        menu.findItem(R.id.nav_network_config)?.isEnabled = false
-        menu.findItem(R.id.nav_shimmer_settings)?.isEnabled = true
-        menu.findItem(R.id.nav_shimmer_visualization)?.isEnabled = true
-        menu.findItem(R.id.nav_diagnostics)?.isEnabled = false
-        menu.findItem(R.id.nav_about)?.isEnabled = false
-    }
-    private fun observeViewModel() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    updateUI(state)
-                }
-            }
-        }
-    }
-    private fun updateUI(state: MainUiState) {
-        binding.toolbar.title = when {
-            state.isRecording -> "Recording - ${state.sessionDuration}"
-            state.isCalibrating -> "Calibrating..."
-            else -> "Multi-Sensor Recording"
-        }
-        requestedOrientation = if (state.isRecording) {
-            ActivityInfo.SCREEN_ORIENTATION_LOCKED
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-    }
-    override fun onSupportNavigateUp(): Boolean {
+            try {
+                // Start RGB recording
+                val rgbFile = File(recordingDir, "rgb_$timestamp.mp4")
+                val rgbStarted = rgbCamera.startRecording(rgbFile)
 
-        return super.onSupportNavigateUp()
+                // Start thermal recording
+                val thermalStarted = thermalCamera.startRecording()
+
+                // Start GSR streaming
+                val gsrStarted = gsrSensor.startStreaming()
+
+                if (rgbStarted && thermalStarted && gsrStarted) {
+                    isRecording.set(true)
+                    recordingStartTime = System.currentTimeMillis()
+                    
+                    runOnUiThread {
+                        recordButton.text = getString(R.string.stop_recording)
+                        recordButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                        timerHandler.post(timerRunnable)
+                        Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show()
+                    }
+                    
+                    Log.i(TAG, "Multi-sensor recording started")
+                } else {
+                    runOnUiThread {
+                        Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error starting recording", e)
+                runOnUiThread {
+                    Toast.makeText(this, "Recording error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }.start()
     }
-    private fun showErrorDialog(title: String, message: String) {
-        AlertDialog.Builder(this)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .show()
+
+    /**
+     * Stop recording session
+     */
+    private fun stopRecording() {
+        Thread {
+            try {
+                // Stop all recordings
+                rgbCamera.stopRecording()
+                thermalCamera.stopRecording()
+                gsrSensor.stopStreaming()
+
+                isRecording.set(false)
+
+                runOnUiThread {
+                    recordButton.text = getString(R.string.start_recording)
+                    recordButton.setBackgroundColor(ContextCompat.getColor(this, R.color.primary))
+                    recordingTimer.text = "00:00"
+                    timerHandler.removeCallbacks(timerRunnable)
+                    Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show()
+                }
+
+                Log.i(TAG, "Multi-sensor recording stopped")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error stopping recording", e)
+            }
+        }.start()
     }
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+    /**
+     * Check if all devices are ready for recording
+     */
+    private fun allDevicesReady(): Boolean {
+        return rgbCamera.isConnected() && 
+               thermalCamera.isConnected() && 
+               gsrSensor.isConnected()
+    }
+
+    /**
+     * Update recording timer display
+     */
+    private fun updateRecordingTimer() {
+        val elapsed = (System.currentTimeMillis() - recordingStartTime) / 1000
+        val minutes = elapsed / 60
+        val seconds = elapsed % 60
+        recordingTimer.text = String.format("%02d:%02d", minutes, seconds)
+    }
+
+    /**
+     * Update camera status display
+     */
+    private fun updateCameraStatus(initialized: Boolean) {
+        cameraStatus.text = if (initialized) "Ready" else "Error"
+        cameraStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.green else R.color.red))
+        
+        cameraConnectionStatus.text = if (rgbCamera.isConnected()) "Connected" else "Disconnected"
+        cameraConnectionStatus.setTextColor(ContextCompat.getColor(this, if (rgbCamera.isConnected()) R.color.green else R.color.red))
+    }
+
+    /**
+     * Update thermal camera status display
+     */
+    private fun updateThermalStatus(initialized: Boolean) {
+        thermalStatus.text = if (initialized) "Ready" else "Error"
+        thermalStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.green else R.color.red))
+        
+        thermalConnectionStatus.text = if (thermalCamera.isConnected()) "Connected" else "Disconnected"
+        thermalConnectionStatus.setTextColor(ContextCompat.getColor(this, if (thermalCamera.isConnected()) R.color.green else R.color.red))
+    }
+
+    /**
+     * Update GSR sensor status display
+     */
+    private fun updateGsrStatus(initialized: Boolean) {
+        gsrConnectionStatus.text = if (initialized) "Initialized" else "Error"
+        gsrConnectionStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.orange else R.color.red))
+    }
+
+    /**
+     * Update GSR connection status display
+     */
+    private fun updateGsrConnectionStatus(connected: Boolean) {
+        gsrConnectionStatus.text = if (connected) "Connected" else "Disconnected"
+        gsrConnectionStatus.setTextColor(ContextCompat.getColor(this, if (connected) R.color.green else R.color.red))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        
+        // Stop recording if active
+        if (isRecording.get()) {
+            stopRecording()
+        }
+        
+        // Release all resources
+        rgbCamera.release()
+        thermalCamera.release()
+        gsrSensor.release()
+        
+        timerHandler.removeCallbacks(timerRunnable)
+        
+        Log.i(TAG, "MainActivity destroyed, resources released")
     }
 }
