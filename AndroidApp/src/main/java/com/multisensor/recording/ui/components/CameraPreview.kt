@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,14 +66,58 @@ fun CameraPreview(
             )
         }
 
-        // Camera info overlay
+        // Enhanced camera info overlay with better status information
         DeviceStatusOverlay(
-            deviceName = "Camera",
+            deviceName = "RGB Camera",
             icon = Icons.Default.Camera,
             isConnected = uiState.isCameraConnected,
             isInitializing = uiState.isConnecting,
+            detailText = when {
+                uiState.isCameraConnected -> "Camera ready"
+                uiState.isConnecting -> "Connecting to camera..."
+                !uiState.isInitialized -> "System initializing..."
+                else -> "Camera not available - check permissions"
+            },
             modifier = Modifier.align(Alignment.BottomStart)
         )
+        
+        // Add a semi-transparent overlay when camera is not connected to make status more visible
+        if (!uiState.isCameraConnected && !uiState.isConnecting) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Camera,
+                        contentDescription = "No camera",
+                        modifier = Modifier.size(48.dp),
+                        tint = Color.White
+                    )
+                    Text(
+                        text = "RGB Camera Preview",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        text = if (uiState.isInitialized) {
+                            "Camera not connected"
+                        } else {
+                            "Initializing system..."
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White.copy(alpha = 0.8f),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
     }
 }
 

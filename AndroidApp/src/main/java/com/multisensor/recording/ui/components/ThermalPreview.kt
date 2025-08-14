@@ -18,15 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.multisensor.recording.util.ThermalColorPalette
 import com.multisensor.recording.util.TemperatureRange
 @Composable
 fun ThermalPreview(
     thermalBitmap: Bitmap?,
     isRecording: Boolean,
     temperatureRange: TemperatureRange,
-    colorPalette: ThermalColorPalette,
-    onPaletteChange: (ThermalColorPalette) -> Unit = {},
     onTemperatureRangeChange: (TemperatureRange) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -59,11 +56,7 @@ fun ThermalPreview(
                 )
             }
         }
-        
-        ColorPaletteIndicator(
-            palette = colorPalette,
-            modifier = Modifier.align(Alignment.BottomStart)
-        )
+
     }
 }
 @Composable
@@ -155,23 +148,3 @@ private fun TemperatureOverlay(
     }
 }
 
-@Composable
-private fun ColorPaletteIndicator(
-    palette: ThermalColorPalette,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.padding(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Text(
-            text = palette.displayName,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Medium
-        )
-    }
-}

@@ -24,7 +24,6 @@ import com.multisensor.recording.ui.theme.RecordingActive
 @Composable
 fun ThermalCameraStatusCard(
     status: ThermalRecorder.ThermalCameraStatus,
-    onCaptureCalibration: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -199,26 +198,6 @@ fun ThermalCameraStatusCard(
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = if (status.isPreviewActive) ConnectionGreen else MaterialTheme.colorScheme.onSurfaceVariant
                             )
-                        }
-                        
-                        // Calibration capture button
-                        if (status.isPreviewActive && !status.isRecording) {
-                            Button(
-                                onClick = onCaptureCalibration,
-                                modifier = Modifier.size(width = 120.dp, height = 32.dp),
-                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.CameraAlt,
-                                    contentDescription = "Calibrate",
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = "Calibrate",
-                                    style = MaterialTheme.typography.labelMedium
-                                )
-                            }
                         }
                     }
                 }
