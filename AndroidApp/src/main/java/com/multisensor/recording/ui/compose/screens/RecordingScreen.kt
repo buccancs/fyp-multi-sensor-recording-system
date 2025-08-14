@@ -33,7 +33,6 @@ import com.multisensor.recording.ui.MainViewModel
 import com.multisensor.recording.ui.components.AnimatedRecordingButton
 import com.multisensor.recording.ui.components.CameraPreview
 import com.multisensor.recording.ui.components.ColorPaletteSelector
-import com.multisensor.recording.ui.components.ThermalPreview
 import com.multisensor.recording.ui.components.ThermalPreviewSurface
 import com.multisensor.recording.ui.components.ThermalCameraStatusCard
 import com.multisensor.recording.ui.components.ThermalControlsPanel
@@ -191,11 +190,9 @@ fun RecordingScreen(
                 ThermalControlsPanel(
                     status = thermalStatus,
                     temperatureRange = uiState.temperatureRange,
-                    colorPalette = uiState.colorPalette,
                     onCaptureCalibration = { viewModel.captureThermalCalibrationImage() },
                     onStartCalibration = { viewModel.startThermalCalibration() },
                     onTemperatureRangeChange = { /* TODO: Implement temperature range change */ },
-                    onColorPaletteChange = { /* TODO: Implement color palette change */ },
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
