@@ -72,7 +72,7 @@ This research platform enables contactless GSR prediction through synchronised m
 
 - **📱 Android Mobile Application**: Real-time RGB video and thermal imaging capture with unified UI architecture and camera switching capabilities
 - **🖥️ PC Controller Application**: Centralized data recording and synchronisation with enhanced device coordination
-- **📊 Shimmer GSR Sensors**: Ground truth physiological measurements with improved initialization timing
+- **📊 Shimmer GSR Sensors**: **Complete ShimmerAndroidAPI integration** with real device communication, multi-sensor support (GSR, PPG, accelerometer, gyroscope, magnetometer, ECG, EMG), and comprehensive UI controls
 - **🧪 Virtual Test Environment**: Complete system simulation without hardware dependencies
 - **⚡ Real-time Processing**: Live data analysis and visualisation with sub-millisecond precision
 - **🔄 Unified Architecture**: **Consolidated calibration, recording, and monitoring systems** eliminating duplication between Android and Python platforms
@@ -98,6 +98,9 @@ This research platform enables contactless GSR prediction through synchronised m
 ### 📊 Multi-Sensor Data Fusion with Unified Components
 - **Synchronised Recording**: Precise timestamp alignment across all sensors with improved initialization coordination
 - **Multiple Data Streams**: GSR, RGB video, thermal imaging, device metadata
+- **Real-time Processing**: Live analysis and visualisation with configurable update rates
+- **Shimmer Device Integration**: Complete ShimmerAndroidAPI integration with official bluetooth management patterns
+- **Professional UI Controls**: Comprehensive device management, sensor configuration, and real-time monitoring interfaces
 - **Camera Preview Switching**: Toggle between RGB and thermal camera views with real-time preview control
 - **Unified Architecture**: **Consolidated components eliminating code duplication** between platforms
 - **Enhanced Error Handling**: Improved camera initialization timing preventing "CameraRecorder not initialized" errors
@@ -202,6 +205,37 @@ For actual data collection with physical devices:
 2. **PC Application**: Run `python PythonApp/main.py` 
 3. **Shimmer Sensors**: Pair GSR+ devices via Bluetooth
 4. **Network Setup**: Configure WiFi/Bluetooth connectivity
+
+### 🔬 Shimmer GSR+ Integration
+
+The system includes complete **ShimmerAndroidAPI integration** with professional-grade sensor support:
+
+#### Device Features
+- **✅ Real Device Discovery**: Automatic discovery from paired Bluetooth devices
+- **✅ Multi-Connection Support**: Both BT_CLASSIC and BLE connections
+- **✅ Multi-Sensor Arrays**: GSR, PPG, accelerometer, gyroscope, magnetometer, ECG, EMG
+- **✅ Professional State Management**: Official message handler patterns for device lifecycle
+- **✅ Real-time Data Streaming**: Configurable sampling rates (25.6Hz to 512Hz)
+- **✅ SD Logging**: Time-synchronized logging across multiple devices
+
+#### User Interface
+- **📱 Shimmer Dashboard**: Embedded directly in recording workflow
+- **⚙️ Control Panel**: Dedicated configuration screen with device management
+- **📊 Real-time Visualization**: Live sensor charts with auto-scaling
+- **🔧 Quick Configuration**: Sampling rate, sensor range, and channel selection
+
+#### API Integration
+```kotlin
+// Example: Configure device for stress research
+viewModel.updateSensorConfiguration(setOf("GSR", "PPG", "ACCEL"))
+viewModel.updateSamplingRate(128) // Optimal for physiological signals
+viewModel.updateGsrRange(4) // High sensitivity for subtle changes
+
+// Start synchronized recording
+viewModel.startStreaming() // Begins real-time data collection
+```
+
+**Comprehensive Documentation**: [Shimmer API Reference](docs/api/shimmer-api.md) | [Usage Examples](docs/api/shimmer-usage-examples.md)
 
 ## 🧪 Testing & Development
 
