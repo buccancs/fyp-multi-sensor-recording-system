@@ -56,19 +56,22 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- Connect devices button -->
+        <!-- Enhanced connect devices button with professional styling -->
         <TextView
             android:id="@+id/tv_connect_device"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="56dp"
             android:gravity="center"
-            android:text="Connect Devices"
+            android:text="🔗 Connect Multi-Sensor Devices"
             android:textSize="16sp"
-            android:textColor="@color/white"
-            android:background="@drawable/connect_button_bg"
-            app:layout_constraintWidth_percent="0.75"
-            app:layout_constraintDimensionRatio="2825:440"
-            app:layout_constraintVertical_bias="0.3"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:background="@drawable/button_primary_enhanced"
+            android:elevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintWidth_percent="0.85"
+            app:layout_constraintVertical_bias="0.25"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_image"
