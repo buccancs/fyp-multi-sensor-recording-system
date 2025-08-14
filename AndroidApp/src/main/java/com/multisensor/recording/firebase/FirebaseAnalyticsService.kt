@@ -158,7 +158,6 @@ class FirebaseAnalyticsService @Inject constructor(
         }
         firebaseAnalytics.logEvent("synchronization_performed", bundle)
     }
-    }
 
     // Data Export and Analysis Events
 
