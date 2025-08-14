@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.hardware.usb.UsbDevice
+import android.os.Build
 import android.view.TextureView
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.multisensor.recording.ui.MainViewModel
@@ -426,7 +428,17 @@ class MainActivityCoordinator @Inject constructor(
                 filter: android.content.IntentFilter
             ): android.content.Intent? {
                 return try {
-                    callback?.getContext()?.registerReceiver(receiver, filter)
+                    val context = callback?.getContext()
+                    if (context != null) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            // For Android 13+, use RECEIVER_NOT_EXPORTED for app-specific broadcasts
+                            ContextCompat.registerReceiver(context, receiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+                        } else {
+                            context.registerReceiver(receiver, filter)
+                        }
+                    } else {
+                        null
+                    }
                 } catch (e: Exception) {
                     android.util.Log.e("MainActivityCoordinator", "Failed to register broadcast receiver", e)
                     null

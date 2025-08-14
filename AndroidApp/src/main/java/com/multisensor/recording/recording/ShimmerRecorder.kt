@@ -543,6 +543,37 @@ constructor(
             ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
         }
     }
+    
+    fun getPermissionStatus(): Map<String, Boolean> {
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            BLUETOOTH_PERMISSIONS_NEW
+        } else {
+            BLUETOOTH_PERMISSIONS_LEGACY
+        }
+        
+        return permissions.associateWith { permission ->
+            ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+    
+    fun getInitializationDiagnostics(): String {
+        val hasPermissions = hasBluetoothPermissions()
+        val bluetoothEnabled = bluetoothAdapter?.isEnabled == true
+        val managerInitialized = shimmerBluetoothManager != null
+        val isInit = isInitialized.get()
+        
+        return buildString {
+            appendLine("=== Shimmer Initialization Diagnostics ===")
+            appendLine("Permissions granted: $hasPermissions")
+            appendLine("Bluetooth enabled: $bluetoothEnabled")
+            appendLine("Manager initialized: $managerInitialized")
+            appendLine("Recorder initialized: $isInit")
+            appendLine("Connected devices: ${connectedDevices.size}")
+            if (!hasPermissions) {
+                appendLine("Missing permissions: ${getPermissionStatus().filterValues { !it }.keys}")
+            }
+        }
+    }
 
     suspend fun connectSingleDevice(
         macAddress: String,
@@ -1183,14 +1214,22 @@ constructor(
 
                 recordingScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-                withContext(Dispatchers.Main) {
-                    val handler = createShimmerHandler()
-                    shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, handler)
+                // Check Bluetooth permissions before initializing ShimmerBluetoothManagerAndroid
+                if (!hasBluetoothPermissions()) {
+                    logger.warning("Missing Bluetooth permissions - ShimmerBluetoothManager initialization skipped")
+                    logger.info("Bluetooth permissions must be granted before Shimmer functionality can be used")
+                } else {
+                    withContext(Dispatchers.Main) {
+                        val handler = createShimmerHandler()
+                        shimmerBluetoothManager = ShimmerBluetoothManagerAndroid(context, handler)
+                    }
+                    logger.info("ShimmerBluetoothManagerAndroid initialized successfully")
                 }
-                logger.info("ShimmerBluetoothManagerAndroid initialized successfully")
 
                 if (bluetoothAdapter?.isEnabled != true) {
                     logger.warning("Bluetooth is not enabled - some features may not work")
+                } else if (shimmerBluetoothManager == null) {
+                    logger.warning("ShimmerBluetoothManager not initialized - Bluetooth permissions may be missing")
                 }
 
                 val hasConnectedDevices = connectedDevices.isNotEmpty()

@@ -79,10 +79,34 @@ constructor(
             true
         } catch (e: SecurityException) {
             logger.error("Security exception initializing thermal recorder", e)
-            false
+            logger.warning("ThermalRecorder initialized with limited functionality due to security restrictions")
+            // Set initialized to true even with security exception to allow app to continue
+            isInitialized.set(true)
+            true
         } catch (e: Exception) {
             logger.error("Thermal camera initialization failed", e)
             false
+        }
+    }
+    
+    fun getInitializationDiagnostics(): String {
+        val isInit = isInitialized.get()
+        val hasUsbManager = usbManager != null
+        val hasMonitor = topdonUsbMonitor != null
+        val isRecording = isRecording.get()
+        val hasCurrentDevice = currentDevice != null
+        
+        return buildString {
+            appendLine("=== Thermal Camera Initialization Diagnostics ===")
+            appendLine("Recorder initialized: $isInit")
+            appendLine("USB manager available: $hasUsbManager")
+            appendLine("USB monitor created: $hasMonitor")
+            appendLine("Current device connected: $hasCurrentDevice")
+            appendLine("Recording active: $isRecording")
+            appendLine("Frame count: ${frameCount.get()}")
+            if (hasCurrentDevice) {
+                appendLine("Device: ${currentDevice?.deviceName}")
+            }
         }
     }
 
@@ -448,7 +472,15 @@ constructor(
                 }
             }
         )
-        topdonUsbMonitor?.register()
+        try {
+            topdonUsbMonitor?.register()
+            logger.info("USB monitor registered successfully")
+        } catch (e: SecurityException) {
+            logger.error("Security exception initializing thermal recorder", e)
+            logger.warning("USB monitoring disabled due to receiver registration requirements on Android 13+")
+            logger.info("Thermal camera functionality may be limited without USB monitoring")
+            // Don't re-throw the exception - allow the app to continue without USB monitoring
+        }
     }
 
     private fun checkForConnectedDevices() {
