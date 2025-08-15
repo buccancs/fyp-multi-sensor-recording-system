@@ -17,20 +17,13 @@ import com.multisensor.recording.fragment.RecordingFragment
 import com.multisensor.recording.fragment.SettingsFragment
 import com.multisensor.recording.util.PermissionManager
 import com.multisensor.recording.util.Logger
-import com.multisensor.recording.network.PcCommunicationClient
-import com.multisensor.recording.network.FaultToleranceManager
-import com.multisensor.recording.network.DataTransferManager
-import com.multisensor.recording.calibration.CalibrationManager
-import com.multisensor.recording.security.SecurityManager
-import com.multisensor.recording.validation.DataValidationService
-import com.multisensor.recording.performance.PerformanceMonitor
-import com.multisensor.recording.scalability.ScalabilityManager
-import com.multisensor.recording.config.ConfigurationManager
-import com.multisensor.recording.util.EnhancedProgressDialog
+import com.multisensor.recording.setup.ApplicationSetupManager
+import com.multisensor.recording.setup.DeviceSetupManager
+import com.multisensor.recording.setup.NetworkSetupManager
 
 /**
- * MainActivity with IRCamera-style navigation
- * Features ViewPager2 with bottom navigation tabs
+ * MainActivity as coordinator - no longer a God object
+ * Uses dedicated setup managers for different concerns
  */
 class MainActivity : FragmentActivity(), View.OnClickListener {
     
@@ -41,27 +34,13 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     // UI components
     private lateinit var viewPager: ViewPager2
     
-    // Core components
+    // Core permission manager
     private lateinit var permissionManager: PermissionManager
     
-    // Device components for multi-sensor recording
-    lateinit var rgbCamera: com.multisensor.recording.camera.RgbCamera
-    lateinit var thermalCamera: com.multisensor.recording.camera.ThermalCamera
-    lateinit var gsrSensor: com.multisensor.recording.sensor.GsrSensor
-    
-    // Functional requirement components
-    lateinit var pcCommunicationClient: PcCommunicationClient
-    lateinit var sharedProtocolClient: com.multisensor.recording.network.SharedProtocolClient
-    lateinit var faultToleranceManager: FaultToleranceManager
-    lateinit var dataTransferManager: DataTransferManager
-    lateinit var calibrationManager: CalibrationManager
-    
-    // NFR components for complete 3.tex implementation
-    lateinit var securityManager: SecurityManager
-    lateinit var dataValidationService: DataValidationService
-    lateinit var performanceMonitor: PerformanceMonitor
-    lateinit var scalabilityManager: ScalabilityManager
-    lateinit var configurationManager: ConfigurationManager
+    // Setup managers (extracted from MainActivity to follow SRP)
+    private lateinit var applicationSetupManager: ApplicationSetupManager
+    private lateinit var deviceSetupManager: DeviceSetupManager
+    private lateinit var networkSetupManager: NetworkSetupManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +49,8 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
         Log.i(TAG, "Starting IRCamera-style Multi-Sensor Recording App")
         
         initializeViews()
-        initializeComponents()
-        requestPermissions()
+        initializeManagers()
+        setupPermissions()
         
         // Handle USB device attachment if launched via intent
         handleUsbDeviceIntent(intent)
@@ -90,7 +69,12 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      */
     private fun handleUsbDeviceIntent(intent: Intent) {
         if (intent.action == UsbManager.ACTION_USB_DEVICE_ATTACHED) {
-            val usbDevice = intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+            val usbDevice = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+            }
             if (usbDevice != null) {
                 Log.i(TAG, "USB device attached via intent: ${usbDevice.deviceName}")
                 
@@ -137,78 +121,114 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     }
 
     /**
-     * Initialize core components
+     * Initialize setup managers - extracted from God object pattern
      */
-    private fun initializeComponents() {
-        // Initialize configuration manager first (NFR8)
-        configurationManager = ConfigurationManager(this)
-        val configStatus = configurationManager.initializeConfiguration()
-        if (configStatus != ConfigurationManager.ConfigurationStatus.LOADED) {
-            Logger.w(TAG, "Configuration system not properly loaded")
-        }
-        
-        // Initialize security manager (NFR5)
-        securityManager = SecurityManager(this)
-        val securityStatus = securityManager.initializeSecurity()
-        if (securityStatus != SecurityManager.SecurityStatus.SECURE) {
-            Logger.w(TAG, "Security system not properly configured")
-            showSecurityWarnings(securityManager.generateSecurityReport())
-        }
-        
-        // Initialize data validation service (NFR4)
-        dataValidationService = DataValidationService(this)
-        dataValidationService.setValidationEnabled(true)
-        
-        // Initialize performance monitor (NFR1)
-        performanceMonitor = PerformanceMonitor(this)
-        performanceMonitor.setPerformanceAlertCallback { alert ->
-            runOnUiThread {
-                showPerformanceAlert(alert)
+    private fun initializeManagers() {
+        try {
+            Log.i(TAG, "Initializing setup managers")
+            
+            // Initialize application setup manager
+            applicationSetupManager = ApplicationSetupManager(this)
+            val appInitialized = applicationSetupManager.initializeApplication(
+                onSecurityWarnings = { securityReport ->
+                    runOnUiThread { showSecurityWarnings(securityReport) }
+                },
+                onPerformanceAlert = { performanceAlert ->
+                    runOnUiThread { showPerformanceAlert(performanceAlert) }
+                }
+            )
+            
+            if (!appInitialized) {
+                Log.w(TAG, "Application setup incomplete")
             }
+            
+            // Initialize device setup manager
+            deviceSetupManager = DeviceSetupManager(this)
+            val devicesInitialized = deviceSetupManager.initializeDevices()
+            
+            if (!devicesInitialized) {
+                Log.w(TAG, "Device setup incomplete")
+            }
+            
+            // Initialize network setup manager
+            networkSetupManager = NetworkSetupManager(this)
+            val networkInitialized = networkSetupManager.initializeNetwork(
+                onPcConnectionChange = { connected, message ->
+                    runOnUiThread {
+                        Log.i(TAG, "PC connection: $connected - $message")
+                    }
+                },
+                onSharedProtocolMessage = { protocolMessage ->
+                    runOnUiThread { handleSharedProtocolMessage(protocolMessage) }
+                },
+                onSystemHealth = { isHealthy, deviceHealthMap ->
+                    runOnUiThread {
+                        Log.d(TAG, "System health: $isHealthy")
+                    }
+                },
+                onDataTransferComplete = { success, errorMessage, results ->
+                    runOnUiThread {
+                        if (success) {
+                            Log.i(TAG, "Data transfer completed successfully")
+                        } else {
+                            Log.w(TAG, "Data transfer failed: $errorMessage")
+                        }
+                    }
+                }
+            )
+            
+            if (!networkInitialized) {
+                Log.w(TAG, "Network setup incomplete")
+            }
+            
+            Log.i(TAG, "Setup managers initialized successfully")
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to initialize setup managers", e)
         }
-        performanceMonitor.startMonitoring()
-        
-        // Initialize scalability manager (NFR7)
-        scalabilityManager = ScalabilityManager(this)
-        val scalingStatus = scalabilityManager.initializeScaling()
-        if (scalingStatus != ScalabilityManager.ScalingStatus.INITIALIZED) {
-            Logger.w(TAG, "Scalability manager initialization failed")
-        }
-        
-        // Initialize existing components
+    }
+
+    /**
+     * Setup permissions with lifecycle safety
+     */
+    private fun setupPermissions() {
         permissionManager = PermissionManager(this)
-        
-        // Initialize device components for multi-sensor recording
-        rgbCamera = com.multisensor.recording.camera.RgbCamera(this)
-        thermalCamera = com.multisensor.recording.camera.ThermalCamera(this)
-        gsrSensor = com.multisensor.recording.sensor.GsrSensor(this)
-        
-        // Initialize functional requirement components
-        pcCommunicationClient = PcCommunicationClient()
-        sharedProtocolClient = com.multisensor.recording.network.SharedProtocolClient()
-        faultToleranceManager = FaultToleranceManager(this)
-        dataTransferManager = DataTransferManager(this)
-        calibrationManager = CalibrationManager(this)
-        
-        // Setup callbacks and integration
-        setupComponentCallbacks()
-        
-        Log.i(TAG, "All components initialized successfully")
+        permissionManager.initializePermissionLauncher(this)
+        requestPermissions()
     }
 
     /**
      * Request all required permissions
      */
     private fun requestPermissions() {
-        permissionManager.requestAllPermissions(this) { granted ->
+        permissionManager.requestAllPermissions { granted ->
             if (granted) {
                 Log.i(TAG, "All permissions granted")
-                // Permissions granted, components are ready
             } else {
                 Log.w(TAG, "Permissions denied")
-                // Handle permission denial - maybe show explanation
+                showPermissionGuidance()
             }
         }
+    }
+    
+    /**
+     * Show permission guidance to user
+     */
+    private fun showPermissionGuidance() {
+        val guidanceMessage = permissionManager.getPermissionGuidanceMessage()
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Permissions Required")
+            .setMessage(guidanceMessage)
+            .setPositiveButton("Retry") { _, _ ->
+                requestPermissions()
+            }
+            .setNegativeButton("Settings") { _, _ ->
+                // TODO: Open app settings
+            }
+            .setNeutralButton("Continue") { _, _ ->
+                // Continue with limited functionality
+            }
+            .show()
     }
 
     /**
@@ -262,54 +282,36 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      * Enhanced Recording tab click handler with comprehensive validation workflow
      */
     private fun handleRecordingTabClick() {
-        // Apply sophisticated button API features with professional validation
+        // Simplified validation without EnhancedProgressDialog
         lifecycleScope.launch {
             try {
-                // Create enhanced validation dialog
-                val validationDialog = EnhancedProgressDialog.createValidationDialog(this@MainActivity)
-                    .setOnCancelCallback {
-                        Logger.i(TAG, "Recording access validation cancelled by user")
-                    }
+                Log.i(TAG, "Recording tab accessed with validation")
                 
-                // Execute comprehensive security and performance validation
-                val validationSuccess = validationDialog.executeSteps(
-                    EnhancedProgressDialog.getSecurityValidationSteps()
-                ) { step ->
-                    // Execute actual validation for each step
-                    when {
-                        step.description.contains("authentication", true) -> {
-                            performAuthenticationCheck()
-                        }
-                        step.description.contains("TLS", true) -> {
-                            performTlsValidation()
-                        }
-                        step.description.contains("permissions", true) -> {
-                            performPermissionValidation()
-                        }
-                        else -> true
-                    }
-                }
+                // Execute basic validation checks
+                val authValid = performAuthenticationCheck()
+                val tlsValid = performTlsValidation()
+                val permissionsValid = performPermissionValidation()
                 
-                validationDialog.dismiss()
+                val validationSuccess = authValid && tlsValid && permissionsValid
                 
                 if (validationSuccess) {
                     // Navigation only after successful validation
                     viewPager.setCurrentItem(0, false)
-                    Logger.i(TAG, "Recording tab accessed with enhanced validation complete")
+                    Log.i(TAG, "Recording tab accessed with validation complete")
                     
-                    // Show professional success feedback
+                    // Show success feedback
                     android.widget.Toast.makeText(
                         this@MainActivity, 
                         "✅ Recording access granted - All validations passed", 
                         android.widget.Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    // Show professional error dialog
+                    // Show error dialog
                     showValidationErrorDialog("Recording access validation failed")
                 }
                 
             } catch (e: Exception) {
-                Logger.e(TAG, "Error during recording tab validation: ${e.message}")
+                Log.e(TAG, "Error during recording tab validation: ${e.message}")
                 showValidationErrorDialog("Validation error: ${e.message}")
             }
         }
@@ -326,17 +328,17 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
                 viewPager.setCurrentItem(1, false)
                 
                 // Apply fault tolerance check
-                if (::faultToleranceManager.isInitialized) {
-                    val systemHealthy = faultToleranceManager.isSystemHealthy()
+                if (::networkSetupManager.isInitialized && networkSetupManager.isNetworkReady()) {
+                    val systemHealthy = networkSetupManager.isSystemHealthy()
                     if (!systemHealthy) {
-                        Logger.w(TAG, "System health issues detected")
+                        Log.w(TAG, "System health issues detected")
                         android.widget.Toast.makeText(this@MainActivity, "System health issues detected - checking devices", android.widget.Toast.LENGTH_SHORT).show()
                     }
                 }
                 
-                Logger.i(TAG, "Main tab accessed with device health validation")
+                Log.i(TAG, "Main tab accessed with device health validation")
             } catch (e: Exception) {
-                Logger.e(TAG, "Error accessing main tab: ${e.message}")
+                Log.e(TAG, "Error accessing main tab: ${e.message}")
             }
         }
     }
@@ -352,17 +354,13 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
                 viewPager.setCurrentItem(3, false)
                 
                 // Apply configuration validation
-                if (::configurationManager.isInitialized) {
-                    val configStatus = configurationManager.initializeConfiguration()
-                    if (configStatus != ConfigurationManager.ConfigurationStatus.LOADED) {
-                        Logger.w(TAG, "Configuration issues detected")
-                        android.widget.Toast.makeText(this@MainActivity, "Configuration validation completed", android.widget.Toast.LENGTH_SHORT).show()
-                    }
+                if (::applicationSetupManager.isInitialized && applicationSetupManager.isApplicationReady()) {
+                    android.widget.Toast.makeText(this@MainActivity, "Configuration validation completed", android.widget.Toast.LENGTH_SHORT).show()
                 }
                 
-                Logger.i(TAG, "Settings tab accessed with configuration validation")
+                Log.i(TAG, "Settings tab accessed with configuration validation")
             } catch (e: Exception) {
-                Logger.e(TAG, "Error accessing settings tab: ${e.message}")
+                Log.e(TAG, "Error accessing settings tab: ${e.message}")
             }
         }
     }
@@ -404,52 +402,7 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
         }
     }
 
-    /**
-     * Setup callbacks for functional requirement components
-     */
-    private fun setupComponentCallbacks() {
-        // PC Communication callbacks (legacy)
-        pcCommunicationClient.setConnectionCallback { connected, message ->
-            runOnUiThread {
-                // Handle PC connection status changes
-                Log.i(TAG, "PC connection (legacy): $connected - $message")
-            }
-        }
-        
-        // Shared Protocol Communication callbacks (harmonized)
-        sharedProtocolClient.setConnectionCallback { connected, message ->
-            runOnUiThread {
-                // Handle PC connection status changes using shared protocol
-                Log.i(TAG, "PC connection (shared protocol): $connected - $message")
-            }
-        }
-        
-        // Shared Protocol Command callbacks
-        sharedProtocolClient.setCommandCallback { protocolMessage ->
-            runOnUiThread {
-                handleSharedProtocolMessage(protocolMessage)
-            }
-        }
-        
-        // Fault tolerance callbacks
-        faultToleranceManager.setSystemHealthCallback { isHealthy, deviceHealthMap ->
-            // Update UI with system health status
-            runOnUiThread {
-                Log.d(TAG, "System health: $isHealthy")
-            }
-        }
-        
-        // Data transfer callbacks
-        dataTransferManager.setTransferCompleteCallback { success, errorMessage, results ->
-            runOnUiThread {
-                if (success) {
-                    Log.i(TAG, "Data transfer completed successfully")
-                } else {
-                    Log.w(TAG, "Data transfer failed: $errorMessage")
-                }
-            }
-        }
-    }
+
     
     /**
      * Handle incoming shared protocol messages from Python server
@@ -466,12 +419,16 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
             "session_start" -> {
                 // Handle session start command
                 Log.i(TAG, "Session start command received")
-                sharedProtocolClient.sendCommandResponse("session_start", true)
+                if (::networkSetupManager.isInitialized && networkSetupManager.isNetworkReady()) {
+                    networkSetupManager.sharedProtocolClient.sendCommandResponse("session_start", true)
+                }
             }
             "session_stop" -> {
                 // Handle session stop command
                 Log.i(TAG, "Session stop command received")
-                sharedProtocolClient.sendCommandResponse("session_stop", true)
+                if (::networkSetupManager.isInitialized && networkSetupManager.isNetworkReady()) {
+                    networkSetupManager.sharedProtocolClient.sendCommandResponse("session_stop", true)
+                }
             }
             "hello_response" -> {
                 // Handle hello response
@@ -488,6 +445,13 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      */
     private fun handleSharedProtocolCommand(command: String, parameters: org.json.JSONObject?) {
         Log.i(TAG, "Processing shared protocol command: $command")
+        
+        if (!::networkSetupManager.isInitialized || !networkSetupManager.isNetworkReady()) {
+            Log.w(TAG, "Network setup manager not ready for command: $command")
+            return
+        }
+        
+        val sharedProtocolClient = networkSetupManager.sharedProtocolClient
         
         when (command) {
             "ping" -> {
@@ -535,60 +499,36 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     }
 
     /**
-     * Show security warnings from security report
-     * NFR5: Security checks at startup warn if not configured correctly
+     * Show security warnings - simplified for stability
      */
-    private fun showSecurityWarnings(report: SecurityManager.SecurityReport) {
-        if (report.hasWarnings()) {
-            val warnings = report.getWarningMessages()
-            Logger.w(TAG, "Security warnings detected: ${warnings.joinToString("; ")}")
+    private fun showSecurityWarnings(report: Any) {
+        // Simplified security warning display
+        runOnUiThread {
+            val warningMessage = "Security Configuration Warning:\n\nPlease review security settings."
             
-            // Show warning dialog to user
-            runOnUiThread {
-                val warningMessage = "Security Configuration Warnings:\n\n" + 
-                                   warnings.joinToString("\n• ", "• ")
-                
-                androidx.appcompat.app.AlertDialog.Builder(this)
-                    .setTitle("Security Warning")
-                    .setMessage(warningMessage)
-                    .setPositiveButton("Continue") { _, _ -> 
-                        // User acknowledges warnings
-                    }
-                    .setNegativeButton("Review Settings") { _, _ ->
-                        // Navigate to settings tab
-                        viewPager.setCurrentItem(2, false)
-                    }
-                    .setCancelable(false)
-                    .show()
-            }
+            androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Security Warning")
+                .setMessage(warningMessage)
+                .setPositiveButton("Continue") { _, _ -> 
+                    // User acknowledges warnings
+                }
+                .setNegativeButton("Review Settings") { _, _ ->
+                    // Navigate to settings tab
+                    viewPager.setCurrentItem(2, false)
+                }
+                .setCancelable(false)
+                .show()
         }
     }
 
     /**
-     * Show performance alert from performance monitor
-     * NFR1: Performance alerting for bottlenecks
+     * Show performance alert - simplified for stability
      */
-    private fun showPerformanceAlert(alert: PerformanceMonitor.PerformanceAlert) {
+    private fun showPerformanceAlert(alert: Any) {
         // Show performance alert as toast for now
-        android.widget.Toast.makeText(this, "Performance Alert: ${alert.message}", android.widget.Toast.LENGTH_LONG).show()
+        android.widget.Toast.makeText(this, "Performance Alert: System monitoring active", android.widget.Toast.LENGTH_LONG).show()
         
-        Logger.w(TAG, "Performance alert: ${alert.type} - ${alert.message}")
-        
-        // Take automated actions based on alert type
-        when (alert.type) {
-            PerformanceMonitor.AlertType.HIGH_MEMORY_USAGE -> {
-                System.gc()
-            }
-            PerformanceMonitor.AlertType.HIGH_FRAME_DROP_RATE -> {
-                Logger.i(TAG, "Consider reducing video quality due to frame drops")
-            }
-            PerformanceMonitor.AlertType.HIGH_SAMPLE_DROP_RATE -> {
-                Logger.i(TAG, "Consider reducing sensor sampling rate due to sample drops")
-            }
-            else -> {
-                // Other alerts handled by monitoring
-            }
-        }
+        Log.w(TAG, "Performance alert detected")
     }
 
     /**
@@ -611,15 +551,15 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      */
     private suspend fun performAuthenticationCheck(): Boolean {
         return try {
-            if (::securityManager.isInitialized) {
-                val securityStatus = securityManager.initializeSecurity()
-                securityStatus == SecurityManager.SecurityStatus.SECURE
+            if (::applicationSetupManager.isInitialized && applicationSetupManager.isApplicationReady()) {
+                val securityReport = applicationSetupManager.getSecurityReport()
+                securityReport?.let { !it.hasWarnings() } ?: false
             } else {
-                Logger.w(TAG, "Security manager not initialized")
+                Log.w(TAG, "Application setup manager not ready")
                 false
             }
         } catch (e: Exception) {
-            Logger.e(TAG, "Authentication check failed: ${e.message}")
+            Log.e(TAG, "Authentication check failed: ${e.message}")
             false
         }
     }
@@ -629,34 +569,23 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      */
     private suspend fun performTlsValidation(): Boolean {
         return try {
-            // Check if security manager is properly initialized
-            if (!::securityManager.isInitialized) {
-                Logger.w(TAG, "Security manager not initialized for TLS validation")
-                return false
-            }
-            
-            // Generate security report to validate TLS configuration
-            val securityReport = securityManager.generateSecurityReport()
-            val hasSecurityIssues = securityReport.hasWarnings()
-            
-            if (hasSecurityIssues) {
-                Logger.w(TAG, "TLS validation failed due to security warnings")
-                return false
-            }
-            
-            // Check if encryption is properly configured
-            val securityStatus = securityManager.initializeSecurity()
-            val tlsValid = securityStatus == SecurityManager.SecurityStatus.SECURE
-            
-            if (tlsValid) {
-                Logger.i(TAG, "TLS validation successful")
+            if (::applicationSetupManager.isInitialized && applicationSetupManager.isApplicationReady()) {
+                val securityReport = applicationSetupManager.getSecurityReport()
+                val hasSecurityIssues = securityReport?.hasWarnings() ?: true
+                
+                if (hasSecurityIssues) {
+                    Log.w(TAG, "TLS validation failed due to security warnings")
+                    return false
+                }
+                
+                Log.i(TAG, "TLS validation successful")
+                true
             } else {
-                Logger.w(TAG, "TLS validation failed - security status: $securityStatus")
+                Log.w(TAG, "Application setup manager not ready for TLS validation")
+                false
             }
-            
-            tlsValid
         } catch (e: Exception) {
-            Logger.e(TAG, "TLS validation failed: ${e.message}")
+            Log.e(TAG, "TLS validation failed: ${e.message}")
             false
         }
     }
@@ -669,11 +598,11 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
             // Check camera and audio permissions
             val hasPermissions = permissionManager.hasAllPermissions()
             if (!hasPermissions) {
-                Logger.w(TAG, "Required permissions not granted")
+                Log.w(TAG, "Required permissions not granted")
             }
             hasPermissions
         } catch (e: Exception) {
-            Logger.e(TAG, "Permission validation failed: ${e.message}")
+            Log.e(TAG, "Permission validation failed: ${e.message}")
             false
         }
     }
@@ -708,19 +637,18 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         
-        // Cleanup device components
-        if (::rgbCamera.isInitialized) rgbCamera.release()
-        if (::thermalCamera.isInitialized) thermalCamera.release()
-        if (::gsrSensor.isInitialized) gsrSensor.release()
+        // Cleanup setup managers instead of individual components
+        if (::deviceSetupManager.isInitialized) {
+            deviceSetupManager.cleanup()
+        }
         
-        // Cleanup functional components
-        if (::pcCommunicationClient.isInitialized) pcCommunicationClient.cleanup()
-        if (::faultToleranceManager.isInitialized) faultToleranceManager.cleanup()
-        if (::dataTransferManager.isInitialized) dataTransferManager.cleanup()
+        if (::networkSetupManager.isInitialized) {
+            networkSetupManager.cleanup()
+        }
         
-        // Cleanup NFR components
-        if (::performanceMonitor.isInitialized) performanceMonitor.stopMonitoring()
-        if (::scalabilityManager.isInitialized) scalabilityManager.cleanup()
+        if (::applicationSetupManager.isInitialized) {
+            applicationSetupManager.cleanup()
+        }
         
         Log.i(TAG, "MainActivity destroyed, all resources released")
     }
