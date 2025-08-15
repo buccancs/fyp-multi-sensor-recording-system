@@ -171,10 +171,15 @@ class EnhancedProgressDialog(private val context: Context) {
             for ((index, step) in steps.withIndex()) {
                 updateProgress(step)
                 
-                // Execute step in background
+                // Execute step in background without artificial delays
                 val success = withContext(Dispatchers.IO) {
                     try {
-                        delay(step.duration) // Simulate work
+                        // Only add minimal delay for UI feedback (max 200ms)
+                        if (step.duration > 200L) {
+                            delay(200L)
+                        } else {
+                            delay(step.duration)
+                        }
                         onStepComplete(step)
                     } catch (e: Exception) {
                         Logger.e("EnhancedProgressDialog", "Step failed: ${e.message}")
@@ -187,7 +192,7 @@ class EnhancedProgressDialog(private val context: Context) {
                         title = "Error occurred",
                         description = "Step failed: ${step.title}",
                         isError = true,
-                        errorMessage = "Please try again or check system settings"
+                        errorMessage = "Please check system settings and try again"
                     ))
                     return@withContext false
                 }
@@ -231,25 +236,25 @@ class EnhancedProgressDialog(private val context: Context) {
                     "Security Validation", 
                     "Checking authentication tokens...", 
                     20,
-                    800L
+                    150L
                 ),
                 ProgressStep(
                     "Security Validation", 
                     "Validating TLS encryption...", 
                     50,
-                    600L
+                    100L
                 ),
                 ProgressStep(
                     "Security Validation", 
                     "Verifying system permissions...", 
                     80,
-                    500L
+                    100L
                 ),
                 ProgressStep(
                     "Security Validation Complete", 
                     "All security checks passed", 
                     100,
-                    300L
+                    50L
                 )
             )
         }
@@ -261,33 +266,39 @@ class EnhancedProgressDialog(private val context: Context) {
             return listOf(
                 ProgressStep(
                     "Connecting Devices", 
+                    "Performing security validation...", 
+                    10,
+                    150L
+                ),
+                ProgressStep(
+                    "Connecting Devices", 
                     "Initializing RGB camera...", 
-                    15,
-                    1200L
+                    25,
+                    200L
                 ),
                 ProgressStep(
                     "Connecting Devices", 
                     "Establishing thermal camera connection...", 
-                    35,
-                    1500L
+                    50,
+                    200L
                 ),
                 ProgressStep(
                     "Connecting Devices", 
                     "Configuring GSR sensor...", 
-                    60,
-                    1000L
+                    75,
+                    200L
                 ),
                 ProgressStep(
                     "Connecting Devices", 
                     "Synchronizing device clocks...", 
-                    80,
-                    800L
+                    90,
+                    150L
                 ),
                 ProgressStep(
                     "Connection Complete", 
                     "All devices ready for recording", 
                     100,
-                    400L
+                    100L
                 )
             )
         }

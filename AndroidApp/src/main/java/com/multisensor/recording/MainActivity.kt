@@ -44,6 +44,11 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     // Core components
     private lateinit var permissionManager: PermissionManager
     
+    // Device components for multi-sensor recording
+    lateinit var rgbCamera: com.multisensor.recording.camera.RgbCamera
+    lateinit var thermalCamera: com.multisensor.recording.camera.ThermalCamera
+    lateinit var gsrSensor: com.multisensor.recording.sensor.GsrSensor
+    
     // Functional requirement components
     lateinit var pcCommunicationClient: PcCommunicationClient
     lateinit var faultToleranceManager: FaultToleranceManager
@@ -174,6 +179,11 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
         
         // Initialize existing components
         permissionManager = PermissionManager(this)
+        
+        // Initialize device components for multi-sensor recording
+        rgbCamera = com.multisensor.recording.camera.RgbCamera(this)
+        thermalCamera = com.multisensor.recording.camera.ThermalCamera(this)
+        gsrSensor = com.multisensor.recording.sensor.GsrSensor(this)
         
         // Initialize functional requirement components
         pcCommunicationClient = PcCommunicationClient()
@@ -514,10 +524,32 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      */
     private suspend fun performTlsValidation(): Boolean {
         return try {
-            // Simulate TLS certificate validation
-            kotlinx.coroutines.delay(400)
-            // In real implementation, validate TLS certificates
-            true
+            // Check if security manager is properly initialized
+            if (!::securityManager.isInitialized) {
+                Logger.w(TAG, "Security manager not initialized for TLS validation")
+                return false
+            }
+            
+            // Generate security report to validate TLS configuration
+            val securityReport = securityManager.generateSecurityReport()
+            val hasSecurityIssues = securityReport.hasWarnings()
+            
+            if (hasSecurityIssues) {
+                Logger.w(TAG, "TLS validation failed due to security warnings")
+                return false
+            }
+            
+            // Check if encryption is properly configured
+            val securityStatus = securityManager.initializeSecurity()
+            val tlsValid = securityStatus == SecurityManager.SecurityStatus.SECURE
+            
+            if (tlsValid) {
+                Logger.i(TAG, "TLS validation successful")
+            } else {
+                Logger.w(TAG, "TLS validation failed - security status: $securityStatus")
+            }
+            
+            tlsValid
         } catch (e: Exception) {
             Logger.e(TAG, "TLS validation failed: ${e.message}")
             false
@@ -571,7 +603,12 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         
-        // Cleanup components
+        // Cleanup device components
+        if (::rgbCamera.isInitialized) rgbCamera.release()
+        if (::thermalCamera.isInitialized) thermalCamera.release()
+        if (::gsrSensor.isInitialized) gsrSensor.release()
+        
+        // Cleanup functional components
         if (::pcCommunicationClient.isInitialized) pcCommunicationClient.cleanup()
         if (::faultToleranceManager.isInitialized) faultToleranceManager.cleanup()
         if (::dataTransferManager.isInitialized) dataTransferManager.cleanup()

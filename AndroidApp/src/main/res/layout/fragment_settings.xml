@@ -203,6 +203,35 @@
 
                     </LinearLayout>
 
+                    <!-- Configuration Actions -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_reload_config"
+                            android:layout_width="0dp"
+                            android:layout_height="36dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:text="Reload Config"
+                            android:textSize="12sp"
+                            android:backgroundTint="@color/primary" />
+
+                        <Button
+                            android:id="@+id/btn_test_connection"
+                            android:layout_width="0dp"
+                            android:layout_height="36dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="Test PC Connection"
+                            android:textSize="12sp"
+                            android:backgroundTint="@color/secondary" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

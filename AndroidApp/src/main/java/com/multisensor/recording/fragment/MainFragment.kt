@@ -60,16 +60,117 @@ class MainFragment : Fragment(), View.OnClickListener {
     }
 
     private fun refresh() {
-        // Check if any devices are available (placeholder logic)
-        val hasAnyDevice = hasConnectedDevices()
+        // Get real device status from MainActivity
+        val activity = activity as? MainActivity
+        val deviceList = if (activity != null) {
+            getDeviceStatusList(activity)
+        } else {
+            // Fallback if activity not available
+            listOf(
+                DeviceInfo(DeviceType.RGB_CAMERA, "📱", "RGB Camera", "Not available", false),
+                DeviceInfo(DeviceType.THERMAL_CAMERA, "🌡️", "Thermal Camera", "Not available", false),
+                DeviceInfo(DeviceType.GSR_SENSOR, "📊", "GSR Sensor", "Not available", false)
+            )
+        }
+        
+        // Update adapter with real device status
+        adapter.updateDevices(deviceList)
+        
+        // Check if any devices are available
+        val hasAnyDevice = deviceList.any { it.isConnected }
         view?.findViewById<View>(R.id.cl_has_device)?.isVisible = hasAnyDevice
         view?.findViewById<View>(R.id.cl_no_device)?.isVisible = !hasAnyDevice
-        adapter.notifyDataSetChanged()
+    }
+    
+    /**
+     * Get current device status from MainActivity components
+     */
+    private fun getDeviceStatusList(activity: MainActivity): List<DeviceInfo> {
+        return try {
+            listOf(
+                DeviceInfo(
+                    DeviceType.RGB_CAMERA,
+                    "📱",
+                    "RGB Camera",
+                    try {
+                        if (activity.rgbCamera.isConnected()) {
+                            "Ready for recording"
+                        } else {
+                            "Not connected"
+                        }
+                    } catch (e: Exception) {
+                        "Not available"
+                    },
+                    try {
+                        activity.rgbCamera.isConnected()
+                    } catch (e: Exception) {
+                        false
+                    }
+                ),
+                DeviceInfo(
+                    DeviceType.THERMAL_CAMERA,
+                    "🌡️",
+                    "Thermal Camera",
+                    try {
+                        if (activity.thermalCamera.isConnected()) {
+                            "Ready for thermal imaging"
+                        } else {
+                            "Not connected"
+                        }
+                    } catch (e: Exception) {
+                        "Not available"
+                    },
+                    try {
+                        activity.thermalCamera.isConnected()
+                    } catch (e: Exception) {
+                        false
+                    }
+                ),
+                DeviceInfo(
+                    DeviceType.GSR_SENSOR,
+                    "📊",
+                    "GSR Sensor",
+                    try {
+                        if (activity.gsrSensor.isConnected()) {
+                            "Ready for physiological monitoring"
+                        } else {
+                            "Not connected"
+                        }
+                    } catch (e: Exception) {
+                        "Not available"
+                    },
+                    try {
+                        activity.gsrSensor.isConnected()
+                    } catch (e: Exception) {
+                        false
+                    }
+                )
+            )
+        } catch (e: Exception) {
+            Logger.e("MainFragment", "Error getting device status: ${e.message}")
+            // Return safe defaults
+            listOf(
+                DeviceInfo(DeviceType.RGB_CAMERA, "📱", "RGB Camera", "Status unknown", false),
+                DeviceInfo(DeviceType.THERMAL_CAMERA, "🌡️", "Thermal Camera", "Status unknown", false),
+                DeviceInfo(DeviceType.GSR_SENSOR, "📊", "GSR Sensor", "Status unknown", false)
+            )
+        }
     }
 
     private fun hasConnectedDevices(): Boolean {
-        // Placeholder - in real implementation, check actual device status
-        return true // Always show devices for demo
+        return try {
+            val activity = activity as? MainActivity ?: return false
+            // Check actual device connectivity status
+            val rgbConnected = try { activity.rgbCamera.isConnected() } catch (e: Exception) { false }
+            val thermalConnected = try { activity.thermalCamera.isConnected() } catch (e: Exception) { false }
+            val gsrConnected = try { activity.gsrSensor.isConnected() } catch (e: Exception) { false }
+            
+            // Return true if any device is actually connected
+            rgbConnected || thermalConnected || gsrConnected
+        } catch (e: Exception) {
+            Logger.w("MainFragment", "Error checking device connectivity: ${e.message}")
+            false
+        }
     }
 
     override fun onClick(v: View?) {
@@ -121,10 +222,10 @@ class MainFragment : Fragment(), View.OnClickListener {
                         step.description.contains("GSR sensor", true) -> {
                             initializeGsrSensor(activity)
                         }
-                        step.description.contains("synchronizing", true) -> {
+                        step.description.contains("synchronizing", true) || step.description.contains("clocks", true) -> {
                             synchronizeDevices(activity)
                         }
-                        else -> true
+                        else -> true // Default success for other steps
                     }
                 }
                 
@@ -161,14 +262,12 @@ class MainFragment : Fragment(), View.OnClickListener {
     }
     
     /**
-     * Initialize RGB camera with professional validation
+     * Initialize RGB camera with real validation
      */
     private suspend fun initializeRgbCamera(activity: MainActivity): Boolean {
         return try {
-            // Simulate RGB camera initialization
-            kotlinx.coroutines.delay(500)
-            // In real implementation, check camera permissions and availability
-            true
+            // Check if camera is available and attempt connection
+            activity.rgbCamera.isConnected()
         } catch (e: Exception) {
             Logger.e("MainFragment", "RGB camera initialization failed: ${e.message}")
             false
@@ -176,14 +275,12 @@ class MainFragment : Fragment(), View.OnClickListener {
     }
     
     /**
-     * Initialize thermal camera with professional validation
+     * Initialize thermal camera with real validation
      */
     private suspend fun initializeThermalCamera(activity: MainActivity): Boolean {
         return try {
-            // Simulate thermal camera initialization
-            kotlinx.coroutines.delay(800)
-            // In real implementation, establish thermal camera connection
-            true
+            // Check if thermal camera is available and attempt connection
+            activity.thermalCamera.isConnected()
         } catch (e: Exception) {
             Logger.e("MainFragment", "Thermal camera initialization failed: ${e.message}")
             false
@@ -191,18 +288,19 @@ class MainFragment : Fragment(), View.OnClickListener {
     }
     
     /**
-     * Initialize GSR sensor with professional validation
+     * Initialize GSR sensor with real validation
      */
     private suspend fun initializeGsrSensor(activity: MainActivity): Boolean {
         return try {
-            // Simulate GSR sensor initialization
-            kotlinx.coroutines.delay(600)
-            // Check fault tolerance manager for system health
+            // Check system health before attempting GSR connection
             val systemHealthy = activity.faultToleranceManager.isSystemHealthy()
             if (!systemHealthy) {
                 Logger.w("MainFragment", "System health check failed during GSR sensor init")
+                return false
             }
-            true
+            
+            // Check if GSR sensor is available and attempt connection
+            activity.gsrSensor.isConnected()
         } catch (e: Exception) {
             Logger.e("MainFragment", "GSR sensor initialization failed: ${e.message}")
             false
@@ -210,14 +308,31 @@ class MainFragment : Fragment(), View.OnClickListener {
     }
     
     /**
-     * Synchronize devices with professional time sync
+     * Synchronize devices with real time sync validation
      */
     private suspend fun synchronizeDevices(activity: MainActivity): Boolean {
         return try {
-            // Simulate device synchronization
-            kotlinx.coroutines.delay(400)
+            // Check if devices are actually connected before sync
+            val rgbReady = try { activity.rgbCamera.isConnected() } catch (e: Exception) { false }
+            val thermalReady = try { activity.thermalCamera.isConnected() } catch (e: Exception) { false }
+            val gsrReady = try { activity.gsrSensor.isConnected() } catch (e: Exception) { false }
+            
+            if (!rgbReady && !thermalReady && !gsrReady) {
+                Logger.w("MainFragment", "No devices available for synchronization")
+                return false
+            }
+            
             // Enable data validation for synchronized recording
             activity.dataValidationService.setValidationEnabled(true)
+            
+            // Verify data validation is working
+            val validationStats = activity.dataValidationService.getValidationStatistics()
+            if (!validationStats.isEnabled) {
+                Logger.w("MainFragment", "Data validation could not be enabled")
+                return false
+            }
+            
+            Logger.i("MainFragment", "Device synchronization completed successfully")
             true
         } catch (e: Exception) {
             Logger.e("MainFragment", "Device synchronization failed: ${e.message}")
@@ -281,12 +396,12 @@ class MainFragment : Fragment(), View.OnClickListener {
     private class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.ViewHolder>() {
         
         var onItemClickListener: ((type: DeviceType) -> Unit)? = null
+        private var deviceInfoList: List<DeviceInfo> = emptyList()
 
-        private val devices = listOf(
-            DeviceInfo(DeviceType.RGB_CAMERA, "📱", "RGB Camera", "High-resolution recording ready", true),
-            DeviceInfo(DeviceType.THERMAL_CAMERA, "🌡️", "Thermal Camera", "Infrared imaging ready", true),
-            DeviceInfo(DeviceType.GSR_SENSOR, "📊", "GSR Sensor", "Physiological monitoring ready", false)
-        )
+        fun updateDevices(devices: List<DeviceInfo>) {
+            deviceInfoList = devices
+            notifyDataSetChanged()
+        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             return ViewHolder(
@@ -300,7 +415,7 @@ class MainFragment : Fragment(), View.OnClickListener {
 
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val device = devices[position]
+            val device = deviceInfoList[position]
             val hasTitle = position == 0
 
             holder.itemView.findViewById<View>(R.id.tv_title)?.isVisible = hasTitle
@@ -337,14 +452,14 @@ class MainFragment : Fragment(), View.OnClickListener {
             }
         }
 
-        override fun getItemCount(): Int = devices.size
+        override fun getItemCount(): Int = deviceInfoList.size
 
         inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
             init {
                 rootView.findViewById<View>(R.id.iv_bg)?.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
-                        onItemClickListener?.invoke(devices[position].type)
+                        onItemClickListener?.invoke(deviceInfoList[position].type)
                     }
                 }
             }
