@@ -50,7 +50,7 @@ class MessageType(Enum):
 @dataclass
 class BaseMessage:
     """Base message structure for all network communications."""
-    message_type: MessageType
+    message_type: MessageType = None
     timestamp: float = None
     session_id: Optional[str] = None
     device_id: Optional[str] = None
@@ -61,8 +61,24 @@ class BaseMessage:
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
-        result = asdict(self)
-        result["message_type"] = self.message_type.value
+        result = {}
+        for field in self.__dataclass_fields__:
+            value = getattr(self, field)
+            if hasattr(value, 'to_dict'):
+                # Handle objects with custom serialization
+                result[field] = value.to_dict()
+            elif hasattr(value, 'value'):
+                # Handle enums
+                result[field] = value.value
+            elif isinstance(value, list):
+                # Handle lists of objects
+                result[field] = [
+                    item.to_dict() if hasattr(item, 'to_dict') else 
+                    item.value if hasattr(item, 'value') else item
+                    for item in value
+                ]
+            else:
+                result[field] = value
         return result
     
     def to_json(self) -> str:
@@ -79,20 +95,41 @@ class BaseMessage:
 @dataclass
 class HelloMessage(BaseMessage):
     """Device introduction message."""
-    device_info: DeviceInfo
-    capabilities: List[str]
+    device_info: DeviceInfo = None
+    capabilities: List[str] = None
     protocol_version: str = "1.0"
     
     def __post_init__(self):
         super().__post_init__()
         self.message_type = MessageType.HELLO
-        self.device_id = self.device_info.device_id
+        if self.device_info:
+            self.device_id = self.device_info.device_id
+        if self.capabilities is None:
+            self.capabilities = []
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "HelloMessage":
+        """Create from dictionary."""
+        device_info_data = data.get("device_info")
+        device_info = None
+        if device_info_data:
+            from shared_protocols.data_structures import DeviceInfo
+            device_info = DeviceInfo.from_dict(device_info_data)
+        
+        return cls(
+            device_info=device_info,
+            capabilities=data.get("capabilities", []),
+            protocol_version=data.get("protocol_version", "1.0"),
+            timestamp=data.get("timestamp"),
+            session_id=data.get("session_id"),
+            device_id=data.get("device_id")
+        )
 
 
 @dataclass
 class DeviceStatusMessage(BaseMessage):
     """Device status update message."""
-    device_state: DeviceState
+    device_state: DeviceState = None
     battery_level: Optional[float] = None
     error_message: Optional[str] = None
     additional_info: Dict[str, Any] = None
@@ -107,7 +144,7 @@ class DeviceStatusMessage(BaseMessage):
 @dataclass
 class SessionControlMessage(BaseMessage):
     """Session control message (start/stop)."""
-    action: str  # "start" or "stop"
+    action: str = None  # "start" or "stop"
     session_config: Optional[SessionConfig] = None
     
     def __post_init__(self):
@@ -121,11 +158,13 @@ class SessionControlMessage(BaseMessage):
 @dataclass
 class DataMessage(BaseMessage):
     """Data streaming message."""
-    samples: List[SensorSample]
+    samples: List[SensorSample] = None
     batch_id: Optional[str] = None
     
     def __post_init__(self):
         super().__post_init__()
+        if self.samples is None:
+            self.samples = []
         if len(self.samples) == 1:
             self.message_type = MessageType.DATA_SAMPLE
         else:
@@ -135,7 +174,7 @@ class DataMessage(BaseMessage):
 @dataclass
 class CalibrationMessage(BaseMessage):
     """Calibration-related message."""
-    action: str  # "start", "capture", "complete"
+    action: str = None  # "start", "capture", "complete"
     pattern_info: Optional[Dict[str, Any]] = None
     image_data: Optional[str] = None  # base64 encoded
     results: Optional[Dict[str, Any]] = None
@@ -153,7 +192,7 @@ class CalibrationMessage(BaseMessage):
 @dataclass
 class CommandMessage(BaseMessage):
     """Command message for device control."""
-    command: str
+    command: str = None
     parameters: Dict[str, Any] = None
     
     def __post_init__(self):
@@ -166,8 +205,8 @@ class CommandMessage(BaseMessage):
 @dataclass
 class ResponseMessage(BaseMessage):
     """Response to a command message."""
-    original_command: str
-    success: bool
+    original_command: str = None
+    success: bool = False
     result: Optional[Dict[str, Any]] = None
     error_message: Optional[str] = None
     
@@ -179,8 +218,8 @@ class ResponseMessage(BaseMessage):
 @dataclass
 class ErrorMessage(BaseMessage):
     """Error notification message."""
-    error_code: str
-    error_message: str
+    error_code: str = None
+    error_message: str = None
     context: Optional[Dict[str, Any]] = None
     
     def __post_init__(self):

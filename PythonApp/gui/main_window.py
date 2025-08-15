@@ -248,6 +248,19 @@ class MainWindow(QMainWindow):
         self.stop_server_btn.clicked.connect(self._stop_server)
         server_button_layout.addWidget(self.stop_server_btn)
         
+        # Protocol test buttons
+        test_protocol_layout = QHBoxLayout()
+        
+        self.test_shared_protocol_btn = QPushButton("Test Shared Protocol")
+        self.test_shared_protocol_btn.clicked.connect(self._test_shared_protocol)
+        test_protocol_layout.addWidget(self.test_shared_protocol_btn)
+        
+        self.test_legacy_protocol_btn = QPushButton("Test Legacy Protocol") 
+        self.test_legacy_protocol_btn.clicked.connect(self._test_legacy_protocol)
+        test_protocol_layout.addWidget(self.test_legacy_protocol_btn)
+        
+        server_layout.addLayout(test_protocol_layout)
+        
         server_layout.addLayout(server_button_layout)
         layout.addWidget(server_group)
         
@@ -680,6 +693,30 @@ class MainWindow(QMainWindow):
         port_layout.addWidget(self.port_input)
         network_layout.addLayout(port_layout)
         
+        # Protocol selection
+        protocol_layout = QHBoxLayout()
+        protocol_layout.addWidget(QLabel("Communication Protocol:"))
+        self.protocol_combo = QComboBox()
+        self.protocol_combo.addItems([
+            "Auto (Shared Protocol + Legacy Fallback)",
+            "Shared Protocol Only",
+            "Legacy Protocol Only"
+        ])
+        self.protocol_combo.setCurrentIndex(0)  # Default to auto
+        protocol_layout.addWidget(self.protocol_combo)
+        network_layout.addLayout(protocol_layout)
+        
+        # Protocol info
+        protocol_info_layout = QVBoxLayout()
+        self.protocol_info = QLabel(
+            "• Auto: Uses shared protocol with legacy fallback\n"
+            "• Shared Protocol: Uses standardized message format\n"
+            "• Legacy: Uses original JSON message format"
+        )
+        self.protocol_info.setStyleSheet("QLabel { color: gray; font-size: 9pt; }")
+        protocol_info_layout.addWidget(self.protocol_info)
+        network_layout.addLayout(protocol_info_layout)
+        
         layout.addWidget(network_group)
         
         # Output settings group
@@ -713,18 +750,28 @@ class MainWindow(QMainWindow):
         self.cleanup_timer.start(30000)  # 30 seconds
     
     def _start_server(self):
-        """Start the network server."""
+        """Start the network server with selected protocol."""
         if self.server and not self.server.running:
             port = self.port_input.value()
             self.server.port = port
             
+            # Configure protocol mode based on selection
+            protocol_mode = self.protocol_combo.currentIndex()
+            if protocol_mode == 0:  # Auto
+                self._log_message("Using auto protocol mode (shared + legacy fallback)")
+            elif protocol_mode == 1:  # Shared Protocol Only
+                self._log_message("Using shared protocol mode only")
+            elif protocol_mode == 2:  # Legacy Only
+                self._log_message("Using legacy protocol mode only")
+            
             if self.server.start_server():
-                self.server_status_label.setText(f"Server: Running on port {port}")
+                protocol_text = self.protocol_combo.currentText()
+                self.server_status_label.setText(f"Server: Running on port {port} ({protocol_text})")
                 self.server_status_label.setStyleSheet("QLabel { color: green; }")
                 self.start_server_btn.setEnabled(False)
                 self.stop_server_btn.setEnabled(True)
-                self.status_bar.showMessage(f"Server started on port {port}")
-                self._log_message(f"Server started on port {port}")
+                self.status_bar.showMessage(f"Server started on port {port} with {protocol_text}")
+                self._log_message(f"Server started on port {port} with {protocol_text}")
             else:
                 QMessageBox.critical(self, "Error", "Failed to start server")
     
@@ -738,6 +785,48 @@ class MainWindow(QMainWindow):
             self.stop_server_btn.setEnabled(False)
             self.status_bar.showMessage("Server stopped")
             self._log_message("Server stopped")
+    
+    def _test_shared_protocol(self):
+        """Test shared protocol communication."""
+        try:
+            if not self.server or not self.server.running:
+                QMessageBox.warning(self, "Warning", "Server must be running to test protocols")
+                return
+            
+            # Send a test command using shared protocol
+            test_devices = self.server.broadcast_command("ping", {"test": True}, use_shared_protocol=True)
+            
+            if test_devices:
+                self._log_message(f"Shared protocol test sent to {len(test_devices)} devices: {test_devices}")
+                QMessageBox.information(self, "Test Result", 
+                    f"Shared protocol ping sent to {len(test_devices)} connected devices")
+            else:
+                self._log_message("No devices connected for shared protocol test")
+                QMessageBox.information(self, "Test Result", "No devices connected to test")
+                
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to test shared protocol: {e}")
+    
+    def _test_legacy_protocol(self):
+        """Test legacy protocol communication."""
+        try:
+            if not self.server or not self.server.running:
+                QMessageBox.warning(self, "Warning", "Server must be running to test protocols")
+                return
+            
+            # Send a test command using legacy protocol
+            test_devices = self.server.broadcast_command("ping", {"test": True}, use_shared_protocol=False)
+            
+            if test_devices:
+                self._log_message(f"Legacy protocol test sent to {len(test_devices)} devices: {test_devices}")
+                QMessageBox.information(self, "Test Result", 
+                    f"Legacy protocol ping sent to {len(test_devices)} connected devices")
+            else:
+                self._log_message("No devices connected for legacy protocol test")
+                QMessageBox.information(self, "Test Result", "No devices connected to test")
+                
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to test legacy protocol: {e}")
     
     def _create_session(self):
         """Create a new recording session."""
