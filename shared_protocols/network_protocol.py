@@ -35,11 +35,30 @@ class MessageType(Enum):
     # Data streaming
     DATA_SAMPLE = "data_sample"
     DATA_BATCH = "data_batch"
+    THERMAL_FRAME = "thermal_frame"
     
     # Calibration
     CALIBRATION_START = "calibration_start"
     CALIBRATION_CAPTURE = "calibration_capture"
     CALIBRATION_COMPLETE = "calibration_complete"
+    
+    # Video stimulus control (for harmonization)
+    VIDEO_STIMULUS_START = "video_stimulus_start"
+    VIDEO_STIMULUS_PAUSE = "video_stimulus_pause" 
+    VIDEO_STIMULUS_STOP = "video_stimulus_stop"
+    VIDEO_STIMULUS_COMPLETE = "video_stimulus_complete"
+    VIDEO_LOAD = "video_load"
+    VIDEO_SEEK = "video_seek"
+    
+    # Enhanced sync and performance
+    LSL_SYNC_CALIBRATE = "lsl_sync_calibrate"
+    PERFORMANCE_ALERT = "performance_alert"
+    SYSTEM_HEALTH = "system_health"
+    
+    # Security enhancements
+    SECURITY_TOKEN = "security_token"
+    SECURITY_HANDSHAKE = "security_handshake"
+    AUTHENTICATION = "authentication"
     
     # Commands
     COMMAND = "command"
@@ -50,7 +69,7 @@ class MessageType(Enum):
 @dataclass
 class BaseMessage:
     """Base message structure for all network communications."""
-    message_type: MessageType
+    message_type: MessageType = None
     timestamp: float = None
     session_id: Optional[str] = None
     device_id: Optional[str] = None
@@ -61,8 +80,24 @@ class BaseMessage:
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
-        result = asdict(self)
-        result["message_type"] = self.message_type.value
+        result = {}
+        for field in self.__dataclass_fields__:
+            value = getattr(self, field)
+            if hasattr(value, 'to_dict'):
+                # Handle objects with custom serialization
+                result[field] = value.to_dict()
+            elif hasattr(value, 'value'):
+                # Handle enums
+                result[field] = value.value
+            elif isinstance(value, list):
+                # Handle lists of objects
+                result[field] = [
+                    item.to_dict() if hasattr(item, 'to_dict') else 
+                    item.value if hasattr(item, 'value') else item
+                    for item in value
+                ]
+            else:
+                result[field] = value
         return result
     
     def to_json(self) -> str:
@@ -79,20 +114,41 @@ class BaseMessage:
 @dataclass
 class HelloMessage(BaseMessage):
     """Device introduction message."""
-    device_info: DeviceInfo
-    capabilities: List[str]
+    device_info: DeviceInfo = None
+    capabilities: List[str] = None
     protocol_version: str = "1.0"
     
     def __post_init__(self):
         super().__post_init__()
         self.message_type = MessageType.HELLO
-        self.device_id = self.device_info.device_id
+        if self.device_info:
+            self.device_id = self.device_info.device_id
+        if self.capabilities is None:
+            self.capabilities = []
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "HelloMessage":
+        """Create from dictionary."""
+        device_info_data = data.get("device_info")
+        device_info = None
+        if device_info_data:
+            from shared_protocols.data_structures import DeviceInfo
+            device_info = DeviceInfo.from_dict(device_info_data)
+        
+        return cls(
+            device_info=device_info,
+            capabilities=data.get("capabilities", []),
+            protocol_version=data.get("protocol_version", "1.0"),
+            timestamp=data.get("timestamp"),
+            session_id=data.get("session_id"),
+            device_id=data.get("device_id")
+        )
 
 
 @dataclass
 class DeviceStatusMessage(BaseMessage):
     """Device status update message."""
-    device_state: DeviceState
+    device_state: DeviceState = None
     battery_level: Optional[float] = None
     error_message: Optional[str] = None
     additional_info: Dict[str, Any] = None
@@ -107,7 +163,7 @@ class DeviceStatusMessage(BaseMessage):
 @dataclass
 class SessionControlMessage(BaseMessage):
     """Session control message (start/stop)."""
-    action: str  # "start" or "stop"
+    action: str = None  # "start" or "stop"
     session_config: Optional[SessionConfig] = None
     
     def __post_init__(self):
@@ -121,11 +177,13 @@ class SessionControlMessage(BaseMessage):
 @dataclass
 class DataMessage(BaseMessage):
     """Data streaming message."""
-    samples: List[SensorSample]
+    samples: List[SensorSample] = None
     batch_id: Optional[str] = None
     
     def __post_init__(self):
         super().__post_init__()
+        if self.samples is None:
+            self.samples = []
         if len(self.samples) == 1:
             self.message_type = MessageType.DATA_SAMPLE
         else:
@@ -135,7 +193,7 @@ class DataMessage(BaseMessage):
 @dataclass
 class CalibrationMessage(BaseMessage):
     """Calibration-related message."""
-    action: str  # "start", "capture", "complete"
+    action: str = None  # "start", "capture", "complete"
     pattern_info: Optional[Dict[str, Any]] = None
     image_data: Optional[str] = None  # base64 encoded
     results: Optional[Dict[str, Any]] = None
@@ -153,7 +211,7 @@ class CalibrationMessage(BaseMessage):
 @dataclass
 class CommandMessage(BaseMessage):
     """Command message for device control."""
-    command: str
+    command: str = None
     parameters: Dict[str, Any] = None
     
     def __post_init__(self):
@@ -166,8 +224,8 @@ class CommandMessage(BaseMessage):
 @dataclass
 class ResponseMessage(BaseMessage):
     """Response to a command message."""
-    original_command: str
-    success: bool
+    original_command: str = None
+    success: bool = False
     result: Optional[Dict[str, Any]] = None
     error_message: Optional[str] = None
     
@@ -179,13 +237,85 @@ class ResponseMessage(BaseMessage):
 @dataclass
 class ErrorMessage(BaseMessage):
     """Error notification message."""
-    error_code: str
-    error_message: str
+    error_code: str = None
+    error_message: str = None
     context: Optional[Dict[str, Any]] = None
     
     def __post_init__(self):
         super().__post_init__()
         self.message_type = MessageType.ERROR
+
+
+@dataclass
+class VideoStimulusMessage(BaseMessage):
+    """Video stimulus control message."""
+    action: str = None  # start, pause, stop, complete, load, seek
+    video_path: Optional[str] = None
+    position: Optional[int] = None
+    metadata: Optional[Dict[str, Any]] = None
+    
+    def __post_init__(self):
+        super().__post_init__()
+        if self.action == "start":
+            self.message_type = MessageType.VIDEO_STIMULUS_START
+        elif self.action == "pause":
+            self.message_type = MessageType.VIDEO_STIMULUS_PAUSE
+        elif self.action == "stop":
+            self.message_type = MessageType.VIDEO_STIMULUS_STOP
+        elif self.action == "complete":
+            self.message_type = MessageType.VIDEO_STIMULUS_COMPLETE
+        elif self.action == "load":
+            self.message_type = MessageType.VIDEO_LOAD
+        elif self.action == "seek":
+            self.message_type = MessageType.VIDEO_SEEK
+
+
+@dataclass
+class ThermalFrameMessage(BaseMessage):
+    """Thermal camera frame data message."""
+    temperature_data: Optional[List[List[float]]] = None
+    width: int = 0
+    height: int = 0
+    min_temp: float = 0.0
+    max_temp: float = 0.0
+    format: str = "celsius"
+    
+    def __post_init__(self):
+        super().__post_init__()
+        self.message_type = MessageType.THERMAL_FRAME
+
+
+@dataclass
+class PerformanceAlertMessage(BaseMessage):
+    """Performance monitoring alert message."""
+    alert_type: str = None  # cpu, memory, battery, network
+    severity: str = "info"  # info, warning, error, critical
+    value: Optional[float] = None
+    threshold: Optional[float] = None
+    description: str = None
+    
+    def __post_init__(self):
+        super().__post_init__()
+        self.message_type = MessageType.PERFORMANCE_ALERT
+
+
+@dataclass
+class SecurityMessage(BaseMessage):
+    """Security-related message."""
+    action: str = None  # token, handshake, authentication
+    token: Optional[str] = None
+    challenge: Optional[str] = None
+    response: Optional[str] = None
+    encryption_method: Optional[str] = None
+    
+    def __post_init__(self):
+        super().__post_init__()
+        if self.action == "token":
+            self.message_type = MessageType.SECURITY_TOKEN
+        elif self.action == "handshake":
+            self.message_type = MessageType.SECURITY_HANDSHAKE
+        elif self.action == "authentication":
+            self.message_type = MessageType.AUTHENTICATION
 
 
 def create_message_from_json(json_str: str) -> Optional[BaseMessage]:
@@ -210,6 +340,16 @@ def create_message_from_json(json_str: str) -> Optional[BaseMessage]:
             return ResponseMessage.from_dict(data)
         elif message_type == MessageType.ERROR:
             return ErrorMessage.from_dict(data)
+        elif message_type in [MessageType.VIDEO_STIMULUS_START, MessageType.VIDEO_STIMULUS_PAUSE, 
+                             MessageType.VIDEO_STIMULUS_STOP, MessageType.VIDEO_STIMULUS_COMPLETE,
+                             MessageType.VIDEO_LOAD, MessageType.VIDEO_SEEK]:
+            return VideoStimulusMessage.from_dict(data)
+        elif message_type == MessageType.THERMAL_FRAME:
+            return ThermalFrameMessage.from_dict(data)
+        elif message_type == MessageType.PERFORMANCE_ALERT:
+            return PerformanceAlertMessage.from_dict(data)
+        elif message_type in [MessageType.SECURITY_TOKEN, MessageType.SECURITY_HANDSHAKE, MessageType.AUTHENTICATION]:
+            return SecurityMessage.from_dict(data)
         else:
             return BaseMessage.from_dict(data)
             
@@ -221,8 +361,9 @@ def create_message_from_json(json_str: str) -> Optional[BaseMessage]:
         )
 
 
-# Standard commands
-STANDARD_COMMANDS = {
+# Enhanced command set for harmonization
+ENHANCED_COMMANDS = {
+    # Existing commands
     "PING": "ping",
     "GET_STATUS": "get_status",
     "START_STREAMING": "start_streaming", 
@@ -231,8 +372,44 @@ STANDARD_COMMANDS = {
     "SYNC_TIME": "sync_time",
     "GET_BATTERY": "get_battery",
     "SET_SAMPLING_RATE": "set_sampling_rate",
-    "RESTART_DEVICE": "restart_device"
+    "RESTART_DEVICE": "restart_device",
+    
+    # Video stimulus commands
+    "VIDEO_LOAD": "video_load",
+    "VIDEO_PLAY": "video_play",
+    "VIDEO_PAUSE": "video_pause",
+    "VIDEO_STOP": "video_stop", 
+    "VIDEO_SEEK": "video_seek",
+    "VIDEO_GET_STATUS": "video_get_status",
+    
+    # Thermal camera commands
+    "THERMAL_CONNECT": "thermal_connect",
+    "THERMAL_DISCONNECT": "thermal_disconnect",
+    "THERMAL_START_STREAM": "thermal_start_stream",
+    "THERMAL_STOP_STREAM": "thermal_stop_stream",
+    "THERMAL_CAPTURE": "thermal_capture",
+    "THERMAL_GET_STATUS": "thermal_get_status",
+    
+    # Enhanced sync commands
+    "LSL_CALIBRATE": "lsl_calibrate",
+    "LSL_DISCOVER": "lsl_discover",
+    "NTP_SYNC": "ntp_sync",
+    "TIME_BROADCAST": "time_broadcast",
+    
+    # Performance monitoring
+    "GET_PERFORMANCE": "get_performance",
+    "SET_PERFORMANCE_ALERT": "set_performance_alert",
+    "GET_SYSTEM_HEALTH": "get_system_health",
+    
+    # Security commands
+    "GENERATE_TOKEN": "generate_token",
+    "VALIDATE_TOKEN": "validate_token",
+    "SECURITY_HANDSHAKE": "security_handshake",
+    "ENABLE_TLS": "enable_tls"
 }
+
+# Use enhanced commands as standard
+STANDARD_COMMANDS = ENHANCED_COMMANDS
 
 # Standard error codes
 STANDARD_ERROR_CODES = {

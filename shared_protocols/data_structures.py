@@ -20,6 +20,8 @@ class DeviceType(Enum):
     RGB_CAMERA = "rgb_camera"
     ANDROID_PHONE = "android_phone"
     PC_WEBCAM = "pc_webcam"
+    PYTHON_SERVER = "python_server"
+    DESKTOP_CLIENT = "desktop_client"
 
 
 class DeviceState(Enum):

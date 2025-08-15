@@ -1,0 +1,2 @@
+timestamp,device_id,sensor_type,gsr,ppg
+1755243431.5186462,test_sensor,GSR,15.5,850

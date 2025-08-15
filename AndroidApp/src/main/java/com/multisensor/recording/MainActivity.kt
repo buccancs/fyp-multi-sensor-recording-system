@@ -51,6 +51,7 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
     
     // Functional requirement components
     lateinit var pcCommunicationClient: PcCommunicationClient
+    lateinit var sharedProtocolClient: com.multisensor.recording.network.SharedProtocolClient
     lateinit var faultToleranceManager: FaultToleranceManager
     lateinit var dataTransferManager: DataTransferManager
     lateinit var calibrationManager: CalibrationManager
@@ -184,6 +185,7 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
         
         // Initialize functional requirement components
         pcCommunicationClient = PcCommunicationClient()
+        sharedProtocolClient = com.multisensor.recording.network.SharedProtocolClient()
         faultToleranceManager = FaultToleranceManager(this)
         dataTransferManager = DataTransferManager(this)
         calibrationManager = CalibrationManager(this)
@@ -346,8 +348,8 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
         // Apply button API features: Configuration validation and updates
         lifecycleScope.launch {
             try {
-                // Navigate to settings tab
-                viewPager.setCurrentItem(2, false)
+                // Navigate to settings tab (now position 3)
+                viewPager.setCurrentItem(3, false)
                 
                 // Apply configuration validation
                 if (::configurationManager.isInitialized) {
@@ -376,20 +378,28 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      * Navigate to settings tab from other fragments
      */
     fun navigateToSettings() {
-        viewPager.setCurrentItem(2, false)
+        viewPager.setCurrentItem(3, false)  // Updated position for settings
+    }
+    
+    /**
+     * Navigate to video stimulus tab from other fragments
+     */
+    fun navigateToVideoStimulus() {
+        viewPager.setCurrentItem(2, false)  // Video stimulus tab
     }
 
     /**
      * ViewPager adapter for fragment navigation
      */
     private class ViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
-        override fun getItemCount() = 3
+        override fun getItemCount() = 4
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> RecordingFragment()  // Recording controls and previews
-                1 -> MainFragment()       // Device connection status
-                else -> SettingsFragment() // Settings and system info
+                0 -> RecordingFragment()       // Recording controls and previews
+                1 -> MainFragment()            // Device connection status
+                2 -> com.multisensor.recording.stimulus.VideoStimulusFragment() // Video stimulus for emotion elicitation
+                else -> SettingsFragment()    // Settings and system info
             }
         }
     }
@@ -398,11 +408,26 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      * Setup callbacks for functional requirement components
      */
     private fun setupComponentCallbacks() {
-        // PC Communication callbacks
+        // PC Communication callbacks (legacy)
         pcCommunicationClient.setConnectionCallback { connected, message ->
             runOnUiThread {
                 // Handle PC connection status changes
-                Log.i(TAG, "PC connection: $connected - $message")
+                Log.i(TAG, "PC connection (legacy): $connected - $message")
+            }
+        }
+        
+        // Shared Protocol Communication callbacks (harmonized)
+        sharedProtocolClient.setConnectionCallback { connected, message ->
+            runOnUiThread {
+                // Handle PC connection status changes using shared protocol
+                Log.i(TAG, "PC connection (shared protocol): $connected - $message")
+            }
+        }
+        
+        // Shared Protocol Command callbacks
+        sharedProtocolClient.setCommandCallback { protocolMessage ->
+            runOnUiThread {
+                handleSharedProtocolMessage(protocolMessage)
             }
         }
         
@@ -424,6 +449,89 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+    
+    /**
+     * Handle incoming shared protocol messages from Python server
+     */
+    private fun handleSharedProtocolMessage(message: com.multisensor.recording.network.SharedProtocolMessage) {
+        Log.i(TAG, "Received shared protocol message: ${message.messageType}")
+        
+        when (message.messageType) {
+            "command" -> {
+                val command = message.data.optString("command", "")
+                val parameters = message.data.optJSONObject("parameters")
+                handleSharedProtocolCommand(command, parameters)
+            }
+            "session_start" -> {
+                // Handle session start command
+                Log.i(TAG, "Session start command received")
+                sharedProtocolClient.sendCommandResponse("session_start", true)
+            }
+            "session_stop" -> {
+                // Handle session stop command
+                Log.i(TAG, "Session stop command received")
+                sharedProtocolClient.sendCommandResponse("session_stop", true)
+            }
+            "hello_response" -> {
+                // Handle hello response
+                Log.i(TAG, "Hello response received from server")
+            }
+            else -> {
+                Log.w(TAG, "Unknown shared protocol message type: ${message.messageType}")
+            }
+        }
+    }
+    
+    /**
+     * Handle shared protocol commands
+     */
+    private fun handleSharedProtocolCommand(command: String, parameters: org.json.JSONObject?) {
+        Log.i(TAG, "Processing shared protocol command: $command")
+        
+        when (command) {
+            "ping" -> {
+                val result = org.json.JSONObject().apply {
+                    put("pong", true)
+                    put("timestamp", System.currentTimeMillis() / 1000.0)
+                }
+                sharedProtocolClient.sendCommandResponse(command, true, result)
+            }
+            "get_status" -> {
+                val result = org.json.JSONObject().apply {
+                    put("device_state", "connected")
+                    put("is_recording", false) // Update based on actual state
+                    put("battery_level", getBatteryLevel())
+                }
+                sharedProtocolClient.sendCommandResponse(command, true, result)
+            }
+            "start_streaming" -> {
+                // Start data streaming
+                sharedProtocolClient.sendCommandResponse(command, true)
+            }
+            "stop_streaming" -> {
+                // Stop data streaming
+                sharedProtocolClient.sendCommandResponse(command, true)
+            }
+            "sync_time" -> {
+                // Handle time synchronization
+                val result = org.json.JSONObject().apply {
+                    put("device_time", System.currentTimeMillis() / 1000.0)
+                }
+                sharedProtocolClient.sendCommandResponse(command, true, result)
+            }
+            else -> {
+                sharedProtocolClient.sendError("E003", "Unknown command: $command")
+            }
+        }
+    }
+    
+    /**
+     * Get battery level for status reporting
+     */
+    private fun getBatteryLevel(): Float {
+        val batteryManager = getSystemService(BATTERY_SERVICE) as android.os.BatteryManager
+        return batteryManager.getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY).toFloat()
     }
 
     /**
