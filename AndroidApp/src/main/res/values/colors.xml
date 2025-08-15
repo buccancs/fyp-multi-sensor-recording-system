@@ -11,4 +11,43 @@
     <color name="green">#4CAF50</color>
     <color name="red">#F44336</color>
     <color name="orange">#FF9800</color>
+    <color name="blue">#2196F3</color>
+    
+    <!-- IRCamera style colors -->
+    <color name="background_dark">#16131E</color>
+    <color name="tab_text">#CCFFFFFF</color>
+    <color name="tab_text_selected">#FFFFFF</color>
+    <color name="device_card_background">#22202B</color>
+    <color name="device_card_selected">#2A5CCF</color>
+    <color name="device_card_border">#3A3742</color>
+    
+    <!-- Enhanced Button API Colors -->
+    <color name="button_primary">#2A5CCF</color>
+    <color name="button_primary_pressed">#1E4DB5</color>
+    <color name="button_secondary">#404654</color>
+    <color name="button_secondary_pressed">#35394A</color>
+    <color name="button_success">#28A745</color>
+    <color name="button_warning">#FFC107</color>
+    <color name="button_danger">#DC3545</color>
+    
+    <!-- Status Colors -->
+    <color name="status_online">#28A745</color>
+    <color name="status_offline">#6C757D</color>
+    <color name="status_connecting">#FFC107</color>
+    <color name="status_error">#DC3545</color>
+    
+    <!-- Progress and Validation Colors -->
+    <color name="progress_background">#2C2937</color>
+    <color name="progress_primary">#2A5CCF</color>
+    <color name="validation_success">#D4EDDA</color>
+    <color name="validation_warning">#FFF3CD</color>
+    <color name="validation_error">#F8D7DA</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#CCFFFFFF</color>
+    <color name="text_tertiary">#99FFFFFF</color>
+    <color name="text_success">#28A745</color>
+    <color name="text_warning">#FFC107</color>
+    <color name="text_error">#DC3545</color>
 </resources>
