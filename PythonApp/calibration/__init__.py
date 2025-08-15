@@ -13,18 +13,21 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, asdict
-import numpy as np
-
 logger = logging.getLogger(__name__)
 
-# Try to import OpenCV
+# Try to import OpenCV and numpy
 try:
     import cv2
+    import numpy as np
     OPENCV_AVAILABLE = True
-    logger.info("OpenCV available for camera calibration")
-except ImportError:
+    NUMPY_AVAILABLE = True
+    logger.info("OpenCV and numpy available for camera calibration")
+except ImportError as e:
+    cv2 = None
+    np = None
     OPENCV_AVAILABLE = False
-    logger.warning("OpenCV not available - calibration features disabled")
+    NUMPY_AVAILABLE = False
+    logger.warning(f"OpenCV or numpy not available - calibration features disabled: {e}")
 
 
 @dataclass
@@ -41,27 +44,43 @@ class CalibrationPattern:
 @dataclass
 class CameraIntrinsics:
     """Camera intrinsic parameters."""
-    camera_matrix: np.ndarray
-    distortion_coeffs: np.ndarray
+    camera_matrix: 'Any'
+    distortion_coeffs: 'Any'
     image_size: Tuple[int, int]
     reprojection_error: float
     
     def to_dict(self) -> dict:
-        return {
-            'camera_matrix': self.camera_matrix.tolist(),
-            'distortion_coeffs': self.distortion_coeffs.tolist(),
-            'image_size': self.image_size,
-            'reprojection_error': self.reprojection_error
-        }
+        if NUMPY_AVAILABLE:
+            return {
+                'camera_matrix': self.camera_matrix.tolist(),
+                'distortion_coeffs': self.distortion_coeffs.tolist(),
+                'image_size': self.image_size,
+                'reprojection_error': self.reprojection_error
+            }
+        else:
+            return {
+                'camera_matrix': [],
+                'distortion_coeffs': [],
+                'image_size': self.image_size,
+                'reprojection_error': self.reprojection_error
+            }
     
     @classmethod
     def from_dict(cls, data: dict):
-        return cls(
-            camera_matrix=np.array(data['camera_matrix']),
-            distortion_coeffs=np.array(data['distortion_coeffs']),
-            image_size=tuple(data['image_size']),
-            reprojection_error=data['reprojection_error']
-        )
+        if NUMPY_AVAILABLE:
+            return cls(
+                camera_matrix=np.array(data['camera_matrix']),
+                distortion_coeffs=np.array(data['distortion_coeffs']),
+                image_size=tuple(data['image_size']),
+                reprojection_error=data['reprojection_error']
+            )
+        else:
+            return cls(
+                camera_matrix=[],
+                distortion_coeffs=[],
+                image_size=tuple(data['image_size']),
+                reprojection_error=data['reprojection_error']
+            )
 
 
 @dataclass
@@ -69,34 +88,56 @@ class StereoCalibration:
     """Stereo calibration parameters for camera pair."""
     rgb_intrinsics: CameraIntrinsics
     thermal_intrinsics: CameraIntrinsics
-    rotation_matrix: np.ndarray
-    translation_vector: np.ndarray
-    essential_matrix: np.ndarray
-    fundamental_matrix: np.ndarray
+    rotation_matrix: 'Any'
+    translation_vector: 'Any'
+    essential_matrix: 'Any'
+    fundamental_matrix: 'Any'
     reprojection_error: float
     
     def to_dict(self) -> dict:
-        return {
-            'rgb_intrinsics': self.rgb_intrinsics.to_dict(),
-            'thermal_intrinsics': self.thermal_intrinsics.to_dict(),
-            'rotation_matrix': self.rotation_matrix.tolist(),
-            'translation_vector': self.translation_vector.tolist(),
-            'essential_matrix': self.essential_matrix.tolist(),
-            'fundamental_matrix': self.fundamental_matrix.tolist(),
-            'reprojection_error': self.reprojection_error
-        }
+        if NUMPY_AVAILABLE:
+            return {
+                'rgb_intrinsics': self.rgb_intrinsics.to_dict(),
+                'thermal_intrinsics': self.thermal_intrinsics.to_dict(),
+                'rotation_matrix': self.rotation_matrix.tolist(),
+                'translation_vector': self.translation_vector.tolist(),
+                'essential_matrix': self.essential_matrix.tolist(),
+                'fundamental_matrix': self.fundamental_matrix.tolist(),
+                'reprojection_error': self.reprojection_error
+            }
+        else:
+            return {
+                'rgb_intrinsics': self.rgb_intrinsics.to_dict(),
+                'thermal_intrinsics': self.thermal_intrinsics.to_dict(),
+                'rotation_matrix': [],
+                'translation_vector': [],
+                'essential_matrix': [],
+                'fundamental_matrix': [],
+                'reprojection_error': self.reprojection_error
+            }
     
     @classmethod
     def from_dict(cls, data: dict):
-        return cls(
-            rgb_intrinsics=CameraIntrinsics.from_dict(data['rgb_intrinsics']),
-            thermal_intrinsics=CameraIntrinsics.from_dict(data['thermal_intrinsics']),
-            rotation_matrix=np.array(data['rotation_matrix']),
-            translation_vector=np.array(data['translation_vector']),
-            essential_matrix=np.array(data['essential_matrix']),
-            fundamental_matrix=np.array(data['fundamental_matrix']),
-            reprojection_error=data['reprojection_error']
-        )
+        if NUMPY_AVAILABLE:
+            return cls(
+                rgb_intrinsics=CameraIntrinsics.from_dict(data['rgb_intrinsics']),
+                thermal_intrinsics=CameraIntrinsics.from_dict(data['thermal_intrinsics']),
+                rotation_matrix=np.array(data['rotation_matrix']),
+                translation_vector=np.array(data['translation_vector']),
+                essential_matrix=np.array(data['essential_matrix']),
+                fundamental_matrix=np.array(data['fundamental_matrix']),
+                reprojection_error=data['reprojection_error']
+            )
+        else:
+            return cls(
+                rgb_intrinsics=CameraIntrinsics.from_dict(data['rgb_intrinsics']),
+                thermal_intrinsics=CameraIntrinsics.from_dict(data['thermal_intrinsics']),
+                rotation_matrix=[],
+                translation_vector=[],
+                essential_matrix=[],
+                fundamental_matrix=[],
+                reprojection_error=data['reprojection_error']
+            )
 
 
 class CalibrationSession:
@@ -108,20 +149,32 @@ class CalibrationSession:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         
-        self.rgb_images: List[np.ndarray] = []
-        self.thermal_images: List[np.ndarray] = []
+    def __init__(self, session_id: str, pattern: CalibrationPattern, output_dir: str):
+        self.session_id = session_id
+        self.pattern = pattern
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(exist_ok=True)
+        
+        self.rgb_images: List[Any] = []
+        self.thermal_images: List[Any] = []
         self.capture_count = 0
         self.max_captures = 20
         
         # Pattern detection configuration
-        self.detection_flags = cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_NORMALIZE_IMAGE
-        if self.pattern.pattern_type == "checkerboard":
-            self.detection_flags += cv2.CALIB_CB_FAST_CHECK
+        if OPENCV_AVAILABLE:
+            self.detection_flags = cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_NORMALIZE_IMAGE
+            if self.pattern.pattern_type == "checkerboard":
+                self.detection_flags += cv2.CALIB_CB_FAST_CHECK
+        else:
+            self.detection_flags = 0
     
-    def add_image_pair(self, rgb_image: np.ndarray, thermal_image: np.ndarray) -> Tuple[bool, str]:
+    def add_image_pair(self, rgb_image: 'Any', thermal_image: 'Any') -> Tuple[bool, str]:
         """Add a pair of RGB and thermal images to the calibration session."""
         if not OPENCV_AVAILABLE:
             return False, "OpenCV not available"
+        
+        if not NUMPY_AVAILABLE:
+            return False, "NumPy not available"
         
         if self.capture_count >= self.max_captures:
             return False, f"Maximum captures ({self.max_captures}) reached"
@@ -161,8 +214,11 @@ class CalibrationSession:
             logger.error(f"Error adding image pair: {e}")
             return False, f"Error: {e}"
     
-    def _detect_pattern(self, image: np.ndarray) -> Tuple[bool, Optional[np.ndarray]]:
+    def _detect_pattern(self, image) -> Tuple[bool, Optional[Any]]:
         """Detect calibration pattern in image."""
+        if not OPENCV_AVAILABLE or not NUMPY_AVAILABLE:
+            return False, None
+            
         if self.pattern.pattern_type == "checkerboard":
             found, corners = cv2.findChessboardCorners(
                 image, 
@@ -214,11 +270,21 @@ class CalibrationManager:
         self.active_session: Optional[CalibrationSession] = None
         self.stored_calibrations: Dict[str, dict] = {}
         
+        # Check availability of required libraries
+        self._dependencies_available = OPENCV_AVAILABLE and NUMPY_AVAILABLE
+        
+        if not self._dependencies_available:
+            logger.warning("Calibration manager initialized in limited mode - OpenCV or NumPy not available")
+        
         # Load existing calibrations
         self._load_stored_calibrations()
     
     def start_calibration_session(self, device_id: str, pattern: CalibrationPattern) -> CalibrationSession:
         """Start a new calibration session."""
+        if not self._dependencies_available:
+            logger.error("Cannot start calibration session - OpenCV or NumPy not available")
+            raise RuntimeError("Calibration requires OpenCV and NumPy")
+        
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         session_id = f"calibration_{device_id}_{timestamp}"
         
@@ -228,8 +294,11 @@ class CalibrationManager:
         logger.info(f"Started calibration session: {session_id}")
         return self.active_session
     
-    def add_calibration_images(self, rgb_image: np.ndarray, thermal_image: np.ndarray) -> Tuple[bool, str]:
+    def add_calibration_images(self, rgb_image: 'Any', thermal_image: 'Any') -> Tuple[bool, str]:
         """Add images to the active calibration session."""
+        if not self._dependencies_available:
+            return False, "OpenCV or NumPy not available"
+        
         if not self.active_session:
             return False, "No active calibration session"
         
@@ -237,8 +306,8 @@ class CalibrationManager:
     
     def compute_calibration(self, device_id: str) -> Tuple[bool, Optional[StereoCalibration], str]:
         """Compute calibration from captured images."""
-        if not OPENCV_AVAILABLE:
-            return False, None, "OpenCV not available"
+        if not self._dependencies_available:
+            return False, None, "OpenCV or NumPy not available"
         
         if not self.active_session:
             return False, None, "No active calibration session"
@@ -299,16 +368,19 @@ class CalibrationManager:
             logger.error(f"Error computing calibration: {e}")
             return False, None, f"Calibration error: {e}"
     
-    def _generate_object_points(self) -> np.ndarray:
+    def _generate_object_points(self) -> Any:
         """Generate 3D object points for the calibration pattern."""
+        if not NUMPY_AVAILABLE:
+            return []
+            
         pattern = self.active_session.pattern
         object_points = np.zeros((pattern.pattern_size[0] * pattern.pattern_size[1], 3), np.float32)
         object_points[:, :2] = np.mgrid[0:pattern.pattern_size[0], 0:pattern.pattern_size[1]].T.reshape(-1, 2)
         object_points *= pattern.square_size
         return object_points
     
-    def _calibrate_single_camera(self, object_points: List[np.ndarray], 
-                                image_points: List[np.ndarray], 
+    def _calibrate_single_camera(self, object_points: List[Any], 
+                                image_points: List[Any], 
                                 image_size: Tuple[int, int]) -> CameraIntrinsics:
         """Calibrate a single camera."""
         ret, camera_matrix, dist_coeffs, rvecs, tvecs = cv2.calibrateCamera(
@@ -322,9 +394,9 @@ class CalibrationManager:
             reprojection_error=ret
         )
     
-    def _calibrate_stereo_cameras(self, object_points: List[np.ndarray],
-                                 rgb_image_points: List[np.ndarray],
-                                 thermal_image_points: List[np.ndarray],
+    def _calibrate_stereo_cameras(self, object_points: List[Any],
+                                 rgb_image_points: List[Any],
+                                 thermal_image_points: List[Any],
                                  rgb_intrinsics: CameraIntrinsics,
                                  thermal_intrinsics: CameraIntrinsics,
                                  image_size: Tuple[int, int]) -> StereoCalibration:
@@ -436,12 +508,31 @@ class CalibrationManager:
         if self.active_session:
             logger.info(f"Ended calibration session: {self.active_session.session_id}")
             self.active_session = None
+    
+    def prepare_calibration_session(self, device_id: str, pattern: CalibrationPattern = None) -> bool:
+        """Prepare a calibration session for a device."""
+        try:
+            if not self._dependencies_available:
+                logger.warning("Cannot prepare calibration session - OpenCV or NumPy not available")
+                return False
+            
+            if pattern is None:
+                pattern = CalibrationPattern()
+            
+            # Just return True to indicate preparation is ready
+            # Actual session start is handled by start_calibration_session
+            logger.info(f"Calibration session prepared for device {device_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error preparing calibration session: {e}")
+            return False
 
 
-def apply_calibration_to_images(rgb_image: np.ndarray, thermal_image: np.ndarray, 
-                               calibration: StereoCalibration) -> Tuple[np.ndarray, np.ndarray]:
+def apply_calibration_to_images(rgb_image: 'Any', thermal_image: 'Any', 
+                               calibration: StereoCalibration) -> Tuple['Any', 'Any']:
     """Apply calibration to rectify and align RGB and thermal images."""
-    if not OPENCV_AVAILABLE:
+    if not OPENCV_AVAILABLE or not NUMPY_AVAILABLE:
         return rgb_image, thermal_image
     
     try:

@@ -499,7 +499,31 @@ class TransferManager:
             return False
     
     def prepare_file_transfer(self, device_id: str, file_path: str, session_id: str) -> Dict[str, Any]:
-        """Prepare a file transfer request."""
+        """Prepare a file transfer request from a file path (legacy signature)."""
+        return self.prepare_file_transfer_from_path(device_id, file_path, session_id)
+    
+    def prepare_file_transfer_direct(self, session_id: str, device_id: str, filename: str, file_size: int, checksum: str) -> Dict[str, Any]:
+        """Prepare a file transfer request with given parameters."""
+        try:
+            transfer_request = {
+                'session_id': session_id,
+                'device_id': device_id,
+                'filename': filename,
+                'file_size': file_size,
+                'checksum': checksum,
+                'timestamp': datetime.now().isoformat(),
+                'status': 'prepared'
+            }
+            
+            logger.info(f"Prepared file transfer for {filename} from {device_id}")
+            return transfer_request
+            
+        except Exception as e:
+            logger.error(f"Error preparing file transfer: {e}")
+            return {}
+    
+    def prepare_file_transfer_from_path(self, device_id: str, file_path: str, session_id: str) -> Dict[str, Any]:
+        """Prepare a file transfer request from a file path."""
         try:
             file_path_obj = Path(file_path)
             if not file_path_obj.exists():
