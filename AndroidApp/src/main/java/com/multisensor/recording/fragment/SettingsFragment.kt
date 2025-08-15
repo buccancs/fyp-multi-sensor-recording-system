@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.multisensor.recording.R
@@ -14,6 +13,7 @@ import com.multisensor.recording.MainActivity
 import com.multisensor.recording.performance.PerformanceMonitor
 import com.multisensor.recording.security.SecurityManager
 import com.multisensor.recording.config.ConfigurationManager
+import com.multisensor.recording.util.ToastManager
 import com.multisensor.recording.util.Logger
 import kotlinx.coroutines.launch
 
@@ -219,20 +219,20 @@ class SettingsFragment : Fragment(), View.OnClickListener {
                     try {
                         val status = activity.configurationManager.initializeConfiguration()
                         if (status == ConfigurationManager.ConfigurationStatus.LOADED) {
-                            Toast.makeText(requireContext(), "✅ Configuration reloaded successfully", Toast.LENGTH_SHORT).show()
+                            ToastManager.showSuccess(requireContext(), ToastManager.Messages.CONFIG_RELOAD_SUCCESS)
                             updateSettings() // Refresh display
                         } else {
-                            Toast.makeText(requireContext(), "⚠️ Configuration reload failed", Toast.LENGTH_SHORT).show()
+                            ToastManager.showWarning(requireContext(), ToastManager.Messages.CONFIG_RELOAD_FAILED)
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "❌ Configuration manager error", Toast.LENGTH_SHORT).show()
+                        ToastManager.showError(requireContext(), ToastManager.Messages.CONFIG_MANAGER_ERROR)
                     }
                 } else {
-                    Toast.makeText(requireContext(), "❌ Configuration manager not available", Toast.LENGTH_SHORT).show()
+                    ToastManager.showError(requireContext(), ToastManager.Messages.CONFIG_MANAGER_UNAVAILABLE)
                 }
             } catch (e: Exception) {
                 Logger.e("SettingsFragment", "Config reload error: ${e.message}")
-                Toast.makeText(requireContext(), "❌ Error reloading configuration", Toast.LENGTH_SHORT).show()
+                ToastManager.showError(requireContext(), ToastManager.Messages.CONFIG_ERROR_RELOADING)
             } finally {
                 reloadConfigButton.isEnabled = true
                 reloadConfigButton.text = "Reload Config"
@@ -255,19 +255,19 @@ class SettingsFragment : Fragment(), View.OnClickListener {
                         // Test PC connection
                         val connected = activity.pcCommunicationClient.isConnected()
                         if (connected) {
-                            Toast.makeText(requireContext(), "✅ PC connection successful", Toast.LENGTH_SHORT).show()
+                            ToastManager.showSuccess(requireContext(), ToastManager.Messages.PC_CONNECTION_SUCCESS)
                         } else {
-                            Toast.makeText(requireContext(), "⚠️ PC connection failed - check server", Toast.LENGTH_SHORT).show()
+                            ToastManager.showWarning(requireContext(), ToastManager.Messages.PC_CONNECTION_FAILED)
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "❌ PC communication error", Toast.LENGTH_SHORT).show()
+                        ToastManager.showError(requireContext(), "PC communication error")
                     }
                 } else {
-                    Toast.makeText(requireContext(), "❌ PC communication client not available", Toast.LENGTH_SHORT).show()
+                    ToastManager.showError(requireContext(), "PC communication client not available")
                 }
             } catch (e: Exception) {
                 Logger.e("SettingsFragment", "Connection test error: ${e.message}")
-                Toast.makeText(requireContext(), "❌ Error testing connection", Toast.LENGTH_SHORT).show()
+                ToastManager.showError(requireContext(), "Error testing connection")
             } finally {
                 testConnectionButton.isEnabled = true
                 testConnectionButton.text = "Test PC Connection"

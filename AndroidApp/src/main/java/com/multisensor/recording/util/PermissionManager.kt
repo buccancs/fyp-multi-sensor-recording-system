@@ -3,6 +3,7 @@ package com.multisensor.recording.util
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -13,6 +14,46 @@ import androidx.core.content.ContextCompat
 class PermissionManager(private val context: Context) {
 
     companion object {
+        /**
+         * Get the appropriate permissions based on API level.
+         * Handles deprecated storage permissions and API-specific Bluetooth permissions.
+         */
+        fun getRequiredPermissions(): Array<String> {
+            val permissions = mutableListOf<String>()
+            
+            // Core permissions - always required
+            permissions.add(Manifest.permission.CAMERA)
+            permissions.add(Manifest.permission.RECORD_AUDIO)
+            
+            // Storage permissions - deprecated in API 30+ for scoped storage
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+            
+            // Bluetooth permissions - different for API 31+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+                permissions.add(Manifest.permission.BLUETOOTH_SCAN)
+            } else {
+                permissions.add(Manifest.permission.BLUETOOTH)
+                permissions.add(Manifest.permission.BLUETOOTH_ADMIN)
+            }
+            
+            // Location permissions - needed for Bluetooth scanning
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // For API 31+, fine location may not be needed if we don't derive location
+                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+            } else {
+                // For older APIs, both needed for Bluetooth
+                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+                permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+            
+            return permissions.toTypedArray()
+        }
+        
+        @Deprecated("Use getRequiredPermissions() for API-level aware permissions")
         val REQUIRED_PERMISSIONS = arrayOf(
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
@@ -28,7 +69,7 @@ class PermissionManager(private val context: Context) {
     }
 
     fun hasAllPermissions(): Boolean {
-        return REQUIRED_PERMISSIONS.all { permission ->
+        return getRequiredPermissions().all { permission ->
             ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
         }
     }
@@ -46,7 +87,7 @@ class PermissionManager(private val context: Context) {
             callback(allGranted)
         }
 
-        requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
+        requestPermissionLauncher.launch(getRequiredPermissions())
     }
 
     fun hasCameraPermission(): Boolean {

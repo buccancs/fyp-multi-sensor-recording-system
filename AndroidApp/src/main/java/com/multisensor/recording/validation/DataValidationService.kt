@@ -15,7 +15,7 @@ import kotlin.math.abs
  * NFR4: Data Integrity and Validation - Ensures data accuracy and corruption-free recording
  * 
  * Implements:
- * - Sensor data range validation (e.g., GSR 0.0-100.0 μS)
+ * - Sensor data range validation (e.g., GSR 0.0-100.0 uS)
  * - File transfer integrity verification
  * - Session metadata validation
  * - Data completeness checks
@@ -33,10 +33,10 @@ class DataValidationService(private val context: Context) {
     companion object {
         private const val TAG = "DataValidationService"
         
-        // GSR validation ranges (from 3.tex: GSR readings 0.0 to 100.0 μS)
+        // GSR validation ranges (from 3.tex: GSR readings 0.0 to 100.0 uS)
         private const val GSR_MIN_VALUE = 0.0
         private const val GSR_MAX_VALUE = 100.0
-        private const val GSR_REASONABLE_CHANGE_RATE = 10.0 // μS per second
+        private const val GSR_REASONABLE_CHANGE_RATE = 10.0 // uS per second
         
         // Video validation
         private const val MIN_VIDEO_FPS = 15
@@ -73,7 +73,7 @@ class DataValidationService(private val context: Context) {
 
     /**
      * Validate GSR sensor reading
-     * NFR4: Range checking for GSR readings (0.0-100.0 μS)
+     * NFR4: Range checking for GSR readings (0.0-100.0 uS)
      */
     fun validateGsrReading(value: Double, timestamp: Long): ValidationResult {
         if (!isValidationEnabled.get()) {
@@ -85,7 +85,7 @@ class DataValidationService(private val context: Context) {
 
         // Range validation
         if (value < GSR_MIN_VALUE || value > GSR_MAX_VALUE) {
-            errors.add("GSR value $value μS outside valid range [$GSR_MIN_VALUE, $GSR_MAX_VALUE]")
+            errors.add("GSR value $value uS outside valid range [$GSR_MIN_VALUE, $GSR_MAX_VALUE]")
         }
 
         // Rate of change validation
@@ -94,14 +94,14 @@ class DataValidationService(private val context: Context) {
             if (timeDiffSeconds > 0) {
                 val changeRate = abs(value - lastValue) / timeDiffSeconds
                 if (changeRate > GSR_REASONABLE_CHANGE_RATE) {
-                    warnings.add("High GSR change rate: ${String.format("%.2f", changeRate)} μS/s")
+                    warnings.add("High GSR change rate: ${String.format("%.2f", changeRate)} uS/s")
                 }
             }
         }
 
         // Physiological plausibility
         if (value > 50.0) {
-            warnings.add("Unusually high GSR reading: $value μS (possible sensor saturation)")
+            warnings.add("Unusually high GSR reading: $value uS (possible sensor saturation)")
         }
 
         // Update tracking
@@ -125,12 +125,12 @@ class DataValidationService(private val context: Context) {
 
         // Temperature range validation
         if (temperatureCelsius < THERMAL_MIN_TEMP_CELSIUS || temperatureCelsius > THERMAL_MAX_TEMP_CELSIUS) {
-            errors.add("Thermal reading $temperatureCelsius°C outside reasonable range [$THERMAL_MIN_TEMP_CELSIUS, $THERMAL_MAX_TEMP_CELSIUS]")
+            errors.add("Thermal reading ${temperatureCelsius}C outside reasonable range [$THERMAL_MIN_TEMP_CELSIUS, $THERMAL_MAX_TEMP_CELSIUS]")
         }
 
         // Physiological range for human skin temperature
         if (temperatureCelsius < 25.0 || temperatureCelsius > 40.0) {
-            warnings.add("Thermal reading $temperatureCelsius°C outside typical human skin temperature range")
+            warnings.add("Thermal reading ${temperatureCelsius}C outside typical human skin temperature range")
         }
 
         return createValidationResult(errors, warnings, "Thermal")
