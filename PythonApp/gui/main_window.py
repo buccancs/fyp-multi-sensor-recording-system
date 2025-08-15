@@ -36,7 +36,7 @@ except ImportError:
 from PythonApp.network import JsonSocketServer
 from PythonApp.session import SessionManager, SessionConfig
 from PythonApp.sensors import SensorManager
-from PythonApp.sync import TimeServer, SessionSynchronizer, SyncSignalBroadcaster
+from PythonApp.sync import TimeServer, SessionSynchronizer, SyncSignalBroadcaster, EnhancedSynchronizationManager
 from PythonApp.calibration import CalibrationManager, CalibrationPattern
 from PythonApp.transfer import TransferManager
 from PythonApp.security import SecurityManager
@@ -53,6 +53,8 @@ class MainWindow(QMainWindow):
         self.server: Optional[JsonSocketServer] = None
         self.session_manager: Optional[SessionManager] = None
         self.sensor_manager: Optional[SensorManager] = None
+        # Initialize enhanced synchronization manager
+        self.enhanced_sync_manager: Optional[EnhancedSynchronizationManager] = None
         self.time_server: Optional[TimeServer] = None
         self.session_synchronizer: Optional[SessionSynchronizer] = None
         self.sync_broadcaster: Optional[SyncSignalBroadcaster] = None
@@ -85,21 +87,21 @@ class MainWindow(QMainWindow):
             self.server = JsonSocketServer(host="0.0.0.0", port=8080)
             self.server.set_security_manager(self.security_manager)
             
-            # Initialize time synchronization
-            self.time_server = TimeServer(host="0.0.0.0", port=8889)
+            # Initialize enhanced synchronization manager (supports both NTP-like and LSL)
+            self.enhanced_sync_manager = EnhancedSynchronizationManager(prefer_lsl=True)
             
-            # Initialize sensor manager
-            self.sensor_manager = SensorManager()
-            
-            # Initialize session synchronizer
-            self.session_synchronizer = SessionSynchronizer(self.time_server, self.server)
+            # Keep references to individual components for compatibility
+            self.time_server = self.enhanced_sync_manager.ntp_time_server
+            self.session_synchronizer = self.enhanced_sync_manager.session_synchronizer
+            # Set network server for enhanced sync manager
+            self.enhanced_sync_manager.set_network_server(self.server)
             self.server.set_session_synchronizer(self.session_synchronizer)
             
             # Initialize sync broadcaster
             self.sync_broadcaster = SyncSignalBroadcaster(self.server)
             
-            # Initialize calibration manager
-            self.calibration_manager = CalibrationManager()
+            # Initialize sensor manager
+            self.sensor_manager = SensorManager()
             
             # Initialize transfer manager
             self.transfer_manager = TransferManager()
@@ -316,6 +318,27 @@ class MainWindow(QMainWindow):
         sync_widget = QWidget()
         layout = QVBoxLayout(sync_widget)
         
+        # Synchronization method selection
+        method_group = QGroupBox("Synchronization Method")
+        method_layout = QVBoxLayout(method_group)
+        
+        # Method info and status
+        self.sync_method_info = QLabel("Initializing synchronization...")
+        method_layout.addWidget(self.sync_method_info)
+        
+        # LSL calibration controls
+        lsl_controls = QHBoxLayout()
+        self.lsl_calibrate_btn = QPushButton("Calibrate LSL Time Sync")
+        self.lsl_calibrate_btn.clicked.connect(self._calibrate_lsl_sync)
+        lsl_controls.addWidget(self.lsl_calibrate_btn)
+        
+        self.lsl_discover_btn = QPushButton("Discover LSL Streams")
+        self.lsl_discover_btn.clicked.connect(self._discover_lsl_streams)
+        lsl_controls.addWidget(self.lsl_discover_btn)
+        
+        method_layout.addLayout(lsl_controls)
+        layout.addWidget(method_group)
+        
         # Sync signals group
         signals_group = QGroupBox("Synchronization Signals")
         signals_layout = QVBoxLayout(signals_group)
@@ -339,7 +362,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(signals_group)
         
         # Sync status group
-        sync_status_group = QGroupBox("Device Synchronization Status")
+        sync_status_group = QGroupBox("Synchronization Status")
         sync_status_layout = QVBoxLayout(sync_status_group)
         
         self.sync_status_display = QTextEdit()
@@ -349,6 +372,50 @@ class MainWindow(QMainWindow):
         layout.addWidget(sync_status_group)
         
         tab_widget.addTab(sync_widget, "Sync")
+    
+    def _calibrate_lsl_sync(self):
+        """Calibrate LSL time synchronization."""
+        if not self.enhanced_sync_manager:
+            QMessageBox.warning(self, "Warning", "Enhanced synchronization manager not available")
+            return
+        
+        try:
+            success = self.enhanced_sync_manager.calibrate_lsl_time_sync()
+            if success:
+                QMessageBox.information(self, "Success", "LSL time synchronization calibrated successfully")
+                self.log_message("LSL time synchronization calibrated")
+            else:
+                QMessageBox.warning(self, "Warning", "LSL time synchronization calibration failed or LSL not available")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"LSL calibration error: {e}")
+            logger.error(f"LSL calibration error: {e}")
+    
+    def _discover_lsl_streams(self):
+        """Discover available LSL streams."""
+        if not self.enhanced_sync_manager:
+            QMessageBox.warning(self, "Warning", "Enhanced synchronization manager not available")
+            return
+        
+        try:
+            if hasattr(self.enhanced_sync_manager, 'lsl_time_sync') and self.enhanced_sync_manager.lsl_time_sync:
+                streams = self.enhanced_sync_manager.lsl_time_sync.discover_available_streams()
+                
+                if streams:
+                    stream_info = "Available LSL Streams:\n\n"
+                    for stream in streams:
+                        stream_info += f"• {stream.name} ({stream.type})\n"
+                        stream_info += f"  Channels: {stream.channel_count}, Rate: {stream.sampling_rate} Hz\n"
+                        stream_info += f"  Source: {stream.source_id}\n\n"
+                    
+                    QMessageBox.information(self, "LSL Streams", stream_info)
+                    self.log_message(f"Discovered {len(streams)} LSL streams")
+                else:
+                    QMessageBox.information(self, "LSL Streams", "No LSL streams found on the network")
+            else:
+                QMessageBox.warning(self, "Warning", "LSL not available")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"LSL discovery error: {e}")
+            logger.error(f"LSL discovery error: {e}")
     
     def _create_calibration_tab(self, tab_widget: QTabWidget):
         """Create the calibration tab."""
@@ -746,58 +813,74 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Error", f"Failed to show sensor info: {e}")
     
     def _start_time_server(self):
-        """Start the time synchronization server."""
+        """Start the enhanced synchronization service."""
         try:
-            if self.time_server and self.time_server.start_server():
+            if self.enhanced_sync_manager and self.enhanced_sync_manager.start_synchronization_service():
                 self.start_time_server_btn.setEnabled(False)
                 self.stop_time_server_btn.setEnabled(True)
-                self._log_message("Time synchronization server started")
+                active_method = self.enhanced_sync_manager.active_method
+                self._log_message(f"Enhanced synchronization service started (method: {active_method})")
             else:
-                QMessageBox.critical(self, "Error", "Failed to start time server")
+                QMessageBox.critical(self, "Error", "Failed to start synchronization service")
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to start time server: {e}")
+            QMessageBox.critical(self, "Error", f"Failed to start synchronization service: {e}")
     
     def _stop_time_server(self):
-        """Stop the time synchronization server."""
+        """Stop the enhanced synchronization service."""
         try:
-            if self.time_server:
-                self.time_server.stop_server()
+            if self.enhanced_sync_manager:
+                self.enhanced_sync_manager.stop_synchronization_service()
                 self.start_time_server_btn.setEnabled(True)
                 self.stop_time_server_btn.setEnabled(False)
-                self._log_message("Time synchronization server stopped")
+                self._log_message("Enhanced synchronization service stopped")
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to stop time server: {e}")
+            QMessageBox.critical(self, "Error", f"Failed to stop synchronization service: {e}")
     
     def _send_flash_signal(self):
         """Send flash synchronization signal."""
         try:
-            if self.sync_broadcaster:
-                devices = self.sync_broadcaster.send_flash_signal()
-                self._log_message(f"Flash signal sent to {len(devices)} devices")
+            if self.enhanced_sync_manager:
+                success = self.enhanced_sync_manager.send_sync_signal("flash")
+                if success:
+                    self._log_message("Flash sync signal sent successfully")
+                else:
+                    self._log_message("Failed to send flash sync signal")
             else:
-                QMessageBox.warning(self, "Warning", "Sync broadcaster not available")
+                QMessageBox.warning(self, "Warning", "Enhanced synchronization manager not available")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to send flash signal: {e}")
     
     def _send_audio_signal(self):
         """Send audio synchronization signal."""
         try:
-            if self.sync_broadcaster:
-                devices = self.sync_broadcaster.send_audio_signal()
-                self._log_message(f"Audio signal sent to {len(devices)} devices")
+            if self.enhanced_sync_manager:
+                success = self.enhanced_sync_manager.send_sync_signal("audio", {
+                    'frequency': 1000,
+                    'duration_ms': 100
+                })
+                if success:
+                    self._log_message("Audio sync signal sent successfully")
+                else:
+                    self._log_message("Failed to send audio sync signal")
             else:
-                QMessageBox.warning(self, "Warning", "Sync broadcaster not available")
+                QMessageBox.warning(self, "Warning", "Enhanced synchronization manager not available")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to send audio signal: {e}")
     
     def _send_marker_signal(self):
         """Send marker synchronization signal."""
         try:
-            if self.sync_broadcaster:
-                devices = self.sync_broadcaster.send_marker_signal()
-                self._log_message(f"Marker signal sent to {len(devices)} devices")
+            if self.enhanced_sync_manager:
+                success = self.enhanced_sync_manager.send_sync_signal("marker", {
+                    'marker_text': 'SYNC',
+                    'display_duration_ms': 500
+                })
+                if success:
+                    self._log_message("Marker sync signal sent successfully")
+                else:
+                    self._log_message("Failed to send marker sync signal")
             else:
-                QMessageBox.warning(self, "Warning", "Sync broadcaster not available")
+                QMessageBox.warning(self, "Warning", "Enhanced synchronization manager not available")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to send marker signal: {e}")
     
@@ -902,6 +985,16 @@ class MainWindow(QMainWindow):
             
             self.sensors_display.setText(sensor_text)
         
+        # Update enhanced synchronization status first
+        if hasattr(self, 'sync_method_info') and self.enhanced_sync_manager:
+            try:
+                sync_status = self.enhanced_sync_manager.get_synchronization_status()
+                method_text = f"Method: {sync_status['active_method'].upper()}"
+                method_text += f", LSL: {'Available' if sync_status.get('lsl_available') else 'Unavailable'}"
+                self.sync_method_info.setText(method_text)
+            except Exception as e:
+                self.sync_method_info.setText(f"Sync Status Error: {e}")
+        
         # Update time sync status
         if self.time_server:
             sync_stats = self.time_server.get_sync_statistics()
@@ -919,21 +1012,54 @@ class MainWindow(QMainWindow):
             
             self.time_sync_display.setText(sync_text)
         
-        # Update sync status
-        if self.session_synchronizer:
-            sync_status = self.session_synchronizer.get_device_sync_status()
-            sync_text = f"Device Synchronization:\n\n"
-            
-            for device_id, status in sync_status.items():
-                online = "🟢" if status['is_online'] else "🔴"
-                sync_text += f"{online} {device_id}\n"
-                sync_text += f"   Session: {status.get('session_id', 'None')}\n"
-                sync_text += f"   Status: {status.get('sync_status', 'Unknown')}\n\n"
-            
-            if not sync_status:
-                sync_text += "No devices in active session\n"
-            
-            self.sync_status_display.setText(sync_text)
+        # Update device sync status with enhanced information
+        if self.enhanced_sync_manager:
+            try:
+                # Get comprehensive sync status
+                enhanced_status = self.enhanced_sync_manager.get_synchronization_status()
+                sync_text = f"Enhanced Device Synchronization:\n\n"
+                sync_text += f"Active Method: {enhanced_status['active_method'].upper()}\n"
+                sync_text += f"Current Time: {enhanced_status['current_time']:.3f}\n\n"
+                
+                # Add LSL information if available
+                if 'lsl_status' in enhanced_status and enhanced_status['lsl_status'].get('available', False):
+                    lsl_status = enhanced_status['lsl_status']
+                    sync_text += f"LSL Streams: {len(lsl_status.get('available_streams', []))}\n"
+                    if 'time_sync_status' in lsl_status:
+                        ts_status = lsl_status['time_sync_status']
+                        sync_text += f"LSL Time Correction: {ts_status.get('time_correction', 0):.6f}s\n"
+                    sync_text += "\n"
+                
+                # Add device status from session synchronizer
+                if self.session_synchronizer:
+                    device_status = self.session_synchronizer.get_device_sync_status()
+                    for device_id, status in device_status.items():
+                        online = "🟢" if status['is_online'] else "🔴"
+                        sync_text += f"{online} {device_id}\n"
+                        sync_text += f"   Session: {status.get('session_id', 'None')}\n"
+                        sync_text += f"   Status: {status.get('sync_status', 'Unknown')}\n\n"
+                    
+                    if not device_status:
+                        sync_text += "No devices in active session\n"
+                
+                self.sync_status_display.setText(sync_text)
+                
+            except Exception as e:
+                # Fallback to simple device sync status
+                if self.session_synchronizer:
+                    sync_status = self.session_synchronizer.get_device_sync_status()
+                    sync_text = f"Device Synchronization:\n\n"
+                    
+                    for device_id, status in sync_status.items():
+                        online = "🟢" if status['is_online'] else "🔴"
+                        sync_text += f"{online} {device_id}\n"
+                        sync_text += f"   Session: {status.get('session_id', 'None')}\n"
+                        sync_text += f"   Status: {status.get('sync_status', 'Unknown')}\n\n"
+                    
+                    if not sync_status:
+                        sync_text += "No devices in active session\n"
+                    
+                    self.sync_status_display.setText(sync_text)
         
         # Update calibration status
         if self.calibration_manager:
@@ -1448,6 +1574,11 @@ class MainWindow(QMainWindow):
             self._stop_camera_preview()
             self._stop_video()
             
+            # Stop enhanced synchronization service
+            if self.enhanced_sync_manager:
+                self.enhanced_sync_manager.stop_synchronization_service()
+            
+            # Fallback: stop individual components if needed
             if self.time_server and self.time_server.running:
                 self.time_server.stop_server()
             
