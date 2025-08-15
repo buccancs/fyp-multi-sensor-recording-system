@@ -1,111 +1,197 @@
 package com.multisensor.recording
 
+import android.content.Intent
+import android.hardware.usb.UsbDevice
+import android.hardware.usb.UsbManager
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.SurfaceView
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.camera.view.PreviewView
-import androidx.core.content.ContextCompat
-import com.multisensor.recording.camera.RgbCamera
-import com.multisensor.recording.camera.ThermalCamera
-import com.multisensor.recording.sensor.GsrSensor
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import kotlinx.coroutines.launch
+import com.multisensor.recording.fragment.MainFragment
+import com.multisensor.recording.fragment.RecordingFragment
+import com.multisensor.recording.fragment.SettingsFragment
 import com.multisensor.recording.util.PermissionManager
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.atomic.AtomicBoolean
+import com.multisensor.recording.util.Logger
+import com.multisensor.recording.network.PcCommunicationClient
+import com.multisensor.recording.network.FaultToleranceManager
+import com.multisensor.recording.network.DataTransferManager
+import com.multisensor.recording.calibration.CalibrationManager
+import com.multisensor.recording.security.SecurityManager
+import com.multisensor.recording.validation.DataValidationService
+import com.multisensor.recording.performance.PerformanceMonitor
+import com.multisensor.recording.scalability.ScalabilityManager
+import com.multisensor.recording.config.ConfigurationManager
+import com.multisensor.recording.util.EnhancedProgressDialog
 
 /**
- * Streamlined MainActivity - simplified from the complex original
- * Focuses on core IRCamera functionality with minimal dependencies
+ * MainActivity with IRCamera-style navigation
+ * Features ViewPager2 with bottom navigation tabs
  */
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity(), View.OnClickListener {
     
     companion object {
         private const val TAG = "MainActivity"
     }
 
     // UI components
-    private lateinit var cameraPreview: PreviewView
-    private lateinit var thermalPreview: SurfaceView
-    private lateinit var recordButton: Button
-    private lateinit var recordingTimer: TextView
-    private lateinit var cameraStatus: TextView
-    private lateinit var thermalStatus: TextView
-    private lateinit var gsrStatus: TextView
-    private lateinit var cameraConnectionStatus: TextView
-    private lateinit var thermalConnectionStatus: TextView
-    private lateinit var gsrConnectionStatus: TextView
-
+    private lateinit var viewPager: ViewPager2
+    
     // Core components
     private lateinit var permissionManager: PermissionManager
-    private lateinit var rgbCamera: RgbCamera
-    private lateinit var thermalCamera: ThermalCamera
-    private lateinit var gsrSensor: GsrSensor
-
-    // Recording state
-    private val isRecording = AtomicBoolean(false)
-    private var recordingStartTime = 0L
-    private val timerHandler = Handler(Looper.getMainLooper())
-    private val timerRunnable = object : Runnable {
-        override fun run() {
-            if (isRecording.get()) {
-                updateRecordingTimer()
-                timerHandler.postDelayed(this, 1000)
-            }
-        }
-    }
+    
+    // Device components for multi-sensor recording
+    lateinit var rgbCamera: com.multisensor.recording.camera.RgbCamera
+    lateinit var thermalCamera: com.multisensor.recording.camera.ThermalCamera
+    lateinit var gsrSensor: com.multisensor.recording.sensor.GsrSensor
+    
+    // Functional requirement components
+    lateinit var pcCommunicationClient: PcCommunicationClient
+    lateinit var faultToleranceManager: FaultToleranceManager
+    lateinit var dataTransferManager: DataTransferManager
+    lateinit var calibrationManager: CalibrationManager
+    
+    // NFR components for complete 3.tex implementation
+    lateinit var securityManager: SecurityManager
+    lateinit var dataValidationService: DataValidationService
+    lateinit var performanceMonitor: PerformanceMonitor
+    lateinit var scalabilityManager: ScalabilityManager
+    lateinit var configurationManager: ConfigurationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         
-        Log.i(TAG, "Starting streamlined Multi-Sensor Recording App")
+        Log.i(TAG, "Starting IRCamera-style Multi-Sensor Recording App")
         
         initializeViews()
         initializeComponents()
         requestPermissions()
+        
+        // Handle USB device attachment if launched via intent
+        handleUsbDeviceIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        
+        // Handle USB device attachment when app is already running
+        intent?.let { handleUsbDeviceIntent(it) }
+    }
+
+    /**
+     * Handle USB device attachment intent for automatic device connection
+     */
+    private fun handleUsbDeviceIntent(intent: Intent) {
+        if (intent.action == UsbManager.ACTION_USB_DEVICE_ATTACHED) {
+            val usbDevice = intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+            if (usbDevice != null) {
+                Log.i(TAG, "USB device attached via intent: ${usbDevice.deviceName}")
+                
+                // Navigate to main tab to show device connection status
+                lifecycleScope.launch {
+                    // Navigate to main tab immediately
+                    viewPager.setCurrentItem(1, false)
+                    
+                    // Show user-friendly notification
+                    android.widget.Toast.makeText(
+                        this@MainActivity,
+                        "📱 USB device detected - Connecting automatically...",
+                        android.widget.Toast.LENGTH_LONG
+                    ).show()
+                    
+                    Log.i(TAG, "Auto-navigated to main tab due to USB device attachment")
+                }
+            }
+        }
     }
 
     /**
      * Initialize UI views
      */
     private fun initializeViews() {
-        cameraPreview = findViewById(R.id.camera_preview)
-        thermalPreview = findViewById(R.id.thermal_preview)
-        recordButton = findViewById(R.id.record_button)
-        recordingTimer = findViewById(R.id.recording_timer)
+        viewPager = findViewById(R.id.view_page)
         
-        cameraStatus = findViewById(R.id.camera_status)
-        thermalStatus = findViewById(R.id.thermal_status)
-        
-        cameraConnectionStatus = findViewById(R.id.camera_connection_status)
-        thermalConnectionStatus = findViewById(R.id.thermal_connection_status)
-        gsrConnectionStatus = findViewById(R.id.gsr_connection_status)
-
-        recordButton.setOnClickListener {
-            if (isRecording.get()) {
-                stopRecording()
-            } else {
-                startRecording()
+        viewPager.offscreenPageLimit = 3
+        viewPager.isUserInputEnabled = false
+        viewPager.adapter = ViewPagerAdapter(this)
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                refreshTabSelect(position)
             }
-        }
+        })
+        
+        // Set default to main page (position 1)
+        viewPager.setCurrentItem(1, false)
+
+        // Setup bottom navigation click handlers
+        findViewById<View>(R.id.cl_icon_recording)?.setOnClickListener(this)
+        findViewById<View>(R.id.view_main)?.setOnClickListener(this)
+        findViewById<View>(R.id.cl_icon_settings)?.setOnClickListener(this)
     }
 
     /**
      * Initialize core components
      */
     private fun initializeComponents() {
+        // Initialize configuration manager first (NFR8)
+        configurationManager = ConfigurationManager(this)
+        val configStatus = configurationManager.initializeConfiguration()
+        if (configStatus != ConfigurationManager.ConfigurationStatus.LOADED) {
+            Logger.w(TAG, "Configuration system not properly loaded")
+        }
+        
+        // Initialize security manager (NFR5)
+        securityManager = SecurityManager(this)
+        val securityStatus = securityManager.initializeSecurity()
+        if (securityStatus != SecurityManager.SecurityStatus.SECURE) {
+            Logger.w(TAG, "Security system not properly configured")
+            showSecurityWarnings(securityManager.generateSecurityReport())
+        }
+        
+        // Initialize data validation service (NFR4)
+        dataValidationService = DataValidationService(this)
+        dataValidationService.setValidationEnabled(true)
+        
+        // Initialize performance monitor (NFR1)
+        performanceMonitor = PerformanceMonitor(this)
+        performanceMonitor.setPerformanceAlertCallback { alert ->
+            runOnUiThread {
+                showPerformanceAlert(alert)
+            }
+        }
+        performanceMonitor.startMonitoring()
+        
+        // Initialize scalability manager (NFR7)
+        scalabilityManager = ScalabilityManager(this)
+        val scalingStatus = scalabilityManager.initializeScaling()
+        if (scalingStatus != ScalabilityManager.ScalingStatus.INITIALIZED) {
+            Logger.w(TAG, "Scalability manager initialization failed")
+        }
+        
+        // Initialize existing components
         permissionManager = PermissionManager(this)
-        rgbCamera = RgbCamera(this)
-        thermalCamera = ThermalCamera(this)
-        gsrSensor = GsrSensor(this)
+        
+        // Initialize device components for multi-sensor recording
+        rgbCamera = com.multisensor.recording.camera.RgbCamera(this)
+        thermalCamera = com.multisensor.recording.camera.ThermalCamera(this)
+        gsrSensor = com.multisensor.recording.sensor.GsrSensor(this)
+        
+        // Initialize functional requirement components
+        pcCommunicationClient = PcCommunicationClient()
+        faultToleranceManager = FaultToleranceManager(this)
+        dataTransferManager = DataTransferManager(this)
+        calibrationManager = CalibrationManager(this)
+        
+        // Setup callbacks and integration
+        setupComponentCallbacks()
+        
+        Log.i(TAG, "All components initialized successfully")
     }
 
     /**
@@ -115,208 +201,419 @@ class MainActivity : ComponentActivity() {
         permissionManager.requestAllPermissions(this) { granted ->
             if (granted) {
                 Log.i(TAG, "All permissions granted")
-                initializeDevices()
+                // Permissions granted, components are ready
             } else {
                 Log.w(TAG, "Permissions denied")
-                Toast.makeText(this, "App requires all permissions to function", Toast.LENGTH_LONG).show()
+                // Handle permission denial - maybe show explanation
             }
         }
     }
 
     /**
-     * Initialize all devices
+     * Refresh the 3 tabs' selection state
+     * @param index Currently selected tab, [0, 2]
      */
-    private fun initializeDevices() {
-        Thread {
-            // Initialize RGB camera
-            val rgbInitialized = rgbCamera.initialize(cameraPreview, this)
-            runOnUiThread {
-                updateCameraStatus(rgbInitialized)
-            }
+    private fun refreshTabSelect(index: Int) {
+        val recordingIcon = findViewById<android.widget.ImageView>(R.id.iv_icon_recording)
+        val recordingText = findViewById<android.widget.TextView>(R.id.tv_icon_recording)
+        val settingsIcon = findViewById<android.widget.ImageView>(R.id.iv_icon_settings)
+        val settingsText = findViewById<android.widget.TextView>(R.id.tv_icon_settings)
+        val mainBg = findViewById<android.widget.ImageView>(R.id.iv_bottom_main_bg)
 
-            // Initialize thermal camera
-            val thermalInitialized = thermalCamera.initialize(thermalPreview)
-            runOnUiThread {
-                updateThermalStatus(thermalInitialized)
-            }
+        // Reset all selections
+        recordingIcon?.isSelected = false
+        recordingText?.isSelected = false
+        settingsIcon?.isSelected = false
+        settingsText?.isSelected = false
+        mainBg?.setImageResource(R.drawable.main_bg_not_select)
 
-            // Initialize GSR sensor
-            val gsrInitialized = gsrSensor.initialize()
-            runOnUiThread {
-                updateGsrStatus(gsrInitialized)
+        when (index) {
+            0 -> { // Recording tab
+                recordingIcon?.isSelected = true
+                recordingText?.isSelected = true
             }
+            1 -> { // Main/Home tab
+                mainBg?.setImageResource(R.drawable.main_bg_select)
+            }
+            2 -> { // Settings tab
+                settingsIcon?.isSelected = true
+                settingsText?.isSelected = true
+            }
+        }
+    }
 
-            // Auto-connect to GSR sensor if available
-            if (gsrInitialized) {
-                gsrSensor.scanForDevices { devices ->
-                    if (devices.isNotEmpty()) {
-                        // Auto-connect to first available device
-                        val deviceAddress = devices.first().substringAfter("(").substringBefore(")")
-                        val connected = gsrSensor.connect(deviceAddress)
-                        runOnUiThread {
-                            updateGsrConnectionStatus(connected)
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.cl_icon_recording -> { // Recording tab
+                handleRecordingTabClick()
+            }
+            R.id.view_main -> { // Main/Home tab
+                handleMainTabClick()
+            }
+            R.id.cl_icon_settings -> { // Settings tab
+                handleSettingsTabClick()
+            }
+        }
+    }
+
+    /**
+     * Enhanced Recording tab click handler with comprehensive validation workflow
+     */
+    private fun handleRecordingTabClick() {
+        // Apply sophisticated button API features with professional validation
+        lifecycleScope.launch {
+            try {
+                // Create enhanced validation dialog
+                val validationDialog = EnhancedProgressDialog.createValidationDialog(this@MainActivity)
+                    .setOnCancelCallback {
+                        Logger.i(TAG, "Recording access validation cancelled by user")
+                    }
+                
+                // Execute comprehensive security and performance validation
+                val validationSuccess = validationDialog.executeSteps(
+                    EnhancedProgressDialog.getSecurityValidationSteps()
+                ) { step ->
+                    // Execute actual validation for each step
+                    when {
+                        step.description.contains("authentication", true) -> {
+                            performAuthenticationCheck()
                         }
+                        step.description.contains("TLS", true) -> {
+                            performTlsValidation()
+                        }
+                        step.description.contains("permissions", true) -> {
+                            performPermissionValidation()
+                        }
+                        else -> true
                     }
                 }
-            }
-
-            Log.i(TAG, "Device initialization completed")
-        }.start()
-    }
-
-    /**
-     * Start recording session
-     */
-    private fun startRecording() {
-        if (!allDevicesReady()) {
-            Toast.makeText(this, "Not all devices are ready", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        Thread {
-            val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val recordingDir = File(getExternalFilesDir(Environment.DIRECTORY_MOVIES), "recordings")
-            if (!recordingDir.exists()) {
-                recordingDir.mkdirs()
-            }
-
-            try {
-                // Start RGB recording
-                val rgbFile = File(recordingDir, "rgb_$timestamp.mp4")
-                val rgbStarted = rgbCamera.startRecording(rgbFile)
-
-                // Start thermal recording
-                val thermalStarted = thermalCamera.startRecording()
-
-                // Start GSR streaming
-                val gsrStarted = gsrSensor.startStreaming()
-
-                if (rgbStarted && thermalStarted && gsrStarted) {
-                    isRecording.set(true)
-                    recordingStartTime = System.currentTimeMillis()
+                
+                validationDialog.dismiss()
+                
+                if (validationSuccess) {
+                    // Navigation only after successful validation
+                    viewPager.setCurrentItem(0, false)
+                    Logger.i(TAG, "Recording tab accessed with enhanced validation complete")
                     
-                    runOnUiThread {
-                        recordButton.text = getString(R.string.stop_recording)
-                        recordButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-                        timerHandler.post(timerRunnable)
-                        Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show()
-                    }
-                    
-                    Log.i(TAG, "Multi-sensor recording started")
+                    // Show professional success feedback
+                    android.widget.Toast.makeText(
+                        this@MainActivity, 
+                        "✅ Recording access granted - All validations passed", 
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    runOnUiThread {
-                        Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show()
+                    // Show professional error dialog
+                    showValidationErrorDialog("Recording access validation failed")
+                }
+                
+            } catch (e: Exception) {
+                Logger.e(TAG, "Error during recording tab validation: ${e.message}")
+                showValidationErrorDialog("Validation error: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * Enhanced Main tab click handler with device status integration
+     */
+    private fun handleMainTabClick() {
+        // Apply button API features: Health check and auto-recovery
+        lifecycleScope.launch {
+            try {
+                // Navigate to main tab
+                viewPager.setCurrentItem(1, false)
+                
+                // Apply fault tolerance check
+                if (::faultToleranceManager.isInitialized) {
+                    val systemHealthy = faultToleranceManager.isSystemHealthy()
+                    if (!systemHealthy) {
+                        Logger.w(TAG, "System health issues detected")
+                        android.widget.Toast.makeText(this@MainActivity, "System health issues detected - checking devices", android.widget.Toast.LENGTH_SHORT).show()
                     }
                 }
+                
+                Logger.i(TAG, "Main tab accessed with device health validation")
             } catch (e: Exception) {
-                Log.e(TAG, "Error starting recording", e)
-                runOnUiThread {
-                    Toast.makeText(this, "Recording error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+                Logger.e(TAG, "Error accessing main tab: ${e.message}")
             }
-        }.start()
+        }
     }
 
     /**
-     * Stop recording session
+     * Enhanced Settings tab click handler with configuration management
      */
-    private fun stopRecording() {
-        Thread {
+    private fun handleSettingsTabClick() {
+        // Apply button API features: Configuration validation and updates
+        lifecycleScope.launch {
             try {
-                // Stop all recordings
-                rgbCamera.stopRecording()
-                thermalCamera.stopRecording()
-                gsrSensor.stopStreaming()
-
-                isRecording.set(false)
-
-                runOnUiThread {
-                    recordButton.text = getString(R.string.start_recording)
-                    recordButton.setBackgroundColor(ContextCompat.getColor(this, R.color.primary))
-                    recordingTimer.text = "00:00"
-                    timerHandler.removeCallbacks(timerRunnable)
-                    Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show()
+                // Navigate to settings tab
+                viewPager.setCurrentItem(2, false)
+                
+                // Apply configuration validation
+                if (::configurationManager.isInitialized) {
+                    val configStatus = configurationManager.initializeConfiguration()
+                    if (configStatus != ConfigurationManager.ConfigurationStatus.LOADED) {
+                        Logger.w(TAG, "Configuration issues detected")
+                        android.widget.Toast.makeText(this@MainActivity, "Configuration validation completed", android.widget.Toast.LENGTH_SHORT).show()
+                    }
                 }
-
-                Log.i(TAG, "Multi-sensor recording stopped")
+                
+                Logger.i(TAG, "Settings tab accessed with configuration validation")
             } catch (e: Exception) {
-                Log.e(TAG, "Error stopping recording", e)
+                Logger.e(TAG, "Error accessing settings tab: ${e.message}")
             }
-        }.start()
+        }
     }
 
     /**
-     * Check if all devices are ready for recording
+     * Navigate to recording tab from other fragments
      */
-    private fun allDevicesReady(): Boolean {
-        return rgbCamera.isConnected() && 
-               thermalCamera.isConnected() && 
-               gsrSensor.isConnected()
+    fun navigateToRecording() {
+        viewPager.setCurrentItem(0, false)
     }
 
     /**
-     * Update recording timer display
+     * Navigate to settings tab from other fragments
      */
-    private fun updateRecordingTimer() {
-        val elapsed = (System.currentTimeMillis() - recordingStartTime) / 1000
-        val minutes = elapsed / 60
-        val seconds = elapsed % 60
-        recordingTimer.text = String.format("%02d:%02d", minutes, seconds)
+    fun navigateToSettings() {
+        viewPager.setCurrentItem(2, false)
     }
 
     /**
-     * Update camera status display
+     * ViewPager adapter for fragment navigation
      */
-    private fun updateCameraStatus(initialized: Boolean) {
-        cameraStatus.text = if (initialized) "Ready" else "Error"
-        cameraStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.green else R.color.red))
+    private class ViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+        override fun getItemCount() = 3
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                0 -> RecordingFragment()  // Recording controls and previews
+                1 -> MainFragment()       // Device connection status
+                else -> SettingsFragment() // Settings and system info
+            }
+        }
+    }
+
+    /**
+     * Setup callbacks for functional requirement components
+     */
+    private fun setupComponentCallbacks() {
+        // PC Communication callbacks
+        pcCommunicationClient.setConnectionCallback { connected, message ->
+            runOnUiThread {
+                // Handle PC connection status changes
+                Log.i(TAG, "PC connection: $connected - $message")
+            }
+        }
         
-        cameraConnectionStatus.text = if (rgbCamera.isConnected()) "Connected" else "Disconnected"
-        cameraConnectionStatus.setTextColor(ContextCompat.getColor(this, if (rgbCamera.isConnected()) R.color.green else R.color.red))
-    }
-
-    /**
-     * Update thermal camera status display
-     */
-    private fun updateThermalStatus(initialized: Boolean) {
-        thermalStatus.text = if (initialized) "Ready" else "Error"
-        thermalStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.green else R.color.red))
+        // Fault tolerance callbacks
+        faultToleranceManager.setSystemHealthCallback { isHealthy, deviceHealthMap ->
+            // Update UI with system health status
+            runOnUiThread {
+                Log.d(TAG, "System health: $isHealthy")
+            }
+        }
         
-        thermalConnectionStatus.text = if (thermalCamera.isConnected()) "Connected" else "Disconnected"
-        thermalConnectionStatus.setTextColor(ContextCompat.getColor(this, if (thermalCamera.isConnected()) R.color.green else R.color.red))
+        // Data transfer callbacks
+        dataTransferManager.setTransferCompleteCallback { success, errorMessage, results ->
+            runOnUiThread {
+                if (success) {
+                    Log.i(TAG, "Data transfer completed successfully")
+                } else {
+                    Log.w(TAG, "Data transfer failed: $errorMessage")
+                }
+            }
+        }
     }
 
     /**
-     * Update GSR sensor status display
+     * Show security warnings from security report
+     * NFR5: Security checks at startup warn if not configured correctly
      */
-    private fun updateGsrStatus(initialized: Boolean) {
-        gsrConnectionStatus.text = if (initialized) "Initialized" else "Error"
-        gsrConnectionStatus.setTextColor(ContextCompat.getColor(this, if (initialized) R.color.orange else R.color.red))
+    private fun showSecurityWarnings(report: SecurityManager.SecurityReport) {
+        if (report.hasWarnings()) {
+            val warnings = report.getWarningMessages()
+            Logger.w(TAG, "Security warnings detected: ${warnings.joinToString("; ")}")
+            
+            // Show warning dialog to user
+            runOnUiThread {
+                val warningMessage = "Security Configuration Warnings:\n\n" + 
+                                   warnings.joinToString("\n• ", "• ")
+                
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Security Warning")
+                    .setMessage(warningMessage)
+                    .setPositiveButton("Continue") { _, _ -> 
+                        // User acknowledges warnings
+                    }
+                    .setNegativeButton("Review Settings") { _, _ ->
+                        // Navigate to settings tab
+                        viewPager.setCurrentItem(2, false)
+                    }
+                    .setCancelable(false)
+                    .show()
+            }
+        }
     }
 
     /**
-     * Update GSR connection status display
+     * Show performance alert from performance monitor
+     * NFR1: Performance alerting for bottlenecks
      */
-    private fun updateGsrConnectionStatus(connected: Boolean) {
-        gsrConnectionStatus.text = if (connected) "Connected" else "Disconnected"
-        gsrConnectionStatus.setTextColor(ContextCompat.getColor(this, if (connected) R.color.green else R.color.red))
+    private fun showPerformanceAlert(alert: PerformanceMonitor.PerformanceAlert) {
+        // Show performance alert as toast for now
+        android.widget.Toast.makeText(this, "Performance Alert: ${alert.message}", android.widget.Toast.LENGTH_LONG).show()
+        
+        Logger.w(TAG, "Performance alert: ${alert.type} - ${alert.message}")
+        
+        // Take automated actions based on alert type
+        when (alert.type) {
+            PerformanceMonitor.AlertType.HIGH_MEMORY_USAGE -> {
+                System.gc()
+            }
+            PerformanceMonitor.AlertType.HIGH_FRAME_DROP_RATE -> {
+                Logger.i(TAG, "Consider reducing video quality due to frame drops")
+            }
+            PerformanceMonitor.AlertType.HIGH_SAMPLE_DROP_RATE -> {
+                Logger.i(TAG, "Consider reducing sensor sampling rate due to sample drops")
+            }
+            else -> {
+                // Other alerts handled by monitoring
+            }
+        }
+    }
+
+    /**
+     * Show security dialog for recording access
+     * Enhanced button API feature with NFR5 integration
+     */
+    private fun showSecurityDialog(message: String) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Security Check")
+            .setMessage(message)
+            .setPositiveButton("Review Security") { _, _ ->
+                viewPager.setCurrentItem(2, false)
+            }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .show()
+    }
+    
+    /**
+     * Professional authentication check for enhanced button API
+     */
+    private suspend fun performAuthenticationCheck(): Boolean {
+        return try {
+            if (::securityManager.isInitialized) {
+                val securityStatus = securityManager.initializeSecurity()
+                securityStatus == SecurityManager.SecurityStatus.SECURE
+            } else {
+                Logger.w(TAG, "Security manager not initialized")
+                false
+            }
+        } catch (e: Exception) {
+            Logger.e(TAG, "Authentication check failed: ${e.message}")
+            false
+        }
+    }
+    
+    /**
+     * Professional TLS validation for enhanced security
+     */
+    private suspend fun performTlsValidation(): Boolean {
+        return try {
+            // Check if security manager is properly initialized
+            if (!::securityManager.isInitialized) {
+                Logger.w(TAG, "Security manager not initialized for TLS validation")
+                return false
+            }
+            
+            // Generate security report to validate TLS configuration
+            val securityReport = securityManager.generateSecurityReport()
+            val hasSecurityIssues = securityReport.hasWarnings()
+            
+            if (hasSecurityIssues) {
+                Logger.w(TAG, "TLS validation failed due to security warnings")
+                return false
+            }
+            
+            // Check if encryption is properly configured
+            val securityStatus = securityManager.initializeSecurity()
+            val tlsValid = securityStatus == SecurityManager.SecurityStatus.SECURE
+            
+            if (tlsValid) {
+                Logger.i(TAG, "TLS validation successful")
+            } else {
+                Logger.w(TAG, "TLS validation failed - security status: $securityStatus")
+            }
+            
+            tlsValid
+        } catch (e: Exception) {
+            Logger.e(TAG, "TLS validation failed: ${e.message}")
+            false
+        }
+    }
+    
+    /**
+     * Professional permission validation for system access
+     */
+    private suspend fun performPermissionValidation(): Boolean {
+        return try {
+            // Check camera and audio permissions
+            val hasPermissions = permissionManager.hasAllPermissions()
+            if (!hasPermissions) {
+                Logger.w(TAG, "Required permissions not granted")
+            }
+            hasPermissions
+        } catch (e: Exception) {
+            Logger.e(TAG, "Permission validation failed: ${e.message}")
+            false
+        }
+    }
+    
+    /**
+     * Show enhanced validation error dialog with professional recovery options
+     */
+    private fun showValidationErrorDialog(message: String) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("⚠️ Validation Failed")
+            .setMessage("""
+                $message
+                
+                🔒 Security Requirements:
+                • Valid authentication tokens
+                • TLS encryption enabled
+                • All system permissions granted
+                
+                Please resolve these issues to access recording features.
+            """.trimIndent())
+            .setPositiveButton("Review Security") { _, _ ->
+                viewPager.setCurrentItem(2, false)
+            }
+            .setNeutralButton("Grant Permissions") { _, _ ->
+                requestPermissions()
+            }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .setCancelable(false)
+            .show()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         
-        // Stop recording if active
-        if (isRecording.get()) {
-            stopRecording()
-        }
+        // Cleanup device components
+        if (::rgbCamera.isInitialized) rgbCamera.release()
+        if (::thermalCamera.isInitialized) thermalCamera.release()
+        if (::gsrSensor.isInitialized) gsrSensor.release()
         
-        // Release all resources
-        rgbCamera.release()
-        thermalCamera.release()
-        gsrSensor.release()
+        // Cleanup functional components
+        if (::pcCommunicationClient.isInitialized) pcCommunicationClient.cleanup()
+        if (::faultToleranceManager.isInitialized) faultToleranceManager.cleanup()
+        if (::dataTransferManager.isInitialized) dataTransferManager.cleanup()
         
-        timerHandler.removeCallbacks(timerRunnable)
+        // Cleanup NFR components
+        if (::performanceMonitor.isInitialized) performanceMonitor.stopMonitoring()
+        if (::scalabilityManager.isInitialized) scalabilityManager.cleanup()
         
-        Log.i(TAG, "MainActivity destroyed, resources released")
+        Log.i(TAG, "MainActivity destroyed, all resources released")
     }
 }

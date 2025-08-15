@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/dialog_background">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tv_progress_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Processing..."
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Progress bar with custom styling -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_marginBottom="16dp"
+        android:progressTint="@color/progress_primary"
+        android:progressBackgroundTint="@color/progress_background"
+        android:progress="0"
+        android:max="100" />
+
+    <!-- Current step text -->
+    <TextView
+        android:id="@+id/tv_progress_step"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Initializing..."
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Detailed status -->
+    <TextView
+        android:id="@+id/tv_progress_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please wait while the system prepares..."
+        android:textSize="12sp"
+        android:textColor="@color/text_tertiary"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Action buttons container -->
+    <LinearLayout
+        android:id="@+id/ll_action_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Cancel"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            android:background="@drawable/button_secondary_enhanced"
+            android:layout_marginEnd="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+        <Button
+            android:id="@+id/btn_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Retry"
+            android:textSize="12sp"
+            android:textColor="@color/text_primary"
+            android:background="@drawable/button_primary_enhanced"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
