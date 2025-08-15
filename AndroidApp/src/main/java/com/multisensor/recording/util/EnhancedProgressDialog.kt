@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import com.multisensor.recording.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -40,7 +39,6 @@ class EnhancedProgressDialog(private val context: Context) {
         val title: String,
         val description: String,
         val progress: Int,
-        val duration: Long = 1000L,
         val isError: Boolean = false,
         val errorMessage: String? = null
     )
@@ -171,15 +169,9 @@ class EnhancedProgressDialog(private val context: Context) {
             for ((index, step) in steps.withIndex()) {
                 updateProgress(step)
                 
-                // Execute step in background without artificial delays
+                // Execute step in background - real validation only
                 val success = withContext(Dispatchers.IO) {
                     try {
-                        // Only add minimal delay for UI feedback (max 200ms)
-                        if (step.duration > 200L) {
-                            delay(200L)
-                        } else {
-                            delay(step.duration)
-                        }
                         onStepComplete(step)
                     } catch (e: Exception) {
                         Logger.e("EnhancedProgressDialog", "Step failed: ${e.message}")
@@ -228,77 +220,67 @@ class EnhancedProgressDialog(private val context: Context) {
         }
         
         /**
-         * Professional validation steps for enhanced button API
+         * Real validation steps for system security
          */
         fun getSecurityValidationSteps(): List<ProgressStep> {
             return listOf(
                 ProgressStep(
                     "Security Validation", 
                     "Checking authentication tokens...", 
-                    20,
-                    150L
+                    20
                 ),
                 ProgressStep(
                     "Security Validation", 
                     "Validating TLS encryption...", 
-                    50,
-                    100L
+                    50
                 ),
                 ProgressStep(
                     "Security Validation", 
                     "Verifying system permissions...", 
-                    80,
-                    100L
+                    80
                 ),
                 ProgressStep(
                     "Security Validation Complete", 
                     "All security checks passed", 
-                    100,
-                    50L
+                    100
                 )
             )
         }
         
         /**
-         * Professional device connection steps
+         * Real device connection steps
          */
         fun getDeviceConnectionSteps(): List<ProgressStep> {
             return listOf(
                 ProgressStep(
                     "Connecting Devices", 
                     "Performing security validation...", 
-                    10,
-                    150L
+                    10
                 ),
                 ProgressStep(
                     "Connecting Devices", 
                     "Initializing RGB camera...", 
-                    25,
-                    200L
+                    25
                 ),
                 ProgressStep(
                     "Connecting Devices", 
                     "Establishing thermal camera connection...", 
-                    50,
-                    200L
+                    50
                 ),
                 ProgressStep(
                     "Connecting Devices", 
                     "Configuring GSR sensor...", 
-                    75,
-                    200L
+                    75
                 ),
                 ProgressStep(
                     "Connecting Devices", 
                     "Synchronizing device clocks...", 
-                    90,
-                    150L
+                    90
                 ),
                 ProgressStep(
                     "Connection Complete", 
                     "All devices ready for recording", 
-                    100,
-                    100L
+                    100
                 )
             )
         }

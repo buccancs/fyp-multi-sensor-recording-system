@@ -232,9 +232,7 @@ class ThermalCamera(private val context: Context) {
                         retryCount++
                         Log.w(TAG, "IRCamera IRCMD initialization attempt $retryCount failed: ${e.message}")
                         ircmd = null
-                        if (retryCount < maxRetries) {
-                            Thread.sleep(500L * retryCount) // Progressive delay
-                        }
+                        // No artificial delays - fail fast for real testing
                     }
                 }
 
@@ -306,7 +304,7 @@ class ThermalCamera(private val context: Context) {
                     Log.i(TAG, "IRCamera thermal preview stopped")
                 } catch (e: Exception) {
                     Log.w(TAG, "stopPreview method not available: ${e.message}")
-                    Log.i(TAG, "IRCamera thermal preview stopped (stub mode)")
+                    Log.i(TAG, "IRCamera thermal preview stopped")
                 }
                 isPreviewActive.set(false)
             }
@@ -375,7 +373,7 @@ class ThermalCamera(private val context: Context) {
                     if (currentDevice == null) {
                         Log.w(TAG, "Current IRCamera device is null, checking for connected devices")
                         checkForDevices()
-                        Thread.sleep(500)
+                        retryCount++
                         continue
                     }
 
@@ -393,17 +391,14 @@ class ThermalCamera(private val context: Context) {
                         Log.i(TAG, "IRCamera thermal camera preview started successfully")
                     } catch (e: Exception) {
                         Log.w(TAG, "startPreview method not available or failed: ${e.message}")
-                        // Consider preview started for stub implementation
-                        previewStarted = true
-                        Log.i(TAG, "IRCamera thermal camera preview started (stub mode)")
+                        // Fail if real preview cannot start - no stub implementation
+                        retryCount++
                     }
 
                 } catch (e: Exception) {
                     retryCount++
                     Log.w(TAG, "IRCamera preview start attempt $retryCount failed: ${e.message}")
-                    if (retryCount < maxRetries) {
-                        Thread.sleep(1000L * retryCount) // Progressive delay: 1s, 2s, 3s
-                    }
+                    // No artificial delays - fail fast for real device testing
                 }
             }
 

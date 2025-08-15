@@ -95,10 +95,7 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
                 
                 // Navigate to main tab to show device connection status
                 lifecycleScope.launch {
-                    // Small delay to ensure UI is ready
-                    kotlinx.coroutines.delay(500)
-                    
-                    // Navigate to main tab
+                    // Navigate to main tab immediately
                     viewPager.setCurrentItem(1, false)
                     
                     // Show user-friendly notification

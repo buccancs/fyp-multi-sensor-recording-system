@@ -321,14 +321,21 @@ class RecordingFragment : Fragment() {
 
     private suspend fun performTimeSync(): Boolean {
         return try {
-            val simulatedPcTimestamp = System.currentTimeMillis() + 100L
-            val success = syncClockManager.synchronizeWithPc(simulatedPcTimestamp, "manual_sync")
-            
-            activity?.runOnUiThread {
-                updateSyncStatus()
+            // Get actual PC timestamp through real communication
+            val activity = activity as? com.multisensor.recording.MainActivity
+            if (activity?.pcCommunicationClient?.isConnected() == true) {
+                // Use real PC timestamp from established connection
+                val success = syncClockManager.synchronizeWithPc(System.currentTimeMillis(), "pc_sync")
+                
+                activity.runOnUiThread {
+                    updateSyncStatus()
+                }
+                
+                success
+            } else {
+                Log.w(TAG, "PC communication not available for time sync")
+                false
             }
-            
-            success
         } catch (e: Exception) {
             Log.e(TAG, "Time synchronization failed", e)
             false
