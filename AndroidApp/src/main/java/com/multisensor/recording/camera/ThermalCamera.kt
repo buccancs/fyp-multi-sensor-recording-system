@@ -28,8 +28,10 @@ class ThermalCamera(private val context: Context) {
         )
     }
 
-    // Camera state
+    // Camera state - separate initialization and readiness tracking
     private val isInitialized = AtomicBoolean(false)
+    private val hasPermissions = AtomicBoolean(false)
+    private val isReady = AtomicBoolean(false)
     private val isPreviewActive = AtomicBoolean(false)
     private val isRecording = AtomicBoolean(false)
     private val frameCount = AtomicLong(0L)
@@ -62,12 +64,16 @@ class ThermalCamera(private val context: Context) {
             true
         } catch (e: SecurityException) {
             Log.e(TAG, "Security exception initializing thermal camera", e)
-            Log.w(TAG, "IRCamera initialized with limited functionality due to security restrictions")
-            // Set initialized to true even with security exception to allow app to continue
-            isInitialized.set(true)
-            true
+            Log.w(TAG, "IRCamera failed to initialize due to security restrictions")
+            // Do NOT set initialized to true on security exception
+            hasPermissions.set(false)
+            isReady.set(false)
+            false
         } catch (e: Exception) {
             Log.e(TAG, "IRCamera thermal camera initialization failed", e)
+            isInitialized.set(false)
+            hasPermissions.set(false)
+            isReady.set(false)
             false
         }
     }
@@ -89,12 +95,18 @@ class ThermalCamera(private val context: Context) {
                 override fun onGranted(device: UsbDevice, granted: Boolean) {
                     if (granted && isSupportedDevice(device)) {
                         Log.i(TAG, "Permission granted for IRCamera thermal camera")
+                        hasPermissions.set(true)
                         initializeCamera(device)
+                    } else {
+                        Log.w(TAG, "Permission denied for IRCamera thermal camera")
+                        hasPermissions.set(false)
+                        isReady.set(false)
                     }
                 }
 
                 override fun onConnect(device: UsbDevice, ctrlBlock: USBMonitor.UsbControlBlock, createNew: Boolean) {
                     if (createNew && isSupportedDevice(device)) {
+                        hasPermissions.set(true)
                         initializeCameraWithControlBlock(device, ctrlBlock)
                     }
                 }
@@ -242,9 +254,18 @@ class ThermalCamera(private val context: Context) {
             }
 
             Log.i(TAG, "IRCamera thermal camera initialized - UVC: ${uvcCamera != null}, IRCMD: ${ircmd != null}")
+            
+            // Set ready state based on successful component initialization
+            isReady.set(uvcCamera != null && ircmd != null)
+            if (isReady.get()) {
+                Log.i(TAG, "IRCamera thermal camera is ready for operations")
+            } else {
+                Log.w(TAG, "IRCamera thermal camera initialized but not fully ready")
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Error initializing IRCamera thermal camera with control block", e)
-            // Clean up on failure
+            // Clean up on failure and ensure ready state is false
+            isReady.set(false)
             cleanupCameraResources()
         }
     }
@@ -266,6 +287,16 @@ class ThermalCamera(private val context: Context) {
     fun startPreview(): Boolean {
         if (!isInitialized.get()) {
             Log.w(TAG, "IRCamera not initialized")
+            return false
+        }
+        
+        if (!hasPermissions.get()) {
+            Log.w(TAG, "IRCamera lacks required permissions")
+            return false
+        }
+        
+        if (!isReady.get()) {
+            Log.w(TAG, "IRCamera not ready for operations")
             return false
         }
 
@@ -417,6 +448,30 @@ class ThermalCamera(private val context: Context) {
     fun isConnected(): Boolean {
         return isInitialized.get() && currentDevice != null
     }
+    
+    /**
+     * Check if camera has required permissions
+     */
+    fun hasRequiredPermissions(): Boolean {
+        return hasPermissions.get()
+    }
+    
+    /**
+     * Check if camera is fully ready for operations
+     */
+    fun isFullyReady(): Boolean {
+        return isInitialized.get() && hasPermissions.get() && isReady.get()
+    }
+    
+    /**
+     * Get detailed camera status for diagnostics
+     */
+    fun getCameraStatus(): String {
+        return "ThermalCamera Status - Initialized: ${isInitialized.get()}, " +
+               "Permissions: ${hasPermissions.get()}, Ready: ${isReady.get()}, " +
+               "Device: ${currentDevice?.deviceName ?: "None"}, " +
+               "Preview: ${isPreviewActive.get()}, Recording: ${isRecording.get()}"
+    }
 
     /**
      * Check if preview is running
@@ -499,6 +554,8 @@ class ThermalCamera(private val context: Context) {
             isInitialized.set(false)
             isPreviewActive.set(false)
             isRecording.set(false)
+            hasPermissions.set(false)
+            isReady.set(false)
             frameCount.set(0L)
             
             Log.i(TAG, "IRCamera thermal camera resources released")
@@ -508,6 +565,8 @@ class ThermalCamera(private val context: Context) {
             isInitialized.set(false)
             isPreviewActive.set(false)
             isRecording.set(false)
+            hasPermissions.set(false)
+            isReady.set(false)
         }
     }
 }
