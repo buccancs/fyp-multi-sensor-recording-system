@@ -1,5 +1,8 @@
 package com.multisensor.recording
 
+import android.content.Intent
+import android.hardware.usb.UsbDevice
+import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -63,6 +66,47 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
         initializeViews()
         initializeComponents()
         requestPermissions()
+        
+        // Handle USB device attachment if launched via intent
+        handleUsbDeviceIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        
+        // Handle USB device attachment when app is already running
+        intent?.let { handleUsbDeviceIntent(it) }
+    }
+
+    /**
+     * Handle USB device attachment intent for automatic device connection
+     */
+    private fun handleUsbDeviceIntent(intent: Intent) {
+        if (intent.action == UsbManager.ACTION_USB_DEVICE_ATTACHED) {
+            val usbDevice = intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+            if (usbDevice != null) {
+                Log.i(TAG, "USB device attached via intent: ${usbDevice.deviceName}")
+                
+                // Navigate to main tab to show device connection status
+                lifecycleScope.launch {
+                    // Small delay to ensure UI is ready
+                    kotlinx.coroutines.delay(500)
+                    
+                    // Navigate to main tab
+                    viewPager.setCurrentItem(1, false)
+                    
+                    // Show user-friendly notification
+                    android.widget.Toast.makeText(
+                        this@MainActivity,
+                        "📱 USB device detected - Connecting automatically...",
+                        android.widget.Toast.LENGTH_LONG
+                    ).show()
+                    
+                    Log.i(TAG, "Auto-navigated to main tab due to USB device attachment")
+                }
+            }
+        }
     }
 
     /**
