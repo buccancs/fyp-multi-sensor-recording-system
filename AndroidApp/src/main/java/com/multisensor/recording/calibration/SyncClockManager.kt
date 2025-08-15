@@ -193,9 +193,6 @@ class SyncClockManager {
             val t1 = System.currentTimeMillis()
             val t2 = pcTimestamp
             val t3 = pcTimestamp
-
-            delay(1)
-
             val t4 = System.currentTimeMillis()
 
             val roundTripTime = t4 - t1
