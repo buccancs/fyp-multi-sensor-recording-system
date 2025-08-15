@@ -28,6 +28,7 @@ import com.multisensor.recording.performance.PerformanceMonitor
 import com.multisensor.recording.scalability.ScalabilityManager
 import com.multisensor.recording.config.ConfigurationManager
 import com.multisensor.recording.util.ToastManager
+import com.multisensor.recording.util.EnhancedProgressDialog
 
 /**
  * MainActivity with IRCamera-style navigation
@@ -302,7 +303,7 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
                     // Show professional success feedback
                     android.widget.Toast.makeText(
                         this@MainActivity, 
-                        "✅ Recording access granted - All validations passed", 
+                        "[SUCCESS] Recording access granted - All validations passed", 
                         android.widget.Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -548,7 +549,7 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
             // Show warning dialog to user
             runOnUiThread {
                 val warningMessage = "Security Configuration Warnings:\n\n" + 
-                                   warnings.joinToString("\n• ", "• ")
+                                   warnings.joinToString("\n- ", "- ")
                 
                 androidx.appcompat.app.AlertDialog.Builder(this)
                     .setTitle("Security Warning")
@@ -685,14 +686,14 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      */
     private fun showValidationErrorDialog(message: String) {
         androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("⚠️ Validation Failed")
+            .setTitle("[WARNING] Validation Failed")
             .setMessage("""
                 $message
                 
-                🔒 Security Requirements:
-                • Valid authentication tokens
-                • TLS encryption enabled
-                • All system permissions granted
+                [SECURITY] Security Requirements:
+                - Valid authentication tokens
+                - TLS encryption enabled
+                - All system permissions granted
                 
                 Please resolve these issues to access recording features.
             """.trimIndent())

@@ -15,6 +15,7 @@ import com.multisensor.recording.MainActivity
 import com.multisensor.recording.security.SecurityManager
 import com.multisensor.recording.util.Logger
 import com.multisensor.recording.util.ToastManager
+import com.multisensor.recording.util.EnhancedProgressDialog
 import kotlinx.coroutines.launch
 
 /**
@@ -69,7 +70,7 @@ class MainFragment : Fragment(), View.OnClickListener {
             listOf(
                 DeviceInfo(DeviceType.RGB_CAMERA, "[RGB]", "RGB Camera", "Not available", false),
                 DeviceInfo(DeviceType.THERMAL_CAMERA, "[THERMAL]", "Thermal Camera", "Not available", false),
-                DeviceInfo(DeviceType.GSR_SENSOR, "📊", "GSR Sensor", "Not available", false)
+                DeviceInfo(DeviceType.GSR_SENSOR, "[GSR]", "GSR Sensor", "Not available", false)
             )
         }
         
@@ -128,7 +129,7 @@ class MainFragment : Fragment(), View.OnClickListener {
                 ),
                 DeviceInfo(
                     DeviceType.GSR_SENSOR,
-                    "📊",
+                    "[GSR]",
                     "GSR Sensor",
                     try {
                         if (activity.gsrSensor.isConnected()) {
@@ -152,7 +153,7 @@ class MainFragment : Fragment(), View.OnClickListener {
             listOf(
                 DeviceInfo(DeviceType.RGB_CAMERA, "[RGB]", "RGB Camera", "Status unknown", false),
                 DeviceInfo(DeviceType.THERMAL_CAMERA, "[THERMAL]", "Thermal Camera", "Status unknown", false),
-                DeviceInfo(DeviceType.GSR_SENSOR, "📊", "GSR Sensor", "Status unknown", false)
+                DeviceInfo(DeviceType.GSR_SENSOR, "[GSR]", "GSR Sensor", "Status unknown", false)
             )
         }
     }
@@ -375,9 +376,9 @@ class MainFragment : Fragment(), View.OnClickListener {
                 Failed to connect devices: $error
                 
                 [TROUBLESHOOTING]:
-                • Check device connections
-                • Verify security settings
-                • Ensure sufficient system resources
+                - Check device connections
+                - Verify security settings
+                - Ensure sufficient system resources
                 
                 Please try again or contact support.
             """.trimIndent())

@@ -14,6 +14,7 @@ import com.multisensor.recording.performance.PerformanceMonitor
 import com.multisensor.recording.security.SecurityManager
 import com.multisensor.recording.config.ConfigurationManager
 import com.multisensor.recording.util.ToastManager
+import com.multisensor.recording.util.Logger
 import kotlinx.coroutines.launch
 
 /**

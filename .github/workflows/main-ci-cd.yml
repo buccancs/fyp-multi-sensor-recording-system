@@ -75,7 +75,7 @@ jobs:
         
         # ASCII-only enforcement check (blocking)
         echo "::group::ASCII-only enforcement"
-        if grep -r --include="*.kt" --include="*.java" --include="*.md" --exclude-dir=external --exclude-dir=node_modules '[^\x00-\x7F]' AndroidApp/src/ docs/ 2>/dev/null; then
+        if LC_ALL=C grep -r --include="*.kt" --include="*.java" --include="*.md" --exclude-dir=external --exclude-dir=node_modules '[^ -~]' AndroidApp/src/ docs/ 2>/dev/null; then
           echo "::error::Non-ASCII characters found in source files. Use ASCII tags like [SUCCESS], [WARNING], [ERROR] instead of emojis."
           exit 1
         else
