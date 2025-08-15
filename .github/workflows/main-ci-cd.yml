@@ -32,12 +32,12 @@ jobs:
     
     - name: Validate project structure
       run: |
-        echo "✅ Validating project structure..."
-        [ -f "pyproject.toml" ] && echo "✅ Python project configuration found"
-        [ -f "build.gradle" ] && echo "✅ Android project configuration found"
-        [ -d "tests_unified" ] && echo "✅ Unified test framework found"
-        [ -d "shared_protocols" ] && echo "✅ Shared protocols module found"
-        [ -f ".github/workflows/main-ci-cd.yml" ] && echo "✅ Main CI/CD workflow found"
+        echo "[VALIDATION] Validating project structure..."
+        [ -f "pyproject.toml" ] && echo "[FOUND] Python project configuration found"
+        [ -f "build.gradle" ] && echo "[FOUND] Android project configuration found"
+        [ -d "tests_unified" ] && echo "[FOUND] Unified test framework found"
+        [ -d "shared_protocols" ] && echo "[FOUND] Shared protocols module found"
+        [ -f ".github/workflows/main-ci-cd.yml" ] && echo "[FOUND] Main CI/CD workflow found"
 
   # Python testing and validation
   python-validation:
@@ -71,7 +71,17 @@ jobs:
     
     - name: Code quality checks
       run: |
-        echo "🔍 Running code quality checks..."
+        echo "[QUALITY] Running code quality checks..."
+        
+        # ASCII-only enforcement check (blocking)
+        echo "::group::ASCII-only enforcement"
+        if grep -r --include="*.kt" --include="*.java" --include="*.md" --exclude-dir=external --exclude-dir=node_modules '[^\x00-\x7F]' AndroidApp/src/ docs/ 2>/dev/null; then
+          echo "::error::Non-ASCII characters found in source files. Use ASCII tags like [SUCCESS], [WARNING], [ERROR] instead of emojis."
+          exit 1
+        else
+          echo "[SUCCESS] All source files use ASCII-only characters"
+        fi
+        echo "::endgroup::"
         
         # Format checking (non-blocking for quick feedback)
         echo "::group::Black formatting check"
@@ -88,7 +98,7 @@ jobs:
     
     - name: Security scan (quick)
       run: |
-        echo "🔒 Running quick security scan..."
+        echo "[SECURITY] Running quick security scan..."
         pip install bandit safety
         
         # Quick security checks
@@ -97,7 +107,7 @@ jobs:
     
     - name: Unit tests
       run: |
-        echo "🧪 Running Python unit tests..."
+        echo "[TESTING] Running Python unit tests..."
         mkdir -p htmlcov
         
         # Run unified testing framework for unit tests in quick mode
@@ -150,12 +160,12 @@ jobs:
     
     - name: Lint Android code
       run: |
-        echo "🔍 Running Android linting..."
+        echo "[ANDROID] Running Android linting..."
         ./gradlew lintDevDebug --continue --no-daemon || echo "::warning::Android linting issues found"
     
     - name: Run Detekt static analysis
       run: |
-        echo "🔍 Running Detekt static analysis..."
+        echo "[ANALYSIS] Running Detekt static analysis..."
         ./gradlew detekt --no-daemon || echo "::warning::Detekt issues found"
     
     - name: Build Android app
@@ -214,7 +224,7 @@ jobs:
     
     - name: Run integration tests
       run: |
-        echo "🔗 Running integration tests..."
+        echo "[INTEGRATION] Running integration tests..."
         python tests_unified/runners/run_unified_tests.py --level integration --mode ci --verbose
     
     - name: Run quick virtual environment test
@@ -249,10 +259,10 @@ jobs:
         if [[ "${{ needs.python-validation.result }}" == "failure" || 
               "${{ needs.android-validation.result }}" == "failure" || 
               "${{ needs.integration-tests.result }}" == "failure" ]]; then
-          echo "❌ Some validations failed"
+          echo "[FAILED] Some validations failed"
           exit 1
         else
-          echo "✅ All validations passed"
+          echo "[SUCCESS] All validations passed"
         fi
     
     - name: Comment PR with summary
@@ -260,20 +270,20 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          const summary = `## 🚀 CI/CD Pipeline Summary
+          const summary = `## [CI/CD] Pipeline Summary
           
-          **Status:** ${{ needs.python-validation.result == 'success' && needs.android-validation.result == 'success' && (needs.integration-tests.result == 'success' || needs.integration-tests.result == 'skipped') && '✅ PASSED' || '❌ FAILED' }}
+          **Status:** ${{ needs.python-validation.result == 'success' && needs.android-validation.result == 'success' && (needs.integration-tests.result == 'success' || needs.integration-tests.result == 'skipped') && '[PASSED]' || '[FAILED]' }}
           
           ### Component Results
-          - **Python:** ${{ needs.python-validation.result == 'success' && '✅' || '❌' }} ${{ needs.python-validation.result }}
-          - **Android:** ${{ needs.android-validation.result == 'success' && '✅' || '❌' }} ${{ needs.android-validation.result }}
-          - **Integration:** ${{ (needs.integration-tests.result == 'success' || needs.integration-tests.result == 'skipped') && '✅' || '❌' }} ${{ needs.integration-tests.result }}
+          - **Python:** ${{ needs.python-validation.result == 'success' && '[PASS]' || '[FAIL]' }} ${{ needs.python-validation.result }}
+          - **Android:** ${{ needs.android-validation.result == 'success' && '[PASS]' || '[FAIL]' }} ${{ needs.android-validation.result }}
+          - **Integration:** ${{ (needs.integration-tests.result == 'success' || needs.integration-tests.result == 'skipped') && '[PASS]' || '[FAIL]' }} ${{ needs.integration-tests.result }}
           
           ### Next Steps
-          ${{ needs.python-validation.result == 'success' && needs.android-validation.result == 'success' && (needs.integration-tests.result == 'success' || needs.integration-tests.result == 'skipped') && '🎉 Ready for comprehensive testing and merge!' || '🔧 Please address the failing checks above.' }}
+          ${{ needs.python-validation.result == 'success' && needs.android-validation.result == 'success' && (needs.integration-tests.result == 'success' || needs.integration-tests.result == 'skipped') && '[SUCCESS] Ready for comprehensive testing and merge!' || '[ACTION] Please address the failing checks above.' }}
           
           <details>
-          <summary>📋 Quality Checklist</summary>
+          <summary>[CHECKLIST] Quality Checklist</summary>
           
           - [x] Code formatting validated
           - [x] Static analysis completed

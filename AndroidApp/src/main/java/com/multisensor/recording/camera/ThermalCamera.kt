@@ -30,9 +30,11 @@ class ThermalCamera(private val context: Context) {
 
     // Camera state
     private val isInitialized = AtomicBoolean(false)
+    private val isReady = AtomicBoolean(false) // Separate from initialized - indicates full functionality
     private val isPreviewActive = AtomicBoolean(false)
     private val isRecording = AtomicBoolean(false)
     private val frameCount = AtomicLong(0L)
+    private var initializationError: String? = null
 
     // IRCamera SDK components - real implementation
     private var currentDevice: UsbDevice? = null
@@ -57,17 +59,25 @@ class ThermalCamera(private val context: Context) {
             setupUsbMonitor()
             checkForDevices()
             
+            // Only mark as initialized AND ready if no exceptions occurred
             isInitialized.set(true)
+            isReady.set(true)
+            initializationError = null
             Log.i(TAG, "IRCamera thermal camera initialized successfully")
             true
         } catch (e: SecurityException) {
             Log.e(TAG, "Security exception initializing thermal camera", e)
-            Log.w(TAG, "IRCamera initialized with limited functionality due to security restrictions")
-            // Set initialized to true even with security exception to allow app to continue
-            isInitialized.set(true)
-            true
+            // DO NOT mark as initialized on security failure - this was the bug
+            isInitialized.set(false)
+            isReady.set(false)
+            initializationError = "Security permissions denied: ${e.message}"
+            Log.w(TAG, "IRCamera initialization failed due to security restrictions")
+            false
         } catch (e: Exception) {
             Log.e(TAG, "IRCamera thermal camera initialization failed", e)
+            isInitialized.set(false)
+            isReady.set(false)
+            initializationError = "Initialization failed: ${e.message}"
             false
         }
     }
@@ -416,6 +426,45 @@ class ThermalCamera(private val context: Context) {
      */
     fun isConnected(): Boolean {
         return isInitialized.get() && currentDevice != null
+    }
+    
+    /**
+     * Check if camera is ready for full operation (initialized without errors)
+     * This is more strict than isConnected() and indicates actual functionality
+     */
+    fun isReady(): Boolean {
+        return isReady.get() && isInitialized.get() && initializationError == null
+    }
+    
+    /**
+     * Get the initialization error message if any
+     */
+    fun getInitializationError(): String? {
+        return initializationError
+    }
+    
+    /**
+     * Get explicit readiness status with details
+     */
+    fun getReadinessStatus(): ReadinessStatus {
+        return when {
+            !isInitialized.get() -> ReadinessStatus.NOT_INITIALIZED
+            initializationError != null -> ReadinessStatus.INITIALIZED_WITH_ERRORS
+            !isReady.get() -> ReadinessStatus.INITIALIZED_NOT_READY
+            currentDevice == null -> ReadinessStatus.READY_NO_DEVICE
+            else -> ReadinessStatus.FULLY_READY
+        }
+    }
+    
+    /**
+     * Readiness status enumeration for explicit state reporting
+     */
+    enum class ReadinessStatus(val description: String) {
+        NOT_INITIALIZED("Not initialized"),
+        INITIALIZED_WITH_ERRORS("Initialized with errors"),
+        INITIALIZED_NOT_READY("Initialized but not ready"),
+        READY_NO_DEVICE("Ready but no device connected"),
+        FULLY_READY("Fully ready for operation")
     }
 
     /**

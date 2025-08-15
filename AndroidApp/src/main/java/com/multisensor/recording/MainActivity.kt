@@ -3,6 +3,7 @@ package com.multisensor.recording
 import android.content.Intent
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,7 +27,7 @@ import com.multisensor.recording.validation.DataValidationService
 import com.multisensor.recording.performance.PerformanceMonitor
 import com.multisensor.recording.scalability.ScalabilityManager
 import com.multisensor.recording.config.ConfigurationManager
-import com.multisensor.recording.util.EnhancedProgressDialog
+import com.multisensor.recording.util.ToastManager
 
 /**
  * MainActivity with IRCamera-style navigation
@@ -90,7 +91,12 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      */
     private fun handleUsbDeviceIntent(intent: Intent) {
         if (intent.action == UsbManager.ACTION_USB_DEVICE_ATTACHED) {
-            val usbDevice = intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+            val usbDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
+            }
             if (usbDevice != null) {
                 Log.i(TAG, "USB device attached via intent: ${usbDevice.deviceName}")
                 
@@ -100,11 +106,7 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
                     viewPager.setCurrentItem(1, false)
                     
                     // Show user-friendly notification
-                    android.widget.Toast.makeText(
-                        this@MainActivity,
-                        "📱 USB device detected - Connecting automatically...",
-                        android.widget.Toast.LENGTH_LONG
-                    ).show()
+                    ToastManager.showMessage(this@MainActivity, ToastManager.Messages.USB_DEVICE_DETECTED)
                     
                     Log.i(TAG, "Auto-navigated to main tab due to USB device attachment")
                 }

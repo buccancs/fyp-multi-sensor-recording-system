@@ -14,7 +14,7 @@ import com.multisensor.recording.R
 import com.multisensor.recording.MainActivity
 import com.multisensor.recording.security.SecurityManager
 import com.multisensor.recording.util.Logger
-import com.multisensor.recording.util.EnhancedProgressDialog
+import com.multisensor.recording.util.ToastManager
 import kotlinx.coroutines.launch
 
 /**
@@ -67,8 +67,8 @@ class MainFragment : Fragment(), View.OnClickListener {
         } else {
             // Fallback if activity not available
             listOf(
-                DeviceInfo(DeviceType.RGB_CAMERA, "📱", "RGB Camera", "Not available", false),
-                DeviceInfo(DeviceType.THERMAL_CAMERA, "🌡️", "Thermal Camera", "Not available", false),
+                DeviceInfo(DeviceType.RGB_CAMERA, "[RGB]", "RGB Camera", "Not available", false),
+                DeviceInfo(DeviceType.THERMAL_CAMERA, "[THERMAL]", "Thermal Camera", "Not available", false),
                 DeviceInfo(DeviceType.GSR_SENSOR, "📊", "GSR Sensor", "Not available", false)
             )
         }
@@ -90,7 +90,7 @@ class MainFragment : Fragment(), View.OnClickListener {
             listOf(
                 DeviceInfo(
                     DeviceType.RGB_CAMERA,
-                    "📱",
+                    "[RGB]",
                     "RGB Camera",
                     try {
                         if (activity.rgbCamera.isConnected()) {
@@ -109,7 +109,7 @@ class MainFragment : Fragment(), View.OnClickListener {
                 ),
                 DeviceInfo(
                     DeviceType.THERMAL_CAMERA,
-                    "🌡️",
+                    "[THERMAL]",
                     "Thermal Camera",
                     try {
                         if (activity.thermalCamera.isConnected()) {
@@ -150,8 +150,8 @@ class MainFragment : Fragment(), View.OnClickListener {
             Logger.e("MainFragment", "Error getting device status: ${e.message}")
             // Return safe defaults
             listOf(
-                DeviceInfo(DeviceType.RGB_CAMERA, "📱", "RGB Camera", "Status unknown", false),
-                DeviceInfo(DeviceType.THERMAL_CAMERA, "🌡️", "Thermal Camera", "Status unknown", false),
+                DeviceInfo(DeviceType.RGB_CAMERA, "[RGB]", "RGB Camera", "Status unknown", false),
+                DeviceInfo(DeviceType.THERMAL_CAMERA, "[THERMAL]", "Thermal Camera", "Status unknown", false),
                 DeviceInfo(DeviceType.GSR_SENSOR, "📊", "GSR Sensor", "Status unknown", false)
             )
         }
@@ -345,13 +345,13 @@ class MainFragment : Fragment(), View.OnClickListener {
      */
     private fun showEnhancedConnectionSuccess() {
         androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle("🎯 Connection Successful")
+            .setTitle("[SUCCESS] Connection Successful")
             .setMessage("""
-                ✅ All devices connected successfully!
+                All devices connected successfully!
                 
-                📱 RGB Camera: Ready
-                🌡️ Thermal Camera: Online  
-                📊 GSR Sensor: Synchronized
+                [RGB] RGB Camera: Ready
+                [THERMAL] Thermal Camera: Online  
+                [GSR] GSR Sensor: Synchronized
                 
                 You can now start recording with full multi-sensor support.
             """.trimIndent())
@@ -370,11 +370,11 @@ class MainFragment : Fragment(), View.OnClickListener {
      */
     private fun showEnhancedConnectionError(error: String) {
         androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle("⚠️ Connection Error")
+            .setTitle("[WARNING] Connection Error")
             .setMessage("""
                 Failed to connect devices: $error
                 
-                🔧 Troubleshooting:
+                [TROUBLESHOOTING]:
                 • Check device connections
                 • Verify security settings
                 • Ensure sufficient system resources
