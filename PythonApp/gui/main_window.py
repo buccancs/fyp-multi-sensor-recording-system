@@ -116,9 +116,6 @@ class MainWindow(QMainWindow):
             # Initialize webcam manager
             self.webcam_manager = WebcamManager()
             
-            # Add a default simulated sensor
-            self.sensor_manager.add_sensor("simulated_gsr_01")
-            
             logger.info("Backend components initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize backend: {e}")
@@ -281,8 +278,8 @@ class MainWindow(QMainWindow):
         # Sensor controls
         sensor_controls = QHBoxLayout()
         
-        self.add_sensor_btn = QPushButton("Add Simulated Sensor")
-        self.add_sensor_btn.clicked.connect(self._add_simulated_sensor)
+        self.add_sensor_btn = QPushButton("Add Real Sensor")
+        self.add_sensor_btn.clicked.connect(self._add_real_sensor)
         sensor_controls.addWidget(self.add_sensor_btn)
         
         sensor_layout.addLayout(sensor_controls)
@@ -730,18 +727,23 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Error", f"Failed to stop recording: {e}")
             logger.error(f"Failed to stop recording: {e}")
     
-    def _add_simulated_sensor(self):
-        """Add a simulated GSR sensor."""
+    def _add_real_sensor(self):
+        """Add a real GSR sensor - requires hardware and port specification."""
         try:
-            import time
-            sensor_id = f"simulated_gsr_{int(time.time())}"
-            
-            if self.sensor_manager and self.sensor_manager.add_sensor(sensor_id):
-                self._log_message(f"Added simulated sensor: {sensor_id}")
-            else:
-                QMessageBox.warning(self, "Warning", "Failed to add simulated sensor")
+            # For real sensors, we need port information
+            # This is a placeholder - in practice, you'd show a dialog to get port info
+            QMessageBox.information(
+                self, 
+                "Add Real Sensor", 
+                "To add real sensors, use the sensor discovery functionality or specify COM/Bluetooth ports directly in the code.\n\n"
+                "Real sensor connection requires:\n"
+                "- PyShimmer library installed\n"
+                "- Shimmer GSR+ device paired/connected\n"
+                "- Correct COM port or Bluetooth address\n\n"
+                "Example: sensor_manager.add_sensor('gsr_001', port='COM3')"
+            )
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to add sensor: {e}")
+            QMessageBox.critical(self, "Error", f"Failed to show sensor info: {e}")
     
     def _start_time_server(self):
         """Start the time synchronization server."""

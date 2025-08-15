@@ -3,7 +3,7 @@ Sensor Integration Module
 ========================
 
 Handles integration with various sensor devices including Shimmer GSR sensors.
-Provides simulation mode for testing and development.
+Requires real hardware for data collection.
 """
 
 import json
@@ -57,7 +57,7 @@ class ShimmerGSRSensor:
             self._pyshimmer_available = True
             logger.info("PyShimmer library available")
         except ImportError:
-            logger.warning("PyShimmer library not available, using simulation mode")
+            logger.error("PyShimmer library not available - real sensors required for data collection")
     
     def set_data_callback(self, callback: Callable[[SensorSample], None]):
         """Set callback function for incoming sensor data."""
@@ -68,23 +68,24 @@ class ShimmerGSRSensor:
         if self.is_connected:
             return True
         
+        if not self._pyshimmer_available:
+            logger.error("PyShimmer library not available - cannot connect to sensors")
+            return False
+        
+        if not self.port:
+            logger.error("No port specified for Shimmer sensor connection")
+            return False
+        
         try:
-            if self._pyshimmer_available and self.port:
-                # Use real PyShimmer connection
-                self.connection = PyShimmer(self.port)
-                if self.connection.connect():
-                    self.is_connected = True
-                    logger.info(f"Connected to Shimmer sensor {self.device_id} on {self.port}")
-                    return True
-                else:
-                    logger.error(f"Failed to connect to Shimmer sensor on {self.port}")
-                    return False
-            else:
-                # Use simulation mode
-                self.connection = "simulation"
+            # Use real PyShimmer connection only
+            self.connection = PyShimmer(self.port)
+            if self.connection.connect():
                 self.is_connected = True
-                logger.info(f"Connected to simulated Shimmer sensor {self.device_id}")
+                logger.info(f"Connected to Shimmer sensor {self.device_id} on {self.port}")
                 return True
+            else:
+                logger.error(f"Failed to connect to Shimmer sensor on {self.port}")
+                return False
                 
         except Exception as e:
             logger.error(f"Error connecting to Shimmer sensor: {e}")
@@ -95,7 +96,7 @@ class ShimmerGSRSensor:
         if self.is_streaming:
             self.stop_streaming()
         
-        if self.connection and self.connection != "simulation":
+        if self.connection:
             try:
                 self.connection.disconnect()
             except:
@@ -115,12 +116,8 @@ class ShimmerGSRSensor:
             return True
         
         try:
-            if self.connection == "simulation":
-                # Start simulation streaming
-                self.streaming_thread = threading.Thread(target=self._simulate_streaming, daemon=True)
-            else:
-                # Start real streaming
-                self.streaming_thread = threading.Thread(target=self._real_streaming, daemon=True)
+            # Start real streaming only
+            self.streaming_thread = threading.Thread(target=self._real_streaming, daemon=True)
             
             self.is_streaming = True
             self.streaming_thread.start()
@@ -142,45 +139,6 @@ class ShimmerGSRSensor:
             self.streaming_thread.join(timeout=2.0)
         
         logger.info(f"Stopped streaming from Shimmer sensor {self.device_id}")
-    
-    def _simulate_streaming(self):
-        """Simulate GSR data streaming for testing."""
-        import random
-        import math
-        
-        base_gsr = 10.0  # Base GSR in microsiemens
-        time_offset = 0
-        
-        while self.is_streaming:
-            try:
-                # Generate realistic GSR data with some variation
-                variation = math.sin(time_offset * 0.1) * 2.0  # Slow variation
-                noise = random.gauss(0, 0.5)  # Random noise
-                gsr_value = max(0, base_gsr + variation + noise)
-                
-                # Create sample
-                sample = SensorSample(
-                    timestamp=time.time(),
-                    device_id=self.device_id,
-                    sensor_type="gsr",
-                    data={
-                        'gsr': gsr_value,
-                        'ppg': random.randint(600, 800),  # Simulated PPG
-                        'accel_x': random.gauss(0, 0.1),
-                        'accel_y': random.gauss(0, 0.1),
-                        'accel_z': random.gauss(1.0, 0.1)
-                    }
-                )
-                
-                if self.data_callback:
-                    self.data_callback(sample)
-                
-                time_offset += 1
-                time.sleep(1.0 / self.sample_rate)  # 128 Hz
-                
-            except Exception as e:
-                logger.error(f"Error in simulation streaming: {e}")
-                break
     
     def _real_streaming(self):
         """Handle real sensor data streaming."""
@@ -364,17 +322,20 @@ class SensorManager:
         """Discover available sensor devices."""
         discovered = []
         
-        # Try to discover real Shimmer devices
+        # Check if PyShimmer is available
         try:
-            # This would typically use pyshimmer or other discovery methods
-            # For now, return list of simulated sensors
-            discovered.append("shimmer_gsr_001")
-            discovered.append("shimmer_gsr_002")
-            logger.info(f"Discovered sensors: {discovered}")
+            from pyshimmer import PyShimmer
+            logger.info("Scanning for Shimmer GSR sensors...")
+            
+            # TODO: Implement actual sensor discovery using PyShimmer
+            # For now, return empty list as no discovery method is implemented
+            # Real implementation would use PyShimmer discovery methods
+            
+            logger.info(f"Discovered {len(discovered)} real sensors")
+        except ImportError:
+            logger.error("PyShimmer library not available - cannot discover real sensors")
         except Exception as e:
-            logger.warning(f"Sensor discovery failed: {e}")
-            # Return at least one simulated sensor for testing
-            discovered.append("shimmer_gsr_simulation")
+            logger.error(f"Sensor discovery failed: {e}")
         
         return discovered
     
