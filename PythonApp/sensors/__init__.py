@@ -16,6 +16,8 @@ from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass
 from pathlib import Path
 
+from .thermal_camera import ThermalCamera, ThermalCameraState, ThermalFrame
+
 logger = logging.getLogger(__name__)
 
 
@@ -172,6 +174,7 @@ class SensorManager:
         self.output_directory.mkdir(exist_ok=True)
         
         self.sensors: Dict[str, ShimmerGSRSensor] = {}
+        self.thermal_cameras: Dict[str, ThermalCamera] = {}
         self.data_writers: Dict[str, csv.DictWriter] = {}
         self.data_files: Dict[str, Any] = {}
         self.is_recording = False
@@ -179,6 +182,36 @@ class SensorManager:
         # Statistics
         self.sample_counts: Dict[str, int] = {}
         self.start_time: Optional[datetime] = None
+    
+    def add_thermal_camera(self, device_id: str) -> bool:
+        """Add a thermal camera to the manager."""
+        if device_id in self.thermal_cameras:
+            logger.warning(f"Thermal camera {device_id} already exists")
+            return True
+        
+        thermal_camera = ThermalCamera()
+        
+        # Attempt to connect
+        if thermal_camera.connect(device_id):
+            self.thermal_cameras[device_id] = thermal_camera
+            self.sample_counts[device_id] = 0
+            logger.info(f"Added thermal camera {device_id}")
+            return True
+        else:
+            logger.error(f"Failed to connect thermal camera {device_id}")
+            return False
+    
+    def remove_thermal_camera(self, device_id: str):
+        """Remove a thermal camera from the manager."""
+        if device_id in self.thermal_cameras:
+            thermal_camera = self.thermal_cameras[device_id]
+            thermal_camera.disconnect()
+            del self.thermal_cameras[device_id]
+            
+            if device_id in self.sample_counts:
+                del self.sample_counts[device_id]
+            
+            logger.info(f"Removed thermal camera {device_id}")
     
     def add_sensor(self, device_id: str, port: Optional[str] = None) -> bool:
         """Add a sensor to the manager."""

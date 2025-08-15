@@ -35,11 +35,30 @@ class MessageType(Enum):
     # Data streaming
     DATA_SAMPLE = "data_sample"
     DATA_BATCH = "data_batch"
+    THERMAL_FRAME = "thermal_frame"
     
     # Calibration
     CALIBRATION_START = "calibration_start"
     CALIBRATION_CAPTURE = "calibration_capture"
     CALIBRATION_COMPLETE = "calibration_complete"
+    
+    # Video stimulus control (for harmonization)
+    VIDEO_STIMULUS_START = "video_stimulus_start"
+    VIDEO_STIMULUS_PAUSE = "video_stimulus_pause" 
+    VIDEO_STIMULUS_STOP = "video_stimulus_stop"
+    VIDEO_STIMULUS_COMPLETE = "video_stimulus_complete"
+    VIDEO_LOAD = "video_load"
+    VIDEO_SEEK = "video_seek"
+    
+    # Enhanced sync and performance
+    LSL_SYNC_CALIBRATE = "lsl_sync_calibrate"
+    PERFORMANCE_ALERT = "performance_alert"
+    SYSTEM_HEALTH = "system_health"
+    
+    # Security enhancements
+    SECURITY_TOKEN = "security_token"
+    SECURITY_HANDSHAKE = "security_handshake"
+    AUTHENTICATION = "authentication"
     
     # Commands
     COMMAND = "command"
@@ -227,6 +246,78 @@ class ErrorMessage(BaseMessage):
         self.message_type = MessageType.ERROR
 
 
+@dataclass
+class VideoStimulusMessage(BaseMessage):
+    """Video stimulus control message."""
+    action: str = None  # start, pause, stop, complete, load, seek
+    video_path: Optional[str] = None
+    position: Optional[int] = None
+    metadata: Optional[Dict[str, Any]] = None
+    
+    def __post_init__(self):
+        super().__post_init__()
+        if self.action == "start":
+            self.message_type = MessageType.VIDEO_STIMULUS_START
+        elif self.action == "pause":
+            self.message_type = MessageType.VIDEO_STIMULUS_PAUSE
+        elif self.action == "stop":
+            self.message_type = MessageType.VIDEO_STIMULUS_STOP
+        elif self.action == "complete":
+            self.message_type = MessageType.VIDEO_STIMULUS_COMPLETE
+        elif self.action == "load":
+            self.message_type = MessageType.VIDEO_LOAD
+        elif self.action == "seek":
+            self.message_type = MessageType.VIDEO_SEEK
+
+
+@dataclass
+class ThermalFrameMessage(BaseMessage):
+    """Thermal camera frame data message."""
+    temperature_data: Optional[List[List[float]]] = None
+    width: int = 0
+    height: int = 0
+    min_temp: float = 0.0
+    max_temp: float = 0.0
+    format: str = "celsius"
+    
+    def __post_init__(self):
+        super().__post_init__()
+        self.message_type = MessageType.THERMAL_FRAME
+
+
+@dataclass
+class PerformanceAlertMessage(BaseMessage):
+    """Performance monitoring alert message."""
+    alert_type: str = None  # cpu, memory, battery, network
+    severity: str = "info"  # info, warning, error, critical
+    value: Optional[float] = None
+    threshold: Optional[float] = None
+    description: str = None
+    
+    def __post_init__(self):
+        super().__post_init__()
+        self.message_type = MessageType.PERFORMANCE_ALERT
+
+
+@dataclass
+class SecurityMessage(BaseMessage):
+    """Security-related message."""
+    action: str = None  # token, handshake, authentication
+    token: Optional[str] = None
+    challenge: Optional[str] = None
+    response: Optional[str] = None
+    encryption_method: Optional[str] = None
+    
+    def __post_init__(self):
+        super().__post_init__()
+        if self.action == "token":
+            self.message_type = MessageType.SECURITY_TOKEN
+        elif self.action == "handshake":
+            self.message_type = MessageType.SECURITY_HANDSHAKE
+        elif self.action == "authentication":
+            self.message_type = MessageType.AUTHENTICATION
+
+
 def create_message_from_json(json_str: str) -> Optional[BaseMessage]:
     """Create appropriate message object from JSON string."""
     try:
@@ -249,6 +340,16 @@ def create_message_from_json(json_str: str) -> Optional[BaseMessage]:
             return ResponseMessage.from_dict(data)
         elif message_type == MessageType.ERROR:
             return ErrorMessage.from_dict(data)
+        elif message_type in [MessageType.VIDEO_STIMULUS_START, MessageType.VIDEO_STIMULUS_PAUSE, 
+                             MessageType.VIDEO_STIMULUS_STOP, MessageType.VIDEO_STIMULUS_COMPLETE,
+                             MessageType.VIDEO_LOAD, MessageType.VIDEO_SEEK]:
+            return VideoStimulusMessage.from_dict(data)
+        elif message_type == MessageType.THERMAL_FRAME:
+            return ThermalFrameMessage.from_dict(data)
+        elif message_type == MessageType.PERFORMANCE_ALERT:
+            return PerformanceAlertMessage.from_dict(data)
+        elif message_type in [MessageType.SECURITY_TOKEN, MessageType.SECURITY_HANDSHAKE, MessageType.AUTHENTICATION]:
+            return SecurityMessage.from_dict(data)
         else:
             return BaseMessage.from_dict(data)
             
@@ -260,8 +361,9 @@ def create_message_from_json(json_str: str) -> Optional[BaseMessage]:
         )
 
 
-# Standard commands
-STANDARD_COMMANDS = {
+# Enhanced command set for harmonization
+ENHANCED_COMMANDS = {
+    # Existing commands
     "PING": "ping",
     "GET_STATUS": "get_status",
     "START_STREAMING": "start_streaming", 
@@ -270,8 +372,44 @@ STANDARD_COMMANDS = {
     "SYNC_TIME": "sync_time",
     "GET_BATTERY": "get_battery",
     "SET_SAMPLING_RATE": "set_sampling_rate",
-    "RESTART_DEVICE": "restart_device"
+    "RESTART_DEVICE": "restart_device",
+    
+    # Video stimulus commands
+    "VIDEO_LOAD": "video_load",
+    "VIDEO_PLAY": "video_play",
+    "VIDEO_PAUSE": "video_pause",
+    "VIDEO_STOP": "video_stop", 
+    "VIDEO_SEEK": "video_seek",
+    "VIDEO_GET_STATUS": "video_get_status",
+    
+    # Thermal camera commands
+    "THERMAL_CONNECT": "thermal_connect",
+    "THERMAL_DISCONNECT": "thermal_disconnect",
+    "THERMAL_START_STREAM": "thermal_start_stream",
+    "THERMAL_STOP_STREAM": "thermal_stop_stream",
+    "THERMAL_CAPTURE": "thermal_capture",
+    "THERMAL_GET_STATUS": "thermal_get_status",
+    
+    # Enhanced sync commands
+    "LSL_CALIBRATE": "lsl_calibrate",
+    "LSL_DISCOVER": "lsl_discover",
+    "NTP_SYNC": "ntp_sync",
+    "TIME_BROADCAST": "time_broadcast",
+    
+    # Performance monitoring
+    "GET_PERFORMANCE": "get_performance",
+    "SET_PERFORMANCE_ALERT": "set_performance_alert",
+    "GET_SYSTEM_HEALTH": "get_system_health",
+    
+    # Security commands
+    "GENERATE_TOKEN": "generate_token",
+    "VALIDATE_TOKEN": "validate_token",
+    "SECURITY_HANDSHAKE": "security_handshake",
+    "ENABLE_TLS": "enable_tls"
 }
+
+# Use enhanced commands as standard
+STANDARD_COMMANDS = ENHANCED_COMMANDS
 
 # Standard error codes
 STANDARD_ERROR_CODES = {

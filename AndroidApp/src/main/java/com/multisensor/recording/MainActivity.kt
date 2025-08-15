@@ -348,8 +348,8 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
         // Apply button API features: Configuration validation and updates
         lifecycleScope.launch {
             try {
-                // Navigate to settings tab
-                viewPager.setCurrentItem(2, false)
+                // Navigate to settings tab (now position 3)
+                viewPager.setCurrentItem(3, false)
                 
                 // Apply configuration validation
                 if (::configurationManager.isInitialized) {
@@ -378,20 +378,28 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
      * Navigate to settings tab from other fragments
      */
     fun navigateToSettings() {
-        viewPager.setCurrentItem(2, false)
+        viewPager.setCurrentItem(3, false)  // Updated position for settings
+    }
+    
+    /**
+     * Navigate to video stimulus tab from other fragments
+     */
+    fun navigateToVideoStimulus() {
+        viewPager.setCurrentItem(2, false)  // Video stimulus tab
     }
 
     /**
      * ViewPager adapter for fragment navigation
      */
     private class ViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
-        override fun getItemCount() = 3
+        override fun getItemCount() = 4
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> RecordingFragment()  // Recording controls and previews
-                1 -> MainFragment()       // Device connection status
-                else -> SettingsFragment() // Settings and system info
+                0 -> RecordingFragment()       // Recording controls and previews
+                1 -> MainFragment()            // Device connection status
+                2 -> com.multisensor.recording.stimulus.VideoStimulusFragment() // Video stimulus for emotion elicitation
+                else -> SettingsFragment()    // Settings and system info
             }
         }
     }

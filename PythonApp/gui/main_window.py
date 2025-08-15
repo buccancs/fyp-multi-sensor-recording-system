@@ -35,7 +35,7 @@ except ImportError:
 
 from PythonApp.network import JsonSocketServer
 from PythonApp.session import SessionManager, SessionConfig
-from PythonApp.sensors import SensorManager
+from PythonApp.sensors import SensorManager, ThermalCamera
 from PythonApp.sync import TimeServer, SessionSynchronizer, SyncSignalBroadcaster, EnhancedSynchronizationManager
 from PythonApp.calibration import CalibrationManager, CalibrationPattern
 from PythonApp.transfer import TransferManager
@@ -117,6 +117,9 @@ class MainWindow(QMainWindow):
             
             # Initialize webcam manager
             self.webcam_manager = WebcamManager()
+            
+            # Initialize thermal camera
+            self.thermal_camera = ThermalCamera()
             
             logger.info("Backend components initialized successfully")
         except Exception as e:
@@ -502,30 +505,60 @@ class MainWindow(QMainWindow):
         # Create two main sections: Camera Preview and Video Playback
         
         # Camera Preview Section
-        camera_group = QGroupBox("USB Camera Preview")
+        camera_group = QGroupBox("USB Camera & Thermal Camera Preview")
         camera_layout = QVBoxLayout(camera_group)
         
         # Camera info
-        camera_info_text = QLabel("Real-time USB webcam preview for participant monitoring.\n"
-                                 "Requires OpenCV and a connected USB camera.")
+        camera_info_text = QLabel("Real-time USB webcam and thermal camera preview for participant monitoring.\n"
+                                 "Requires OpenCV for USB cameras and thermal camera libraries for thermal imaging.")
         camera_info_text.setWordWrap(True)
         camera_layout.addWidget(camera_info_text)
         
-        # Camera selection and controls
-        camera_controls_layout = QHBoxLayout()
-        camera_controls_layout.addWidget(QLabel("Select Camera:"))
+        # Camera type selection
+        camera_type_layout = QHBoxLayout()
+        camera_type_layout.addWidget(QLabel("Camera Type:"))
+        self.camera_type_combo = QComboBox()
+        self.camera_type_combo.addItems(["USB Camera", "Thermal Camera"])
+        self.camera_type_combo.currentTextChanged.connect(self._on_camera_type_changed)
+        camera_type_layout.addWidget(self.camera_type_combo)
+        camera_layout.addLayout(camera_type_layout)
+        
+        # USB Camera controls
+        usb_camera_controls_layout = QHBoxLayout()
+        usb_camera_controls_layout.addWidget(QLabel("Select USB Camera:"))
         self.camera_combo = QComboBox()
-        camera_controls_layout.addWidget(self.camera_combo)
+        usb_camera_controls_layout.addWidget(self.camera_combo)
         
-        self.refresh_cameras_btn = QPushButton("Refresh Cameras")
+        self.refresh_cameras_btn = QPushButton("Refresh USB Cameras")
         self.refresh_cameras_btn.clicked.connect(self._refresh_cameras)
-        camera_controls_layout.addWidget(self.refresh_cameras_btn)
+        usb_camera_controls_layout.addWidget(self.refresh_cameras_btn)
+        camera_layout.addLayout(usb_camera_controls_layout)
         
-        self.start_preview_btn = QPushButton("Start Camera Preview")
+        # Thermal Camera controls
+        thermal_camera_controls_layout = QHBoxLayout()
+        thermal_camera_controls_layout.addWidget(QLabel("Thermal Camera:"))
+        self.thermal_connect_btn = QPushButton("Connect Thermal Camera")
+        self.thermal_connect_btn.clicked.connect(self._connect_thermal_camera)
+        thermal_camera_controls_layout.addWidget(self.thermal_connect_btn)
+        
+        self.thermal_disconnect_btn = QPushButton("Disconnect")
+        self.thermal_disconnect_btn.clicked.connect(self._disconnect_thermal_camera)
+        self.thermal_disconnect_btn.setEnabled(False)
+        thermal_camera_controls_layout.addWidget(self.thermal_disconnect_btn)
+        
+        self.thermal_snapshot_btn = QPushButton("Capture Snapshot")
+        self.thermal_snapshot_btn.clicked.connect(self._capture_thermal_snapshot)
+        self.thermal_snapshot_btn.setEnabled(False)
+        thermal_camera_controls_layout.addWidget(self.thermal_snapshot_btn)
+        camera_layout.addLayout(thermal_camera_controls_layout)
+        
+        # Common camera controls
+        camera_controls_layout = QHBoxLayout()
+        self.start_preview_btn = QPushButton("Start Preview")
         self.start_preview_btn.clicked.connect(self._start_camera_preview)
         camera_controls_layout.addWidget(self.start_preview_btn)
         
-        self.stop_preview_btn = QPushButton("Stop Camera Preview")
+        self.stop_preview_btn = QPushButton("Stop Preview")
         self.stop_preview_btn.clicked.connect(self._stop_camera_preview)
         self.stop_preview_btn.setEnabled(False)
         camera_controls_layout.addWidget(self.stop_preview_btn)
@@ -631,6 +664,143 @@ class MainWindow(QMainWindow):
         
         # Initialize video player state
         self._video_slider_dragging = False
+        
+        # Initialize thermal camera state
+        self._thermal_connected = False
+        self._thermal_streaming = False
+    
+    def _on_camera_type_changed(self, camera_type):
+        """Handle camera type selection change."""
+        try:
+            if camera_type == "USB Camera":
+                # Enable USB camera controls, disable thermal
+                self.camera_combo.setEnabled(True)
+                self.refresh_cameras_btn.setEnabled(True)
+                self.thermal_connect_btn.setEnabled(False)
+                self.thermal_disconnect_btn.setEnabled(False)
+                self.thermal_snapshot_btn.setEnabled(False)
+                
+                # Stop thermal camera if active
+                if self._thermal_streaming:
+                    self._stop_camera_preview()
+                    
+            elif camera_type == "Thermal Camera":
+                # Disable USB camera controls, enable thermal
+                self.camera_combo.setEnabled(False)
+                self.refresh_cameras_btn.setEnabled(False)
+                self.thermal_connect_btn.setEnabled(True)
+                
+                # Stop USB camera if active
+                if self.active_camera_capture:
+                    self._stop_camera_preview()
+                    
+            self._update_camera_status(f"Camera type changed to: {camera_type}")
+            
+        except Exception as e:
+            logger.error(f"Error changing camera type: {e}")
+    
+    def _connect_thermal_camera(self):
+        """Connect to thermal camera."""
+        try:
+            if self.thermal_camera.connect("thermal_0"):
+                self._thermal_connected = True
+                self.thermal_connect_btn.setEnabled(False)
+                self.thermal_disconnect_btn.setEnabled(True)
+                self.thermal_snapshot_btn.setEnabled(True)
+                self._update_camera_status("Thermal camera connected successfully")
+                
+                # Enable preview button for thermal camera
+                self.start_preview_btn.setEnabled(True)
+            else:
+                self._update_camera_status("Failed to connect thermal camera")
+                QMessageBox.warning(self, "Connection Failed", "Failed to connect to thermal camera")
+                
+        except Exception as e:
+            logger.error(f"Error connecting thermal camera: {e}")
+            self._update_camera_status(f"Thermal camera connection error: {e}")
+            QMessageBox.critical(self, "Error", f"Thermal camera error: {e}")
+    
+    def _disconnect_thermal_camera(self):
+        """Disconnect thermal camera."""
+        try:
+            if self._thermal_streaming:
+                self._stop_camera_preview()
+                
+            self.thermal_camera.disconnect()
+            self._thermal_connected = False
+            self.thermal_connect_btn.setEnabled(True)
+            self.thermal_disconnect_btn.setEnabled(False)
+            self.thermal_snapshot_btn.setEnabled(False)
+            self.start_preview_btn.setEnabled(False)
+            self._update_camera_status("Thermal camera disconnected")
+            
+        except Exception as e:
+            logger.error(f"Error disconnecting thermal camera: {e}")
+            self._update_camera_status(f"Thermal camera disconnect error: {e}")
+    
+    def _capture_thermal_snapshot(self):
+        """Capture thermal camera snapshot."""
+        try:
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            filename = f"thermal_snapshot_{timestamp}.png"
+            
+            if self.thermal_camera.capture_snapshot(filename):
+                self._update_camera_status(f"Thermal snapshot captured: {filename}")
+                QMessageBox.information(self, "Snapshot Captured", f"Thermal snapshot saved as: {filename}")
+            else:
+                self._update_camera_status("Failed to capture thermal snapshot")
+                QMessageBox.warning(self, "Capture Failed", "Failed to capture thermal snapshot")
+                
+        except Exception as e:
+            logger.error(f"Error capturing thermal snapshot: {e}")
+            self._update_camera_status(f"Thermal snapshot error: {e}")
+            QMessageBox.critical(self, "Error", f"Snapshot error: {e}")
+    
+    def _start_thermal_streaming(self):
+        """Start thermal camera streaming."""
+        try:
+            if not self._thermal_connected:
+                return False
+                
+            success = self.thermal_camera.start_streaming(self._on_thermal_frame)
+            if success:
+                self._thermal_streaming = True
+                self._update_camera_status("Thermal streaming started")
+                return True
+            else:
+                self._update_camera_status("Failed to start thermal streaming")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error starting thermal streaming: {e}")
+            self._update_camera_status(f"Thermal streaming error: {e}")
+            return False
+    
+    def _stop_thermal_streaming(self):
+        """Stop thermal camera streaming."""
+        try:
+            if self._thermal_streaming:
+                self.thermal_camera.stop_streaming()
+                self._thermal_streaming = False
+                self._update_camera_status("Thermal streaming stopped")
+                
+        except Exception as e:
+            logger.error(f"Error stopping thermal streaming: {e}")
+            self._update_camera_status(f"Thermal streaming stop error: {e}")
+    
+    def _on_thermal_frame(self, thermal_frame):
+        """Handle incoming thermal frame."""
+        try:
+            # For now, just display frame info (would need thermal image rendering)
+            status_text = f"Thermal frame: {thermal_frame.width}x{thermal_frame.height}, "
+            status_text += f"Temp range: {thermal_frame.min_temp:.1f}°C - {thermal_frame.max_temp:.1f}°C"
+            
+            # Update display (simplified - would show actual thermal image)
+            self.media_display_label.setText(f"Thermal Camera Active\n{status_text}\n\n"
+                                           f"Frame {self.thermal_camera.frame_count}")
+            
+        except Exception as e:
+            logger.error(f"Error processing thermal frame: {e}")
     
     def _create_security_tab(self, tab_widget: QTabWidget):
         """Create the security tab."""
@@ -1255,7 +1425,22 @@ class MainWindow(QMainWindow):
             self._update_camera_status(f"Error detecting cameras: {e}")
     
     def _start_camera_preview(self):
-        """Start the camera preview."""
+        """Start the camera preview (USB or Thermal)."""
+        try:
+            camera_type = self.camera_type_combo.currentText()
+            
+            if camera_type == "USB Camera":
+                self._start_usb_camera_preview()
+            elif camera_type == "Thermal Camera":
+                self._start_thermal_camera_preview()
+                
+        except Exception as e:
+            logger.error(f"Error starting camera preview: {e}")
+            self._update_camera_status(f"Error starting preview: {e}")
+            QMessageBox.critical(self, "Camera Error", f"Failed to start camera preview: {e}")
+    
+    def _start_usb_camera_preview(self):
+        """Start USB camera preview."""
         if not OPENCV_AVAILABLE:
             QMessageBox.warning(self, "OpenCV Required", "OpenCV is required for camera preview functionality.")
             return
@@ -1290,42 +1475,78 @@ class MainWindow(QMainWindow):
                 self.camera_combo.setEnabled(False)
                 self.refresh_cameras_btn.setEnabled(False)
                 
-                self._update_camera_status(f"Camera {camera_index} preview started")
-                logger.info(f"Camera {camera_index} preview started")
+                self._update_camera_status(f"USB Camera {camera_index} preview started")
+                logger.info(f"USB Camera {camera_index} preview started")
             else:
-                self._update_camera_status("Failed to start camera preview")
+                self._update_camera_status("Failed to start USB camera preview")
                 
         except Exception as e:
-            logger.error(f"Error starting camera preview: {e}")
-            self._update_camera_status(f"Error starting preview: {e}")
-            QMessageBox.critical(self, "Camera Error", f"Failed to start camera preview: {e}")
+            logger.error(f"Error starting USB camera preview: {e}")
+            self._update_camera_status(f"Error starting USB preview: {e}")
+    
+    def _start_thermal_camera_preview(self):
+        """Start thermal camera preview."""
+        try:
+            if not self._thermal_connected:
+                QMessageBox.warning(self, "Camera Not Connected", "Please connect thermal camera first.")
+                return
+            
+            # Stop any existing preview
+            self._stop_camera_preview()
+            
+            # Start thermal streaming
+            if self._start_thermal_streaming():
+                # Update UI
+                self.start_preview_btn.setEnabled(False)
+                self.stop_preview_btn.setEnabled(True)
+                self.thermal_connect_btn.setEnabled(False)
+                self.thermal_disconnect_btn.setEnabled(True)
+                
+                self._update_camera_status("Thermal camera preview started")
+                logger.info("Thermal camera preview started")
+            else:
+                self._update_camera_status("Failed to start thermal camera preview")
+                
+        except Exception as e:
+            logger.error(f"Error starting thermal camera preview: {e}")
+            self._update_camera_status(f"Error starting thermal preview: {e}")
     
     def _stop_camera_preview(self):
-        """Stop the camera preview."""
-        if self.active_camera_capture:
-            try:
+        """Stop the camera preview (USB or Thermal)."""
+        try:
+            # Stop USB camera if active
+            if self.active_camera_capture:
                 self.active_camera_capture.stop_capture()
                 self.active_camera_capture = None
                 
-                # Update UI
-                self.start_preview_btn.setEnabled(True)
-                self.stop_preview_btn.setEnabled(False)
+                # Update USB camera UI
                 self.camera_combo.setEnabled(True)
                 self.refresh_cameras_btn.setEnabled(True)
                 
-                # Clear preview
-                self.media_display_label.clear()
-                self.media_display_label.setText("Camera preview stopped\nClick 'Start Camera Preview' to begin")
+                self._update_camera_status("USB camera preview stopped")
+                logger.info("USB camera preview stopped")
+            
+            # Stop thermal camera if active
+            if self._thermal_streaming:
+                self._stop_thermal_streaming()
+                self._update_camera_status("Thermal camera preview stopped")
+                logger.info("Thermal camera preview stopped")
+            
+            # Update common UI
+            self.start_preview_btn.setEnabled(True)
+            self.stop_preview_btn.setEnabled(False)
+            
+            # Clear preview
+            self.media_display_label.clear()
+            self.media_display_label.setText("Camera preview stopped\nSelect camera type and click 'Start Preview' to begin")
+            
+            # Cleanup webcam manager
+            if self.webcam_manager:
+                self.webcam_manager.stop_camera_preview()
                 
-                self._update_camera_status("Camera preview stopped")
-                logger.info("Camera preview stopped")
-                
-            except Exception as e:
-                logger.error(f"Error stopping camera preview: {e}")
-                self._update_camera_status(f"Error stopping preview: {e}")
-        
-        if self.webcam_manager:
-            self.webcam_manager.stop_camera_preview()
+        except Exception as e:
+            logger.error(f"Error stopping camera preview: {e}")
+            self._update_camera_status(f"Error stopping preview: {e}")
     
     def _update_camera_frame(self, frame):
         """Update the camera preview with a new frame."""
