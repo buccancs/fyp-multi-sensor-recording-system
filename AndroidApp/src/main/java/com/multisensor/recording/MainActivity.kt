@@ -20,6 +20,9 @@ import com.multisensor.recording.util.Logger
 import com.multisensor.recording.setup.ApplicationSetupManager
 import com.multisensor.recording.setup.DeviceSetupManager
 import com.multisensor.recording.setup.NetworkSetupManager
+import com.multisensor.recording.camera.RgbCamera
+import com.multisensor.recording.camera.ThermalCamera
+import com.multisensor.recording.sensor.GsrSensor
 
 /**
  * MainActivity as coordinator - no longer a God object
@@ -633,6 +636,98 @@ class MainActivity : FragmentActivity(), View.OnClickListener {
             .setCancelable(false)
             .show()
     }
+
+    // Accessor methods for fragments to access device components through setup managers
+    
+    /**
+     * Get RGB camera instance through device setup manager
+     */
+    val rgbCamera: RgbCamera
+        get() = if (::deviceSetupManager.isInitialized) {
+            deviceSetupManager.rgbCamera
+        } else {
+            throw IllegalStateException("DeviceSetupManager not initialized")
+        }
+    
+    /**
+     * Get thermal camera instance through device setup manager
+     */
+    val thermalCamera: ThermalCamera
+        get() = if (::deviceSetupManager.isInitialized) {
+            deviceSetupManager.thermalCamera
+        } else {
+            throw IllegalStateException("DeviceSetupManager not initialized")
+        }
+    
+    /**
+     * Get GSR sensor instance through device setup manager
+     */
+    val gsrSensor: GsrSensor
+        get() = if (::deviceSetupManager.isInitialized) {
+            deviceSetupManager.gsrSensor
+        } else {
+            throw IllegalStateException("GSR sensor not initialized")
+        }
+    
+    /**
+     * Get security manager through application setup manager
+     */
+    val securityManager: com.multisensor.recording.security.SecurityManager
+        get() = if (::applicationSetupManager.isInitialized) {
+            applicationSetupManager.securityManager
+        } else {
+            throw IllegalStateException("ApplicationSetupManager not initialized")
+        }
+    
+    /**
+     * Get configuration manager through application setup manager
+     */
+    val configurationManager: com.multisensor.recording.config.ConfigurationManager
+        get() = if (::applicationSetupManager.isInitialized) {
+            applicationSetupManager.configurationManager
+        } else {
+            throw IllegalStateException("ApplicationSetupManager not initialized")
+        }
+    
+    /**
+     * Get PC communication client through network setup manager
+     */
+    val pcCommunicationClient: com.multisensor.recording.network.PcCommunicationClient
+        get() = if (::networkSetupManager.isInitialized) {
+            networkSetupManager.pcCommunicationClient
+        } else {
+            throw IllegalStateException("NetworkSetupManager not initialized")
+        }
+    
+    /**
+     * Get fault tolerance manager through network setup manager
+     */
+    val faultToleranceManager: com.multisensor.recording.network.FaultToleranceManager
+        get() = if (::networkSetupManager.isInitialized) {
+            networkSetupManager.faultToleranceManager
+        } else {
+            throw IllegalStateException("NetworkSetupManager not initialized")
+        }
+    
+    /**
+     * Get data validation service through application setup manager
+     */
+    val dataValidationService: com.multisensor.recording.validation.DataValidationService
+        get() = if (::applicationSetupManager.isInitialized) {
+            applicationSetupManager.dataValidationService
+        } else {
+            throw IllegalStateException("ApplicationSetupManager not initialized")
+        }
+    
+    /**
+     * Get shared protocol client through network setup manager
+     */
+    val sharedProtocolClient: com.multisensor.recording.network.SharedProtocolClient
+        get() = if (::networkSetupManager.isInitialized) {
+            networkSetupManager.sharedProtocolClient
+        } else {
+            throw IllegalStateException("NetworkSetupManager not initialized")
+        }
 
     override fun onDestroy() {
         super.onDestroy()

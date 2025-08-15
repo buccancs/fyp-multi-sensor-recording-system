@@ -46,7 +46,7 @@ class NetworkSetupManager(private val context: Context) {
             dataTransferManager = DataTransferManager(context)
             calibrationManager = CalibrationManager(context)
             
-            // Setup callbacks
+            // Setup callbacks with proper type conversions
             setupNetworkCallbacks(
                 onPcConnectionChange,
                 onSharedProtocolMessage,
@@ -75,12 +75,12 @@ class NetworkSetupManager(private val context: Context) {
     ) {
         // PC Communication callbacks (legacy)
         pcCommunicationClient.setConnectionCallback { connected, message ->
-            onPcConnectionChange(connected, message)
+            onPcConnectionChange(connected, message ?: "No message")
         }
         
         // Shared Protocol Communication callbacks (harmonized)
         sharedProtocolClient.setConnectionCallback { connected, message ->
-            onPcConnectionChange(connected, message)
+            onPcConnectionChange(connected, message ?: "No message")
         }
         
         // Shared Protocol Command callbacks
@@ -88,14 +88,33 @@ class NetworkSetupManager(private val context: Context) {
             onSharedProtocolMessage(protocolMessage)
         }
         
-        // Fault tolerance callbacks
+        // Fault tolerance callbacks with type conversion
         faultToleranceManager.setSystemHealthCallback { isHealthy, deviceHealthMap ->
-            onSystemHealth(isHealthy, deviceHealthMap)
+            // Convert Map<String, DeviceHealth> to Map<String, Boolean>
+            val booleanHealthMap = deviceHealthMap.mapValues { (_, deviceHealth) -> 
+                deviceHealth.status == com.multisensor.recording.network.DeviceStatus.CONNECTED 
+            }
+            onSystemHealth(isHealthy, booleanHealthMap)
         }
         
-        // Data transfer callbacks
+        // Data transfer callbacks with type conversion
         dataTransferManager.setTransferCompleteCallback { success, errorMessage, results ->
-            onDataTransferComplete(success, errorMessage, results)
+            // Convert List<TransferResult> to Map<String, Any>?
+            val resultsMap = if (results.isNotEmpty()) {
+                mapOf(
+                    "transferCount" to results.size,
+                    "successfulTransfers" to results.count { it.success },
+                    "results" to results.map { result ->
+                        mapOf(
+                            "success" to result.success,
+                            "error" to result.errorMessage
+                        )
+                    }
+                )
+            } else {
+                null
+            }
+            onDataTransferComplete(success, errorMessage, resultsMap)
         }
     }
     

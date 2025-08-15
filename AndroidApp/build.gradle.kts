@@ -105,6 +105,9 @@ dependencies {
     // Permissions - use standard Android permissions
     implementation("androidx.activity:activity-ktx:1.8.2") // For registerForActivityResult
 
+    // ExoPlayer for video stimulus playback
+    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+
     // IRCamera thermal camera SDKs (Topdon/InfiSense)
     implementation(files("src/main/libs/topdon_1.3.7.aar"))
     implementation(files("src/main/libs/libusbdualsdk_1.3.4_2406271906_standard.aar"))

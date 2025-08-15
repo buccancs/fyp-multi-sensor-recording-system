@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,7 @@ import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.MediaItem
 import kotlinx.coroutines.launch
 import java.io.File
 import com.multisensor.recording.R
@@ -186,12 +188,12 @@ class VideoStimulusFragment : Fragment() {
             videoPlayerView.player = exoPlayer
             
             // Set up player event listener
-            exoPlayer?.addListener(object : Player.EventListener {
-                override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                    updatePlaybackControls(playWhenReady, playbackState)
+            exoPlayer?.addListener(object : Player.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    updatePlaybackControls(exoPlayer?.playWhenReady ?: false, playbackState)
                 }
                 
-                override fun onPlayerError(error: ExoPlaybackException) {
+                override fun onPlayerError(error: PlaybackException) {
                     updateVideoStatus("Video playback error: ${error.message}")
                     Logger.e(TAG, "Video playback error", error)
                 }
@@ -235,16 +237,12 @@ class VideoStimulusFragment : Fragment() {
         try {
             currentVideoUri = uri
             
-            // Create media source
-            val dataSourceFactory = DefaultDataSourceFactory(
-                requireContext(),
-                "VideoStimulusPlayer"
-            )
-            val mediaSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(uri)
+            // Create media item (ExoPlayer 2.19+ API)
+            val mediaItem = MediaItem.fromUri(uri)
             
             // Prepare player
-            exoPlayer?.prepare(mediaSource)
+            exoPlayer?.setMediaItem(mediaItem)
+            exoPlayer?.prepare()
             isVideoLoaded = true
             
             // Extract video metadata
@@ -432,7 +430,10 @@ class VideoStimulusFragment : Fragment() {
 fun MainActivity.onVideoStimulusStarted(metadata: Map<String, Any>) {
     // Send video start event to PC server
     try {
-        sharedProtocolClient.sendCommand("video_stimulus_start", metadata)
+        val sessionConfig = org.json.JSONObject().apply {
+            metadata.forEach { (key, value) -> put(key, value) }
+        }
+        sharedProtocolClient.sendSessionControl("video_stimulus_start", sessionConfig)
         Logger.i("MainActivity", "Video stimulus started: ${metadata["title"]}")
     } catch (e: Exception) {
         Logger.e("MainActivity", "Failed to send video start event", e)
@@ -442,7 +443,10 @@ fun MainActivity.onVideoStimulusStarted(metadata: Map<String, Any>) {
 fun MainActivity.onVideoStimulusPaused(position: Long) {
     // Send video pause event to PC server
     try {
-        sharedProtocolClient.sendCommand("video_stimulus_pause", mapOf("position" to position))
+        val sessionConfig = org.json.JSONObject().apply {
+            put("position", position)
+        }
+        sharedProtocolClient.sendSessionControl("video_stimulus_pause", sessionConfig)
         Logger.i("MainActivity", "Video stimulus paused at position: $position")
     } catch (e: Exception) {
         Logger.e("MainActivity", "Failed to send video pause event", e)
@@ -452,7 +456,10 @@ fun MainActivity.onVideoStimulusPaused(position: Long) {
 fun MainActivity.onVideoStimulusStopped(position: Long) {
     // Send video stop event to PC server
     try {
-        sharedProtocolClient.sendCommand("video_stimulus_stop", mapOf("position" to position))
+        val sessionConfig = org.json.JSONObject().apply {
+            put("position", position)
+        }
+        sharedProtocolClient.sendSessionControl("video_stimulus_stop", sessionConfig)
         Logger.i("MainActivity", "Video stimulus stopped at position: $position")
     } catch (e: Exception) {
         Logger.e("MainActivity", "Failed to send video stop event", e)
@@ -462,7 +469,10 @@ fun MainActivity.onVideoStimulusStopped(position: Long) {
 fun MainActivity.onVideoStimulusCompleted(metadata: Map<String, Any>) {
     // Send video completion event to PC server
     try {
-        sharedProtocolClient.sendCommand("video_stimulus_complete", metadata)
+        val sessionConfig = org.json.JSONObject().apply {
+            metadata.forEach { (key, value) -> put(key, value) }
+        }
+        sharedProtocolClient.sendSessionControl("video_stimulus_complete", sessionConfig)
         Logger.i("MainActivity", "Video stimulus completed: ${metadata["title"]}")
     } catch (e: Exception) {
         Logger.e("MainActivity", "Failed to send video complete event", e)
