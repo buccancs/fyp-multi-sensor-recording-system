@@ -36,8 +36,8 @@ The Python desktop application and Android mobile application have been fully ha
 ### 🖥️ **Python App Enhancements**
 #### New Features Added:
 - **Thermal Camera Integration**: Complete thermal imaging support
-  - FLIR thermal camera compatibility (extensible to other brands)
-  - Real-time thermal streaming at 30 FPS
+  - Topdon TC001 thermal camera integration (256x192 resolution, 25 FPS)
+  - Real-time thermal streaming at 25 FPS
   - Temperature data processing and frame analysis
   - Thermal snapshot capture functionality
   - Mock implementation for development/testing

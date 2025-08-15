@@ -18,8 +18,8 @@ logger = logging.getLogger(__name__)
 # Try to import thermal camera libraries
 THERMAL_AVAILABLE = False
 try:
-    # Mock thermal camera interface - replace with actual thermal camera SDK
-    # Common thermal camera libraries: FLIR, Seek Thermal, etc.
+    # Mock thermal camera interface - replace with actual Topdon TC001 SDK
+    # Topdon TC001 thermal camera libraries and USB communication
     import numpy as np
     THERMAL_AVAILABLE = True
 except ImportError:
@@ -48,7 +48,7 @@ class ThermalFrame:
 
 
 class ThermalCamera:
-    """Thermal camera interface for desktop application."""
+    """Thermal camera interface for Topdon TC001 integration."""
     
     def __init__(self):
         self.state = ThermalCameraState.DISCONNECTED
@@ -68,16 +68,14 @@ class ThermalCamera:
     
     def discover_devices(self) -> Dict[str, Any]:
         """Discover available thermal cameras."""
-        if not THERMAL_AVAILABLE:
-            return {}
-        
         # Mock implementation - replace with actual device discovery
+        # For Topdon TC001: USB communication with vendor ID 0x1C06
         mock_devices = {
             "thermal_0": {
-                "name": "FLIR Thermal Camera",
-                "serial": "FL12345678",
-                "resolution": "640x480",
-                "temperature_range": "-40°C to 550°C"
+                "name": "Topdon TC001 Thermal Camera",
+                "serial": "TC12345678",
+                "resolution": "256x192",
+                "temperature_range": "-20°C to 550°C"
             }
         }
         
@@ -94,8 +92,8 @@ class ThermalCamera:
             # Mock connection - replace with actual camera connection
             self.device_info = {
                 "device_id": device_id,
-                "name": "FLIR Thermal Camera",
-                "serial": "FL12345678",
+                "name": "Topdon TC001 Thermal Camera",
+                "serial": "TC12345678",
                 "firmware": "1.2.3",
                 "connected_at": time.time()
             }
@@ -171,7 +169,7 @@ class ThermalCamera:
                     self.frame_count += 1
                     self.last_frame_time = time.time()
                 
-                time.sleep(1/30)  # 30 FPS
+                time.sleep(1/25)  # 25 FPS for Topdon TC001
                 
         except Exception as e:
             logger.error(f"Capture loop error: {e}")
@@ -183,14 +181,14 @@ class ThermalCamera:
         """Generate mock thermal frame for testing."""
         if THERMAL_AVAILABLE:
             import numpy as np
-            # Generate realistic thermal data
-            width, height = 640, 480
+            # Generate realistic thermal data for Topdon TC001 (256x192)
+            width, height = 256, 192
             temp_data = np.random.uniform(20.0, 35.0, (height, width))
             min_temp = float(np.min(temp_data))
             max_temp = float(np.max(temp_data))
         else:
             temp_data = None
-            width, height = 640, 480
+            width, height = 256, 192
             min_temp, max_temp = 20.0, 35.0
         
         return ThermalFrame(
