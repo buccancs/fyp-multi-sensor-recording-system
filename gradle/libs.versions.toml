@@ -9,6 +9,7 @@ ksp = "2.0.20-1.0.24"
 composeBom = "2024.12.01"
 composeActivity = "1.9.3"
 composeNavigation = "2.8.5"
+navigation = "2.7.7"
 hiltNavigationCompose = "1.2.0"
 
 coreKtx = "1.13.1"
@@ -67,6 +68,8 @@ androidx-compose-material3-compose = { module = "androidx.compose.material3:mate
 androidx-compose-material-icons = { module = "androidx.compose.material:material-icons-extended" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -83,7 +86,7 @@ androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
-cardview = { module = "androidx.cardview:cardview", version.ref = "cardviewVersion" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardviewVersion" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektFormatting" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -166,6 +169,11 @@ camera = [
 activity-fragment = [
     "androidx-activity-ktx",
     "androidx-fragment-ktx"
+]
+
+navigation = [
+    "androidx-navigation-fragment-ktx",
+    "androidx-navigation-ui-ktx"
 ]
 
 networking = [

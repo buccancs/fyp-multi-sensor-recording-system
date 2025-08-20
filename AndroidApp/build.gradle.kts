@@ -191,10 +191,9 @@ dependencies {
     implementation(libs.bundles.core.ui)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.material)
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.cardview)
 
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation(libs.bundles.navigation)
 
     implementation(libs.bundles.lifecycle)
     implementation(libs.kotlinx.coroutines.android)
